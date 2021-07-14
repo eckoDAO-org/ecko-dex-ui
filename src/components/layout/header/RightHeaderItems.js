@@ -46,7 +46,6 @@ const RightHeaderItems = () => {
   const { account, logout } = useContext(AccountContext);
   const modalContext = useContext(ModalContext);
 
-  const { setOpenConnectModal } = useContext(WalletContext);
   return (
     <RightContainerHeader>
       <HeaderItem className="mobile-none">
