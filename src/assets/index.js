@@ -1,0 +1,15 @@
+export { ReactComponent as KDALogo } from "./images/header/kadena-logo.svg";
+export { ReactComponent as KaddexLogo } from "./images/header/KADDEX-logo.svg";
+export { ReactComponent as PowerIcon } from "./images/header/power.svg";
+export { ReactComponent as CogIcon } from "./images/header/cog.svg";
+export { ReactComponent as HamburgerIcon } from "./images/header/hamburger.svg";
+export { ReactComponent as AboutIcon } from "./images/header/about.svg";
+export { ReactComponent as CodeIcon } from "./images/header/code.svg";
+export { ReactComponent as DiscordIcon } from "./images/header/discord.svg";
+export { ReactComponent as SwapArrowsIcon } from "./images/shared/swap-token-arrow.svg";
+export { ReactComponent as ArrowDown } from "./images/shared/arrow-down-white.svg";
+export { ReactComponent as ZelcoreLogo } from "./images/shared/zelcore-logo.svg";
+export { ReactComponent as LockLogo } from "./images/shared/awesome-lock.svg";
+export { ReactComponent as TorusLogo } from "./images/shared/torus-logo.svg";
+export { ReactComponent as CloseIcon } from "./images/shared/cross.svg";
+export { ReactComponent as ArrowBack } from "./images/shared/arrow-back.svg";

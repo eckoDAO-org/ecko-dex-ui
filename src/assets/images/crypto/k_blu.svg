@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="24" viewBox="0 0 22 24">
+  <defs>
+    <linearGradient id="linear-gradient" x1="-0.015" y1="0.5" x2="0.962" y2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0.019" stop-color="#004ea4"/>
+      <stop offset="0.024" stop-color="#004fa5"/>
+      <stop offset="0.154" stop-color="#0e74bc"/>
+      <stop offset="0.283" stop-color="#1991ce"/>
+      <stop offset="0.412" stop-color="#20a6db"/>
+      <stop offset="0.538" stop-color="#25b2e3"/>
+      <stop offset="0.66" stop-color="#27b7e6"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="-0.07" y1="0.257" x2="0.527" y2="0.57" gradientUnits="objectBoundingBox">
+      <stop offset="0.017" stop-color="#004ea4"/>
+      <stop offset="0.099" stop-color="#0762b1"/>
+      <stop offset="0.243" stop-color="#1281c4"/>
+      <stop offset="0.395" stop-color="#1b98d3"/>
+      <stop offset="0.555" stop-color="#22a9dd"/>
+      <stop offset="0.731" stop-color="#25b3e3"/>
+      <stop offset="0.95" stop-color="#27b7e6"/>
+    </linearGradient>
+  </defs>
+  <g id="Group_54077" data-name="Group 54077" transform="translate(-27 -135)">
+    <path id="Path_38801" data-name="Path 38801" d="M57.727,135h-7.1l-8.356,8.7v7.248Z" transform="translate(-9.27 0)" fill="url(#linear-gradient)"/>
+    <rect id="Rectangle_4935" data-name="Rectangle 4935" width="6.002" height="24" transform="translate(27 135)" fill="#27b7e6"/>
+    <path id="Path_38802" data-name="Path 38802" d="M61.546,174.015l-9.862-14.4-4.015,4.143,6.909,10.257Z" transform="translate(-12.546 -15.015)" fill="url(#linear-gradient-2)"/>
+  </g>
+</svg>
