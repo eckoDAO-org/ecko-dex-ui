@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button } from "semantic-ui-react";
 import styled from "styled-components";
 import pwError from "../alerts/pwError";
 import CustomButton from "../../shared/CustomButton";
+import { AccountContext } from "../../contexts/AccountContext";
+import reduceToken from "../../utils/reduceToken";
+import ConnectWalletModal from "../modals/kdaModals/ConnectWalletModal";
+import { ModalContext } from "../../contexts/ModalContext";
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -19,6 +23,8 @@ const SwapButtonsForm = ({
   setToValues,
   fromNote,
 }) => {
+  const modalContext = useContext(ModalContext);
+  const { account } = useContext(AccountContext);
   const getButtonLabel = () => {
     // if (!pact.account.account)
     return "Connect wallet";
@@ -48,10 +54,15 @@ const SwapButtonsForm = ({
             //   loading
           }
           onClick={async () => {
-            // if (!pact.account.account) {
-            //   wallet.setOpenConnectModal(true);
-            //   return;
-            // }
+            if (!account.account) {
+              return modalContext.openModal({
+                title: account?.account ? "wallet connected" : "connect wallet",
+                description: account?.account
+                  ? `Account ID: ${reduceToken(account.account)}`
+                  : "Connect a wallet using one of the methods below",
+                content: <ConnectWalletModal />,
+              });
+            }
             setLoading(true);
             // if (
             //   pact.signing.method !== "sign" &&

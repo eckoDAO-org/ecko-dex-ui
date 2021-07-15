@@ -11,7 +11,6 @@ import { AccountContext } from "../../../contexts/AccountContext";
 import reduceToken from "../../../utils/reduceToken";
 import { reduceBalance } from "../../../utils/reduceBalance";
 import SlippagePopupContent from "./SlippagePopupContent";
-import { WalletContext } from "../../../contexts/WalletContext";
 import { ModalContext } from "../../../contexts/ModalContext";
 import ConnectWalletModal from "../../modals/kdaModals/ConnectWalletModal";
 
