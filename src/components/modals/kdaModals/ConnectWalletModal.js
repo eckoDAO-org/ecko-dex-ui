@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components/macro";
 
 import CustomButton from "../../../shared/CustomButton";
@@ -17,19 +17,21 @@ const ConnectWalletModal = () => {
   const { account } = useContext(AccountContext);
 
   const [currentOpenWallet, setCurrentOpenWallet] = useState("");
-  console.log(
-    "🚀 ~ file: ConnectWalletModal.js ~ line 20 ~ ConnectWalletModal ~ currentOpenWallet",
-    currentOpenWallet
-  );
+
+  useEffect(() => {}, [currentOpenWallet]);
 
   const openWalletModal = (walletName) => {
     switch (walletName) {
       default:
         return <div />;
       case "Zelcore":
-        return (
-          <ConnectWalletZelcoreModal open={currentOpenWallet === "Zelcore"} />
-        );
+        return modalContext.openModal({
+          open: currentOpenWallet === "Zelcore",
+          title: "connect wallet",
+          description: "Zelcore Signing (Safest)",
+          content: <ConnectWalletZelcoreModal />,
+          onBack: () => setCurrentOpenWallet(""),
+        });
       case "Torus":
         return <div />;
       case "Chainweaver":

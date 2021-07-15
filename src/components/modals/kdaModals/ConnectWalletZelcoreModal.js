@@ -5,6 +5,7 @@ import CustomButton from "../../../shared/CustomButton";
 import { PactContext } from "../../../contexts/PactContext";
 import { AccountContext } from "../../../contexts/AccountContext";
 import LayoutModal from "../LayoutModal";
+import { WalletContext } from "../../../contexts/WalletContext";
 
 const Container = styled.div`
   position: absolute;
@@ -37,7 +38,7 @@ const ActionContainer = styled.div`
 
 const ConnectWalletZelcoreModal = ({ open, onClose, onBack }) => {
   const account = useContext(AccountContext);
-  const pact = useContext(PactContext);
+  const wallet = useContext(WalletContext);
   const [accountId, setAccountId] = useState("");
   const [openGetZelcoreAccountModal, setOpenGetZelcoreAccountModal] =
     useState(false);
@@ -78,7 +79,7 @@ const ConnectWalletZelcoreModal = ({ open, onClose, onBack }) => {
 
   const handleConnect = async () => {
     await account.setVerifiedAccount(accountId);
-    // await pact.signingWallet();
+    await wallet.signingWallet();
 
     // if (response !== "success") {
     //   setError({ message: "Account does not exist!" });
@@ -90,12 +91,7 @@ const ConnectWalletZelcoreModal = ({ open, onClose, onBack }) => {
   };
 
   return (
-    <LayoutModal
-      open={open}
-      title="connect wallet"
-      description="Zelcore Signing (Safest)"
-      onClose={onClose}
-    >
+    <>
       <Text>
         Please make sure the KDA account provided is controlled by your Zelcore
         wallet
@@ -145,7 +141,7 @@ const ConnectWalletZelcoreModal = ({ open, onClose, onBack }) => {
           </CustomButton>
         </Button.Group>
       </ActionContainer>
-    </LayoutModal>
+    </>
   );
 };
 
