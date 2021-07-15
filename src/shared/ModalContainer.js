@@ -4,13 +4,17 @@ import styled from "styled-components/macro";
 import { ArrowBack, CloseIcon } from "../assets";
 
 const Container = styled.div`
-  position: absolute;
+  position: relative;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  max-width: 500px;
+  flex-flow: column;
+  padding: 20px 20px;
   width: 100%;
-  z-index: 5;
+  border-radius: 10px;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 5px #ffffff;
+  opacity: 1;
+  background: #240b2f 0% 0% no-repeat padding-box;
+  color: #ffffff;
 `;
 
 const HeaderContainer = styled.div`
