@@ -55,7 +55,10 @@ const RightHeaderItems = () => {
           <AccountInfo
             onClick={() =>
               modalContext.openModal({
-                title: "",
+                title: account?.account ? "wallet connected" : "connect wallet",
+                description: account?.account
+                  ? `Account ID: ${reduceToken(account.account)}`
+                  : "Connect a wallet using one of the methods below",
                 content: <ConnectWalletModal />,
               })
             }
@@ -95,7 +98,7 @@ const RightHeaderItems = () => {
         </>
       )}
       {account.account && (
-        <HeaderItem onClick={logout()}>
+        <HeaderItem onClick={() => logout()}>
           <PowerIcon />
         </HeaderItem>
       )}
