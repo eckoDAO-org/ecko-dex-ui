@@ -13,6 +13,7 @@ const ModalRender = ({ children }) => {
             description={value.description}
             open={value.open}
             onClose={value.onClose || value.closeModal}
+            onBack={null || value.onBack}
             containerStyle={value.containerStyle}
             content={value.content}
           />

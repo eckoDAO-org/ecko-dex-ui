@@ -16,16 +16,20 @@ const ConnectWalletModal = () => {
   const modalContext = useContext(ModalContext);
   const { account } = useContext(AccountContext);
 
+  const [currentOpenWallet, setCurrentOpenWallet] = useState("");
+  console.log(
+    "🚀 ~ file: ConnectWalletModal.js ~ line 20 ~ ConnectWalletModal ~ currentOpenWallet",
+    currentOpenWallet
+  );
+
   const openWalletModal = (walletName) => {
     switch (walletName) {
       default:
         return <div />;
       case "Zelcore":
-        return modalContext.openModal({
-          title: "connect wallet",
-          description: "Zelcore Signing (Safest)",
-          content: <ConnectWalletZelcoreModal />,
-        });
+        return (
+          <ConnectWalletZelcoreModal open={currentOpenWallet === "Zelcore"} />
+        );
       case "Torus":
         return <div />;
       case "Chainweaver":
@@ -40,7 +44,10 @@ const ConnectWalletModal = () => {
         border: "1px solid #424242",
       }}
       background="transparent"
-      onClick={() => openWalletModal(wallet.name)}
+      onClick={() => {
+        setCurrentOpenWallet(wallet.name);
+        openWalletModal(wallet.name);
+      }}
     >
       {wallet.logo}
       {` ${wallet.name}`}

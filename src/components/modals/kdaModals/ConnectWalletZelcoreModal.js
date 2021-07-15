@@ -4,6 +4,7 @@ import { Button } from "semantic-ui-react";
 import CustomButton from "../../../shared/CustomButton";
 import { PactContext } from "../../../contexts/PactContext";
 import { AccountContext } from "../../../contexts/AccountContext";
+import LayoutModal from "../LayoutModal";
 
 const Container = styled.div`
   position: absolute;
@@ -34,7 +35,7 @@ const ActionContainer = styled.div`
   margin-top: 32px;
 `;
 
-const ConnectWalletZelcoreModal = ({ show, onClose, onBack }) => {
+const ConnectWalletZelcoreModal = ({ open, onClose, onBack }) => {
   const account = useContext(AccountContext);
   const pact = useContext(PactContext);
   const [accountId, setAccountId] = useState("");
@@ -89,7 +90,12 @@ const ConnectWalletZelcoreModal = ({ show, onClose, onBack }) => {
   };
 
   return (
-    <>
+    <LayoutModal
+      open={open}
+      title="connect wallet"
+      description="Zelcore Signing (Safest)"
+      onClose={onClose}
+    >
       <Text>
         Please make sure the KDA account provided is controlled by your Zelcore
         wallet
@@ -139,7 +145,7 @@ const ConnectWalletZelcoreModal = ({ show, onClose, onBack }) => {
           </CustomButton>
         </Button.Group>
       </ActionContainer>
-    </>
+    </LayoutModal>
   );
 };
 

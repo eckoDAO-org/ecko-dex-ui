@@ -32,6 +32,7 @@ const LayoutModal = ({
   description,
   open,
   onClose,
+  onBack,
   containerStyle,
   children,
   content,
@@ -65,6 +66,7 @@ const LayoutModal = ({
               onClose={() => {
                 onClose();
               }}
+              onBack={onBack ? () => onBack() : null}
             >
               {!account?.account && (
                 <ContentContainer> {content || children}</ContentContainer>
