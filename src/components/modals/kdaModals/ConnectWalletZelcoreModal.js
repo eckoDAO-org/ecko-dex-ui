@@ -6,6 +6,8 @@ import { PactContext } from "../../../contexts/PactContext";
 import { AccountContext } from "../../../contexts/AccountContext";
 import LayoutModal from "../LayoutModal";
 import { WalletContext } from "../../../contexts/WalletContext";
+import { ModalContext } from "../../../contexts/ModalContext";
+import GetZelcoreAccountModal from "./GetZelcoreAccountModal";
 
 const Container = styled.div`
   position: absolute;
@@ -37,6 +39,7 @@ const ActionContainer = styled.div`
 `;
 
 const ConnectWalletZelcoreModal = ({ open, onClose, onBack }) => {
+  const modalContext = useContext(ModalContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const [accountId, setAccountId] = useState("");
@@ -115,7 +118,15 @@ const ConnectWalletZelcoreModal = ({ open, onClose, onBack }) => {
           border: "1px solid #424242",
         }}
         background="transparent"
-        onClick={() => setOpenGetZelcoreAccountModal(true)}
+        onClick={() => {
+          setOpenGetZelcoreAccountModal(true);
+          modalContext.openModal({
+            title: "get zelcore accounts",
+            description: "Select Accounts",
+            open: openGetZelcoreAccountModal,
+            content: <GetZelcoreAccountModal />,
+          });
+        }}
       >
         Get Zelcore Accounts
       </CustomButton>
