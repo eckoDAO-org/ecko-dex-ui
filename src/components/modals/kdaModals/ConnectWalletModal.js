@@ -9,20 +9,29 @@ import reduceToken from "../../../utils/reduceToken";
 import LayoutModal from "../LayoutModal";
 import { AccountContext } from "../../../contexts/AccountContext";
 import { WALLET } from "../../../constants/wallet";
+import { ModalContext } from "../../../contexts/ModalContext";
+import ConnectWalletZelcoreModal from "./ConnectWalletZelcoreModal";
 
 const ConnectWalletModal = () => {
-  const pact = useContext(PactContext);
+  const modalContext = useContext(ModalContext);
   const { account } = useContext(AccountContext);
-  const [openWalletConnect, setOpenConnectWallet] = useState("");
 
-  const [
-    openConnectWalletChainweaverModal,
-    setOpenConnectWalletChainweaverModal,
-  ] = useState(false);
-  const [openConnectWalletZelcoreModal, setOpenConnectWalletZelcoreModal] =
-    useState(false);
-  const [openConnectWalletTorusModal, setOpenConnectWalletTorusModal] =
-    useState(false);
+  const openWalletModal = (walletName) => {
+    switch (walletName) {
+      default:
+        return <div />;
+      case "Zelcore":
+        return modalContext.openModal({
+          title: "connect wallet",
+          description: "Zelcore Signing (Safest)",
+          content: <ConnectWalletZelcoreModal />,
+        });
+      case "Torus":
+        return <div />;
+      case "Chainweaver":
+        return <div />;
+    }
+  };
 
   return Object.values(WALLET).map((wallet, index) => (
     <CustomButton
@@ -31,10 +40,10 @@ const ConnectWalletModal = () => {
         border: "1px solid #424242",
       }}
       background="transparent"
-      onClick={() => setOpenConnectWallet(wallet.name)}
+      onClick={() => openWalletModal(wallet.name)}
     >
-      {wallet.icon}
-      {wallet.name}
+      {wallet.logo}
+      {` ${wallet.name}`}
     </CustomButton>
   ));
 };
