@@ -26,16 +26,15 @@ const SwapButtonsForm = ({
   const modalContext = useContext(ModalContext);
   const { account } = useContext(AccountContext);
   const getButtonLabel = () => {
-    // if (!pact.account.account)
-    return "Connect wallet";
+    if (!account.account) return "Connect wallet";
     // //if (!pact.hasWallet()) return "Set signing method in wallet";
-    // if (!fromValues.coin || !toValues.coin) return "Select tokens";
+    if (!fromValues.coin || !toValues.coin) return "Select tokens";
     // if (fetchingPair) return "Fetching Pair...";
     // if (isNaN(pact.ratio)) return "Pair does not exist!";
     // if (!fromValues.amount || !toValues.amount) return "Enter an amount";
     // if (fromValues.amount > fromValues.balance)
     //   return `Insufficient ${fromValues.coin} balance`;
-    // return "SWAP";
+    return "SWAP";
   };
   return (
     <ButtonContainer>
