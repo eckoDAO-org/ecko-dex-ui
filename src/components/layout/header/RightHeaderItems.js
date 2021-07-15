@@ -95,7 +95,7 @@ const RightHeaderItems = () => {
         </>
       )}
       {account.account && (
-        <HeaderItem onClick={logout}>
+        <HeaderItem onClick={logout()}>
           <PowerIcon />
         </HeaderItem>
       )}
