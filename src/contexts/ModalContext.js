@@ -12,12 +12,15 @@ const initialState = {
 export const ModalProvider = (props) => {
   const [state, setState] = useState(initialState);
 
-  const changeStateModal = (key, value) => {
-    setState((prev) => ({ ...prev, [key]: value }));
+  const [prevModal, setPrevModal] = useState(state);
+
+  const onBackModal = () => {
+    setState(prevModal);
   };
 
   const openModal = (settings) => {
     setState((prev) => ({ ...prev, ...settings, open: true }));
+    return state.id === prevModal.id ? setPrevModal(state) : null;
   };
 
   const setModalLoading = (isLoading) => {
@@ -32,7 +35,7 @@ export const ModalProvider = (props) => {
     <ModalContext.Provider
       value={{
         ...state,
-        changeStateModal,
+        onBackModal,
         openModal,
         setModalLoading,
         closeModal,

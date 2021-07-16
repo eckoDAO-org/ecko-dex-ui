@@ -14,15 +14,11 @@ const ConnectWalletModal = () => {
   const { account } = useContext(AccountContext);
 
   const [currentOpenWallet, setCurrentOpenWallet] = useState("");
-  console.log(
-    "🚀 ~ file: ConnectWalletModal.js ~ line 17 ~ ConnectWalletModal ~ currentOpenWallet",
-    currentOpenWallet
-  );
 
   useEffect(() => {
-    console.log(modalContext.state);
+    console.log(modalContext);
     // if (currentOpenWallet === "") modalContext.setModal("open", false);
-  }, [currentOpenWallet]);
+  }, []);
 
   const openWalletModal = (walletName) => {
     switch (walletName) {
@@ -30,7 +26,7 @@ const ConnectWalletModal = () => {
         return <div />;
       case "Zelcore":
         return modalContext.openModal({
-          open: currentOpenWallet === "Zelcore",
+          id: "ZELCORE",
           title: "connect wallet",
           description: "Zelcore Signing (Safest)",
           onBack: () => setCurrentOpenWallet(""),
@@ -43,7 +39,7 @@ const ConnectWalletModal = () => {
         });
       case "Torus":
         return modalContext.openModal({
-          open: currentOpenWallet === "Torus",
+          id: "TORUS",
           title: "connect wallet",
           description: "Torus Signing",
           onBack: () => setCurrentOpenWallet(""),
