@@ -20,7 +20,7 @@ export const ModalProvider = (props) => {
 
   const openModal = (settings) => {
     setState((prev) => ({ ...prev, ...settings, open: true }));
-    return state.id === prevModal.id ? setPrevModal(state) : null;
+    if (state.id === prevModal.id) setPrevModal(state);
   };
 
   const setModalLoading = (isLoading) => {
