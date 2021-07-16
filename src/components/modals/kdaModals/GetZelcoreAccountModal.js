@@ -64,6 +64,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
 
   const handleConnect = async () => {
     await account.setVerifiedAccount(selectedAccount);
+    handleModalClose();
   };
 
   const handleCancel = () => {
