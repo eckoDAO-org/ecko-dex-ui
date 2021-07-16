@@ -3,10 +3,6 @@ import styled from "styled-components/macro";
 
 import CustomButton from "../../../shared/CustomButton";
 
-import { PactContext } from "../../../contexts/PactContext";
-import reduceToken from "../../../utils/reduceToken";
-
-import LayoutModal from "../LayoutModal";
 import { AccountContext } from "../../../contexts/AccountContext";
 import { WALLET } from "../../../constants/wallet";
 import { ModalContext } from "../../../contexts/ModalContext";
@@ -29,7 +25,9 @@ const ConnectWalletModal = () => {
           open: currentOpenWallet === "Zelcore",
           title: "connect wallet",
           description: "Zelcore Signing (Safest)",
-          content: <ConnectWalletZelcoreModal />,
+          content: (
+            <ConnectWalletZelcoreModal onClose={modalContext.closeModal()} />
+          ),
           onBack: () => setCurrentOpenWallet(""),
         });
       case "Torus":
