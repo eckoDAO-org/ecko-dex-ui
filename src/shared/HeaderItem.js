@@ -46,7 +46,7 @@ const HeaderItem = ({
       exact
       to={getTo()}
       onClick={() =>
-        link ? window.open(link, "_blank", "noopener,noreferrer") : onClick()
+        link ? window.open(link, "_blank", "noopener,noreferrer") : onClick
       }
       style={headerItemStyle}
     >
