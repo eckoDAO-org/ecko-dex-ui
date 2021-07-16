@@ -1,9 +1,7 @@
-import React, { useState, useContext, useEffect } from "react";
-import styled from "styled-components/macro";
+import React, { useContext } from "react";
 
 import CustomButton from "../../../shared/CustomButton";
 
-import { AccountContext } from "../../../contexts/AccountContext";
 import { WALLET } from "../../../constants/wallet";
 import { ModalContext } from "../../../contexts/ModalContext";
 import ConnectWalletZelcoreModal from "./ConnectWalletZelcoreModal";
@@ -11,14 +9,6 @@ import ConnecWalletTorusModal from "./ConnectWalletTorusModal";
 
 const ConnectWalletModal = () => {
   const modalContext = useContext(ModalContext);
-  const { account } = useContext(AccountContext);
-
-  const [currentOpenWallet, setCurrentOpenWallet] = useState("");
-
-  useEffect(() => {
-    console.log(modalContext);
-    // if (currentOpenWallet === "") modalContext.setModal("open", false);
-  }, []);
 
   const openWalletModal = (walletName) => {
     switch (walletName) {
@@ -29,11 +19,11 @@ const ConnectWalletModal = () => {
           id: "ZELCORE",
           title: "connect wallet",
           description: "Zelcore Signing (Safest)",
-          onBack: () => setCurrentOpenWallet(""),
+          onBack: () => modalContext.onBackModal(),
           content: (
             <ConnectWalletZelcoreModal
               onClose={modalContext.closeModal()}
-              onBack={() => setCurrentOpenWallet("")}
+              onBack={() => modalContext.onBackModal()}
             />
           ),
         });
@@ -42,11 +32,11 @@ const ConnectWalletModal = () => {
           id: "TORUS",
           title: "connect wallet",
           description: "Torus Signing",
-          onBack: () => setCurrentOpenWallet(""),
+          onBack: () => modalContext.onBackModal(),
           content: (
             <ConnecWalletTorusModal
               onClose={() => modalContext.closeModal()}
-              onBack={() => setCurrentOpenWallet("")}
+              onBack={() => modalContext.onBackModal()}
             />
           ),
         });
@@ -63,7 +53,6 @@ const ConnectWalletModal = () => {
       }}
       background="transparent"
       onClick={() => {
-        setCurrentOpenWallet(wallet.name);
         openWalletModal(wallet.name);
       }}
     >
