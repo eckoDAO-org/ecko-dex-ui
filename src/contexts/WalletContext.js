@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import Pact from "pact-lang-api";
 
 export const WalletContext = createContext(null);
@@ -19,6 +19,12 @@ export const WalletProvider = (props) => {
   const keyPair = privKey
     ? Pact.crypto.restoreKeyPairFromSecretKey(privKey)
     : "";
+
+  useEffect(() => {
+    const store = async () =>
+      localStorage.setItem("signing", JSON.stringify(signing));
+    store();
+  }, [signing]);
 
   const storePrivKey = async (pk) => {
     setSigning({ method: "pk", key: pk });
