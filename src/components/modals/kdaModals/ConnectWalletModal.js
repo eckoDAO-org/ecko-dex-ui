@@ -27,9 +27,11 @@ const ConnectWalletModal = () => {
           title: "connect wallet",
           description: "Zelcore Signing (Safest)",
           content: (
-            <ConnectWalletZelcoreModal onClose={modalContext.closeModal()} />
+            <ConnectWalletZelcoreModal
+              onClose={modalContext.closeModal()}
+              onBack={setCurrentOpenWallet("")}
+            />
           ),
-          onBack: () => setCurrentOpenWallet(""),
         });
       case "Torus":
         return modalContext.openModal({
@@ -37,9 +39,11 @@ const ConnectWalletModal = () => {
           title: "connect wallet",
           description: "Torus Signing",
           content: (
-            <ConnecWalletTorusModal onClose={modalContext.closeModal()} />
+            <ConnecWalletTorusModal
+              onClose={() => modalContext.closeModal()}
+              onBack={() => setCurrentOpenWallet("")}
+            />
           ),
-          onBack: () => setCurrentOpenWallet(""),
         });
       case "Chainweaver":
         return <div />;
