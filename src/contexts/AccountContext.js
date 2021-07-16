@@ -25,6 +25,8 @@ export const AccountProvider = (props) => {
       ? JSON.parse(savedAcct)
       : { account: null, guard: null, balance: 0 }
   );
+  const [registered, setRegistered] = useState(false);
+
   const [tokenFromAccount, setTokenFromAccount] = useState({
     account: null,
     guard: null,
@@ -40,6 +42,10 @@ export const AccountProvider = (props) => {
   useEffect(() => {
     if (account.account) setVerifiedAccount(account.account);
   }, [sendRes]);
+
+  useEffect(() => {
+    if (account.account) setRegistered(true);
+  }, [registered]);
 
   const clearSendRes = () => {
     setVerifiedAccount(account.account);
@@ -156,6 +162,8 @@ export const AccountProvider = (props) => {
     clearSendRes,
     sendRes,
     setVerifiedAccount,
+    registered,
+    setRegistered,
     getTokenAccount,
     tokenToAccount,
     tokenFromAccount,
