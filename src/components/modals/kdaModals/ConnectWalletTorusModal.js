@@ -8,6 +8,7 @@ import { Loader } from "semantic-ui-react";
 import { AccountContext } from "../../../contexts/AccountContext";
 import { WalletContext } from "../../../contexts/WalletContext";
 import CustomButton from "../../../shared/CustomButton";
+import { ModalContext } from "../../../contexts/ModalContext";
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -84,6 +85,7 @@ const verifierMap = {
 /* const createAPIHost = (network, chainId) => `https://${network}.testnet.chainweb.com/chainweb/0.0/testnet02/chain/${chainId}/pact` */
 
 function Login({ show, onClose, onBack }) {
+  const modalContext = useContext(ModalContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const [selectedVerifier, setSelectedVerifier] = useState(GOOGLE);
@@ -98,6 +100,11 @@ function Login({ show, onClose, onBack }) {
   const history = useHistory();
   const [accountBalance, setAccountBalance] = useState(0);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    console.log(modalContext);
+    // if (currentOpenWallet === "") modalContext.setModal("open", false);
+  }, []);
 
   useEffect(() => {
     const init = async () => {
@@ -181,7 +188,7 @@ function Login({ show, onClose, onBack }) {
           boxShadow="none"
           background="transparent"
           onClick={() => {
-            onBack();
+            modalContext.onBackModal();
           }}
         >
           Cancel
