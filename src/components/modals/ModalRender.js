@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ModalConsumer, ModalProvider } from "../../contexts/ModalContext";
 import LayoutModal from "./LayoutModal";
 

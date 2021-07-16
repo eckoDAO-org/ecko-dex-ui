@@ -3,6 +3,7 @@ import React, { useState, createContext } from "react";
 export const ModalContext = createContext();
 
 const initialState = {
+  id: "",
   open: false,
   title: "",
   content: null,
@@ -10,6 +11,10 @@ const initialState = {
 
 export const ModalProvider = (props) => {
   const [state, setState] = useState(initialState);
+
+  const changeStateModal = (key, value) => {
+    setState((prev) => ({ ...prev, [key]: value }));
+  };
 
   const openModal = (settings) => {
     setState((prev) => ({ ...prev, ...settings, open: true }));
@@ -27,6 +32,7 @@ export const ModalProvider = (props) => {
     <ModalContext.Provider
       value={{
         ...state,
+        changeStateModal,
         openModal,
         setModalLoading,
         closeModal,
