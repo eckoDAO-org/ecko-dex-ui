@@ -1,14 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components/macro";
-import { Transition } from "react-spring/renderprops";
-import Backdrop from "../../../shared/Backdrop";
 import CustomButton from "../../../shared/CustomButton";
 import { Dropdown, Loader } from "semantic-ui-react";
 import { Button } from "semantic-ui-react";
-import { PactContext } from "../../../contexts/PactContext";
 import getAccounts from "../../../utils/getZelcoreAccts";
 import reduceToken from "../../../utils/reduceToken";
 import { AccountContext } from "../../../contexts/AccountContext";
+import { ModalContext } from "../../../contexts/ModalContext";
 
 const Text = styled.span`
   font-size: 13px;
@@ -24,6 +22,7 @@ const ActionContainer = styled.div`
 `;
 
 const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
+  const modalContext = useContext(ModalContext);
   const account = useContext(AccountContext);
   const [loading, setLoading] = useState(false);
   const [accounts, setAccounts] = useState(null);
@@ -69,6 +68,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
 
   const handleCancel = () => {
     setSelectedAccount(null);
+    modalContext.onBackModal();
   };
 
   return (

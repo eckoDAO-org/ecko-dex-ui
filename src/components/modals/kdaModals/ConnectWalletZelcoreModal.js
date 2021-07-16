@@ -20,7 +20,7 @@ const ActionContainer = styled.div`
   margin-top: 32px;
 `;
 
-const ConnectWalletZelcoreModal = ({ open, onClose, onBack }) => {
+const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
   const modalContext = useContext(ModalContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
@@ -59,7 +59,7 @@ const ConnectWalletZelcoreModal = ({ open, onClose, onBack }) => {
 
   const handleModalBack = () => {
     resetValues();
-    onBack();
+    modalContext.onBackModal();
   };
 
   const handleConnect = async () => {
@@ -103,6 +103,7 @@ const ConnectWalletZelcoreModal = ({ open, onClose, onBack }) => {
         onClick={() => {
           setOpenGetZelcoreAccountModal(true);
           modalContext.openModal({
+            id: "ZELCORE_ACCOUNT",
             title: "get zelcore accounts",
             description: "Select Accounts",
             open: openGetZelcoreAccountModal,
@@ -123,7 +124,7 @@ const ConnectWalletZelcoreModal = ({ open, onClose, onBack }) => {
             boxShadow="none"
             background="transparent"
             onClick={() => {
-              resetValues();
+              handleModalBack();
             }}
           >
             Cancel
