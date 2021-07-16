@@ -6,6 +6,7 @@ import { WALLET } from "../../../constants/wallet";
 import { ModalContext } from "../../../contexts/ModalContext";
 import ConnectWalletZelcoreModal from "./ConnectWalletZelcoreModal";
 import ConnecWalletTorusModal from "./ConnectWalletTorusModal";
+import ConnectWalletChainweaverModal from "./ConnectWalletChainweaverModal";
 
 const ConnectWalletModal = () => {
   const modalContext = useContext(ModalContext);
@@ -41,7 +42,18 @@ const ConnectWalletModal = () => {
           ),
         });
       case "Chainweaver":
-        return <div />;
+        return modalContext.openModal({
+          id: "CHIANWEAVER",
+          title: "connect wallet",
+          description: "Chainweaver",
+          onBack: () => modalContext.onBackModal(),
+          content: (
+            <ConnectWalletChainweaverModal
+              onClose={() => modalContext.closeModal()}
+              onBack={() => modalContext.onBackModal()}
+            />
+          ),
+        });
     }
   };
 

@@ -1,33 +1,15 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components/macro";
-import { Transition } from "react-spring/renderprops";
-import ModalContainer from "../../components/shared/ModalContainer";
-import Backdrop from "../../components/shared/Backdrop";
-import MyButton from "../../components/shared/Button";
-import Input from "../../components/shared/Input";
-import { PactContext } from "../../contexts/PactContext";
-import GetZelcoreAccountModal from "./GetZelcoreAccountModal";
+import CustomButton from "../../../shared/CustomButton";
+import Input from "../../../shared/Input";
 import { Button } from "semantic-ui-react";
-
-const Container = styled.div`
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  max-width: 500px;
-  width: 100%;
-  z-index: 5;
-`;
+import { ModalContext } from "../../../contexts/ModalContext";
+import { AccountContext } from "../../../contexts/AccountContext";
+import { WalletContext } from "../../../contexts/WalletContext";
 
 const Text = styled.span`
   font-size: 13px;
   font-family: montserrat-regular;
-`;
-
-const ContentContainer = styled.div`
-  display: flex;
-  flex-flow: column;
-  gap: 24px;
 `;
 
 const ActionContainer = styled.div`
@@ -35,14 +17,15 @@ const ActionContainer = styled.div`
   flex-flow: row;
   align-items: center;
   justify-content: space-around;
-  margin-top: 32px;
+  margin-top: 0;
 `;
 
 const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
-  const pact = useContext(PactContext);
+  const modalContext = useContext(ModalContext);
+  const account = useContext(AccountContext);
+  const wallet = useContext(WalletContext);
   const [accountId, setAccountId] = useState("");
-  const [openGetZelcoreAccountModal, setOpenGetZelcoreAccountModal] =
-    useState(false);
+  useState(false);
 
   const is_hexadecimal = (str) => {
     const regexp = /^[0-9a-fA-F]+$/;
@@ -79,8 +62,8 @@ const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
   };
 
   const handleConnect = async () => {
-    await pact.setVerifiedAccount(accountId);
-    await pact.signingWallet();
+    await account.setVerifiedAccount(accountId);
+    await wallet.signingWallet();
     // if (response !== "success") {
     //   setError({ message: "Account does not exist!" });
     // } else {
@@ -111,7 +94,7 @@ const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
       />
       <ActionContainer>
         <Button.Group fluid>
-          <MyButton
+          <CustomButton
             border="none"
             boxShadow="none"
             background="transparent"
@@ -120,15 +103,15 @@ const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
             }}
           >
             Cancel
-          </MyButton>
-          <MyButton
+          </CustomButton>
+          <CustomButton
             disabled={!checkKey(accountId)}
             onClick={() => {
               handleConnect();
             }}
           >
             Connect
-          </MyButton>
+          </CustomButton>
         </Button.Group>
       </ActionContainer>
     </>
