@@ -24,48 +24,9 @@ const LoaderContainer = styled.div`
   margin-top: 15px;
 `;
 
-const ActionContainer = styled.div`
-  display: flex;
-  flex-flow: row;
-  align-items: center;
-  justify-content: space-around;
-  margin-top: 32px;
-`;
-
 const Text = styled.span`
   font-size: 13px;
   font-family: montserrat-regular;
-`;
-
-const KeyContainer = styled.div`
-  margin-top: 80px;
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-`;
-
-const MainContainer = styled.div`
-  display: flex;
-  flex-flow: column;
-  align: center;
-`;
-const ButtonsContainer = styled.div`
-  display: flex;
-  flex-flow: column;
-  align: center;
-  padding-top: 16px;
-  border: 2px solid 173ad21;
-  border-radius: 25px;
-  height: 100%;
-
-  box-shadow: ${({ theme }) => theme.boxShadow};
-
-  span:first-child {
-    font-size: 12px;
-
-    margin-left: 30px;
-    text-transform: capitalize;
-  }
 `;
 
 const kdaValue = 0.55;
@@ -84,7 +45,7 @@ const verifierMap = {
 
 /* const createAPIHost = (network, chainId) => `https://${network}.testnet.chainweb.com/chainweb/0.0/testnet02/chain/${chainId}/pact` */
 
-function Login({ show, onClose, onBack }) {
+function Login({ onClose, onBack }) {
   const modalContext = useContext(ModalContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
@@ -100,11 +61,6 @@ function Login({ show, onClose, onBack }) {
   const history = useHistory();
   const [accountBalance, setAccountBalance] = useState(0);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    console.log(modalContext);
-    // if (currentOpenWallet === "") modalContext.setModal("open", false);
-  }, []);
 
   useEffect(() => {
     const init = async () => {
