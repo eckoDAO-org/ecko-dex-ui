@@ -7,6 +7,7 @@ import { AccountContext } from "../../../contexts/AccountContext";
 import { WALLET } from "../../../constants/wallet";
 import { ModalContext } from "../../../contexts/ModalContext";
 import ConnectWalletZelcoreModal from "./ConnectWalletZelcoreModal";
+import ConnecWalletTorusModal from "./ConnectWalletTorusModal";
 
 const ConnectWalletModal = () => {
   const modalContext = useContext(ModalContext);
@@ -31,7 +32,15 @@ const ConnectWalletModal = () => {
           onBack: () => setCurrentOpenWallet(""),
         });
       case "Torus":
-        return <div />;
+        return modalContext.openModal({
+          open: currentOpenWallet === "Torus",
+          title: "connect wallet",
+          description: "Torus Signing",
+          content: (
+            <ConnecWalletTorusModal onClose={modalContext.closeModal()} />
+          ),
+          onBack: () => setCurrentOpenWallet(""),
+        });
       case "Chainweaver":
         return <div />;
     }
