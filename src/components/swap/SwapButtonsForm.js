@@ -16,6 +16,7 @@ const ButtonContainer = styled.div`
 `;
 
 const SwapButtonsForm = ({
+  loading,
   setLoading,
   fromValues,
   setFromValues,
@@ -25,6 +26,7 @@ const SwapButtonsForm = ({
 }) => {
   const modalContext = useContext(ModalContext);
   const { account } = useContext(AccountContext);
+
   const getButtonLabel = () => {
     if (!account.account) return "Connect wallet";
     // //if (!pact.hasWallet()) return "Set signing method in wallet";
@@ -42,16 +44,12 @@ const SwapButtonsForm = ({
         <CustomButton
           /* background="none" */
           disabled={
-            ""
-            // pact.account.account &&
-            // (getButtonLabel() !== "SWAP" ||
-            //   isNaN(fromValues.amount) ||
-            //   isNaN(toValues.amount))
+            account.account &&
+            (getButtonLabel() !== "SWAP" ||
+              isNaN(fromValues.amount) ||
+              isNaN(toValues.amount))
           }
-          loading={
-            ""
-            //   loading
-          }
+          loading={loading}
           onClick={async () => {
             if (!account.account) {
               return modalContext.openModal({

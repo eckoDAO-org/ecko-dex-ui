@@ -23,10 +23,8 @@ const StyledButton = styled(SUIButton)`
     if (border) return border + " !important";
     return "1px solid #FFFFFF !important";
   }};
-  box-shadow: ${({ boxShadow }) => {
-    if (boxShadow) return boxShadow + " !important";
-    return "0 0 4px #FFFFFF !important";
-  }};
+  box-shadow: ${({ boxShadow }) =>
+    boxShadow ? boxShadow + " !important" : "0 0 4px #FFFFFF !important"};
   /* box-shadow: 0 0 4px #FFFFFF !important; */
   /* :hover {
     opacity: ${({ hover }) => (hover ? 0.7 : 1.0) + " !important"};
