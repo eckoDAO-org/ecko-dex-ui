@@ -1,33 +1,15 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components/macro";
 import { Button } from "semantic-ui-react";
 import CustomButton from "../../../shared/CustomButton";
-import { PactContext } from "../../../contexts/PactContext";
 import { AccountContext } from "../../../contexts/AccountContext";
-import LayoutModal from "../LayoutModal";
 import { WalletContext } from "../../../contexts/WalletContext";
 import { ModalContext } from "../../../contexts/ModalContext";
 import GetZelcoreAccountModal from "./GetZelcoreAccountModal";
 
-const Container = styled.div`
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  max-width: 500px;
-  width: 100%;
-  z-index: 5;
-`;
-
 const Text = styled.span`
   font-size: 13px;
   font-family: montserrat-regular;
-`;
-
-const ContentContainer = styled.div`
-  display: flex;
-  flex-flow: column;
-  gap: 24px;
 `;
 
 const ActionContainer = styled.div`
@@ -71,8 +53,6 @@ const ConnectWalletZelcoreModal = ({ open, onClose, onBack }) => {
   };
 
   const handleModalClose = () => {
-    debugger;
-
     resetValues();
     modalContext.closeModal();
   };
