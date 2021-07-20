@@ -361,6 +361,7 @@ export const SwapProvider = (props) => {
     <SwapContext.Provider
       value={{
         swap,
+        pairAccount,
         getPairAccount,
         swapLocal,
         swapWallet,
