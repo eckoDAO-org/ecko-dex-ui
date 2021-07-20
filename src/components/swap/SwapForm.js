@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import ButtonDivider from "../../shared/ButtonDivider";
 import Input from "../../shared/Input";
 import InputToken from "../../shared/InputToken";
 import { SwapArrowsIcon } from "../../assets";
 import { limitDecimalPlaces, reduceBalance } from "../../utils/reduceBalance";
+import { PactContext } from "../../contexts/PactContext";
 
 const FormContainer = styled.div`
   position: relative;
@@ -36,6 +37,7 @@ const SwapForm = ({
   setInputSide,
   swapValues,
 }) => {
+  const pact = useContext(PactContext);
   return (
     <FormContainer>
       <Input
@@ -46,14 +48,8 @@ const SwapForm = ({
         inputRightComponent={
           fromValues.coin ? (
             <InputToken
-              icon={
-                []
-                // pact.tokenData[fromValues.coin].icon
-              }
-              code={
-                []
-                // pact.tokenData[fromValues.coin].name
-              }
+              icon={pact.tokenData[fromValues.coin].icon}
+              code={pact.tokenData[fromValues.coin].name}
               onClick={() => setTokenSelectorType("from")}
             />
           ) : null
@@ -79,14 +75,8 @@ const SwapForm = ({
         inputRightComponent={
           toValues.coin ? (
             <InputToken
-              icon={
-                []
-                // pact.tokenData[toValues.coin].icon
-              }
-              code={
-                []
-                // pact.tokenData[toValues.coin].name
-              }
+              icon={pact.tokenData[toValues.coin].icon}
+              code={pact.tokenData[toValues.coin].name}
               onClick={() => setTokenSelectorType("to")}
             />
           ) : null
