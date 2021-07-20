@@ -2,21 +2,18 @@ import React, { createContext, useEffect, useState } from "react";
 import Pact from "pact-lang-api";
 import swal from "@sweetalert/with-react";
 import { getCorrectBalance } from "../utils/reduceBalance";
+import {
+  chainId,
+  creationTime,
+  GAS_PRICE,
+  network,
+} from "../constants/contextConstants";
 
 export const AccountContext = createContext();
 
 const savedAcct = localStorage.getItem("acct");
 const savedPrivKey = localStorage.getItem("pk");
 const savedSigning = localStorage.getItem("signing");
-
-const creationTime = () => Math.round(new Date().getTime() / 1000) - 10;
-const GAS_PRICE = 0.000000000001;
-const chainId = process.env.REACT_APP_KDA_CHAIN_ID || "0";
-const NETWORKID = process.env.REACT_APP_KDA_NETWORK_ID || "testnet04";
-
-const network =
-  process.env.REACT_APP_KDA_NETWORK ||
-  `https://api.testnet.chainweb.com/chainweb/0.0/${NETWORKID}/chain/${chainId}/pact`;
 
 export const AccountProvider = (props) => {
   const [sendRes, setSendRes] = useState(null);

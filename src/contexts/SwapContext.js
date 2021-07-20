@@ -7,16 +7,15 @@ import { WalletContext } from "./WalletContext";
 import { reduceBalance } from "../utils/reduceBalance";
 import { PactContext } from "./PactContext";
 import { decryptKey } from "../utils/keyUtils";
+import {
+  chainId,
+  creationTime,
+  GAS_PRICE,
+  network,
+  NETWORKID,
+} from "../constants/contextConstants";
 
 export const SwapContext = createContext();
-
-const creationTime = () => Math.round(new Date().getTime() / 1000) - 10;
-const NETWORKID = process.env.REACT_APP_KDA_NETWORK_ID || "testnet04";
-const GAS_PRICE = 0.000000000001;
-const chainId = process.env.REACT_APP_KDA_CHAIN_ID || "0";
-const network =
-  process.env.REACT_APP_KDA_NETWORK ||
-  `https://api.testnet.chainweb.com/chainweb/0.0/${NETWORKID}/chain/${chainId}/pact`;
 
 export const SwapProvider = (props) => {
   const pact = useContext(PactContext);
@@ -365,6 +364,7 @@ export const SwapProvider = (props) => {
         getPairAccount,
         swapLocal,
         swapWallet,
+        tokenData,
         localRes,
         isWaitingForWalletAuth,
         walletSuccess,
