@@ -5,6 +5,7 @@ import SwapButtonsForm from "../components/swap/SwapButtonsForm";
 import SwapForm from "../components/swap/SwapForm";
 import SwapResults from "../components/swap/SwapResults";
 import { PactContext } from "../contexts/PactContext";
+import { SwapContext } from "../contexts/SwapContext";
 import theme from "../styles/theme";
 import { getCorrectBalance, reduceBalance } from "../utils/reduceBalance";
 
@@ -28,6 +29,7 @@ const Title = styled.span`
 
 const SwapContainer = () => {
   const pact = useContext(PactContext);
+  const swap = useContext(SwapContext);
 
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
@@ -38,6 +40,11 @@ const SwapContainer = () => {
     address: "",
     precision: 0,
   });
+  console.log(
+    "🚀 ~ file: SwapContainer.js ~ line 37 ~ SwapContainer ~ fromValues",
+    fromValues
+  );
+
   const [toValues, setToValues] = useState({
     amount: "",
     balance: "",
@@ -53,9 +60,6 @@ const SwapContainer = () => {
   const [fetchingPair, setFetchingPair] = useState(false);
   const [priceImpact, setPriceImpact] = useState("");
 
-  // ----------------------------------------------------------------------
-  //                            ADD USEEFFECT
-  // ----------------------------------------------------------------------
   useEffect(() => {
     if (!isNaN(fromValues.amount)) {
       if (inputSide === "from" && fromValues.amount !== "") {
@@ -210,13 +214,13 @@ const SwapContainer = () => {
   }, [fromValues.coin, toValues.coin]);
 
   useEffect(() => {
-    if (pact.walletSuccess) {
+    if (swap.walletSuccess) {
       setLoading(false);
       setFromValues({ amount: "", balance: "", coin: "", address: "" });
       setToValues({ amount: "", balance: "", coin: "", address: "" });
       pact.setWalletSuccess(false);
     }
-  }, [pact.walletSuccess]);
+  }, [swap.walletSuccess]);
 
   const swapValues = () => {
     const from = { ...fromValues };
@@ -268,9 +272,11 @@ const SwapContainer = () => {
   };
 
   const onWalletRequestViewModalClose = () => {
-    pact.setIsWaitingForWalletAuth(false);
-    pact.setWalletError(null);
+    swap.setIsWaitingForWalletAuth(false);
+    swap.setWalletError(null);
   };
+
+  // ADD TXVIEW AND WALLETREQUESTVIEW MODALS
 
   return (
     <Container>
@@ -288,16 +294,20 @@ const SwapContainer = () => {
         setInputSide={setInputSide}
         swapValues={swapValues}
       />
-      {/* {!isNaN(pact.ratio) &&
+      {!isNaN(pact.ratio) &&
       fromValues.amount &&
       fromValues.coin &&
       toValues.amount &&
-      toValues.coin ? ( RESULT CONTAINER) : <></> */}
-      <SwapResults
-        priceImpact={priceImpact}
-        fromValues={fromValues}
-        toValues={toValues}
-      />
+      toValues.coin ? (
+        <SwapResults
+          priceImpact={priceImpact}
+          fromValues={fromValues}
+          toValues={toValues}
+        />
+      ) : (
+        <></>
+      )}
+
       <SwapButtonsForm
         setLoading={setLoading}
         fetchingPair={fetchingPair}

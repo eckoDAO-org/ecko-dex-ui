@@ -6,6 +6,7 @@ import InputToken from "../../shared/InputToken";
 import { SwapArrowsIcon } from "../../assets";
 import { limitDecimalPlaces, reduceBalance } from "../../utils/reduceBalance";
 import { PactContext } from "../../contexts/PactContext";
+import { SwapContext } from "../../contexts/SwapContext";
 
 const FormContainer = styled.div`
   position: relative;
@@ -37,7 +38,7 @@ const SwapForm = ({
   setInputSide,
   swapValues,
 }) => {
-  const pact = useContext(PactContext);
+  const swap = useContext(SwapContext);
   return (
     <FormContainer>
       <Input
@@ -48,8 +49,8 @@ const SwapForm = ({
         inputRightComponent={
           fromValues.coin ? (
             <InputToken
-              icon={pact.tokenData[fromValues.coin].icon}
-              code={pact.tokenData[fromValues.coin].name}
+              icon={swap.tokenData[fromValues.coin].icon}
+              code={swap.tokenData[fromValues.coin].name}
               onClick={() => setTokenSelectorType("from")}
             />
           ) : null
@@ -66,7 +67,7 @@ const SwapForm = ({
           }));
         }}
       />
-      <ButtonDivider icon={<SwapArrowsIcon />} onClick={swapValues} />
+      <ButtonDivider icon={<SwapArrowsIcon />} onClick={() => swapValues()} />
       <Input
         error={isNaN(toValues.amount)}
         topLeftLabel={`to ${toNote}`}
@@ -75,8 +76,8 @@ const SwapForm = ({
         inputRightComponent={
           toValues.coin ? (
             <InputToken
-              icon={pact.tokenData[toValues.coin].icon}
-              code={pact.tokenData[toValues.coin].name}
+              icon={swap.tokenData[toValues.coin].icon}
+              code={swap.tokenData[toValues.coin].name}
               onClick={() => setTokenSelectorType("to")}
             />
           ) : null

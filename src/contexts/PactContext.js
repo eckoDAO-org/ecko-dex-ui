@@ -3,6 +3,7 @@ import Pact from "pact-lang-api";
 import {
   chainId,
   creationTime,
+  FEE,
   GAS_PRICE,
   network,
 } from "../constants/contextConstants";
@@ -59,10 +60,53 @@ export const PactProvider = (props) => {
     }
   };
 
+  const getReserves = async (token0, token1) => {
+    try {
+      let data = await Pact.fetch.local(
+        {
+          pactCode: `
+          (use kswap.exchange)
+          (let*
+            (
+              (p (get-pair ${token0} ${token1}))
+              (reserveA (reserve-for p ${token0}))
+              (reserveB (reserve-for p ${token1}))
+            )[reserveA reserveB])
+           `,
+          meta: Pact.lang.mkMeta(
+            "account",
+            chainId,
+            GAS_PRICE,
+            3000,
+            creationTime(),
+            600
+          ),
+        },
+        network
+      );
+      if (data.result.status === "success") {
+        await setPairReserve({
+          token0: data.result.data[0].decimal
+            ? data.result.data[0].decimal
+            : data.result.data[0],
+          token1: data.result.data[1].decimal
+            ? data.result.data[1].decimal
+            : data.result.data[1],
+        });
+      } else {
+        await setPairReserve({});
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const storeTtl = async (ttl) => {
     await setTtl(slippage);
     await localStorage.setItem("ttl", ttl);
   };
+
+  // UTILS
 
   const getRatio = (toToken, fromToken) => {
     if (toToken === fromToken) return 1;
@@ -74,6 +118,42 @@ export const PactProvider = (props) => {
     return pairReserve["token0"] / pairReserve["token1"];
   };
 
+  //COMPUTE_OUT
+  var computeOut = function (amountIn) {
+    let reserveOut = Number(pairReserve["token1"]);
+    let reserveIn = Number(pairReserve["token0"]);
+    let numerator = Number(amountIn * (1 - FEE) * reserveOut);
+    let denominator = Number(reserveIn + amountIn * (1 - FEE));
+    return numerator / denominator;
+  };
+
+  //COMPUTE_IN
+  var computeIn = function (amountOut) {
+    let reserveOut = Number(pairReserve["token1"]);
+    let reserveIn = Number(pairReserve["token0"]);
+    let numerator = Number(reserveIn * amountOut);
+    let denominator = Number((reserveOut - amountOut) * (1 - FEE));
+    // round up the last digit
+    return numerator / denominator;
+  };
+
+  function computePriceImpact(amountIn, amountOut) {
+    const reserveOut = Number(pairReserve["token1"]);
+    const reserveIn = Number(pairReserve["token0"]);
+    const midPrice = reserveOut / reserveIn;
+    const exactQuote = amountIn * midPrice;
+    const slippage = (exactQuote - amountOut) / exactQuote;
+    return slippage;
+  }
+
+  function priceImpactWithoutFee(priceImpact) {
+    return priceImpact - realizedLPFee();
+  }
+
+  function realizedLPFee(numHops = 1) {
+    return 1 - (1 - FEE) * numHops;
+  }
+
   const contextValues = {
     slippage,
     setSlippage,
@@ -81,11 +161,17 @@ export const PactProvider = (props) => {
     ttl,
     setTtl,
     storeTtl,
+    ratio,
     getRatio,
     getRatio1,
     pair,
     setPair,
     getPair,
+    getReserves,
+    computePriceImpact,
+    priceImpactWithoutFee,
+    computeOut,
+    computeIn,
   };
   return (
     <PactContext.Provider value={contextValues}>
