@@ -1,9 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import { throttle, debounce } from "throttle-debounce";
+import TokenSelector from "../components/swap/swap-modals/TokenSelector";
 import SwapButtonsForm from "../components/swap/SwapButtonsForm";
 import SwapForm from "../components/swap/SwapForm";
 import SwapResults from "../components/swap/SwapResults";
+import { AccountContext } from "../contexts/AccountContext";
+import { ModalContext } from "../contexts/ModalContext";
 import { PactContext } from "../contexts/PactContext";
 import { SwapContext } from "../contexts/SwapContext";
 import theme from "../styles/theme";
@@ -30,6 +33,7 @@ const Title = styled.span`
 const SwapContainer = () => {
   const pact = useContext(PactContext);
   const swap = useContext(SwapContext);
+  const account = useContext(AccountContext);
 
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
@@ -40,10 +44,6 @@ const SwapContainer = () => {
     address: "",
     precision: 0,
   });
-  console.log(
-    "🚀 ~ file: SwapContainer.js ~ line 37 ~ SwapContainer ~ fromValues",
-    fromValues
-  );
 
   const [toValues, setToValues] = useState({
     amount: "",
@@ -240,13 +240,13 @@ const SwapContainer = () => {
   const onTokenClick = async ({ crypto }) => {
     let balance;
     if (crypto.code === "coin") {
-      if (pact.account) {
-        balance = pact.account.balance;
+      if (account.account) {
+        balance = account.account.balance;
       }
     } else {
-      let acct = await pact.getTokenAccount(
+      let acct = await account.getTokenAccount(
         crypto.code,
-        pact.account.account,
+        account.account.account,
         tokenSelectorType === "from"
       );
       if (acct) {
@@ -278,6 +278,36 @@ const SwapContainer = () => {
 
   // ADD TXVIEW AND WALLETREQUESTVIEW MODALS
 
+  // useEffect(() => {
+  //   if (tokenSelectorType !== "")
+  //     modalContext.openModal({
+  //       id: "TOKEN_SELECTOR",
+  //       title: "select a token",
+  //       content: (
+  //         <TokenSelector
+  //           selectedToken={selectedToken}
+  //           onTokenClick={onTokenClick}
+  //           fromToken={fromValues.coin}
+  //           toToken={toValues.coin}
+  //           onClose={modalContext.closeModal()}
+  //         />
+  //       ),
+  //     });
+  // }, [tokenSelectorType]);
+
+  //  modalContext.openModal({
+  //    id: "ZELCORE",
+  //    title: "connect wallet",
+  //    description: "Zelcore Signing (Safest)",
+  //    onBack: () => modalContext.onBackModal(),
+  //    content: (
+  //      <ConnectWalletZelcoreModal
+  //        onClose={modalContext.closeModal()}
+  //        onBack={() => modalContext.onBackModal()}
+  //      />
+  //    ),
+  //  });
+
   return (
     <Container>
       <TitleContainer>
@@ -293,6 +323,8 @@ const SwapContainer = () => {
         setTokenSelectorType={setTokenSelectorType}
         setInputSide={setInputSide}
         swapValues={swapValues}
+        selectedToken={selectedToken}
+        onTokenClick={onTokenClick}
       />
       {!isNaN(pact.ratio) &&
       fromValues.amount &&
