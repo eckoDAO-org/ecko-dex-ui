@@ -38,6 +38,7 @@ const SwapForm = ({
   setInputSide,
   swapValues,
 }) => {
+  const pact = useContext(PactContext);
   const swap = useContext(SwapContext);
   return (
     <FormContainer>
@@ -67,7 +68,7 @@ const SwapForm = ({
           }));
         }}
       />
-      <ButtonDivider icon={<SwapArrowsIcon />} onClick={() => swapValues()} />
+      <ButtonDivider icon={<SwapArrowsIcon />} onClick={swapValues} />
       <Input
         error={isNaN(toValues.amount)}
         topLeftLabel={`to ${toNote}`}
