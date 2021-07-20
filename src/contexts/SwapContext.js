@@ -25,6 +25,31 @@ export const SwapProvider = (props) => {
   const [pairAccount, setPairAccount] = useState("");
   const [cmd, setCmd] = useState(null);
   const [localRes, setLocalRes] = useState(null);
+  const [isWaitingForWalletAuth, setIsWaitingForWalletAuth] = useState(false);
+  const [walletSuccess, setWalletSuccess] = useState(false);
+  const [walletError, setWalletError] = useState(null);
+
+  var mkReq = function (cmd) {
+    return {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(cmd),
+    };
+  };
+
+  var parseRes = async function (raw) {
+    const rawRes = await raw;
+    const res = await rawRes;
+    if (res.ok) {
+      const resJSON = await rawRes.json();
+      return resJSON;
+    } else {
+      const resTEXT = await rawRes.text();
+      return resTEXT;
+    }
+  };
 
   const getPairAccount = async (token0, token1) => {
     try {
@@ -227,8 +252,127 @@ export const SwapProvider = (props) => {
       return -1;
     }
   };
+
+  const swapWallet = async (token0, token1, isSwapIn) => {
+    try {
+      const inPactCode = `(kswap.exchange.swap-exact-in
+          (read-decimal 'token0Amount)
+          (read-decimal 'token1AmountWithSlippage)
+          [${token0.address} ${token1.address}]
+          ${JSON.stringify(account.account)}
+          ${JSON.stringify(account.account)}
+          (read-keyset 'user-ks)
+        )`;
+      const outPactCode = `(kswap.exchange.swap-exact-out
+          (read-decimal 'token1Amount)
+          (read-decimal 'token0AmountWithSlippage)
+          [${token0.address} ${token1.address}]
+          ${JSON.stringify(account.account)}
+          ${JSON.stringify(account.account)}
+          (read-keyset 'user-ks)
+        )`;
+      const signCmd = {
+        pactCode: isSwapIn ? inPactCode : outPactCode,
+        caps: [
+          Pact.lang.mkCap(
+            "Gas Station",
+            "free gas",
+            "kswap.gas-station.GAS_PAYER",
+            ["free-gas", { int: 1 }, 1.0]
+          ),
+          Pact.lang.mkCap(
+            "transfer capability",
+            "trasnsfer token in",
+            `${token0.address}.TRANSFER`,
+            [
+              account.account,
+              pact.pair.account,
+              isSwapIn
+                ? reduceBalance(token0.amount, tokenData[token0.coin].precision)
+                : reduceBalance(
+                    token0.amount * (1 + parseFloat(pact.slippage)),
+                    tokenData[token0.coin].precision
+                  ),
+            ]
+          ),
+        ],
+        sender: "kswap-free-gas",
+        gasLimit: 3000,
+        gasPrice: GAS_PRICE,
+        chainId: chainId,
+        ttl: 600,
+        envData: {
+          "user-ks": account.guard,
+          token0Amount: reduceBalance(
+            token0.amount,
+            tokenData[token0.coin].precision
+          ),
+          token1Amount: reduceBalance(
+            token1.amount,
+            tokenData[token1.coin].precision
+          ),
+          token0AmountWithSlippage: reduceBalance(
+            token0.amount * (1 + parseFloat(pact.slippage)),
+            tokenData[token0.coin].precision
+          ),
+          token1AmountWithSlippage: reduceBalance(
+            token1.amount * (1 - parseFloat(pact.slippage)),
+            tokenData[token1.coin].precision
+          ),
+        },
+        signingPubKey: account.guard.keys[0],
+        networkId: NETWORKID,
+      };
+      //alert to sign tx
+      /* walletLoading(); */
+      setIsWaitingForWalletAuth(true);
+      const cmd = await Pact.wallet.sign(signCmd);
+      console.log("cmd: ", cmd);
+      //close alert programmatically
+      /* swal.close(); */
+      setIsWaitingForWalletAuth(false);
+      setWalletSuccess(true);
+      //set signedtx
+      setCmd(cmd);
+      let data = await fetch(`${network}/api/v1/local`, mkReq(cmd));
+      data = await parseRes(data);
+      setLocalRes(data);
+      return data;
+    } catch (e) {
+      //wallet error alert
+      /* setLocalRes({}); */
+      if (e.message.includes("Failed to fetch"))
+        setWalletError({
+          error: true,
+          title: "No Wallet",
+          content: "Please make sure you open and login to your wallet.",
+        });
+      //walletError();
+      else
+        setWalletError({
+          error: true,
+          title: "Wallet Signing Failure",
+          content:
+            "You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kadenaswap.",
+        }); //walletSigError();
+      console.log(e);
+    }
+  };
   return (
-    <SwapContext.Provider value={{ swap, getPairAccount, swapLocal }}>
+    <SwapContext.Provider
+      value={{
+        swap,
+        getPairAccount,
+        swapLocal,
+        swapWallet,
+        localRes,
+        isWaitingForWalletAuth,
+        walletSuccess,
+        setWalletSuccess,
+        walletError,
+        setWalletError,
+      }}
+    >
       {props.children}
     </SwapContext.Provider>
   );

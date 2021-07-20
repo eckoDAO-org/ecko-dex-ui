@@ -7,6 +7,8 @@ import { AccountContext } from "../../contexts/AccountContext";
 import reduceToken from "../../utils/reduceToken";
 import ConnectWalletModal from "../modals/kdaModals/ConnectWalletModal";
 import { ModalContext } from "../../contexts/ModalContext";
+import { WalletContext } from "../../contexts/WalletContext";
+import { SwapContext } from "../../contexts/SwapContext";
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -28,6 +30,8 @@ const SwapButtonsForm = ({
 }) => {
   const modalContext = useContext(ModalContext);
   const { account } = useContext(AccountContext);
+  const wallet = useContext(WalletContext);
+  const swap = useContext(SwapContext);
 
   const getButtonLabel = () => {
     if (!account.account) return "Connect wallet";
@@ -63,88 +67,88 @@ const SwapButtonsForm = ({
               });
             }
             setLoading(true);
-            // if (
-            //   pact.signing.method !== "sign" &&
-            //   pact.signing.method !== "none"
-            // ) {
-            //   const res = await pact.swapLocal(
-            //     {
-            //       amount: fromValues.amount,
-            //       address: fromValues.address,
-            //       coin: fromValues.coin,
-            //     },
-            //     {
-            //       amount: toValues.amount,
-            //       address: toValues.address,
-            //       coin: toValues.coin,
-            //     },
-            //     fromNote === "(estimated)" ? false : true
-            //   );
+            if (
+              wallet.signing.method !== "sign" &&
+              wallet.signing.method !== "none"
+            ) {
+              const res = await swap.swapLocal(
+                {
+                  amount: fromValues.amount,
+                  address: fromValues.address,
+                  coin: fromValues.coin,
+                },
+                {
+                  amount: toValues.amount,
+                  address: toValues.address,
+                  coin: toValues.coin,
+                },
+                fromNote === "(estimated)" ? false : true
+              );
 
-            //   if (res === -1) {
-            //     setLoading(false);
-            //     //error alert
-            //     if (pact.localRes) pwError();
-            //     return;
-            //   } else {
-            //     //setShowTxModal(true);
-            //     if (res?.result?.status === "success") {
-            //       setFromValues({
-            //         amount: "",
-            //         balance: "",
-            //         coin: "",
-            //         address: "",
-            //         precision: 0,
-            //       });
-            //       setToValues({
-            //         amount: "",
-            //         balance: "",
-            //         coin: "",
-            //         address: "",
-            //         precision: 0,
-            //       });
-            //     }
-            //     setLoading(false);
-            //   }
-            // } else {
-            //   const res = await pact.swapWallet(
-            //     {
-            //       amount: fromValues.amount,
-            //       address: fromValues.address,
-            //       coin: fromValues.coin,
-            //     },
-            //     {
-            //       amount: toValues.amount,
-            //       address: toValues.address,
-            //       coin: toValues.coin,
-            //     },
-            //     fromNote === "(estimated)" ? false : true
-            //   );
+              if (res === -1) {
+                setLoading(false);
+                //error alert
+                if (swap.localRes) pwError();
+                return;
+              } else {
+                //setShowTxModal(true);
+                if (res?.result?.status === "success") {
+                  setFromValues({
+                    amount: "",
+                    balance: "",
+                    coin: "",
+                    address: "",
+                    precision: 0,
+                  });
+                  setToValues({
+                    amount: "",
+                    balance: "",
+                    coin: "",
+                    address: "",
+                    precision: 0,
+                  });
+                }
+                setLoading(false);
+              }
+            } else {
+              const res = await swap.swapWallet(
+                {
+                  amount: fromValues.amount,
+                  address: fromValues.address,
+                  coin: fromValues.coin,
+                },
+                {
+                  amount: toValues.amount,
+                  address: toValues.address,
+                  coin: toValues.coin,
+                },
+                fromNote === "(estimated)" ? false : true
+              );
 
-            //   if (!res) {
-            //     pact.setIsWaitingForWalletAuth(true);
-            //   } else {
-            //     pact.setWalletError(null);
-            //     //setShowTxModal(true);
-            //   }
-            //   if (res?.result?.status === "success") {
-            //     setFromValues({
-            //       amount: "",
-            //       balance: "",
-            //       coin: "",
-            //       address: "",
-            //       precision: 0,
-            //     });
-            //     setToValues({
-            //       amount: "",
-            //       balance: "",
-            //       coin: "",
-            //       address: "",
-            //       precision: 0,
-            //     });
-            //   }
-            //   setLoading(false);
-            // }
+              if (!res) {
+                swap.setIsWaitingForWalletAuth(true);
+              } else {
+                swap.setWalletError(null);
+                //setShowTxModal(true);
+              }
+              if (res?.result?.status === "success") {
+                setFromValues({
+                  amount: "",
+                  balance: "",
+                  coin: "",
+                  address: "",
+                  precision: 0,
+                });
+                setToValues({
+                  amount: "",
+                  balance: "",
+                  coin: "",
+                  address: "",
+                  precision: 0,
+                });
+              }
+              setLoading(false);
+            }
           }}
         >
           {getButtonLabel()}
