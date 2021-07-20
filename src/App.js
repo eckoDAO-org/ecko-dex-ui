@@ -8,6 +8,7 @@ import { AccountProvider } from "./contexts/AccountContext";
 import { WalletProvider } from "./contexts/WalletContext";
 import { PactProvider } from "./contexts/PactContext";
 import ModalRender from "./components/modals/ModalRender";
+import { SwapProvider } from "./contexts/SwapContext";
 
 function App() {
   return (
@@ -16,11 +17,13 @@ function App() {
       <AccountProvider>
         <WalletProvider>
           <PactProvider>
-            <NotificationRender>
-              <ModalRender>
-                <Router />
-              </ModalRender>
-            </NotificationRender>
+            <SwapProvider>
+              <NotificationRender>
+                <ModalRender>
+                  <Router />
+                </ModalRender>
+              </NotificationRender>
+            </SwapProvider>
           </PactProvider>
         </WalletProvider>
       </AccountProvider>
