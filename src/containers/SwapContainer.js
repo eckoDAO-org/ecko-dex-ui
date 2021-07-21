@@ -44,7 +44,6 @@ const SwapContainer = () => {
     address: "",
     precision: 0,
   });
-
   const [toValues, setToValues] = useState({
     amount: "",
     balance: "",
@@ -349,6 +348,7 @@ const SwapContainer = () => {
         setToValues={setToValues}
         fromNote={fromNote}
         ratio={pact.ratio}
+        loading={loading}
       />
     </Container>
   );
