@@ -114,7 +114,7 @@ const TokenSelector = ({
                     fontWeight: "bold",
                   }}
                 >
-                  {crypto.balance ? `${crypto.balance} ${crypto.name}` : ""}{" "}
+                  {crypto.balance ? `${crypto.balance} ${crypto.name}` : ""}
                 </span>
               </TokenItem>
             );
