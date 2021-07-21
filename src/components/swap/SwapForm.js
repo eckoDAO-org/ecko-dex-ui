@@ -7,6 +7,9 @@ import { SwapArrowsIcon } from "../../assets";
 import { limitDecimalPlaces, reduceBalance } from "../../utils/reduceBalance";
 import { PactContext } from "../../contexts/PactContext";
 import { SwapContext } from "../../contexts/SwapContext";
+import { Modal } from "semantic-ui-react";
+import { ModalContext } from "../../contexts/ModalContext";
+import TokenSelector from "./swap-modals/TokenSelector";
 
 const FormContainer = styled.div`
   position: relative;
@@ -37,9 +40,30 @@ const SwapForm = ({
   setTokenSelectorType,
   setInputSide,
   swapValues,
+  selectedToken,
+  onTokenClick,
 }) => {
   const pact = useContext(PactContext);
+
   const swap = useContext(SwapContext);
+  const modalContext = useContext(ModalContext);
+
+  const openSelectorTokenModal = () => {
+    modalContext.openModal({
+      id: "TOKEN_SELECTOR",
+      title: "select a token",
+      content: (
+        <TokenSelector
+          selectedToken={selectedToken}
+          onTokenClick={onTokenClick}
+          fromToken={fromValues.coin}
+          toToken={toValues.coin}
+          onClose={() => modalContext.closeModal()}
+        />
+      ),
+    });
+  };
+
   return (
     <FormContainer>
       <Input
@@ -52,14 +76,20 @@ const SwapForm = ({
             <InputToken
               icon={swap.tokenData[fromValues.coin].icon}
               code={swap.tokenData[fromValues.coin].name}
-              onClick={() => setTokenSelectorType("from")}
+              onClick={() => {
+                setTokenSelectorType("from");
+                // openSelectorTokenModal();
+              }}
             />
           ) : null
         }
         withSelectButton
         numberOnly
         value={fromValues.amount}
-        onSelectButtonClick={() => setTokenSelectorType("from")}
+        onSelectButtonClick={() => {
+          setTokenSelectorType("from");
+          openSelectorTokenModal();
+        }}
         onChange={async (e, { value }) => {
           setInputSide("from");
           setFromValues((prev) => ({
@@ -79,14 +109,20 @@ const SwapForm = ({
             <InputToken
               icon={swap.tokenData[toValues.coin].icon}
               code={swap.tokenData[toValues.coin].name}
-              onClick={() => setTokenSelectorType("to")}
+              onClick={() => {
+                setTokenSelectorType("to");
+                // openSelectorTokenModal();
+              }}
             />
           ) : null
         }
         withSelectButton
         numberOnly
         value={toValues.amount}
-        onSelectButtonClick={() => setTokenSelectorType("to")}
+        onSelectButtonClick={() => {
+          setTokenSelectorType("to");
+          openSelectorTokenModal();
+        }}
         onChange={async (e, { value }) => {
           setInputSide("to");
           setToValues((prev) => ({
