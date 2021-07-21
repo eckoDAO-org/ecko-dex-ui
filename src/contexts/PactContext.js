@@ -30,16 +30,30 @@ export const PactProvider = (props) => {
   const [balances, setBalances] = useState(false);
   const [totalSupply, setTotalSupply] = useState("");
   const [ratio, setRatio] = useState(NaN);
-  const storeSlippage = async (slippage) => {
-    await setSlippage(slippage);
-    await localStorage.setItem("slippage", slippage);
-  };
 
   useEffect(() => {
     pairReserve
       ? setRatio(pairReserve["token0"] / pairReserve["token1"])
       : setRatio(NaN);
   }, [pairReserve]);
+
+  useEffect(() => {
+    fetchPrecision();
+  }, [precision]);
+
+  useEffect(() => {
+    fetchAllBalances();
+  }, [balances, account.account.account, account.sendRes]);
+
+  const getCorrectBalance = (balance) => {
+    const balanceClean = !isNaN(balance) ? balance : balance.decimal;
+    return balanceClean;
+  };
+
+  const storeSlippage = async (slippage) => {
+    await setSlippage(slippage);
+    await localStorage.setItem("slippage", slippage);
+  };
 
   const fetchAllBalances = async () => {
     let count = 0;
