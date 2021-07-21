@@ -28,7 +28,7 @@ export const PactProvider = (props) => {
   const [precision, setPrecision] = useState(false);
 
   const [balances, setBalances] = useState(false);
-
+  const [totalSupply, setTotalSupply] = useState("");
   const [ratio, setRatio] = useState(NaN);
   const storeSlippage = async (slippage) => {
     await setSlippage(slippage);
@@ -133,6 +133,32 @@ export const PactProvider = (props) => {
     } catch (e) {
       setPrecision(false);
 
+      console.log(e);
+    }
+  };
+
+  const getTotalTokenSupply = async (token0, token1) => {
+    try {
+      let data = await Pact.fetch.local(
+        {
+          pactCode: `(kswap.tokens.total-supply (kswap.exchange.get-pair-key ${token0} ${token1}))`,
+          keyPairs: Pact.crypto.genKeyPair(),
+          meta: Pact.lang.mkMeta(
+            "",
+            chainId,
+            0.01,
+            100000000,
+            28800,
+            creationTime()
+          ),
+        },
+        network
+      );
+      if (data.result.status === "success") {
+        if (data.result.data.decimal) setTotalSupply(data.result.data.decimal);
+        else setTotalSupply(data.result.data);
+      }
+    } catch (e) {
       console.log(e);
     }
   };
@@ -272,6 +298,8 @@ export const PactProvider = (props) => {
     balances,
     setBalances,
     fetchAllBalances,
+    totalSupply,
+    getTotalTokenSupply,
     ratio,
     getRatio,
     getRatio1,
