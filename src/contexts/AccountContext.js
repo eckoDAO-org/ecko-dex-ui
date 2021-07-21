@@ -22,6 +22,8 @@ export const AccountProvider = (props) => {
       ? JSON.parse(savedAcct)
       : { account: null, guard: null, balance: 0 }
   );
+  const [privKey, setPrivKey] = useState(savedPrivKey ? savedPrivKey : "");
+
   const [registered, setRegistered] = useState(false);
 
   const [tokenFromAccount, setTokenFromAccount] = useState({
@@ -156,6 +158,8 @@ export const AccountProvider = (props) => {
   const contextValues = {
     GAS_PRICE,
     account,
+    privKey,
+    setPrivKey,
     clearSendRes,
     sendRes,
     setVerifiedAccount,
