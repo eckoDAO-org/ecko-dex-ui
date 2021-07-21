@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import Pact from "pact-lang-api";
 import {
   chainId,
@@ -7,6 +7,9 @@ import {
   GAS_PRICE,
   network,
 } from "../constants/contextConstants";
+import { extractDecimal } from "../utils/reduceBalance";
+import tokenData from "../constants/cryptoCurrencies";
+import { AccountContext } from "./AccountContext";
 
 export const PactContext = createContext();
 
@@ -14,12 +17,18 @@ const savedSlippage = localStorage.getItem("slippage");
 const savedTtl = localStorage.getItem("ttl");
 
 export const PactProvider = (props) => {
+  const account = useContext(AccountContext);
+
   const [slippage, setSlippage] = useState(
     savedSlippage ? savedSlippage : 0.05
   );
   const [ttl, setTtl] = useState(savedTtl ? savedTtl : 600);
   const [pair, setPair] = useState("");
   const [pairReserve, setPairReserve] = useState("");
+  const [precision, setPrecision] = useState(false);
+
+  const [balances, setBalances] = useState(false);
+
   const [ratio, setRatio] = useState(NaN);
   const storeSlippage = async (slippage) => {
     await setSlippage(slippage);
@@ -31,6 +40,102 @@ export const PactProvider = (props) => {
       ? setRatio(pairReserve["token0"] / pairReserve["token1"])
       : setRatio(NaN);
   }, [pairReserve]);
+
+  const fetchAllBalances = async () => {
+    let count = 0;
+    let endBracket = "";
+    let tokenNames = Object.values(tokenData).reduce((accum, cumul) => {
+      count++;
+      endBracket += ")";
+      let code = `
+      (let
+        ((${cumul.name}
+          (try -1 (${cumul.code}.get-balance "${account.account.account}"))
+      ))`;
+      accum += code;
+      return accum;
+    }, "");
+    let objFormat = `{${Object.keys(tokenData)
+      .map((token) => `"${token}": ${token}`)
+      .join(",")}}`;
+    tokenNames = tokenNames + objFormat + endBracket;
+    try {
+      let data = await Pact.fetch.local(
+        {
+          pactCode: tokenNames,
+          meta: Pact.lang.mkMeta(
+            "",
+            chainId,
+            GAS_PRICE,
+            3000,
+            creationTime(),
+            600
+          ),
+        },
+        network
+      );
+      if (data.result.status === "success") {
+        Object.keys(tokenData).forEach((token) => {
+          tokenData[token].balance =
+            extractDecimal(data.result.data[token]) === -1
+              ? "0"
+              : extractDecimal(data.result.data[token]);
+        });
+        setBalances(true);
+      } else {
+        setBalances(false);
+      }
+    } catch (e) {
+      console.log(e);
+      setBalances(true);
+    }
+  };
+
+  const fetchPrecision = async () => {
+    let count = 0;
+    let endBracket = "";
+    let tokenNames = Object.values(tokenData).reduce((accum, cumul) => {
+      count++;
+      endBracket += ")";
+      let code = `
+      (let
+        ((${cumul.name}
+          (try -1 (${cumul.code}.precision))
+      ))`;
+      accum += code;
+      return accum;
+    }, "");
+    let objFormat = `{${Object.keys(tokenData)
+      .map((token) => `"${token}": ${token}`)
+      .join(",")}}`;
+    tokenNames = tokenNames + objFormat + endBracket;
+    try {
+      let data = await Pact.fetch.local(
+        {
+          pactCode: tokenNames,
+          meta: Pact.lang.mkMeta(
+            "",
+            chainId,
+            GAS_PRICE,
+            3000,
+            creationTime(),
+            600
+          ),
+        },
+        network
+      );
+      if (data.result.status === "success") {
+        Object.keys(tokenData).forEach((token) => {
+          tokenData[token].precision = extractDecimal(data.result.data[token]);
+        });
+        setPrecision(true);
+      }
+    } catch (e) {
+      setPrecision(false);
+
+      console.log(e);
+    }
+  };
 
   const getPair = async (token0, token1) => {
     try {
@@ -161,6 +266,12 @@ export const PactProvider = (props) => {
     ttl,
     setTtl,
     storeTtl,
+    precision,
+    setPrecision,
+    fetchPrecision,
+    balances,
+    setBalances,
+    fetchAllBalances,
     ratio,
     getRatio,
     getRatio1,
