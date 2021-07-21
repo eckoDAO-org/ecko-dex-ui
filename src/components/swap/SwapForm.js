@@ -58,7 +58,10 @@ const SwapForm = ({
           onTokenClick={onTokenClick}
           fromToken={fromValues.coin}
           toToken={toValues.coin}
-          onClose={() => modalContext.closeModal()}
+          onClose={() => {
+            setTokenSelectorType(null);
+            modalContext.closeModal();
+          }}
         />
       ),
     });
@@ -76,10 +79,7 @@ const SwapForm = ({
             <InputToken
               icon={swap.tokenData[fromValues.coin].icon}
               code={swap.tokenData[fromValues.coin].name}
-              onClick={() => {
-                setTokenSelectorType("from");
-                // openSelectorTokenModal();
-              }}
+              onClick={() => setTokenSelectorType("from")}
             />
           ) : null
         }
@@ -109,10 +109,7 @@ const SwapForm = ({
             <InputToken
               icon={swap.tokenData[toValues.coin].icon}
               code={swap.tokenData[toValues.coin].name}
-              onClick={() => {
-                setTokenSelectorType("to");
-                // openSelectorTokenModal();
-              }}
+              onClick={() => setTokenSelectorType("to")}
             />
           ) : null
         }
