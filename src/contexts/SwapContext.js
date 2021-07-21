@@ -19,7 +19,8 @@ export const SwapContext = createContext();
 
 export const SwapProvider = (props) => {
   const pact = useContext(PactContext);
-  const account = useContext(AccountContext);
+  const { account } = useContext(AccountContext);
+
   const wallet = useContext(WalletContext);
   const [pairAccount, setPairAccount] = useState("");
   const [cmd, setCmd] = useState(null);
