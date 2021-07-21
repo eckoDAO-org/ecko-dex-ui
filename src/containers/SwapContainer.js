@@ -1,12 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import { throttle, debounce } from "throttle-debounce";
-import TokenSelector from "../components/swap/swap-modals/TokenSelector";
 import SwapButtonsForm from "../components/swap/SwapButtonsForm";
 import SwapForm from "../components/swap/SwapForm";
 import SwapResults from "../components/swap/SwapResults";
 import { AccountContext } from "../contexts/AccountContext";
-import { ModalContext } from "../contexts/ModalContext";
 import { PactContext } from "../contexts/PactContext";
 import { SwapContext } from "../contexts/SwapContext";
 import theme from "../styles/theme";
@@ -54,7 +52,7 @@ const SwapContainer = () => {
   const [inputSide, setInputSide] = useState("");
   const [fromNote, setFromNote] = useState("");
   const [toNote, setToNote] = useState("");
-  const [showTxModal, setShowTxModal] = useState(false);
+  // const [showTxModal, setShowTxModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fetchingPair, setFetchingPair] = useState(false);
   const [priceImpact, setPriceImpact] = useState("");
