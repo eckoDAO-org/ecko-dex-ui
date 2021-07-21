@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import { PactContext } from "../../contexts/PactContext";
 import { reduceBalance } from "../../utils/reduceBalance";
 
 const ResultContainer = styled.div`
@@ -40,38 +41,39 @@ const Value = styled.span`
 `;
 
 const SwapResults = ({ priceImpact, fromValues, toValues }) => {
+  const pact = useContext(PactContext);
   return (
     <ResultContainer>
       <RowContainer>
         <Label>price</Label>
         <Value>
-          {/* {`${reduceBalance(pact.ratio * (1 + priceImpact))} ${
-          fromValues.coin
-          } per ${toValues.coin}`} */}
+          {`${reduceBalance(pact.ratio * (1 + priceImpact))} ${
+            fromValues.coin
+          } per ${toValues.coin}`}
         </Value>
       </RowContainer>
       <RowContainer>
         <Label>Price Impact</Label>
         <Value>
-          {/* {pact.priceImpactWithoutFee(priceImpact) < 0.0001 &&
+          {pact.priceImpactWithoutFee(priceImpact) < 0.0001 &&
           pact.priceImpactWithoutFee(priceImpact)
             ? "< 0.01%"
             : `${reduceBalance(
                 pact.priceImpactWithoutFee(priceImpact) * 100,
                 4
-              )}%`} */}
+              )}%`}
         </Value>
       </RowContainer>
       <RowContainer>
         <Label>max slippage</Label>
-        <Value>{/* {`${pact.slippage * 100}%`} */}</Value>
+        <Value>{`${pact.slippage * 100}%`}</Value>
       </RowContainer>
       <RowContainer>
         <Label>liquidity provider fee</Label>
         <Value>
           {/* {`${reduceBalance(
-          pact.liquidityProviderFee * parseFloat(fromValues.amount),
-          14
+            pact.liquidityProviderFee * parseFloat(fromValues.amount),
+            14
           )} ${fromValues.coin}`} */}
         </Value>
       </RowContainer>
