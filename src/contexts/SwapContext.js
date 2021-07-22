@@ -19,15 +19,11 @@ export const SwapContext = createContext();
 
 export const SwapProvider = (props) => {
   const pact = useContext(PactContext);
-  const { account } = useContext(AccountContext);
+  const { account, localRes, setLocalRes } = useContext(AccountContext);
 
   const wallet = useContext(WalletContext);
   const [pairAccount, setPairAccount] = useState("");
   const [cmd, setCmd] = useState(null);
-  const [localRes, setLocalRes] = useState(null);
-  const [isWaitingForWalletAuth, setIsWaitingForWalletAuth] = useState(false);
-  const [walletSuccess, setWalletSuccess] = useState(false);
-  const [walletError, setWalletError] = useState(null);
 
   var mkReq = function (cmd) {
     return {
@@ -325,13 +321,13 @@ export const SwapProvider = (props) => {
       };
       //alert to sign tx
       /* walletLoading(); */
-      setIsWaitingForWalletAuth(true);
+      wallet.setIsWaitingForWalletAuth(true);
       const cmd = await Pact.wallet.sign(signCmd);
       console.log("cmd: ", cmd);
       //close alert programmatically
       /* swal.close(); */
-      setIsWaitingForWalletAuth(false);
-      setWalletSuccess(true);
+      wallet.setIsWaitingForWalletAuth(false);
+      wallet.setWalletSuccess(true);
       //set signedtx
       setCmd(cmd);
       let data = await fetch(`${network}/api/v1/local`, mkReq(cmd));
@@ -342,14 +338,14 @@ export const SwapProvider = (props) => {
       //wallet error alert
       /* setLocalRes({}); */
       if (e.message.includes("Failed to fetch"))
-        setWalletError({
+        wallet.setWalletError({
           error: true,
           title: "No Wallet",
           content: "Please make sure you open and login to your wallet.",
         });
       //walletError();
       else
-        setWalletError({
+        wallet.setWalletError({
           error: true,
           title: "Wallet Signing Failure",
           content:
@@ -368,11 +364,6 @@ export const SwapProvider = (props) => {
         swapWallet,
         tokenData,
         localRes,
-        isWaitingForWalletAuth,
-        walletSuccess,
-        setWalletSuccess,
-        walletError,
-        setWalletError,
       }}
     >
       {props.children}
