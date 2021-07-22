@@ -20,6 +20,8 @@ import TokenPair from "./TokenPair";
 import { PactContext } from "../../contexts/PactContext";
 import { reduceBalance } from "../../utils/reduceBalance";
 import { WalletContext } from "../../contexts/WalletContext";
+import { LiquidityContext } from "../../contexts/LiquidityContext";
+import { AccountContext } from "../../contexts/AccountContext";
 
 const Container = styled.div`
   display: flex;
@@ -30,7 +32,6 @@ const Container = styled.div`
   /* margin-top: 30px; */
   overflow-y: auto;
   overflow-x: hidden;
-
 `;
 
 const TextContainer = styled.div`
@@ -144,8 +145,8 @@ const FormContainer = styled.div`
   /* border-radius: 10px;
   background: #232323 0% 0% no-repeat padding-box; */
   border-radius: 10px;
-  border: 2px solid #FFFFFF;
-  box-shadow: 0 0 5px #FFFFFF;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 5px #ffffff;
   opacity: 1;
   background: transparent;
   @media (max-width: ${({ theme: { mediaQueries } }) =>
@@ -170,7 +171,7 @@ const RowContainer = styled.div`
 
 const Label = styled.span`
   font: normal normal normal 14px/15px montserrat-regular;
-  color: #FFFFFF;
+  color: #ffffff;
   text-transform: capitalize;
 `;
 
@@ -178,17 +179,18 @@ const Value = styled.span`
   font-family: montserrat-bold;
   font-size: 16px;
   line-height: 20px;
-  color: #FFFFFF;
+  color: #ffffff;
 `;
 
 const LiquidityList = (props) => {
-  const pact = useContext(PactContext);
+  const liquidity = useContext(LiquidityContext);
+  const { account } = useContext(AccountContext);
+  //const pact = useContext(PactContext);
   const wallet = useContext(WalletContext);
 
   useEffect(async () => {
-    pact.getPairListAccountBalance(pact.account.account);
-  }, [pact.account.account]);
-
+    liquidity.getPairListAccountBalance(account.account);
+  }, [account.account]);
 
   return (
     <Container>
@@ -199,7 +201,13 @@ const LiquidityList = (props) => {
           color: "#FFFFFF",
         }}
       >
-        <h1 style={{ fontSize: 24, textAlign: "left !important", fontFamily: "montserrat" }}>
+        <h1
+          style={{
+            fontSize: 24,
+            textAlign: "left !important",
+            fontFamily: "montserrat",
+          }}
+        >
           Liquidity provider rewards
         </h1>
         <p style={{ fontSize: 16 }}>
@@ -211,10 +219,15 @@ const LiquidityList = (props) => {
         </p>
       </TextContainer>
 
-      {pact.account.account !== null ? (
+      {account.account !== null ? (
         <BottomContainer>
           <Header
-            style={{ fontSize: 32, textAlign: "left ", color: "#FFFFFF", fontFamily: "montserrat-bold" }}
+            style={{
+              fontSize: 32,
+              textAlign: "left ",
+              color: "#FFFFFF",
+              fontFamily: "montserrat-bold",
+            }}
           >
             Your Liquidity
           </Header>
@@ -223,14 +236,22 @@ const LiquidityList = (props) => {
             <Button.Group fluid>
               <MyButton
                 disabled
-                buttonStyle={{ marginRight: "15px", borderRadius: "20px", width: "48%" }}
+                buttonStyle={{
+                  marginRight: "15px",
+                  borderRadius: "20px",
+                  width: "48%",
+                }}
                 onClick={() => props.selectCreatePair()}
               >
                 Create a pair
               </MyButton>
               <MyButton
                 /* background="none" */
-                buttonStyle={{ marginLeft: "-5px", borderRadius: "20px", width: "48%" }}
+                buttonStyle={{
+                  marginLeft: "-5px",
+                  borderRadius: "20px",
+                  width: "48%",
+                }}
                 onClick={() => props.selectAddLiquidity()}
               >
                 Add Liquidity
@@ -238,10 +259,9 @@ const LiquidityList = (props) => {
             </Button.Group>
           </ButtonContainer>
 
-          {pact.account.account !== null ? (
-            pact.pairListAccount[0] ? (
-              Object.values(pact.pairListAccount).map((pair) => {
-                
+          {account.account !== null ? (
+            liquidity.pairListAccount[0] ? (
+              Object.values(liquidity.pairListAccount).map((pair) => {
                 return pair && pair.balance ? (
                   <FormContainer>
                     <TokenPair
