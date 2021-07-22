@@ -15,21 +15,22 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <AccountProvider>
-        <WalletProvider>
-          <PactProvider>
-            <SwapProvider>
-              <LiquidityProvider>
-                <NotificationRender>
+
+      <NotificationRender>
+        <AccountProvider>
+          <WalletProvider>
+            <PactProvider>
+              <SwapProvider>
+                <LiquidityProvider>
                   <ModalRender>
                     <Router />
                   </ModalRender>
-                </NotificationRender>
-              </LiquidityProvider>
-            </SwapProvider>
-          </PactProvider>
-        </WalletProvider>
-      </AccountProvider>
+                </LiquidityProvider>
+              </SwapProvider>
+            </PactProvider>
+          </WalletProvider>
+        </AccountProvider>
+      </NotificationRender>
     </ThemeProvider>
   );
 }

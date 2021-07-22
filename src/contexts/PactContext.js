@@ -10,6 +10,7 @@ import {
 import { extractDecimal } from "../utils/reduceBalance";
 import tokenData from "../constants/cryptoCurrencies";
 import { AccountContext } from "./AccountContext";
+import { NotificationContext, STATUSES } from "./NotificationContext";
 
 export const PactContext = createContext();
 
@@ -18,6 +19,7 @@ const savedTtl = localStorage.getItem("ttl");
 
 export const PactProvider = (props) => {
   const account = useContext(AccountContext);
+  const notificationContext = useContext(NotificationContext);
 
   const [slippage, setSlippage] = useState(
     savedSlippage ? savedSlippage : 0.05
@@ -30,6 +32,10 @@ export const PactProvider = (props) => {
   const [balances, setBalances] = useState(false);
   const [totalSupply, setTotalSupply] = useState("");
   const [ratio, setRatio] = useState(NaN);
+
+  //TO FIX, not working when multiple toasts are there
+  const toastId = React.useRef(null);
+  // const [toastIds, setToastIds] = useState({})
 
   useEffect(() => {
     pairReserve
@@ -44,6 +50,16 @@ export const PactProvider = (props) => {
   useEffect(() => {
     fetchAllBalances();
   }, [balances, account.account.account, account.sendRes]);
+
+  const pollingNotif = (reqKey) => {
+    return (toastId.current = notificationContext.showNotification({
+      title: "Transaction Pending",
+      message: reqKey,
+      type: STATUSES.INFO,
+      autoClose: 92000,
+      hideProgressBar: false,
+    }));
+  };
 
   const getCorrectBalance = (balance) => {
     const balanceClean = !isNaN(balance) ? balance : balance.decimal;
