@@ -153,6 +153,24 @@ export const SwapProvider = (props) => {
     }
   };
 
+  const swapSend = async () => {
+    pact.setPolling(true);
+    try {
+      let data;
+      if (cmd.pactCode) {
+        data = await Pact.fetch.send(cmd, network);
+      } else {
+        data = await Pact.wallet.sendSigned(cmd, network);
+      }
+      pact.pollingNotif(data.requestKeys[0]);
+      await pact.listen(data.requestKeys[0]);
+      pact.setPolling(false);
+    } catch (e) {
+      pact.setPolling(false);
+      console.log(e);
+    }
+  };
+
   const swapLocal = async (token0, token1, isSwapIn) => {
     try {
       let privKey = wallet.signing.key;
@@ -360,6 +378,7 @@ export const SwapProvider = (props) => {
         swap,
         pairAccount,
         getPairAccount,
+        swapSend,
         swapLocal,
         swapWallet,
         tokenData,
