@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Pact from "pact-lang-api";
+import pairTokens from "../constants/pairs.json";
 import { toast } from "react-toastify";
 
 import {
@@ -35,6 +36,7 @@ export const PactProvider = (props) => {
   const [polling, setPolling] = useState(false);
   const [totalSupply, setTotalSupply] = useState("");
   const [ratio, setRatio] = useState(NaN);
+  const [pairList, setPairList] = useState(pairTokens);
 
   //TO FIX, not working when multiple toasts are there
   const toastId = React.useRef(null);
@@ -170,6 +172,72 @@ export const PactProvider = (props) => {
     }
   };
 
+  const getPairList = async () => {
+    try {
+      const tokenPairList = Object.keys(pairList).reduce((accum, pair) => {
+        accum += `[${pair.split(":").join(" ")}] `;
+        return accum;
+      }, "");
+      let data = await Pact.fetch.local(
+        {
+          pactCode: `
+            (namespace 'free)
+
+            (module kswap-read G
+
+              (defcap G ()
+                true)
+
+              (defun pair-info (pairList:list)
+                (let* (
+                  (token0 (at 0 pairList))
+                  (token1 (at 1 pairList))
+                  (p (kswap.exchange.get-pair token0 token1))
+                  (reserveA (kswap.exchange.reserve-for p token0))
+                  (reserveB (kswap.exchange.reserve-for p token1))
+                  (totalBal (kswap.tokens.total-supply (kswap.exchange.get-pair-key token0 token1)))
+                )
+                [(kswap.exchange.get-pair-key token0 token1)
+                 reserveA
+                 reserveB
+                 totalBal
+               ]
+              ))
+            )
+            (map (kswap-read.pair-info) [${tokenPairList}])
+             `,
+          meta: Pact.lang.mkMeta(
+            "",
+            chainId,
+            GAS_PRICE,
+            3000,
+            creationTime(),
+            600
+          ),
+        },
+        network
+      );
+      if (data.result.status === "success") {
+        let dataList = data.result.data.reduce((accum, data) => {
+          accum[data[0]] = {
+            supply: data[3],
+            reserves: [data[1], data[2]],
+          };
+          return accum;
+        }, {});
+        const pairList = Object.values(pairTokens).map((pair) => {
+          return {
+            ...pair,
+            ...dataList[pair.name],
+          };
+        });
+        setPairList(pairList);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const wait = async (timeout) => {
     return new Promise((resolve) => {
       setTimeout(resolve, timeout);
@@ -239,6 +307,35 @@ export const PactProvider = (props) => {
           await toast.dismiss(toastId.current);
         },
       });
+    }
+  };
+
+  const tokens = async (token0, token1, account) => {
+    try {
+      let data = await Pact.fetch.local(
+        {
+          pactCode: `
+          (kswap.tokens.get-tokens)
+           `,
+          meta: Pact.lang.mkMeta(
+            "",
+            chainId,
+            GAS_PRICE,
+            3000,
+            creationTime(),
+            600
+          ),
+        },
+        network
+      );
+      if (data.result.status === "success") {
+        return data.result.data;
+      } else {
+        await setPairReserve(null);
+        console.log("Failed");
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -403,6 +500,9 @@ export const PactProvider = (props) => {
     balances,
     setBalances,
     fetchAllBalances,
+    pairList,
+    setPairList,
+    getPairList,
     totalSupply,
     getTotalTokenSupply,
     listen,
@@ -416,6 +516,7 @@ export const PactProvider = (props) => {
     setPair,
     getPair,
     getReserves,
+    tokens,
     computePriceImpact,
     priceImpactWithoutFee,
     computeOut,
