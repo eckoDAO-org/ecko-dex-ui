@@ -17,6 +17,8 @@ const savedSigning = localStorage.getItem("signing");
 
 export const AccountProvider = (props) => {
   const [sendRes, setSendRes] = useState(null);
+  const [localRes, setLocalRes] = useState(null);
+
   const [account, setAccount] = useState(
     savedAcct
       ? JSON.parse(savedAcct)
@@ -156,12 +158,13 @@ export const AccountProvider = (props) => {
   };
 
   const contextValues = {
-    GAS_PRICE,
     account,
     privKey,
     setPrivKey,
     clearSendRes,
     sendRes,
+    localRes,
+    setLocalRes,
     setVerifiedAccount,
     registered,
     setRegistered,
