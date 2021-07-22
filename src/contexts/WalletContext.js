@@ -20,6 +20,10 @@ export const WalletProvider = (props) => {
     ? Pact.crypto.restoreKeyPairFromSecretKey(privKey)
     : "";
 
+  const [walletError, setWalletError] = useState(null);
+  const [isWaitingForWalletAuth, setIsWaitingForWalletAuth] = useState(false);
+  const [walletSuccess, setWalletSuccess] = useState(false);
+
   useEffect(() => {
     const store = async () =>
       localStorage.setItem("signing", JSON.stringify(signing));
@@ -48,6 +52,12 @@ export const WalletProvider = (props) => {
 
   const contextValues = {
     wallet,
+    walletError,
+    setWalletError,
+    isWaitingForWalletAuth,
+    setIsWaitingForWalletAuth,
+    walletSuccess,
+    setWalletSuccess,
     disconnectWallet,
     storePrivKey,
     setSigningMethod,

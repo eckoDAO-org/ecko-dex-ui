@@ -126,9 +126,9 @@ const SwapButtonsForm = ({
               );
 
               if (!res) {
-                swap.setIsWaitingForWalletAuth(true);
+                wallet.setIsWaitingForWalletAuth(true);
               } else {
-                swap.setWalletError(null);
+                wallet.setWalletError(null);
                 //setShowTxModal(true);
               }
               if (res?.result?.status === "success") {

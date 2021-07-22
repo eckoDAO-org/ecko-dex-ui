@@ -7,6 +7,7 @@ import SwapResults from "../components/swap/SwapResults";
 import { AccountContext } from "../contexts/AccountContext";
 import { PactContext } from "../contexts/PactContext";
 import { SwapContext } from "../contexts/SwapContext";
+import { WalletContext } from "../contexts/WalletContext";
 import theme from "../styles/theme";
 import { getCorrectBalance, reduceBalance } from "../utils/reduceBalance";
 
@@ -32,6 +33,7 @@ const SwapContainer = () => {
   const pact = useContext(PactContext);
   const swap = useContext(SwapContext);
   const account = useContext(AccountContext);
+  const wallet = useContext(WalletContext);
 
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
@@ -269,8 +271,8 @@ const SwapContainer = () => {
   };
 
   const onWalletRequestViewModalClose = () => {
-    swap.setIsWaitingForWalletAuth(false);
-    swap.setWalletError(null);
+    wallet.setIsWaitingForWalletAuth(false);
+    wallet.setWalletError(null);
   };
 
   // ADD TXVIEW AND WALLETREQUESTVIEW MODALS
