@@ -163,6 +163,7 @@ export const AccountProvider = (props) => {
     setPrivKey,
     clearSendRes,
     sendRes,
+    setSendRes,
     localRes,
     setLocalRes,
     setVerifiedAccount,

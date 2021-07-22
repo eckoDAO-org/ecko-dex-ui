@@ -1,11 +1,14 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Pact from "pact-lang-api";
+import { toast } from "react-toastify";
+
 import {
   chainId,
   creationTime,
   FEE,
   GAS_PRICE,
   network,
+  NETWORK_TYPE,
 } from "../constants/contextConstants";
 import { extractDecimal } from "../utils/reduceBalance";
 import tokenData from "../constants/cryptoCurrencies";
@@ -28,8 +31,8 @@ export const PactProvider = (props) => {
   const [pair, setPair] = useState("");
   const [pairReserve, setPairReserve] = useState("");
   const [precision, setPrecision] = useState(false);
-
   const [balances, setBalances] = useState(false);
+  const [polling, setPolling] = useState(false);
   const [totalSupply, setTotalSupply] = useState("");
   const [ratio, setRatio] = useState(NaN);
 
@@ -164,6 +167,78 @@ export const PactProvider = (props) => {
       setPrecision(false);
 
       console.log(e);
+    }
+  };
+
+  const wait = async (timeout) => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, timeout);
+    });
+  };
+
+  const listen = async (reqKey) => {
+    //check kadena tx status every 10 seconds until we get a response (success or fail)
+    var time = 240;
+    var pollRes;
+    while (time > 0) {
+      await wait(5000);
+      pollRes = await Pact.fetch.poll({ requestKeys: [reqKey] }, network);
+      if (Object.keys(pollRes).length === 0) {
+        console.log("no return poll");
+        console.log(pollRes);
+        time = time - 5;
+      } else {
+        console.log(pollRes);
+        time = 0;
+      }
+    }
+    account.setSendRes(pollRes);
+    console.log(reqKey);
+    console.log(pollRes);
+    console.log(pollRes[reqKey]);
+    console.log(pollRes[reqKey].result);
+    if (pollRes[reqKey].result.status === "success") {
+      notificationContext.showNotification({
+        title: "Transaction Success!",
+        message: "Check it out in the block explorer",
+        type: STATUSES.SUCCESS,
+        onClose: async () => {
+          await toast.dismiss(toastId);
+          /* window.location.reload(); */
+        },
+        onClick: async () => {
+          await toast.dismiss(toastId);
+          await window.open(
+            `https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${reqKey}`,
+            "_blank",
+            "noopener,noreferrer"
+          );
+        },
+        onOpen: async (value) => {
+          await toast.dismiss(toastId.current);
+        },
+      });
+    } else {
+      notificationContext.showNotification({
+        title: "Transaction Failure!",
+        message: "Check it out in the block explorer",
+        type: STATUSES.ERROR,
+        onClose: async () => {
+          await toast.dismiss(toastId);
+          /* window.location.reload(); */
+        },
+        onClick: async () => {
+          await toast.dismiss(toastId);
+          await window.open(
+            `https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${reqKey}`,
+            "_blank",
+            "noopener,noreferrer"
+          );
+        },
+        onOpen: async (value) => {
+          await toast.dismiss(toastId.current);
+        },
+      });
     }
   };
 
@@ -330,6 +405,10 @@ export const PactProvider = (props) => {
     fetchAllBalances,
     totalSupply,
     getTotalTokenSupply,
+    listen,
+    polling,
+    setPolling,
+    pollingNotif,
     ratio,
     getRatio,
     getRatio1,
