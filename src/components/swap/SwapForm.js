@@ -5,11 +5,7 @@ import Input from "../../shared/Input";
 import InputToken from "../../shared/InputToken";
 import { SwapArrowsIcon } from "../../assets";
 import { limitDecimalPlaces, reduceBalance } from "../../utils/reduceBalance";
-import { PactContext } from "../../contexts/PactContext";
 import { SwapContext } from "../../contexts/SwapContext";
-import { Modal } from "semantic-ui-react";
-import { ModalContext } from "../../contexts/ModalContext";
-import TokenSelector from "./swap-modals/TokenSelector";
 
 const FormContainer = styled.div`
   position: relative;
@@ -40,32 +36,8 @@ const SwapForm = ({
   setTokenSelectorType,
   setInputSide,
   swapValues,
-  selectedToken,
-  onTokenClick,
 }) => {
-  const pact = useContext(PactContext);
-
   const swap = useContext(SwapContext);
-  const modalContext = useContext(ModalContext);
-
-  const openSelectorTokenModal = () => {
-    modalContext.openModal({
-      id: "TOKEN_SELECTOR",
-      title: "select a token",
-      content: (
-        <TokenSelector
-          selectedToken={selectedToken}
-          onTokenClick={onTokenClick}
-          fromToken={fromValues.coin}
-          toToken={toValues.coin}
-          onClose={() => {
-            setTokenSelectorType(null);
-            modalContext.closeModal();
-          }}
-        />
-      ),
-    });
-  };
 
   return (
     <FormContainer>
@@ -86,10 +58,7 @@ const SwapForm = ({
         withSelectButton
         numberOnly
         value={fromValues.amount}
-        onSelectButtonClick={() => {
-          setTokenSelectorType("from");
-          openSelectorTokenModal();
-        }}
+        onSelectButtonClick={() => setTokenSelectorType("from")}
         onChange={async (e, { value }) => {
           setInputSide("from");
           setFromValues((prev) => ({
@@ -116,10 +85,7 @@ const SwapForm = ({
         withSelectButton
         numberOnly
         value={toValues.amount}
-        onSelectButtonClick={() => {
-          setTokenSelectorType("to");
-          openSelectorTokenModal();
-        }}
+        onSelectButtonClick={() => setTokenSelectorType("to")}
         onChange={async (e, { value }) => {
           setInputSide("to");
           setToValues((prev) => ({
