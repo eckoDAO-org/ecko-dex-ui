@@ -13,3 +13,5 @@ export { ReactComponent as LockLogo } from "./images/shared/awesome-lock.svg";
 export { ReactComponent as TorusLogo } from "./images/shared/torus-logo.svg";
 export { ReactComponent as CloseIcon } from "./images/shared/cross.svg";
 export { ReactComponent as ArrowBack } from "./images/shared/arrow-back.svg";
+export { ReactComponent as SuccessfullIcon } from "./images/shared/successful-circle.svg";
+export { ReactComponent as ErrorIcon } from "./images/shared/error-circle.svg";
