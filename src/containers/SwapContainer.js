@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import { throttle, debounce } from "throttle-debounce";
+import TokenSelectorModal from "../components/swap/swap-modals/TokenSelectorModal";
 import SwapButtonsForm from "../components/swap/SwapButtonsForm";
 import SwapForm from "../components/swap/SwapForm";
 import SwapResults from "../components/swap/SwapResults";
@@ -44,6 +45,7 @@ const SwapContainer = () => {
     address: "",
     precision: 0,
   });
+
   const [toValues, setToValues] = useState({
     amount: "",
     balance: "",
@@ -51,10 +53,11 @@ const SwapContainer = () => {
     address: "",
     precision: 0,
   });
+
   const [inputSide, setInputSide] = useState("");
   const [fromNote, setFromNote] = useState("");
   const [toNote, setToNote] = useState("");
-  // const [showTxModal, setShowTxModal] = useState(false);
+  const [showTxModal, setShowTxModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fetchingPair, setFetchingPair] = useState(false);
   const [priceImpact, setPriceImpact] = useState("");
@@ -277,38 +280,16 @@ const SwapContainer = () => {
 
   // ADD TXVIEW AND WALLETREQUESTVIEW MODALS
 
-  // useEffect(() => {
-  //   if (tokenSelectorType !== "")
-  //     modalContext.openModal({
-  //       id: "TOKEN_SELECTOR",
-  //       title: "select a token",
-  //       content: (
-  //         <TokenSelector
-  //           selectedToken={selectedToken}
-  //           onTokenClick={onTokenClick}
-  //           fromToken={fromValues.coin}
-  //           toToken={toValues.coin}
-  //           onClose={modalContext.closeModal()}
-  //         />
-  //       ),
-  //     });
-  // }, [tokenSelectorType]);
-
-  //  modalContext.openModal({
-  //    id: "ZELCORE",
-  //    title: "connect wallet",
-  //    description: "Zelcore Signing (Safest)",
-  //    onBack: () => modalContext.onBackModal(),
-  //    content: (
-  //      <ConnectWalletZelcoreModal
-  //        onClose={modalContext.closeModal()}
-  //        onBack={() => modalContext.onBackModal()}
-  //      />
-  //    ),
-  //  });
-
   return (
     <Container>
+      <TokenSelectorModal
+        show={tokenSelectorType !== null}
+        selectedToken={selectedToken}
+        onTokenClick={onTokenClick}
+        fromToken={fromValues.coin}
+        toToken={toValues.coin}
+        onClose={() => setTokenSelectorType(null)}
+      />
       <TitleContainer>
         <Title style={{ fontFamily: theme.fontFamily.bold }}>Swap</Title>
       </TitleContainer>
@@ -322,8 +303,6 @@ const SwapContainer = () => {
         setTokenSelectorType={setTokenSelectorType}
         setInputSide={setInputSide}
         swapValues={swapValues}
-        selectedToken={selectedToken}
-        onTokenClick={onTokenClick}
       />
       {!isNaN(pact.ratio) &&
       fromValues.amount &&
