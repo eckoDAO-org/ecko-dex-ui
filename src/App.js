@@ -15,7 +15,6 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-
       <NotificationRender>
         <AccountProvider>
           <WalletProvider>

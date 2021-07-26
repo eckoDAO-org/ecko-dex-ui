@@ -58,7 +58,6 @@ const LayoutModal = ({
               title={title}
               description={description}
               containerStyle={{
-                // height: "100%",
                 maxHeight: "80vh",
                 maxWidth: "90vw",
                 ...containerStyle,
