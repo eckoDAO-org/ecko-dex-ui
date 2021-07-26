@@ -63,7 +63,7 @@ const Button = styled.button`
     buttonBackgroundGradient};
   border-radius: 20px;
   span {
-    font-family: montserrat-bold;
+    font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
     font-size: 14px;
     color: white;
     text-transform: capitalize;
@@ -127,7 +127,10 @@ const Input = ({
         <TopLabelsContainer>
           {topLeftLabel && (
             <span
-              style={{ fontFamily: "montserrat-bold", ...topLeftLabelStyle }}
+              style={{
+                fontFamily: theme.fontFamily.bold,
+                ...topLeftLabelStyle,
+              }}
             >
               {topLeftLabel}
             </span>
@@ -135,7 +138,7 @@ const Input = ({
           {topRightLabel && (
             <span
               style={{
-                fontFamily: "montserrat-regular",
+                fontFamily: theme.fontFamily.regular,
                 marginLeft: !topLeftLabel ? "auto" : "unset",
                 ...topRightLabelStyle,
               }}
@@ -178,7 +181,7 @@ const Input = ({
           {bottomLeftLabel && (
             <span
               style={{
-                fontFamily: "montserrat-regular",
+                fontFamily: theme.fontFamily.regular,
                 ...bottomLeftLabelStyle,
               }}
             >
@@ -188,7 +191,7 @@ const Input = ({
           {bottomRightLabel && (
             <span
               style={{
-                fontFamily: "montserrat-regular",
+                fontFamily: theme.fontFamily.regular,
                 marginLeft: !topLeftLabel ? "auto" : "unset",
                 ...bottomRightLabelStyle,
               }}

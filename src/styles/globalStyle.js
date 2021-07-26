@@ -24,7 +24,7 @@ export default createGlobalStyle`
       line-height: inherit;
       overflow: auto;
       min-width: 0;
-      font-family: montserrat-regular;
+      font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
       color: ${({ theme: { colors } }) => colors.primary};
       background: transparent linear-gradient(122deg, #070610 0%, #4C125A 100%) 0% 0% no-repeat padding-box;
       opacity: 1;

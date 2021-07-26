@@ -24,7 +24,7 @@ const Container = styled.div`
 
 const Label = styled.span`
   font-size: 13px;
-  font-family: montserrat-bold;
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
   text-transform: capitalize;
 `;
 

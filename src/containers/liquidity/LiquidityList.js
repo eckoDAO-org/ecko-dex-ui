@@ -22,6 +22,7 @@ import { reduceBalance } from "../../utils/reduceBalance";
 import { WalletContext } from "../../contexts/WalletContext";
 import { LiquidityContext } from "../../contexts/LiquidityContext";
 import { AccountContext } from "../../contexts/AccountContext";
+import theme from "../../styles/theme";
 
 const Container = styled.div`
   display: flex;
@@ -155,33 +156,6 @@ const FormContainer = styled.div`
   }
 `;
 
-const ResultContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 15px 0px 32px;
-  flex-flow: row;
-  width: 100%;
-`;
-
-const RowContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-flow: column;
-`;
-
-const Label = styled.span`
-  font: normal normal normal 14px/15px montserrat-regular;
-  color: #ffffff;
-  text-transform: capitalize;
-`;
-
-const Value = styled.span`
-  font-family: montserrat-bold;
-  font-size: 16px;
-  line-height: 20px;
-  color: #ffffff;
-`;
-
 const LiquidityList = (props) => {
   const liquidity = useContext(LiquidityContext);
   const { account } = useContext(AccountContext);
@@ -226,7 +200,7 @@ const LiquidityList = (props) => {
               fontSize: 32,
               textAlign: "left ",
               color: "#FFFFFF",
-              fontFamily: "montserrat-bold",
+              fontFamily: theme.fontFamily.bold,
             }}
           >
             Your Liquidity

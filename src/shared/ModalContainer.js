@@ -26,14 +26,14 @@ const HeaderContainer = styled.div`
 `;
 
 const Title = styled.span`
-  font-family: montserrat-bold;
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
   font-size: 24px;
   text-transform: capitalize;
   color: "white";
 `;
 
 const Description = styled.span`
-  font-family: montserrat-regular;
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
   font-size: 16px;
   margin-bottom: 24px;
 `;

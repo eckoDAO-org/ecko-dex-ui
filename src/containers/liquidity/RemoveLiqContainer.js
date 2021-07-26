@@ -1,23 +1,28 @@
-import React, { useEffect, useState, useContext } from 'react';
-import styled from 'styled-components/macro';
-import { ReactComponent as PlusIcon } from '../../assets/images/shared/plus.svg';
-import ModalContainer from '../../components/shared/ModalContainer';
-import FormContainer from '../../components/shared/FormContainer';
-import Input from '../../components/shared/Input';
-import InputToken from '../../components/shared/InputToken';
-import ButtonDivider from '../../components/shared/ButtonDivider';
-import MyButton from '../../components/shared/Button';
-import TokenSelector from '../../components/shared/TokenSelector';
+import React, { useEffect, useState, useContext } from "react";
+import styled from "styled-components/macro";
+import { ReactComponent as PlusIcon } from "../../assets/images/shared/plus.svg";
+import ModalContainer from "../../components/shared/ModalContainer";
+import FormContainer from "../../components/shared/FormContainer";
+import Input from "../../components/shared/Input";
+import InputToken from "../../components/shared/InputToken";
+import ButtonDivider from "../../components/shared/ButtonDivider";
+import MyButton from "../../components/shared/Button";
+import TokenSelector from "../../components/shared/TokenSelector";
 import { throttle, debounce } from "throttle-debounce";
-import { PactContext } from '../../contexts/PactContext'
-import { ReactComponent as LeftIcon } from '../../assets/images/shared/left-arrow.svg';
-import { reduceBalance, extractDecimal, limitDecimalPlaces } from '../../utils/reduceBalance';
-import TxView from '../../components/shared/TxView';
-import ReviewTx from './ReviewTx';
+import { PactContext } from "../../contexts/PactContext";
+import { ReactComponent as LeftIcon } from "../../assets/images/shared/left-arrow.svg";
+import {
+  reduceBalance,
+  extractDecimal,
+  limitDecimalPlaces,
+} from "../../utils/reduceBalance";
+import TxView from "../../components/shared/TxView";
+import ReviewTx from "./ReviewTx";
 import { ReactComponent as ArrowBack } from "../../assets/images/shared/arrow-back.svg";
 import { ReactComponent as SwapArrowsIcon } from "../../assets/images/shared/swap-arrow.svg";
-import { Button } from 'semantic-ui-react';
-import WalletRequestView from '../../components/shared/WalletRequestView';
+import { Button } from "semantic-ui-react";
+import WalletRequestView from "../../components/shared/WalletRequestView";
+import theme from "../../styles/theme";
 
 const Container = styled.div`
   display: flex;
@@ -45,7 +50,7 @@ const TitleContainer = styled.div`
 const Title = styled.span`
   font: normal normal bold 32px/57px Montserrat;
   letter-spacing: 0px;
-  color: #FFFFFF;
+  color: #ffffff;
   text-transform: capitalize;
 `;
 
@@ -58,10 +63,9 @@ const ButtonContainer = styled.div`
 
 const MyButtonDivider = styled.div`
   width: 2%;
-  height:auto;
-  display:inline-block;
+  height: auto;
+  display: inline-block;
 `;
-
 
 const ResultContainer = styled.div`
   display: flex;
@@ -87,59 +91,74 @@ const InnerRowContainer = styled.div`
 `;
 
 const Label = styled.span`
-  font: normal normal normal 14px/15px montserrat-regular;
-  color: #FFFFFF;
+  font: normal normal normal 14px/15px ${theme.fontFamily.regular};
+  color: #ffffff;
   text-transform: capitalize;
 `;
 
 const Value = styled.span`
-  font-family: montserrat-bold;
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
   font-size: 16px;
   line-height: 20px;
-  color: #FFFFFF;
+  color: #ffffff;
 `;
-
 
 const RemoveLiqContainer = (props) => {
   const pact = useContext(PactContext);
   const liquidityView = props.selectedView;
-  const {name, token0, token1, balance, supply, pooledAmount} = props.pair
+  const { name, token0, token1, balance, supply, pooledAmount } = props.pair;
 
-  const [amount, setAmount] = useState(100)
-  const [showTxModal, setShowTxModal] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [amount, setAmount] = useState(100);
+  const [showTxModal, setShowTxModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [pooled, setPooled] = useState(balance);
-  const [pooledToken0, setPooledToken0] = useState(reduceBalance(pooledAmount[0],12));
-  const [pooledToken1, setPooledToken1] = useState(reduceBalance(pooledAmount[1],12));
+  const [pooledToken0, setPooledToken0] = useState(
+    reduceBalance(pooledAmount[0], 12)
+  );
+  const [pooledToken1, setPooledToken1] = useState(
+    reduceBalance(pooledAmount[1], 12)
+  );
 
   useEffect(() => {
-    if (!isNaN(amount)){
-      setPooled(reduceBalance(extractDecimal(balance) * amount / 100, pact.PRECISION));
-      setPooledToken0(reduceBalance(extractDecimal(pooledAmount[0]) * amount / 100,  pact.PRECISION));
-      setPooledToken1(reduceBalance(extractDecimal(pooledAmount[1]) * amount / 100,  pact.PRECISION));
+    if (!isNaN(amount)) {
+      setPooled(
+        reduceBalance((extractDecimal(balance) * amount) / 100, pact.PRECISION)
+      );
+      setPooledToken0(
+        reduceBalance(
+          (extractDecimal(pooledAmount[0]) * amount) / 100,
+          pact.PRECISION
+        )
+      );
+      setPooledToken1(
+        reduceBalance(
+          (extractDecimal(pooledAmount[1]) * amount) / 100,
+          pact.PRECISION
+        )
+      );
     }
-  }, [amount] )
+  }, [amount]);
 
   useEffect(() => {
     if (pact.walletSuccess) {
-      setLoading(false)
-      pact.setWalletSuccess(false)
+      setLoading(false);
+      pact.setWalletSuccess(false);
     }
-  }, [pact.walletSuccess])
+  }, [pact.walletSuccess]);
 
   const onWalletRequestViewModalClose = () => {
     pact.setIsWaitingForWalletAuth(false);
     pact.setWalletError(null);
-  }
-  
+  };
+
   return (
     <Container>
       <TxView
-          view="Remove Liquidity"
-          show={showTxModal}
-          token0={token0}
-          token1={token1}
-          onClose={() => setShowTxModal(false)}
+        view="Remove Liquidity"
+        show={showTxModal}
+        token0={token0}
+        token1={token1}
+        onClose={() => setShowTxModal(false)}
       />
       <WalletRequestView
         show={pact.isWaitingForWalletAuth}
@@ -147,34 +166,38 @@ const RemoveLiqContainer = (props) => {
         onClose={() => onWalletRequestViewModalClose()}
       />
       <TitleContainer>
-        
-        <Title style={{ fontFamily: "montserrat-bold" }}>
+        <Title style={{ fontFamily: theme.fontFamily.bold }}>
           <ArrowBack
             style={{
               cursor: "pointer",
               color: "#FFFFFF",
               marginRight: "15px",
-              justifyContent: "center"
+              justifyContent: "center",
             }}
             onClick={() => props.closeLiquidity()}
-          />Remove Liquidity</Title>
+          />
+          Remove Liquidity
+        </Title>
       </TitleContainer>
-      
-      <FormContainer >
+
+      <FormContainer>
         <SubContainer>
-        <Input
-          value={amount}
-          error={isNaN(amount)}
-          topLeftLabel="Pool Tokens to Remove "
-          placeholder= " Enter Amount"
-          label={{ basic: true, content: '%' }}
-          onChange={(e) => {
-            if (Number(e.target.value)<=100 && Number(e.target.value)>=0){
-              setAmount(limitDecimalPlaces(e.target.value, 2));
-            }
-          }}
-          numberOnly
-          /* inputRightComponent={
+          <Input
+            value={amount}
+            error={isNaN(amount)}
+            topLeftLabel="Pool Tokens to Remove "
+            placeholder=" Enter Amount"
+            label={{ basic: true, content: "%" }}
+            onChange={(e) => {
+              if (
+                Number(e.target.value) <= 100 &&
+                Number(e.target.value) >= 0
+              ) {
+                setAmount(limitDecimalPlaces(e.target.value, 2));
+              }
+            }}
+            numberOnly
+            /* inputRightComponent={
             '%'
               
             fromValues.coin ? (
@@ -186,102 +209,119 @@ const RemoveLiqContainer = (props) => {
             ) : null 
           }
           */
-          
-          
-        />
-            <ButtonContainer >
-            <Button.Group fluid >
-                <MyButton
+          />
+          <ButtonContainer>
+            <Button.Group fluid>
+              <MyButton
                 buttonStyle={{
-                    border: "1px solid #424242",
-                    width: "20%",
+                  border: "1px solid #424242",
+                  width: "20%",
                 }}
                 background="transparent"
                 onClick={() => setAmount(25)}
-                >25%</MyButton>
-                <MyButtonDivider/>
-                <MyButton 
+              >
+                25%
+              </MyButton>
+              <MyButtonDivider />
+              <MyButton
                 buttonStyle={{
-                    border: "1px solid #424242",
-                    width: "20%",
+                  border: "1px solid #424242",
+                  width: "20%",
                 }}
                 background="transparent"
                 onClick={() => setAmount(50)}
-                >50%</MyButton>
-                <MyButtonDivider/>
-                <MyButton 
+              >
+                50%
+              </MyButton>
+              <MyButtonDivider />
+              <MyButton
                 buttonStyle={{
-                    border: "1px solid #424242",
-                    width: "20%",
+                  border: "1px solid #424242",
+                  width: "20%",
                 }}
                 background="transparent"
                 onClick={() => setAmount(75)}
-                >75%</MyButton>
-                <MyButtonDivider/>
-                <MyButton 
+              >
+                75%
+              </MyButton>
+              <MyButtonDivider />
+              <MyButton
                 buttonStyle={{
-                    border: "1px solid #424242",
-                    width: "20%",
+                  border: "1px solid #424242",
+                  width: "20%",
                 }}
                 background="transparent"
                 onClick={() => setAmount(100)}
-                >100%</MyButton>
+              >
+                100%
+              </MyButton>
             </Button.Group>
-            </ButtonContainer> 
-         </SubContainer>
-        </FormContainer>
-        
-        <ResultContainer>
-          <InnerRowContainer>
-            <Label>{token0} per {token1}</Label>
-            <Value>{pooled}</Value>
-          </InnerRowContainer>
-          <InnerRowContainer>
-            <Label>Pooled {token0}</Label>
-            <Value>
-                {pooledToken0}
-            </Value>
-          </InnerRowContainer>
-          <InnerRowContainer>
-            <Label>Pooled {token1}</Label>
-            <Value>{pooledToken1}</Value>
-          </InnerRowContainer>
-          
-        </ResultContainer>
-  
+          </ButtonContainer>
+        </SubContainer>
+      </FormContainer>
+
+      <ResultContainer>
+        <InnerRowContainer>
+          <Label>
+            {token0} per {token1}
+          </Label>
+          <Value>{pooled}</Value>
+        </InnerRowContainer>
+        <InnerRowContainer>
+          <Label>Pooled {token0}</Label>
+          <Value>{pooledToken0}</Value>
+        </InnerRowContainer>
+        <InnerRowContainer>
+          <Label>Pooled {token1}</Label>
+          <Value>{pooledToken1}</Value>
+        </InnerRowContainer>
+      </ResultContainer>
+
       <MyButton
-          loading={loading}
-          disabled={isNaN(amount) || reduceBalance(amount)===0}
-          onClick={async () => {
-            if (pact.signing.method !== 'sign' &&
-              pact.signing.method !== "none") {
-              const res = await pact.removeLiquidityLocal(pact.tokenData[token0].code, pact.tokenData[token1].code, reduceBalance(pooled, pact.PRECISION));
-              if (res === -1) {
-                setLoading(false)
-                alert('Incorrect password. If forgotten, you can reset it with your private key')
-                return
-              } else {
-                setShowTxModal(true)
-                setLoading(false)
-              }
+        loading={loading}
+        disabled={isNaN(amount) || reduceBalance(amount) === 0}
+        onClick={async () => {
+          if (
+            pact.signing.method !== "sign" &&
+            pact.signing.method !== "none"
+          ) {
+            const res = await pact.removeLiquidityLocal(
+              pact.tokenData[token0].code,
+              pact.tokenData[token1].code,
+              reduceBalance(pooled, pact.PRECISION)
+            );
+            if (res === -1) {
+              setLoading(false);
+              alert(
+                "Incorrect password. If forgotten, you can reset it with your private key"
+              );
+              return;
             } else {
-              setLoading(true)
-              const res = await pact.removeLiquidityWallet(pact.tokenData[token0].code, pact.tokenData[token1].code, reduceBalance(pooled, pact.PRECISION));
-              if (!res) {
-                pact.setIsWaitingForWalletAuth(true);
-                setLoading(false)
-                /* pact.setWalletError(true); */
-                /* walletError(); */
-              } else {
-                pact.setWalletError(null);
-                setShowTxModal(true)
-                setLoading(false)
-               }
+              setShowTxModal(true);
+              setLoading(false);
+            }
+          } else {
+            setLoading(true);
+            const res = await pact.removeLiquidityWallet(
+              pact.tokenData[token0].code,
+              pact.tokenData[token1].code,
+              reduceBalance(pooled, pact.PRECISION)
+            );
+            if (!res) {
+              pact.setIsWaitingForWalletAuth(true);
+              setLoading(false);
+              /* pact.setWalletError(true); */
+              /* walletError(); */
+            } else {
+              pact.setWalletError(null);
+              setShowTxModal(true);
+              setLoading(false);
             }
           }
-        }>
-          Remove Liquidity
-        </MyButton>
+        }}
+      >
+        Remove Liquidity
+      </MyButton>
       {/* <ButtonContainer>
         <TxView
           view={selectedView}

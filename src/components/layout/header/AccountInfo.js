@@ -13,7 +13,7 @@ const Container = styled.div`
 const BalanceContainer = styled.div`
   padding: 10px 21px;
   /* background: rgba(205, 205, 205, 0.5); */
-  font-family: "montserrat-bold";
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
   font-size: 14px;
   color: white;
   border-radius: 20px;
@@ -26,7 +26,7 @@ const BalanceContainer = styled.div`
 const AccountContainer = styled.div`
   padding: 10px 21px;
   background: transparent;
-  font-family: "montserrat-bold";
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
   font-size: 14px;
   color: white;
   border-radius: 4px;
