@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import { throttle, debounce } from "throttle-debounce";
 import TokenSelectorModal from "../components/swap/swap-modals/TokenSelectorModal";
+import TxView from "../components/swap/swap-modals/TxView";
 import SwapButtonsForm from "../components/swap/SwapButtonsForm";
 import SwapForm from "../components/swap/SwapForm";
 import SwapResults from "../components/swap/SwapResults";
@@ -290,6 +291,12 @@ const SwapContainer = () => {
         toToken={toValues.coin}
         onClose={() => setTokenSelectorType(null)}
       />
+      <TxView
+        show={showTxModal}
+        selectedToken={selectedToken}
+        onTokenClick={onTokenClick}
+        onClose={() => setShowTxModal(false)}
+      />
       <TitleContainer>
         <Title style={{ fontFamily: theme.fontFamily.bold }}>Swap</Title>
       </TitleContainer>
@@ -303,6 +310,7 @@ const SwapContainer = () => {
         setTokenSelectorType={setTokenSelectorType}
         setInputSide={setInputSide}
         swapValues={swapValues}
+        setShowTxModal={setShowTxModal}
       />
       {!isNaN(pact.ratio) &&
       fromValues.amount &&
@@ -328,6 +336,7 @@ const SwapContainer = () => {
         fromNote={fromNote}
         ratio={pact.ratio}
         loading={loading}
+        setShowTxModal={setShowTxModal}
       />
     </Container>
   );
