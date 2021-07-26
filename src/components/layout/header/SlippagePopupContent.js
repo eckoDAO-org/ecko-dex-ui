@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import { PactContext } from "../../../contexts/PactContext";
-import theme from "../../../styles/theme";
 import Input from "../../../shared/Input";
 
 const Container = styled.div`
@@ -14,7 +13,7 @@ const Container = styled.div`
 
 const BoldLabel = styled.span`
   font-size: 13px;
-  font-family: ${({ theme: fontFamily }) => fontFamily.regular};
+  font-family: ${({ theme: fontFamily }) => fontFamily.bold};
   text-transform: capitalize;
 `;
 

@@ -1,12 +1,7 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components/macro";
-import { Transition } from "react-spring/renderprops";
-import ModalContainer from "../../components/shared/ModalContainer";
-import Search from "../../components/shared/Search";
-import Backdrop from "../../components/shared/Backdrop";
-import { List, Message, Button } from "semantic-ui-react";
-import { ReactComponent as KadenaIcon } from "../../assets/images/crypto/kadena-logo.svg";
-import { ReactComponent as ArrowDown } from "../../assets/images/shared/arrow-down.svg";
+import { Button } from "semantic-ui-react";
+
 import { PactContext } from "../../contexts/PactContext";
 import {
   reduceBalance,
