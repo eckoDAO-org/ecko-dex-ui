@@ -52,6 +52,7 @@ export const WalletProvider = (props) => {
 
   const contextValues = {
     wallet,
+    signing,
     walletError,
     setWalletError,
     isWaitingForWalletAuth,
