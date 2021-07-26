@@ -9,7 +9,7 @@ import { WalletContext } from "../../../contexts/WalletContext";
 
 const Text = styled.span`
   font-size: 13px;
-  font-family: montserrat-regular;
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
 `;
 
 const ActionContainer = styled.div`
