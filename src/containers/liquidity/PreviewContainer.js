@@ -41,13 +41,6 @@ const Title = styled.span`
   text-transform: capitalize;
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 24px;
-  width: 100%;
-`;
-
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
