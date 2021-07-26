@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components/macro";
 import { Transition } from "react-spring/renderprops";
 import { Message, Popup, Icon } from "semantic-ui-react";
-import { PactContext } from "../../../contexts/PactContext";
 import { ErrorIcon, SuccessfullIcon } from "../../../assets";
 import { extractDecimal, gasUnit } from "../../../utils/reduceBalance";
 import CustomButton from "../../../shared/CustomButton";
@@ -408,19 +407,3 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
 };
 
 export default TxView;
-
-/* {(typeof pact.localRes === 'string'
-                ?
-                  localError()
-                :
-                  (pact.localRes.result.status === 'success'
-                  ?
-                    !view
-                    ? successView()
-                    : view==="Remove Liquidity"
-                      ? successRemoveView()
-                      : successAddView()
-                  :
-                    failView()
-                  )
-                )} */

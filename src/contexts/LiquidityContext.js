@@ -92,6 +92,8 @@ export const LiquidityProvider = (props) => {
     }
   };
   const contextValue = {
+    liquidityProviderFee,
+    setLiquidityProviderFee,
     pairListAccount,
     setPairListAccount,
     getPairListAccountBalance,

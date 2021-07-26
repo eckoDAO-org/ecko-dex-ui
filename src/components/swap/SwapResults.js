@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { PactContext } from "../../contexts/PactContext";
+import { LiquidityContext } from "../../contexts/LiquidityContext";
 import { reduceBalance } from "../../utils/reduceBalance";
 
 const ResultContainer = styled.div`
@@ -27,8 +28,7 @@ const RowContainer = styled.div`
 `;
 
 const Label = styled.span`
-  font: normal normal normal 14px/15px
-    ${({ theme: { fontFamily } }) => fontFamily.regular};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
   color: #ffffff;
   text-transform: capitalize;
 `;
@@ -42,6 +42,7 @@ const Value = styled.span`
 
 const SwapResults = ({ priceImpact, fromValues, toValues }) => {
   const pact = useContext(PactContext);
+  const liquidity = useContext(LiquidityContext);
   return (
     <ResultContainer>
       <RowContainer>
@@ -71,10 +72,10 @@ const SwapResults = ({ priceImpact, fromValues, toValues }) => {
       <RowContainer>
         <Label>liquidity provider fee</Label>
         <Value>
-          {/* {`${reduceBalance(
-            pact.liquidityProviderFee * parseFloat(fromValues.amount),
+          {`${reduceBalance(
+            liquidity.liquidityProviderFee * parseFloat(fromValues.amount),
             14
-          )} ${fromValues.coin}`} */}
+          )} ${fromValues.coin}`}
         </Value>
       </RowContainer>
     </ResultContainer>
