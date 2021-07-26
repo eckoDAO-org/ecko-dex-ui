@@ -27,6 +27,7 @@ const SwapButtonsForm = ({
   setToValues,
   fromNote,
   ratio,
+  setShowTxModal,
 }) => {
   const modalContext = useContext(ModalContext);
   const { account } = useContext(AccountContext);
@@ -91,7 +92,7 @@ const SwapButtonsForm = ({
                 if (swap.localRes) pwError();
                 return;
               } else {
-                //setShowTxModal(true);
+                setShowTxModal(true);
                 if (res?.result?.status === "success") {
                   setFromValues({
                     amount: "",
@@ -129,7 +130,7 @@ const SwapButtonsForm = ({
                 wallet.setIsWaitingForWalletAuth(true);
               } else {
                 wallet.setWalletError(null);
-                //setShowTxModal(true);
+                setShowTxModal(true);
               }
               if (res?.result?.status === "success") {
                 setFromValues({
