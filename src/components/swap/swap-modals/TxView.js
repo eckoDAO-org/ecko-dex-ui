@@ -8,6 +8,8 @@ import { extractDecimal, gasUnit } from "../../../utils/reduceBalance";
 import CustomButton from "../../../shared/CustomButton";
 import Backdrop from "../../../shared/Backdrop";
 import ModalContainer from "../../../shared/ModalContainer";
+import { SwapContext } from "../../../contexts/SwapContext";
+import { GAS_PRICE } from "../../../constants/contextConstants";
 
 const Container = styled.div`
   position: absolute;
@@ -70,7 +72,7 @@ const Value = styled.span`
 `;
 
 const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
-  const pact = useContext(PactContext);
+  const swap = useContext(SwapContext);
 
   const [loading, setLoading] = useState(false);
 
@@ -89,23 +91,23 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           <SpaceBetweenRow>
             <Label>Send</Label>
             <Value>
-              {`${pact.localRes.result.data[0].amount} ${showTicker(
-                pact.localRes.result.data[0].token
+              {`${swap.localRes.result.data[0].amount} ${showTicker(
+                swap.localRes.result.data[0].token
               )}`}
             </Value>
           </SpaceBetweenRow>
           <SpaceBetweenRow style={{ padding: "16px 0px" }}>
             <Label>Receive</Label>
             <Value>
-              {`${pact.localRes.result.data[1].amount} ${showTicker(
-                pact.localRes.result.data[1].token
+              {`${swap.localRes.result.data[1].amount} ${showTicker(
+                swap.localRes.result.data[1].token
               )}`}
             </Value>
           </SpaceBetweenRow>
           <SpaceBetweenRow>
             <Label>Gas Cost</Label>
             <Value>
-              <s>{`${gasUnit(pact.GAS_PRICE * pact.localRes.gas)} KDA`}</s>
+              <s>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</s>
               <span style={{ marginLeft: 5, color: "#ffa900" }}>FREE!</span>
               <Popup
                 trigger={
@@ -137,7 +139,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           buttonStyle={{ width: "100%" }}
           onClick={async () => {
             setLoading(true);
-            pact.swapSend();
+            swap.swapSend();
             onClose();
             setLoading(false);
           }}
@@ -159,21 +161,21 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           <SpaceBetweenRow>
             <Label>Remove</Label>
             <Value>
-              {`${extractDecimal(pact.localRes.result.data.amount0)} `}
+              {`${extractDecimal(swap.localRes.result.data.amount0)} `}
               {showTicker(token0)}
             </Value>
           </SpaceBetweenRow>
           <SpaceBetweenRow style={{ padding: "16px 0px" }}>
             <Label>Remove</Label>
             <Value>
-              {`${extractDecimal(pact.localRes.result.data.amount1)} `}
+              {`${extractDecimal(swap.localRes.result.data.amount1)} `}
               {showTicker(token1)}
             </Value>
           </SpaceBetweenRow>
           <SpaceBetweenRow>
             <Label>Gas Cost</Label>
             <Value>
-              <s>{`${gasUnit(pact.GAS_PRICE * pact.localRes.gas)} KDA`}</s>
+              <s>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</s>
               <span style={{ marginLeft: 5, color: "#ffa900" }}>FREE!</span>
               <Popup
                 trigger={
@@ -205,7 +207,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           buttonStyle={{ width: "100%" }}
           onClick={async () => {
             setLoading(true);
-            pact.swapSend();
+            swap.swapSend();
             onClose();
             setLoading(false);
           }}
@@ -227,21 +229,21 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           <SpaceBetweenRow>
             <Label>Add</Label>
             <Value>
-              {`${extractDecimal(pact.localRes.result.data.amount0)}`}{" "}
+              {`${extractDecimal(swap.localRes.result.data.amount0)}`}
               {showTicker(token0)}
             </Value>
           </SpaceBetweenRow>
           <SpaceBetweenRow style={{ padding: "16px 0px" }}>
             <Label>Add</Label>
             <Value>
-              {`${extractDecimal(pact.localRes.result.data.amount1)}`}{" "}
+              {`${extractDecimal(swap.localRes.result.data.amount1)}`}
               {showTicker(token1)}
             </Value>
           </SpaceBetweenRow>
           <SpaceBetweenRow>
             <Label>Gas Cost</Label>
             <Value>
-              <s>{`${gasUnit(pact.GAS_PRICE * pact.localRes.gas)} KDA`}</s>
+              <s>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</s>
               <span style={{ marginLeft: 5, color: "#ffa900" }}>FREE!</span>
               <Popup
                 trigger={
@@ -274,11 +276,11 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           onClick={async () => {
             setLoading(true);
             if (view === "Add Liquidity") {
-              pact.swapSend();
+              swap.swapSend();
               onClose();
             } else {
               await createTokenPair();
-              await pact.swapSend();
+              await swap.swapSend();
               onClose();
             }
             setLoading(false);
@@ -304,11 +306,11 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           >
             <RowContainer>
               <span style={{ wordBreak: "break-all" }}>
-                {pact.localRes.result.error.message}
+                {swap.localRes.result.error.message}
               </span>
             </RowContainer>
           </Message>
-          {pact.localRes.result.error.message.includes("insufficient") ? (
+          {swap.localRes.result.error.message.includes("insufficient") ? (
             <span style={{ wordBreak: "break-all" }}>
               TIP: Try setting a higher slippage amount
             </span>
@@ -339,7 +341,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
             style={{ wordBreak: "break-all", backgroundColor: "#424242" }}
           >
             <RowContainer>
-              <span style={{ wordBreak: "break-all" }}>{pact.localRes}</span>
+              <span style={{ wordBreak: "break-all" }}>{swap.localRes}</span>
             </RowContainer>
           </Message>
         </TransactionsDetails>
@@ -356,9 +358,9 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
 
   const renderSwitch = () => {
     if (
-      pact.localRes &&
-      pact.localRes.result &&
-      pact.localRes.result.status === "success"
+      swap.localRes &&
+      swap.localRes.result &&
+      swap.localRes.result.status === "success"
     ) {
       switch (view) {
         default:
@@ -394,7 +396,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
               }}
               onClose={onClose}
             >
-              {typeof pact.localRes === "string"
+              {typeof swap.localRes === "string"
                 ? localError()
                 : renderSwitch()}
             </ModalContainer>
