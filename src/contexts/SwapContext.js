@@ -25,7 +25,7 @@ export const SwapProvider = (props) => {
   const [pairAccount, setPairAccount] = useState("");
   const [cmd, setCmd] = useState(null);
 
-  var mkReq = function (cmd) {
+  const mkReq = function (cmd) {
     return {
       headers: {
         "Content-Type": "application/json",
@@ -35,7 +35,7 @@ export const SwapProvider = (props) => {
     };
   };
 
-  var parseRes = async function (raw) {
+  const parseRes = async function (raw) {
     const rawRes = await raw;
     const res = await rawRes;
     if (res.ok) {
@@ -383,6 +383,10 @@ export const SwapProvider = (props) => {
         swapWallet,
         tokenData,
         localRes,
+        cmd,
+        setCmd,
+        mkReq,
+        parseRes,
       }}
     >
       {props.children}
