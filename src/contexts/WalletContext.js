@@ -55,6 +55,7 @@ export const WalletProvider = (props) => {
     signing,
     walletError,
     setWalletError,
+    keyPair,
     isWaitingForWalletAuth,
     setIsWaitingForWalletAuth,
     walletSuccess,
