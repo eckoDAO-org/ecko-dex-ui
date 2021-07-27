@@ -66,11 +66,6 @@ export const PactProvider = (props) => {
     }));
   };
 
-  const getCorrectBalance = (balance) => {
-    const balanceClean = !isNaN(balance) ? balance : balance.decimal;
-    return balanceClean;
-  };
-
   const storeSlippage = async (slippage) => {
     await setSlippage(slippage);
     await localStorage.setItem("slippage", slippage);
