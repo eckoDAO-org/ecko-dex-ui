@@ -28,6 +28,6 @@ export default [
     id: 3,
     label: "stats",
     route: ROUTE_STATS,
-    className: "mobile-none",
+    className: "",
   },
 ];

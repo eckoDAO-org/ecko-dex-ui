@@ -24,7 +24,7 @@ const IconsContainer = styled.div`
     z-index: 2;
   }
   div:last-child {
-    margin-left: 5px;
+    margin-right: 5px;
   }
 `;
 
@@ -33,6 +33,16 @@ const CustomGrid = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
   gap: 4px 0px;
+`;
+
+export const PartialScrollableScrollSection = styled.div`
+  flex: 1;
+  overflow: auto;
+  margin-bottom: -10px;
+
+  ::-webkit-scrollbar {
+    display: block;
+  }
 `;
 
 const StatsContainer = () => {
@@ -49,40 +59,41 @@ const StatsContainer = () => {
         <ModalContainer
           title="pool stats"
           containerStyle={{
-            overflow: "hidden",
             maxHeight: "80vh",
             maxWidth: 650,
           }}
         >
-          {pact.pairList[0] ? (
-            Object.values(pact.pairList).map((pair) =>
-              pair && pair.reserves ? (
-                <CustomGrid>
-                  <CustomLabel bold>Name</CustomLabel>
-                  <IconsContainer>
-                    {tokenData[pair.token0].icon}
-                    {tokenData[pair.token1].icon}
-                    <div>{`${pair.token0}/${pair.token1}`}</div>
-                  </IconsContainer>
-                  <CustomLabel bold>token0</CustomLabel>
-                  <CustomLabel>{reduceBalance(pair.reserves[0])}</CustomLabel>
-                  <CustomLabel bold>token1</CustomLabel>
-                  <CustomLabel>{reduceBalance(pair.reserves[1])}</CustomLabel>
-                  <CustomLabel bold>Rate</CustomLabel>
-                  <CustomLabel>{`${reduceBalance(
-                    extractDecimal(pair.reserves[0]) /
-                      extractDecimal(pair.reserves[1])
-                  )} ${pair.token0}/${pair.token1}`}</CustomLabel>
-                </CustomGrid>
-              ) : (
-                ""
+          <PartialScrollableScrollSection>
+            {pact.pairList[0] ? (
+              Object.values(pact.pairList).map((pair) =>
+                pair && pair.reserves ? (
+                  <CustomGrid>
+                    <CustomLabel bold>Name</CustomLabel>
+                    <IconsContainer>
+                      {tokenData[pair.token0].icon}
+                      {tokenData[pair.token1].icon}
+                      <div>{`${pair.token0}/${pair.token1}`}</div>
+                    </IconsContainer>
+                    <CustomLabel bold>token0</CustomLabel>
+                    <CustomLabel>{reduceBalance(pair.reserves[0])}</CustomLabel>
+                    <CustomLabel bold>token1</CustomLabel>
+                    <CustomLabel>{reduceBalance(pair.reserves[1])}</CustomLabel>
+                    <CustomLabel bold>Rate</CustomLabel>
+                    <CustomLabel>{`${reduceBalance(
+                      extractDecimal(pair.reserves[0]) /
+                        extractDecimal(pair.reserves[1])
+                    )} ${pair.token0}/${pair.token1}`}</CustomLabel>
+                  </CustomGrid>
+                ) : (
+                  ""
+                )
               )
-            )
-          ) : (
-            <Dimmer active inverted>
-              <Loader>Loading</Loader>
-            </Dimmer>
-          )}
+            ) : (
+              <Dimmer active inverted>
+                <Loader>Loading</Loader>
+              </Dimmer>
+            )}
+          </PartialScrollableScrollSection>
         </ModalContainer>
       ) : (
         //DESKTOP

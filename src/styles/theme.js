@@ -5,7 +5,7 @@ export const theme = {
     mainContentPadding: 24,
   },
   header: {
-    height: 56,
+    height: 65,
   },
   mediaQueries: {
     mobileBreakpoint: "48rem",
