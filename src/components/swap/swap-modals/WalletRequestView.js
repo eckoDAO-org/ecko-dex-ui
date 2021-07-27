@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { Transition } from "react-spring/renderprops";
-import ModalContainer from "./ModalContainer";
+import ModalContainer from "../../../shared/ModalContainer";
 import { Loader, Icon } from "semantic-ui-react";
 import CustomButton from "../../../shared/CustomButton";
 
