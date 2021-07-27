@@ -10,10 +10,8 @@ import theme from "../styles/theme";
 import CustomLabel from "../shared/CustomLabel";
 
 const Container = styled.div`
-  width: 100%;
   margin-left: auto;
   margin-right: auto;
-  overflow: scroll;
 `;
 
 const IconsContainer = styled.div`
@@ -51,6 +49,7 @@ const StatsContainer = () => {
         <ModalContainer
           title="pool stats"
           containerStyle={{
+            overflow: "hidden",
             maxHeight: "80vh",
             maxWidth: 650,
           }}
