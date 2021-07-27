@@ -451,6 +451,10 @@ export const PactProvider = (props) => {
     return pairReserve["token0"] / pairReserve["token1"];
   };
 
+  const share = (amount) => {
+    return Number(amount) / (Number(pairReserve["token0"]) + Number(amount));
+  };
+
   //COMPUTE_OUT
   var computeOut = function (amountIn) {
     let reserveOut = Number(pairReserve["token1"]);
@@ -512,6 +516,7 @@ export const PactProvider = (props) => {
     ratio,
     getRatio,
     getRatio1,
+    share,
     pair,
     setPair,
     getPair,
