@@ -1,26 +1,35 @@
 import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components/macro";
-import { ReactComponent as PlusIcon } from "../../assets/images/shared/plus.svg";
-import ModalContainer from "../../components/shared/ModalContainer";
-import FormContainer from "../../components/shared/FormContainer";
-import Input from "../../components/shared/Input";
-import InputToken from "../../components/shared/InputToken";
-import ButtonDivider from "../../components/shared/ButtonDivider";
-import MyButton from "../../components/shared/Button";
-import TokenSelector from "../../components/shared/TokenSelector";
+
 import { throttle, debounce } from "throttle-debounce";
 import { PactContext } from "../../contexts/PactContext";
-import { ReactComponent as LeftIcon } from "../../assets/images/shared/left-arrow.svg";
-import { reduceBalance, limitDecimalPlaces } from "../../utils/reduceBalance";
-import TxView from "../../components/shared/TxView";
+import {
+  reduceBalance,
+  limitDecimalPlaces,
+  getCorrectBalance,
+} from "../../utils/reduceBalance";
 import ReviewTx from "./ReviewTx";
+import WalletRequestView from "../../components/swap/swap-modals/WalletRequestView";
 import { ReactComponent as ArrowBack } from "../../assets/images/shared/arrow-back.svg";
 import { ReactComponent as SwapArrowsIcon } from "../../assets/images/shared/swap-token-arrow.svg";
 import { Grid } from "semantic-ui-react";
-import WalletRequestView from "../../components/shared/WalletRequestView";
+
 import walletError from "../../components/alerts/walletError";
-import ReviewTxModal from "../../components/shared/ReviewTxModal";
 import { Button } from "semantic-ui-react";
+import CustomLabel from "../../shared/CustomLabel";
+import CustomButton from "../../shared/CustomButton";
+import ButtonDivider from "../../shared/ButtonDivider";
+import TokenSelectorModal from "../../components/swap/swap-modals/TokenSelectorModal";
+import FormContainer from "../../shared/FormContainer";
+import Input from "../../shared/Input";
+import InputToken from "../../shared/InputToken";
+import ReviewTxModal from "../../components/modals/liquidity/ReviewTxModal";
+import TxView from "../../components/swap/swap-modals/TxView";
+import { AccountContext } from "../../contexts/AccountContext";
+import { WalletContext } from "../../contexts/WalletContext";
+import { LiquidityContext } from "../../contexts/LiquidityContext";
+import theme from "../../styles/theme";
+import tokenData from "../../constants/cryptoCurrencies";
 
 const Container = styled.div`
   display: flex;
@@ -51,40 +60,6 @@ const ButtonContainer = styled.div`
   width: 100%;
 `;
 
-const RowContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 15px 0px;
-`;
-
-const ColumnContainer = styled.div`
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-
-  & > span:first-child {
-    font-size: 14px;
-    margin-bottom: 3px;
-  }
-
-  & > span:last-child {
-    font-size: 12px;
-    color: #b5b5b5;
-  }
-`;
-
-const InfoContainer = styled.div`
-  position: relative;
-  display: flex;
-  flex-flow: row;
-  padding: 20px 20px;
-  width: 100%;
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: column;
-  }
-`;
-
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -107,12 +82,6 @@ const InnerRowContainer = styled.div`
   }
 `;
 
-const Label = styled.span`
-  font: normal normal normal 14px/15px montserrat-regular;
-  color: #ffffff;
-  text-transform: capitalize;
-`;
-
 const Value = styled.span`
   font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
   font-size: 16px;
@@ -122,6 +91,9 @@ const Value = styled.span`
 
 const LiquidityContainer = (props) => {
   const pact = useContext(PactContext);
+  const account = useContext(AccountContext);
+  const wallet = useContext(WalletContext);
+  const liquidity = useContext(LiquidityContext);
   const { selectedView, setSelectedView } = props;
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
@@ -174,48 +146,48 @@ const LiquidityContainer = (props) => {
 
   useEffect(async () => {
     if (fromValues.coin !== "") {
-      await pact.getTokenAccount(
-        pact.tokenData[fromValues.coin].code,
-        pact.account.account,
+      await account.getTokenAccount(
+        tokenData[fromValues.coin].code,
+        account.account.account,
         true
       );
     }
     if (toValues.coin !== "") {
-      await pact.getTokenAccount(
-        pact.tokenData[toValues.coin].code,
-        pact.account.account,
+      await account.getTokenAccount(
+        tokenData[toValues.coin].code,
+        account.account.account,
         false
       );
     }
     if (fromValues.coin !== "" && toValues.coin !== "") {
       await pact.getPair(
-        pact.tokenData[fromValues.coin].code,
-        pact.tokenData[toValues.coin].code
+        tokenData[fromValues.coin].code,
+        tokenData[toValues.coin].code
       );
       await pact.getReserves(
-        pact.tokenData[fromValues.coin].code,
-        pact.tokenData[toValues.coin].code
+        tokenData[fromValues.coin].code,
+        tokenData[toValues.coin].code
       );
       if (pact.pair) {
         setPairExist(true);
       }
     }
-  }, [fromValues, toValues, pairExist, pact.account.account]);
+  }, [fromValues, toValues, pairExist, account.account.account]);
 
   const onTokenClick = async ({ crypto }) => {
     let balance;
     if (crypto.code === "coin") {
-      if (pact.account) {
-        balance = pact.account.balance;
+      if (account.account) {
+        balance = account.account.balance;
       }
     } else {
-      let acct = await pact.getTokenAccount(
+      let acct = await account.getTokenAccount(
         crypto.code,
-        pact.account.account,
+        account.account.account,
         tokenSelectorType === "from"
       );
       if (acct) {
-        balance = pact.getCorrectBalance(acct.balance);
+        balance = getCorrectBalance(acct.balance);
       }
     }
     if (tokenSelectorType === "from")
@@ -235,8 +207,8 @@ const LiquidityContainer = (props) => {
   };
 
   const onWalletRequestViewModalClose = () => {
-    pact.setIsWaitingForWalletAuth(false);
-    pact.setWalletError(null);
+    wallet.setIsWaitingForWalletAuth(false);
+    wallet.setWalletError(null);
   };
 
   useEffect(() => {
@@ -320,7 +292,7 @@ const LiquidityContainer = (props) => {
   }, [toValues.amount]);
 
   useEffect(() => {
-    if (pact.walletSuccess) {
+    if (wallet.walletSuccess) {
       setLoading(false);
       setFromValues({
         coin: "",
@@ -352,7 +324,7 @@ const LiquidityContainer = (props) => {
       5: { msg: "Pair Already Exists", status: false },
       6: { msg: "Select different tokens", status: false },
     };
-    if (!pact.account.account) return status[0];
+    if (!account.account.account) return status[0];
     if (selectedView === "Create A Pair") {
       if (pairExist) {
         setSelectedView("Add Liquidity");
@@ -384,11 +356,11 @@ const LiquidityContainer = (props) => {
 
   const supply = async () => {
     if (selectedView === "Create A Pair") {
-      if (pact.signing.method !== "sign") {
+      if (wallet.signing.method !== "sign") {
         setLoading(true);
-        const res = await pact.createTokenPairLocal(
-          pact.tokenData[fromValues.coin],
-          pact.tokenData[toValues.coin],
+        const res = await liquidity.createTokenPairLocal(
+          tokenData[fromValues.coin],
+          tokenData[toValues.coin],
           fromValues.amount,
           toValues.amount
         );
@@ -407,11 +379,14 @@ const LiquidityContainer = (props) => {
         console.log("not signed");
       }
     } else {
-      if (pact.signing.method !== "sign" && pact.signing.method !== "none") {
+      if (
+        wallet.signing.method !== "sign" &&
+        wallet.signing.method !== "none"
+      ) {
         setLoading(true);
-        const res = await pact.addLiquidityLocal(
-          pact.tokenData[fromValues.coin],
-          pact.tokenData[toValues.coin],
+        const res = await liquidity.addLiquidityLocal(
+          tokenData[fromValues.coin],
+          tokenData[toValues.coin],
           fromValues.amount,
           toValues.amount
         );
@@ -431,14 +406,14 @@ const LiquidityContainer = (props) => {
         setShowReview(false);
         console.log(
           "param,",
-          pact.tokenData[fromValues.coin],
-          pact.tokenData[toValues.coin],
+          tokenData[fromValues.coin],
+          tokenData[toValues.coin],
           fromValues.amount,
           toValues.amount
         );
-        const res = await pact.addLiquidityWallet(
-          pact.tokenData[fromValues.coin],
-          pact.tokenData[toValues.coin],
+        const res = await liquidity.addLiquidityWallet(
+          tokenData[fromValues.coin],
+          tokenData[toValues.coin],
           fromValues.amount,
           toValues.amount
         );
@@ -480,7 +455,7 @@ const LiquidityContainer = (props) => {
 
   return (
     <Container>
-      <TokenSelector
+      <TokenSelectorModal
         show={tokenSelectorType !== null}
         selectedToken={selectedToken}
         onTokenClick={onTokenClick}
@@ -496,9 +471,9 @@ const LiquidityContainer = (props) => {
         fromToken={fromValues.coin}
         toToken={toValues.coin}
         createTokenPair={() =>
-          pact.createTokenPairLocal(
-            pact.tokenData[fromValues.coin].name,
-            pact.tokenData[toValues.coin].name,
+          liquidity.createTokenPairLocal(
+            tokenData[fromValues.coin].name,
+            tokenData[toValues.coin].name,
             fromValues.amount,
             toValues.amount
           )
@@ -506,8 +481,8 @@ const LiquidityContainer = (props) => {
         onClose={() => setShowTxModal(false)}
       />
       <WalletRequestView
-        show={pact.isWaitingForWalletAuth}
-        error={pact.walletError}
+        show={wallet.isWaitingForWalletAuth}
+        error={wallet.walletError}
         onClose={() => onWalletRequestViewModalClose()}
       />
       <ReviewTxModal
@@ -521,7 +496,7 @@ const LiquidityContainer = (props) => {
       />
 
       <TitleContainer>
-        <Title style={{ fontFamily: "montserrat-bold" }}>
+        <Title style={{ fontFamily: theme.fontFamily.bold }}>
           <ArrowBack
             style={{
               cursor: "pointer",
@@ -545,8 +520,8 @@ const LiquidityContainer = (props) => {
           inputRightComponent={
             fromValues.coin ? (
               <InputToken
-                icon={pact.tokenData[fromValues.coin].icon}
-                code={pact.tokenData[fromValues.coin].name}
+                icon={tokenData[fromValues.coin].icon}
+                code={tokenData[fromValues.coin].name}
                 onClick={() => setTokenSelectorType("from")}
               />
             ) : null
@@ -572,8 +547,8 @@ const LiquidityContainer = (props) => {
           inputRightComponent={
             toValues.coin ? (
               <InputToken
-                icon={pact.tokenData[toValues.coin].icon}
-                code={pact.tokenData[toValues.coin].name}
+                icon={tokenData[toValues.coin].icon}
+                code={tokenData[toValues.coin].name}
                 onClick={() => setTokenSelectorType("to")}
               />
             ) : null
@@ -597,14 +572,14 @@ const LiquidityContainer = (props) => {
         <>
           <ResultContainer>
             <InnerRowContainer>
-              <Label>{`${toValues.coin} per ${fromValues.coin}`}</Label>
+              <CustomLabel>{`${toValues.coin} per ${fromValues.coin}`}</CustomLabel>
               <Value>
                 {reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ??
                   "-"}
               </Value>
             </InnerRowContainer>
             <InnerRowContainer>
-              <Label>{`${fromValues.coin} per ${toValues.coin}`}</Label>
+              <CustomLabel>{`${fromValues.coin} per ${toValues.coin}`}</CustomLabel>
               <Value>
                 {reduceBalance(
                   pact.getRatio1(toValues.coin, fromValues.coin)
@@ -612,7 +587,7 @@ const LiquidityContainer = (props) => {
               </Value>
             </InnerRowContainer>
             <InnerRowContainer>
-              <Label>Share of Pool</Label>
+              <CustomLabel>Share of Pool</CustomLabel>
               <Value>
                 {!pact.share(fromValues.amount)
                   ? 0
@@ -625,23 +600,13 @@ const LiquidityContainer = (props) => {
       )}
       <ButtonContainer>
         <Button.Group>
-          <MyButton
+          <CustomButton
             disabled={!buttonStatus().status}
             onClick={() => setShowReview(true)}
           >
             {buttonStatus().msg}
-          </MyButton>
+          </CustomButton>
         </Button.Group>
-        {/* <ReviewTx
-          fromValues={fromValues}
-          toValues={toValues}
-          buttonStatus={buttonStatus}
-          liquidityView={selectedView}
-          supply={supply}
-          loading={loading}
-          open={showReview}
-          setOpen={setShowReview}
-        /> */}
       </ButtonContainer>
     </Container>
   );
