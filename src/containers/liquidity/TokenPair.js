@@ -8,8 +8,7 @@ import {
   extractDecimal,
   pairUnit,
 } from "../../utils/reduceBalance";
-import MyButton from "../../components/shared/Button";
-
+import CustomButton from "../../shared/CustomButton";
 const Container = styled.div`
   display: flex;
   flex-flow: column;
@@ -106,7 +105,7 @@ const TokenPair = (props) => {
 
       <ButtonContainer>
         <Button.Group fluid>
-          <MyButton
+          <CustomButton
             buttonStyle={{
               marginRight: "30px",
               width: "50%",
@@ -118,8 +117,8 @@ const TokenPair = (props) => {
             }}
           >
             Remove
-          </MyButton>
-          <MyButton
+          </CustomButton>
+          <CustomButton
             buttonStyle={{
               marginLeft: "-20px",
               width: "50%",
@@ -128,7 +127,7 @@ const TokenPair = (props) => {
             onClick={() => props.selectAddLiquidity()}
           >
             Add
-          </MyButton>
+          </CustomButton>
         </Button.Group>
       </ButtonContainer>
     </Container>

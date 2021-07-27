@@ -1,24 +1,10 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import styled from "styled-components/macro";
-import {
-  Message,
-  Divider,
-  Dimmer,
-  Loader,
-  Button,
-  Header,
-  Grid,
-} from "semantic-ui-react";
-import { Button as SUIButton } from "semantic-ui-react";
-/* import ModalContainer from '../../components/shared/ModalContainer'; */
-import Input from "../../components/shared/Input";
-import InputToken from "../../components/shared/InputToken";
-import ButtonDivider from "../../components/shared/ButtonDivider";
-import MyButton from "../../components/shared/Button";
-import cryptoCurrencies from "../../constants/tokens";
+import { Loader, Button, Header } from "semantic-ui-react";
+
+import CustomButton from "../../shared/CustomButton";
 import TokenPair from "./TokenPair";
-import { PactContext } from "../../contexts/PactContext";
-import { reduceBalance } from "../../utils/reduceBalance";
+
 import { WalletContext } from "../../contexts/WalletContext";
 import { LiquidityContext } from "../../contexts/LiquidityContext";
 import { AccountContext } from "../../contexts/AccountContext";
@@ -208,7 +194,7 @@ const LiquidityList = (props) => {
 
           <ButtonContainer style={{ marginBottom: "30px" }}>
             <Button.Group fluid>
-              <MyButton
+              <CustomButton
                 disabled
                 buttonStyle={{
                   marginRight: "15px",
@@ -218,8 +204,8 @@ const LiquidityList = (props) => {
                 onClick={() => props.selectCreatePair()}
               >
                 Create a pair
-              </MyButton>
-              <MyButton
+              </CustomButton>
+              <CustomButton
                 /* background="none" */
                 buttonStyle={{
                   marginLeft: "-5px",
@@ -229,7 +215,7 @@ const LiquidityList = (props) => {
                 onClick={() => props.selectAddLiquidity()}
               >
                 Add Liquidity
-              </MyButton>
+              </CustomButton>
             </Button.Group>
           </ButtonContainer>
 
@@ -262,14 +248,14 @@ const LiquidityList = (props) => {
           )}
         </BottomContainer>
       ) : (
-        <MyButton
+        <CustomButton
           hover={true}
           buttonStyle={{ padding: "10px 16px", width: "214px", height: "40px" }}
           fontSize={14}
           onClick={() => wallet.setOpenConnectModal(true)}
         >
           Connect Wallet
-        </MyButton>
+        </CustomButton>
       )}
     </Container>
   );

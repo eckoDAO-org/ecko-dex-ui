@@ -1,28 +1,20 @@
 import React, { useEffect, useState, useContext } from "react";
+import { Button } from "semantic-ui-react";
 import styled from "styled-components/macro";
-import { ReactComponent as PlusIcon } from "../../assets/images/shared/plus.svg";
-import ModalContainer from "../../components/shared/ModalContainer";
-import FormContainer from "../../components/shared/FormContainer";
-import Input from "../../components/shared/Input";
-import InputToken from "../../components/shared/InputToken";
-import ButtonDivider from "../../components/shared/ButtonDivider";
-import MyButton from "../../components/shared/Button";
-import TokenSelector from "../../components/shared/TokenSelector";
-import { throttle, debounce } from "throttle-debounce";
+import { ArrowBack } from "../../assets";
+import TxView from "../../components/swap/swap-modals/TxView";
+import WalletRequestView from "../../components/swap/swap-modals/WalletRequestView";
 import { PactContext } from "../../contexts/PactContext";
-import { ReactComponent as LeftIcon } from "../../assets/images/shared/left-arrow.svg";
+
+import CustomButton from "../../shared/CustomButton";
+import FormContainer from "../../shared/FormContainer";
+import Input from "../../shared/Input";
+import theme from "../../styles/theme";
 import {
-  reduceBalance,
   extractDecimal,
   limitDecimalPlaces,
+  reduceBalance,
 } from "../../utils/reduceBalance";
-import TxView from "../../components/shared/TxView";
-import ReviewTx from "./ReviewTx";
-import { ReactComponent as ArrowBack } from "../../assets/images/shared/arrow-back.svg";
-import { ReactComponent as SwapArrowsIcon } from "../../assets/images/shared/swap-arrow.svg";
-import { Button } from "semantic-ui-react";
-import WalletRequestView from "../../components/shared/WalletRequestView";
-import theme from "../../styles/theme";
 
 const Container = styled.div`
   display: flex;
@@ -118,7 +110,7 @@ const RemoveLiqContainer = (props) => {
   const [pooledToken1, setPooledToken1] = useState(
     reduceBalance(pooledAmount[1], 12)
   );
-
+  //DA VEDERE
   useEffect(() => {
     if (!isNaN(amount)) {
       setPooled(
@@ -212,7 +204,7 @@ const RemoveLiqContainer = (props) => {
           />
           <ButtonContainer>
             <Button.Group fluid>
-              <MyButton
+              <CustomButton
                 buttonStyle={{
                   border: "1px solid #424242",
                   width: "20%",
@@ -221,9 +213,9 @@ const RemoveLiqContainer = (props) => {
                 onClick={() => setAmount(25)}
               >
                 25%
-              </MyButton>
+              </CustomButton>
               <MyButtonDivider />
-              <MyButton
+              <CustomButton
                 buttonStyle={{
                   border: "1px solid #424242",
                   width: "20%",
@@ -232,9 +224,9 @@ const RemoveLiqContainer = (props) => {
                 onClick={() => setAmount(50)}
               >
                 50%
-              </MyButton>
+              </CustomButton>
               <MyButtonDivider />
-              <MyButton
+              <CustomButton
                 buttonStyle={{
                   border: "1px solid #424242",
                   width: "20%",
@@ -243,9 +235,9 @@ const RemoveLiqContainer = (props) => {
                 onClick={() => setAmount(75)}
               >
                 75%
-              </MyButton>
+              </CustomButton>
               <MyButtonDivider />
-              <MyButton
+              <CustomButton
                 buttonStyle={{
                   border: "1px solid #424242",
                   width: "20%",
@@ -254,7 +246,7 @@ const RemoveLiqContainer = (props) => {
                 onClick={() => setAmount(100)}
               >
                 100%
-              </MyButton>
+              </CustomButton>
             </Button.Group>
           </ButtonContainer>
         </SubContainer>
@@ -277,7 +269,7 @@ const RemoveLiqContainer = (props) => {
         </InnerRowContainer>
       </ResultContainer>
 
-      <MyButton
+      <CustomButton
         loading={loading}
         disabled={isNaN(amount) || reduceBalance(amount) === 0}
         onClick={async () => {
@@ -321,7 +313,7 @@ const RemoveLiqContainer = (props) => {
         }}
       >
         Remove Liquidity
-      </MyButton>
+      </CustomButton>
       {/* <ButtonContainer>
         <TxView
           view={selectedView}
