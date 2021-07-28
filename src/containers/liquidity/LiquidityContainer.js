@@ -8,13 +8,10 @@ import {
   limitDecimalPlaces,
   getCorrectBalance,
 } from "../../utils/reduceBalance";
-import ReviewTx from "./ReviewTx";
 import WalletRequestView from "../../components/swap/swap-modals/WalletRequestView";
 import { ReactComponent as ArrowBack } from "../../assets/images/shared/arrow-back.svg";
 import { ReactComponent as SwapArrowsIcon } from "../../assets/images/shared/swap-token-arrow.svg";
-import { Grid } from "semantic-ui-react";
 
-import walletError from "../../components/alerts/walletError";
 import { Button } from "semantic-ui-react";
 import CustomLabel from "../../shared/CustomLabel";
 import CustomButton from "../../shared/CustomButton";
@@ -418,11 +415,11 @@ const LiquidityContainer = (props) => {
           toValues.amount
         );
         if (!res) {
-          pact.setIsWaitingForWalletAuth(true);
+          wallet.setIsWaitingForWalletAuth(true);
           /* pact.setWalletError(true); */
           /* walletError(); */
         } else {
-          pact.setWalletError(null);
+          wallet.setWalletError(null);
           setSelectedView("Add Liquidity");
           setShowTxModal(true);
         }
