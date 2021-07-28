@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import styled from "styled-components/macro";
-import { Dimmer, Grid, Loader, Table } from "semantic-ui-react";
+import { Dimmer, Loader, Table } from "semantic-ui-react";
 import { isMobile } from "react-device-detect";
 import { PactContext } from "../contexts/PactContext";
 import ModalContainer from "../shared/ModalContainer";
