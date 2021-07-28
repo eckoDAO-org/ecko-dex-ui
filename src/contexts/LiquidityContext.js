@@ -214,6 +214,7 @@ export const LiquidityProvider = (props) => {
     amountDesired0,
     amountDesired1
   ) => {
+    debugger;
     try {
       let privKey = wallet.signing.key;
       if (wallet.signing.method === "pk+pw") {
@@ -256,7 +257,7 @@ export const LiquidityProvider = (props) => {
           ],
         },
         envData: {
-          "user-ks": account.guard,
+          "user-ks": account.account.guard,
           amountDesired0: reduceBalance(
             amountDesired0,
             tokenData[token0.name].precision
