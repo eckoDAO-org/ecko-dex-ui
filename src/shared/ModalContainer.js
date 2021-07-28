@@ -15,6 +15,10 @@ const Container = styled.div`
   opacity: 1;
   background: #240b2f 0% 0% no-repeat padding-box;
   color: #ffffff;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const HeaderContainer = styled.div`
