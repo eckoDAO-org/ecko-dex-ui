@@ -12,6 +12,12 @@ import { GAS_PRICE } from "../../../constants/contextConstants";
 
 const Container = styled.div`
   position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
   display: flex;
   justify-content: center;
   align-items: center;
