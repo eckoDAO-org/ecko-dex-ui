@@ -121,19 +121,33 @@ const LiquidityContainer = (props) => {
   }, [showTxModal]);
 
   /////// when pass pair by the container, set the token on InputToken
-  const handleTokenValue = (by, key, value) => {
-    if (by === "from") return setFromValues({ ...fromValues, [key]: value });
-    else if (by === "to") return setToValues({ ...toValues, [key]: value });
+  const handleTokenValue = (by, crypto) => {
+    if (by === "from")
+      return setFromValues((prev) => ({
+        ...prev,
+        balance: crypto?.balance,
+        coin: crypto?.name,
+        precision: crypto.precision,
+      }));
+    if (by === "to")
+      return setToValues((prev) => ({
+        ...prev,
+        balance: crypto?.balance,
+        coin: crypto?.name,
+        precision: crypto.precision,
+      }));
     else return null;
   };
+
   useEffect(() => {
     if (props?.pair?.token0 && fromValues === initialStateValue)
-      return handleTokenValue("from", "coin", props?.pair?.token0);
-  }, [fromValues]);
+      handleTokenValue("from", tokenData[props?.pair?.token0]);
+  }, [fromValues, props?.pair?.token0]);
 
   useEffect(() => {
     if (props?.pair?.token1 && toValues === initialStateValue)
-      return handleTokenValue("to", "coin", props?.pair?.token1);
+      //return onTokenClick(tokenData[props?.pair?.token1]);
+      return handleTokenValue("to", tokenData[props?.pair?.token1]);
   }, [toValues]);
   ////////
 
@@ -175,13 +189,13 @@ const LiquidityContainer = (props) => {
 
   const onTokenClick = async ({ crypto }) => {
     let balance;
-    if (crypto.code === "coin") {
+    if (crypto?.code === "coin") {
       if (account.account) {
         balance = account.account.balance;
       }
     } else {
       let acct = await account.getTokenAccount(
-        crypto.code,
+        crypto?.code,
         account.account.account,
         tokenSelectorType === "from"
       );
@@ -193,15 +207,15 @@ const LiquidityContainer = (props) => {
       setFromValues((prev) => ({
         ...prev,
         balance: balance,
-        coin: crypto.name,
+        coin: crypto?.name,
         precision: crypto.precision,
       }));
     if (tokenSelectorType === "to")
       setToValues((prev) => ({
         ...prev,
         balance: balance,
-        coin: crypto.name,
-        precision: crypto.precision,
+        coin: crypto?.name,
+        precision: crypto?.precision,
       }));
   };
 

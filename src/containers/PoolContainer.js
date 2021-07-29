@@ -6,7 +6,6 @@ import RemoveLiqContainer from "./liquidity/RemoveLiqContainer";
 const PoolContainer = () => {
   const [selectedView, setSelectedView] = useState(false);
   const [pair, setPair] = useState(null);
-
   return (
     <>
       {selectedView === "Remove Liquidity" ? (
