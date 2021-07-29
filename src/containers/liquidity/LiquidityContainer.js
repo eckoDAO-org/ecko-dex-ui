@@ -86,6 +86,15 @@ const Value = styled.span`
   color: #ffffff;
 `;
 
+const initialStateValue = {
+  coin: "",
+  account: "",
+  guard: null,
+  balance: null,
+  amount: "",
+  precision: 0,
+};
+
 const LiquidityContainer = (props) => {
   const pact = useContext(PactContext);
   const account = useContext(AccountContext);
@@ -95,26 +104,19 @@ const LiquidityContainer = (props) => {
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
   const [inputSide, setInputSide] = useState("");
-  const [fromValues, setFromValues] = useState({
-    coin: "",
-    account: null,
-    guard: null,
-    balance: null,
-    amount: "",
-    precision: 0,
-  });
-  const [toValues, setToValues] = useState({
-    coin: "",
-    account: null,
-    guard: null,
-    balance: null,
-    amount: "",
-    precision: 0,
-  });
+  const [fromValues, setFromValues] = useState(initialStateValue);
+
+  const [toValues, setToValues] = useState(initialStateValue);
   const [pairExist, setPairExist] = useState(false);
   const [showTxModal, setShowTxModal] = useState(false);
   const [showReview, setShowReview] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const handleTokenValue = (by, key, value) => {
+    if (by === "from") return setFromValues({ ...fromValues, [key]: value });
+    else if (by === "to") return setToValues({ ...toValues, [key]: value });
+    else return null;
+  };
 
   useEffect(() => {
     if (showTxModal === false) {
@@ -134,6 +136,16 @@ const LiquidityContainer = (props) => {
       });
     }
   }, [showTxModal]);
+
+  useEffect(() => {
+    if (props?.pair?.token0 && fromValues === initialStateValue)
+      return handleTokenValue("from", "coin", props?.pair?.token0);
+  }, [fromValues]);
+
+  useEffect(() => {
+    if (props?.pair?.token1 && toValues === initialStateValue)
+      return handleTokenValue("to", "coin", props?.pair?.token1);
+  }, [toValues]);
 
   useEffect(async () => {
     if (tokenSelectorType === "from") setSelectedToken(fromValues.coin);
