@@ -106,6 +106,7 @@ const LiquidityContainer = (props) => {
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
   const [inputSide, setInputSide] = useState("");
+
   const [fromValues, setFromValues] = useState(initialStateValue);
   const [toValues, setToValues] = useState(initialStateValue);
 
@@ -141,15 +142,18 @@ const LiquidityContainer = (props) => {
   };
 
   useEffect(() => {
-    if (props?.pair?.token0 && fromValues === initialStateValue)
+    setInputSide("from");
+    if (props?.pair?.token0 && fromValues === initialStateValue) {
       handleTokenValue("from", tokenData[props?.pair?.token0]);
+    }
   }, [fromValues, props?.pair?.token0]);
 
   useEffect(() => {
-    if (props?.pair?.token1 && toValues === initialStateValue)
-      //return onTokenClick(tokenData[props?.pair?.token1]);
-      return handleTokenValue("to", tokenData[props?.pair?.token1]);
-  }, [toValues]);
+    setInputSide("to");
+    if (props?.pair?.token1 && toValues === initialStateValue) {
+      handleTokenValue("to", tokenData[props?.pair?.token1]);
+    }
+  }, [toValues, props?.pair?.token1]);
   ////////
 
   useEffect(async () => {

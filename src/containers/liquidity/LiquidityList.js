@@ -10,6 +10,9 @@ import { LiquidityContext } from "../../contexts/LiquidityContext";
 import { AccountContext } from "../../contexts/AccountContext";
 import theme from "../../styles/theme";
 import ModalContainer from "../../shared/ModalContainer";
+import reduceToken from "../../utils/reduceToken";
+import ConnectWalletModal from "../../components/modals/kdaModals/ConnectWalletModal";
+import { ModalContext } from "../../contexts/ModalContext";
 
 const Container = styled.div`
   display: flex;
@@ -66,6 +69,7 @@ const FormContainer = styled.div`
 const TopContainer = styled.div``;
 
 const LiquidityList = (props) => {
+  const modalContext = useContext(ModalContext);
   const liquidity = useContext(LiquidityContext);
   const { account } = useContext(AccountContext);
   //const pact = useContext(PactContext);
@@ -98,7 +102,7 @@ const LiquidityList = (props) => {
             style={{
               fontSize: 24,
               textAlign: "left !important",
-              fontFamily: "montserrat",
+              fontFamily: theme.fontFamily.bold,
             }}
           >
             Liquidity provider rewards
@@ -187,7 +191,15 @@ const LiquidityList = (props) => {
               height: "40px",
             }}
             fontSize={14}
-            onClick={() => wallet.setOpenConnectModal(true)}
+            onClick={() =>
+              modalContext.openModal({
+                title: account?.account ? "wallet connected" : "connect wallet",
+                description: account?.account
+                  ? `Account ID: ${reduceToken(account.account)}`
+                  : "Connect a wallet using one of the methods below",
+                content: <ConnectWalletModal />,
+              })
+            }
           >
             Connect Wallet
           </CustomButton>
