@@ -4,7 +4,12 @@ import HeaderItem from "../../../shared/HeaderItem";
 import AccountInfo from "./AccountInfo";
 import Button from "../../../shared/CustomButton";
 import CustomPopup from "../../../shared/CustomPopup";
-import { PowerIcon, CogIcon, HamburgerIcon } from "../../../assets";
+import {
+  PowerIcon,
+  CogIcon,
+  HamburgerIcon,
+  AboutBigIcon,
+} from "../../../assets";
 import headerLinks from "../../headerLinks";
 import PopupContentList from "./PopupContentList";
 import { AccountContext } from "../../../contexts/AccountContext";
@@ -39,7 +44,6 @@ const Label = styled.span`
   color: white;
   fontsize: 16;
 `;
-//  montare Context
 
 const RightHeaderItems = () => {
   const { account, logout } = useContext(AccountContext);
@@ -115,7 +119,7 @@ const RightHeaderItems = () => {
       <HeaderItem>
         <CustomPopup
           basic
-          trigger={<HamburgerIcon />}
+          trigger={<AboutBigIcon />}
           on="click"
           offset={[0, 10]}
           position="bottom right"
