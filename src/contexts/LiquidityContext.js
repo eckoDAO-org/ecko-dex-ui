@@ -214,7 +214,6 @@ export const LiquidityProvider = (props) => {
     amountDesired0,
     amountDesired1
   ) => {
-    debugger;
     try {
       let privKey = wallet.signing.key;
       if (wallet.signing.method === "pk+pw") {
