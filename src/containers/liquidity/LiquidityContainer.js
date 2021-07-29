@@ -27,6 +27,7 @@ import { WalletContext } from "../../contexts/WalletContext";
 import { LiquidityContext } from "../../contexts/LiquidityContext";
 import theme from "../../styles/theme";
 import tokenData from "../../constants/cryptoCurrencies";
+import SwapForm from "../../components/swap/SwapForm";
 
 const Container = styled.div`
   margin-top: ${({ theme: { header } }) => header.height};
@@ -522,64 +523,16 @@ const LiquidityContainer = (props) => {
           Add Liquidity
         </Title>
       </TitleContainer>
-
-      <FormContainer>
-        <Input
-          topLeftLabel="input"
-          bottomLeftLabel={`balance: ${
-            reduceBalance(fromValues.balance) ?? "-"
-          }`}
-          placeholder="enter amount"
-          inputRightComponent={
-            fromValues.coin ? (
-              <InputToken
-                icon={tokenData[fromValues.coin].icon}
-                code={tokenData[fromValues.coin].name}
-                onClick={() => setTokenSelectorType("from")}
-              />
-            ) : null
-          }
-          withSelectButton
-          numberOnly
-          value={fromValues.amount}
-          onSelectButtonClick={() => setTokenSelectorType("from")}
-          onChange={async (e, { value }) => {
-            setInputSide("from");
-            setFromValues((prev) => ({
-              ...prev,
-              amount: limitDecimalPlaces(value, fromValues.precision),
-            }));
-          }}
-          error={isNaN(fromValues.amount)}
-        />
-        <ButtonDivider icon={<SwapArrowsIcon />} onClick={swapValues} />
-        <Input
-          topLeftLabel="input"
-          bottomLeftLabel={`balance: ${reduceBalance(toValues.balance) ?? "-"}`}
-          placeholder="enter amount"
-          inputRightComponent={
-            toValues.coin ? (
-              <InputToken
-                icon={tokenData[toValues.coin].icon}
-                code={tokenData[toValues.coin].name}
-                onClick={() => setTokenSelectorType("to")}
-              />
-            ) : null
-          }
-          withSelectButton
-          numberOnly
-          value={toValues.amount}
-          onSelectButtonClick={() => setTokenSelectorType("to")}
-          onChange={async (e, { value }) => {
-            setInputSide("to");
-            setToValues((prev) => ({
-              ...prev,
-              amount: limitDecimalPlaces(value, toValues.precision),
-            }));
-          }}
-          error={isNaN(toValues.amount)}
-        />
-      </FormContainer>
+      <SwapForm
+        fromValues={fromValues}
+        setFromValues={setFromValues}
+        toValues={toValues}
+        setToValues={setToValues}
+        setTokenSelectorType={setTokenSelectorType}
+        setInputSide={setInputSide}
+        swapValues={swapValues}
+        setShowTxModal={setShowTxModal}
+      />
 
       {fromValues.coin && toValues.coin && (
         <>

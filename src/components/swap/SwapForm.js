@@ -6,6 +6,7 @@ import InputToken from "../../shared/InputToken";
 import { SwapArrowsIcon } from "../../assets";
 import { limitDecimalPlaces, reduceBalance } from "../../utils/reduceBalance";
 import { SwapContext } from "../../contexts/SwapContext";
+import tokenData from "../../constants/cryptoCurrencies";
 
 const FormContainer = styled.div`
   position: relative;
@@ -37,20 +38,18 @@ const SwapForm = ({
   setInputSide,
   swapValues,
 }) => {
-  const swap = useContext(SwapContext);
-
   return (
     <FormContainer>
       <Input
         error={isNaN(fromValues.amount)}
-        topLeftLabel={`from ${fromNote}`}
+        topLeftLabel={fromNote ? `from ${fromNote}` : "input"}
         bottomLeftLabel={`balance: ${reduceBalance(fromValues.balance) ?? "-"}`}
         placeholder="enter amount"
         inputRightComponent={
           fromValues.coin ? (
             <InputToken
-              icon={swap.tokenData[fromValues.coin].icon}
-              code={swap.tokenData[fromValues.coin].name}
+              icon={tokenData[fromValues.coin].icon}
+              code={tokenData[fromValues.coin].name}
               onClick={() => setTokenSelectorType("from")}
             />
           ) : null
@@ -70,14 +69,14 @@ const SwapForm = ({
       <ButtonDivider icon={<SwapArrowsIcon />} onClick={swapValues} />
       <Input
         error={isNaN(toValues.amount)}
-        topLeftLabel={`to ${toNote}`}
+        topLeftLabel={toNote ? `to ${toNote}` : `input`}
         bottomLeftLabel={`balance: ${reduceBalance(toValues.balance) ?? "-"}`}
         placeholder="enter amount"
         inputRightComponent={
           toValues.coin ? (
             <InputToken
-              icon={swap.tokenData[toValues.coin].icon}
-              code={swap.tokenData[toValues.coin].name}
+              icon={tokenData[toValues.coin].icon}
+              code={tokenData[toValues.coin].name}
               onClick={() => setTokenSelectorType("to")}
             />
           ) : null
