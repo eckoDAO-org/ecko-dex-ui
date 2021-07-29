@@ -72,8 +72,6 @@ const LiquidityList = (props) => {
   const modalContext = useContext(ModalContext);
   const liquidity = useContext(LiquidityContext);
   const { account } = useContext(AccountContext);
-  //const pact = useContext(PactContext);
-  const wallet = useContext(WalletContext);
 
   useEffect(async () => {
     liquidity.getPairListAccountBalance(account.account);
