@@ -42,7 +42,7 @@ const SwapForm = ({
     <FormContainer>
       <Input
         error={isNaN(fromValues.amount)}
-        topLeftLabel={fromNote ? `from ${fromNote}` : "input"}
+        topLeftLabel={fromNote ? `from ${fromNote}` : `input`}
         bottomLeftLabel={`balance: ${reduceBalance(fromValues.balance) ?? "-"}`}
         placeholder="enter amount"
         inputRightComponent={

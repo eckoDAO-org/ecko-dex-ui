@@ -395,7 +395,6 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
             <ModalContainer
               title="transaction details"
               containerStyle={{
-                height: "100%",
                 maxHeight: "80vh",
                 maxWidth: "90vw",
               }}
