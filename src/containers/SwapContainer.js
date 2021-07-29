@@ -3,6 +3,7 @@ import styled from "styled-components/macro";
 import { throttle, debounce } from "throttle-debounce";
 import TokenSelectorModal from "../components/swap/swap-modals/TokenSelectorModal";
 import TxView from "../components/swap/swap-modals/TxView";
+import WalletRequestView from "../components/swap/swap-modals/WalletRequestView";
 import SwapButtonsForm from "../components/swap/SwapButtonsForm";
 import SwapForm from "../components/swap/SwapForm";
 import SwapResults from "../components/swap/SwapResults";
@@ -296,6 +297,11 @@ const SwapContainer = () => {
         selectedToken={selectedToken}
         onTokenClick={onTokenClick}
         onClose={() => setShowTxModal(false)}
+      />
+      <WalletRequestView
+        show={wallet.isWaitingForWalletAuth}
+        error={wallet.walletError}
+        onClose={() => onWalletRequestViewModalClose()}
       />
       <TitleContainer>
         <Title style={{ fontFamily: theme.fontFamily.bold }}>Swap</Title>

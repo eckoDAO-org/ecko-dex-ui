@@ -49,7 +49,6 @@ const WalletRequestView = ({ show, onClose, error }) => {
               <ModalContainer
                 title={error.title}
                 containerStyle={{
-                  height: "100%",
                   maxHeight: "80vh",
                   maxWidth: "90vw",
                 }}
