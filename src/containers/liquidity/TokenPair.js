@@ -1,8 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components/macro";
 import { Button } from "semantic-ui-react";
 
-import { PactContext } from "../../contexts/PactContext";
 import {
   reduceBalance,
   extractDecimal,
@@ -71,8 +70,7 @@ const Value = styled.span`
 `;
 
 const TokenPair = (props) => {
-  let pact = useContext(PactContext);
-  let { name, token0, token1, balance, supply, pooledAmount } = props.pair;
+  let { token0, token1, balance, supply, pooledAmount } = props.pair;
 
   return balance ? (
     <Container>
@@ -125,7 +123,10 @@ const TokenPair = (props) => {
               width: "50%",
             }}
             background="transparent"
-            onClick={() => props.selectAddLiquidity()}
+            onClick={() => {
+              props.selectAddLiquidity();
+              props.setTokenPair(props.pair);
+            }}
           >
             Add
           </CustomButton>
