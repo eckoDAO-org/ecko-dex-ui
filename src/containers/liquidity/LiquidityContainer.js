@@ -29,6 +29,7 @@ import theme from "../../styles/theme";
 import tokenData from "../../constants/cryptoCurrencies";
 
 const Container = styled.div`
+  margin-top: ${({ theme: { header } }) => header.height};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -105,38 +106,26 @@ const LiquidityContainer = (props) => {
   const [selectedToken, setSelectedToken] = useState(null);
   const [inputSide, setInputSide] = useState("");
   const [fromValues, setFromValues] = useState(initialStateValue);
-
   const [toValues, setToValues] = useState(initialStateValue);
+
   const [pairExist, setPairExist] = useState(false);
   const [showTxModal, setShowTxModal] = useState(false);
   const [showReview, setShowReview] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (showTxModal === false) {
+      setFromValues(initialStateValue);
+      setToValues(initialStateValue);
+    }
+  }, [showTxModal]);
+
+  /////// when pass pair by the container, set the token on InputToken
   const handleTokenValue = (by, key, value) => {
     if (by === "from") return setFromValues({ ...fromValues, [key]: value });
     else if (by === "to") return setToValues({ ...toValues, [key]: value });
     else return null;
   };
-
-  useEffect(() => {
-    if (showTxModal === false) {
-      setFromValues({
-        coin: "",
-        account: null,
-        guard: null,
-        balance: null,
-        amount: "",
-      });
-      setToValues({
-        coin: "",
-        account: null,
-        guard: null,
-        balance: null,
-        amount: "",
-      });
-    }
-  }, [showTxModal]);
-
   useEffect(() => {
     if (props?.pair?.token0 && fromValues === initialStateValue)
       return handleTokenValue("from", "coin", props?.pair?.token0);
@@ -146,6 +135,7 @@ const LiquidityContainer = (props) => {
     if (props?.pair?.token1 && toValues === initialStateValue)
       return handleTokenValue("to", "coin", props?.pair?.token1);
   }, [toValues]);
+  ////////
 
   useEffect(async () => {
     if (tokenSelectorType === "from") setSelectedToken(fromValues.coin);
