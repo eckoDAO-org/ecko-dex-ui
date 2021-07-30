@@ -64,6 +64,10 @@ const FormContainer = styled.div`
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
   }
+  @media (max-width: ${({ theme: { mediaQueries } }) =>
+      `${mediaQueries.mobileSmallPixel}px`}) {
+    padding: 0;
+  }
 `;
 
 const TopContainer = styled.div``;
