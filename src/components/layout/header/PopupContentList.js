@@ -21,7 +21,7 @@ const PopupContentList = ({ items }) => {
           className={item?.className}
           route={item?.route}
           key={index}
-          onClick={item?.onCLick}
+          onClick={item?.onClick}
           icon={item?.icon}
           link={item?.link}
           headerItemStyle={{

@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components/macro";
-import { isMobile } from "react-device-detect";
 import { KaddexLogo } from "../../../assets";
 import { ROUTE_INDEX } from "../../../router/routes";
 import RightHeaderItems from "./RightHeaderItems";
@@ -46,13 +45,18 @@ const RightContainer = styled.div`
 
 const MobileHeader = ({ className }) => {
   const history = useHistory();
-  console.log(
-    "🚀 ~ file: MobileHeader.js ~ line 49 ~ MobileHeader ~ history",
-    window.innerWidth
-  );
   const node = useRef();
   useOnClickOutside(node, () => setOpen(false));
   const [open, setOpen] = useState(false);
+
+  const handlePopupClose = () => {
+    setOpen(false);
+  };
+
+  const handlePopupOpen = () => {
+    setOpen(true);
+  };
+
   return (
     <Container className={className}>
       <LeftContainer ref={node}>
@@ -67,8 +71,8 @@ const MobileHeader = ({ className }) => {
             <PopupContentList items={menuItems} />
           </CustomPopup>
         </HeaderItem>
-        {/* <Burger open={open} setOpen={setOpen} /> */}
-        {/* <MobileMenu open={open} setOpen={setOpen} /> */}
+        {/* <Burger open={open} setOpen={setOpen} />
+        <MobileMenu open={open} setOpen={setOpen} /> */}
         <KaddexLogo
           style={{
             cursor: "pointer",
