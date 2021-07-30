@@ -18,8 +18,6 @@ const IconsContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-right: 21px;
-  width: 80px;
   svg:first-child {
     z-index: 2;
   }

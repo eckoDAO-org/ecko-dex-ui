@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components/macro";
+import { isMobile } from "react-device-detect";
 import { KaddexLogo } from "../../../assets";
 import { ROUTE_INDEX } from "../../../router/routes";
 import RightHeaderItems from "./RightHeaderItems";
@@ -12,6 +13,7 @@ import CustomPopup from "../../../shared/CustomPopup";
 import { HamburgerIcon } from "../../../assets";
 import { useOnClickOutside } from "../../../hooks/hooks";
 import menuItems from "../../menuItems";
+import theme from "../../../styles/theme";
 
 const Container = styled.div`
   display: flex;
@@ -28,6 +30,14 @@ const LeftContainer = styled.div`
   & > *:not(:last-child) {
     margin-right: 25px;
   }
+
+  @media (max-width: ${({ theme: { mediaQueries } }) =>
+      `${mediaQueries.mobileSmallPixel}px`}) {
+    margin-right: 10px;
+    & > *:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
 `;
 
 const RightContainer = styled.div`
@@ -36,6 +46,10 @@ const RightContainer = styled.div`
 
 const MobileHeader = ({ className }) => {
   const history = useHistory();
+  console.log(
+    "🚀 ~ file: MobileHeader.js ~ line 49 ~ MobileHeader ~ history",
+    window.innerWidth
+  );
   const node = useRef();
   useOnClickOutside(node, () => setOpen(false));
   const [open, setOpen] = useState(false);
@@ -56,7 +70,13 @@ const MobileHeader = ({ className }) => {
         {/* <Burger open={open} setOpen={setOpen} /> */}
         {/* <MobileMenu open={open} setOpen={setOpen} /> */}
         <KaddexLogo
-          style={{ cursor: "pointer" }}
+          style={{
+            cursor: "pointer",
+            width:
+              window.innerWidth <= theme.mediaQueries.mobileSmallPixel
+                ? "100px"
+                : "100%",
+          }}
           onClick={() => history.push(ROUTE_INDEX)}
         />
       </LeftContainer>
