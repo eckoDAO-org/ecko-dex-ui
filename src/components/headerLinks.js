@@ -1,5 +1,5 @@
 import React from "react";
-import { AboutIcon, CodeIcon, DiscordIcon } from "../assets";
+import { AboutIcon, CodeIcon, TelegramIcon } from "../assets";
 
 export default [
   {
@@ -16,8 +16,8 @@ export default [
   },
   {
     id: 0,
-    label: "discord",
-    icon: <DiscordIcon />,
-    link: "https://discord.io",
+    label: "telegram",
+    icon: <TelegramIcon />,
+    link: "https://t.me/KaddeXofficial",
   },
 ];

@@ -7,6 +7,7 @@ export { ReactComponent as AboutIcon } from "./images/header/about.svg";
 export { ReactComponent as AboutBigIcon } from "./images/header/about-big.svg";
 export { ReactComponent as CodeIcon } from "./images/header/code.svg";
 export { ReactComponent as DiscordIcon } from "./images/header/discord.svg";
+export { ReactComponent as TelegramIcon } from "./images/header/telegram.svg";
 export { ReactComponent as SwapArrowsIcon } from "./images/shared/swap-token-arrow.svg";
 export { ReactComponent as ArrowDown } from "./images/shared/arrow-down-white.svg";
 export { ReactComponent as ZelcoreLogo } from "./images/shared/zelcore-logo.svg";
