@@ -65,6 +65,15 @@ const ContainerInputTypeNumber = styled.div`
 const Row = styled.div`
   display: flex;
   align-items: center;
+  
+  .restrictedInput{
+    @media (max-width: ${({ theme: { mediaQueries } }) =>
+      `${mediaQueries.mobilePixel + 1}px`}) {
+        .ui.fluid.input > input {
+    width: 30px !important;
+    }
+  }
+  }
 `;
 
 const SlippagePopupContent = () => {
@@ -105,7 +114,7 @@ const SlippagePopupContent = () => {
           1%
         </SlippageTolleranceValue>
 
-        <ContainerInputTypeNumber>
+        <ContainerInputTypeNumber className="restrictedInput">
           <Input
             containerStyle={{
               border: "none !important",

@@ -67,6 +67,11 @@ const Button = styled.button`
     font-size: 14px;
     color: white;
     text-transform: capitalize;
+
+    @media (max-width: ${({ theme: { mediaQueries } }) =>
+      `${mediaQueries.mobilePixel + 1}px`}) {
+     
+  }
   }
 `;
 
