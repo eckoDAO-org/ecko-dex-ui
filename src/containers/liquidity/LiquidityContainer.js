@@ -3,23 +3,14 @@ import styled from "styled-components/macro";
 
 import { throttle, debounce } from "throttle-debounce";
 import { PactContext } from "../../contexts/PactContext";
-import {
-  reduceBalance,
-  limitDecimalPlaces,
-  getCorrectBalance,
-} from "../../utils/reduceBalance";
+import { reduceBalance, getCorrectBalance } from "../../utils/reduceBalance";
 import WalletRequestView from "../../components/swap/swap-modals/WalletRequestView";
 import { ReactComponent as ArrowBack } from "../../assets/images/shared/arrow-back.svg";
-import { ReactComponent as SwapArrowsIcon } from "../../assets/images/shared/swap-token-arrow.svg";
 
 import { Button } from "semantic-ui-react";
 import CustomLabel from "../../shared/CustomLabel";
 import CustomButton from "../../shared/CustomButton";
-import ButtonDivider from "../../shared/ButtonDivider";
 import TokenSelectorModal from "../../components/swap/swap-modals/TokenSelectorModal";
-import FormContainer from "../../shared/FormContainer";
-import Input from "../../shared/Input";
-import InputToken from "../../shared/InputToken";
 import ReviewTxModal from "../../components/modals/liquidity/ReviewTxModal";
 import TxView from "../../components/swap/swap-modals/TxView";
 import { AccountContext } from "../../contexts/AccountContext";
@@ -123,18 +114,33 @@ const LiquidityContainer = (props) => {
   }, [showTxModal]);
 
   /////// when pass pair by the container, set the token on InputToken
-  const handleTokenValue = (by, crypto) => {
+  const handleTokenValue = async (by, crypto) => {
+    let balance;
+    if (crypto?.code === "coin") {
+      if (account.account) {
+        balance = account.account.balance;
+      }
+    } else {
+      let acct = await account.getTokenAccount(
+        crypto?.code,
+        account.account.account,
+        tokenSelectorType === "from"
+      );
+      if (acct) {
+        balance = getCorrectBalance(acct.balance);
+      }
+    }
     if (by === "from")
       return setFromValues((prev) => ({
         ...prev,
-        balance: crypto?.balance,
+        balance: balance,
         coin: crypto?.name,
         precision: crypto.precision,
       }));
     if (by === "to")
       return setToValues((prev) => ({
         ...prev,
-        balance: crypto?.balance,
+        balance: balance,
         coin: crypto?.name,
         precision: crypto.precision,
       }));
@@ -331,6 +337,57 @@ const LiquidityContainer = (props) => {
       pact.setWalletSuccess(false);
     }
   }, [pact.walletSuccess]);
+
+  useEffect(() => {
+    if (!isNaN(pact.ratio)) {
+      if (fromValues.amount !== "" && toValues.amount === "") {
+        setToValues({
+          ...toValues,
+          amount: reduceBalance(
+            pact.computeOut(fromValues.amount),
+            toValues.precision
+          ),
+        });
+      }
+      if (fromValues.amount === "" && toValues.amount !== "") {
+        setFromValues({
+          ...fromValues,
+          amount: reduceBalance(
+            pact.computeIn(toValues.amount),
+            fromValues.precision
+          ),
+        });
+      }
+      if (fromValues.amount !== "" && toValues.amount !== "") {
+        setToValues({
+          ...toValues,
+          amount: reduceBalance(
+            pact.computeOut(fromValues.amount),
+            toValues.precision
+          ),
+        });
+      }
+    }
+  }, [pact.ratio]);
+
+  // useEffect(() => {
+  //   if (!isNaN(pact.ratio)) {
+  //     setPriceImpact(
+  //       pact.computePriceImpact(
+  //         Number(fromValues.amount),
+  //         Number(toValues.amount)
+  //       )
+  //     );
+  //   } else {
+  //     setPriceImpact("");
+  //   }
+  // }, [
+  //   fromValues.coin,
+  //   toValues.coin,
+  //   fromValues.amount,
+  //   toValues.amount,
+  //   pact.ratio,
+  // ]);
 
   const buttonStatus = () => {
     let status = {
