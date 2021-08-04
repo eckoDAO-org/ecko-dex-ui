@@ -69,9 +69,8 @@ const Button = styled.button`
     text-transform: capitalize;
 
     @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
-     
-  }
+        `${mediaQueries.mobilePixel + 1}px`}) {
+    }
   }
 `;
 
@@ -99,6 +98,7 @@ const Input = ({
   onChange,
   error,
   type,
+  maxLength,
 }) => {
   const getIcon = () => {
     if (withSelectButton && !inputRightComponent)
@@ -117,7 +117,6 @@ const Input = ({
     if (inputRightComponent) return inputRightComponent;
     return null;
   };
-
   return (
     <Container
       inputRightComponent={inputRightComponent || withSelectButton}
@@ -165,6 +164,7 @@ const Input = ({
         labelPosition="right"
         error={error}
         type={type}
+        maxLength={maxLength}
         onChange={(e, props) => {
           if (numberOnly && props.value.match(/[a-zA-Z]/)) return;
           onChange(e, props);

@@ -1,11 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 import ButtonDivider from "../../shared/ButtonDivider";
 import Input from "../../shared/Input";
 import InputToken from "../../shared/InputToken";
 import { SwapArrowsIcon } from "../../assets";
 import { limitDecimalPlaces, reduceBalance } from "../../utils/reduceBalance";
-import { SwapContext } from "../../contexts/SwapContext";
 import tokenData from "../../constants/cryptoCurrencies";
 
 const FormContainer = styled.div`
@@ -45,6 +44,7 @@ const SwapForm = ({
         topLeftLabel={fromNote ? `from ${fromNote}` : `input`}
         bottomLeftLabel={`balance: ${reduceBalance(fromValues.balance) ?? "-"}`}
         placeholder="enter amount"
+        maxLength="15"
         inputRightComponent={
           fromValues.coin ? (
             <InputToken
@@ -72,6 +72,8 @@ const SwapForm = ({
         topLeftLabel={toNote ? `to ${toNote}` : `input`}
         bottomLeftLabel={`balance: ${reduceBalance(toValues.balance) ?? "-"}`}
         placeholder="enter amount"
+        type="number"
+        maxLength="15"
         inputRightComponent={
           toValues.coin ? (
             <InputToken
