@@ -8,6 +8,7 @@ import {
   GAS_PRICE,
   network,
 } from "../constants/contextConstants";
+import FailedLoginView from "../shared/FailedLoginView";
 
 export const AccountContext = createContext();
 
@@ -53,6 +54,16 @@ export const AccountProvider = (props) => {
     setSendRes(null);
   };
 
+  const errorLoginModal = (accountName) => {
+    return (
+      <FailedLoginView
+        show={true}
+        onClose={() => {}}
+        accountName={accountName}
+      />
+    );
+  };
+
   const setVerifiedAccount = async (accountName) => {
     /* console.log("network", network); */
 
@@ -79,10 +90,7 @@ export const AccountProvider = (props) => {
         });
         await localStorage.setItem("acct", JSON.stringify(data.result.data));
       } else {
-        await swal({
-          text: `Please make sure the account ${accountName} exist on kadena blockchain`,
-          title: "No Account",
-        });
+        errorLoginModal(accountName);
         setAccount({ account: null, guard: null, balance: 0 });
       }
     } catch (e) {

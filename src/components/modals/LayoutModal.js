@@ -3,7 +3,6 @@ import styled from "styled-components/macro";
 import { Transition } from "react-spring/renderprops";
 import Backdrop from "../../shared/Backdrop";
 import ModalContainer from "../../shared/ModalContainer";
-import { AccountContext } from "../../contexts/AccountContext";
 
 const Container = styled.div`
   position: absolute;
@@ -37,7 +36,6 @@ const LayoutModal = ({
   children,
   content,
 }) => {
-  const { account } = useContext(AccountContext);
   return (
     <Transition
       items={open}
@@ -67,9 +65,7 @@ const LayoutModal = ({
               }}
               onBack={onBack ? () => onBack() : null}
             >
-              {!account?.account && (
-                <ContentContainer> {content || children}</ContentContainer>
-              )}
+              <ContentContainer> {content || children}</ContentContainer>
             </ModalContainer>
           </Container>
         ))

@@ -16,19 +16,19 @@ function App() {
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <NotificationRender>
-        <AccountProvider>
-          <WalletProvider>
-            <PactProvider>
-              <SwapProvider>
-                <LiquidityProvider>
-                  <ModalRender>
+        <ModalRender>
+          <AccountProvider>
+            <WalletProvider>
+              <PactProvider>
+                <SwapProvider>
+                  <LiquidityProvider>
                     <Router />
-                  </ModalRender>
-                </LiquidityProvider>
-              </SwapProvider>
-            </PactProvider>
-          </WalletProvider>
-        </AccountProvider>
+                  </LiquidityProvider>
+                </SwapProvider>
+              </PactProvider>
+            </WalletProvider>
+          </AccountProvider>
+        </ModalRender>
       </NotificationRender>
     </ThemeProvider>
   );
