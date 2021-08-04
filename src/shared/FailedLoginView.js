@@ -20,7 +20,7 @@ const Container = styled.div`
   align-items: center;
   max-width: 385px;
   width: 100%;
-  z-index: 5;
+  z-index: 8;
 `;
 
 const RowContainer = styled.div`
@@ -80,8 +80,8 @@ const FailedLoginView = ({ onClose, show, accountName }) => {
                 <ErrorIcon />
                 <Title>No Account</Title>
                 <SubTitle>
-                  `Please make sure the account ${accountName} exist on kadena
-                  blockchain`
+                  {`Please make sure the account ${accountName} exist on kadena
+                  blockchain`}
                 </SubTitle>
                 <CustomButton
                   onClick={() => {
