@@ -261,7 +261,7 @@ const LiquidityContainer = (props) => {
               ...toValues,
               amount: reduceBalance(
                 fromValues.amount / pact.ratio,
-                fromValues.precision
+                toValues.precision
               ),
             })
           );
@@ -301,7 +301,7 @@ const LiquidityContainer = (props) => {
               ...fromValues,
               amount: reduceBalance(
                 toValues.amount * pact.ratio,
-                toValues.precision
+                fromValues.precision
               ),
             })
           );
