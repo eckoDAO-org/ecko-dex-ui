@@ -127,9 +127,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
               </CustomButton>
               <CustomButton
                 disabled={!selectedAccount}
-                onClick={() => {
-                  handleConnect();
-                }}
+                onClick={() => handleConnect()}
               >
                 Connect
               </CustomButton>

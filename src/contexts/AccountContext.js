@@ -66,7 +66,6 @@ export const AccountProvider = (props) => {
 
   const setVerifiedAccount = async (accountName) => {
     /* console.log("network", network); */
-
     try {
       let data = await Pact.fetch.local(
         {
@@ -90,7 +89,12 @@ export const AccountProvider = (props) => {
         });
         await localStorage.setItem("acct", JSON.stringify(data.result.data));
       } else {
-        errorLoginModal(accountName);
+        // errorLoginModal(accountName);
+        await swal({
+          text: `Please make sure the account ${accountName} exist on kadena blockchain`,
+          title: "No Account",
+        });
+
         setAccount({ account: null, guard: null, balance: 0 });
       }
     } catch (e) {
