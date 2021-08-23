@@ -1,9 +1,15 @@
 .swal-modal {
-  background-color: #232323;
-  border: none !important;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 5px #ffffff;
+  opacity: 1;
+  background: #240b2f 0% 0% no-repeat padding-box;
+  color: #ffffff;
 }
 .swal-title {
-  color: #e0e0e0 !important;
+  color: #ffffff !important;
 }
 .swal-text {
   /* background-color: #FEFAE3; */
@@ -17,7 +23,9 @@
 }
 
 .swal-footer {
-  background-color: #232323;
+  justify-content: center;
+  align-items: center;
+  background-color: #240b2f;
   margin-top: 32px;
   overflow: hidden;
   font-family: montserrat-bold !important;
@@ -26,11 +34,12 @@
   border: 1px solid purple;
 }
 .swal-button {
+  cursor: pointer;
   padding: 7px 19px;
   border-radius: 2px;
-  background-color: #27b7e6;
-  font-size: 12px;
-  color: white;
+  background-color: #240b2f;
+  font-size: 16px;
+  color: #ffffff;
   border-radius: 20px;
   font-family: montserrat-bold !important;
   text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.3);

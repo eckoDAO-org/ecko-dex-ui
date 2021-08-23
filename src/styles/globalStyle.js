@@ -74,4 +74,5 @@ export default createGlobalStyle`
         display: none !important;
       }
     }
+
 `;
