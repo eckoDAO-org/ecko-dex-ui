@@ -94,20 +94,7 @@ const SwapButtonsForm = ({
               } else {
                 setShowTxModal(true);
                 if (res?.result?.status === "success") {
-                  setFromValues({
-                    amount: "",
-                    balance: "",
-                    coin: "",
-                    address: "",
-                    precision: 0,
-                  });
-                  setToValues({
-                    amount: "",
-                    balance: "",
-                    coin: "",
-                    address: "",
-                    precision: 0,
-                  });
+                  setFromValues((prev) => ({ ...prev, amount: "" }));
                 }
                 setLoading(false);
               }
@@ -133,20 +120,8 @@ const SwapButtonsForm = ({
                 setShowTxModal(true);
               }
               if (res?.result?.status === "success") {
-                setFromValues({
-                  amount: "",
-                  balance: "",
-                  coin: "",
-                  address: "",
-                  precision: 0,
-                });
-                setToValues({
-                  amount: "",
-                  balance: "",
-                  coin: "",
-                  address: "",
-                  precision: 0,
-                });
+                setFromValues((prev) => ({ ...prev, amount: "" }));
+                setToValues((prev) => ({ ...prev, amount: "" }));
               }
               setLoading(false);
             }

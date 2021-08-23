@@ -36,6 +36,10 @@ const SwapContainer = () => {
   const pact = useContext(PactContext);
   const swap = useContext(SwapContext);
   const account = useContext(AccountContext);
+  console.log(
+    "🚀 ~ file: SwapContainer.js ~ line 39 ~ SwapContainer ~ account",
+    account.account
+  );
   const wallet = useContext(WalletContext);
 
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
