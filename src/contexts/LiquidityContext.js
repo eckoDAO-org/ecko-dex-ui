@@ -8,6 +8,7 @@ import {
   GAS_PRICE,
   network,
   NETWORKID,
+  PRECISION,
 } from "../constants/contextConstants";
 import { AccountContext } from "./AccountContext";
 import { WalletContext } from "./WalletContext";
@@ -21,7 +22,7 @@ export const LiquidityContext = createContext(null);
 
 export const LiquidityProvider = (props) => {
   const pact = useContext(PactContext);
-  const account = useContext(AccountContext);
+  const { account, localRes, setLocalRes } = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const swap = useContext(SwapContext);
   const [liquidityProviderFee, setLiquidityProviderFee] = useState(0.003);
@@ -145,8 +146,8 @@ export const LiquidityProvider = (props) => {
                 (read-decimal 'amountDesired1)
                 (read-decimal 'amountMinimum0)
                 (read-decimal 'amountMinimum1)
-                ${JSON.stringify(account.account.account)}
-                ${JSON.stringify(account.account.account)}
+                ${JSON.stringify(account.account)}
+                ${JSON.stringify(account.account)}
                 (read-keyset 'user-ks)
               )`,
           keyPairs: {
@@ -154,11 +155,11 @@ export const LiquidityProvider = (props) => {
             clist: [
               {
                 name: `${token0.code}.TRANSFER`,
-                args: [account.account.account, pair, Number(amountDesired0)],
+                args: [account.account, pair, Number(amountDesired0)],
               },
               {
                 name: `${token1.code}.TRANSFER`,
-                args: [account.account.account, pair, Number(amountDesired1)],
+                args: [account.account, pair, Number(amountDesired1)],
               },
               {
                 name: "kswap.gas-station.GAS_PAYER",
@@ -197,10 +198,10 @@ export const LiquidityProvider = (props) => {
         };
         let data = await Pact.fetch.local(cmd, network);
         swap.setCmd(cmd);
-        account.setLocalRes(data);
+        setLocalRes(data);
         return data;
       } catch (e) {
-        account.setLocalRes({});
+        setLocalRes({});
         console.log(e);
         return -1;
       }
@@ -233,21 +234,21 @@ export const LiquidityProvider = (props) => {
               (read-decimal 'amountDesired1)
               (read-decimal 'amountMinimum0)
               (read-decimal 'amountMinimum1)
-              ${JSON.stringify(account.account.account)}
-              ${JSON.stringify(account.account.account)}
+              ${JSON.stringify(account.account)}
+              ${JSON.stringify(account.account)}
               (read-keyset 'user-ks)
             )`,
         keyPairs: {
-          publicKey: account.account.guard.keys[0],
+          publicKey: account.guard.keys[0],
           secretKey: privKey,
           clist: [
             {
               name: `${token0.code}.TRANSFER`,
-              args: [account.account.account, pair, Number(amountDesired0)],
+              args: [account.account, pair, Number(amountDesired0)],
             },
             {
               name: `${token1.code}.TRANSFER`,
-              args: [account.account.account, pair, Number(amountDesired1)],
+              args: [account.account, pair, Number(amountDesired1)],
             },
             {
               name: "kswap.gas-station.GAS_PAYER",
@@ -256,7 +257,7 @@ export const LiquidityProvider = (props) => {
           ],
         },
         envData: {
-          "user-ks": account.account.guard,
+          "user-ks": account.guard,
           amountDesired0: reduceBalance(
             amountDesired0,
             tokenData[token0.name].precision
@@ -286,10 +287,10 @@ export const LiquidityProvider = (props) => {
       };
       let data = await Pact.fetch.local(cmd, network);
       swap.setCmd(cmd);
-      account.setLocalRes(data);
+      setLocalRes(data);
       return data;
     } catch (e) {
-      account.setLocalRes({});
+      setLocalRes({});
       console.log(e);
       return -1;
     }
@@ -301,6 +302,7 @@ export const LiquidityProvider = (props) => {
     amountDesired0,
     amountDesired1
   ) => {
+    debugger;
     try {
       let pair = await swap.getPairAccount(token0.code, token1.code);
       const signCmd = {
@@ -311,8 +313,8 @@ export const LiquidityProvider = (props) => {
             (read-decimal 'amountDesired1)
             (read-decimal 'amountMinimum0)
             (read-decimal 'amountMinimum1)
-            ${JSON.stringify(account.account.account)}
-            ${JSON.stringify(account.account.account)}
+            ${JSON.stringify(account.account)}
+            ${JSON.stringify(account.account)}
             (read-keyset 'user-ks)
           )`,
         caps: [
@@ -326,13 +328,13 @@ export const LiquidityProvider = (props) => {
             "transfer capability",
             "Transfer Token to Pool",
             `${token0.code}.TRANSFER`,
-            [account.account.account, pair, Number(amountDesired0)]
+            [account.account, pair, Number(amountDesired0)]
           ),
           Pact.lang.mkCap(
             "transfer capability",
             "Transfer Token to Pool",
             `${token1.code}.TRANSFER`,
-            [account.account.account, pair, Number(amountDesired1)]
+            [account.account, pair, Number(amountDesired1)]
           ),
         ],
         sender: "kswap-free-gas",
@@ -341,7 +343,7 @@ export const LiquidityProvider = (props) => {
         chainId: chainId,
         ttl: 600,
         envData: {
-          "user-ks": account.account.guard,
+          "user-ks": account.guard,
           amountDesired0: reduceBalance(
             amountDesired0,
             tokenData[token0.name].precision
@@ -351,15 +353,15 @@ export const LiquidityProvider = (props) => {
             tokenData[token1.name].precision
           ),
           amountMinimum0: reduceBalance(
-            amountDesired0 * (1 - parseFloat(account.slippage)),
+            amountDesired0 * (1 - parseFloat(pact.slippage)),
             tokenData[token0.name].precision
           ),
           amountMinimum1: reduceBalance(
-            amountDesired1 * (1 - parseFloat(account.slippage)),
+            amountDesired1 * (1 - parseFloat(pact.slippage)),
             tokenData[token1.name].precision
           ),
         },
-        signingPubKey: account.account.guard.keys[0],
+        signingPubKey: account.guard.keys[0],
         networkId: NETWORKID,
       };
       //alert to sign tx
@@ -374,10 +376,158 @@ export const LiquidityProvider = (props) => {
       swap.setCmd(cmd);
       let data = await fetch(`${network}/api/v1/local`, swap.mkReq(cmd));
       data = await swap.parseRes(data);
-      account.setLocalRes(data);
+      setLocalRes(data);
       return data;
     } catch (e) {
       //wallet error alert
+      if (e.message.includes("Failed to fetch"))
+        wallet.setWalletError({
+          error: true,
+          title: "No Wallet",
+          content: "Please make sure you open and login to your wallet.",
+        });
+      //walletError();
+      else
+        wallet.setWalletError({
+          error: true,
+          title: "Wallet Signing Failure",
+          content:
+            "You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kadenaswap.",
+        }); //walletSigError();
+      console.log(e);
+    }
+  };
+
+  const removeLiquidityLocal = async (token0, token1, liquidity) => {
+    try {
+      let privKey = wallet.signing.key;
+      if (wallet.signing.method === "pk+pw") {
+        const pw = await pwPrompt();
+        privKey = await decryptKey(pw);
+      }
+      if (privKey.length !== 64) {
+        return;
+      }
+      let pairKey = await pact.getPairKey(token0, token1);
+      let pair = await swap.getPairAccount(token0, token1);
+      let cmd = {
+        pactCode: `(kswap.exchange.remove-liquidity
+              ${token0}
+              ${token1}
+              (read-decimal 'liquidity)
+              0.0
+              0.0
+              ${JSON.stringify(account.account)}
+              ${JSON.stringify(account.account)}
+              (read-keyset 'user-ks)
+            )`,
+        networkId: NETWORKID,
+        keyPairs: {
+          publicKey: account.guard.keys[0],
+          secretKey: privKey,
+          clist: [
+            {
+              name: `kswap.tokens.TRANSFER`,
+              args: [pairKey, account.account, pair, Number(liquidity)],
+            },
+            {
+              name: `kswap.tokens.TRANSFER`,
+              args: [pairKey, account.account, pair, Number(liquidity)],
+            },
+            {
+              name: "kswap.gas-station.GAS_PAYER",
+              args: ["free-gas", { int: 1 }, 1.0],
+            },
+          ],
+        },
+        envData: {
+          "user-ks": account.guard,
+          liquidity: reduceBalance(liquidity, PRECISION),
+        },
+        meta: Pact.lang.mkMeta(
+          "kswap-free-gas",
+          chainId,
+          GAS_PRICE,
+          3000,
+          creationTime(),
+          600
+        ),
+      };
+      swap.setCmd(cmd);
+      let data = await Pact.fetch.local(cmd, network);
+      setLocalRes(data);
+      return data;
+    } catch (e) {
+      setLocalRes({});
+      if (e.message.includes("Failed to fetch")) wallet.walletError();
+      else wallet.walletSigError();
+      return -1;
+    }
+  };
+
+  const removeLiquidityWallet = async (token0, token1, liquidity) => {
+    try {
+      let pairKey = await pact.getPairKey(token0, token1);
+      let pair = await swap.getPairAccount(token0, token1);
+      const signCmd = {
+        pactCode: `(kswap.exchange.remove-liquidity
+            ${token0}
+            ${token1}
+            (read-decimal 'liquidity)
+            0.0
+            0.0
+            ${JSON.stringify(account.account)}
+            ${JSON.stringify(account.account)}
+            (read-keyset 'user-ks)
+          )`,
+        caps: [
+          Pact.lang.mkCap(
+            "Gas Station",
+            "free gas",
+            "kswap.gas-station.GAS_PAYER",
+            ["free-gas", { int: 1 }, 1.0]
+          ),
+          Pact.lang.mkCap(
+            "transfer capability",
+            "Transfer Token to Pool",
+            `kswap.tokens.TRANSFER`,
+            [pairKey, account.account, pair, Number(liquidity)]
+          ),
+          Pact.lang.mkCap(
+            "transfer capability",
+            "Transfer Token to Pool",
+            `kswap.tokens.TRANSFER`,
+            [pairKey, account.account, pair, Number(liquidity)]
+          ),
+        ],
+        sender: "kswap-free-gas",
+        gasLimit: 3000,
+        gasPrice: GAS_PRICE,
+        chainId: chainId,
+        ttl: 600,
+        envData: {
+          "user-ks": account.guard,
+          liquidity: reduceBalance(liquidity, PRECISION),
+        },
+        signingPubKey: account.guard.keys[0],
+        networkId: NETWORKID,
+      };
+      //alert to sign tx
+      /* walletLoading(); */
+      wallet.setIsWaitingForWalletAuth(true);
+      const cmd = await Pact.wallet.sign(signCmd);
+      //close alert programmatically
+      /* swal.close(); */
+      wallet.setIsWaitingForWalletAuth(false);
+      wallet.setWalletSuccess(true);
+      swap.setCmd(cmd);
+      let data = await fetch(`${network}/api/v1/local`, swap.mkReq(cmd));
+      data = await swap.parseRes(data);
+      setLocalRes(data);
+      return data;
+    } catch (e) {
+      //wallet error alert
+      setLocalRes({});
       if (e.message.includes("Failed to fetch"))
         wallet.setWalletError({
           error: true,
@@ -405,6 +555,8 @@ export const LiquidityProvider = (props) => {
     createTokenPairLocal,
     addLiquidityLocal,
     addLiquidityWallet,
+    removeLiquidityLocal,
+    removeLiquidityWallet,
   };
 
   return (

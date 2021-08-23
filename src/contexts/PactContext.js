@@ -388,6 +388,30 @@ export const PactProvider = (props) => {
     }
   };
 
+  const getPairKey = async (token0, token1) => {
+    try {
+      let data = await Pact.fetch.local(
+        {
+          pactCode: `(kswap.exchange.get-pair-key ${token0} ${token1})`,
+          meta: Pact.lang.mkMeta(
+            account.account.account,
+            chainId,
+            GAS_PRICE,
+            3000,
+            creationTime(),
+            600
+          ),
+        },
+        network
+      );
+      if (data.result.status === "success") {
+        return data.result.data;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const getReserves = async (token0, token1) => {
     try {
       let data = await Pact.fetch.local(
@@ -515,6 +539,7 @@ export const PactProvider = (props) => {
     pair,
     setPair,
     getPair,
+    getPairKey,
     getReserves,
     tokens,
     computePriceImpact,

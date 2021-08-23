@@ -5,16 +5,21 @@ import { ArrowBack } from "../../assets";
 import TxView from "../../components/swap/swap-modals/TxView";
 import WalletRequestView from "../../components/swap/swap-modals/WalletRequestView";
 import { PactContext } from "../../contexts/PactContext";
+import { WalletContext } from "../../contexts/WalletContext";
 
 import CustomButton from "../../shared/CustomButton";
 import FormContainer from "../../shared/FormContainer";
 import Input from "../../shared/Input";
-import theme from "../../styles/theme";
+import { PRECISION } from "../../constants/contextConstants";
+import tokenData from "../../constants/cryptoCurrencies";
+
 import {
   extractDecimal,
   limitDecimalPlaces,
   reduceBalance,
 } from "../../utils/reduceBalance";
+import theme from "../../styles/theme";
+import { LiquidityContext } from "../../contexts/LiquidityContext";
 
 const Container = styled.div`
   display: flex;
@@ -97,6 +102,8 @@ const Value = styled.span`
 
 const RemoveLiqContainer = (props) => {
   const pact = useContext(PactContext);
+  const wallet = useContext(WalletContext);
+  const liquidity = useContext(LiquidityContext);
   const liquidityView = props.selectedView;
   const { name, token0, token1, balance, supply, pooledAmount } = props.pair;
 
@@ -114,33 +121,34 @@ const RemoveLiqContainer = (props) => {
   useEffect(() => {
     if (!isNaN(amount)) {
       setPooled(
-        reduceBalance((extractDecimal(balance) * amount) / 100, pact.PRECISION)
+        reduceBalance((extractDecimal(balance) * amount) / 100, PRECISION)
       );
       setPooledToken0(
         reduceBalance(
           (extractDecimal(pooledAmount[0]) * amount) / 100,
-          pact.PRECISION
+          PRECISION
         )
       );
       setPooledToken1(
         reduceBalance(
           (extractDecimal(pooledAmount[1]) * amount) / 100,
-          pact.PRECISION
+          PRECISION
         )
       );
     }
   }, [amount]);
 
   useEffect(() => {
-    if (pact.walletSuccess) {
+    if (wallet.walletSuccess) {
+      //?//
       setLoading(false);
-      pact.setWalletSuccess(false);
+      wallet.setWalletSuccess(false);
     }
-  }, [pact.walletSuccess]);
+  }, [wallet.walletSuccess]);
 
   const onWalletRequestViewModalClose = () => {
-    pact.setIsWaitingForWalletAuth(false);
-    pact.setWalletError(null);
+    wallet.setIsWaitingForWalletAuth(false);
+    wallet.setWalletError(null);
   };
 
   return (
@@ -153,8 +161,8 @@ const RemoveLiqContainer = (props) => {
         onClose={() => setShowTxModal(false)}
       />
       <WalletRequestView
-        show={pact.isWaitingForWalletAuth}
-        error={pact.walletError}
+        show={wallet.isWaitingForWalletAuth}
+        error={wallet.walletError}
         onClose={() => onWalletRequestViewModalClose()}
       />
       <TitleContainer>
@@ -274,13 +282,13 @@ const RemoveLiqContainer = (props) => {
         disabled={isNaN(amount) || reduceBalance(amount) === 0}
         onClick={async () => {
           if (
-            pact.signing.method !== "sign" &&
-            pact.signing.method !== "none"
+            wallet.signing.method !== "sign" &&
+            wallet.signing.method !== "none"
           ) {
-            const res = await pact.removeLiquidityLocal(
-              pact.tokenData[token0].code,
-              pact.tokenData[token1].code,
-              reduceBalance(pooled, pact.PRECISION)
+            const res = await liquidity.removeLiquidityLocal(
+              tokenData[token0].code,
+              tokenData[token1].code,
+              reduceBalance(pooled, PRECISION)
             );
             if (res === -1) {
               setLoading(false);
@@ -294,18 +302,18 @@ const RemoveLiqContainer = (props) => {
             }
           } else {
             setLoading(true);
-            const res = await pact.removeLiquidityWallet(
-              pact.tokenData[token0].code,
-              pact.tokenData[token1].code,
-              reduceBalance(pooled, pact.PRECISION)
+            const res = await liquidity.removeLiquidityWallet(
+              tokenData[token0].code,
+              tokenData[token1].code,
+              reduceBalance(pooled, PRECISION)
             );
             if (!res) {
-              pact.setIsWaitingForWalletAuth(true);
+              wallet.setIsWaitingForWalletAuth(true);
               setLoading(false);
               /* pact.setWalletError(true); */
               /* walletError(); */
             } else {
-              pact.setWalletError(null);
+              wallet.setWalletError(null);
               setShowTxModal(true);
               setLoading(false);
             }
