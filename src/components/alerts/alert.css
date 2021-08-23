@@ -10,6 +10,7 @@
 }
 .swal-title {
   color: #ffffff !important;
+  font-family: montserrat-bold;
 }
 .swal-text {
   /* background-color: #FEFAE3; */
@@ -38,7 +39,7 @@
   padding: 7px 19px;
   border-radius: 2px;
   background-color: #240b2f;
-  border: 2px solid #ffffff;
+  border: 1px solid #ffffff;
   box-shadow: 0 0 5px #ffffff;
   font-size: 16px;
   color: #ffffff;
