@@ -7,6 +7,7 @@ import WalletRequestView from "../components/swap/swap-modals/WalletRequestView"
 import SwapButtonsForm from "../components/swap/SwapButtonsForm";
 import SwapForm from "../components/swap/SwapForm";
 import SwapResults from "../components/swap/SwapResults";
+import tokenData from "../constants/cryptoCurrencies";
 import { AccountContext } from "../contexts/AccountContext";
 import { PactContext } from "../contexts/PactContext";
 import { SwapContext } from "../contexts/SwapContext";
@@ -36,10 +37,7 @@ const SwapContainer = () => {
   const pact = useContext(PactContext);
   const swap = useContext(SwapContext);
   const account = useContext(AccountContext);
-  console.log(
-    "🚀 ~ file: SwapContainer.js ~ line 39 ~ SwapContainer ~ account",
-    account.account
-  );
+
   const wallet = useContext(WalletContext);
 
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
@@ -151,6 +149,38 @@ const SwapContainer = () => {
       }
     }
   }, [toValues.amount]);
+
+  useEffect(() => {
+    const getBalance = async () => {
+      if (account.account && toValues.coin !== "" && fromValues.coin !== "") {
+        let acctOfFromValues = await account.getTokenAccount(
+          tokenData[fromValues.coin]?.code,
+          account.account.account,
+          tokenSelectorType === "from"
+        );
+        let acctOfToValues = await account.getTokenAccount(
+          tokenData[toValues.coin]?.code,
+          account.account.account,
+          tokenSelectorType === "to"
+        );
+        if (acctOfFromValues) {
+          let balanceFrom = getCorrectBalance(acctOfFromValues.balance);
+          setFromValues((prev) => ({
+            ...prev,
+            balance: balanceFrom,
+          }));
+        }
+        if (acctOfToValues) {
+          let balanceTo = getCorrectBalance(acctOfToValues.balance);
+          setToValues((prev) => ({
+            ...prev,
+            balance: balanceTo,
+          }));
+        }
+      }
+    };
+    getBalance();
+  }, [toValues.amount, fromValues.amount]);
 
   useEffect(() => {
     if (!isNaN(pact.ratio)) {

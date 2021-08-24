@@ -94,7 +94,14 @@ const SwapButtonsForm = ({
               } else {
                 setShowTxModal(true);
                 if (res?.result?.status === "success") {
-                  setFromValues((prev) => ({ ...prev, amount: "" }));
+                  setFromValues((prev) => ({
+                    ...prev,
+                    amount: "",
+                  }));
+                  setToValues((prev) => ({
+                    ...prev,
+                    amount: "",
+                  }));
                 }
                 setLoading(false);
               }

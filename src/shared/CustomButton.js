@@ -4,6 +4,7 @@ import styled from "styled-components/macro";
 import { Button as SUIButton } from "semantic-ui-react";
 
 const StyledButton = styled(SUIButton)`
+  cursor: pointer;
   font-family: ${({ theme: { fontFamily } }) => fontFamily.bold} !important;
   font-size: ${({ fontSize }) =>
     fontSize ? fontSize + " !important" : "16px !important"};
@@ -28,7 +29,6 @@ const StyledButton = styled(SUIButton)`
   /* box-shadow: 0 0 4px #FFFFFF !important; */
   /* :hover {
     opacity: ${({ hover }) => (hover ? 0.7 : 1.0) + " !important"};
-    cursor: pointer;
   } */
 `;
 
