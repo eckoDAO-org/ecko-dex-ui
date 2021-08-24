@@ -83,6 +83,7 @@ const SwapContainer = () => {
               setToValues({
                 ...toValues,
                 amount: reduceBalance(
+                  // fromValues.amount / pact.ratio,
                   pact.computeOut(fromValues.amount),
                   toValues.precision
                 ),
@@ -94,6 +95,7 @@ const SwapContainer = () => {
               setToValues({
                 ...toValues,
                 amount: reduceBalance(
+                  // fromValues.amount / pact.ratio,
                   pact.computeOut(fromValues.amount),
                   toValues.precision
                 ),
@@ -125,6 +127,7 @@ const SwapContainer = () => {
               setFromValues({
                 ...fromValues,
                 amount: reduceBalance(
+                  // toValues.amount * pact.ratio,
                   pact.computeIn(toValues.amount),
                   fromValues.precision
                 ),
@@ -136,6 +139,7 @@ const SwapContainer = () => {
               setFromValues({
                 ...fromValues,
                 amount: reduceBalance(
+                  // toValues.amount * pact.ratio,
                   pact.computeIn(toValues.amount),
                   fromValues.precision
                 ),
@@ -149,38 +153,6 @@ const SwapContainer = () => {
       }
     }
   }, [toValues.amount]);
-
-  useEffect(() => {
-    const getBalance = async () => {
-      if (account.account && toValues.coin !== "" && fromValues.coin !== "") {
-        let acctOfFromValues = await account.getTokenAccount(
-          tokenData[fromValues.coin]?.code,
-          account.account.account,
-          tokenSelectorType === "from"
-        );
-        let acctOfToValues = await account.getTokenAccount(
-          tokenData[toValues.coin]?.code,
-          account.account.account,
-          tokenSelectorType === "to"
-        );
-        if (acctOfFromValues) {
-          let balanceFrom = getCorrectBalance(acctOfFromValues.balance);
-          setFromValues((prev) => ({
-            ...prev,
-            balance: balanceFrom,
-          }));
-        }
-        if (acctOfToValues) {
-          let balanceTo = getCorrectBalance(acctOfToValues.balance);
-          setToValues((prev) => ({
-            ...prev,
-            balance: balanceTo,
-          }));
-        }
-      }
-    };
-    getBalance();
-  }, [toValues.amount, fromValues.amount]);
 
   useEffect(() => {
     if (!isNaN(pact.ratio)) {
@@ -232,6 +204,38 @@ const SwapContainer = () => {
     toValues.amount,
     pact.ratio,
   ]);
+
+  useEffect(() => {
+    const getBalance = async () => {
+      if (account.account && toValues.coin !== "" && fromValues.coin !== "") {
+        let acctOfFromValues = await account.getTokenAccount(
+          tokenData[fromValues.coin]?.code,
+          account.account.account,
+          tokenSelectorType === "from"
+        );
+        let acctOfToValues = await account.getTokenAccount(
+          tokenData[toValues.coin]?.code,
+          account.account.account,
+          tokenSelectorType === "to"
+        );
+        if (acctOfFromValues) {
+          let balanceFrom = getCorrectBalance(acctOfFromValues.balance);
+          setFromValues((prev) => ({
+            ...prev,
+            balance: balanceFrom,
+          }));
+        }
+        if (acctOfToValues) {
+          let balanceTo = getCorrectBalance(acctOfToValues.balance);
+          setToValues((prev) => ({
+            ...prev,
+            balance: balanceTo,
+          }));
+        }
+      }
+    };
+    getBalance();
+  }, [toValues.amount, fromValues.amount]);
 
   useEffect(() => {
     if (tokenSelectorType === "from") return setSelectedToken(fromValues.coin);

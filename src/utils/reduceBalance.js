@@ -32,7 +32,7 @@ export const extractDecimal = (num) => {
 };
 
 export const limitDecimalPlaces = (numStr, count) => {
-  if (numStr.indexOf(".") == -1) {
+  if (numStr.indexOf(".") === -1) {
     if (numStr === "") return "";
     if (!isNaN(numStr)) return Number(numStr);
   }
@@ -42,7 +42,7 @@ export const limitDecimalPlaces = (numStr, count) => {
   ) {
     return numStr;
   }
-  if (numStr.length - numStr.indexOf(".") > count && count !=0) {
+  if (numStr.length - numStr.indexOf(".") > count && count !== 0) {
     numStr = parseFloat(numStr).toFixed(count);
     return numStr;
   } else {
