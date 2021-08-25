@@ -21,6 +21,7 @@ const Container = styled.div`
 `;
 
 const TopLabelsContainer = styled.div`
+  align-items: center;
   display: flex;
   justify-content: space-between;
   margin-bottom: 8px;

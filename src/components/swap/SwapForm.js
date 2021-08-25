@@ -3,6 +3,7 @@ import styled from "styled-components";
 import ButtonDivider from "../../shared/ButtonDivider";
 import Input from "../../shared/Input";
 import InputToken from "../../shared/InputToken";
+import CustomButton from "../../shared/CustomButton";
 import { SwapArrowsIcon } from "../../assets";
 import { limitDecimalPlaces, reduceBalance } from "../../utils/reduceBalance";
 import tokenData from "../../constants/cryptoCurrencies";
@@ -42,6 +43,18 @@ const SwapForm = ({
       <Input
         error={isNaN(fromValues.amount)}
         topLeftLabel={fromNote ? `from ${fromNote}` : `input`}
+        topRightLabel={
+          <CustomButton
+            buttonStyle={{
+              padding: 12,
+              marginRight: 0,
+            }}
+            fontSize="12px"
+            onClick={() => {}}
+          >
+            MAX
+          </CustomButton>
+        }
         bottomLeftLabel={`balance: ${reduceBalance(fromValues.balance) ?? "-"}`}
         placeholder="enter amount"
         maxLength="15"
@@ -71,6 +84,18 @@ const SwapForm = ({
         error={isNaN(toValues.amount)}
         topLeftLabel={toNote ? `to ${toNote}` : `input`}
         bottomLeftLabel={`balance: ${reduceBalance(toValues.balance) ?? "-"}`}
+        topRightLabel={
+          <CustomButton
+            buttonStyle={{
+              padding: 12,
+              marginRight: 0,
+            }}
+            fontSize="12px"
+            onClick={() => {}}
+          >
+            MAX
+          </CustomButton>
+        }
         placeholder="enter amount"
         maxLength="15"
         inputRightComponent={
