@@ -50,7 +50,14 @@ const SwapForm = ({
               marginRight: 0,
             }}
             fontSize="12px"
-            onClick={() => {}}
+            onClick={() => {
+              setInputSide("from");
+              setFromValues((prev) => ({
+                ...prev,
+                amount: fromValues.balance,
+              }));
+            }}
+            disabled={toValues.amount === toValues.balance}
           >
             MAX
           </CustomButton>
@@ -91,7 +98,11 @@ const SwapForm = ({
               marginRight: 0,
             }}
             fontSize="12px"
-            onClick={() => {}}
+            onClick={() => {
+              setInputSide("to");
+              setToValues((prev) => ({ ...prev, amount: toValues.balance }));
+            }}
+            disabled={fromValues.amount === fromValues.balance}
           >
             MAX
           </CustomButton>
