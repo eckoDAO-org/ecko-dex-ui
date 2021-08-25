@@ -72,10 +72,13 @@ const SwapResults = ({ priceImpact, fromValues, toValues }) => {
       <RowContainer>
         <Label>liquidity provider fee</Label>
         <Value>
-          {`${reduceBalance(
+          {`${(
+            liquidity.liquidityProviderFee * parseFloat(fromValues.amount)
+          ).toFixed(fromValues.precision)} ${fromValues.coin}`}
+          {/* {`${reduceBalance(
             liquidity.liquidityProviderFee * parseFloat(fromValues.amount),
             14
-          )} ${fromValues.coin}`}
+          )} ${fromValues.coin}`} */}
         </Value>
       </RowContainer>
     </ResultContainer>

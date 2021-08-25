@@ -39,8 +39,6 @@ export const AccountProvider = (props) => {
     guard: null,
     balance: 0,
   });
-  const [totalSupply, setTotalSupply] = useState("");
-
   useEffect(() => {
     if (account.account) setVerifiedAccount(account.account);
   }, [sendRes]);
@@ -136,32 +134,6 @@ export const AccountProvider = (props) => {
     }
   };
 
-  const getTotalTokenSupply = async (token0, token1) => {
-    try {
-      let data = await Pact.fetch.local(
-        {
-          pactCode: `(kswap.tokens.total-supply (kswap.exchange.get-pair-key ${token0} ${token1}))`,
-          keyPairs: Pact.crypto.genKeyPair(),
-          meta: Pact.lang.mkMeta(
-            "",
-            chainId,
-            0.01,
-            100000000,
-            28800,
-            creationTime()
-          ),
-        },
-        network
-      );
-      if (data.result.status === "success") {
-        if (data.result.data.decimal) setTotalSupply(data.result.data.decimal);
-        else setTotalSupply(data.result.data);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   const logout = () => {
     localStorage.removeItem("acct", null);
     localStorage.removeItem("signing", null);
@@ -184,8 +156,6 @@ export const AccountProvider = (props) => {
     getTokenAccount,
     tokenToAccount,
     tokenFromAccount,
-    getTotalTokenSupply,
-    totalSupply,
     logout,
   };
   return (

@@ -114,6 +114,7 @@ const RemoveLiqContainer = (props) => {
   const [pooledToken0, setPooledToken0] = useState(
     reduceBalance(pooledAmount[0], 12)
   );
+
   const [pooledToken1, setPooledToken1] = useState(
     reduceBalance(pooledAmount[1], 12)
   );

@@ -302,7 +302,6 @@ export const LiquidityProvider = (props) => {
     amountDesired0,
     amountDesired1
   ) => {
-    debugger;
     try {
       let pair = await swap.getPairAccount(token0.code, token1.code);
       const signCmd = {
