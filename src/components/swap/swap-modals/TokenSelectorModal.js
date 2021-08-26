@@ -5,6 +5,7 @@ import Search from "../../../shared/Search";
 import Backdrop from "../../../shared/Backdrop";
 import ModalContainer from "../../../shared/ModalContainer";
 import { SwapContext } from "../../../contexts/SwapContext";
+import { pairUnit } from "../../../utils/reduceBalance";
 
 const Container = styled.div`
   position: absolute;
@@ -169,7 +170,7 @@ const TokenSelectorModal = ({
                           }}
                         >
                           {crypto.balance
-                            ? `${crypto.balance} ${crypto.name}`
+                            ? `${pairUnit(crypto.balance)} ${crypto.name}`
                             : ""}
                         </span>
                       </TokenItem>

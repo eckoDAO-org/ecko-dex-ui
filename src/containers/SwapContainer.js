@@ -96,11 +96,9 @@ const SwapContainer = () => {
                 ...toValues,
                 amount: reduceBalance(
                   // fromValues.amount / pact.ratio,
-                  pact
-                    .computeOut(fromValues.amount)
-                    .toFixed(fromValues.precision),
+                  pact.computeOut(fromValues.amount),
                   toValues.precision
-                ),
+                ).toFixed(toValues.precision),
               })
             );
           }
@@ -142,9 +140,9 @@ const SwapContainer = () => {
                 ...fromValues,
                 amount: reduceBalance(
                   // toValues.amount * pact.ratio,
-                  pact.computeIn(toValues.amount).toFixed(fromValues.precision),
+                  pact.computeIn(toValues.amount),
                   fromValues.precision
-                ),
+                ).toFixed(fromValues.precision),
               })
             );
           }
