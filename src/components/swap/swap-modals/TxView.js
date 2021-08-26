@@ -96,17 +96,17 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           <SpaceBetweenRow>
             <Label>Send</Label>
             <Value>
-              {`${swap.localRes.result.data[0].amount} ${showTicker(
-                swap.localRes.result.data[0].token
-              )}`}
+              {`${extractDecimal(
+                swap.localRes.result.data[0].amount
+              )} ${showTicker(swap.localRes.result.data[0].token)}`}
             </Value>
           </SpaceBetweenRow>
           <SpaceBetweenRow style={{ padding: "16px 0px" }}>
             <Label>Receive</Label>
             <Value>
-              {`${swap.localRes.result.data[1].amount} ${showTicker(
-                swap.localRes.result.data[1].token
-              )}`}
+              {`${extractDecimal(
+                swap.localRes.result.data[1].amount
+              )} ${showTicker(swap.localRes.result.data[1].token)}`}
             </Value>
           </SpaceBetweenRow>
           <SpaceBetweenRow>
