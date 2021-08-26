@@ -158,11 +158,11 @@ const LiquidityList = (props) => {
             </TopContainer>
             {account.account !== null ? (
               liquidity.pairListAccount[0] ? (
-                Object.values(liquidity.pairListAccount).map((pair) => {
+                Object.values(liquidity.pairListAccount).map((pair, index) => {
                   return pair && pair.balance ? (
                     <FormContainer>
                       <TokenPair
-                        key={pair.name}
+                        key={index}
                         pair={pair}
                         selectAddLiquidity={props.selectAddLiquidity}
                         selectRemoveLiquidity={props.selectRemoveLiquidity}

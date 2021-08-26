@@ -16,6 +16,7 @@ import tokenData from "../../constants/cryptoCurrencies";
 import {
   extractDecimal,
   limitDecimalPlaces,
+  pairUnit,
   reduceBalance,
 } from "../../utils/reduceBalance";
 import theme from "../../styles/theme";
@@ -118,6 +119,7 @@ const RemoveLiqContainer = (props) => {
   const [pooledToken1, setPooledToken1] = useState(
     reduceBalance(pooledAmount[1], 12)
   );
+
   //DA VEDERE
   useEffect(() => {
     if (!isNaN(amount)) {
@@ -266,15 +268,15 @@ const RemoveLiqContainer = (props) => {
           <Label>
             {token0} per {token1}
           </Label>
-          <Value>{pooled}</Value>
+          <Value>{pairUnit(extractDecimal(pooled))}</Value>
         </InnerRowContainer>
         <InnerRowContainer>
           <Label>Pooled {token0}</Label>
-          <Value>{pooledToken0}</Value>
+          <Value>{pairUnit(extractDecimal(pooledToken0))}</Value>
         </InnerRowContainer>
         <InnerRowContainer>
           <Label>Pooled {token1}</Label>
-          <Value>{pooledToken1}</Value>
+          <Value>{pairUnit(extractDecimal(pooledToken1))}</Value>
         </InnerRowContainer>
       </ResultContainer>
 
