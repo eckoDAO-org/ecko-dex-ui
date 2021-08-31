@@ -17,6 +17,9 @@ import { getCorrectBalance, reduceBalance } from "../utils/reduceBalance";
 
 const Container = styled.div`
   width: 100%;
+  margin-top: 24px;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 const TitleContainer = styled.div`
@@ -317,8 +320,6 @@ const SwapContainer = () => {
     wallet.setIsWaitingForWalletAuth(false);
     wallet.setWalletError(null);
   };
-
-  // ADD TXVIEW AND WALLETREQUESTVIEW MODALS
 
   return (
     <Container>

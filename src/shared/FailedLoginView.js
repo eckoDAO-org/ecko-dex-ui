@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components/macro";
 import { Transition } from "react-spring/renderprops";
 import { ErrorIcon } from "../assets";
-import { Message } from "semantic-ui-react";
 import CustomButton from "./CustomButton";
 import Backdrop from "./Backdrop";
 import ModalContainer from "./ModalContainer";
@@ -23,12 +22,6 @@ const Container = styled.div`
   z-index: 8;
 `;
 
-const RowContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 15px 0px;
-`;
-
 const Content = styled.div`
   display: flex;
   align-items: center;
@@ -46,13 +39,6 @@ const SubTitle = styled.div`
  font-family: ${({ theme: { fontFamily } }) =>
    fontFamily.bold};  font-size: 16px;
   color: color: #FFFFFF;
-`;
-
-const TransactionsDetails = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 24px 0px;
 `;
 
 const FailedLoginView = ({ onClose, show, accountName }) => {

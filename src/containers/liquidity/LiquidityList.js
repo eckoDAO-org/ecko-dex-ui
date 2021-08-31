@@ -5,7 +5,6 @@ import { Loader, Button, Header } from "semantic-ui-react";
 import CustomButton from "../../shared/CustomButton";
 import TokenPair from "./TokenPair";
 
-import { WalletContext } from "../../contexts/WalletContext";
 import { LiquidityContext } from "../../contexts/LiquidityContext";
 import { AccountContext } from "../../contexts/AccountContext";
 import theme from "../../styles/theme";

@@ -14,7 +14,6 @@ import styled from "styled-components/macro";
 import {
   ROUTE_INDEX,
   ROUTE_POOL,
-  ROUTE_SWAP,
   ROUTE_WRAP,
   ROUTE_STATS,
   ROUTE_STATIC,

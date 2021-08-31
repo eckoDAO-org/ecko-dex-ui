@@ -4,8 +4,8 @@ import styled from "styled-components/macro";
 import { KaddexLogo } from "../../../assets";
 import { ROUTE_INDEX } from "../../../router/routes";
 import RightHeaderItems from "./RightHeaderItems";
-import Burger from "./burger/Burger";
-import MobileMenu from "./menu/MobileMenu";
+// import Burger from "./burger/Burger";
+// import MobileMenu from "./menu/MobileMenu";
 import PopupContentList from "./PopupContentList";
 import HeaderItem from "../../../shared/HeaderItem";
 import CustomPopup from "../../../shared/CustomPopup";
@@ -48,14 +48,6 @@ const MobileHeader = ({ className }) => {
   const node = useRef();
   useOnClickOutside(node, () => setOpen(false));
   const [open, setOpen] = useState(false);
-
-  const handlePopupClose = () => {
-    setOpen(false);
-  };
-
-  const handlePopupOpen = () => {
-    setOpen(true);
-  };
 
   return (
     <Container className={className}>

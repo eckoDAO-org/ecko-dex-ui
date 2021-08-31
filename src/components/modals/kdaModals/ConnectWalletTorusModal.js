@@ -29,9 +29,6 @@ const Text = styled.span`
   font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
 `;
 
-const kdaValue = 0.55;
-const availableBalance = 12.9999999999999;
-
 const GOOGLE = "google";
 
 const verifierMap = {

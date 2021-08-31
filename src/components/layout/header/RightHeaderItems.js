@@ -4,12 +4,7 @@ import HeaderItem from "../../../shared/HeaderItem";
 import AccountInfo from "./AccountInfo";
 import Button from "../../../shared/CustomButton";
 import CustomPopup from "../../../shared/CustomPopup";
-import {
-  PowerIcon,
-  CogIcon,
-  HamburgerIcon,
-  AboutBigIcon,
-} from "../../../assets";
+import { PowerIcon, CogIcon, AboutBigIcon } from "../../../assets";
 import headerLinks from "../../headerLinks";
 import PopupContentList from "./PopupContentList";
 import { AccountContext } from "../../../contexts/AccountContext";

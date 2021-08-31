@@ -1,12 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components/macro";
-import { ReactComponent as PlusIcon } from "../../assets/images/shared/plus.svg";
 import ModalContainer from "../../components/shared/ModalContainer";
-import InputToken from "../../components/shared/InputToken";
-import ButtonDivider from "../../components/shared/ButtonDivider";
+
 import { default as StyledButton } from "../../components/shared/Button";
-import cryptoCurrencies from "../../constants/tokens";
-import TokenSelector from "../../components/shared/TokenSelector";
 import { Header, Input, Button, List, Statistic } from "semantic-ui-react";
 import TxView from "../../components/shared/TxView";
 import { PactContext } from "../../contexts/PactContext";
@@ -27,7 +23,7 @@ const Container = styled.div`
 const RemoveLiquidityContainer = (props) => {
   const pact = useContext(PactContext);
   const liquidityView = props.selectedView;
-  const { name, token0, token1, balance, supply, pooledAmount } = props.pair;
+  const { token0, token1, balance, pooledAmount } = props.pair;
 
   const [amount, setAmount] = useState(100);
   const [showTxModal, setShowTxModal] = useState(false);

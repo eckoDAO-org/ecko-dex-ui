@@ -52,16 +52,6 @@ export const AccountProvider = (props) => {
     setSendRes(null);
   };
 
-  const errorLoginModal = (accountName) => {
-    return (
-      <FailedLoginView
-        show={true}
-        onClose={() => {}}
-        accountName={accountName}
-      />
-    );
-  };
-
   const setVerifiedAccount = async (accountName) => {
     /* console.log("network", network); */
     try {
@@ -87,7 +77,6 @@ export const AccountProvider = (props) => {
         });
         await localStorage.setItem("acct", JSON.stringify(data.result.data));
       } else {
-        // errorLoginModal(accountName);
         await swal({
           text: `Please make sure the account ${accountName} exist on kadena blockchain`,
           title: "No Account",
