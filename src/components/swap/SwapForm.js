@@ -43,25 +43,25 @@ const SwapForm = ({
       <Input
         error={isNaN(fromValues.amount)}
         topLeftLabel={fromNote ? `from ${fromNote}` : `input`}
-        topRightLabel={
-          <CustomButton
-            buttonStyle={{
-              padding: 12,
-              marginRight: 0,
-            }}
-            fontSize="12px"
-            onClick={() => {
-              setInputSide("from");
-              setFromValues((prev) => ({
-                ...prev,
-                amount: fromValues.balance,
-              }));
-            }}
-            disabled={toValues.amount === toValues.balance}
-          >
-            MAX
-          </CustomButton>
-        }
+        // topRightLabel={{}
+        //   <CustomButton
+        //     buttonStyle={{
+        //       padding: 12,
+        //       marginRight: 0,
+        //     }}
+        //     fontSize="12px"
+        //     onClick={() => {
+        //       setInputSide("from");
+        //       setFromValues((prev) => ({
+        //         ...prev,
+        //         amount: fromValues.balance,
+        //       }));
+        //     }}
+        //     disabled={toValues.amount === toValues.balance}
+        //   >
+        //     MAX
+        //   </CustomButton>
+        // }
         bottomLeftLabel={`balance: ${reduceBalance(fromValues.balance) ?? "-"}`}
         placeholder="enter amount"
         maxLength="15"
@@ -91,22 +91,22 @@ const SwapForm = ({
         error={isNaN(toValues.amount)}
         topLeftLabel={toNote ? `to ${toNote}` : `input`}
         bottomLeftLabel={`balance: ${reduceBalance(toValues.balance) ?? "-"}`}
-        topRightLabel={
-          <CustomButton
-            buttonStyle={{
-              padding: 12,
-              marginRight: 0,
-            }}
-            fontSize="12px"
-            onClick={() => {
-              setInputSide("to");
-              setToValues((prev) => ({ ...prev, amount: toValues.balance }));
-            }}
-            disabled={fromValues.amount === fromValues.balance}
-          >
-            MAX
-          </CustomButton>
-        }
+        // topRightLabel={
+        //   <CustomButton
+        //     buttonStyle={{
+        //       padding: 12,
+        //       marginRight: 0,
+        //     }}
+        //     fontSize="12px"
+        //     onClick={() => {
+        //       setInputSide("to");
+        //       setToValues((prev) => ({ ...prev, amount: toValues.balance }));
+        //     }}
+        //     disabled={fromValues.amount === fromValues.balance}
+        //   >
+        //     MAX
+        //   </CustomButton>
+        // }
         placeholder="enter amount"
         maxLength="15"
         inputRightComponent={
