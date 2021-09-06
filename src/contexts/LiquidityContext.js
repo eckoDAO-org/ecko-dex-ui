@@ -22,7 +22,7 @@ export const LiquidityContext = createContext(null);
 
 export const LiquidityProvider = (props) => {
   const pact = useContext(PactContext);
-  const { account, localRes, setLocalRes } = useContext(AccountContext);
+  const { account, setLocalRes } = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const swap = useContext(SwapContext);
   const [liquidityProviderFee, setLiquidityProviderFee] = useState(0.003);

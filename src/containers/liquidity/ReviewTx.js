@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Header, Modal } from "semantic-ui-react";
 import { Statistic, List, Divider } from "semantic-ui-react";
 import { reduceBalance } from "../../utils/reduceBalance";

@@ -3,7 +3,6 @@ import styled from "styled-components/macro";
 import CustomButton from "../../../shared/CustomButton";
 import Input from "../../../shared/Input";
 import { Button } from "semantic-ui-react";
-import { ModalContext } from "../../../contexts/ModalContext";
 import { AccountContext } from "../../../contexts/AccountContext";
 import { WalletContext } from "../../../contexts/WalletContext";
 
@@ -21,7 +20,6 @@ const ActionContainer = styled.div`
 `;
 
 const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
-  const modalContext = useContext(ModalContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const [accountId, setAccountId] = useState("");
@@ -56,19 +54,9 @@ const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
     onClose();
   };
 
-  const handleModalBack = () => {
-    resetValues();
-    onBack();
-  };
-
   const handleConnect = async () => {
     await account.setVerifiedAccount(accountId);
     await wallet.signingWallet();
-    // if (response !== "success") {
-    //   setError({ message: "Account does not exist!" });
-    // } else {
-    //   handleModalClose();
-    // }
 
     handleModalClose();
   };

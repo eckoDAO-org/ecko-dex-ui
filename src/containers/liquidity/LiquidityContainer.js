@@ -370,25 +370,6 @@ const LiquidityContainer = (props) => {
     }
   }, [pact.ratio]);
 
-  // useEffect(() => {
-  //   if (!isNaN(pact.ratio)) {
-  //     setPriceImpact(
-  //       pact.computePriceImpact(
-  //         Number(fromValues.amount),
-  //         Number(toValues.amount)
-  //       )
-  //     );
-  //   } else {
-  //     setPriceImpact("");
-  //   }
-  // }, [
-  //   fromValues.coin,
-  //   toValues.coin,
-  //   fromValues.amount,
-  //   toValues.amount,
-  //   pact.ratio,
-  // ]);
-
   const buttonStatus = () => {
     let status = {
       0: { msg: "Connect your KDA wallet", status: false },

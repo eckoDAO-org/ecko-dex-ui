@@ -4,7 +4,6 @@ import styled from "styled-components/macro";
 import { ArrowBack } from "../../assets";
 import TxView from "../../components/swap/swap-modals/TxView";
 import WalletRequestView from "../../components/swap/swap-modals/WalletRequestView";
-import { PactContext } from "../../contexts/PactContext";
 import { WalletContext } from "../../contexts/WalletContext";
 
 import CustomButton from "../../shared/CustomButton";
@@ -102,11 +101,9 @@ const Value = styled.span`
 `;
 
 const RemoveLiqContainer = (props) => {
-  const pact = useContext(PactContext);
   const wallet = useContext(WalletContext);
   const liquidity = useContext(LiquidityContext);
-  const liquidityView = props.selectedView;
-  const { name, token0, token1, balance, supply, pooledAmount } = props.pair;
+  const { token0, token1, balance, pooledAmount } = props.pair;
 
   const [amount, setAmount] = useState(100);
   const [showTxModal, setShowTxModal] = useState(false);
@@ -120,7 +117,6 @@ const RemoveLiqContainer = (props) => {
     reduceBalance(pooledAmount[1], 12)
   );
 
-  //DA VEDERE
   useEffect(() => {
     if (!isNaN(amount)) {
       setPooled(
@@ -200,18 +196,6 @@ const RemoveLiqContainer = (props) => {
               }
             }}
             numberOnly
-            /* inputRightComponent={
-            '%'
-              
-            fromValues.coin ? (
-              <InputToken
-                icon={pact.tokenData[fromValues.coin].icon}
-                code={pact.tokenData[fromValues.coin].name}
-                onClick={() => setTokenSelectorType('from')}
-              />
-            ) : null 
-          }
-          */
           />
           <ButtonContainer>
             <Button.Group fluid>
@@ -325,26 +309,6 @@ const RemoveLiqContainer = (props) => {
       >
         Remove Liquidity
       </CustomButton>
-      {/* <ButtonContainer>
-        <TxView
-          view={selectedView}
-          show={showTxModal}
-          token0={fromValues.coin}
-          token1={toValues.coin}
-          createTokenPair={() => pact.createTokenPairLocal(pact.tokenData[fromValues.coin].name, pact.tokenData[toValues.coin].name, fromValues.amount, toValues.amount)}
-          onClose={() => setShowTxModal(false)}
-        />
-        <ReviewTx
-          fromValues={fromValues}
-          toValues={toValues}
-          buttonStatus={buttonStatus}
-          liquidityView={selectedView}
-          supply={supply}
-          loading={loading}
-          open={showReview}
-          setOpen={setShowReview}
-        />
-    </ButtonContainer> */}
     </Container>
   );
 };

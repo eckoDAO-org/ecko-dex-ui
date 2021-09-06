@@ -5,7 +5,6 @@ import { Loader, Button, Header } from "semantic-ui-react";
 import CustomButton from "../../shared/CustomButton";
 import TokenPair from "./TokenPair";
 
-import { WalletContext } from "../../contexts/WalletContext";
 import { LiquidityContext } from "../../contexts/LiquidityContext";
 import { AccountContext } from "../../contexts/AccountContext";
 import theme from "../../styles/theme";
@@ -160,7 +159,7 @@ const LiquidityList = (props) => {
               liquidity.pairListAccount[0] ? (
                 Object.values(liquidity.pairListAccount).map((pair, index) => {
                   return pair && pair.balance ? (
-                    <FormContainer>
+                    <FormContainer key={index}>
                       <TokenPair
                         key={index}
                         pair={pair}
