@@ -78,6 +78,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
               <ModalContainer
                 title="Please Sign"
                 containerStyle={{
+                  height: "100%",
                   maxHeight: "80vh",
                   maxWidth: "90vw",
                 }} /* onClose={onClose} */

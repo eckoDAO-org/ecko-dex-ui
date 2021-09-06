@@ -161,7 +161,7 @@ const LiquidityList = (props) => {
                   return pair && pair.balance ? (
                     <FormContainer key={index}>
                       <TokenPair
-                        key={index}
+                        key={pair.name}
                         pair={pair}
                         selectAddLiquidity={props.selectAddLiquidity}
                         selectRemoveLiquidity={props.selectRemoveLiquidity}

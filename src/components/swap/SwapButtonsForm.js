@@ -27,7 +27,6 @@ const SwapButtonsForm = ({
   setToValues,
   fromNote,
   ratio,
-  noLiquidity,
   setShowTxModal,
 }) => {
   const modalContext = useContext(ModalContext);
@@ -41,7 +40,6 @@ const SwapButtonsForm = ({
     if (!fromValues.coin || !toValues.coin) return "Select tokens";
     if (fetchingPair) return "Fetching Pair...";
     if (isNaN(ratio)) return "Pair does not exist!";
-    if (noLiquidity) return "Insufficient liquidity";
     if (!fromValues.amount || !toValues.amount) return "Enter an amount";
     if (fromValues.amount > fromValues.balance)
       return `Insufficient ${fromValues.coin} balance`;
