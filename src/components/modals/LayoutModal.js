@@ -24,6 +24,9 @@ const ContentContainer = styled.div`
   display: flex;
   flex-flow: column;
   gap: 24px;
+  & > div:last-child {
+    margin-top: 0;
+  }
 `;
 
 const LayoutModal = ({

@@ -47,7 +47,7 @@ const RightHeaderItems = () => {
   return (
     <RightContainerHeader>
       <HeaderItem className="mobile-none">
-        <Label>live testnet chain 0</Label>
+        <Label>mainnet BETA chain 2</Label>
       </HeaderItem>
       {account?.account ? (
         <HeaderItem className="mobile-none">
