@@ -43,25 +43,6 @@ const SwapForm = ({
       <Input
         error={isNaN(fromValues.amount)}
         topLeftLabel={fromNote ? `from ${fromNote}` : `input`}
-        // topRightLabel={{}
-        //   <CustomButton
-        //     buttonStyle={{
-        //       padding: 12,
-        //       marginRight: 0,
-        //     }}
-        //     fontSize="12px"
-        //     onClick={() => {
-        //       setInputSide("from");
-        //       setFromValues((prev) => ({
-        //         ...prev,
-        //         amount: fromValues.balance,
-        //       }));
-        //     }}
-        //     disabled={toValues.amount === toValues.balance}
-        //   >
-        //     MAX
-        //   </CustomButton>
-        // }
         bottomLeftLabel={`balance: ${reduceBalance(fromValues.balance) ?? "-"}`}
         placeholder="enter amount"
         maxLength="15"
@@ -71,6 +52,14 @@ const SwapForm = ({
               icon={tokenData[fromValues.coin].icon}
               code={tokenData[fromValues.coin].name}
               onClick={() => setTokenSelectorType("from")}
+              onClickButton={() => {
+                setInputSide("from");
+                setFromValues((prev) => ({
+                  ...prev,
+                  amount: fromValues.balance,
+                }));
+              }}
+              disabledButton={toValues.amount === toValues.balance}
             />
           ) : null
         }
@@ -91,22 +80,6 @@ const SwapForm = ({
         error={isNaN(toValues.amount)}
         topLeftLabel={toNote ? `to ${toNote}` : `input`}
         bottomLeftLabel={`balance: ${reduceBalance(toValues.balance) ?? "-"}`}
-        // topRightLabel={
-        //   <CustomButton
-        //     buttonStyle={{
-        //       padding: 12,
-        //       marginRight: 0,
-        //     }}
-        //     fontSize="12px"
-        //     onClick={() => {
-        //       setInputSide("to");
-        //       setToValues((prev) => ({ ...prev, amount: toValues.balance }));
-        //     }}
-        //     disabled={fromValues.amount === fromValues.balance}
-        //   >
-        //     MAX
-        //   </CustomButton>
-        // }
         placeholder="enter amount"
         maxLength="15"
         inputRightComponent={
@@ -115,6 +88,11 @@ const SwapForm = ({
               icon={tokenData[toValues.coin].icon}
               code={tokenData[toValues.coin].name}
               onClick={() => setTokenSelectorType("to")}
+              onClickButton={() => {
+                setInputSide("to");
+                setToValues((prev) => ({ ...prev, amount: toValues.balance }));
+              }}
+              disabledButton={fromValues.amount === fromValues.balance}
             />
           ) : null
         }

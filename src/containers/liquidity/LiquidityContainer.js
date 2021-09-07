@@ -334,9 +334,9 @@ const LiquidityContainer = (props) => {
         amount: "",
         precision: 0,
       });
-      pact.setWalletSuccess(false);
+      wallet.setWalletSuccess(false);
     }
-  }, [pact.walletSuccess]);
+  }, [wallet.walletSuccess]);
 
   useEffect(() => {
     if (!isNaN(pact.ratio)) {

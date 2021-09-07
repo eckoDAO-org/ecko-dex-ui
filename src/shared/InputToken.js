@@ -5,7 +5,6 @@ import { ArrowDown } from "../assets";
 import CustomButton from "./CustomButton";
 
 const Container = styled.div`
-  cursor: pointer;
   position: absolute;
   top: 13%;
   right: 4px;
@@ -13,7 +12,13 @@ const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   min-width: ${({ theme: { inputTokenWidth } }) => `${inputTokenWidth}px`};
+`;
 
+const ElementsContainer = styled.div`
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   svg:first-child {
     margin-right: 8px;
   }
@@ -25,12 +30,14 @@ const Container = styled.div`
   }
 `;
 
-const InputToken = ({ icon, code, onClick, disabled }) => {
+const InputToken = ({ icon, code, onClick, onClickButton, disabledButton }) => {
   return (
-    <Container onClick={onClick}>
-      {icon}
+    <Container>
+      <ElementsContainer onClick={onClick}>
+        {icon}
 
-      <span>{code}</span>
+        <span>{code}</span>
+      </ElementsContainer>
       <ArrowDown />
       <CustomButton
         buttonStyle={{
@@ -38,8 +45,8 @@ const InputToken = ({ icon, code, onClick, disabled }) => {
           marginLeft: 12,
         }}
         fontSize="8px"
-        onClick={() => {}}
-        disabled={disabled}
+        onClick={onClickButton}
+        disabled={disabledButton}
       >
         MAX
       </CustomButton>
