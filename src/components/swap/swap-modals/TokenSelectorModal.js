@@ -120,8 +120,10 @@ const TokenSelectorModal = ({
                     const code =
                       c.code !== "coin" ? c.code.split(".")[1] : c.code;
                     return (
-                      code.toLocaleLowerCase().includes(searchValue) ||
-                      c.name.toLowerCase().includes(searchValue)
+                      code
+                        .toLocaleLowerCase()
+                        .includes(searchValue.toLocaleLowerCase()) ||
+                      c.name.toLowerCase().includes(searchValue.toLowerCase())
                     );
                   })
                   .map((crypto) => {
