@@ -127,10 +127,6 @@ const TokenSelectorModal = ({
                     );
                   })
                   .map((crypto) => {
-                    console.log(
-                      "🚀 ~ file: TokenSelectorModal.js ~ line 136 ~ .map ~ crypto",
-                      crypto
-                    );
                     return (
                       <TokenItem
                         key={crypto.name}
