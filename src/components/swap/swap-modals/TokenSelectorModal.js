@@ -5,7 +5,7 @@ import Search from "../../../shared/Search";
 import Backdrop from "../../../shared/Backdrop";
 import ModalContainer from "../../../shared/ModalContainer";
 import { SwapContext } from "../../../contexts/SwapContext";
-import { pairUnit } from "../../../utils/reduceBalance";
+import { extractDecimal } from "../../../utils/reduceBalance";
 
 const Container = styled.div`
   position: absolute;
@@ -127,6 +127,10 @@ const TokenSelectorModal = ({
                     );
                   })
                   .map((crypto) => {
+                    console.log(
+                      "🚀 ~ file: TokenSelectorModal.js ~ line 136 ~ .map ~ crypto",
+                      crypto
+                    );
                     return (
                       <TokenItem
                         key={crypto.name}
@@ -172,7 +176,9 @@ const TokenSelectorModal = ({
                           }}
                         >
                           {crypto.balance
-                            ? `${pairUnit(crypto.balance)} ${crypto.name}`
+                            ? `${extractDecimal(crypto.balance).toFixed(
+                                crypto.precision
+                              )} ${crypto.name}`
                             : ""}
                         </span>
                       </TokenItem>
