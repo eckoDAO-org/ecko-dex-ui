@@ -26,6 +26,7 @@ const SwapButtonsForm = ({
   toValues,
   setToValues,
   fromNote,
+  noLiquidity,
   ratio,
   setShowTxModal,
 }) => {
@@ -40,6 +41,7 @@ const SwapButtonsForm = ({
     if (!fromValues.coin || !toValues.coin) return "Select tokens";
     if (fetchingPair) return "Fetching Pair...";
     if (isNaN(ratio)) return "Pair does not exist!";
+    if (noLiquidity) return "not enough liquidity";
     if (!fromValues.amount || !toValues.amount) return "Enter an amount";
     if (fromValues.amount > fromValues.balance)
       return `Insufficient ${fromValues.coin} balance`;

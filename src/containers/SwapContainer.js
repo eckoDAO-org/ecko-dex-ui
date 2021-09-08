@@ -67,6 +67,7 @@ const SwapContainer = () => {
   const [showTxModal, setShowTxModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fetchingPair, setFetchingPair] = useState(false);
+  const [noLiquidity, setNoLiquidity] = useState(false);
   const [priceImpact, setPriceImpact] = useState("");
 
   useEffect(() => {
@@ -136,6 +137,7 @@ const SwapContainer = () => {
                 ),
               })
             );
+            throttle(500, safeSetFrom(), fromValues.precision);
           } else {
             debounce(
               500,
@@ -148,6 +150,7 @@ const SwapContainer = () => {
                 ).toFixed(fromValues.precision),
               })
             );
+            debounce(500, safeSetFrom(), fromValues.precision);
           }
         }
       }
@@ -282,6 +285,26 @@ const SwapContainer = () => {
     }
   };
 
+  // Check if their is enough liquidity before setting the from amount
+  const safeSetFrom = () => {
+    setNoLiquidity(false);
+    if (0 >= pact.computeIn(toValues.amount)) {
+      setNoLiquidity(true);
+      setFromValues({
+        ...fromValues,
+        amount: 0,
+      });
+    } else {
+      setFromValues({
+        ...fromValues,
+        amount: reduceBalance(
+          pact.computeIn(toValues.amount),
+          fromValues.precision
+        ),
+      });
+    }
+  };
+
   const onTokenClick = async ({ crypto }) => {
     let balance;
     if (crypto.code === "coin") {
@@ -381,6 +404,7 @@ const SwapContainer = () => {
         fromNote={fromNote}
         ratio={pact.ratio}
         loading={loading}
+        noLiquidity={noLiquidity}
         setShowTxModal={setShowTxModal}
       />
     </Container>
