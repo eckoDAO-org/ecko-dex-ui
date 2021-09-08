@@ -152,14 +152,14 @@ const LiquidityContainer = (props) => {
     if (props?.pair?.token0 && fromValues === initialStateValue) {
       handleTokenValue("from", tokenData[props?.pair?.token0]);
     }
-  }, [fromValues, props?.pair?.token0]);
+  }, [props?.pair?.token0]);
 
   useEffect(() => {
     setInputSide("to");
     if (props?.pair?.token1 && toValues === initialStateValue) {
       handleTokenValue("to", tokenData[props?.pair?.token1]);
     }
-  }, [toValues, props?.pair?.token1]);
+  }, [props?.pair?.token1]);
   ////////
 
   useEffect(async () => {
@@ -219,7 +219,7 @@ const LiquidityContainer = (props) => {
         ...prev,
         balance: balance,
         coin: crypto?.name,
-        precision: crypto.precision,
+        precision: crypto?.precision,
       }));
     if (tokenSelectorType === "to")
       setToValues((prev) => ({
@@ -262,7 +262,7 @@ const LiquidityContainer = (props) => {
               amount: reduceBalance(
                 fromValues.amount / pact.ratio,
                 toValues.precision
-              ).toFixed(toValues.precision),
+              )?.toFixed(toValues.precision),
             })
           );
         }
@@ -302,7 +302,7 @@ const LiquidityContainer = (props) => {
               amount: reduceBalance(
                 toValues.amount * pact.ratio,
                 fromValues.precision
-              ).toFixed(fromValues.precision),
+              )?.toFixed(fromValues?.precision),
             })
           );
         }
