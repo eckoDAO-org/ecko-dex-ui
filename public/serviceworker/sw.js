@@ -224,7 +224,7 @@ self.addEventListener("fetch", function (event) {
                 },
                 error: error,
               },
-              "https://swap.kaddex.com"
+              "http://localhost:3000"
             );
           } else {
             // communicate via broadcast channel
