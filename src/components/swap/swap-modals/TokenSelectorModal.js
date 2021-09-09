@@ -5,7 +5,7 @@ import Search from "../../../shared/Search";
 import Backdrop from "../../../shared/Backdrop";
 import ModalContainer from "../../../shared/ModalContainer";
 import { SwapContext } from "../../../contexts/SwapContext";
-import { extractDecimal } from "../../../utils/reduceBalance";
+import { extractDecimal, reduceBalance } from "../../../utils/reduceBalance";
 
 const Container = styled.div`
   position: absolute;
@@ -122,8 +122,8 @@ const TokenSelectorModal = ({
                     return (
                       code
                         .toLocaleLowerCase()
-                        .includes(searchValue.toLocaleLowerCase()) ||
-                      c.name.toLowerCase().includes(searchValue.toLowerCase())
+                        .includes(searchValue?.toLocaleLowerCase()) ||
+                      c.name.toLowerCase().includes(searchValue?.toLowerCase())
                     );
                   })
                   .map((crypto) => {
@@ -172,7 +172,7 @@ const TokenSelectorModal = ({
                           }}
                         >
                           {crypto.balance
-                            ? `${extractDecimal(crypto.balance).toFixed(
+                            ? `${reduceBalance(crypto.balance).toFixed(
                                 crypto.precision
                               )} ${crypto.name}`
                             : ""}
