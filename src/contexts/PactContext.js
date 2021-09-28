@@ -37,6 +37,11 @@ export const PactProvider = (props) => {
   const [totalSupply, setTotalSupply] = useState("");
   const [ratio, setRatio] = useState(NaN);
   const [pairList, setPairList] = useState(pairTokens);
+  const [swapList, setSwapList] = useState({});
+  console.log(
+    "🚀 ~ file: PactContext.js ~ line 41 ~ PactProvider ~ swapList",
+    swapList
+  );
 
   //TO FIX, not working when multiple toasts are there
   const toastId = React.useRef(null);
@@ -56,6 +61,10 @@ export const PactProvider = (props) => {
     fetchAllBalances();
   }, [balances, account.account.account, account.sendRes]);
 
+  useEffect(() => {
+    getSwapList();
+  }, [account.sendRes]);
+
   const pollingNotif = (reqKey) => {
     return (toastId.current = notificationContext.showNotification({
       title: "Transaction Pending",
@@ -69,6 +78,32 @@ export const PactProvider = (props) => {
   const storeSlippage = async (slippage) => {
     await setSlippage(slippage);
     await localStorage.setItem("slippage", slippage);
+  };
+
+  const setReqKeysLocalStorage = (key) => {
+    const swapReqKeysLS = JSON.parse(localStorage.getItem("swapReqKeys"));
+    if (!swapReqKeysLS) {
+      //first saving swapReqKeys in localstorage
+      localStorage.setItem(`swapReqKeys`, JSON.stringify([key]));
+    } else {
+      swapReqKeysLS.push(key);
+      localStorage.setItem(`swapReqKeys`, JSON.stringify(swapReqKeysLS));
+    }
+  };
+
+  const getSwapList = async () => {
+    setSwapList({});
+    var reqKeyList = JSON.parse(localStorage.getItem("swapReqKeys"));
+
+    let tx = await Pact.fetch.poll(
+      { requestKeys: Object.values(reqKeyList) },
+      network
+    );
+    if (Object.keys(tx).length !== 0) {
+      setSwapList(tx);
+    } else {
+      setSwapList("NO_SWAP_FOUND");
+    }
   };
 
   const fetchAllBalances = async () => {
@@ -261,6 +296,7 @@ export const PactProvider = (props) => {
     console.log(pollRes[reqKey]);
     console.log(pollRes[reqKey].result);
     if (pollRes[reqKey].result.status === "success") {
+      setReqKeysLocalStorage(reqKey);
       notificationContext.showNotification({
         title: "Transaction Success!",
         message: "Check it out in the block explorer",
@@ -526,6 +562,8 @@ export const PactProvider = (props) => {
     pairList,
     setPairList,
     getPairList,
+    swapList,
+    getSwapList,
     totalSupply,
     getTotalTokenSupply,
     listen,
