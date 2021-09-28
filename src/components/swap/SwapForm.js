@@ -12,7 +12,6 @@ const FormContainer = styled.div`
   position: relative;
   display: flex;
   flex-flow: row;
-  gap: 32px;
   padding: 20px 20px;
   width: 100%;
   border-radius: 10px;
@@ -20,6 +19,11 @@ const FormContainer = styled.div`
   box-shadow: 0 0 5px #ffffff;
   opacity: 1;
   background: transparent;
+
+  & > *:not(:last-child) {
+    margin-right:32px;
+  }
+
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;

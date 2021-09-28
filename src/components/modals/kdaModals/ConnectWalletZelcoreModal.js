@@ -17,7 +17,7 @@ const ActionContainer = styled.div`
   flex-flow: row;
   align-items: center;
   justify-content: space-around;
-  margin-top: 32px;
+  
 `;
 
 const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {

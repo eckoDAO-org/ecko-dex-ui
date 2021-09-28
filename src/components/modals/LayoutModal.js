@@ -23,7 +23,10 @@ const Container = styled.div`
 const ContentContainer = styled.div`
   display: flex;
   flex-flow: column;
-  gap: 24px;
+  
+  & > *:not(:last-child) {
+    margin-bottom:24px;
+  }
 `;
 
 const LayoutModal = ({

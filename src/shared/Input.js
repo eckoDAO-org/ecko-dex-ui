@@ -58,8 +58,9 @@ const Button = styled.button`
   position: absolute;
   top: 25%;
   right: 10px;
-  max-height: 22px;
-  padding: 8px !important;
+  height: 22px;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
   background: ${({ theme: { buttonBackgroundGradient } }) =>
     buttonBackgroundGradient};
   border-radius: 20px;
