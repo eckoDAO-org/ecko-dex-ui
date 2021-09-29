@@ -1,23 +1,32 @@
 import React, { useContext } from "react";
 import { Grid } from "semantic-ui-react";
+import styled from "styled-components/macro";
 import { NETWORKID } from "../../constants/contextConstants";
 import tokenData from "../../constants/cryptoCurrencies";
 import { PactContext } from "../../contexts/PactContext";
 import ModalContainer from "../../shared/ModalContainer";
 import { PartialScrollableScrollSection } from "../layout/Containers";
 
+const IconColumn = styled(Grid.Column)`
+    display: flex !important;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
+`;
+
 const SwapHistoryTab = () => {
   const pact = useContext(PactContext);
-  console.log(
-    "🚀 ~ file: SwapHistoryTab.js ~ line 52 ~ SwapHistoryTab ~ tokenData",
-    tokenData
-  );
+
+  const getIconCoin = (cryptoCode) => {
+   const crypto = Object.values(tokenData).find(({code})=>code === cryptoCode);
+   return crypto.icon;
+  }
 
   return (
     <ModalContainer
       title="Swap History"
       containerStyle={{
-        maxHeight: "80vh",
+        maxHeight: "60vh",
         maxWidth: 650,
       }}
     >
@@ -29,7 +38,7 @@ const SwapHistoryTab = () => {
         </Grid.Row>
       </Grid>
       <PartialScrollableScrollSection>
-        <Grid style={{ width: "100%", minHeight: "50px", margin: "16px 0" }}>
+        <Grid style={{ width: "100%", minHeight: "40px", margin: "16px 0" }}>
           {pact.txList === "NO_SWAP_FOUND" ? (
             <Grid.Row>
               <Grid.Column>No Swap found</Grid.Column>
@@ -49,11 +58,10 @@ const SwapHistoryTab = () => {
                 }}
               >
                 <Grid.Column>{swap?.txId}</Grid.Column>
-                <Grid.Column>{`${
-                  tokenData[swap?.events[3]?.params[3].refName]?.icon
-                }/${
-                  tokenData[swap?.events[3]?.params[5].refName]?.icon
-                }`}</Grid.Column>
+                <IconColumn>
+                {getIconCoin(swap?.result?.data[0]?.token)}
+                {getIconCoin(swap?.result?.data[1]?.token)}
+                </IconColumn>
                 <Grid.Column>{`${swap?.events[3]?.params[4]}`}</Grid.Column>
               </Grid.Row>
             ))
