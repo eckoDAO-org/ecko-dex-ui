@@ -38,10 +38,7 @@ export const PactProvider = (props) => {
   const [ratio, setRatio] = useState(NaN);
   const [pairList, setPairList] = useState(pairTokens);
   const [swapList, setSwapList] = useState({});
-  console.log(
-    "🚀 ~ file: PactContext.js ~ line 41 ~ PactProvider ~ swapList",
-    swapList
-  );
+
 
   //TO FIX, not working when multiple toasts are there
   const toastId = React.useRef(null);
