@@ -14,7 +14,7 @@ const Container = styled.div`
   flex-flow: column;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  /* padding-bottom: 20px; */
 `;
 
 const ResultContainer = styled.div`
@@ -23,9 +23,20 @@ const ResultContainer = styled.div`
   margin: 15px 0px 32px;
   flex-flow: row;
   width: 100%;
+  height: 100%;
+  padding: 10px;
+
+  & > *:not(:last-child) {
+    margin-right:15px;
+  }
+
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
+
+    & > *:not(:last-child) {
+    margin-bottom:15px;
+  }
   }
 `;
 
@@ -37,6 +48,7 @@ const HeaderContainer = styled.span`
   font-weight: bold;
   font-size: 20px;
   text-align: left;
+  padding: 10px;
 `;
 
 const ButtonContainer = styled.div`
@@ -44,6 +56,7 @@ const ButtonContainer = styled.div`
   flex-flow: row;
   justify-content: center;
   width: 100%;
+  
 `;
 
 const RowContainer = styled.div`
@@ -107,7 +120,8 @@ const TokenPair = (props) => {
           <CustomButton
             buttonStyle={{
               marginRight: "30px",
-              width: "50%",
+              width: "48%",
+              height: "40px",
             }}
             background="transparent"
             onClick={() => {
@@ -120,7 +134,8 @@ const TokenPair = (props) => {
           <CustomButton
             buttonStyle={{
               marginLeft: "-20px",
-              width: "50%",
+              width: "48%",
+              height: "40px",
             }}
             background="transparent"
             onClick={() => {

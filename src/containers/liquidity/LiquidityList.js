@@ -26,6 +26,11 @@ const TextContainer = styled.div`
   align-items: left;
   justify-content: flex-start;
   width: 100%;
+
+  @media (max-width: ${({ theme: { mediaQueries } }) =>
+      `${mediaQueries.mobilePixel + 1}px`}) {
+    display: table;
+  }
 `;
 
 const BottomContainer = styled.div`
@@ -49,19 +54,22 @@ const ButtonContainer = styled.div`
 `;
 
 const FormContainer = styled.div`
-  display: flex;
+  display: table;
   flex-flow: column;
   padding: 20px 20px;
   margin-bottom: 15px;
   width: 100%;
+  height: 100%;
   border-radius: 10px;
   border: 2px solid #ffffff;
   box-shadow: 0 0 5px #ffffff;
   opacity: 1;
   background: transparent;
+
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
+    display: table;
   }
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobileSmallPixel}px`}) {
@@ -70,6 +78,7 @@ const FormContainer = styled.div`
 `;
 
 const TopContainer = styled.div``;
+
 
 const LiquidityList = (props) => {
   const modalContext = useContext(ModalContext);
