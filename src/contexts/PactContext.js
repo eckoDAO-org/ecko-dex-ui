@@ -39,7 +39,6 @@ export const PactProvider = (props) => {
   const [pairList, setPairList] = useState(pairTokens);
   const [swapList, setSwapList] = useState({});
 
-
   //TO FIX, not working when multiple toasts are there
   const toastId = React.useRef(null);
   // const [toastIds, setToastIds] = useState({})

@@ -5,6 +5,7 @@ import { NETWORKID } from "../../constants/contextConstants";
 import tokenData from "../../constants/cryptoCurrencies";
 import { PactContext } from "../../contexts/PactContext";
 import ModalContainer from "../../shared/ModalContainer";
+import theme from "../../styles/theme";
 import { PartialScrollableScrollSection } from "../layout/Containers";
 
 const IconColumn = styled(Grid.Column)`
@@ -21,7 +22,7 @@ const SwapHistoryTab = () => {
     const crypto = Object.values(tokenData).find(
       ({ code }) => code === cryptoCode
     );
-    return crypto.icon;
+    return crypto?.icon;
   };
 
   return (
@@ -34,9 +35,21 @@ const SwapHistoryTab = () => {
     >
       <Grid style={{ width: "100%", marginLeft: 0 }}>
         <Grid.Row columns="3">
-          <Grid.Column className="textBold">Tx Id</Grid.Column>
-          <Grid.Column className="textBold">Pair</Grid.Column>
-          <Grid.Column className="textBold">Amount</Grid.Column>
+          <Grid.Column
+            style={{ fontFamily: theme.fontFamily.bold, fontSize: 18 }}
+          >
+            Tx Id
+          </Grid.Column>
+          <Grid.Column
+            style={{ fontFamily: theme.fontFamily.bold, fontSize: 18 }}
+          >
+            Pair
+          </Grid.Column>
+          <Grid.Column
+            style={{ fontFamily: theme.fontFamily.bold, fontSize: 18 }}
+          >
+            Amount
+          </Grid.Column>
         </Grid.Row>
       </Grid>
       <PartialScrollableScrollSection>
@@ -46,27 +59,30 @@ const SwapHistoryTab = () => {
               <Grid.Column>No Swap found</Grid.Column>
             </Grid.Row>
           ) : (
-            Object.values(pact.swapList).map((swap, index) => (
-              <Grid.Row
-                columns="3"
-                key={index}
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  window.open(
-                    `https://explorer.chainweb.com/${NETWORKID}/tx/${swap?.reqKey}`,
-                    "_blank",
-                    "noopener,noreferrer"
-                  );
-                }}
-              >
-                <Grid.Column>{swap?.txId}</Grid.Column>
-                <IconColumn>
-                  {getIconCoin(swap?.result?.data[0]?.token)}
-                  {getIconCoin(swap?.result?.data[1]?.token)}
-                </IconColumn>
-                <Grid.Column>{`${swap?.result?.data[0]?.amount}`}</Grid.Column>
-              </Grid.Row>
-            ))
+            Object.values(pact.swapList)
+              .filter((swapTx) => swapTx?.events[3]?.name === "SWAP")
+              .sort((a, b) => a?.txId - b?.txId)
+              .map((swap, index) => (
+                <Grid.Row
+                  columns="3"
+                  key={index}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    window.open(
+                      `https://explorer.chainweb.com/${NETWORKID}/tx/${swap?.reqKey}`,
+                      "_blank",
+                      "noopener,noreferrer"
+                    );
+                  }}
+                >
+                  <Grid.Column>{swap?.txId}</Grid.Column>
+                  <IconColumn>
+                    {getIconCoin(swap?.result?.data[0]?.token)}
+                    {getIconCoin(swap?.result?.data[1]?.token)}
+                  </IconColumn>
+                  <Grid.Column>{`${swap?.result?.data[0]?.amount}`}</Grid.Column>
+                </Grid.Row>
+              ))
           )}
         </Grid>
       </PartialScrollableScrollSection>
