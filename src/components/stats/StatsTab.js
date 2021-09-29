@@ -104,14 +104,18 @@ const StatsTab = () => {
         {pact.pairList[0] ? (
           Object.values(pact.pairList).map((pair) =>
             pair && pair.reserves ? (
-              <Table.Body>
-                <Table.Row key={pair.name}>
-                  <Table.Cell>
-                    <IconsContainer>
-                      {tokenData[pair.token0].icon}
-                      {tokenData[pair.token1].icon}
-                      <div>{`${pair.token0}/${pair.token1}`}</div>
-                    </IconsContainer>
+              <Table.Body key={pair.name}>
+                <Table.Row>
+                  <Table.Cell
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    {tokenData[pair.token0].icon}
+                    {tokenData[pair.token1].icon}
+                    <div>{`${pair.token0}/${pair.token1}`}</div>
                   </Table.Cell>
                   <Table.Cell>{reduceBalance(pair.reserves[0])}</Table.Cell>
                   <Table.Cell>{reduceBalance(pair.reserves[1])}</Table.Cell>

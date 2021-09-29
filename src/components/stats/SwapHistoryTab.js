@@ -8,19 +8,21 @@ import ModalContainer from "../../shared/ModalContainer";
 import { PartialScrollableScrollSection } from "../layout/Containers";
 
 const IconColumn = styled(Grid.Column)`
-    display: flex !important;
-    align-content: center;
-    justify-content: flex-start;
-    align-items: center;
+  display: flex !important;
+  align-content: center;
+  justify-content: flex-start;
+  align-items: center;
 `;
 
 const SwapHistoryTab = () => {
   const pact = useContext(PactContext);
 
   const getIconCoin = (cryptoCode) => {
-   const crypto = Object.values(tokenData).find(({code})=>code === cryptoCode);
-   return crypto.icon;
-  }
+    const crypto = Object.values(tokenData).find(
+      ({ code }) => code === cryptoCode
+    );
+    return crypto.icon;
+  };
 
   return (
     <ModalContainer
@@ -59,10 +61,10 @@ const SwapHistoryTab = () => {
               >
                 <Grid.Column>{swap?.txId}</Grid.Column>
                 <IconColumn>
-                {getIconCoin(swap?.result?.data[0]?.token)}
-                {getIconCoin(swap?.result?.data[1]?.token)}
+                  {getIconCoin(swap?.result?.data[0]?.token)}
+                  {getIconCoin(swap?.result?.data[1]?.token)}
                 </IconColumn>
-                <Grid.Column>{`${swap?.events[3]?.params[4]}`}</Grid.Column>
+                <Grid.Column>{`${swap?.result?.data[0]?.amount}`}</Grid.Column>
               </Grid.Row>
             ))
           )}
