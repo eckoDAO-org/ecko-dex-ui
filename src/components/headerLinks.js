@@ -1,5 +1,5 @@
 import React from "react";
-import { AboutIcon, CodeIcon, DiscordIcon, TelegramIcon } from "../assets";
+import { AboutIcon, CodeIcon, TelegramIcon, DiscordIcon } from "../assets";
 
 export default [
   {
