@@ -1,5 +1,5 @@
 import React from "react";
-import { AboutIcon, CodeIcon, TelegramIcon } from "../assets";
+import { AboutIcon, CodeIcon, DiscordIcon, TelegramIcon } from "../assets";
 
 export default [
   {
@@ -15,9 +15,15 @@ export default [
     link: "https://github.com/sportelliguglielmo/kaddex-swap",
   },
   {
-    id: 0,
+    id: 2,
     label: "telegram",
     icon: <TelegramIcon />,
     link: "https://t.me/KaddeXofficial",
+  },
+  {
+    id: 3,
+    label: "discord",
+    icon: <DiscordIcon />,
+    link: "https://discord.gg/QSJpHRFDcv",
   },
 ];
