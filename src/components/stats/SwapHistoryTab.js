@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Grid } from "semantic-ui-react";
 import styled from "styled-components/macro";
-import { NETWORKID } from "../../constants/contextConstants";
+import { NETWORK_TYPE } from "../../constants/contextConstants";
 import tokenData from "../../constants/cryptoCurrencies";
 import { PactContext } from "../../contexts/PactContext";
 import ModalContainer from "../../shared/ModalContainer";
@@ -54,22 +54,22 @@ const SwapHistoryTab = () => {
       </Grid>
       <PartialScrollableScrollSection>
         <Grid style={{ width: "100%", minHeight: "40px", margin: "16px 0" }}>
-          {pact.txList === "NO_SWAP_FOUND" ? (
+          {pact.swapList === "NO_SWAP_FOUND" ? (
             <Grid.Row>
               <Grid.Column>No Swap found</Grid.Column>
             </Grid.Row>
           ) : (
             Object.values(pact.swapList)
-              .filter((swapTx) => swapTx?.events[3]?.name === "SWAP")
-              .sort((a, b) => a?.txId - b?.txId)
-              .map((swap, index) => (
+              ?.filter((swapTx) => swapTx?.events[3]?.name === "SWAP")
+              ?.sort((a, b) => a?.txId - b?.txId)
+              ?.map((swap, index) => (
                 <Grid.Row
                   columns="3"
                   key={index}
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     window.open(
-                      `https://explorer.chainweb.com/${NETWORKID}/tx/${swap?.reqKey}`,
+                      `https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${swap?.reqKey}`,
                       "_blank",
                       "noopener,noreferrer"
                     );

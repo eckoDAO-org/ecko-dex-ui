@@ -57,10 +57,6 @@ export const PactProvider = (props) => {
     fetchAllBalances();
   }, [balances, account.account.account, account.sendRes]);
 
-  useEffect(() => {
-    getSwapList();
-  }, [account.sendRes]);
-
   const pollingNotif = (reqKey) => {
     return (toastId.current = notificationContext.showNotification({
       title: "Transaction Pending",
@@ -89,18 +85,42 @@ export const PactProvider = (props) => {
 
   const getSwapList = async () => {
     setSwapList({});
-    var reqKeyList = JSON.parse(localStorage.getItem("swapReqKeys"));
-
-    let tx = await Pact.fetch.poll(
-      { requestKeys: Object.values(reqKeyList) },
-      network
-    );
-    if (Object.keys(tx).length !== 0) {
-      setSwapList(tx);
+    if (account.account) {
+      var reqKeyList = JSON.parse(localStorage.getItem("swapReqKeys"));
+      if (reqKeyList) {
+        let tx = await Pact.fetch.poll(
+          { requestKeys: Object.values(reqKeyList) },
+          network
+        );
+        if (Object.keys(tx).length !== 0) {
+          const searchSwap = Object.values(tx).some(
+            (t) =>
+              t?.events[3]?.params[0] === account.account.account ||
+              t?.events[3]?.params[1] === account.account.account
+          );
+          if (searchSwap)
+            setSwapList(
+              Object.values(tx)?.filter(
+                (swapTx) =>
+                  swapTx?.events[3]?.params[0] === account.account.account ||
+                  swapTx?.events[3]?.params[1] === account.account.account
+              )
+            );
+          else setSwapList("NO_SWAP_FOUND");
+        } else {
+          setSwapList("NO_SWAP_FOUND");
+        }
+      } else {
+        setSwapList("NO_SWAP_FOUND");
+      }
     } else {
       setSwapList("NO_SWAP_FOUND");
     }
   };
+
+  useEffect(() => {
+    getSwapList();
+  }, [account.sendRes, account.account]);
 
   const fetchAllBalances = async () => {
     let count = 0;
