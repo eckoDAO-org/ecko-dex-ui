@@ -15,6 +15,7 @@ import { extractDecimal } from "../utils/reduceBalance";
 import tokenData from "../constants/cryptoCurrencies";
 import { AccountContext } from "./AccountContext";
 import { NotificationContext, STATUSES } from "./NotificationContext";
+import { eventsRecentList } from "../chainweb/standalone-functions/call-chain-data";
 
 export const PactContext = createContext();
 
@@ -38,6 +39,10 @@ export const PactProvider = (props) => {
   const [ratio, setRatio] = useState(NaN);
   const [pairList, setPairList] = useState(pairTokens);
   const [swapList, setSwapList] = useState({});
+  console.log(
+    "🚀 ~ file: PactContext.js ~ line 42 ~ PactProvider ~ swapList",
+    swapList
+  );
 
   //TO FIX, not working when multiple toasts are there
   const toastId = React.useRef(null);
@@ -83,30 +88,16 @@ export const PactProvider = (props) => {
     }
   };
 
-  const getSwapList = async () => {
+  const getEventsSwapList = async () => {
     setSwapList({});
-    if (account.account) {
-      var reqKeyList = JSON.parse(localStorage.getItem("swapReqKeys"));
-      if (reqKeyList) {
-        let tx = await Pact.fetch.poll(
-          { requestKeys: Object.values(reqKeyList) },
-          network
-        );
-        if (Object.keys(tx).length !== 0) {
-          const searchSwap = Object.values(tx).some(
-            (t) =>
-              t?.events[3]?.params[0] === account.account.account ||
-              t?.events[3]?.params[1] === account.account.account
-          );
-          if (searchSwap)
-            setSwapList(
-              Object.values(tx)?.filter(
-                (swapTx) =>
-                  swapTx?.events[3]?.params[0] === account.account.account ||
-                  swapTx?.events[3]?.params[1] === account.account.account
-              )
-            );
-          else setSwapList("NO_SWAP_FOUND");
+    let events = await eventsRecentList.then((res) => res);
+    if (Object.values(events).length !== 0) {
+      if (account.account) {
+        const swap = Object.values(events)
+          ?.filter((swapTx) => swapTx?.name === "SWAP")
+          .filter((s) => s?.params[1] === account.account.account);
+        if (swap.length !== 0) {
+          setSwapList(swap);
         } else {
           setSwapList("NO_SWAP_FOUND");
         }
@@ -118,8 +109,44 @@ export const PactProvider = (props) => {
     }
   };
 
+  const getSwapList = async () => {
+    // setSwapList({});
+    // if (account.account) {
+    //   var reqKeyList = JSON.parse(localStorage.getItem("swapReqKeys"));
+    //   if (reqKeyList) {
+    //     let tx = await Pact.fetch.poll(
+    //       { requestKeys: Object.values(reqKeyList) },
+    //       network
+    //     );
+    //     if (Object.keys(tx).length !== 0) {
+    //       const searchSwap = Object.values(tx).some(
+    //         (t) =>
+    //           t?.events[3]?.params[0] === account.account.account ||
+    //           t?.events[3]?.params[1] === account.account.account
+    //       );
+    //       if (searchSwap)
+    //         setSwapList(
+    //           Object.values(tx)?.filter(
+    //             (swapTx) =>
+    //               swapTx?.events[3]?.params[0] === account.account.account ||
+    //               swapTx?.events[3]?.params[1] === account.account.account
+    //           )
+    //         );
+    //       else setSwapList("NO_SWAP_FOUND");
+    //     } else {
+    //       setSwapList("NO_SWAP_FOUND");
+    //     }
+    //   } else {
+    //     setSwapList("NO_SWAP_FOUND");
+    //   }
+    // } else {
+    //   setSwapList("NO_SWAP_FOUND");
+    // }
+  };
+
   useEffect(() => {
-    getSwapList();
+    getEventsSwapList();
+    // getSwapList();
   }, [account.sendRes, account.account]);
 
   const fetchAllBalances = async () => {

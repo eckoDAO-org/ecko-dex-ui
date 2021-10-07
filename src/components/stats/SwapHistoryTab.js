@@ -38,7 +38,7 @@ const SwapHistoryTab = () => {
           <Grid.Column
             style={{ fontFamily: theme.fontFamily.bold, fontSize: 18 }}
           >
-            Tx Id
+            Height
           </Grid.Column>
           <Grid.Column
             style={{ fontFamily: theme.fontFamily.bold, fontSize: 18 }}
@@ -60,8 +60,7 @@ const SwapHistoryTab = () => {
             </Grid.Row>
           ) : (
             Object.values(pact.swapList)
-              ?.filter((swapTx) => swapTx?.events[3]?.name === "SWAP")
-              ?.sort((a, b) => a?.txId - b?.txId)
+              ?.sort((a, b) => a?.height - b?.height)
               ?.map((swap, index) => (
                 <Grid.Row
                   columns="3"
@@ -69,18 +68,26 @@ const SwapHistoryTab = () => {
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     window.open(
-                      `https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${swap?.reqKey}`,
+                      `https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${swap?.moduleHash}`,
                       "_blank",
                       "noopener,noreferrer"
                     );
                   }}
                 >
-                  <Grid.Column>{swap?.txId}</Grid.Column>
+                  <Grid.Column>{swap?.height}</Grid.Column>
                   <IconColumn>
-                    {getIconCoin(swap?.result?.data[0]?.token)}
-                    {getIconCoin(swap?.result?.data[1]?.token)}
+                    {getIconCoin(
+                      swap?.params[3]?.refName?.namespace
+                        ? `${swap?.params[3]?.refName?.namespace}.${swap?.params[3]?.refName?.name}`
+                        : swap?.params[3]?.refName?.name
+                    )}
+                    {getIconCoin(
+                      swap?.params[5]?.refName?.namespace
+                        ? `${swap?.params[5]?.refName?.namespace}.${swap?.params[5]?.refName?.name}`
+                        : swap?.params[5]?.refName?.name
+                    )}
                   </IconColumn>
-                  <Grid.Column>{`${swap?.result?.data[0]?.amount}`}</Grid.Column>
+                  <Grid.Column>{`${swap?.params[2]}`}</Grid.Column>
                 </Grid.Row>
               ))
           )}
