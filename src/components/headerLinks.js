@@ -12,7 +12,7 @@ export default [
     id: 1,
     label: "code",
     icon: <CodeIcon />,
-    link: "https://github.com/sportelliguglielmo/kaddex-swap",
+    link: "https://github.com/KaddexGit/kaddex-swap-v2",
   },
   {
     id: 2,
