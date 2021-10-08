@@ -37,7 +37,7 @@ const Label = styled.span`
   text-transform: capitalize;
   padding: 10px 16px;
   color: white;
-  fontsize: 16;
+  font-size: 16;
 `;
 
 const RightHeaderItems = () => {
