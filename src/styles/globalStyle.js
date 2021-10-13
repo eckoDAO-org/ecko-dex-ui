@@ -63,14 +63,14 @@ export default createGlobalStyle`
 
     .desktop-none {
       @media (min-width: ${({ theme: { mediaQueries } }) =>
-        `${mediaQueries.mobilePixel + 1}px`}) {
+        `${mediaQueries.desktopPixel +1}px`}) {
         display: none !important;
       }
     }
 
     .mobile-none {
       @media (max-width: ${({ theme: { mediaQueries } }) =>
-        `${mediaQueries.mobilePixel}px`}) {
+        `${mediaQueries.desktopPixel }px`}) {
         display: none !important;
       }
     }

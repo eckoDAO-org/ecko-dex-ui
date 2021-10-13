@@ -6,6 +6,8 @@ import { ROUTE_INDEX } from "../../../router/routes";
 import menuItems from "../../menuItems";
 import RightHeaderItems from "./RightHeaderItems";
 import HeaderItem from "../../../shared/HeaderItem";
+import { Checkbox } from "semantic-ui-react";
+import GameEditionToggle from "../../../shared/GameEditionToggle";
 
 const Container = styled.div`
   display: flex;
@@ -27,7 +29,9 @@ const RightContainer = styled.div`
   display: flex;
 `;
 
-const DesktopHeader = ({ className }) => {
+
+
+const DesktopHeader = ({ className,gameEditionView }) => {
   const history = useHistory();
   return (
     <Container className={className}>
@@ -36,11 +40,14 @@ const DesktopHeader = ({ className }) => {
           style={{ cursor: "pointer" }}
           onClick={() => history.push(ROUTE_INDEX)}
         />
-        {menuItems.map((item, index) => (
+
+        { !gameEditionView ? menuItems.map((item, index) => (
           <HeaderItem key={index} className={item.className} route={item.route}>
             {item.label}
           </HeaderItem>
-        ))}
+        )) : (null)}
+
+        <GameEditionToggle/>
       </LeftContainer>
       <RightContainer>
         <RightHeaderItems />

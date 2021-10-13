@@ -13,6 +13,7 @@ import { HamburgerIcon } from "../../../assets";
 import { useOnClickOutside } from "../../../hooks/hooks";
 import menuItems from "../../menuItems";
 import theme from "../../../styles/theme";
+import GameEditionToggle from "../../../shared/GameEditionToggle";
 
 const Container = styled.div`
   display: flex;
@@ -63,8 +64,6 @@ const MobileHeader = ({ className }) => {
             <PopupContentList items={menuItems} />
           </CustomPopup>
         </HeaderItem>
-        {/* <Burger open={open} setOpen={setOpen} />
-        <MobileMenu open={open} setOpen={setOpen} /> */}
         <KaddexLogo
           style={{
             cursor: "pointer",
@@ -75,6 +74,7 @@ const MobileHeader = ({ className }) => {
           }}
           onClick={() => history.push(ROUTE_INDEX)}
         />
+        <GameEditionToggle/>
       </LeftContainer>
       <RightContainer>
         <RightHeaderItems />
