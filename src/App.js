@@ -10,11 +10,13 @@ import { PactProvider } from "./contexts/PactContext";
 import ModalRender from "./components/modals/ModalRender";
 import { SwapProvider } from "./contexts/SwapContext";
 import { LiquidityProvider } from "./contexts/LiquidityContext";
+import { GameEditionProvider } from "./contexts/GameEditionContext";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
+      <GameEditionProvider>
       <NotificationRender>
         <AccountProvider>
           <WalletProvider>
@@ -30,6 +32,7 @@ function App() {
           </WalletProvider>
         </AccountProvider>
       </NotificationRender>
+      </GameEditionProvider>
     </ThemeProvider>
   );
 }

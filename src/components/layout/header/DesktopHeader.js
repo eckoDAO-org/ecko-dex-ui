@@ -7,6 +7,7 @@ import menuItems from "../../menuItems";
 import RightHeaderItems from "./RightHeaderItems";
 import HeaderItem from "../../../shared/HeaderItem";
 import { Checkbox } from "semantic-ui-react";
+import GameEditionToggle from "../../../shared/GameEditionToggle";
 
 const Container = styled.div`
   display: flex;
@@ -28,18 +29,9 @@ const RightContainer = styled.div`
   display: flex;
 `;
 
-const ToggleContainer = styled.div`
- font-family: ${({ theme: { fontFamily } }) => `${fontFamily.pressStartRegular}`};
- color:#ffffff;
- justify-content: center;
 
- span {
-  vertical-align: text-bottom !important;
-  margin-right: 4px;
- }
-`
 
-const DesktopHeader = ({ className,gameEditionView, setGameEditionView }) => {
+const DesktopHeader = ({ className,gameEditionView }) => {
   const history = useHistory();
   return (
     <Container className={className}>
@@ -54,12 +46,8 @@ const DesktopHeader = ({ className,gameEditionView, setGameEditionView }) => {
             {item.label}
           </HeaderItem>
         )) : (null)}
-      <ToggleContainer>      
-        <span>        
-          Game Edition  
-        </span>
-        <Checkbox toggle onChange={()=>setGameEditionView(!gameEditionView)}/> 
-      </ToggleContainer>
+
+        <GameEditionToggle/>
       </LeftContainer>
       <RightContainer>
         <RightHeaderItems />
