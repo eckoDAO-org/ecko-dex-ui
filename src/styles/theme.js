@@ -25,6 +25,7 @@ export const theme = {
     italic: "montserrat-italic",
     bold: "montserrat-bold",
     boldItalic: "montserrat-bold-italic",
+    pressStartRegular:"press-start-regular"
   },
   inputTokenWidth: 78,
   inputSelectButtonWidth: 81,

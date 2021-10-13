@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import Wrapper from "../../shared/Wrapper";
 import CustomParticles from "./CustomParticles";
 import DesktopHeader from "./header/DesktopHeader";
 import MobileHeader from "./header/MobileHeader";
 import { ReactComponent as Stripes } from "../../assets/images/shared/stripes.svg";
+import GameEditionContainer from "../game-edition/GameEditionContainer";
+import { useHistory } from "react-router";
+import { ROUTE_GAME_EDITION_MENU, ROUTE_SWAP } from "../../router/routes";
 
 const MainContainer = styled.div`
   display: flex;
@@ -40,13 +43,27 @@ const StripesContainer = styled.div`
 `;
 
 const Layout = ({ children }) => {
+const history = useHistory()
+
+  const [gameEditionView, setGameEditionView] = useState(true);
+  useEffect(()=>{
+    gameEditionView? history.push(ROUTE_GAME_EDITION_MENU) : history.push(ROUTE_SWAP)
+  },[gameEditionView])
+  
   return (
     <MainContainer>
       <CustomParticles />
       <WrapperContainer>
         <MobileHeader className="desktop-none" />
-        <DesktopHeader className="mobile-none" />
-        <MainContent>{children}</MainContent>
+        <DesktopHeader className="mobile-none" setGameEditionView={setGameEditionView} gameEditionView={gameEditionView}/>
+        {gameEditionView ? (
+        <GameEditionContainer>
+          {children}
+        </GameEditionContainer>
+        )
+        :
+         <MainContent>{children}</MainContent>}
+       
       </WrapperContainer>
       <StripesContainer>
         <Stripes />
