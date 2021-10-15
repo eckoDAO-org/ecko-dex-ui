@@ -8,17 +8,21 @@ const ToggleContainer = styled.div`
  color:#ffffff;
  justify-content: center;
 
+ transform: ${({ animation }) =>
+    !animation ?  "translateX(0px)" : "translateX(-250px)"};
+ transition: transform 1s ease-in-out;
+
  span {
   vertical-align: text-bottom !important;
   margin-right: 4px;
  }
 `
 
-const GameEditionToggle = () => {
+const GameEditionToggle = ({animation}) => {
 
     const game = useContext(GameEditionContext)
     return (
-        <ToggleContainer>
+        <ToggleContainer animation={animation}>
               <span>        
           Game Edition  
         </span>
