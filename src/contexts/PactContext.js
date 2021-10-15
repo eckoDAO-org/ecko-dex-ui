@@ -90,7 +90,7 @@ export const PactProvider = (props) => {
 
   const getEventsSwapList = async () => {
     setSwapList({});
-    let events = await eventsRecentList.then((res) => res);
+    let events = await eventsRecentList?.then((res) => res);
     if (Object.values(events).length !== 0) {
       if (account.account) {
         const swap = Object.values(events)
