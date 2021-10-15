@@ -2,7 +2,7 @@ import styled from "styled-components/macro";
 
 
 export const FadeIn = styled.div`
-  animation: fade-in 3s linear;
+  animation: fade-in 1s linear;
   @keyframes fade-in {
     from {
       opacity: 0;

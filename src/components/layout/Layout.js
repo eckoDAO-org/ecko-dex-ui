@@ -7,7 +7,7 @@ import MobileHeader from "./header/MobileHeader";
 import { ReactComponent as Stripes } from "../../assets/images/shared/stripes.svg";
 import GameEditionContainer from "../game-edition/GameEditionContainer";
 import { useHistory } from "react-router";
-import { ROUTE_GAME_EDITION_MENU, ROUTE_SWAP } from "../../router/routes";
+import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from "../../router/routes";
 import { GameEditionContext } from "../../contexts/GameEditionContext";
 
 const MainContainer = styled.div`
@@ -48,7 +48,7 @@ const history = useHistory()
 const game = useContext(GameEditionContext)
 
   useEffect(()=>{
-    game.gameEditionView? history.push(ROUTE_GAME_EDITION_MENU) : history.push(ROUTE_SWAP)
+    game.gameEditionView? history.push(ROUTE_GAME_START_ANIMATION) : history.push(ROUTE_SWAP)
   },[game.gameEditionView])
   
   return (
