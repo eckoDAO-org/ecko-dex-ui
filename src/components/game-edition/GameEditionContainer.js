@@ -10,7 +10,7 @@ const MainContainer = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
-  /* margin-top: 40px; */
+  margin-top: 5%;
 `
 
 const ContentContainer = styled.div`
