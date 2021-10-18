@@ -18,35 +18,37 @@ import { getCorrectBalance, reduceBalance } from "../utils/reduceBalance";
 
 const Container = styled.div`
   width: 100%;
-  margin-top: ${({ gameEditionView }) =>
-      gameEditionView ? `0px` : ` 24px`};
+  margin-top: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 24px`)};
   margin-left: auto;
   margin-right: auto;
 `;
 
 const TitleContainer = styled.div`
   display: flex;
-  justify-content:${({ gameEditionView }) =>
-      gameEditionView ? `center` : ` space-between`};
+  justify-content: ${({ gameEditionView }) =>
+    gameEditionView ? `center` : ` space-between`};
   margin-bottom: ${({ gameEditionView }) =>
-      gameEditionView ? `0px` : ` 24px`};
+    gameEditionView ? `0px` : ` 24px`};
   width: 100%;
 `;
 
 const Title = styled.span`
   font: ${({ gameEditionView }) =>
-      gameEditionView ? `normal normal normal 16px/19px  ${theme.fontFamily.pressStartRegular}` : ` normal normal bold 32px/57px ${theme.fontFamily.bold}`}; 
+    gameEditionView
+      ? `normal normal normal 16px/19px  ${theme.fontFamily.pressStartRegular}`
+      : ` normal normal bold 32px/57px ${theme.fontFamily.bold}`};
   letter-spacing: 0px;
-  color: ${({ theme: { colors } }) => colors.black};
+  color: ${({ theme: { colors }, gameEditionView }) =>
+    gameEditionView ? colors.black : "#ffffff"};
   text-transform: ${({ gameEditionView }) =>
-      gameEditionView ? `uppercase` : ` capitalize`};;
+    gameEditionView ? `uppercase` : ` capitalize`}; ;
 `;
 
 const SwapContainer = () => {
   const pact = useContext(PactContext);
   const swap = useContext(SwapContext);
   const account = useContext(AccountContext);
-  const {gameEditionView} = useContext(GameEditionContext)
+  const { gameEditionView } = useContext(GameEditionContext);
 
   const wallet = useContext(WalletContext);
 
@@ -352,7 +354,7 @@ const SwapContainer = () => {
   };
 
   return (
- <Container gameEditionView={gameEditionView}>
+    <Container gameEditionView={gameEditionView}>
       <TokenSelectorModal
         show={tokenSelectorType !== null}
         selectedToken={selectedToken}
@@ -414,7 +416,8 @@ const SwapContainer = () => {
         noLiquidity={noLiquidity}
         setShowTxModal={setShowTxModal}
       />
-    </Container>)
+    </Container>
+  );
 };
 
 export default SwapContainer;
