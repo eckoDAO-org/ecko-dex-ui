@@ -1,49 +1,56 @@
-import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components/macro';
-import { throttle, debounce } from 'throttle-debounce';
+import React, { useContext, useEffect, useState } from "react";
+import styled from "styled-components/macro";
+import { throttle, debounce } from "throttle-debounce";
+import TokenSelectorModal from "../components/swap/swap-modals/TokenSelectorModal";
+import TxView from "../components/swap/swap-modals/TxView";
+import WalletRequestView from "../components/swap/swap-modals/WalletRequestView";
+import SwapButtonsForm from "../components/swap/SwapButtonsForm";
+import SwapForm from "../components/swap/SwapForm";
+import SwapResults from "../components/swap/SwapResults";
+import tokenData from "../constants/cryptoCurrencies";
+import { AccountContext } from "../contexts/AccountContext";
+import { GameEditionContext } from "../contexts/GameEditionContext";
+import { PactContext } from "../contexts/PactContext";
+import { SwapContext } from "../contexts/SwapContext";
+import { WalletContext } from "../contexts/WalletContext";
+import theme from "../styles/theme";
+import { getCorrectBalance, reduceBalance } from "../utils/reduceBalance";
 import ConnectWalletModal from '../components/modals/kdaModals/ConnectWalletModal';
-import TokenSelectorModal from '../components/swap/swap-modals/TokenSelectorModal';
-import TxView from '../components/swap/swap-modals/TxView';
-import WalletRequestView from '../components/swap/swap-modals/WalletRequestView';
-import SwapButtonsForm from '../components/swap/SwapButtonsForm';
-import SwapForm from '../components/swap/SwapForm';
-import SwapResults from '../components/swap/SwapResults';
-import tokenData from '../constants/cryptoCurrencies';
-import { AccountContext } from '../contexts/AccountContext';
-import { GameEditionContext } from '../contexts/GameEditionContext';
-import { PactContext } from '../contexts/PactContext';
-import { SwapContext } from '../contexts/SwapContext';
-import { WalletContext } from '../contexts/WalletContext';
-import theme from '../styles/theme';
-import { getCorrectBalance, reduceBalance } from '../utils/reduceBalance';
 
 const Container = styled.div`
-	width: 100%;
-	margin-top: 24px;
-	margin-left: auto;
-	margin-right: auto;
+  width: 100%;
+  margin-top: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 24px`)};
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 const TitleContainer = styled.div`
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: 24px;
-	width: 100%;
+  display: flex;
+  justify-content: ${({ gameEditionView }) =>
+    gameEditionView ? `center` : ` space-between`};
+  margin-bottom: ${({ gameEditionView }) =>
+    gameEditionView ? `0px` : ` 24px`};
+  width: 100%;
 `;
 
 const Title = styled.span`
-	font: normal normal bold 32px/57px Montserrat;
-	letter-spacing: 0px;
-	color: #ffffff;
-	text-transform: capitalize;
+  font: ${({ gameEditionView }) =>
+    gameEditionView
+      ? `normal normal normal 16px/19px  ${theme.fontFamily.pressStartRegular}`
+      : ` normal normal bold 32px/57px ${theme.fontFamily.bold}`};
+  letter-spacing: 0px;
+  color: ${({ theme: { colors }, gameEditionView }) =>
+    gameEditionView ? colors.black : "#ffffff"};
+  text-transform: ${({ gameEditionView }) =>
+    gameEditionView ? `uppercase` : ` capitalize`}; ;
 `;
 
 const SwapContainer = () => {
-	const pact = useContext(PactContext);
-	const swap = useContext(SwapContext);
-	const account = useContext(AccountContext);
+  const pact = useContext(PactContext);
+  const swap = useContext(SwapContext);
+  const account = useContext(AccountContext);
+  const { gameEditionView } = useContext(GameEditionContext);
 	const { openModal } = useContext(GameEditionContext);
-	const wallet = useContext(WalletContext);
 
 	const [tokenSelectorType, setTokenSelectorType] = useState(null);
 	const [selectedToken, setSelectedToken] = useState(null);
@@ -405,19 +412,71 @@ const SwapContainer = () => {
 				<></>
 			)}
 
-			<SwapButtonsForm
-				setLoading={setLoading}
-				fetchingPair={fetchingPair}
-				fromValues={fromValues}
-				setFromValues={setFromValues}
-				toValues={toValues}
-				setToValues={setToValues}
-				fromNote={fromNote}
-				ratio={pact.ratio}
-				loading={loading}
-				noLiquidity={noLiquidity}
-				setShowTxModal={setShowTxModal}
-			/>
+  return (
+    <Container gameEditionView={gameEditionView}>
+      <TokenSelectorModal
+        show={tokenSelectorType !== null}
+        selectedToken={selectedToken}
+        onTokenClick={onTokenClick}
+        fromToken={fromValues.coin}
+        toToken={toValues.coin}
+        onClose={() => setTokenSelectorType(null)}
+      />
+      <TxView
+        show={showTxModal}
+        selectedToken={selectedToken}
+        onTokenClick={onTokenClick}
+        onClose={() => setShowTxModal(false)}
+      />
+      <WalletRequestView
+        show={wallet.isWaitingForWalletAuth}
+        error={wallet.walletError}
+        onClose={() => onWalletRequestViewModalClose()}
+      />
+      <TitleContainer gameEditionView={gameEditionView}>
+        <Title gameEditionView={gameEditionView}>Swap</Title>
+      </TitleContainer>
+      <SwapForm
+        fromValues={fromValues}
+        setFromValues={setFromValues}
+        toValues={toValues}
+        setToValues={setToValues}
+        fromNote={fromNote}
+        toNote={toNote}
+        setTokenSelectorType={setTokenSelectorType}
+        setInputSide={setInputSide}
+        swapValues={swapValues}
+        setShowTxModal={setShowTxModal}
+      />
+      {!isNaN(pact.ratio) &&
+      fromValues.amount &&
+      fromValues.coin &&
+      toValues.amount &&
+      toValues.coin ? (
+        <SwapResults
+          priceImpact={priceImpact}
+          fromValues={fromValues}
+          toValues={toValues}
+        />
+      ) : (
+        <></>
+      )}
+
+      <SwapButtonsForm
+        setLoading={setLoading}
+        fetchingPair={fetchingPair}
+        fromValues={fromValues}
+        setFromValues={setFromValues}
+        toValues={toValues}
+        setToValues={setToValues}
+        fromNote={fromNote}
+        ratio={pact.ratio}
+        loading={loading}
+        noLiquidity={noLiquidity}
+        setShowTxModal={setShowTxModal}
+      />
+    </Container>
+  );
 			{/* <button
 				onClick={() =>
 					openModal({
@@ -430,8 +489,6 @@ const SwapContainer = () => {
 			>
 				Ciao
 			</button> */}
-		</Container>
-	);
 };
 
 export default SwapContainer;

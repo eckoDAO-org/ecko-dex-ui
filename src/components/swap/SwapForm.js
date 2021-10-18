@@ -1,22 +1,26 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import ButtonDivider from "../../shared/ButtonDivider";
 import Input from "../../shared/Input";
 import InputToken from "../../shared/InputToken";
-import CustomButton from "../../shared/CustomButton";
 import { SwapArrowsIcon } from "../../assets";
 import { limitDecimalPlaces, reduceBalance } from "../../utils/reduceBalance";
 import tokenData from "../../constants/cryptoCurrencies";
+import { GameEditionContext } from "../../contexts/GameEditionContext";
 
 const FormContainer = styled.div`
   position: relative;
   display: flex;
-  flex-flow: row;
-  padding: 20px 20px;
+  flex-flow:${({ gameEditionView }) =>
+      gameEditionView ? `column` : `row`} ;
+  padding: ${({ gameEditionView }) =>
+      gameEditionView ? `10px 10px` : `20px 20px`} ;
   width: 100%;
   border-radius: 10px;
-  border: 2px solid #ffffff;
-  box-shadow: 0 0 5px #ffffff;
+  border:${({ gameEditionView }) =>
+      gameEditionView ? `none` : ` 2px solid #ffffff`} ;
+  box-shadow:${({ gameEditionView }) =>
+      gameEditionView ? `none` : `0 0 5px #ffffff`} ;
   opacity: 1;
   background: transparent;
 
@@ -25,10 +29,13 @@ const FormContainer = styled.div`
   }
 
   @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+      `${mediaQueries.mobilePixel + 1}px` }) {
     flex-flow: column;
     gap: 0px;
   }
+
+
+
 `;
 
 const SwapForm = ({
@@ -42,8 +49,9 @@ const SwapForm = ({
   setInputSide,
   swapValues,
 }) => {
+  const {gameEditionView} = useContext(GameEditionContext)
   return (
-    <FormContainer>
+    <FormContainer gameEditionView={gameEditionView}>
       <Input
         error={isNaN(fromValues.amount)}
         topLeftLabel={fromNote ? `from ${fromNote}` : `input`}
@@ -78,8 +86,9 @@ const SwapForm = ({
             amount: limitDecimalPlaces(value, fromValues.precision),
           }));
         }}
-      />
-      <ButtonDivider icon={<SwapArrowsIcon />} onClick={swapValues} />
+      />{
+        gameEditionView ? null : <ButtonDivider icon={<SwapArrowsIcon />} onClick={swapValues} />
+      }
       <Input
         error={isNaN(toValues.amount)}
         topLeftLabel={toNote ? `to ${toNote}` : `input`}
