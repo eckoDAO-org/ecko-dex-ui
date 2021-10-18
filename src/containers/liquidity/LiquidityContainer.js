@@ -630,7 +630,10 @@ const LiquidityContainer = (props) => {
 				</>
 			)}
 			<ButtonContainer>
-				<Button.Group>
+				<Button.Group
+					fluid={gameEditionView}
+					style={{ padding: gameEditionView ? '0 10px' : 0 }}
+				>
 					<CustomButton
 						disabled={!buttonStatus().status}
 						onClick={() => setShowReview(true)}
