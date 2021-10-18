@@ -33,25 +33,25 @@ const GameEditionContainer = ({ children }) => {
 	const { modalState } = useContext(GameEditionContext);
 	const history = useHistory();
 
-	// d3.select("#start_button").style("cursor","pointer").on("click",()=>setmessage("I'm swap Button"))
-	// d3.select("#select_button").style("cursor","pointer").on("click",()=>setmessage("I'm Menu Button"))
-	// d3.select("#left_button").style("cursor","pointer").on("click",()=>setmessage("I'm Left Button"))
-	// d3.select("#right_button").style("cursor","pointer").on("click",()=>setmessage("I'm Right Button"))
-	// d3.select("#power_button").style("cursor","pointer").on("click",()=>setmessage("I'm Power Button"))
-	// d3.select("#a_button").style("cursor","pointer").on("click",()=>setmessage("I'm A Button"))
-	// d3.select("#b_button").style("cursor","pointer").on("click",()=>setmessage("I'm B Button"))
+  // d3.select("#start_button").style("cursor","pointer").on("click",()=>setmessage("I'm swap Button"))
+  // d3.select("#select_button").style("cursor","pointer").on("click",()=>setmessage("I'm Menu Button"))
+  // d3.select("#left_button").style("cursor","pointer").on("click",()=>setmessage("I'm Left Button"))
+  // d3.select("#right_button").style("cursor","pointer").on("click",()=>setmessage("I'm Right Button"))
+  // d3.select("#power_button").style("cursor","pointer").on("click",()=>setmessage("I'm Power Button"))
+  // d3.select("#a_button").style("cursor","pointer").on("click",()=>setmessage("I'm A Button"))
+  // d3.select("#b_button").style("cursor","pointer").on("click",()=>setmessage("I'm B Button"))
 
-	return (
-		<MainContainer>
-			<GameEditionWrapper
-				selectLabel="MENU"
-				selectOnClick={() => history.push(ROUTE_GAME_EDITION_MENU)}
-				startLabel="SWAP"
-				startOnClick={() => history.push(ROUTE_SWAP)}
-			>
-				<ContentContainer>
-					{children}
-					{/* {modalState.isVisible && (
+  return (
+    <MainContainer>
+      <GameEditionWrapper
+        selectLabel="MENU"
+        selectOnClick={() => history.push(ROUTE_GAME_EDITION_MENU)}
+        startLabel="SWAP"
+        startOnClick={() => history.push(ROUTE_SWAP)}
+      >
+        <ContentContainer>
+          {children}
+          {/* {modalState.isVisible && (
 						<div
 							style={{
 								top: 0,
@@ -69,10 +69,10 @@ const GameEditionContainer = ({ children }) => {
 							{modalState.content}
 						</div>
 					)} */}
-				</ContentContainer>
-			</GameEditionWrapper>
-		</MainContainer>
-	);
+        </ContentContainer>
+      </GameEditionWrapper>
+    </MainContainer>
+  );
 };
 
 export default GameEditionContainer;
