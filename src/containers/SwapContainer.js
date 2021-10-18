@@ -1,57 +1,53 @@
-import React, { useContext, useEffect, useState } from "react";
-import styled from "styled-components/macro";
-import { throttle, debounce } from "throttle-debounce";
-import TokenSelectorModal from "../components/swap/swap-modals/TokenSelectorModal";
-import TxView from "../components/swap/swap-modals/TxView";
-import WalletRequestView from "../components/swap/swap-modals/WalletRequestView";
-import SwapButtonsForm from "../components/swap/SwapButtonsForm";
-import SwapForm from "../components/swap/SwapForm";
-import SwapResults from "../components/swap/SwapResults";
-import tokenData from "../constants/cryptoCurrencies";
-import { AccountContext } from "../contexts/AccountContext";
-import { GameEditionContext } from "../contexts/GameEditionContext";
-import { PactContext } from "../contexts/PactContext";
-import { SwapContext } from "../contexts/SwapContext";
-import { WalletContext } from "../contexts/WalletContext";
-import theme from "../styles/theme";
-import { getCorrectBalance, reduceBalance } from "../utils/reduceBalance";
+import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components/macro';
+import { throttle, debounce } from 'throttle-debounce';
+import TokenSelectorModal from '../components/swap/swap-modals/TokenSelectorModal';
+import TxView from '../components/swap/swap-modals/TxView';
+import WalletRequestView from '../components/swap/swap-modals/WalletRequestView';
+import SwapButtonsForm from '../components/swap/SwapButtonsForm';
+import SwapForm from '../components/swap/SwapForm';
+import SwapResults from '../components/swap/SwapResults';
+import tokenData from '../constants/cryptoCurrencies';
+import { AccountContext } from '../contexts/AccountContext';
+import { GameEditionContext } from '../contexts/GameEditionContext';
+import { PactContext } from '../contexts/PactContext';
+import { SwapContext } from '../contexts/SwapContext';
+import { WalletContext } from '../contexts/WalletContext';
+import theme from '../styles/theme';
+import { getCorrectBalance, reduceBalance } from '../utils/reduceBalance';
 import ConnectWalletModal from '../components/modals/kdaModals/ConnectWalletModal';
-
 const Container = styled.div`
-  width: 100%;
-  margin-top: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 24px`)};
-  margin-left: auto;
-  margin-right: auto;
+	width: 100%;
+	margin-top: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 24px`)};
+	margin-left: auto;
+	margin-right: auto;
 `;
-
 const TitleContainer = styled.div`
-  display: flex;
-  justify-content: ${({ gameEditionView }) =>
-    gameEditionView ? `center` : ` space-between`};
-  margin-bottom: ${({ gameEditionView }) =>
-    gameEditionView ? `0px` : ` 24px`};
-  width: 100%;
+	display: flex;
+	justify-content: ${({ gameEditionView }) =>
+		gameEditionView ? `center` : ` space-between`};
+	margin-bottom: ${({ gameEditionView }) =>
+		gameEditionView ? `0px` : ` 24px`};
+	width: 100%;
 `;
-
 const Title = styled.span`
-  font: ${({ gameEditionView }) =>
-    gameEditionView
-      ? `normal normal normal 16px/19px  ${theme.fontFamily.pressStartRegular}`
-      : ` normal normal bold 32px/57px ${theme.fontFamily.bold}`};
-  letter-spacing: 0px;
-  color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : "#ffffff"};
-  text-transform: ${({ gameEditionView }) =>
-    gameEditionView ? `uppercase` : ` capitalize`}; ;
+	font: ${({ gameEditionView }) =>
+		gameEditionView
+			? `normal normal normal 16px/19px  ${theme.fontFamily.pressStartRegular}`
+			: ` normal normal bold 32px/57px ${theme.fontFamily.bold}`};
+	letter-spacing: 0px;
+	color: ${({ theme: { colors }, gameEditionView }) =>
+		gameEditionView ? colors.black : '#ffffff'};
+	text-transform: ${({ gameEditionView }) =>
+		gameEditionView ? `uppercase` : ` capitalize`}; ;
 `;
-
 const SwapContainer = () => {
-  const pact = useContext(PactContext);
-  const swap = useContext(SwapContext);
-  const account = useContext(AccountContext);
-  const { gameEditionView } = useContext(GameEditionContext);
+	const pact = useContext(PactContext);
+	const swap = useContext(SwapContext);
+	const account = useContext(AccountContext);
+	const wallet = useContext(WalletContext);
+	const { gameEditionView } = useContext(GameEditionContext);
 	const { openModal } = useContext(GameEditionContext);
-
 	const [tokenSelectorType, setTokenSelectorType] = useState(null);
 	const [selectedToken, setSelectedToken] = useState(null);
 	const [fromValues, setFromValues] = useState({
@@ -61,7 +57,6 @@ const SwapContainer = () => {
 		address: '',
 		precision: 0,
 	});
-
 	const [toValues, setToValues] = useState({
 		amount: '',
 		balance: '',
@@ -69,7 +64,6 @@ const SwapContainer = () => {
 		address: '',
 		precision: 0,
 	});
-
 	const [inputSide, setInputSide] = useState('');
 	const [fromNote, setFromNote] = useState('');
 	const [toNote, setToNote] = useState('');
@@ -78,7 +72,6 @@ const SwapContainer = () => {
 	const [fetchingPair, setFetchingPair] = useState(false);
 	const [noLiquidity, setNoLiquidity] = useState(false);
 	const [priceImpact, setPriceImpact] = useState('');
-
 	useEffect(() => {
 		if (!isNaN(fromValues.amount)) {
 			if (inputSide === 'from' && fromValues.amount !== '') {
@@ -122,7 +115,6 @@ const SwapContainer = () => {
 			}
 		}
 	}, [fromValues.amount]);
-
 	useEffect(() => {
 		if (!isNaN(toValues.amount)) {
 			if (inputSide === 'to' && toValues.amount !== '') {
@@ -168,7 +160,6 @@ const SwapContainer = () => {
 			}
 		}
 	}, [toValues.amount]);
-
 	useEffect(() => {
 		if (!isNaN(pact.ratio)) {
 			if (fromValues.amount !== '' && toValues.amount === '') {
@@ -200,7 +191,6 @@ const SwapContainer = () => {
 			}
 		}
 	}, [pact.ratio]);
-
 	useEffect(() => {
 		if (!isNaN(pact.ratio)) {
 			setPriceImpact(
@@ -219,7 +209,6 @@ const SwapContainer = () => {
 		toValues.amount,
 		pact.ratio,
 	]);
-
 	useEffect(() => {
 		const getBalance = async () => {
 			if (
@@ -257,14 +246,12 @@ const SwapContainer = () => {
 		};
 		getBalance();
 	}, [toValues.amount, fromValues.amount]);
-
 	useEffect(() => {
 		if (tokenSelectorType === 'from')
 			return setSelectedToken(fromValues.coin);
 		if (tokenSelectorType === 'to') return setSelectedToken(toValues.coin);
 		return setSelectedToken(null);
 	}, [tokenSelectorType]);
-
 	useEffect(() => {
 		const getReserves = async () => {
 			if (toValues.coin !== '' && fromValues.coin !== '') {
@@ -276,7 +263,6 @@ const SwapContainer = () => {
 		};
 		getReserves();
 	}, [fromValues.coin, toValues.coin]);
-
 	useEffect(() => {
 		if (swap.walletSuccess) {
 			setLoading(false);
@@ -285,7 +271,6 @@ const SwapContainer = () => {
 			pact.setWalletSuccess(false);
 		}
 	}, [swap.walletSuccess]);
-
 	const swapValues = () => {
 		const from = { ...fromValues };
 		const to = { ...toValues };
@@ -300,7 +285,6 @@ const SwapContainer = () => {
 			setFromNote('');
 		}
 	};
-
 	// Check if their is enough liquidity before setting the from amount
 	const safeSetFrom = () => {
 		setNoLiquidity(false);
@@ -320,7 +304,6 @@ const SwapContainer = () => {
 			});
 		}
 	};
-
 	const onTokenClick = async ({ crypto }) => {
 		let balance;
 		if (crypto.code === 'coin') {
@@ -354,14 +337,12 @@ const SwapContainer = () => {
 				precision: crypto.precision,
 			}));
 	};
-
 	const onWalletRequestViewModalClose = () => {
 		wallet.setIsWaitingForWalletAuth(false);
 		wallet.setWalletError(null);
 	};
-
 	return (
-		<Container>
+		<Container gameEditionView={gameEditionView}>
 			<TokenSelectorModal
 				show={tokenSelectorType !== null}
 				selectedToken={selectedToken}
@@ -381,10 +362,8 @@ const SwapContainer = () => {
 				error={wallet.walletError}
 				onClose={() => onWalletRequestViewModalClose()}
 			/>
-			<TitleContainer>
-				<Title style={{ fontFamily: theme.fontFamily.bold }}>
-					Swap
-				</Title>
+			<TitleContainer gameEditionView={gameEditionView}>
+				<Title gameEditionView={gameEditionView}>Swap</Title>
 			</TitleContainer>
 			<SwapForm
 				fromValues={fromValues}
@@ -411,84 +390,32 @@ const SwapContainer = () => {
 			) : (
 				<></>
 			)}
-
-  return (
-    <Container gameEditionView={gameEditionView}>
-      <TokenSelectorModal
-        show={tokenSelectorType !== null}
-        selectedToken={selectedToken}
-        onTokenClick={onTokenClick}
-        fromToken={fromValues.coin}
-        toToken={toValues.coin}
-        onClose={() => setTokenSelectorType(null)}
-      />
-      <TxView
-        show={showTxModal}
-        selectedToken={selectedToken}
-        onTokenClick={onTokenClick}
-        onClose={() => setShowTxModal(false)}
-      />
-      <WalletRequestView
-        show={wallet.isWaitingForWalletAuth}
-        error={wallet.walletError}
-        onClose={() => onWalletRequestViewModalClose()}
-      />
-      <TitleContainer gameEditionView={gameEditionView}>
-        <Title gameEditionView={gameEditionView}>Swap</Title>
-      </TitleContainer>
-      <SwapForm
-        fromValues={fromValues}
-        setFromValues={setFromValues}
-        toValues={toValues}
-        setToValues={setToValues}
-        fromNote={fromNote}
-        toNote={toNote}
-        setTokenSelectorType={setTokenSelectorType}
-        setInputSide={setInputSide}
-        swapValues={swapValues}
-        setShowTxModal={setShowTxModal}
-      />
-      {!isNaN(pact.ratio) &&
-      fromValues.amount &&
-      fromValues.coin &&
-      toValues.amount &&
-      toValues.coin ? (
-        <SwapResults
-          priceImpact={priceImpact}
-          fromValues={fromValues}
-          toValues={toValues}
-        />
-      ) : (
-        <></>
-      )}
-
-      <SwapButtonsForm
-        setLoading={setLoading}
-        fetchingPair={fetchingPair}
-        fromValues={fromValues}
-        setFromValues={setFromValues}
-        toValues={toValues}
-        setToValues={setToValues}
-        fromNote={fromNote}
-        ratio={pact.ratio}
-        loading={loading}
-        noLiquidity={noLiquidity}
-        setShowTxModal={setShowTxModal}
-      />
-    </Container>
-  );
-			{/* <button
-				onClick={() =>
-					openModal({
-						isVisible: true,
-						title: 'swap modal',
-						description: 'use it to swap',
-						content: <ConnectWalletModal />,
-					})
-				}
-			>
-				Ciao
-			</button> */}
+			<SwapButtonsForm
+				setLoading={setLoading}
+				fetchingPair={fetchingPair}
+				fromValues={fromValues}
+				setFromValues={setFromValues}
+				toValues={toValues}
+				setToValues={setToValues}
+				fromNote={fromNote}
+				ratio={pact.ratio}
+				loading={loading}
+				noLiquidity={noLiquidity}
+				setShowTxModal={setShowTxModal}
+			/>
+		</Container>
+	);
 };
-
 export default SwapContainer;
+/* <button
+                onClick={() =>
+                    openModal({
+                        isVisible: true,
+                        title: 'swap modal',
+                        description: 'use it to swap',
+                        content: <ConnectWalletModal />,
+                    })
+                }
+            >
+                Ciao
+            </button> */

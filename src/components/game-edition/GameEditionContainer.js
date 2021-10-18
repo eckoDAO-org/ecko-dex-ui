@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router';
 import { ROUTE_GAME_EDITION_MENU, ROUTE_SWAP } from '../../router/routes';
@@ -7,24 +7,31 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 
 const MainContainer = styled.div`
 	/* position: relative; */
-  display: flex;
-  width: 100%;
-  justify-content: center;
-`
+	display: flex;
+	width: 100%;
+	justify-content: center;
+`;
 
 const ContentContainer = styled.div`
-    width: 100%;
-    height:100%;
-    border-radius: 24px;
-    background: rgb(254,251,102);
-    background: linear-gradient(180deg, rgba(254,251,102,1) 35%, rgba(255,54,208,1) 100%);
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-    font-weight: 500;
-    font-size: larger;
-`
+	width: 100%;
+	height: 100%;
+	border-radius: 24px;
+	background: rgb(254, 251, 102);
+	background: linear-gradient(
+		180deg,
+		rgba(254, 251, 102, 1) 35%,
+		rgba(255, 54, 208, 1) 100%
+	);
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	text-align: center;
+	font-weight: 500;
+	font-size: larger;
+`;
+const GameEditionContainer = ({ children }) => {
+	const { modalState } = useContext(GameEditionContext);
+	const history = useHistory();
 
 	// d3.select("#start_button").style("cursor","pointer").on("click",()=>setmessage("I'm swap Button"))
 	// d3.select("#select_button").style("cursor","pointer").on("click",()=>setmessage("I'm Menu Button"))
