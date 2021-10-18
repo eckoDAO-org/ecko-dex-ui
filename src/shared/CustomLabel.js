@@ -1,24 +1,32 @@
-import React from "react";
-import styled from "styled-components";
-import theme from "../styles/theme";
+import React, { useContext } from 'react';
+import styled from 'styled-components';
+import { GameEditionContext } from '../contexts/GameEditionContext';
+import theme from '../styles/theme';
 
 const Label = styled.span`
-  color: #ffffff;
-  text-transform: capitalize;
+	color: #ffffff;
+	text-transform: capitalize;
 `;
 
 const CustomLabel = ({ children, bold, fontSize, labelStyle }) => {
-  return (
-    <Label
-      style={{
-        fontFamily: bold ? theme.fontFamily.bold : theme.fontFamily.regular,
-        fontSize: fontSize ? fontSize : 13,
-        ...labelStyle,
-      }}
-    >
-      {children}
-    </Label>
-  );
+	const { gameEditionView } = useContext(GameEditionContext);
+
+	return (
+		<Label
+			style={{
+				fontFamily: gameEditionView
+					? theme.fontFamily.pressStartRegular
+					: bold
+					? theme.fontFamily.bold
+					: theme.fontFamily.regular,
+				fontSize: gameEditionView ? '10px' : fontSize ? fontSize : 13,
+				color: gameEditionView ? theme.colors.black : '#fff',
+				...labelStyle,
+			}}
+		>
+			{children}
+		</Label>
+	);
 };
 
 export default CustomLabel;
