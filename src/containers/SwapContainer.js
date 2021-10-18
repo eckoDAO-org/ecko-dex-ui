@@ -9,6 +9,7 @@ import SwapForm from "../components/swap/SwapForm";
 import SwapResults from "../components/swap/SwapResults";
 import tokenData from "../constants/cryptoCurrencies";
 import { AccountContext } from "../contexts/AccountContext";
+import { GameEditionContext } from "../contexts/GameEditionContext";
 import { PactContext } from "../contexts/PactContext";
 import { SwapContext } from "../contexts/SwapContext";
 import { WalletContext } from "../contexts/WalletContext";
@@ -17,29 +18,35 @@ import { getCorrectBalance, reduceBalance } from "../utils/reduceBalance";
 
 const Container = styled.div`
   width: 100%;
-  margin-top: 24px;
+  margin-top: ${({ gameEditionView }) =>
+      gameEditionView ? `0px` : ` 24px`};
   margin-left: auto;
   margin-right: auto;
 `;
 
 const TitleContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 24px;
+  justify-content:${({ gameEditionView }) =>
+      gameEditionView ? `center` : ` space-between`};
+  margin-bottom: ${({ gameEditionView }) =>
+      gameEditionView ? `0px` : ` 24px`};
   width: 100%;
 `;
 
 const Title = styled.span`
-  font: normal normal bold 32px/57px Montserrat;
+  font: ${({ gameEditionView }) =>
+      gameEditionView ? `normal normal normal 16px/19px  ${theme.fontFamily.pressStartRegular}` : ` normal normal bold 32px/57px ${theme.fontFamily.bold}`}; 
   letter-spacing: 0px;
-  color: #ffffff;
-  text-transform: capitalize;
+  color: ${({ theme: { colors } }) => colors.black};
+  text-transform: ${({ gameEditionView }) =>
+      gameEditionView ? `uppercase` : ` capitalize`};;
 `;
 
 const SwapContainer = () => {
   const pact = useContext(PactContext);
   const swap = useContext(SwapContext);
   const account = useContext(AccountContext);
+  const {gameEditionView} = useContext(GameEditionContext)
 
   const wallet = useContext(WalletContext);
 
@@ -345,7 +352,7 @@ const SwapContainer = () => {
   };
 
   return (
-    <Container>
+ <Container gameEditionView={gameEditionView}>
       <TokenSelectorModal
         show={tokenSelectorType !== null}
         selectedToken={selectedToken}
@@ -365,8 +372,8 @@ const SwapContainer = () => {
         error={wallet.walletError}
         onClose={() => onWalletRequestViewModalClose()}
       />
-      <TitleContainer>
-        <Title style={{ fontFamily: theme.fontFamily.bold }}>Swap</Title>
+      <TitleContainer gameEditionView={gameEditionView}>
+        <Title gameEditionView={gameEditionView}>Swap</Title>
       </TitleContainer>
       <SwapForm
         fromValues={fromValues}
@@ -407,8 +414,7 @@ const SwapContainer = () => {
         noLiquidity={noLiquidity}
         setShowTxModal={setShowTxModal}
       />
-    </Container>
-  );
+    </Container>)
 };
 
 export default SwapContainer;

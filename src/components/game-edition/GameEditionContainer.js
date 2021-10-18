@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import * as d3 from 'd3';
 import { useHistory } from 'react-router';
 import {ROUTE_GAME_EDITION_MENU, ROUTE_SWAP } from '../../router/routes';
 import { GameEditionWrapper } from './GameEditionWrapper';
@@ -10,11 +9,9 @@ const MainContainer = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
-  margin-top: 5%;
 `
 
 const ContentContainer = styled.div`
-
     width: 100%;
     height:100%;
     border-radius: 24px;

@@ -9,6 +9,7 @@ import ConnectWalletModal from "../modals/kdaModals/ConnectWalletModal";
 import { ModalContext } from "../../contexts/ModalContext";
 import { WalletContext } from "../../contexts/WalletContext";
 import { SwapContext } from "../../contexts/SwapContext";
+import { GameEditionContext } from "../../contexts/GameEditionContext";
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -34,6 +35,7 @@ const SwapButtonsForm = ({
   const { account } = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const swap = useContext(SwapContext);
+  const { gameEditionView } = useContext(GameEditionContext);
 
   const getButtonLabel = () => {
     if (!account.account) return "Connect wallet";
@@ -49,7 +51,10 @@ const SwapButtonsForm = ({
   };
   return (
     <ButtonContainer>
-      <Button.Group>
+      <Button.Group
+        fluid={gameEditionView}
+        style={{ padding: gameEditionView ? "0 10px" : 0 }}
+      >
         <CustomButton
           /* background="none" */
           disabled={

@@ -9,6 +9,7 @@ import GameEditionContainer from "../game-edition/GameEditionContainer";
 import { useHistory } from "react-router";
 import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from "../../router/routes";
 import { GameEditionContext } from "../../contexts/GameEditionContext";
+import { FadeIn } from "../shared/animations";
 
 const MainContainer = styled.div`
   display: flex;
@@ -41,6 +42,12 @@ const StripesContainer = styled.div`
       `${mediaQueries.mobilePixel + 1}px`}) {
     display: none;
   }
+`;
+
+const FadeInContainer = styled(FadeIn)`
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 `;
 
 const Layout = ({ children }) => {

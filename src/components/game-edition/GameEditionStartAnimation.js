@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
-import HeaderItem from '../../shared/HeaderItem';
 import theme from '../../styles/theme';
-import headerLinks from '../headerLinks';
-import menuItems from '../menuItems';
-import { FadeIn } from '../shared/animations';
 import { ROUTE_GAME_EDITION_MENU } from '../../router/routes';
 
 const Container = styled.div`
