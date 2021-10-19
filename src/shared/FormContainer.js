@@ -1,6 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components/macro";
+import React, { useContext } from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components/macro';
+import { GameEditionContext } from '../contexts/GameEditionContext';
 
 const Container = styled.div`
   position: relative;
@@ -9,13 +10,15 @@ const Container = styled.div`
   padding: 20px 20px;
   width: 100%;
   border-radius: 10px;
-  border: 2px solid #ffffff;
-  box-shadow: 0 0 5px #ffffff;
+  border: ${({ gameEditionView, theme: { colors } }) =>
+    gameEditionView ? `2px dashed ${colors.black}` : ' 2px solid #ffffff'};
+  box-shadow: ${({ gameEditionView, theme: { colors } }) =>
+    gameEditionView ? `none` : ' 0 0 5px #ffffff'};
   opacity: 1;
   background: transparent;
 
   & > *:not(:last-child) {
-    margin-bottom:32px;
+    margin-bottom: 32px;
   }
 
   @media (max-width: ${({ theme: { mediaQueries } }) =>
@@ -31,7 +34,7 @@ const Content = styled.div`
   width: 100%;
 
   & > *:not(:last-child) {
-    margin-right:32px;
+    margin-right: 32px;
   }
 
   @media (max-width: ${({ theme: { mediaQueries } }) =>
@@ -56,8 +59,10 @@ const Title = styled.span`
 `;
 
 const FormContainer = ({ containerStyle, title, titleStyle, children }) => {
+  const { gameEditionView } = useContext(GameEditionContext);
+
   return (
-    <Container style={containerStyle}>
+    <Container gameEditionView={gameEditionView} style={containerStyle}>
       {title && (
         <HeaderContainer>
           <Title style={titleStyle}>{title}</Title>
@@ -74,7 +79,7 @@ FormContainer.propTypes = {
 };
 
 FormContainer.defaultProps = {
-  title: "",
+  title: '',
   onClose: null,
 };
 
