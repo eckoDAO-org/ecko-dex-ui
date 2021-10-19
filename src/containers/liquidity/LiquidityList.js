@@ -90,7 +90,7 @@ const TitleContainer = styled.div`
     gameEditionView ? `center` : ` space-between`};
   margin-bottom: ${({ gameEditionView }) =>
     gameEditionView ? `0px` : ` 24px`};
-  width: 100%;
+  width: 93%;
 `;
 const Title = styled.span`
   font: ${({ gameEditionView }) =>
