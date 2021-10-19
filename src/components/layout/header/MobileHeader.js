@@ -64,17 +64,8 @@ const MobileHeader = ({ className }) => {
             <PopupContentList items={menuItems} />
           </CustomPopup>
         </HeaderItem>
-        <KaddexLogo
-          style={{
-            cursor: "pointer",
-            width:
-              window.innerWidth <= theme.mediaQueries.mobileSmallPixel
-                ? "100px"
-                : "100%",
-          }}
-          onClick={() => history.push(ROUTE_INDEX)}
-        />
-        <GameEditionToggle/>
+
+        <GameEditionToggle />
       </LeftContainer>
       <RightContainer>
         <RightHeaderItems />
