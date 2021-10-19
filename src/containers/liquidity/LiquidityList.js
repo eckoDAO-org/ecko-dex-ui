@@ -90,7 +90,7 @@ const TitleContainer = styled.div`
     gameEditionView ? `center` : ` space-between`};
   margin-bottom: ${({ gameEditionView }) =>
     gameEditionView ? `0px` : ` 24px`};
-  width: 100%;
+  width: 93%;
 `;
 const Title = styled.span`
   font: ${({ gameEditionView }) =>
@@ -116,11 +116,6 @@ const LiquidityList = (props) => {
 
   return (
     <Container gameEditionView={gameEditionView}>
-      {gameEditionView && (
-        <TitleContainer gameEditionView={gameEditionView}>
-          <Title gameEditionView={gameEditionView}>Pool</Title>
-        </TitleContainer>
-      )}
       <ModalContainer
         containerStyle={{
           maxHeight: gameEditionView ? "60vh" : "80vh",
@@ -131,6 +126,11 @@ const LiquidityList = (props) => {
           background: "none",
         }}
       >
+        {gameEditionView && (
+          <TitleContainer gameEditionView={gameEditionView}>
+            <Title gameEditionView={gameEditionView}>Pool</Title>
+          </TitleContainer>
+        )}
         <TextContainer
           style={{
             marginBottom: gameEditionView ? 15 : 30,
