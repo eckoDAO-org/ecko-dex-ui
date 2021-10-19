@@ -19,6 +19,7 @@ const Container = styled.div`
   margin-top: 24px;
   margin-left: auto;
   margin-right: auto;
+  height: ${({ gameEditionView }) => gameEditionView && "100%"};
 `;
 
 const TextContainer = styled.div`
@@ -60,7 +61,6 @@ const FormContainer = styled.div`
   padding: ${({ gameEditionView }) => (gameEditionView ? "10px" : "20px")};
   margin-bottom: 15px;
   width: 100%;
-  height: 100%;
   border-radius: 10px;
   border: ${({ gameEditionView, theme: { colors } }) =>
     gameEditionView ? `2px dashed ${colors.black}` : " 2px solid #ffffff"};
@@ -115,7 +115,7 @@ const LiquidityList = (props) => {
   }, [account.account]);
 
   return (
-    <Container>
+    <Container gameEditionView={gameEditionView}>
       <ModalContainer
         containerStyle={{
           maxHeight: gameEditionView ? "60vh" : "80vh",
