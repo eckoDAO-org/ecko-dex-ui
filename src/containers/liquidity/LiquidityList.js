@@ -116,6 +116,11 @@ const LiquidityList = (props) => {
 
   return (
     <Container gameEditionView={gameEditionView}>
+      {gameEditionView && (
+        <TitleContainer gameEditionView={gameEditionView}>
+          <Title gameEditionView={gameEditionView}>Pool</Title>
+        </TitleContainer>
+      )}
       <ModalContainer
         containerStyle={{
           maxHeight: gameEditionView ? "60vh" : "80vh",
@@ -126,11 +131,6 @@ const LiquidityList = (props) => {
           background: "none",
         }}
       >
-        {gameEditionView && (
-          <TitleContainer gameEditionView={gameEditionView}>
-            <Title gameEditionView={gameEditionView}>Pool</Title>
-          </TitleContainer>
-        )}
         <TextContainer
           style={{
             marginBottom: gameEditionView ? 15 : 30,
