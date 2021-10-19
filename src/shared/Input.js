@@ -35,6 +35,10 @@ const Container = styled.div`
     .ui.button:hover .icon {
         opacity: 1;
     }
+    .ui.labeled.input > .label:not(.corner) {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
 `;
 
 const TopLabelsContainer = styled.div`
