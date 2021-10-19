@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 export default createGlobalStyle`
     *, *:before, *:after {
@@ -63,14 +63,14 @@ export default createGlobalStyle`
 
     .desktop-none {
       @media (min-width: ${({ theme: { mediaQueries } }) =>
-        `${mediaQueries.desktopPixel +1}px`}) {
+          `${mediaQueries.desktopPixel + 1}px`}) {
         display: none !important;
       }
     }
 
     .mobile-none {
       @media (max-width: ${({ theme: { mediaQueries } }) =>
-        `${mediaQueries.desktopPixel }px`}) {
+          `${mediaQueries.desktopPixel}px`}) {
         display: none !important;
       }
     }
