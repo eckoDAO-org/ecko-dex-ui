@@ -37,6 +37,7 @@ const SubContainer = styled.div`
   align-items: center;
   flex-flow: column;
   width: 100%;
+  padding: ${({ gameEditionView }) => gameEditionView && '10px'};
 `;
 
 const TitleContainer = styled.div`
@@ -45,9 +46,9 @@ const TitleContainer = styled.div`
   margin-bottom: ${({ gameEditionView }) =>
     gameEditionView ? '10px' : `24px`};
   width: 100%;
-  /* position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
+  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
   top: ${({ gameEditionView }) => gameEditionView && '10px'};
-  padding: ${({ gameEditionView }) => gameEditionView && '10px'}; */
+  padding: ${({ gameEditionView }) => gameEditionView && '10px'};
 `;
 
 const Title = styled.span`
@@ -66,8 +67,6 @@ const ButtonContainer = styled.div`
   justify-content: center;
   margin-top: 24px;
   width: 100%;
-  /* position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  bottom: ${({ gameEditionView }) => gameEditionView && '10px'}; */
 `;
 
 const MyButtonDivider = styled.div`
@@ -82,6 +81,9 @@ const ResultContainer = styled.div`
   margin: 15px 0px;
   flex-flow: ${({ gameEditionView }) => (gameEditionView ? 'column' : 'row')};
   width: 100%;
+  top: ${({ gameEditionView }) => gameEditionView && '200px'};
+  padding: ${({ gameEditionView }) => gameEditionView && '10px'};
+  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
@@ -202,8 +204,14 @@ const RemoveLiqContainer = (props) => {
         {gameEditionView && <CloseGE onClick={() => props.closeLiquidity()} />}
       </TitleContainer>
 
-      <FormContainer>
-        <SubContainer>
+      <FormContainer
+        containerStyle={
+          gameEditionView
+            ? { border: 'none', padding: 0, position: 'absolute', top: '60px' }
+            : {}
+        }
+      >
+        <SubContainer gameEditionView={gameEditionView}>
           <Input
             value={amount}
             error={isNaN(amount)}
@@ -220,14 +228,32 @@ const RemoveLiqContainer = (props) => {
             }}
             numberOnly
           />
-          <ButtonContainer>
+          <ButtonContainer
+            gameEditionView={gameEditionView}
+            style={gameEditionView ? { marginTop: '3px' } : {}}
+          >
             <Button.Group fluid>
               <CustomButton
                 buttonStyle={{
                   border: '1px solid #424242',
                   width: '20%',
                 }}
-                background='transparent'
+                background={
+                  amount === 25
+                    ? gameEditionView
+                      ? `${theme.colors.black}`
+                      : `${theme.colors.white}`
+                    : 'transparent'
+                }
+                color={
+                  amount === 25
+                    ? gameEditionView
+                      ? `${theme.colors.yellow}`
+                      : `${theme.colors.black}`
+                    : gameEditionView
+                    ? `${theme.colors.black}`
+                    : `${theme.colors.white}`
+                }
                 onClick={() => setAmount(25)}
               >
                 25%
@@ -238,7 +264,22 @@ const RemoveLiqContainer = (props) => {
                   border: '1px solid #424242',
                   width: '20%',
                 }}
-                background='transparent'
+                background={
+                  amount === 50
+                    ? gameEditionView
+                      ? `${theme.colors.black}`
+                      : `${theme.colors.white}`
+                    : 'transparent'
+                }
+                color={
+                  amount === 50
+                    ? gameEditionView
+                      ? `${theme.colors.yellow}`
+                      : `${theme.colors.black}`
+                    : gameEditionView
+                    ? `${theme.colors.black}`
+                    : `${theme.colors.white}`
+                }
                 onClick={() => setAmount(50)}
               >
                 50%
@@ -249,7 +290,22 @@ const RemoveLiqContainer = (props) => {
                   border: '1px solid #424242',
                   width: '20%',
                 }}
-                background='transparent'
+                background={
+                  amount === 75
+                    ? gameEditionView
+                      ? `${theme.colors.black}`
+                      : `${theme.colors.white}`
+                    : 'transparent'
+                }
+                color={
+                  amount === 75
+                    ? gameEditionView
+                      ? `${theme.colors.yellow}`
+                      : `${theme.colors.black}`
+                    : gameEditionView
+                    ? `${theme.colors.black}`
+                    : `${theme.colors.white}`
+                }
                 onClick={() => setAmount(75)}
               >
                 75%
@@ -260,7 +316,22 @@ const RemoveLiqContainer = (props) => {
                   border: '1px solid #424242',
                   width: '20%',
                 }}
-                background='transparent'
+                background={
+                  amount === 100
+                    ? gameEditionView
+                      ? `${theme.colors.black}`
+                      : `${theme.colors.white}`
+                    : 'transparent'
+                }
+                color={
+                  amount === 100
+                    ? gameEditionView
+                      ? `${theme.colors.yellow}`
+                      : `${theme.colors.black}`
+                    : gameEditionView
+                    ? `${theme.colors.black}`
+                    : `${theme.colors.white}`
+                }
                 onClick={() => setAmount(100)}
               >
                 100%
@@ -295,7 +366,7 @@ const RemoveLiqContainer = (props) => {
 
       <ButtonContainer
         gameEditionView={gameEditionView}
-        style={{ marginTop: !gameEditionView && 0 }}
+        style={gameEditionView ? { position: 'absolute', bottom: '10px' } : {}}
       >
         <Button.Group
           fluid={gameEditionView}

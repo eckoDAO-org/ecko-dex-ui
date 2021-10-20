@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
 import { GameEditionContext } from '../contexts/GameEditionContext';
+import theme from '../styles/theme';
 
 const Container = styled.div`
   position: relative;
@@ -11,9 +12,11 @@ const Container = styled.div`
   width: 100%;
   border-radius: 10px;
   border: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? `2px dashed ${colors.black}` : ' 2px solid #ffffff'};
+    gameEditionView
+      ? `2px dashed ${colors.black}`
+      : `2px solid ${colors.white}`};
   box-shadow: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? `none` : ' 0 0 5px #ffffff'};
+    gameEditionView ? `none` : `0 0 5px ${colors.white}`};
   opacity: 1;
   background: transparent;
 
@@ -55,7 +58,7 @@ const Title = styled.span`
   font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
   font-size: 24px;
   text-transform: capitalize;
-  color: #ffffff;
+  color: ${theme.colors.white};
 `;
 
 const FormContainer = ({ containerStyle, title, titleStyle, children }) => {
