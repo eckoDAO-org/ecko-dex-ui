@@ -31,7 +31,7 @@ const IconsContainer = styled.div`
 
 const StatsTab = () => {
   const pact = useContext(PactContext);
-  const gameEditionView = useContext(GameEditionContext);
+  const { gameEditionView } = useContext(GameEditionContext);
 
   useEffect(async () => {
     await pact.getPairList();
@@ -51,11 +51,17 @@ const StatsTab = () => {
             pair && pair.reserves ? (
               <CustomGrid>
                 <CustomLabel bold>Name</CustomLabel>
-                <IconsContainer gameEditionView={gameEditionView}>
-                  {tokenData[pair.token0].icon}
-                  {tokenData[pair.token1].icon}
-                  <CustomLabel>{`${pair.token0}/${pair.token1}`}</CustomLabel>
-                </IconsContainer>
+                {gameEditionView ? (
+                  <CustomLabel
+                    start
+                  >{`${pair.token0}/${pair.token1}`}</CustomLabel>
+                ) : (
+                  <IconsContainer>
+                    {tokenData[pair.token0].icon}
+                    {tokenData[pair.token1].icon}
+                    <CustomLabel>{`${pair.token0}/${pair.token1}`}</CustomLabel>
+                  </IconsContainer>
+                )}
                 <CustomLabel bold>token0</CustomLabel>
                 <CustomLabel start>
                   {reduceBalance(pair.reserves[0])}

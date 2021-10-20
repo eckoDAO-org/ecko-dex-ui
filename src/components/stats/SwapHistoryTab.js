@@ -18,7 +18,7 @@ const IconColumn = styled(Grid.Column)`
 
 const SwapHistoryTab = () => {
   const pact = useContext(PactContext);
-  const gameEditionView = useContext(GameEditionContext);
+  const { gameEditionView } = useContext(GameEditionContext);
 
   const getIconCoin = (cryptoCode) => {
     const crypto = Object.values(tokenData).find(
