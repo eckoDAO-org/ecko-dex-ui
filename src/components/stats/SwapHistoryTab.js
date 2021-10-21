@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Grid } from 'semantic-ui-react';
 import styled from 'styled-components/macro';
+import { KDALogo, ZelcoreLogo } from '../../assets';
 import { NETWORK_TYPE } from '../../constants/contextConstants';
 import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
@@ -14,6 +15,15 @@ const IconColumn = styled(Grid.Column)`
   align-content: center;
   justify-content: flex-start;
   align-items: center;
+`;
+
+const ColumnContainer = styled(Grid.Column)`
+  font-family: ${({ theme: { fontFamily }, gameEditionView, regular }) => {
+    if (gameEditionView) return fontFamily.pressStartRegular;
+    else if (regular) return fontFamily.regular;
+    else return fontFamily.bold;
+  }};
+  font-size: ${({ fontSize }) => (fontSize ? fontSize : '18px')};
 `;
 
 const SwapHistoryTab = () => {
@@ -37,52 +47,24 @@ const SwapHistoryTab = () => {
     >
       <Grid style={{ width: '100%', marginLeft: 0 }}>
         <Grid.Row columns='3'>
-          <Grid.Column
-            style={{
-              fontFamily: gameEditionView
-                ? theme.fontFamily.pressStartRegular
-                : theme.fontFamily.bold,
-              fontSize: 18,
-            }}
-          >
+          <ColumnContainer gameEditionView={gameEditionView}>
             Height
-          </Grid.Column>
-          <Grid.Column
-            style={{
-              fontFamily: gameEditionView
-                ? theme.fontFamily.pressStartRegular
-                : theme.fontFamily.bold,
-              fontSize: 18,
-            }}
-          >
+          </ColumnContainer>
+          <ColumnContainer gameEditionView={gameEditionView}>
             Pair
-          </Grid.Column>
-          <Grid.Column
-            style={{
-              fontFamily: gameEditionView
-                ? theme.fontFamily.pressStartRegular
-                : theme.fontFamily.bold,
-              fontSize: 18,
-            }}
-          >
+          </ColumnContainer>
+          <ColumnContainer gameEditionView={gameEditionView}>
             Amount
-          </Grid.Column>
+          </ColumnContainer>
         </Grid.Row>
       </Grid>
       <PartialScrollableScrollSection>
         <Grid style={{ width: '100%', minHeight: '40px', margin: '16px 0' }}>
           {pact.swapList === 'NO_SWAP_FOUND' ? (
             <Grid.Row>
-              <Grid.Column
-                style={{
-                  fontFamily: gameEditionView
-                    ? theme.fontFamily.pressStartRegular
-                    : theme.fontFamily.bold,
-                  fontSize: 18,
-                }}
-              >
+              <ColumnContainer gameEditionView={gameEditionView}>
                 No Swap found
-              </Grid.Column>
+              </ColumnContainer>
             </Grid.Row>
           ) : (
             Object.values(pact.swapList)
@@ -100,7 +82,13 @@ const SwapHistoryTab = () => {
                     );
                   }}
                 >
-                  <Grid.Column>{swap?.height}</Grid.Column>
+                  <ColumnContainer
+                    regular
+                    gameEditionView={gameEditionView}
+                    fontSize='12px'
+                  >
+                    {swap?.height}
+                  </ColumnContainer>
                   <IconColumn>
                     {getIconCoin(
                       swap?.params[3]?.refName?.namespace
@@ -113,7 +101,11 @@ const SwapHistoryTab = () => {
                         : swap?.params[5]?.refName?.name
                     )}
                   </IconColumn>
-                  <Grid.Column>{`${swap?.params[2]}`}</Grid.Column>
+                  <ColumnContainer
+                    regular
+                    gameEditionView={gameEditionView}
+                    fontSize='12px'
+                  >{`${swap?.params[2]}`}</ColumnContainer>
                 </Grid.Row>
               ))
           )}
