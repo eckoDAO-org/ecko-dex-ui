@@ -1,25 +1,25 @@
-import React, { useEffect, useContext } from "react";
-import styled from "styled-components/macro";
-import { Loader, Button, Header } from "semantic-ui-react";
+import React, { useEffect, useContext } from 'react';
+import styled from 'styled-components/macro';
+import { Loader, Button, Header } from 'semantic-ui-react';
 
-import CustomButton from "../../shared/CustomButton";
-import TokenPair from "./TokenPair";
+import CustomButton from '../../shared/CustomButton';
+import TokenPair from './TokenPair';
 
-import { LiquidityContext } from "../../contexts/LiquidityContext";
-import { AccountContext } from "../../contexts/AccountContext";
-import theme from "../../styles/theme";
-import ModalContainer from "../../shared/ModalContainer";
-import reduceToken from "../../utils/reduceToken";
-import ConnectWalletModal from "../../components/modals/kdaModals/ConnectWalletModal";
-import { ModalContext } from "../../contexts/ModalContext";
-import { GameEditionContext } from "../../contexts/GameEditionContext";
+import { LiquidityContext } from '../../contexts/LiquidityContext';
+import { AccountContext } from '../../contexts/AccountContext';
+import theme from '../../styles/theme';
+import ModalContainer from '../../shared/ModalContainer';
+import reduceToken from '../../utils/reduceToken';
+import ConnectWalletModal from '../../components/modals/kdaModals/ConnectWalletModal';
+import { ModalContext } from '../../contexts/ModalContext';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
 
 const Container = styled.div`
   display: flex;
   margin-top: 24px;
   margin-left: auto;
   margin-right: auto;
-  height: ${({ gameEditionView }) => gameEditionView && "100%"};
+  height: ${({ gameEditionView }) => gameEditionView && '100%'};
 `;
 
 const TextContainer = styled.div`
@@ -49,6 +49,8 @@ const ButtonContainer = styled.div`
   justify-content: center;
   margin-right: 2px;
   width: 100%;
+  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
+  bottom: ${({ gameEditionView }) => gameEditionView && '10px'};
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
@@ -58,14 +60,16 @@ const ButtonContainer = styled.div`
 const FormContainer = styled.div`
   display: table;
   flex-flow: column;
-  padding: ${({ gameEditionView }) => (gameEditionView ? "10px" : "20px")};
+  padding: ${({ gameEditionView }) => (gameEditionView ? '10px' : '20px')};
   margin-bottom: 15px;
   width: 100%;
   border-radius: 10px;
   border: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? `2px dashed ${colors.black}` : " 2px solid #ffffff"};
+    gameEditionView
+      ? `2px dashed ${colors.black} !important`
+      : ' 2px solid #ffffff'};
   box-shadow: ${({ gameEditionView }) =>
-    gameEditionView ? "none" : "0 0 5px #ffffff"};
+    gameEditionView ? 'none !important' : '0 0 5px #ffffff'};
   opacity: 1;
   background: transparent;
 
@@ -84,8 +88,8 @@ const TopContainer = styled.div``;
 
 const TitleContainer = styled.div`
   display: flex;
-  position: ${({ gameEditionView }) => gameEditionView && "absolute"};
-  top: ${({ gameEditionView }) => gameEditionView && "10px"};
+  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
+  top: ${({ gameEditionView }) => gameEditionView && '10px'};
   justify-content: ${({ gameEditionView }) =>
     gameEditionView ? `center` : ` space-between`};
   margin-bottom: ${({ gameEditionView }) =>
@@ -99,7 +103,7 @@ const Title = styled.span`
       : ` normal normal bold 32px/57px ${theme.fontFamily.bold}`};
   letter-spacing: 0px;
   color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : "#ffffff"};
+    gameEditionView ? colors.black : '#ffffff'};
   text-transform: ${({ gameEditionView }) =>
     gameEditionView ? `uppercase` : ` capitalize`}; ;
 `;
@@ -118,12 +122,12 @@ const LiquidityList = (props) => {
     <Container gameEditionView={gameEditionView}>
       <ModalContainer
         containerStyle={{
-          maxHeight: gameEditionView ? "60vh" : "80vh",
+          maxHeight: gameEditionView ? '60vh' : '80vh',
           maxWidth: 900,
-          overflow: "auto",
-          border: "none",
-          boxShadow: "none",
-          background: "none",
+          overflow: 'auto',
+          border: 'none',
+          boxShadow: 'none',
+          background: 'none',
         }}
       >
         {gameEditionView && (
@@ -134,9 +138,9 @@ const LiquidityList = (props) => {
         <TextContainer
           style={{
             marginBottom: gameEditionView ? 15 : 30,
-            background: "transparent",
-            textAlign: "left",
-            color: gameEditionView ? theme.colors.black : "#FFFFFF",
+            background: 'transparent',
+            textAlign: 'left',
+            color: gameEditionView ? theme.colors.black : '#FFFFFF',
           }}
         >
           <h1
@@ -170,8 +174,8 @@ const LiquidityList = (props) => {
               <Header
                 style={{
                   fontSize: gameEditionView ? 16 : 32,
-                  textAlign: "left ",
-                  color: gameEditionView ? theme.colors.black : "#FFFFFF",
+                  textAlign: 'left ',
+                  color: gameEditionView ? theme.colors.black : '#FFFFFF',
                   fontFamily: gameEditionView
                     ? theme.fontFamily.pressStartRegular
                     : theme.fontFamily.bold,
@@ -186,9 +190,9 @@ const LiquidityList = (props) => {
                   <CustomButton
                     disabled
                     buttonStyle={{
-                      marginRight: "15px",
-                      borderRadius: "20px",
-                      width: "48%",
+                      marginRight: '15px',
+                      borderRadius: '20px',
+                      width: '48%',
                     }}
                     onClick={() => props.selectCreatePair()}
                   >
@@ -196,9 +200,9 @@ const LiquidityList = (props) => {
                   </CustomButton>
                   <CustomButton
                     buttonStyle={{
-                      marginLeft: "-5px",
-                      borderRadius: "20px",
-                      width: "48%",
+                      marginLeft: '-5px',
+                      borderRadius: '20px',
+                      width: '48%',
                     }}
                     onClick={() => props.selectAddLiquidity()}
                   >
@@ -228,8 +232,17 @@ const LiquidityList = (props) => {
                   );
                 })
               ) : (
-                <FormContainer>
-                  <Loader active inline="centered" style={{ color: "#FFFFFF" }}>
+                <FormContainer gameEditionView={gameEditionView}>
+                  <Loader
+                    active
+                    inline='centered'
+                    style={{
+                      color: gameEditionView ? theme.colors.black : '#FFFFFF',
+                      fontFamily: gameEditionView
+                        ? theme.fontFamily.pressStartRegular
+                        : theme.fontFamily.regular,
+                    }}
+                  >
                     Loading..
                   </Loader>
                 </FormContainer>
@@ -239,26 +252,38 @@ const LiquidityList = (props) => {
             )}
           </BottomContainer>
         ) : (
-          <CustomButton
-            hover={true}
-            buttonStyle={{
-              padding: "10px 16px",
-              width: "214px",
-              height: "40px",
+          <ButtonContainer
+            gameEditionView={gameEditionView}
+            style={{
+              width: gameEditionView && '93%',
+              justifyContent: !gameEditionView && 'start',
             }}
-            fontSize={14}
-            onClick={() =>
-              modalContext.openModal({
-                title: account?.account ? "wallet connected" : "connect wallet",
-                description: account?.account
-                  ? `Account ID: ${reduceToken(account.account)}`
-                  : "Connect a wallet using one of the methods below",
-                content: <ConnectWalletModal />,
-              })
-            }
           >
-            Connect Wallet
-          </CustomButton>
+            <Button.Group fluid={gameEditionView}>
+              <CustomButton
+                hover={true}
+                buttonStyle={{
+                  padding: !gameEditionView && '10px 16px',
+                  width: !gameEditionView && '214px',
+                  height: !gameEditionView && '40px',
+                }}
+                fontSize={14}
+                onClick={() =>
+                  modalContext.openModal({
+                    title: account?.account
+                      ? 'wallet connected'
+                      : 'connect wallet',
+                    description: account?.account
+                      ? `Account ID: ${reduceToken(account.account)}`
+                      : 'Connect a wallet using one of the methods below',
+                    content: <ConnectWalletModal />,
+                  })
+                }
+              >
+                Connect Wallet
+              </CustomButton>
+            </Button.Group>
+          </ButtonContainer>
         )}
       </ModalContainer>
     </Container>
