@@ -35,6 +35,17 @@ const Container = styled.div`
     .ui.button:hover .icon {
         opacity: 1;
     }
+    .ui.labeled.input > .label:not(.corner) {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        background: ${({ gameEditionView }) =>
+            gameEditionView && 'transparent'};
+        border: ${({ gameEditionView }) => gameEditionView && 'none'};
+        font-family: ${({ gameEditionView }) =>
+            gameEditionView
+                ? `${theme.fontFamily.pressStartRegular}`
+                : `${theme.fontFamily.regular}`};
+    }
 `;
 
 const TopLabelsContainer = styled.div`
