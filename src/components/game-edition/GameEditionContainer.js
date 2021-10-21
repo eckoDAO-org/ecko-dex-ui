@@ -5,6 +5,7 @@ import { ROUTE_GAME_EDITION_MENU, ROUTE_SWAP } from '../../router/routes';
 import { GameEditionWrapper } from './GameEditionWrapper';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
+import { FadeIn } from '../shared/animations';
 
 const MainContainer = styled.div`
   /* position: relative; */
@@ -54,11 +55,13 @@ const GameEditionContainer = ({ children }) => {
         <ContentContainer>
           {children}
           {modalState.isVisible && (
-            <GameEditionModalsContainer
-              title={modalState.title}
-              description={modalState.description}
-              content={modalState.content}
-            />
+            <FadeIn>
+              <GameEditionModalsContainer
+                title={modalState.title}
+                description={modalState.description}
+                content={modalState.content}
+              />
+            </FadeIn>
           )}
         </ContentContainer>
       </GameEditionWrapper>
