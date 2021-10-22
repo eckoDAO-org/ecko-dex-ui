@@ -45,14 +45,13 @@ const GameEditionMenuContainer = () => {
     <Container>
       <TopListContainer>
         {menuItems.map((item, index) => (
-          <RowMenuContainer>
+          <RowMenuContainer key={index}>
             <MenuGEIcon
               style={{
                 display: arrowVisible === item.label ? 'block' : 'none',
               }}
             />
             <HeaderItem
-              key={index}
               className={item.className}
               route={item.route}
               headerItemStyle={{
@@ -75,7 +74,7 @@ const GameEditionMenuContainer = () => {
       </TopListContainer>
       <BottomListContainer>
         {headerLinks.map((item, index) => (
-          <RowMenuContainer>
+          <RowMenuContainer key={index}>
             <MenuGEIcon
               style={{
                 display: arrowVisible === item.label ? 'block' : 'none',
@@ -84,7 +83,6 @@ const GameEditionMenuContainer = () => {
             <HeaderItem
               className={item?.className}
               route={item?.route}
-              key={index}
               onClick={item?.onClick}
               link={item?.link}
               headerItemStyle={{

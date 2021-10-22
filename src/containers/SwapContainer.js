@@ -3,7 +3,6 @@ import styled from 'styled-components/macro';
 import { throttle, debounce } from 'throttle-debounce';
 import { FadeIn } from '../components/shared/animations';
 import TokenSelectorModal from '../components/swap/swap-modals/TokenSelectorModal';
-import TokenSelectorModalGE from '../components/swap/swap-modals/TokenSelectorModalGE';
 import TxView from '../components/swap/swap-modals/TxView';
 import WalletRequestView from '../components/swap/swap-modals/WalletRequestView';
 import SwapButtonsForm from '../components/swap/SwapButtonsForm';
@@ -12,11 +11,14 @@ import SwapResults from '../components/swap/SwapResults';
 import tokenData from '../constants/cryptoCurrencies';
 import { AccountContext } from '../contexts/AccountContext';
 import { GameEditionContext } from '../contexts/GameEditionContext';
+import { ModalContext } from '../contexts/ModalContext';
 import { PactContext } from '../contexts/PactContext';
 import { SwapContext } from '../contexts/SwapContext';
 import { WalletContext } from '../contexts/WalletContext';
 import theme from '../styles/theme';
 import { getCorrectBalance, reduceBalance } from '../utils/reduceBalance';
+import TokenSelectorModalContent from '../components/swap/swap-modals/TokenSelectorModalContent';
+
 const Container = styled(FadeIn)`
   width: 100%;
   margin-top: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 24px`)};
@@ -44,12 +46,23 @@ const Title = styled.span`
   text-transform: ${({ gameEditionView }) =>
     gameEditionView ? `uppercase` : ` capitalize`}; ;
 `;
+
+const GameEditionTokenSelectorContainer = styled.div`
+  position: absolute;
+  bottom: 75px;
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  height: 100%;
+`;
 const SwapContainer = () => {
   const pact = useContext(PactContext);
   const swap = useContext(SwapContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
-  const { gameEditionView } = useContext(GameEditionContext);
+  const modalContext = useContext(ModalContext);
+  const { gameEditionView, openModal, closeModal } =
+    useContext(GameEditionContext);
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
   const [fromValues, setFromValues] = useState({
@@ -336,24 +349,79 @@ const SwapContainer = () => {
     wallet.setIsWaitingForWalletAuth(false);
     wallet.setWalletError(null);
   };
+
+  useEffect(() => {
+    if (tokenSelectorType !== null) {
+      onClickTokenSelectorType();
+    }
+  }, [tokenSelectorType]);
+
+  const onClickTokenSelectorType = () => {
+    if (gameEditionView) {
+      openModal({
+        title: 'Select a Token',
+        closeModal: () => {
+          setTokenSelectorType(null);
+          closeModal();
+        },
+        content: (
+          <GameEditionTokenSelectorContainer>
+            <TokenSelectorModalContent
+              selectedToken={selectedToken}
+              onTokenClick={onTokenClick}
+              onClose={() => {
+                setTokenSelectorType(null);
+                closeModal();
+              }}
+              fromToken={fromValues.coin}
+              toToken={toValues.coin}
+            />
+          </GameEditionTokenSelectorContainer>
+        ),
+      });
+    } else {
+      modalContext.openModal({
+        title: 'select a token',
+        description: '',
+        containerStyle: {
+          //height: "100%",
+          maxHeight: '40vh !important',
+          maxWidth: '40vw !important',
+          width: '90%',
+        },
+        onBack: () => {
+          modalContext.onBackModal();
+          setTokenSelectorType(null);
+        },
+        onClose: () => {
+          setTokenSelectorType(null);
+          modalContext.closeModal();
+        },
+        content: (
+          <TokenSelectorModalContent
+            selectedToken={selectedToken}
+            onTokenClick={onTokenClick}
+            onClose={() => {
+              setTokenSelectorType(null);
+              modalContext.closeModal();
+            }}
+            fromToken={fromValues.coin}
+            toToken={toValues.coin}
+          />
+        ),
+      });
+    }
+  };
   return (
     <Container gameEditionView={gameEditionView}>
-      <TokenSelectorModal
-        show={tokenSelectorType !== null && !gameEditionView}
+      {/* <TokenSelectorModal
+        show={tokenSelectorType !== null}
         selectedToken={selectedToken}
         onTokenClick={onTokenClick}
         fromToken={fromValues.coin}
         toToken={toValues.coin}
         onClose={() => setTokenSelectorType(null)}
-      />
-      <TokenSelectorModalGE
-        show={tokenSelectorType !== null && gameEditionView}
-        selectedToken={selectedToken}
-        onTokenClick={onTokenClick}
-        fromToken={fromValues.coin}
-        toToken={toValues.coin}
-        onClose={() => setTokenSelectorType(null)}
-      />
+      /> */}
 
       <TxView
         show={showTxModal}
@@ -380,6 +448,7 @@ const SwapContainer = () => {
         setInputSide={setInputSide}
         swapValues={swapValues}
         setShowTxModal={setShowTxModal}
+        /* onClickTokenSelectorType={onClickTokenSelectorType} */
       />
       {!isNaN(pact.ratio) &&
       fromValues.amount &&

@@ -33,7 +33,7 @@ const ContentContainer = styled.div`
 `;
 
 const GameEditionContainer = ({ children }) => {
-  const { modalState } = useContext(GameEditionContext);
+  const { modalState, closeModal } = useContext(GameEditionContext);
   const history = useHistory();
 
   // d3.select("#start_button").style("cursor","pointer").on("click",()=>setmessage("I'm swap Button"))
@@ -48,18 +48,25 @@ const GameEditionContainer = ({ children }) => {
     <MainContainer>
       <GameEditionWrapper
         selectLabel='MENU'
-        selectOnClick={() => history.push(ROUTE_GAME_EDITION_MENU)}
+        selectOnClick={() => {
+          history.push(ROUTE_GAME_EDITION_MENU);
+          closeModal();
+        }}
         startLabel='SWAP'
-        startOnClick={() => history.push(ROUTE_SWAP)}
+        startOnClick={() => {
+          history.push(ROUTE_SWAP);
+          closeModal();
+        }}
       >
         <ContentContainer>
           {children}
-          {modalState.isVisible && (
+          {modalState.open && (
             <FadeIn>
               <GameEditionModalsContainer
                 title={modalState.title}
                 description={modalState.description}
                 content={modalState.content}
+                onClose={modalState.closeModal}
               />
             </FadeIn>
           )}

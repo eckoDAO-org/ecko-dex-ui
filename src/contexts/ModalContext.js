@@ -1,12 +1,13 @@
-import React, { useState, createContext } from "react";
+import React, { useState, createContext } from 'react';
 
 export const ModalContext = createContext();
 
 const initialState = {
-  id: "",
+  id: '',
   open: false,
-  title: "",
+  title: '',
   content: null,
+  containerStyle: null,
 };
 
 export const ModalProvider = (props) => {

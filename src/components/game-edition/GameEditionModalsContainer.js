@@ -56,13 +56,27 @@ const ContentModalContainer = styled.div`
   padding: 10px;
 `;
 
-const GameEditionModalsContainer = ({ title, description, content }) => {
+const GameEditionModalsContainer = ({
+  title,
+  description,
+  content,
+  onClose,
+}) => {
   const { closeModal } = useContext(GameEditionContext);
   return (
     <GEModalContainer>
       <TitleContainer>
-        {title}{' '}
-        <CloseGe style={{ cursor: 'pointer' }} onClick={() => closeModal()} />
+        {title}
+        <CloseGe
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            if (onClose) {
+              onClose();
+            } else {
+              closeModal();
+            }
+          }}
+        />
       </TitleContainer>
       <DescriptionContainer>{description}</DescriptionContainer>
       <ContentModalContainer>{content}</ContentModalContainer>
