@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { CloseGe } from '../../assets';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
 
 const GEModalContainer = styled.div`
   top: 0;
@@ -55,16 +56,13 @@ const ContentModalContainer = styled.div`
   padding: 10px;
 `;
 
-const GameEditionModalsContainer = ({
-  title,
-  description,
-  content,
-  closeModal,
-}) => {
+const GameEditionModalsContainer = ({ title, description, content }) => {
+  const { closeModal } = useContext(GameEditionContext);
   return (
     <GEModalContainer>
       <TitleContainer>
-        {title} <CloseGe onClick={() => closeModal()} />
+        {title}{' '}
+        <CloseGe style={{ cursor: 'pointer' }} onClick={() => closeModal()} />
       </TitleContainer>
       <DescriptionContainer>{description}</DescriptionContainer>
       <ContentModalContainer>{content}</ContentModalContainer>

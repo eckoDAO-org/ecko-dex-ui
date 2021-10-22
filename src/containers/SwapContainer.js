@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import { throttle, debounce } from 'throttle-debounce';
+import { FadeIn } from '../components/shared/animations';
 import TokenSelectorModal from '../components/swap/swap-modals/TokenSelectorModal';
 import TokenSelectorModalGE from '../components/swap/swap-modals/TokenSelectorModalGE';
 import TxView from '../components/swap/swap-modals/TxView';
@@ -16,7 +17,7 @@ import { SwapContext } from '../contexts/SwapContext';
 import { WalletContext } from '../contexts/WalletContext';
 import theme from '../styles/theme';
 import { getCorrectBalance, reduceBalance } from '../utils/reduceBalance';
-const Container = styled.div`
+const Container = styled(FadeIn)`
   width: 100%;
   margin-top: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 24px`)};
   margin-left: auto;
