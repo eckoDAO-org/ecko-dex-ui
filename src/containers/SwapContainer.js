@@ -42,7 +42,7 @@ const Title = styled.span`
   color: ${({ theme: { colors }, gameEditionView }) =>
     gameEditionView ? colors.black : '#ffffff'};
   text-transform: ${({ gameEditionView }) =>
-    gameEditionView ? `uppercase` : ` capitalize`}; ;
+    gameEditionView ? `uppercase` : ` capitalize`};
 `;
 const SwapContainer = () => {
   const pact = useContext(PactContext);

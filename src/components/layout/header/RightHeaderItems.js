@@ -30,16 +30,29 @@ const RightContainerHeader = styled.div`
       margin-right: 16px;
     }
   }
+
+  .fadeOut {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 1s, opacity 1s linear;
+  }
+  .fadeIn {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 1s linear;
+  }
 `;
 
-const Label = styled.span`
-  font-size: 13px;
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
-  text-transform: capitalize;
-  padding: 10px 16px;
-  color: white;
-  font-size: 16;
-`;
+const FadeContainer = styled.div``;
+
+// const Label = styled.span`
+//   font-size: 13px;
+//   font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+//   text-transform: capitalize;
+//   padding: 10px 16px;
+//   color: white;
+//   font-size: 16;
+// `;
 
 const RightHeaderItems = () => {
   const { account, logout } = useContext(AccountContext);
@@ -48,9 +61,6 @@ const RightHeaderItems = () => {
 
   return (
     <RightContainerHeader>
-      <HeaderItem className='mobile-none'>
-        <Label>mainnet BETA chain 2</Label>
-      </HeaderItem>
       {account?.account ? (
         <HeaderItem className='mobile-none'>
           <AccountInfo
@@ -74,8 +84,8 @@ const RightHeaderItems = () => {
       ) : (
         <></>
       )}
-      {!account.account && !gameEditionView && (
-        <>
+      {!account.account && (
+        <FadeContainer className={gameEditionView ? 'fadeOut' : 'fadeIn'}>
           <HeaderItem className='mobile-none'>
             <Button
               hover={true}
@@ -96,7 +106,7 @@ const RightHeaderItems = () => {
               Connect Wallet
             </Button>
           </HeaderItem>
-        </>
+        </FadeContainer>
       )}
       {account.account && (
         <HeaderItem>
