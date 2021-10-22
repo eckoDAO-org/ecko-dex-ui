@@ -3,6 +3,7 @@ import styled from 'styled-components/macro';
 import { throttle, debounce } from 'throttle-debounce';
 import { FadeIn } from '../components/shared/animations';
 import TokenSelectorModal from '../components/swap/swap-modals/TokenSelectorModal';
+import TokenSelectorModalGE from '../components/swap/swap-modals/TokenSelectorModalGE';
 import TxView from '../components/swap/swap-modals/TxView';
 import WalletRequestView from '../components/swap/swap-modals/WalletRequestView';
 import SwapButtonsForm from '../components/swap/SwapButtonsForm';
@@ -338,13 +339,22 @@ const SwapContainer = () => {
   return (
     <Container gameEditionView={gameEditionView}>
       <TokenSelectorModal
-        show={tokenSelectorType !== null}
+        show={tokenSelectorType !== null && !gameEditionView}
         selectedToken={selectedToken}
         onTokenClick={onTokenClick}
         fromToken={fromValues.coin}
         toToken={toValues.coin}
         onClose={() => setTokenSelectorType(null)}
       />
+      <TokenSelectorModalGE
+        show={tokenSelectorType !== null && gameEditionView}
+        selectedToken={selectedToken}
+        onTokenClick={onTokenClick}
+        fromToken={fromValues.coin}
+        toToken={toValues.coin}
+        onClose={() => setTokenSelectorType(null)}
+      />
+
       <TxView
         show={showTxModal}
         selectedToken={selectedToken}
