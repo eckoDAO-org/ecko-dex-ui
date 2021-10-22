@@ -37,7 +37,8 @@ const SwapButtonsForm = ({
   const { account } = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const swap = useContext(SwapContext);
-  const { gameEditionView, openModal } = useContext(GameEditionContext);
+  const { gameEditionView, openModal, closeModal } =
+    useContext(GameEditionContext);
 
   const getButtonLabel = () => {
     if (!account.account) return 'Connect wallet';

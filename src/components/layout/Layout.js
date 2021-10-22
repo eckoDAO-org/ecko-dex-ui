@@ -1,15 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
-import styled from "styled-components/macro";
-import Wrapper from "../../shared/Wrapper";
-import CustomParticles from "./CustomParticles";
-import DesktopHeader from "./header/DesktopHeader";
-import MobileHeader from "./header/MobileHeader";
-import { ReactComponent as Stripes } from "../../assets/images/shared/stripes.svg";
-import GameEditionContainer from "../game-edition/GameEditionContainer";
-import { useHistory } from "react-router";
-import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from "../../router/routes";
-import { GameEditionContext } from "../../contexts/GameEditionContext";
-import { FadeIn } from "../shared/animations";
+import React, { useContext, useEffect } from 'react';
+import styled from 'styled-components/macro';
+import Wrapper from '../../shared/Wrapper';
+import CustomParticles from './CustomParticles';
+import DesktopHeader from './header/DesktopHeader';
+import MobileHeader from './header/MobileHeader';
+import { ReactComponent as Stripes } from '../../assets/images/shared/stripes.svg';
+import GameEditionContainer from '../game-edition/GameEditionContainer';
+import { useHistory } from 'react-router';
+import { ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from '../../router/routes';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { FadeIn } from '../shared/animations';
 
 const MainContainer = styled.div`
   display: flex;
@@ -45,33 +45,35 @@ const StripesContainer = styled.div`
 `;
 
 const FadeInContainer = styled(FadeIn)`
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const Layout = ({ children }) => {
-const history = useHistory()
-const game = useContext(GameEditionContext)
+  const history = useHistory();
+  const game = useContext(GameEditionContext);
 
-  useEffect(()=>{
-    game.gameEditionView? history.push(ROUTE_GAME_START_ANIMATION) : history.push(ROUTE_SWAP)
-  },[game.gameEditionView])
-  
+  useEffect(() => {
+    game.gameEditionView
+      ? history.push(ROUTE_GAME_START_ANIMATION)
+      : history.push(ROUTE_SWAP);
+  }, [game.gameEditionView]);
+
   return (
     <MainContainer>
       <CustomParticles />
       <WrapperContainer>
-        <MobileHeader className="desktop-none"/>
-        <DesktopHeader className="mobile-none" gameEditionView={game.gameEditionView}/>
+        <MobileHeader className='desktop-none' />
+        <DesktopHeader
+          className='mobile-none'
+          gameEditionView={game.gameEditionView}
+        />
         {game.gameEditionView ? (
-        <GameEditionContainer>
-          {children}
-        </GameEditionContainer>
-        )
-        :
-         <MainContent>{children}</MainContent>}
-       
+          <GameEditionContainer>{children}</GameEditionContainer>
+        ) : (
+          <MainContent>{children}</MainContent>
+        )}
       </WrapperContainer>
       <StripesContainer>
         <Stripes />
