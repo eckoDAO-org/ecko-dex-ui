@@ -1,14 +1,17 @@
-import React, { useState, useContext } from "react";
-import styled from "styled-components/macro";
-import CustomButton from "../../../shared/CustomButton";
-import Input from "../../../shared/Input";
-import { Button } from "semantic-ui-react";
-import { AccountContext } from "../../../contexts/AccountContext";
-import { WalletContext } from "../../../contexts/WalletContext";
+import React, { useState, useContext } from 'react';
+import styled from 'styled-components/macro';
+import CustomButton from '../../../shared/CustomButton';
+import Input from '../../../shared/Input';
+import { Button } from 'semantic-ui-react';
+import { AccountContext } from '../../../contexts/AccountContext';
+import { WalletContext } from '../../../contexts/WalletContext';
+import { GameEditionContext } from '../../../contexts/GameEditionContext';
 
 const Text = styled.span`
   font-size: 13px;
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
+    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
+  text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
 `;
 
 const ActionContainer = styled.div`
@@ -22,7 +25,8 @@ const ActionContainer = styled.div`
 const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
-  const [accountId, setAccountId] = useState("");
+  const { gameEditionView } = useContext(GameEditionContext);
+  const [accountId, setAccountId] = useState('');
   useState(false);
 
   const is_hexadecimal = (str) => {
@@ -46,7 +50,7 @@ const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
   };
 
   const resetValues = () => {
-    setAccountId("");
+    setAccountId('');
   };
 
   const handleModalClose = () => {
@@ -63,19 +67,19 @@ const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
 
   return (
     <>
-      <Text>
+      <Text gameEditionView={gameEditionView}>
         Please make sure the KDA account provided is controlled by your
         Chainweaver wallet.
       </Text>
-      <Text>
+      <Text gameEditionView={gameEditionView}>
         When submitting a transaction, Chainweaver will show you a preview
         within the wallet before signing.
       </Text>
       <Input
-        topLeftLabel={"Account"}
-        placeholder="Insert your Account"
+        topLeftLabel={'Account'}
+        placeholder='Insert your Account'
         value={accountId}
-        error={accountId !== "" ? !checkKey(accountId) : false}
+        error={accountId !== '' ? !checkKey(accountId) : false}
         onChange={async (e, { value }) => {
           setAccountId(value);
         }}
@@ -83,9 +87,9 @@ const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
       <ActionContainer>
         <Button.Group fluid>
           <CustomButton
-            border="none"
-            boxShadow="none"
-            background="transparent"
+            border='none'
+            boxShadow='none'
+            background='transparent'
             onClick={() => {
               resetValues();
             }}

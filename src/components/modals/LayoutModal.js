@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "styled-components/macro";
-import { Transition } from "react-spring/renderprops";
-import Backdrop from "../../shared/Backdrop";
-import ModalContainer from "../../shared/ModalContainer";
+import React from 'react';
+import styled from 'styled-components/macro';
+import { Transition } from 'react-spring/renderprops';
+import Backdrop from '../../shared/Backdrop';
+import ModalContainer from '../../shared/ModalContainer';
 
 const Container = styled.div`
   position: absolute;
@@ -23,9 +23,9 @@ const Container = styled.div`
 const ContentContainer = styled.div`
   display: flex;
   flex-flow: column;
-  
+
   & > *:not(:last-child) {
-    margin-bottom:24px;
+    margin-bottom: 24px;
   }
 `;
 
@@ -39,6 +39,7 @@ const LayoutModal = ({
   children,
   content,
 }) => {
+  console.log('stuelee', containerStyle);
   return (
     <Transition
       items={open}
@@ -59,8 +60,8 @@ const LayoutModal = ({
               title={title}
               description={description}
               containerStyle={{
-                maxHeight: "80vh",
-                maxWidth: "90vw",
+                maxHeight: '80vh',
+                maxWidth: '90vw',
                 ...containerStyle,
               }}
               onClose={() => {
