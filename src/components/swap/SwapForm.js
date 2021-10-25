@@ -46,7 +46,6 @@ const SwapForm = ({
   setTokenSelectorType,
   setInputSide,
   swapValues,
-  onClickTokenSelectorType,
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
   return (

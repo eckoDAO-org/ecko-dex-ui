@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import Pact from "pact-lang-api";
-import pairTokens from "../constants/pairs.json";
-import { toast } from "react-toastify";
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import Pact from 'pact-lang-api';
+import pairTokens from '../constants/pairs.json';
+import { toast } from 'react-toastify';
 
 import {
   chainId,
@@ -10,17 +10,17 @@ import {
   GAS_PRICE,
   network,
   NETWORK_TYPE,
-} from "../constants/contextConstants";
-import { extractDecimal } from "../utils/reduceBalance";
-import tokenData from "../constants/cryptoCurrencies";
-import { AccountContext } from "./AccountContext";
-import { NotificationContext, STATUSES } from "./NotificationContext";
-import { eventsRecentList } from "../chainweb/standalone-functions/call-chain-data";
+} from '../constants/contextConstants';
+import { extractDecimal } from '../utils/reduceBalance';
+import tokenData from '../constants/cryptoCurrencies';
+import { AccountContext } from './AccountContext';
+import { NotificationContext, STATUSES } from './NotificationContext';
+import { eventsRecentList } from '../chainweb/standalone-functions/call-chain-data';
 
 export const PactContext = createContext();
 
-const savedSlippage = localStorage.getItem("slippage");
-const savedTtl = localStorage.getItem("ttl");
+const savedSlippage = localStorage.getItem('slippage');
+const savedTtl = localStorage.getItem('ttl');
 
 export const PactProvider = (props) => {
   const account = useContext(AccountContext);
@@ -30,19 +30,15 @@ export const PactProvider = (props) => {
     savedSlippage ? savedSlippage : 0.05
   );
   const [ttl, setTtl] = useState(savedTtl ? savedTtl : 600);
-  const [pair, setPair] = useState("");
-  const [pairReserve, setPairReserve] = useState("");
+  const [pair, setPair] = useState('');
+  const [pairReserve, setPairReserve] = useState('');
   const [precision, setPrecision] = useState(false);
   const [balances, setBalances] = useState(false);
   const [polling, setPolling] = useState(false);
-  const [totalSupply, setTotalSupply] = useState("");
+  const [totalSupply, setTotalSupply] = useState('');
   const [ratio, setRatio] = useState(NaN);
   const [pairList, setPairList] = useState(pairTokens);
   const [swapList, setSwapList] = useState({});
-  console.log(
-    "🚀 ~ file: PactContext.js ~ line 42 ~ PactProvider ~ swapList",
-    swapList
-  );
 
   //TO FIX, not working when multiple toasts are there
   const toastId = React.useRef(null);
@@ -50,7 +46,7 @@ export const PactProvider = (props) => {
 
   useEffect(() => {
     pairReserve
-      ? setRatio(pairReserve["token0"] / pairReserve["token1"])
+      ? setRatio(pairReserve['token0'] / pairReserve['token1'])
       : setRatio(NaN);
   }, [pairReserve]);
 
@@ -64,7 +60,7 @@ export const PactProvider = (props) => {
 
   const pollingNotif = (reqKey) => {
     return (toastId.current = notificationContext.showNotification({
-      title: "Transaction Pending",
+      title: 'Transaction Pending',
       message: reqKey,
       type: STATUSES.INFO,
       autoClose: 92000,
@@ -74,11 +70,11 @@ export const PactProvider = (props) => {
 
   const storeSlippage = async (slippage) => {
     await setSlippage(slippage);
-    await localStorage.setItem("slippage", slippage);
+    await localStorage.setItem('slippage', slippage);
   };
 
   const setReqKeysLocalStorage = (key) => {
-    const swapReqKeysLS = JSON.parse(localStorage.getItem("swapReqKeys"));
+    const swapReqKeysLS = JSON.parse(localStorage.getItem('swapReqKeys'));
     if (!swapReqKeysLS) {
       //first saving swapReqKeys in localstorage
       localStorage.setItem(`swapReqKeys`, JSON.stringify([key]));
@@ -94,18 +90,18 @@ export const PactProvider = (props) => {
     if (Object.values(events).length !== 0) {
       if (account.account) {
         const swap = Object.values(events)
-          ?.filter((swapTx) => swapTx?.name === "SWAP")
+          ?.filter((swapTx) => swapTx?.name === 'SWAP')
           .filter((s) => s?.params[1] === account.account.account);
         if (swap.length !== 0) {
           setSwapList(swap);
         } else {
-          setSwapList("NO_SWAP_FOUND");
+          setSwapList('NO_SWAP_FOUND');
         }
       } else {
-        setSwapList("NO_SWAP_FOUND");
+        setSwapList('NO_SWAP_FOUND');
       }
     } else {
-      setSwapList("NO_SWAP_FOUND");
+      setSwapList('NO_SWAP_FOUND');
     }
   };
 
@@ -151,10 +147,10 @@ export const PactProvider = (props) => {
 
   const fetchAllBalances = async () => {
     let count = 0;
-    let endBracket = "";
+    let endBracket = '';
     let tokenNames = Object.values(tokenData).reduce((accum, cumul) => {
       count++;
-      endBracket += ")";
+      endBracket += ')';
       let code = `
       (let
         ((${cumul.name}
@@ -162,17 +158,17 @@ export const PactProvider = (props) => {
       ))`;
       accum += code;
       return accum;
-    }, "");
+    }, '');
     let objFormat = `{${Object.keys(tokenData)
       .map((token) => `"${token}": ${token}`)
-      .join(",")}}`;
+      .join(',')}}`;
     tokenNames = tokenNames + objFormat + endBracket;
     try {
       let data = await Pact.fetch.local(
         {
           pactCode: tokenNames,
           meta: Pact.lang.mkMeta(
-            "",
+            '',
             chainId,
             GAS_PRICE,
             3000,
@@ -182,11 +178,11 @@ export const PactProvider = (props) => {
         },
         network
       );
-      if (data.result.status === "success") {
+      if (data.result.status === 'success') {
         Object.keys(tokenData).forEach((token) => {
           tokenData[token].balance =
             extractDecimal(data.result.data[token]) === -1
-              ? "0"
+              ? '0'
               : extractDecimal(data.result.data[token]);
         });
         setBalances(true);
@@ -201,10 +197,10 @@ export const PactProvider = (props) => {
 
   const fetchPrecision = async () => {
     let count = 0;
-    let endBracket = "";
+    let endBracket = '';
     let tokenNames = Object.values(tokenData).reduce((accum, cumul) => {
       count++;
-      endBracket += ")";
+      endBracket += ')';
       let code = `
       (let
         ((${cumul.name}
@@ -212,17 +208,17 @@ export const PactProvider = (props) => {
       ))`;
       accum += code;
       return accum;
-    }, "");
+    }, '');
     let objFormat = `{${Object.keys(tokenData)
       .map((token) => `"${token}": ${token}`)
-      .join(",")}}`;
+      .join(',')}}`;
     tokenNames = tokenNames + objFormat + endBracket;
     try {
       let data = await Pact.fetch.local(
         {
           pactCode: tokenNames,
           meta: Pact.lang.mkMeta(
-            "",
+            '',
             chainId,
             GAS_PRICE,
             3000,
@@ -232,7 +228,7 @@ export const PactProvider = (props) => {
         },
         network
       );
-      if (data.result.status === "success") {
+      if (data.result.status === 'success') {
         Object.keys(tokenData).forEach((token) => {
           tokenData[token].precision = extractDecimal(data.result.data[token]);
         });
@@ -248,9 +244,9 @@ export const PactProvider = (props) => {
   const getPairList = async () => {
     try {
       const tokenPairList = Object.keys(pairList).reduce((accum, pair) => {
-        accum += `[${pair.split(":").join(" ")}] `;
+        accum += `[${pair.split(':').join(' ')}] `;
         return accum;
-      }, "");
+      }, '');
       let data = await Pact.fetch.local(
         {
           pactCode: `
@@ -280,7 +276,7 @@ export const PactProvider = (props) => {
             (map (kswap-read.pair-info) [${tokenPairList}])
              `,
           meta: Pact.lang.mkMeta(
-            "",
+            '',
             chainId,
             GAS_PRICE,
             3000,
@@ -290,7 +286,7 @@ export const PactProvider = (props) => {
         },
         network
       );
-      if (data.result.status === "success") {
+      if (data.result.status === 'success') {
         let dataList = data.result.data.reduce((accum, data) => {
           accum[data[0]] = {
             supply: data[3],
@@ -325,7 +321,7 @@ export const PactProvider = (props) => {
       await wait(5000);
       pollRes = await Pact.fetch.poll({ requestKeys: [reqKey] }, network);
       if (Object.keys(pollRes).length === 0) {
-        console.log("no return poll");
+        console.log('no return poll');
         console.log(pollRes);
         time = time - 5;
       } else {
@@ -338,11 +334,11 @@ export const PactProvider = (props) => {
     console.log(pollRes);
     console.log(pollRes[reqKey]);
     console.log(pollRes[reqKey].result);
-    if (pollRes[reqKey].result.status === "success") {
+    if (pollRes[reqKey].result.status === 'success') {
       setReqKeysLocalStorage(reqKey);
       notificationContext.showNotification({
-        title: "Transaction Success!",
-        message: "Check it out in the block explorer",
+        title: 'Transaction Success!',
+        message: 'Check it out in the block explorer',
         type: STATUSES.SUCCESS,
         onClose: async () => {
           await toast.dismiss(toastId);
@@ -352,8 +348,8 @@ export const PactProvider = (props) => {
           await toast.dismiss(toastId);
           await window.open(
             `https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${reqKey}`,
-            "_blank",
-            "noopener,noreferrer"
+            '_blank',
+            'noopener,noreferrer'
           );
         },
         onOpen: async (value) => {
@@ -362,8 +358,8 @@ export const PactProvider = (props) => {
       });
     } else {
       notificationContext.showNotification({
-        title: "Transaction Failure!",
-        message: "Check it out in the block explorer",
+        title: 'Transaction Failure!',
+        message: 'Check it out in the block explorer',
         type: STATUSES.ERROR,
         onClose: async () => {
           await toast.dismiss(toastId);
@@ -373,8 +369,8 @@ export const PactProvider = (props) => {
           await toast.dismiss(toastId);
           await window.open(
             `https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${reqKey}`,
-            "_blank",
-            "noopener,noreferrer"
+            '_blank',
+            'noopener,noreferrer'
           );
         },
         onOpen: async (value) => {
@@ -392,7 +388,7 @@ export const PactProvider = (props) => {
           (kswap.tokens.get-tokens)
            `,
           meta: Pact.lang.mkMeta(
-            "",
+            '',
             chainId,
             GAS_PRICE,
             3000,
@@ -402,11 +398,11 @@ export const PactProvider = (props) => {
         },
         network
       );
-      if (data.result.status === "success") {
+      if (data.result.status === 'success') {
         return data.result.data;
       } else {
         await setPairReserve(null);
-        console.log("Failed");
+        console.log('Failed');
       }
     } catch (e) {
       console.log(e);
@@ -420,7 +416,7 @@ export const PactProvider = (props) => {
           pactCode: `(kswap.tokens.total-supply (kswap.exchange.get-pair-key ${token0} ${token1}))`,
           keyPairs: Pact.crypto.genKeyPair(),
           meta: Pact.lang.mkMeta(
-            "",
+            '',
             chainId,
             0.01,
             100000000,
@@ -430,7 +426,7 @@ export const PactProvider = (props) => {
         },
         network
       );
-      if (data.result.status === "success") {
+      if (data.result.status === 'success') {
         if (data.result.data.decimal) setTotalSupply(data.result.data.decimal);
         else setTotalSupply(data.result.data);
       }
@@ -446,7 +442,7 @@ export const PactProvider = (props) => {
           pactCode: `(kswap.exchange.get-pair ${token0} ${token1})`,
           keyPairs: Pact.crypto.genKeyPair(),
           meta: Pact.lang.mkMeta(
-            "",
+            '',
             chainId,
             GAS_PRICE,
             3000,
@@ -456,7 +452,7 @@ export const PactProvider = (props) => {
         },
         network
       );
-      if (data.result.status === "success") {
+      if (data.result.status === 'success') {
         setPair(data.result.data);
         return data.result.data;
       } else {
@@ -483,7 +479,7 @@ export const PactProvider = (props) => {
         },
         network
       );
-      if (data.result.status === "success") {
+      if (data.result.status === 'success') {
         return data.result.data;
       }
     } catch (e) {
@@ -505,7 +501,7 @@ export const PactProvider = (props) => {
             )[reserveA reserveB])
            `,
           meta: Pact.lang.mkMeta(
-            "account",
+            'account',
             chainId,
             GAS_PRICE,
             3000,
@@ -515,7 +511,7 @@ export const PactProvider = (props) => {
         },
         network
       );
-      if (data.result.status === "success") {
+      if (data.result.status === 'success') {
         await setPairReserve({
           token0: data.result.data[0].decimal
             ? data.result.data[0].decimal
@@ -534,29 +530,29 @@ export const PactProvider = (props) => {
 
   const storeTtl = async (ttl) => {
     await setTtl(slippage);
-    await localStorage.setItem("ttl", ttl);
+    await localStorage.setItem('ttl', ttl);
   };
 
   // UTILS
 
   const getRatio = (toToken, fromToken) => {
     if (toToken === fromToken) return 1;
-    return pairReserve["token1"] / pairReserve["token0"];
+    return pairReserve['token1'] / pairReserve['token0'];
   };
 
   const getRatio1 = (toToken, fromToken) => {
     if (toToken === fromToken) return 1;
-    return pairReserve["token0"] / pairReserve["token1"];
+    return pairReserve['token0'] / pairReserve['token1'];
   };
 
   const share = (amount) => {
-    return Number(amount) / (Number(pairReserve["token0"]) + Number(amount));
+    return Number(amount) / (Number(pairReserve['token0']) + Number(amount));
   };
 
   //COMPUTE_OUT
   var computeOut = function (amountIn) {
-    let reserveOut = Number(pairReserve["token1"]);
-    let reserveIn = Number(pairReserve["token0"]);
+    let reserveOut = Number(pairReserve['token1']);
+    let reserveIn = Number(pairReserve['token0']);
     let numerator = Number(amountIn * (1 - FEE) * reserveOut);
     let denominator = Number(reserveIn + amountIn * (1 - FEE));
     return numerator / denominator;
@@ -564,8 +560,8 @@ export const PactProvider = (props) => {
 
   //COMPUTE_IN
   var computeIn = function (amountOut) {
-    let reserveOut = Number(pairReserve["token1"]);
-    let reserveIn = Number(pairReserve["token0"]);
+    let reserveOut = Number(pairReserve['token1']);
+    let reserveIn = Number(pairReserve['token0']);
     let numerator = Number(reserveIn * amountOut);
     let denominator = Number((reserveOut - amountOut) * (1 - FEE));
     // round up the last digit
@@ -573,8 +569,8 @@ export const PactProvider = (props) => {
   };
 
   function computePriceImpact(amountIn, amountOut) {
-    const reserveOut = Number(pairReserve["token1"]);
-    const reserveIn = Number(pairReserve["token0"]);
+    const reserveOut = Number(pairReserve['token1']);
+    const reserveIn = Number(pairReserve['token0']);
     const midPrice = reserveOut / reserveIn;
     const exactQuote = amountIn * midPrice;
     const slippage = (exactQuote - amountOut) / exactQuote;

@@ -39,7 +39,6 @@ const LayoutModal = ({
   children,
   content,
 }) => {
-  console.log('stuelee', containerStyle);
   return (
     <Transition
       items={open}

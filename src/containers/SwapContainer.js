@@ -255,11 +255,7 @@ const SwapContainer = () => {
     };
     getBalance();
   }, [toValues.amount, fromValues.amount]);
-  useEffect(() => {
-    if (tokenSelectorType === 'from') return setSelectedToken(fromValues.coin);
-    if (tokenSelectorType === 'to') return setSelectedToken(toValues.coin);
-    return setSelectedToken(null);
-  }, [tokenSelectorType]);
+
   useEffect(() => {
     const getReserves = async () => {
       if (toValues.coin !== '' && fromValues.coin !== '') {
@@ -351,12 +347,26 @@ const SwapContainer = () => {
   };
 
   useEffect(() => {
+    console.log('tokenSelectorType-----', tokenSelectorType);
+    console.log('fromValues.coin-----', fromValues.coin);
+
+    if (tokenSelectorType === 'from') return setSelectedToken(fromValues.coin);
+    console.log('SETTEDD');
+    console.log('fromValues.coin-----', fromValues.coin);
+    console.log('selectedToken-----', selectedToken);
+    if (tokenSelectorType === 'to') return setSelectedToken(toValues.coin);
+    return setSelectedToken(null);
+  }, [tokenSelectorType]);
+
+  useEffect(() => {
     if (tokenSelectorType !== null) {
-      onClickTokenSelectorType();
+      handleTokenSelectorType();
     }
   }, [tokenSelectorType]);
 
-  const onClickTokenSelectorType = () => {
+  const handleTokenSelectorType = () => {
+    console.log('I?M IN');
+    console.log('selectedToken INNNN', selectedToken);
     if (gameEditionView) {
       openModal({
         title: 'Select a Token',
@@ -385,9 +395,7 @@ const SwapContainer = () => {
         description: '',
         containerStyle: {
           //height: "100%",
-          maxHeight: '40vh !important',
-          maxWidth: '40vw !important',
-          width: '90%',
+          width: '75%',
         },
         onBack: () => {
           modalContext.onBackModal();
@@ -448,7 +456,7 @@ const SwapContainer = () => {
         setInputSide={setInputSide}
         swapValues={swapValues}
         setShowTxModal={setShowTxModal}
-        /* onClickTokenSelectorType={onClickTokenSelectorType} */
+        /* handleTokenSelectorType={handleTokenSelectorType} */
       />
       {!isNaN(pact.ratio) &&
       fromValues.amount &&
