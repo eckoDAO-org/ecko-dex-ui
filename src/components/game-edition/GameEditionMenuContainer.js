@@ -11,12 +11,13 @@ const Container = styled(FadeIn)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 100%;
 `;
 
 const TopListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 50px;
+  margin-top: 20%;
   align-items: center;
   justify-content: center;
   & > *:not(:last-child) {
@@ -29,6 +30,7 @@ const BottomListContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-bottom: 20%;
   & > *:not(:last-child) {
     margin-bottom: 25px;
   }

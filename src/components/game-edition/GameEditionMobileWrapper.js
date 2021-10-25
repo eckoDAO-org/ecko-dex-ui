@@ -23,9 +23,9 @@ const GameEditionMobileWrapper = ({
           y2='1'
           gradientUnits='objectBoundingBox'
         >
-          <stop offset='0' stop-color='#22fefe' />
-          <stop offset='0.552' stop-color='#6f6ede' />
-          <stop offset='1' stop-color='#4a186f' />
+          <stop offset='0' stopColor='#22fefe' />
+          <stop offset='0.552' stopColor='#6f6ede' />
+          <stop offset='1' stopColor='#4a186f' />
         </linearGradient>
         <linearGradient
           id='linear-gradient-4'
@@ -33,8 +33,8 @@ const GameEditionMobileWrapper = ({
           y2='1'
           gradientUnits='objectBoundingBox'
         >
-          <stop offset='0' stop-color='#5c4499' />
-          <stop offset='1' stop-color='#271259' />
+          <stop offset='0' stopColor='#5c4499' />
+          <stop offset='1' stopColor='#271259' />
         </linearGradient>
         <linearGradient
           id='linear-gradient-5'
@@ -44,10 +44,10 @@ const GameEditionMobileWrapper = ({
           y2='1'
           gradientUnits='objectBoundingBox'
         >
-          <stop offset='0' stop-color='#fefb66' />
-          <stop offset='1' stop-color='#ff36d0' />
+          <stop offset='0' stopColor='#fefb66' />
+          <stop offset='1' stopColor='#ff36d0' />
         </linearGradient>
-        <clipPath id='clip-path'>
+        <clipPath id='clipPath'>
           <rect width='128.435' height='33.189' fill='none' />
         </clipPath>
         <linearGradient
@@ -58,8 +58,8 @@ const GameEditionMobileWrapper = ({
           y2='35.433'
           gradientUnits='objectBoundingBox'
         >
-          <stop offset='0' stop-color='#f2248d' />
-          <stop offset='1' stop-color='#791247' />
+          <stop offset='0' stopColor='#f2248d' />
+          <stop offset='1' stopColor='#791247' />
         </linearGradient>
         <linearGradient
           id='linear-gradient-9'
@@ -80,7 +80,7 @@ const GameEditionMobileWrapper = ({
         <filter id='Ellipse_18'>
           <feOffset dx='2' dy='5' input='SourceAlpha' />
           <feGaussianBlur stdDeviation='4.5' result='blur' />
-          <feFlood flood-color='#00f041' flood-opacity='0.161' result='color' />
+          <feFlood floodColor='#00f041' floodOpacity='0.161' result='color' />
           <feComposite operator='out' in='SourceGraphic' in2='blur' />
           <feComposite operator='in' in='color' />
           <feComposite operator='in' in2='SourceGraphic' />
@@ -93,8 +93,8 @@ const GameEditionMobileWrapper = ({
           y2='1.336'
           gradientUnits='objectBoundingBox'
         >
-          <stop offset='0' stop-color='#fff' />
-          <stop offset='1' stop-color='#6cc34a' />
+          <stop offset='0' stopColor='#fff' />
+          <stop offset='1' stopColor='#6cc34a' />
         </linearGradient>
       </defs>
       <g id='Gameboy' transform='translate(-421.152 -8)'>
@@ -133,7 +133,7 @@ const GameEditionMobileWrapper = ({
             data-name='Rectangle 38'
             transform='translate(56 56)'
             stroke='#d11f7a'
-            stroke-width='2'
+            strokeWidth='2'
             fill='url(#linear-gradient-5)'
           >
             <rect width='558' height='766' stroke='none' />
@@ -146,7 +146,7 @@ const GameEditionMobileWrapper = ({
             id='Repeat_Grid_2'
             data-name='Repeat Grid 2'
             transform='translate(520.839 1054.507) rotate(-20)'
-            clip-path='url(#clip-path)'
+            clipPath='url(#clipPath)'
           >
             <g transform='translate(-1021 -803)'>
               <rect
@@ -262,9 +262,9 @@ const GameEditionMobileWrapper = ({
                 id='MENU'
                 transform='matrix(0.899, -0.438, 0.438, 0.899, 24.918, 61.977)'
                 fill='#e3e3e3'
-                font-size='14'
-                font-family='press-start-regular'
-                font-weight='500'
+                fontSize='14'
+                fontFamily='press-start-regular'
+                fontWeight='500'
                 letterSpacing='0.01em'
               >
                 <tspan x='0' y='0'>
@@ -306,9 +306,9 @@ const GameEditionMobileWrapper = ({
                 id='SWAP'
                 transform='matrix(0.899, -0.438, 0.438, 0.899, 18.613, 65.534)'
                 fill='#e3e3e3'
-                font-size='14'
+                fontSize='14'
                 fontFamily='press-start-regular'
-                font-weight='500'
+                fontWeight='500'
                 letterSpacing='0.01em'
               >
                 <tspan x='0' y='0'>
@@ -375,7 +375,7 @@ const GameEditionMobileWrapper = ({
                   transform='translate(0.432 0.429)'
                   fill='none'
                   stroke='#f2248d'
-                  stroke-width='1'
+                  strokeWidth='1'
                 />
               </g>
               <text
@@ -383,9 +383,9 @@ const GameEditionMobileWrapper = ({
                 data-name='B'
                 transform='translate(24.936 43.952)'
                 fill='#e3e3e3'
-                font-size='20'
-                font-family='Helvetica Neue'
-                font-weight='500'
+                fontSize='20'
+                fontFamily='Helvetica Neue'
+                fontWeight='500'
                 style={{ mixBlendMode: 'multiply', isolation: 'isolate' }}
               >
                 <tspan x='0' y='0'>
@@ -438,7 +438,7 @@ const GameEditionMobileWrapper = ({
                   transform='translate(0.432 0.429)'
                   fill='none'
                   stroke='#f2248d'
-                  stroke-width='1'
+                  strokeWidth='1'
                 />
               </g>
               <path
@@ -448,7 +448,7 @@ const GameEditionMobileWrapper = ({
                 transform='translate(2026.734 1589.98)'
                 fill='none'
                 stroke='#fdfdfd'
-                stroke-width='1'
+                strokeWidth='1'
                 opacity='0.198'
                 style={{ mixBlendMode: 'normal', isolation: 'isolate' }}
               />
@@ -457,9 +457,9 @@ const GameEditionMobileWrapper = ({
                 data-name='A'
                 transform='translate(26.702 40.14)'
                 fill='#e3e3e3'
-                font-size='22'
-                font-family='Helvetica Neue'
-                font-weight='500'
+                fontSize='22'
+                fontFamily='Helvetica Neue'
+                fontWeight='500'
                 style={{ mixBlendMode: 'multiply', isolation: 'isolate' }}
               >
                 <tspan x='0' y='0'>
@@ -539,7 +539,7 @@ const GameEditionMobileWrapper = ({
                   transform='translate(0.48 0.48)'
                   fill='none'
                   stroke='#f2248d'
-                  stroke-width='1'
+                  strokeWidth='1'
                 />
               </g>
               <g
@@ -564,7 +564,7 @@ const GameEditionMobileWrapper = ({
                   transform='translate(0.48 0.48)'
                   fill='none'
                   stroke='#f2248d'
-                  stroke-width='1'
+                  strokeWidth='1'
                 />
               </g>
               <g
@@ -589,7 +589,7 @@ const GameEditionMobileWrapper = ({
                   transform='translate(0.48 0.48)'
                   fill='none'
                   stroke='#f2248d'
-                  stroke-width='1'
+                  strokeWidth='1'
                 />
               </g>
               <g
@@ -614,7 +614,7 @@ const GameEditionMobileWrapper = ({
                   transform='translate(0.48 0.48)'
                   fill='none'
                   stroke='#f2248d'
-                  stroke-width='1'
+                  strokeWidth='1'
                 />
               </g>
               <g
@@ -639,7 +639,7 @@ const GameEditionMobileWrapper = ({
                   transform='translate(0.48 0.48)'
                   fill='none'
                   stroke='#f2248d'
-                  stroke-width='1'
+                  strokeWidth='1'
                 />
               </g>
             </g>
