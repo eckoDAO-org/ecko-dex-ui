@@ -112,7 +112,7 @@ const LiquidityList = (props) => {
   const modalContext = useContext(ModalContext);
   const liquidity = useContext(LiquidityContext);
   const { account } = useContext(AccountContext);
-  const { gameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView, openModal } = useContext(GameEditionContext);
 
   useEffect(async () => {
     liquidity.getPairListAccountBalance(account.account);
@@ -268,17 +268,30 @@ const LiquidityList = (props) => {
                   height: !gameEditionView && '40px',
                 }}
                 fontSize={14}
-                onClick={() =>
-                  modalContext.openModal({
-                    title: account?.account
-                      ? 'wallet connected'
-                      : 'connect wallet',
-                    description: account?.account
-                      ? `Account ID: ${reduceToken(account.account)}`
-                      : 'Connect a wallet using one of the methods below',
-                    content: <ConnectWalletModal />,
-                  })
-                }
+                onClick={() => {
+                  if (gameEditionView) {
+                    return openModal({
+                      isVisible: true,
+                      title: account?.account
+                        ? 'wallet connected'
+                        : 'connect wallet',
+                      description: account?.account
+                        ? `Account ID: ${reduceToken(account.account)}`
+                        : 'Connect a wallet using one of the methods below',
+                      content: <ConnectWalletModal />,
+                    });
+                  } else {
+                    modalContext.openModal({
+                      title: account?.account
+                        ? 'wallet connected'
+                        : 'connect wallet',
+                      description: account?.account
+                        ? `Account ID: ${reduceToken(account.account)}`
+                        : 'Connect a wallet using one of the methods below',
+                      content: <ConnectWalletModal />,
+                    });
+                  }
+                }}
               >
                 Connect Wallet
               </CustomButton>

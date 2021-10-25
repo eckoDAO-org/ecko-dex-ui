@@ -61,10 +61,11 @@ const GameEditionModalsContainer = ({
   description,
   content,
   onClose,
+  modalStyle,
 }) => {
   const { closeModal } = useContext(GameEditionContext);
   return (
-    <GEModalContainer>
+    <GEModalContainer style={modalStyle}>
       <TitleContainer>
         {title}
         <CloseGe

@@ -6,9 +6,10 @@ import { GameEditionWrapper } from './GameEditionWrapper';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
 import { FadeIn } from '../shared/animations';
+import theme from '../../styles/theme';
+import GameEditionMobileWrapper from './GameEditionMobileWrapper';
 
 const MainContainer = styled.div`
-  /* position: relative; */
   display: flex;
   width: 100%;
   justify-content: center;
@@ -46,32 +47,61 @@ const GameEditionContainer = ({ children }) => {
 
   return (
     <MainContainer>
-      <GameEditionWrapper
-        selectLabel='MENU'
-        selectOnClick={() => {
-          history.push(ROUTE_GAME_EDITION_MENU);
-          closeModal();
-        }}
-        startLabel='SWAP'
-        startOnClick={() => {
-          history.push(ROUTE_SWAP);
-          closeModal();
-        }}
-      >
-        <ContentContainer>
-          {children}
-          {modalState.open && (
-            <FadeIn>
-              <GameEditionModalsContainer
-                title={modalState.title}
-                description={modalState.description}
-                content={modalState.content}
-                onClose={modalState.closeModal}
-              />
-            </FadeIn>
-          )}
-        </ContentContainer>
-      </GameEditionWrapper>
+      {window.innerWidth <= theme.mediaQueries.mobilePixel - 1 ? (
+        <GameEditionMobileWrapper
+          selectLabel='MENU'
+          selectOnClick={() => {
+            history.push(ROUTE_GAME_EDITION_MENU);
+            closeModal();
+          }}
+          startLabel='SWAP'
+          startOnClick={() => {
+            history.push(ROUTE_SWAP);
+            closeModal();
+          }}
+        >
+          <ContentContainer>
+            {children}
+            {modalState.open && (
+              <FadeIn>
+                <GameEditionModalsContainer
+                  title={modalState.title}
+                  description={modalState.description}
+                  content={modalState.content}
+                  onClose={modalState.closeModal}
+                />
+              </FadeIn>
+            )}
+          </ContentContainer>
+        </GameEditionMobileWrapper>
+      ) : (
+        <GameEditionWrapper
+          selectLabel='MENU'
+          selectOnClick={() => {
+            history.push(ROUTE_GAME_EDITION_MENU);
+            closeModal();
+          }}
+          startLabel='SWAP'
+          startOnClick={() => {
+            history.push(ROUTE_SWAP);
+            closeModal();
+          }}
+        >
+          <ContentContainer>
+            {children}
+            {modalState.open && (
+              <FadeIn>
+                <GameEditionModalsContainer
+                  title={modalState.title}
+                  description={modalState.description}
+                  content={modalState.content}
+                  onClose={modalState.closeModal}
+                />
+              </FadeIn>
+            )}
+          </ContentContainer>
+        </GameEditionWrapper>
+      )}
     </MainContainer>
   );
 };
