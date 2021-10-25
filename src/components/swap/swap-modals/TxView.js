@@ -164,7 +164,11 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           </SpaceBetweenRow>
         </TransactionsDetails>
         <CustomButton
-          buttonStyle={{ width: '100%', position: 'absolute', top: 322 }}
+          buttonStyle={{
+            width: '100%',
+            position: gameEditionView && 'absolute',
+            top: gameEditionView && 322,
+          }}
           onClick={async () => {
             setLoading(true);
             swap.swapSend();
@@ -234,7 +238,11 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           </SpaceBetweenRow>
         </TransactionsDetails>
         <CustomButton
-          buttonStyle={{ width: '100%', position: 'absolute', top: 322 }}
+          buttonStyle={{
+            width: '100%',
+            position: gameEditionView && 'absolute',
+            top: gameEditionView && 322,
+          }}
           onClick={async () => {
             setLoading(true);
             swap.swapSend();
