@@ -10,13 +10,22 @@ import { ModalContext } from '../../../contexts/ModalContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import theme from '../../../styles/theme';
 
-const Text = styled.span`
+const TopText = styled.span`
   font-size: 13px;
   font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
   text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
   position: ${({ gameEditionView }) => (gameEditionView ? 'absolute' : 'none')};
-  top: ${({ gameEditionView }) => (gameEditionView ? '40px' : '0')};
+  bottom: ${({ gameEditionView }) => (gameEditionView ? '292px' : '0')};
+`;
+
+const BottomText = styled.span`
+  font-size: 13px;
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
+    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
+  text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
+  position: ${({ gameEditionView }) => (gameEditionView ? 'absolute' : 'none')};
+  top: ${({ gameEditionView }) => (gameEditionView ? '-48px' : '0')};
 `;
 
 const ActionContainer = styled.div`
@@ -25,18 +34,34 @@ const ActionContainer = styled.div`
   align-items: center;
   justify-content: space-around;
   margin-top: 32px;
+  width: ${({ gameEditionView }) => gameEditionView && '97%'};
+  position: ${({ gameEditionView }) => (gameEditionView ? 'absolute' : 'none')};
+  top: ${({ gameEditionView }) => (gameEditionView ? '188px' : '0')};
 `;
 
 const DropdownContainer = styled.div`
   .ui.selection.dropdown {
     background: transparent;
     border: 2px dashed ${theme.colors.black};
+    position: absolute;
+    width: 97%;
+    top: -22px;
   }
 
   .ui.selection.dropdown .menu {
     margin-top: 10px !important;
     background: transparent;
     border: 2px dashed ${theme.colors.black};
+
+    @media (min-width: ${({ theme: { mediaQueries } }) =>
+        `${mediaQueries.mobilePixel + 1}px`}) {
+      max-height: 13em;
+    }
+
+    @media (min-width: ${({ theme: { mediaQueries } }) =>
+        `${mediaQueries.desktopPixel}px`}) {
+      max-height: 11em;
+    }
   }
 
   .ui.selection.visible.dropdown .menu {
@@ -114,10 +139,10 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
     <>
       {!approved ? (
         <>
-          <Text gameEditionView={gameEditionView}>
+          <TopText gameEditionView={gameEditionView}>
             Follow instructions in the wallet to share your accounts
-          </Text>
-          <ActionContainer>
+          </TopText>
+          <ActionContainer gameEditionView={gameEditionView}>
             {loading ? (
               <Loader
                 active
@@ -137,9 +162,9 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
         </>
       ) : (
         <>
-          <Text gameEditionView={gameEditionView}>
+          <BottomText gameEditionView={gameEditionView}>
             Choose Public Key you intend to use
-          </Text>
+          </BottomText>
           {gameEditionView ? (
             <DropdownContainer>
               <Dropdown
@@ -177,7 +202,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
               value={selectedAccount}
             />
           )}
-          <ActionContainer>
+          <ActionContainer gameEditionView={gameEditionView}>
             <Button.Group fluid>
               {!gameEditionView && (
                 <CustomButton

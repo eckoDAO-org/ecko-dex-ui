@@ -1,13 +1,14 @@
-import React, { useEffect, useContext, useState } from "react";
-import styled from "styled-components/macro";
-import { Transition } from "react-spring/renderprops";
-import ModalContainer from "../../../shared/ModalContainer";
-import { reduceBalance } from "../../../utils/reduceBalance";
-import Backdrop from "../../../shared/Backdrop";
-import { Loader } from "semantic-ui-react";
-import CustomButton from "../../../shared/CustomButton";
-import { SuccessfullIcon } from "../../../assets";
-import { PactContext } from "../../../contexts/PactContext";
+import React, { useContext } from 'react';
+import styled from 'styled-components/macro';
+import { Transition } from 'react-spring/renderprops';
+import ModalContainer from '../../../shared/ModalContainer';
+import { reduceBalance } from '../../../utils/reduceBalance';
+import Backdrop from '../../../shared/Backdrop';
+import CustomButton from '../../../shared/CustomButton';
+import { SuccessfullIcon } from '../../../assets';
+import { PactContext } from '../../../contexts/PactContext';
+import { GameEditionContext } from '../../../contexts/GameEditionContext';
+import GameEditionModalsContainer from '../../game-edition/GameEditionModalsContainer';
 
 const Container = styled.div`
   position: absolute;
@@ -24,46 +25,39 @@ const Content = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  svg {
+    display: ${({ gameEditionView }) => gameEditionView && 'none '};
+  }
+  width: 97%;
+  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
+  bottom: ${({ gameEditionView }) => gameEditionView && '138px'};
 `;
 
-const LoaderContainer = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  margin-top: 15px;
-`;
+// const AmountLabel = styled.span`
+//   font-family: montserrat-bold;
+//   display: flex;
+//   flex-direction: row;
+//   font-size: 13px;
+//   color: #FFFFFF;
+//   margin-bottom: 10px;
+// `;
 
-const Label = styled.span`
-  font-family: montserrat-bold;
-  font-size: 13px;
-  color: #ffffff;
-`;
+// const RowContainer = styled.div`
+//   display: flex;
+//   justify-content: space-between;
+//   margin: 15px 0px;
+// `;
 
-const AmountLabel = styled.span`
-  font-family: montserrat-bold;
-  display: flex
-  flex-direction: row;
-  font-size: 13px;
-  color: #FFFFFF;
-  margin-bottom: 10px;
-`;
-
-const RowContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 15px 0px;
-`;
-
-const Divider = styled.div`
-  border: ${({ theme: { colors } }) => `1px solid ${colors.border}`};
-  margin: 16px 0px;
-  width: 100%;
-`;
+// const Divider = styled.div`
+//   border: ${({ theme: { colors } }) => `1px solid ${colors.border}`};
+//   margin: 16px 0px;
+//   width: 100%;
+// `;
 
 const Title = styled.div`
   font-family: montserrat-bold;
   font-size: 24px;
-  color: color: #FFFFFF;;
+  color: #ffffff; ;
 `;
 
 const TransactionsDetails = styled.div`
@@ -80,12 +74,6 @@ const SpaceBetweenRow = styled.div`
   justify-content: space-between;
 `;
 
-const Value = styled.span`
-  font-family: montserrat-regular;
-  font-size: 13px;
-  color: #ffffff;
-`;
-
 const SubTitleContainer = styled.div`
   display: flex;
   align-items: center;
@@ -93,12 +81,32 @@ const SubTitleContainer = styled.div`
 `;
 
 const SubTitle = styled.div`
-  font-family: montserrat-bold;
-  font-size: 16px;
-  color: color: #FFFFFF;
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
+    gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '14px' : '16px')};
+  color: ${({ theme: { colors }, gameEditionView }) =>
+    gameEditionView ? colors.black : '#ffffff'};
+  text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
+  width: ${({ gameEditionView }) => (gameEditionView ? '100%' : 'auto')};
   align-items: center;
   position: relative;
   justify-content: center;
+`;
+
+const Label = styled.span`
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
+    gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
+  color: ${({ theme: { colors }, gameEditionView }) =>
+    gameEditionView ? colors.black : '#ffffff'};
+`;
+
+const Value = styled.span`
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
+    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
+  color: ${({ theme: { colors }, gameEditionView }) =>
+    gameEditionView ? colors.black : '#ffffff'};
 `;
 
 const ReviewTxModal = ({
@@ -111,8 +119,113 @@ const ReviewTxModal = ({
   liquidityView,
 }) => {
   const pact = useContext(PactContext);
+  const { gameEditionView } = useContext(GameEditionContext);
 
-  return (
+  const ContentView = () => {
+    if (liquidityView === 'Add Liquidity') {
+      return (
+        <TransactionsDetails>
+          <SubTitleContainer>
+            <SubTitle
+              style={{
+                marginBottom: '15px',
+                justifyContent: 'center',
+              }}
+              gameEditionView={gameEditionView}
+            >
+              Deposit Desired:
+            </SubTitle>
+          </SubTitleContainer>
+          <SpaceBetweenRow>
+            <Label gameEditionView={gameEditionView}>{fromValues.coin}</Label>
+            <Value gameEditionView={gameEditionView}>{fromValues.amount}</Value>
+          </SpaceBetweenRow>
+          <SpaceBetweenRow style={{ padding: '16px 0px' }}>
+            <Label gameEditionView={gameEditionView}>{toValues.coin}</Label>
+            <Value gameEditionView={gameEditionView}>{toValues.amount}</Value>
+          </SpaceBetweenRow>
+          <SubTitleContainer>
+            <SubTitle
+              style={{
+                marginBottom: '15px',
+                justifyContent: 'center',
+              }}
+              gameEditionView={gameEditionView}
+            >
+              Rates:
+            </SubTitle>
+          </SubTitleContainer>
+          <SpaceBetweenRow>
+            <Label
+              gameEditionView={gameEditionView}
+            >{`1 ${fromValues?.coin}`}</Label>
+            <Value gameEditionView={gameEditionView}>
+              {`${reduceBalance(1 / pact.ratio)} ${toValues?.coin}`}
+            </Value>
+          </SpaceBetweenRow>
+          <SpaceBetweenRow style={{ padding: '16px 0px' }}>
+            <Label
+              gameEditionView={gameEditionView}
+            >{`1 ${toValues?.coin} `}</Label>
+            <Value gameEditionView={gameEditionView}>{`${reduceBalance(
+              pact.ratio
+            )} ${fromValues?.coin}`}</Value>
+          </SpaceBetweenRow>
+          <SpaceBetweenRow>
+            <Label gameEditionView={gameEditionView}>Share of Pool:</Label>
+            <Value gameEditionView={gameEditionView}>
+              {reduceBalance(pact.share(fromValues?.amount) * 100)}%
+            </Value>
+          </SpaceBetweenRow>
+        </TransactionsDetails>
+      );
+    } else {
+      return (
+        <TransactionsDetails>
+          <SpaceBetweenRow>
+            <Label>{`1 ${fromValues?.coin}`}</Label>
+            <Value>
+              {`${reduceBalance(toValues.amount / fromValues.amount)} ${
+                toValues.coin
+              }`}
+            </Value>
+          </SpaceBetweenRow>
+          <SpaceBetweenRow style={{ padding: '16px 0px' }}>
+            <Label>{`1 ${toValues?.coin} `}</Label>
+            <Value>
+              {`${reduceBalance(fromValues.amount / toValues.amount)} ${
+                fromValues.coin
+              }`}
+            </Value>
+          </SpaceBetweenRow>
+        </TransactionsDetails>
+      );
+    }
+  };
+
+  return gameEditionView && show ? (
+    <GameEditionModalsContainer
+      modalStyle={{ zIndex: 1 }}
+      title='Preview Successful!'
+      content={
+        <Content gameEditionView={gameEditionView}>
+          <SuccessfullIcon />
+          {ContentView()}
+          <CustomButton
+            buttonStyle={{
+              width: '100%',
+              position: 'absolute',
+              bottom: '-130px',
+            }}
+            loading={loading}
+            onClick={supply}
+          >
+            Confirm
+          </CustomButton>
+        </Content>
+      }
+    />
+  ) : (
     <Transition
       items={show}
       from={{ opacity: 0 }}
@@ -125,91 +238,22 @@ const ReviewTxModal = ({
           <Container style={props}>
             <Backdrop onClose={onClose} />
             <ModalContainer
-              title="Preview Successful!"
+              title='Preview Successful!'
               containerStyle={{
-                height: "100%",
-                maxHeight: "80vh",
-                maxWidth: "90vw",
+                height: '100%',
+                maxHeight: '80vh',
+                maxWidth: '90vw',
               }}
               onClose={onClose}
             >
               <Content>
                 <SuccessfullIcon />
-                <Title style={{ padding: "16px 0px" }}>
+                <Title style={{ padding: '16px 0px' }}>
                   Transaction Details
                 </Title>
-
-                {liquidityView === "Add Liquidity" ? (
-                  <TransactionsDetails>
-                    <SubTitleContainer>
-                      <SubTitle
-                        style={{
-                          marginBottom: "15px",
-                          justifyContent: "center",
-                        }}
-                      >
-                        Deposit Desired:
-                      </SubTitle>
-                    </SubTitleContainer>
-                    <SpaceBetweenRow>
-                      <Label>{fromValues.coin}</Label>
-                      <Value>{fromValues.amount}</Value>
-                    </SpaceBetweenRow>
-                    <SpaceBetweenRow style={{ padding: "16px 0px" }}>
-                      <Label>{toValues.coin}</Label>
-                      <Value>{toValues.amount}</Value>
-                    </SpaceBetweenRow>
-                    <SubTitleContainer>
-                      <SubTitle
-                        style={{
-                          marginBottom: "15px",
-                          justifyContent: "center",
-                        }}
-                      >
-                        Rates:
-                      </SubTitle>
-                    </SubTitleContainer>
-                    <SpaceBetweenRow>
-                      <Label>{`1 ${fromValues?.coin}`}</Label>
-                      <Value>
-                        {`${reduceBalance(1 / pact.ratio)} ${toValues?.coin}`}
-                      </Value>
-                    </SpaceBetweenRow>
-                    <SpaceBetweenRow style={{ padding: "16px 0px" }}>
-                      <Label>{`1 ${toValues?.coin} `}</Label>
-                      <Value>
-                        {`${reduceBalance(pact.ratio)} ${fromValues?.coin}`}
-                      </Value>
-                    </SpaceBetweenRow>
-                    <SpaceBetweenRow>
-                      <Label>Share of Pool:</Label>
-                      <Value>
-                        {reduceBalance(pact.share(fromValues?.amount) * 100)}%
-                      </Value>
-                    </SpaceBetweenRow>
-                  </TransactionsDetails>
-                ) : (
-                  <TransactionsDetails>
-                    <SpaceBetweenRow>
-                      <Label>{`1 ${fromValues?.coin}`}</Label>
-                      <Value>
-                        {`${reduceBalance(
-                          toValues.amount / fromValues.amount
-                        )} ${toValues.coin}`}
-                      </Value>
-                    </SpaceBetweenRow>
-                    <SpaceBetweenRow style={{ padding: "16px 0px" }}>
-                      <Label>{`1 ${toValues?.coin} `}</Label>
-                      <Value>
-                        {`${reduceBalance(
-                          fromValues.amount / toValues.amount
-                        )} ${fromValues.coin}`}
-                      </Value>
-                    </SpaceBetweenRow>
-                  </TransactionsDetails>
-                )}
+                {ContentView()}
                 <CustomButton
-                  buttonStyle={{ width: "100%" }}
+                  buttonStyle={{ width: '100%' }}
                   loading={loading}
                   onClick={supply}
                 >
