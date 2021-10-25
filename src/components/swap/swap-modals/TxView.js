@@ -251,7 +251,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
 
   const successAddView = () => {
     return (
-      <Content gameEditionView={gameEditionView}>
+      <Content gameEditionView={gameEditionView} style={{ bottom: '148px' }}>
         <SuccessfullIcon />
         <Title gameEditionView={gameEditionView}>Preview Successful!</Title>
         <SubTitle gameEditionView={gameEditionView}>
