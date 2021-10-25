@@ -11,9 +11,9 @@ const GameEditionMobileWrapper = ({
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
-      xmlns:xlink='http://www.w3.org/1999/xlink'
+      xmlnsXlink='http://www.w3.org/1999/xlink'
       width='675'
-      height='1098'
+      height={window.innerHeight - 66}
       viewBox='0 0 675 1098'
     >
       <defs>
@@ -67,7 +67,7 @@ const GameEditionMobileWrapper = ({
           y1='36.018'
           x2='29.023'
           y2='36.041'
-          xlink:href='#linear-gradient-7'
+          xlinkHref='#linear-gradient-7'
         />
         <linearGradient
           id='linear-gradient-12'
@@ -75,7 +75,7 @@ const GameEditionMobileWrapper = ({
           y1='66.987'
           x2='78.412'
           y2='67.03'
-          xlink:href='#linear-gradient-7'
+          xlinkHref='#linear-gradient-7'
         />
         <filter id='Ellipse_18'>
           <feOffset dx='2' dy='5' input='SourceAlpha' />
@@ -238,9 +238,11 @@ const GameEditionMobileWrapper = ({
             </g>
           </g>
           <g
-            id='Group_56904'
+            id='select_button'
             data-name='Group 56904'
             transform='translate(335.068 932.76)'
+            style={{ cursor: 'pointer' }}
+            onClick={selectOnClick}
           >
             <g
               id='Group_56903'
@@ -261,12 +263,12 @@ const GameEditionMobileWrapper = ({
                 transform='matrix(0.899, -0.438, 0.438, 0.899, 24.918, 61.977)'
                 fill='#e3e3e3'
                 font-size='14'
-                font-family='Helvetica Neue'
+                font-family='press-start-regular'
                 font-weight='500'
-                letter-spacing='0.01em'
+                letterSpacing='0.01em'
               >
                 <tspan x='0' y='0'>
-                  MENU
+                  {selectLabel}
                 </tspan>
               </text>
             </g>
@@ -280,9 +282,11 @@ const GameEditionMobileWrapper = ({
             />
           </g>
           <g
-            id='Group_56905'
+            id='start_button'
             data-name='Group 56905'
             transform='translate(219.295 931.068)'
+            style={{ cursor: 'pointer' }}
+            onClick={startOnClick}
           >
             <g
               id='Group_56902'
@@ -303,12 +307,12 @@ const GameEditionMobileWrapper = ({
                 transform='matrix(0.899, -0.438, 0.438, 0.899, 18.613, 65.534)'
                 fill='#e3e3e3'
                 font-size='14'
-                font-family='Helvetica Neue'
+                fontFamily='press-start-regular'
                 font-weight='500'
-                letter-spacing='0.01em'
+                letterSpacing='0.01em'
               >
                 <tspan x='0' y='0'>
-                  SWAP
+                  {startLabel}
                 </tspan>
               </text>
             </g>
