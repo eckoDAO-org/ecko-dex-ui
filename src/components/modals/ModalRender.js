@@ -1,6 +1,6 @@
-import React from "react";
-import { ModalConsumer, ModalProvider } from "../../contexts/ModalContext";
-import LayoutModal from "./LayoutModal";
+import React from 'react';
+import { ModalConsumer, ModalProvider } from '../../contexts/ModalContext';
+import LayoutModal from './LayoutModal';
 
 const ModalRender = ({ children }) => {
   return (

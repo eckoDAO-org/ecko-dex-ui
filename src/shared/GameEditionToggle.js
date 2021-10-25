@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
-import { Checkbox } from "semantic-ui-react";
-import styled from "styled-components";
-import { GameEditionContext } from "../contexts/GameEditionContext";
+import React, { useContext } from 'react';
+import { Checkbox } from 'semantic-ui-react';
+import styled from 'styled-components';
+import { GameEditionContext } from '../contexts/GameEditionContext';
 
 const ToggleContainer = styled.div`
   display: flex;
@@ -46,7 +46,7 @@ const ToggleContainer = styled.div`
   }
 
   transform: ${({ animation }) =>
-    !animation ? "translateX(0px)" : "translateX(-250px)"};
+    !animation ? 'translateX(0px)' : 'translateX(-250px)'};
   transition: transform 1s ease-in-out;
 `;
 
@@ -68,7 +68,10 @@ const GameEditionToggle = ({ animation }) => {
       <GameLabel gameEditionView={game.gameEditionView}>Game Edition</GameLabel>
       <Checkbox
         toggle
-        onChange={() => game.setGameEditionView(!game.gameEditionView)}
+        onChange={() => {
+          game.setGameEditionView(!game.gameEditionView);
+          game.closeModal();
+        }}
       />
     </ToggleContainer>
   );

@@ -70,7 +70,13 @@ const GameEditionModalsContainer = ({
         {title}
         <CloseGe
           style={{ cursor: 'pointer' }}
-          onClick={() => closeModal() || onClose()}
+          onClick={() => {
+            if (onClose) {
+              onClose();
+            } else {
+              closeModal();
+            }
+          }}
         />
       </TitleContainer>
       <DescriptionContainer>{description}</DescriptionContainer>
