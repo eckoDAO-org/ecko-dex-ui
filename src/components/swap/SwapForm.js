@@ -1,12 +1,12 @@
-import React from "react";
-import styled from "styled-components";
-import ButtonDivider from "../../shared/ButtonDivider";
-import Input from "../../shared/Input";
-import InputToken from "../../shared/InputToken";
-import CustomButton from "../../shared/CustomButton";
-import { SwapArrowsIcon } from "../../assets";
-import { limitDecimalPlaces, reduceBalance } from "../../utils/reduceBalance";
-import tokenData from "../../constants/cryptoCurrencies";
+import React from 'react';
+import styled from 'styled-components';
+import ButtonDivider from '../../shared/ButtonDivider';
+import Input from '../../shared/Input';
+import InputToken from '../../shared/InputToken';
+import CustomButton from '../../shared/CustomButton';
+import { SwapArrowsIcon } from '../../assets';
+import { limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
+import tokenData from '../../constants/cryptoCurrencies';
 
 const FormContainer = styled.div`
   position: relative;
@@ -21,7 +21,7 @@ const FormContainer = styled.div`
   background: transparent;
 
   & > *:not(:last-child) {
-    margin-right:32px;
+    margin-right: 32px;
   }
 
   @media (max-width: ${({ theme: { mediaQueries } }) =>
@@ -47,20 +47,20 @@ const SwapForm = ({
       <Input
         error={isNaN(fromValues.amount)}
         topLeftLabel={fromNote ? `from ${fromNote}` : `input`}
-        bottomLeftLabel={`balance: ${reduceBalance(fromValues.balance) ?? "-"}`}
-        placeholder="enter amount"
-        maxLength="15"
+        bottomLeftLabel={`balance: ${reduceBalance(fromValues.balance) ?? '-'}`}
+        placeholder='enter amount'
+        maxLength='15'
         inputRightComponent={
           fromValues.coin ? (
             <InputToken
               icon={tokenData[fromValues.coin].icon}
               code={tokenData[fromValues.coin].name}
-              onClick={() => setTokenSelectorType("from")}
+              onClick={() => setTokenSelectorType('from')}
               onClickButton={() => {
-                setInputSide("from");
+                setInputSide('from');
                 setFromValues((prev) => ({
                   ...prev,
-                  amount: fromValues.balance,
+                  amount: reduceBalance(fromValues.balance),
                 }));
               }}
               disabledButton={toValues.amount === toValues.balance}
@@ -70,9 +70,9 @@ const SwapForm = ({
         withSelectButton
         numberOnly
         value={fromValues.amount}
-        onSelectButtonClick={() => setTokenSelectorType("from")}
+        onSelectButtonClick={() => setTokenSelectorType('from')}
         onChange={async (e, { value }) => {
-          setInputSide("from");
+          setInputSide('from');
           setFromValues((prev) => ({
             ...prev,
             amount: limitDecimalPlaces(value, fromValues.precision),
@@ -83,18 +83,21 @@ const SwapForm = ({
       <Input
         error={isNaN(toValues.amount)}
         topLeftLabel={toNote ? `to ${toNote}` : `input`}
-        bottomLeftLabel={`balance: ${reduceBalance(toValues.balance) ?? "-"}`}
-        placeholder="enter amount"
-        maxLength="15"
+        bottomLeftLabel={`balance: ${reduceBalance(toValues.balance) ?? '-'}`}
+        placeholder='enter amount'
+        maxLength='15'
         inputRightComponent={
           toValues.coin ? (
             <InputToken
               icon={tokenData[toValues.coin].icon}
               code={tokenData[toValues.coin].name}
-              onClick={() => setTokenSelectorType("to")}
+              onClick={() => setTokenSelectorType('to')}
               onClickButton={() => {
-                setInputSide("to");
-                setToValues((prev) => ({ ...prev, amount: toValues.balance }));
+                setInputSide('to');
+                setToValues((prev) => ({
+                  ...prev,
+                  amount: reduceBalance(toValues.balance),
+                }));
               }}
               disabledButton={fromValues.amount === fromValues.balance}
             />
@@ -103,9 +106,9 @@ const SwapForm = ({
         withSelectButton
         numberOnly
         value={toValues.amount}
-        onSelectButtonClick={() => setTokenSelectorType("to")}
+        onSelectButtonClick={() => setTokenSelectorType('to')}
         onChange={async (e, { value }) => {
-          setInputSide("to");
+          setInputSide('to');
           setToValues((prev) => ({
             ...prev,
             amount: limitDecimalPlaces(value, toValues.precision),
