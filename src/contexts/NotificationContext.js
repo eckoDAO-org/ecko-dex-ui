@@ -10,7 +10,7 @@ export const STATUSES = {
   WARNING: toast.TYPE.WARNING,
   DARK: toast.TYPE.DARK,
   ERROR: toast.TYPE.ERROR,
-  INFO: toast.TYPE.INFO
+  INFO: toast.TYPE.INFO,
 };
 
 export const NotificationProvider = ({ children }) => {
@@ -18,7 +18,7 @@ export const NotificationProvider = ({ children }) => {
     title = '',
     message = '',
     autoClose = false,
-    position = 'top-right',
+    position = 'bottom-right',
     type = STATUSES.SUCCESS,
     style = undefined,
     progressStyle = undefined,
@@ -30,32 +30,35 @@ export const NotificationProvider = ({ children }) => {
     closeButton = undefined,
     onClick = undefined,
     onOpen = undefined,
-    onClose = undefined
+    onClose = undefined,
   }) => {
-    return toast(<NotificationContainer message={message} type={type} title={title} />, {
-      title,
-      message,
-      autoClose,
-      position,
-      style,
-      type,
-      progressStyle,
-      hideProgressBar,
-      pauseOnHover,
-      pauseOnFocusLoss,
-      draggable,
-      delay,
-      closeButton,
-      onClick,
-      onOpen,
-      onClose
-    });
+    return toast(
+      <NotificationContainer message={message} type={type} title={title} />,
+      {
+        title,
+        message,
+        autoClose,
+        position,
+        style,
+        type,
+        progressStyle,
+        hideProgressBar,
+        pauseOnHover,
+        pauseOnFocusLoss,
+        draggable,
+        delay,
+        closeButton,
+        onClick,
+        onOpen,
+        onClose,
+      }
+    );
   };
 
   return (
     <NotificationContext.Provider
       value={{
-        showNotification
+        showNotification,
       }}
     >
       {children}
