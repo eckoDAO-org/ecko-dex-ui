@@ -46,7 +46,7 @@ const ToggleContainer = styled.div`
   }
 
   transform: ${({ animation }) =>
-    !animation ? 'translateX(0px)' : 'translateX(-250px)'};
+    !animation ? 'translateX(0px)' : 'translateX(-180px)'};
   transition: transform 1s ease-in-out;
 `;
 
