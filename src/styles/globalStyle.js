@@ -41,6 +41,10 @@ export default createGlobalStyle`
         height: 100%;
       }
     }
+/* 
+    .ui.dimmer {
+      background-color: rgba(0,0,0,.40) !important;
+    } */
 
     .ui.input>input {
       background: transparent 0% 0% no-repeat padding-box;
@@ -63,14 +67,14 @@ export default createGlobalStyle`
 
     .desktop-none {
       @media (min-width: ${({ theme: { mediaQueries } }) =>
-          `${mediaQueries.desktopPixel + 1}px`}) {
+        `${mediaQueries.desktopPixel + 1}px`}) {
         display: none !important;
       }
     }
 
     .mobile-none {
       @media (max-width: ${({ theme: { mediaQueries } }) =>
-          `${mediaQueries.desktopPixel}px`}) {
+        `${mediaQueries.desktopPixel}px`}) {
         display: none !important;
       }
     }

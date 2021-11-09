@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import NotificationContainer from '../components/notification/NotificationContainer';
 
@@ -13,7 +13,13 @@ export const STATUSES = {
   INFO: toast.TYPE.INFO,
 };
 
+const getStoredNotification = JSON.parse(localStorage.getItem('Notification'));
+
 export const NotificationProvider = ({ children }) => {
+  const [notificationList, setNotificationList] = useState(
+    getStoredNotification
+  );
+
   const showNotification = ({
     title = '',
     message = '',
@@ -55,10 +61,34 @@ export const NotificationProvider = ({ children }) => {
     );
   };
 
+  useEffect(() => {
+    setNotificationList(getStoredNotification);
+  }, [getStoredNotification]);
+
+  const storeNotification = (notification) => {
+    const notificationListByStorage = JSON.parse(
+      localStorage.getItem('Notification')
+    );
+    if (!notificationListByStorage) {
+      //first saving swapReqKeys in localstorage
+      localStorage.setItem(`Notification`, JSON.stringify([notification]));
+      setNotificationList(notification);
+    } else {
+      notificationListByStorage.push(notification);
+      localStorage.setItem(
+        `Notification`,
+        JSON.stringify(notificationListByStorage)
+      );
+      setNotificationList(notificationListByStorage);
+    }
+  };
+
   return (
     <NotificationContext.Provider
       value={{
         showNotification,
+        notificationList,
+        storeNotification,
       }}
     >
       {children}

@@ -163,6 +163,7 @@ export const SwapProvider = (props) => {
         data = await Pact.wallet.sendSigned(cmd, network);
       }
       pact.pollingNotif(data.requestKeys[0]);
+
       await pact.listen(data.requestKeys[0]);
       pact.setPolling(false);
     } catch (e) {
