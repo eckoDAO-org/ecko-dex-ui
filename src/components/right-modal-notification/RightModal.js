@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Transition, Modal, Divider } from 'semantic-ui-react';
+import { Transition, Modal } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
 import { CloseIcon } from '../../assets';

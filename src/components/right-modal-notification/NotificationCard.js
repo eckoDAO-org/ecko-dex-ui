@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Divider } from 'semantic-ui-react';
 import styled from 'styled-components';
 import {
+  CloseIcon,
   NotificationCautionBlueIcon,
   NotificationErrorIcon,
   NotificationSuccessIcon,
@@ -20,13 +21,19 @@ const Container = styled.div`
       : 'none'};
   width: 100%;
   height: 100%;
+  /* 
+  transform: ${({ animation }) =>
+    !animation ? 'translateX(0px)' : 'translateX(500px)'};
+  transition: transform 1s ease-in-out; */
 `;
 
 const NotificationContainer = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
   align-items: center;
   height: 100%;
+  width: 100%;
   color: #fff;
   padding: 16px 26px;
 `;
@@ -38,11 +45,20 @@ const CustomDivider = styled(Divider)`
   border-bottom: 0px !important;
 `;
 
+const CloseIconColumn = styled.div`
+  display: flex;
+  height: 100%;
+  align-self: flex-start;
+  svg {
+    width: 7px;
+    height: 7px;
+  }
+`;
+
 const IconColumn = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 20px;
   svg {
     width: 40px;
     height: 40px;
@@ -54,6 +70,7 @@ const DescriptionColumn = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  max-width: 200px;
   & > span:not(:last-child) {
     margin-bottom: 4px;
   }
@@ -73,12 +90,17 @@ const Description = styled.span`
   font-size: 14px;
 `;
 
-const NotificationCard = ({ time, date, title, description, type }) => {
+const NotificationCard = ({
+  index,
+  time,
+  date,
+  title,
+  description,
+  type,
+  removeItem,
+}) => {
   const [isHover, setIsHover] = useState(false);
-  console.log(
-    '🚀 ~ file: NotificationCard.js ~ line 74 ~ NotificationCard ~ isHover',
-    isHover
-  );
+  const [animation, setAnimation] = useState(false);
 
   const getIconByTypeNotification = (type) => {
     switch (type) {
@@ -112,8 +134,22 @@ const NotificationCard = ({ time, date, title, description, type }) => {
     }
   };
 
+  //   useEffect(() => {
+  //     if (animation) {
+  //       const timer = setTimeout(async () => {
+  //         await removeItem(index);
+  //       }, 1000);
+  //       return () => {
+  //         setAnimation(false);
+
+  //         clearTimeout(timer);
+  //       };
+  //     }
+  //   }, [animation]);
+
   return (
     <Container
+      id={`notification_card_${index}`}
       isHover={isHover}
       typeColor={getColorByType(type)}
       onMouseOver={() => {
@@ -122,6 +158,7 @@ const NotificationCard = ({ time, date, title, description, type }) => {
       onMouseLeave={() => {
         setIsHover(false);
       }}
+      animation={animation}
     >
       <CustomDivider />
       <NotificationContainer>
@@ -131,6 +168,15 @@ const NotificationCard = ({ time, date, title, description, type }) => {
           <Title>{title}</Title>
           <Description>{description}</Description>
         </DescriptionColumn>
+        <CloseIconColumn>
+          <CloseIcon
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              //   setAnimation(true);
+              removeItem(index);
+            }}
+          />
+        </CloseIconColumn>
       </NotificationContainer>
     </Container>
   );
