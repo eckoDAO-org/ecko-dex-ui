@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components/macro";
+import React from 'react';
+import styled from 'styled-components/macro';
 
 const Container = styled.div`
   display: flex;
@@ -14,17 +14,13 @@ const Button = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #FFFFFF;
-  box-shadow: 0 0 5px #FFFFFF;
+  border: 1px solid #ffffff;
   border-radius: 100%;
   width: 48px;
   height: 48px;
   padding: 0;
   margin: 0;
   background: transparent;
-  svg {
-    transform: rotate(90deg);
-  }
   svg path.a {
     fill: #fff;
   }

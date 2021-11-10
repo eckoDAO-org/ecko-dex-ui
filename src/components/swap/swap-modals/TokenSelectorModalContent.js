@@ -61,7 +61,10 @@ const TokenSelectorModalContent = ({
 
   return (
     <>
-      <Label gameEditionView={gameEditionView} style={{ marginBottom: 4 }}>
+      <Label
+        gameEditionView={gameEditionView}
+        style={{ marginTop: '20px', marginBottom: 4 }}
+      >
         search token
       </Label>
       <Search

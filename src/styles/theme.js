@@ -32,7 +32,7 @@ export const theme = {
   },
   inputTokenWidth: 78,
   inputSelectButtonWidth: 81,
-  buttonBackgroundGradient: 'transparent',
+  buttonBackgroundGradient: '#FFFFFF',
 };
 
 export default theme;

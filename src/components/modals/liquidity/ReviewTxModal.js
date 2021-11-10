@@ -28,7 +28,7 @@ const Content = styled.div`
   svg {
     display: ${({ gameEditionView }) => gameEditionView && 'none '};
   }
-  width: 97%;
+  width: ${({ gameEditionView }) => (gameEditionView ? '97%' : '100%')};
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
   bottom: ${({ gameEditionView }) => gameEditionView && '138px'};
 `;

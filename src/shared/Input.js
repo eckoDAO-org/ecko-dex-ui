@@ -97,8 +97,7 @@ const Button = styled.button`
   height: 22px;
   padding-left: 8px !important;
   /* padding-right: 8px !important; */
-  background: ${({ theme: { buttonBackgroundGradient } }) =>
-    buttonBackgroundGradient};
+  background: transparent;
   border-radius: 20px;
   span {
     font: ${({ gameEditionView }) =>

@@ -49,6 +49,8 @@ const InputToken = ({ icon, code, onClick, onClickButton, disabledButton }) => {
           textTransform: gameEditionView ? 'capitalize' : 'uppercase',
         }}
         border='none'
+        color={!gameEditionView && '#fff'}
+        background='transparent'
         fontSize={gameEditionView ? '13px' : '13px'}
         onClick={onClickButton}
         disabled={disabledButton}

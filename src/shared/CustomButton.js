@@ -13,17 +13,20 @@ const StyledButton = styled(SUIButton)`
       : fontFamily.bold} !important;
   font-size: ${({ fontSize }) =>
     fontSize ? fontSize + ' !important' : '16px !important'};
-  color: ${({ color, gameEditionView }) => {
+  color: ${({ disabled, color, gameEditionView }) => {
     if (color) return color + ' !important';
-    else if (gameEditionView) return `${theme.colors.black} !important`;
-    else return '#ffffff !important';
+    if (gameEditionView) return `${theme.colors.black} !important`;
+    else if (disabled) return '#ffffff !important';
+    else return '#4C125A !important';
   }};
   background: ${({
     disabled,
     background,
+    gameEditionView,
     theme: { buttonBackgroundGradient },
   }) => {
     if (background) return background + ' !important';
+    if (gameEditionView) return 'transparent !important';
     if (disabled) return 'transparent !important';
     return buttonBackgroundGradient + '!important';
   }};

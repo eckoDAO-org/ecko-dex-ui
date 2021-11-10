@@ -58,6 +58,7 @@ const ButtonContainer = styled.div`
 `;
 
 const FormContainer = styled.div`
+  position: ${({ gameEditionView }) => !gameEditionView && `relative`};
   display: table;
   flex-flow: column;
   padding: ${({ gameEditionView }) => (gameEditionView ? '10px' : '20px')};
@@ -67,11 +68,31 @@ const FormContainer = styled.div`
   border: ${({ gameEditionView, theme: { colors } }) =>
     gameEditionView
       ? `2px dashed ${colors.black} !important`
-      : ' 2px solid #ffffff'};
-  box-shadow: ${({ gameEditionView }) =>
-    gameEditionView ? 'none !important' : '0 0 5px #ffffff'};
+      : '2px solid transparent'};
+
+  background-clip: ${({ gameEditionView }) =>
+    !gameEditionView && `padding-box`};
   opacity: 1;
-  background: transparent;
+  background: ${({ gameEditionView }) =>
+    gameEditionView
+      ? `transparent`
+      : `transparent linear-gradient(122deg, #070610 0%, #4c125a 100%) 0%
+    0% no-repeat padding-box`};
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1000;
+    margin: -2px;
+    border-radius: inherit;
+    background: ${({ gameEditionView }) =>
+      !gameEditionView &&
+      'linear-gradient(to right, #ed1cb5, #ffa900, #39fffc)'};
+  }
 
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
@@ -88,12 +109,10 @@ const TopContainer = styled.div``;
 
 const TitleContainer = styled.div`
   display: flex;
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  top: ${({ gameEditionView }) => gameEditionView && '10px'};
   justify-content: ${({ gameEditionView }) =>
     gameEditionView ? `center` : ` space-between`};
   margin-bottom: ${({ gameEditionView }) =>
-    gameEditionView ? `0px` : ` 24px`};
+    gameEditionView ? `20px` : ` 24px`};
   width: 93%;
 `;
 const Title = styled.span`
@@ -121,6 +140,8 @@ const LiquidityList = (props) => {
   return (
     <Container gameEditionView={gameEditionView}>
       <ModalContainer
+        withoutRainbowBackground
+        gameEditionView={gameEditionView}
         containerStyle={{
           maxHeight: gameEditionView ? '60vh' : '80vh',
           maxWidth: 900,
