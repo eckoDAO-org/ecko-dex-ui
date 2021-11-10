@@ -34,11 +34,11 @@ const StyledButton = styled(SUIButton)`
     else if (gameEditionView) return `2px dashed #000000 !important`;
     else return '1px solid #FFFFFF !important';
   }};
-  box-shadow: ${({ boxShadow, gameEditionView }) => {
+  /* box-shadow: ${({ boxShadow, gameEditionView }) => {
     if (boxShadow) return boxShadow + ' !important';
     else if (gameEditionView) return `none !important`;
     else return '0 0 4px #FFFFFF !important';
-  }};
+  }}; */
 
   /* box-shadow: 0 0 4px #FFFFFF !important; */
   /* :hover {

@@ -15,7 +15,6 @@ const Label = styled.span`
 `;
 
 const Divider = styled.div`
-  /* border: ${({ theme: { colors } }) => `1px solid ${colors.border}`}; */
   border: 1px solid #ecebec;
   margin: 16px 0px;
   width: 100%;
@@ -57,6 +56,8 @@ const TokenSelectorModalContent = ({
   const [searchValue, setSearchValue] = useState('');
   const swap = useContext(SwapContext);
   const { gameEditionView } = useContext(GameEditionContext);
+
+  console.log('selectedToken', selectedToken);
 
   return (
     <>

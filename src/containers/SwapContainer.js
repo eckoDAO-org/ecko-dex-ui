@@ -22,9 +22,62 @@ import TokenSelectorModalContent from '../components/swap/swap-modals/TokenSelec
 const Container = styled(FadeIn)`
   width: 100%;
   margin-top: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 24px`)};
+  max-width: ${({ gameEditionView }) => !gameEditionView && `500px`};
   margin-left: auto;
   margin-right: auto;
 `;
+
+const FormContainer = styled.div`
+  position: ${({ gameEditionView }) => !gameEditionView && `relative`};
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  padding: ${({ gameEditionView }) =>
+    gameEditionView ? `10px 10px` : `32px 32px`};
+  width: 100%;
+  border-radius: 10px;
+  border: ${({ gameEditionView }) =>
+    gameEditionView ? `none` : ` 2px solid transparent`};
+
+  background-clip: ${({ gameEditionView }) =>
+    !gameEditionView && `padding-box`};
+
+  opacity: 1;
+  background: ${({ gameEditionView }) =>
+    gameEditionView
+      ? `transparent`
+      : `transparent linear-gradient(122deg, #070610 0%, #4c125a 100%) 0%
+    0% no-repeat padding-box`};
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1000;
+    margin: -2px;
+    border-radius: inherit;
+    background: ${({ gameEditionView }) =>
+      !gameEditionView &&
+      'linear-gradient(to right, #ed1cb5, #ffa900, #39fffc)'};
+  }
+
+  /* &:before {
+    border-radius: inherit;
+
+  /* & > *:not(:last-child) {
+    margin-right: 32px;
+  } */
+
+  @media (max-width: ${({ theme: { mediaQueries } }) =>
+      `${mediaQueries.mobilePixel + 1}px`}) {
+    flex-flow: column;
+    gap: 0px;
+  }
+`;
+
 const TitleContainer = styled.div`
   display: flex;
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
@@ -255,11 +308,7 @@ const SwapContainer = () => {
     };
     getBalance();
   }, [toValues.amount, fromValues.amount]);
-  useEffect(() => {
-    if (tokenSelectorType === 'from') return setSelectedToken(fromValues.coin);
-    if (tokenSelectorType === 'to') return setSelectedToken(toValues.coin);
-    return setSelectedToken(null);
-  }, [tokenSelectorType]);
+
   useEffect(() => {
     const getReserves = async () => {
       if (toValues.coin !== '' && fromValues.coin !== '') {
@@ -351,12 +400,26 @@ const SwapContainer = () => {
   };
 
   useEffect(() => {
+    console.log('tokenSelectorType-----', tokenSelectorType);
+    console.log('fromValues.coin-----', fromValues.coin);
+
+    if (tokenSelectorType === 'from') return setSelectedToken(fromValues.coin);
+    console.log('SETTEDD');
+    console.log('fromValues.coin-----', fromValues.coin);
+    console.log('selectedToken-----', selectedToken);
+    if (tokenSelectorType === 'to') return setSelectedToken(toValues.coin);
+    return setSelectedToken(null);
+  }, [tokenSelectorType]);
+
+  useEffect(() => {
     if (tokenSelectorType !== null) {
-      onClickTokenSelectorType();
+      handleTokenSelectorType();
     }
   }, [tokenSelectorType]);
 
-  const onClickTokenSelectorType = () => {
+  const handleTokenSelectorType = () => {
+    console.log('I?M IN');
+    console.log('selectedToken INNNN', selectedToken);
     if (gameEditionView) {
       openModal({
         title: 'Select a Token',
@@ -385,9 +448,7 @@ const SwapContainer = () => {
         description: '',
         containerStyle: {
           //height: "100%",
-          maxHeight: '40vh !important',
-          maxWidth: '40vw !important',
-          width: '90%',
+          width: '75%',
         },
         onBack: () => {
           modalContext.onBackModal();
@@ -437,45 +498,47 @@ const SwapContainer = () => {
       <TitleContainer gameEditionView={gameEditionView}>
         <Title gameEditionView={gameEditionView}>Swap</Title>
       </TitleContainer>
-      <SwapForm
-        fromValues={fromValues}
-        setFromValues={setFromValues}
-        toValues={toValues}
-        setToValues={setToValues}
-        fromNote={fromNote}
-        toNote={toNote}
-        setTokenSelectorType={setTokenSelectorType}
-        setInputSide={setInputSide}
-        swapValues={swapValues}
-        setShowTxModal={setShowTxModal}
-        /* onClickTokenSelectorType={onClickTokenSelectorType} */
-      />
-      {!isNaN(pact.ratio) &&
-      fromValues.amount &&
-      fromValues.coin &&
-      toValues.amount &&
-      toValues.coin ? (
-        <SwapResults
-          priceImpact={priceImpact}
+      <FormContainer gameEditionView={gameEditionView}>
+        <SwapForm
           fromValues={fromValues}
+          setFromValues={setFromValues}
           toValues={toValues}
+          setToValues={setToValues}
+          fromNote={fromNote}
+          toNote={toNote}
+          setTokenSelectorType={setTokenSelectorType}
+          setInputSide={setInputSide}
+          swapValues={swapValues}
+          setShowTxModal={setShowTxModal}
+          /* handleTokenSelectorType={handleTokenSelectorType} */
         />
-      ) : (
-        <></>
-      )}
-      <SwapButtonsForm
-        setLoading={setLoading}
-        fetchingPair={fetchingPair}
-        fromValues={fromValues}
-        setFromValues={setFromValues}
-        toValues={toValues}
-        setToValues={setToValues}
-        fromNote={fromNote}
-        ratio={pact.ratio}
-        loading={loading}
-        noLiquidity={noLiquidity}
-        setShowTxModal={setShowTxModal}
-      />
+        {!isNaN(pact.ratio) &&
+        fromValues.amount &&
+        fromValues.coin &&
+        toValues.amount &&
+        toValues.coin ? (
+          <SwapResults
+            priceImpact={priceImpact}
+            fromValues={fromValues}
+            toValues={toValues}
+          />
+        ) : (
+          <></>
+        )}
+        <SwapButtonsForm
+          setLoading={setLoading}
+          fetchingPair={fetchingPair}
+          fromValues={fromValues}
+          setFromValues={setFromValues}
+          toValues={toValues}
+          setToValues={setToValues}
+          fromNote={fromNote}
+          ratio={pact.ratio}
+          loading={loading}
+          noLiquidity={noLiquidity}
+          setShowTxModal={setShowTxModal}
+        />
+      </FormContainer>
     </Container>
   );
 };

@@ -8,32 +8,13 @@ import { limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
 import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 
-const FormContainer = styled.div`
-  position: relative;
+const Container = styled.div`
   display: flex;
-  flex-flow: ${({ gameEditionView }) => (gameEditionView ? `column` : `row`)};
-  padding: ${({ gameEditionView }) =>
-    gameEditionView ? `10px 10px` : `20px 20px`};
+  flex-flow: column;
   width: 100%;
-  border-radius: 10px;
-  border: ${({ gameEditionView }) =>
-    gameEditionView ? `none` : ` 2px solid #ffffff`};
-  box-shadow: ${({ gameEditionView }) =>
-    gameEditionView ? `none` : `0 0 5px #ffffff`};
-  opacity: 1;
-  background: transparent;
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  top: ${({ gameEditionView }) => gameEditionView && '40px'};
-
-  & > *:not(:last-child) {
-    margin-right: 32px;
-  }
-
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: column;
-    gap: 0px;
-  }
+  position: ${({ gameEditionView }) =>
+    gameEditionView && 'absolute !important'};
+  bottom: ${({ gameEditionView }) => gameEditionView && '50px !important'};
 `;
 
 const SwapForm = ({
@@ -46,15 +27,14 @@ const SwapForm = ({
   setTokenSelectorType,
   setInputSide,
   swapValues,
-  onClickTokenSelectorType,
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
   return (
-    <FormContainer gameEditionView={gameEditionView}>
+    <Container>
       <Input
         error={isNaN(fromValues.amount)}
-        topLeftLabel={fromNote ? `from ${fromNote}` : `input`}
-        bottomLeftLabel={`balance: ${reduceBalance(fromValues.balance) ?? '-'}`}
+        topLeftLabel={fromNote ? `from ${fromNote}` : `from`}
+        topRightLabel={`balance: ${reduceBalance(fromValues.balance) ?? '-'}`}
         placeholder='enter amount'
         maxLength='15'
         size='big'
@@ -96,8 +76,8 @@ const SwapForm = ({
       )}
       <Input
         error={isNaN(toValues.amount)}
-        topLeftLabel={toNote ? `to ${toNote}` : `input`}
-        bottomLeftLabel={`balance: ${reduceBalance(toValues.balance) ?? '-'}`}
+        topLeftLabel={toNote ? `to ${toNote}` : `to`}
+        topRightLabel={`balance: ${reduceBalance(toValues.balance) ?? '-'}`}
         placeholder='enter amount'
         maxLength='15'
         inputRightComponent={
@@ -131,7 +111,7 @@ const SwapForm = ({
           }));
         }}
       />
-    </FormContainer>
+    </Container>
   );
 };
 

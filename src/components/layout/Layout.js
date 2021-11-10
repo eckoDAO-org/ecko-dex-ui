@@ -62,7 +62,7 @@ const Layout = ({ children }) => {
 
   return (
     <MainContainer>
-      <CustomParticles />
+      {/* <CustomParticles /> */}
       <WrapperContainer>
         <MobileHeader className='desktop-none' />
         <DesktopHeader

@@ -11,8 +11,12 @@ const Container = styled.div`
   flex-flow: column;
   margin-bottom: ${({ gameEditionView }) => (gameEditionView ? '10px' : '0px')};
   width: 100%;
+  border: ${({ gameEditionView }) => !gameEditionView && '1px solid #ffffff99'};
+  border-radius: ${({ gameEditionView }) => !gameEditionView && '4px'};
+  padding: ${({ gameEditionView }) => !gameEditionView && '10px'};
 
   .ui.input > input {
+    padding: ${({ gameEditionView }) => !gameEditionView && ' 10px 2px'};
     font-family: ${({ gameEditionView }) =>
       gameEditionView
         ? `${theme.fontFamily.pressStartRegular}`
@@ -89,10 +93,10 @@ const Button = styled.button`
   align-items: center;
   position: absolute;
   top: 25%;
-  right: 10px;
+  right: ${({ gameEditionView }) => (gameEditionView ? '10px' : '0px')};
   height: 22px;
   padding-left: 8px !important;
-  padding-right: 8px !important;
+  /* padding-right: 8px !important; */
   background: ${({ theme: { buttonBackgroundGradient } }) =>
     buttonBackgroundGradient};
   border-radius: 20px;
@@ -146,8 +150,7 @@ const Input = ({
           gameEditionView={gameEditionView}
           onClick={onSelectButtonClick}
           style={{
-            border: gameEditionView ? 'none' : '1px solid #FFFFFF',
-            boxShadow: gameEditionView ? 'none' : '0 0 3px #FFFFFF',
+            border: 'none',
           }}
         >
           <span>
@@ -221,11 +224,9 @@ const Input = ({
           containerStyle
             ? containerStyle
             : {
+                padding: !gameEditionView && '0px !important',
                 borderRadius: '10px',
-                border: gameEditionView
-                  ? '2px dashed #15081F'
-                  : '1px solid #FFFFFF',
-                boxShadow: gameEditionView ? 'none' : '0 0 5px #FFFFFF',
+                border: gameEditionView ? '2px dashed #15081F' : 'none',
                 opacity: 1,
                 backgroundColor: 'transparent',
               }

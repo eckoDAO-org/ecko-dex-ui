@@ -14,7 +14,7 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 24px;
+  margin-top: 20px;
   width: 100%;
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
   bottom: ${({ gameEditionView }) => gameEditionView && '10px'};
@@ -54,10 +54,7 @@ const SwapButtonsForm = ({
   };
   return (
     <ButtonContainer gameEditionView={gameEditionView}>
-      <Button.Group
-        fluid={gameEditionView}
-        style={{ padding: gameEditionView ? '0 10px' : 0 }}
-      >
+      <Button.Group fluid style={{ padding: gameEditionView ? '0 10px' : 0 }}>
         <CustomButton
           /* background="none" */
           disabled={
