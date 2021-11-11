@@ -285,7 +285,7 @@ export const LiquidityProvider = (props) => {
           ),
         },
         meta: Pact.lang.mkMeta(
-          "kswap-free-gas",
+          ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
           chainId,
           GAS_PRICE,
           3000,
