@@ -14,7 +14,7 @@ import {
   network,
   NETWORKID,
   ENABLE_GAS_STATION,
-} from "../constants/contextConstants";
+} from '../constants/contextConstants';
 
 export const SwapContext = createContext();
 
@@ -156,7 +156,6 @@ export const SwapProvider = (props) => {
 
   const swapSend = async () => {
     pact.setPolling(true);
-    debugger;
     try {
       let data;
       if (cmd.pactCode) {
@@ -175,7 +174,6 @@ export const SwapProvider = (props) => {
   };
 
   const swapLocal = async (token0, token1, isSwapIn) => {
-    debugger;
     try {
       let privKey = wallet.signing.key;
       if (wallet.signing.method === 'pk+pw') {
@@ -212,11 +210,11 @@ export const SwapProvider = (props) => {
             ...(ENABLE_GAS_STATION
               ? [
                   {
-                    name: "kswap.gas-station.GAS_PAYER",
-                    args: ["free-gas", { int: 1 }, 1.0],
+                    name: 'kswap.gas-station.GAS_PAYER',
+                    args: ['free-gas', { int: 1 }, 1.0],
                   },
                 ]
-              : [Pact.lang.mkCap("gas", "pay gas", "coin.GAS").cap]),
+              : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap]),
             {
               name: `${token0.address}.TRANSFER`,
               args: [
@@ -256,7 +254,7 @@ export const SwapProvider = (props) => {
         },
         networkId: NETWORKID,
         meta: Pact.lang.mkMeta(
-          ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
+          ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account,
           chainId,
           GAS_PRICE,
           3000,
@@ -276,7 +274,6 @@ export const SwapProvider = (props) => {
   };
 
   const swapWallet = async (token0, token1, isSwapIn) => {
-    debugger;
     try {
       const inPactCode = `(kswap.exchange.swap-exact-in
           (read-decimal 'token0Amount)
@@ -300,16 +297,16 @@ export const SwapProvider = (props) => {
           ...(ENABLE_GAS_STATION
             ? [
                 Pact.lang.mkCap(
-                  "Gas Station",
-                  "free gas",
-                  "kswap.gas-station.GAS_PAYER",
-                  ["free-gas", { int: 1 }, 1.0]
+                  'Gas Station',
+                  'free gas',
+                  'kswap.gas-station.GAS_PAYER',
+                  ['free-gas', { int: 1 }, 1.0]
                 ),
               ]
             : []),
           Pact.lang.mkCap(
-            "transfer capability",
-            "trasnsfer token in",
+            'transfer capability',
+            'trasnsfer token in',
             `${token0.address}.TRANSFER`,
             [
               account.account,
@@ -323,10 +320,10 @@ export const SwapProvider = (props) => {
             ]
           ),
           ...(!ENABLE_GAS_STATION
-            ? [Pact.lang.mkCap("gas", "pay gas", "coin.GAS")]
+            ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]
             : []),
         ],
-        sender: ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
+        sender: ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account,
         gasLimit: 3000,
         gasPrice: GAS_PRICE,
         chainId: chainId,
