@@ -16,4 +16,6 @@ export const NETWORK_TYPE = "mainnet";
 export const network = `https://api.chainweb.com/chainweb/0.0/${NETWORKID}/chain/${chainId}/pact`;
 
 export const creationTime = () => Math.round(new Date().getTime() / 1000) - 10;
-export const GAS_PRICE = 0.000000000001;
+export const GAS_PRICE = 0.00000001;
+//Enable or disable gas station
+export const ENABLE_GAS_STATION = false;

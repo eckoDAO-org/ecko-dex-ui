@@ -9,6 +9,7 @@ import {
   network,
   NETWORKID,
   PRECISION,
+  ENABLE_GAS_STATION,
 } from "../constants/contextConstants";
 import { AccountContext } from "./AccountContext";
 import { WalletContext } from "./WalletContext";
@@ -161,10 +162,14 @@ export const LiquidityProvider = (props) => {
                 name: `${token1.code}.TRANSFER`,
                 args: [account.account, pair, Number(amountDesired1)],
               },
-              {
-                name: "kswap.gas-station.GAS_PAYER",
-                args: ["free-gas", { int: 1 }, 1.0],
-              },
+              ...(ENABLE_GAS_STATION
+                ? [
+                    {
+                      name: "kswap.gas-station.GAS_PAYER",
+                      args: ["free-gas", { int: 1 }, 1.0],
+                    },
+                  ]
+                : [Pact.lang.mkCap("gas", "pay gas", "coin.GAS")]),
             ],
           },
           envData: {
@@ -187,7 +192,7 @@ export const LiquidityProvider = (props) => {
             ),
           },
           meta: Pact.lang.mkMeta(
-            "kswap-free-gas",
+            ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
             chainId,
             GAS_PRICE,
             5000,
@@ -250,10 +255,14 @@ export const LiquidityProvider = (props) => {
               name: `${token1.code}.TRANSFER`,
               args: [account.account, pair, Number(amountDesired1)],
             },
-            {
-              name: "kswap.gas-station.GAS_PAYER",
-              args: ["free-gas", { int: 1 }, 1.0],
-            },
+            ...(ENABLE_GAS_STATION
+              ? [
+                  {
+                    name: "kswap.gas-station.GAS_PAYER",
+                    args: ["free-gas", { int: 1 }, 1.0],
+                  },
+                ]
+              : [Pact.lang.mkCap("gas", "pay gas", "coin.GAS")]),
           ],
         },
         envData: {
@@ -317,12 +326,16 @@ export const LiquidityProvider = (props) => {
             (read-keyset 'user-ks)
           )`,
         caps: [
-          Pact.lang.mkCap(
-            "Gas Station",
-            "free gas",
-            "kswap.gas-station.GAS_PAYER",
-            ["free-gas", { int: 1 }, 1.0]
-          ),
+          ...(ENABLE_GAS_STATION
+            ? [
+                Pact.lang.mkCap(
+                  "Gas Station",
+                  "free gas",
+                  "kswap.gas-station.GAS_PAYER",
+                  ["free-gas", { int: 1 }, 1.0]
+                ),
+              ]
+            : []),
           Pact.lang.mkCap(
             "transfer capability",
             "Transfer Token to Pool",
@@ -335,8 +348,11 @@ export const LiquidityProvider = (props) => {
             `${token1.code}.TRANSFER`,
             [account.account, pair, Number(amountDesired1)]
           ),
+          ...(!ENABLE_GAS_STATION
+            ? [Pact.lang.mkCap("gas", "pay gas", "coin.GAS")]
+            : []),
         ],
-        sender: "kswap-free-gas",
+        sender: ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
         gasLimit: 3000,
         gasPrice: GAS_PRICE,
         chainId: chainId,
@@ -433,10 +449,14 @@ export const LiquidityProvider = (props) => {
               name: `kswap.tokens.TRANSFER`,
               args: [pairKey, account.account, pair, Number(liquidity)],
             },
-            {
-              name: "kswap.gas-station.GAS_PAYER",
-              args: ["free-gas", { int: 1 }, 1.0],
-            },
+            ...(ENABLE_GAS_STATION
+              ? [
+                  {
+                    name: "kswap.gas-station.GAS_PAYER",
+                    args: ["free-gas", { int: 1 }, 1.0],
+                  },
+                ]
+              : [Pact.lang.mkCap("gas", "pay gas", "coin.GAS")]),
           ],
         },
         envData: {
@@ -444,7 +464,7 @@ export const LiquidityProvider = (props) => {
           liquidity: reduceBalance(liquidity, PRECISION),
         },
         meta: Pact.lang.mkMeta(
-          "kswap-free-gas",
+          ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
           chainId,
           GAS_PRICE,
           3000,
@@ -480,11 +500,21 @@ export const LiquidityProvider = (props) => {
             (read-keyset 'user-ks)
           )`,
         caps: [
+          ...(ENABLE_GAS_STATION
+            ? [
+                Pact.lang.mkCap(
+                  "Gas Station",
+                  "free gas",
+                  "kswap.gas-station.GAS_PAYER",
+                  ["free-gas", { int: 1 }, 1.0]
+                ),
+              ]
+            : []),
           Pact.lang.mkCap(
-            "Gas Station",
-            "free gas",
-            "kswap.gas-station.GAS_PAYER",
-            ["free-gas", { int: 1 }, 1.0]
+            "transfer capability",
+            "Transfer Token to Pool",
+            `kswap.tokens.TRANSFER`,
+            [pairKey, account.account, pair, Number(liquidity)]
           ),
           Pact.lang.mkCap(
             "transfer capability",
@@ -492,14 +522,11 @@ export const LiquidityProvider = (props) => {
             `kswap.tokens.TRANSFER`,
             [pairKey, account.account, pair, Number(liquidity)]
           ),
-          Pact.lang.mkCap(
-            "transfer capability",
-            "Transfer Token to Pool",
-            `kswap.tokens.TRANSFER`,
-            [pairKey, account.account, pair, Number(liquidity)]
-          ),
+          ...(!ENABLE_GAS_STATION
+            ? [Pact.lang.mkCap("gas", "pay gas", "coin.GAS")]
+            : []),
         ],
-        sender: "kswap-free-gas",
+        sender: ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
         gasLimit: 3000,
         gasPrice: GAS_PRICE,
         chainId: chainId,
