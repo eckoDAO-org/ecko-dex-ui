@@ -107,15 +107,6 @@ const RightModalContent = () => {
           Set Notification Warning
         </Button>
       </Content>
-      {/* <FooterContainer>
-        <Button
-          onClick={() => {
-            notification.removeAllItem();
-          }}
-        >
-          Remove All Notification{' '}
-        </Button>
-      </FooterContainer> */}
     </ModalContainer>
   );
 };

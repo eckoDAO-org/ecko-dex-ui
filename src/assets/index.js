@@ -9,6 +9,7 @@ export { ReactComponent as CodeIcon } from './images/header/code.svg';
 export { ReactComponent as DiscordIcon } from './images/header/discord.svg';
 export { ReactComponent as TelegramIcon } from './images/header/telegram.svg';
 export { ReactComponent as SwapArrowsIcon } from './images/shared/swap-token-arrow.svg';
+export { ReactComponent as SwapIcon } from './images/shared/swap-icon.svg';
 export { ReactComponent as ArrowDown } from './images/shared/arrow-down-white.svg';
 export { ReactComponent as ZelcoreLogo } from './images/shared/zelcore-logo.svg';
 export { ReactComponent as LockLogo } from './images/shared/awesome-lock.svg';

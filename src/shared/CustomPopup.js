@@ -1,6 +1,11 @@
-import React from "react";
-import { Popup } from "semantic-ui-react";
-import theme from "../styles/theme";
+import React from 'react';
+import { Popup as SUIPopup } from 'semantic-ui-react';
+import styled from 'styled-components';
+
+const Popup = styled(SUIPopup)`
+  & .ui.visible.popup {
+  }
+`;
 
 const CustomPopup = ({
   popupStyle,
@@ -19,10 +24,8 @@ const CustomPopup = ({
       offset={offset}
       position={position}
       style={{
-        padding: "13px 13px 4px 13px",
-        background: `${theme.colors.purple} 0% 0% no-repeat padding-box`,
-        border: "2px solid #FFFFFF",
-        boxShadow: "0 0 5px #FFFFFF",
+        padding: '13px 13px 4px 13px',
+        // background: `${theme.colors.purple} 0% 0% no-repeat padding-box`,
         ...popupStyle,
       }}
       {...props}

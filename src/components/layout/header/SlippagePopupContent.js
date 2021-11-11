@@ -1,25 +1,27 @@
-import React, { useContext, useState, useEffect } from "react";
-import styled from "styled-components";
-import { PactContext } from "../../../contexts/PactContext";
-import Input from "../../../shared/Input";
+import React, { useContext, useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { PactContext } from '../../../contexts/PactContext';
+import Input from '../../../shared/Input';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
   margin-bottom: 9px;
-  background: ${({ theme: colors }) => colors.purple} 0% 0% no-repeat
-    padding-box;
+  padding: 10px;
+  background: transparent linear-gradient(122deg, #070610 0%, #4c125a 100%) 0%
+    0% no-repeat padding-box;
 `;
 
 const BoldLabel = styled.span`
   font-size: 13px;
-  font-family: ${({ theme: fontFamily }) => fontFamily.bold};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold} !important;
   text-transform: capitalize;
 `;
 
 const RegularLabel = styled.span`
   font-size: 13px;
-  font-family: ${({ theme: fontFamily }) => fontFamily.regular};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
   text-transform: capitalize;
   color: #ffffff;
 `;
@@ -27,11 +29,11 @@ const RegularLabel = styled.span`
 const SlippageTolleranceValue = styled.div`
   border-radius: 16px;
   border: 1px solid #ffffff;
-  box-shadow: ${({ isSelected }) => (isSelected ? "0 0 5px #FFFFFF;" : "none")};
+  box-shadow: ${({ isSelected }) => (isSelected ? '0 0 5px #FFFFFF;' : 'none')};
   color: #ffffff;
   text-shadow: ${({ isSelected }) =>
-    isSelected ? "0 0 5px #FFFFFF;" : "none"};
-  font-family: ${({ theme: fontFamily }) => fontFamily.regular};
+    isSelected ? '0 0 5px #FFFFFF;' : 'none'};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
   font-size: 14px;
   padding: 6.5px 8.5px;
   min-width: 48px;
@@ -39,8 +41,8 @@ const SlippageTolleranceValue = styled.div`
   justify-content: center;
   background-image: ${({ isSelected }) =>
     isSelected
-      ? "linear-gradient(to top right, #ed098f 0%,  #7a0196 100%)"
-      : "#ffffff"};
+      ? 'linear-gradient(to top right, #ed098f 0%,  #7a0196 100%)'
+      : '#ffffff'};
   cursor: pointer;
 `;
 
@@ -65,14 +67,14 @@ const ContainerInputTypeNumber = styled.div`
 const Row = styled.div`
   display: flex;
   align-items: center;
-  
-  .restrictedInput{
+
+  .restrictedInput {
     @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
-        .ui.fluid.input > input {
-    width: 30px !important;
+        `${mediaQueries.mobilePixel + 1}px`}) {
+      .ui.fluid.input > input {
+        width: 30px !important;
+      }
     }
-  }
   }
 `;
 
@@ -89,7 +91,7 @@ const SlippagePopupContent = () => {
   }, [tl]);
   return (
     <Container>
-      <BoldLabel style={{ color: "#FFFFFF" }}>Transactions Settings</BoldLabel>
+      <BoldLabel style={{ color: '#FFFFFF' }}>Transactions Settings</BoldLabel>
       <RegularLabel style={{ marginTop: 16 }}>Slippage Tolerance</RegularLabel>
 
       <Row style={{ marginTop: 8 }}>
@@ -114,11 +116,12 @@ const SlippagePopupContent = () => {
           1%
         </SlippageTolleranceValue>
 
-        <ContainerInputTypeNumber className="restrictedInput">
+        <ContainerInputTypeNumber className='restrictedInput'>
           <Input
             containerStyle={{
-              border: "none !important",
-              boxShadow: "none !important",
+              border: 'none ',
+              boxShadow: 'none !important',
+              padding: '0px',
             }}
             placeholder={slp}
             numberOnly
@@ -140,8 +143,9 @@ const SlippagePopupContent = () => {
         <ContainerInputTypeNumber>
           <Input
             containerStyle={{
-              border: "none !important",
-              boxShadow: "none !important",
+              border: 'none',
+              boxShadow: 'none !important',
+              padding: '0px',
             }}
             placeholder={tl}
             numberOnly
@@ -153,7 +157,7 @@ const SlippagePopupContent = () => {
             }}
           />
         </ContainerInputTypeNumber>
-        <RegularLabel style={{ color: "#FFFFFF", marginLeft: 8 }}>
+        <RegularLabel style={{ color: '#FFFFFF', marginLeft: 8 }}>
           minutes
         </RegularLabel>
       </Row>

@@ -61,6 +61,31 @@ export default createGlobalStyle`
       opacity: 1 !important;
     }
 
+    .ui.popup {
+      background: transparent linear-gradient(122deg, #070610 0%, #4c125a 100%) 0%
+      0% no-repeat padding-box !important;
+
+    border: 2px solid transparent !important;
+    background-clip: padding-box !important;
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: -1000;
+      margin: -2px;
+      border-radius: inherit;
+      background: linear-gradient(
+        to right,
+        #ed1cb5,
+        #ffa900,
+        #39fffc
+      ) !important;
+    }
+    }
+
     #tsparticles canvas{
       z-index:-1 !important;
     }

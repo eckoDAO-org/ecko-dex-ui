@@ -18,6 +18,10 @@ import { WalletContext } from '../contexts/WalletContext';
 import theme from '../styles/theme';
 import { getCorrectBalance, reduceBalance } from '../utils/reduceBalance';
 import TokenSelectorModalContent from '../components/swap/swap-modals/TokenSelectorModalContent';
+import HeaderItem from '../shared/HeaderItem';
+import CustomPopup from '../shared/CustomPopup';
+import { CogIcon } from '../assets';
+import SlippagePopupContent from '../components/layout/header/SlippagePopupContent';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -80,6 +84,7 @@ const FormContainer = styled.div`
 
 const TitleContainer = styled.div`
   display: flex;
+  justify-content: space-between;
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
   top: ${({ gameEditionView }) => gameEditionView && '10px'};
   justify-content: ${({ gameEditionView }) =>
@@ -497,6 +502,20 @@ const SwapContainer = () => {
       />
       <TitleContainer gameEditionView={gameEditionView}>
         <Title gameEditionView={gameEditionView}>Swap</Title>
+        {!gameEditionView && (
+          <HeaderItem
+            headerItemStyle={{ alignItems: 'center', display: 'flex' }}
+          >
+            <CustomPopup
+              trigger={<CogIcon />}
+              on='click'
+              offset={[10, 10]}
+              position='bottom right'
+            >
+              <SlippagePopupContent />
+            </CustomPopup>
+          </HeaderItem>
+        )}
       </TitleContainer>
       <FormContainer gameEditionView={gameEditionView}>
         <SwapForm

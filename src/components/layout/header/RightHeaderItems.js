@@ -139,7 +139,7 @@ const RightHeaderItems = () => {
           }}
         />
       </HeaderItem>
-      <HeaderItem>
+      {/* <HeaderItem>
         <CustomPopup
           trigger={<CogIcon />}
           on='click'
@@ -148,7 +148,7 @@ const RightHeaderItems = () => {
         >
           <SlippagePopupContent />
         </CustomPopup>
-      </HeaderItem>
+      </HeaderItem> */}
       <HeaderItem>
         <CustomPopup
           basic
