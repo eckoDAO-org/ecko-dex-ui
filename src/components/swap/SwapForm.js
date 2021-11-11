@@ -51,7 +51,7 @@ const SwapForm = ({
                 setInputSide('from');
                 setFromValues((prev) => ({
                   ...prev,
-                  amount: fromValues.balance,
+                  amount: reduceBalance(fromValues.balance),
                 }));
               }}
               disabledButton={toValues.amount === toValues.balance}

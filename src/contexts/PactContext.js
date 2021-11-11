@@ -347,7 +347,7 @@ export const PactProvider = (props) => {
         onClick: async () => {
           await toast.dismiss(toastId);
           await window.open(
-            `https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${reqKey}`,
+            `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
             '_blank',
             'noopener,noreferrer'
           );
@@ -368,7 +368,7 @@ export const PactProvider = (props) => {
         onClick: async () => {
           await toast.dismiss(toastId);
           await window.open(
-            `https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${reqKey}`,
+            `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
             '_blank',
             'noopener,noreferrer'
           );
