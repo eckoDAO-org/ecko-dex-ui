@@ -1,8 +1,7 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Button } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { NotificationContext } from '../../contexts/NotificationContext';
-import CustomButton from '../../shared/CustomButton';
 import NotificationCard from './NotificationCard';
 
 const ModalContainer = styled.div`
@@ -108,7 +107,7 @@ const RightModalContent = () => {
           Set Notification Warning
         </Button>
       </Content>
-      <FooterContainer>
+      {/* <FooterContainer>
         <Button
           onClick={() => {
             notification.removeAllItem();
@@ -116,7 +115,7 @@ const RightModalContent = () => {
         >
           Remove All Notification{' '}
         </Button>
-      </FooterContainer>
+      </FooterContainer> */}
     </ModalContainer>
   );
 };

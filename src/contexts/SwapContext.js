@@ -155,6 +155,7 @@ export const SwapProvider = (props) => {
 
   const swapSend = async () => {
     pact.setPolling(true);
+    debugger;
     try {
       let data;
       if (cmd.pactCode) {
@@ -173,6 +174,7 @@ export const SwapProvider = (props) => {
   };
 
   const swapLocal = async (token0, token1, isSwapIn) => {
+    debugger;
     try {
       let privKey = wallet.signing.key;
       if (wallet.signing.method === 'pk+pw') {

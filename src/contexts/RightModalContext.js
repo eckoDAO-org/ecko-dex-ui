@@ -5,7 +5,8 @@ export const RightModalContext = createContext();
 const initialState = {
   open: false,
   title: '',
-  content: null
+  content: null,
+  footer: null,
 };
 
 export const RightModalProvider = (props) => {
@@ -29,7 +30,7 @@ export const RightModalProvider = (props) => {
         ...state,
         setModalLoading,
         openModal,
-        closeModal
+        closeModal,
       }}
     >
       {props.children}
@@ -39,6 +40,11 @@ export const RightModalProvider = (props) => {
 
 export const RightModalConsumer = RightModalContext.Consumer;
 
-export const withRightModalContext = (Component) => (props) => (
-  <RightModalConsumer>{(providerProps) => <Component {...props} modalContextProps={providerProps} />}</RightModalConsumer>
-);
+export const withRightModalContext = (Component) => (props) =>
+  (
+    <RightModalConsumer>
+      {(providerProps) => (
+        <Component {...props} modalContextProps={providerProps} />
+      )}
+    </RightModalConsumer>
+  );

@@ -23,6 +23,7 @@ const RightModalRender = ({ children }) => {
               contentStyle={value.contentStyle}
               titleStyle={value.titleStyle}
               onClose={value.onClose || value.closeModal}
+              footerButton={value?.footer}
             />
           )
         }

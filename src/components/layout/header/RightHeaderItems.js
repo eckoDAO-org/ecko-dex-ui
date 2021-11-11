@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 import HeaderItem from '../../../shared/HeaderItem';
 import AccountInfo from './AccountInfo';
@@ -18,6 +18,7 @@ import BellNotification from '../../right-modal-notification/BellNotification';
 import { RightModalContext } from '../../../contexts/RightModalContext';
 import { ModalContent } from 'semantic-ui-react';
 import RightModalContent from '../../right-modal-notification/RightModalContent';
+import { NotificationContext } from '../../../contexts/NotificationContext';
 
 const RightContainerHeader = styled.div`
   display: flex;
@@ -62,6 +63,7 @@ const RightHeaderItems = () => {
   const { account, logout } = useContext(AccountContext);
   const modalContext = useContext(ModalContext);
   const { gameEditionView } = useContext(GameEditionContext);
+  const notification = useContext(NotificationContext);
   const rightModal = useContext(RightModalContext);
 
   return (
@@ -124,6 +126,15 @@ const RightHeaderItems = () => {
             rightModal.openModal({
               title: 'Notifications',
               content: <RightModalContent />,
+              footer: (
+                <Button
+                  onClick={() => {
+                    notification.removeAllItem();
+                  }}
+                  label=' Remove All Notification'
+                  fontSize='12px'
+                />
+              ),
             });
           }}
         />

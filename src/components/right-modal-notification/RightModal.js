@@ -29,8 +29,8 @@ const Container = styled(Modal)`
 `;
 
 const ContentContainer = styled.div`
-  height: ${({ theme: { header, breadcrumbHeight = 0 } }) =>
-    `calc(100% - ${header.height + breadcrumbHeight}px)`};
+  height: ${({ theme: { header, breadcrumbHeight = 0, footer } }) =>
+    `calc(100% - ${header.height + breadcrumbHeight + footer.modalFooter}px)`};
   overflow: auto;
   z-index: 1;
   overflow-x: hidden;
@@ -74,6 +74,21 @@ const IconContainer = styled.div`
   cursor: pointer;
 `;
 
+const FooterContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  /* margin: 10px 10px 0 10px; */
+  z-index: 1;
+  padding: 10px;
+  & > * {
+    width: 200px;
+  }
+`;
+
 const RightModal = ({
   open,
   onClose,
@@ -91,6 +106,7 @@ const RightModal = ({
   disableBackdrop,
   headerStyle,
   showHeader,
+  footerButton,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
@@ -133,6 +149,7 @@ const RightModal = ({
         <ContentContainer style={contentStyle}>
           {children || content}
         </ContentContainer>
+        <FooterContainer>{footerButton}</FooterContainer>
       </Container>
     </CustomTransition>
   );

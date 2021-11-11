@@ -7,6 +7,9 @@ export const theme = {
   header: {
     height: 65,
   },
+  footer: {
+    modalFooter: 57,
+  },
   mediaQueries: {
     mobileBreakpoint: '48rem',
     mobileSmallPixel: 320,
