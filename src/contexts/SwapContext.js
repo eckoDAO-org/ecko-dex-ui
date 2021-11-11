@@ -213,7 +213,7 @@ export const SwapProvider = (props) => {
                     args: ["free-gas", { int: 1 }, 1.0],
                   },
                 ]
-              : []),
+              : [Pact.lang.mkCap("gas", "pay gas", "coin.GAS").cap]),
             {
               name: `${token0.address}.TRANSFER`,
               args: [
@@ -230,9 +230,6 @@ export const SwapProvider = (props) => {
                     ),
               ],
             },
-            ...(!ENABLE_GAS_STATION
-              ? [Pact.lang.mkCap("gas", "pay gas", "coin.GAS")]
-              : []),
           ],
         },
         envData: {

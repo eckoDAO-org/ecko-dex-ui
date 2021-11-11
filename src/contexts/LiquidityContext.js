@@ -169,7 +169,7 @@ export const LiquidityProvider = (props) => {
                       args: ["free-gas", { int: 1 }, 1.0],
                     },
                   ]
-                : [Pact.lang.mkCap("gas", "pay gas", "coin.GAS")]),
+                : [Pact.lang.mkCap("gas", "pay gas", "coin.GAS").cap]),
             ],
           },
           envData: {
@@ -262,7 +262,7 @@ export const LiquidityProvider = (props) => {
                     args: ["free-gas", { int: 1 }, 1.0],
                   },
                 ]
-              : [Pact.lang.mkCap("gas", "pay gas", "coin.GAS")]),
+              : [Pact.lang.mkCap("gas", "pay gas", "coin.GAS").cap]),
           ],
         },
         envData: {
@@ -456,7 +456,7 @@ export const LiquidityProvider = (props) => {
                     args: ["free-gas", { int: 1 }, 1.0],
                   },
                 ]
-              : [Pact.lang.mkCap("gas", "pay gas", "coin.GAS")]),
+              : [Pact.lang.mkCap("gas", "pay gas", "coin.GAS").cap]),
           ],
         },
         envData: {

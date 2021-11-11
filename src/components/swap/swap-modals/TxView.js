@@ -8,7 +8,10 @@ import CustomButton from "../../../shared/CustomButton";
 import Backdrop from "../../../shared/Backdrop";
 import ModalContainer from "../../../shared/ModalContainer";
 import { SwapContext } from "../../../contexts/SwapContext";
-import { GAS_PRICE } from "../../../constants/contextConstants";
+import {
+  GAS_PRICE,
+  ENABLE_GAS_STATION,
+} from "../../../constants/contextConstants";
 
 const Container = styled.div`
   position: absolute;
@@ -112,31 +115,40 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           <SpaceBetweenRow>
             <Label>Gas Cost</Label>
             <Value>
-              <s>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</s>
-              <span style={{ marginLeft: 5, color: "#ffa900" }}>FREE!</span>
-              <Popup
-                trigger={
-                  <Icon
-                    onClick={() => {
-                      window.open(
-                        "https://medium.com/kadena-io/the-first-crypto-gas-station-is-now-on-kadenas-blockchain-6dc43b4b3836",
-                        "_blank",
-                        "noopener,noreferrer"
-                      );
-                    }}
-                    name="help circle"
-                    style={{ marginLeft: "2px" }}
-                  />
-                }
-                position="top center"
-              >
-                <Popup.Header>Why is Gas free?</Popup.Header>
-                <Popup.Content>
-                  Kadena has a novel concept called gas stations that allows
-                  smart contracts to pay for users' gas. This means you do not
-                  need to hold KDA to trade any token pair!
-                </Popup.Content>
-              </Popup>
+              {ENABLE_GAS_STATION ? (
+                <>
+                  <s>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</s>
+                  <span style={{ marginLeft: 5, color: "#ffa900" }}>FREE!</span>
+                </>
+              ) : (
+                <span>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</span>
+              )}
+
+              {ENABLE_GAS_STATION ? (
+                <Popup
+                  trigger={
+                    <Icon
+                      onClick={() => {
+                        window.open(
+                          "https://medium.com/kadena-io/the-first-crypto-gas-station-is-now-on-kadenas-blockchain-6dc43b4b3836",
+                          "_blank",
+                          "noopener,noreferrer"
+                        );
+                      }}
+                      name="help circle"
+                      style={{ marginLeft: "2px" }}
+                    />
+                  }
+                  position="top center"
+                >
+                  <Popup.Header>Why is Gas free?</Popup.Header>
+                  <Popup.Content>
+                    Kadena has a novel concept called gas stations that allows
+                    smart contracts to pay for users' gas. This means you do not
+                    need to hold KDA to trade any token pair!
+                  </Popup.Content>
+                </Popup>
+              ) : null}
             </Value>
           </SpaceBetweenRow>
         </TransactionsDetails>
@@ -180,31 +192,40 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           <SpaceBetweenRow>
             <Label>Gas Cost</Label>
             <Value>
-              <s>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</s>
-              <span style={{ marginLeft: 5, color: "#ffa900" }}>FREE!</span>
-              <Popup
-                trigger={
-                  <Icon
-                    onClick={() => {
-                      window.open(
-                        "https://medium.com/kadena-io/the-first-crypto-gas-station-is-now-on-kadenas-blockchain-6dc43b4b3836",
-                        "_blank",
-                        "noopener,noreferrer"
-                      );
-                    }}
-                    name="help circle"
-                    style={{ marginLeft: "2px" }}
-                  />
-                }
-                position="top center"
-              >
-                <Popup.Header>Why is Gas free?</Popup.Header>
-                <Popup.Content>
-                  Kadena has a novel concept called gas stations that allows
-                  smart contracts to pay for users' gas. This means you do not
-                  need to hold KDA to trade any token pair!
-                </Popup.Content>
-              </Popup>
+              {ENABLE_GAS_STATION ? (
+                <>
+                  <s>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</s>
+                  <span style={{ marginLeft: 5, color: "#ffa900" }}>FREE!</span>
+                </>
+              ) : (
+                <span>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</span>
+              )}
+
+              {ENABLE_GAS_STATION ? (
+                <Popup
+                  trigger={
+                    <Icon
+                      onClick={() => {
+                        window.open(
+                          "https://medium.com/kadena-io/the-first-crypto-gas-station-is-now-on-kadenas-blockchain-6dc43b4b3836",
+                          "_blank",
+                          "noopener,noreferrer"
+                        );
+                      }}
+                      name="help circle"
+                      style={{ marginLeft: "2px" }}
+                    />
+                  }
+                  position="top center"
+                >
+                  <Popup.Header>Why is Gas free?</Popup.Header>
+                  <Popup.Content>
+                    Kadena has a novel concept called gas stations that allows
+                    smart contracts to pay for users' gas. This means you do not
+                    need to hold KDA to trade any token pair!
+                  </Popup.Content>
+                </Popup>
+              ) : null}
             </Value>
           </SpaceBetweenRow>
         </TransactionsDetails>
@@ -248,31 +269,40 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           <SpaceBetweenRow>
             <Label>Gas Cost</Label>
             <Value>
-              <s>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</s>
-              <span style={{ marginLeft: 5, color: "#ffa900" }}>FREE!</span>
-              <Popup
-                trigger={
-                  <Icon
-                    onClick={() => {
-                      window.open(
-                        "https://medium.com/kadena-io/the-first-crypto-gas-station-is-now-on-kadenas-blockchain-6dc43b4b3836",
-                        "_blank",
-                        "noopener,noreferrer"
-                      );
-                    }}
-                    name="help circle"
-                    style={{ marginLeft: "2px" }}
-                  />
-                }
-                position="top center"
-              >
-                <Popup.Header>Why is Gas free?</Popup.Header>
-                <Popup.Content>
-                  Kadena has a novel concept called gas stations that allows
-                  smart contracts to pay for users' gas. This means you do not
-                  need to hold KDA to trade any token pair!
-                </Popup.Content>
-              </Popup>
+              {ENABLE_GAS_STATION ? (
+                <>
+                  <s>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</s>
+                  <span style={{ marginLeft: 5, color: "#ffa900" }}>FREE!</span>
+                </>
+              ) : (
+                <span>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</span>
+              )}
+
+              {ENABLE_GAS_STATION ? (
+                <Popup
+                  trigger={
+                    <Icon
+                      onClick={() => {
+                        window.open(
+                          "https://medium.com/kadena-io/the-first-crypto-gas-station-is-now-on-kadenas-blockchain-6dc43b4b3836",
+                          "_blank",
+                          "noopener,noreferrer"
+                        );
+                      }}
+                      name="help circle"
+                      style={{ marginLeft: "2px" }}
+                    />
+                  }
+                  position="top center"
+                >
+                  <Popup.Header>Why is Gas free?</Popup.Header>
+                  <Popup.Content>
+                    Kadena has a novel concept called gas stations that allows
+                    smart contracts to pay for users' gas. This means you do not
+                    need to hold KDA to trade any token pair!
+                  </Popup.Content>
+                </Popup>
+              ) : null}
             </Value>
           </SpaceBetweenRow>
         </TransactionsDetails>
