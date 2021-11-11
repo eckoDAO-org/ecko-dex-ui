@@ -51,6 +51,7 @@ const HeaderContainer = styled.div`
   display: flex;
   flex-flow: row;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
 `;
 

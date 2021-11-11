@@ -9,7 +9,7 @@ const initialModalState = {
   content: null,
 };
 export const GameEditionProvider = (props) => {
-  const [gameEditionView, setGameEditionView] = useState(true);
+  const [gameEditionView, setGameEditionView] = useState(false);
   const [modalState, setModalState] = useState(initialModalState);
 
   const openModal = (settings) => {
