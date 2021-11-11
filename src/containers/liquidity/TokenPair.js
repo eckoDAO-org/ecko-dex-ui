@@ -78,7 +78,7 @@ const ColumnContainer = styled.div`
 
 const Label = styled.span`
   font-family: ${({ gameEditionView, theme: { fontFamily } }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
+    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
   color: ${({ gameEditionView, theme: { colors } }) =>
     gameEditionView ? colors.black : '#FFFFFF'};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '16px')};

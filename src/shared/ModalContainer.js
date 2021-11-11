@@ -16,13 +16,8 @@ const Container = styled.div`
   background-clip: ${({ gameEditionView }) =>
     !gameEditionView && `padding-box`};
   opacity: 1;
-  background: ${({ gameEditionView }) =>
-    gameEditionView ? 'trasparent' : '#240b2f 0% 0% no-repeat padding-box'};
-  background: ${({ gameEditionView }) =>
-    gameEditionView
-      ? `transparent`
-      : `transparent linear-gradient(122deg, #070610 0%, #4c125a 100%) 0%
-    0% no-repeat padding-box`};
+  background: transparent;
+  backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
   color: ${({ gameEditionView, theme: { colors } }) =>
     gameEditionView ? colors.black : ' #ffffff'};
 
@@ -31,15 +26,24 @@ const Container = styled.div`
     !gameEditionView &&
     `::before {
       content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      z-index: -1000;
-      margin: -2px;
-      border-radius: inherit;
-      background: linear-gradient(to right, #ed1cb5, #ffa900, #39fffc);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1000;
+    margin: -1px;
+    border-radius: 10px;
+    border-left: 1px solid #ed1cb5;
+    border-right: 1px solid #39fffc;
+    background-image: linear-gradient(to right, #ed1cb5, #ffa900, #39fffc),
+      linear-gradient(to right, #ed1cb5, #ffa900, #39fffc);
+    /* background: ${({ gameEditionView }) =>
+      !gameEditionView &&
+      'linear-gradient(to right, #ed1cb5, #ffa900, #39fffc)'}; */
+    background-position: 0 0, 0 100%;
+    background-size: 100% 1px;
+    background-repeat: no-repeat;
     }`}
 
   ::-webkit-scrollbar {
@@ -81,7 +85,6 @@ const ModalContainer = ({
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
 
-  console.log('withoutRainbowBackground', withoutRainbowBackground);
   return (
     <Container
       style={containerStyle}

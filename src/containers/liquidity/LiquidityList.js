@@ -79,7 +79,9 @@ const FormContainer = styled.div`
       : `transparent linear-gradient(122deg, #070610 0%, #4c125a 100%) 0%
     0% no-repeat padding-box`};
 
-  &:before {
+  ${({ gameEditionView }) =>
+    !gameEditionView &&
+    `&:before {
     content: '';
     position: absolute;
     top: 0;
@@ -89,13 +91,11 @@ const FormContainer = styled.div`
     z-index: -1000;
     margin: -2px;
     border-radius: inherit;
-    background: ${({ gameEditionView }) =>
-      !gameEditionView &&
-      'linear-gradient(to right, #ed1cb5, #ffa900, #39fffc)'};
-  }
+    background: linear-gradient(to right, #ed1cb5, #ffa900, #39fffc);
+  }`}
 
   @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+    `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
     display: table;
   }

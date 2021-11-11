@@ -14,10 +14,9 @@ const Button = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #ffffff;
-  border-radius: 100%;
-  width: 48px;
-  height: 48px;
+  border: none;
+  width: 32px;
+  height: 32px;
   padding: 0;
   margin: 0;
   background: transparent;
