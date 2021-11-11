@@ -11,8 +11,7 @@ const ResultContainer = styled.div`
   margin: ${({ gameEditionView }) =>
     gameEditionView ? `0px` : ` 20px 0px 0px 0px`};
   padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : ` 0px`)};
-  flex-flow: ${({ gameEditionView }) =>
-    gameEditionView ? `column` : ` column`};
+  flex-flow: column;
   width: 100%;
   /* position: ${({ gameEditionView }) => gameEditionView && 'absolute'}; */
   margin-top: ${({ gameEditionView }) => gameEditionView && '30px'};
@@ -26,7 +25,7 @@ const ResultContainer = styled.div`
 const RowContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  flex-flow: ${({ gameEditionView }) => (gameEditionView ? `row` : ` row`)};
+  flex-flow: row;
   margin-bottom: ${({ gameEditionView }) => !gameEditionView && `10px`};
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {

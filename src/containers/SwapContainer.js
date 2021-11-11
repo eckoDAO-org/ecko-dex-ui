@@ -85,7 +85,7 @@ const TitleContainer = styled.div`
   justify-content: ${({ gameEditionView }) =>
     gameEditionView ? `center` : ` space-between`};
   margin-bottom: ${({ gameEditionView }) =>
-    gameEditionView ? `0px` : ` 24px`};
+    gameEditionView ? `0px` : ` 14px`};
   width: 100%;
 `;
 const Title = styled.span`

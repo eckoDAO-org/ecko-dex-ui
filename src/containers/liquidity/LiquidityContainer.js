@@ -29,6 +29,7 @@ const Container = styled.div`
   align-items: center;
   flex-flow: column;
   width: 100%;
+  max-width: ${({ gameEditionView }) => !gameEditionView && `500px`};
 `;
 
 const TitleContainer = styled.div`
@@ -52,10 +53,61 @@ const Title = styled.span`
   text-transform: capitalize;
 `;
 
+const FormContainer = styled.div`
+  position: ${({ gameEditionView }) => !gameEditionView && `relative`};
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  padding: ${({ gameEditionView }) =>
+    gameEditionView ? `10px 10px` : `32px 32px`};
+  width: 100%;
+  border-radius: 10px;
+  border: ${({ gameEditionView }) =>
+    gameEditionView ? `none` : ` 2px solid transparent`};
+
+  background-clip: ${({ gameEditionView }) =>
+    !gameEditionView && `padding-box`};
+
+  opacity: 1;
+  background: ${({ gameEditionView }) =>
+    gameEditionView
+      ? `transparent`
+      : `transparent linear-gradient(122deg, #070610 0%, #4c125a 100%) 0%
+    0% no-repeat padding-box`};
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1000;
+    margin: -2px;
+    border-radius: inherit;
+    background: ${({ gameEditionView }) =>
+      !gameEditionView &&
+      'linear-gradient(to right, #ed1cb5, #ffa900, #39fffc)'};
+  }
+
+  /* &:before {
+    border-radius: inherit;
+
+  /* & > *:not(:last-child) {
+    margin-right: 32px;
+  } */
+
+  @media (max-width: ${({ theme: { mediaQueries } }) =>
+      `${mediaQueries.mobilePixel + 1}px`}) {
+    flex-flow: column;
+    gap: 0px;
+  }
+`;
+
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 24px;
+  margin-top: 20px;
   width: 100%;
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
   bottom: ${({ gameEditionView }) => gameEditionView && '10px'};
@@ -64,12 +116,13 @@ const ButtonContainer = styled.div`
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 15px 0px;
-  flex-flow: ${({ gameEditionView }) => (gameEditionView ? `column` : ` row`)};
+  margin: ${({ gameEditionView }) =>
+    gameEditionView ? `0px` : ` 20px 0px 0px 0px`};
+  flex-flow: column;
   width: 100%;
   padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : 0)};
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  margin-top: ${({ gameEditionView }) => gameEditionView && '90px'};
+  /* position: ${({ gameEditionView }) => gameEditionView && 'absolute'}; */
+  margin-top: ${({ gameEditionView }) => gameEditionView && '30px'};
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
@@ -79,7 +132,8 @@ const ResultContainer = styled.div`
 const InnerRowContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  flex-flow: ${({ gameEditionView }) => (gameEditionView ? `row` : `column`)};
+  flex-flow: row;
+  margin-bottom: ${({ gameEditionView }) => !gameEditionView && `10px`};
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: row;
@@ -88,8 +142,8 @@ const InnerRowContainer = styled.div`
 
 const Value = styled.span`
   font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '16px')};
+    gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   line-height: 20px;
   color: ${({ theme: { colors }, gameEditionView }) =>
     gameEditionView ? colors.black : '#FFFFFF'};
@@ -659,60 +713,63 @@ const LiquidityContainer = (props) => {
         </Title>
         {gameEditionView && <CloseGE onClick={() => props.closeLiquidity()} />}
       </TitleContainer>
-      <SwapForm
-        fromValues={fromValues}
-        setFromValues={setFromValues}
-        toValues={toValues}
-        setToValues={setToValues}
-        setTokenSelectorType={setTokenSelectorType}
-        setInputSide={setInputSide}
-        swapValues={swapValues}
-        setShowTxModal={setShowTxModal}
-      />
+      <FormContainer gameEditionView={gameEditionView}>
+        <SwapForm
+          fromValues={fromValues}
+          setFromValues={setFromValues}
+          toValues={toValues}
+          setToValues={setToValues}
+          setTokenSelectorType={setTokenSelectorType}
+          setInputSide={setInputSide}
+          swapValues={swapValues}
+          setShowTxModal={setShowTxModal}
+        />
 
-      {fromValues.coin && toValues.coin && (
-        <>
-          <ResultContainer gameEditionView={gameEditionView}>
-            <InnerRowContainer gameEditionView={gameEditionView}>
-              <CustomLabel>{`${toValues.coin} per ${fromValues.coin}`}</CustomLabel>
-              <Value gameEditionView={gameEditionView}>
-                {reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ??
-                  '-'}
-              </Value>
-            </InnerRowContainer>
-            <InnerRowContainer gameEditionView={gameEditionView}>
-              <CustomLabel>{`${fromValues.coin} per ${toValues.coin}`}</CustomLabel>
-              <Value gameEditionView={gameEditionView}>
-                {reduceBalance(
-                  pact.getRatio1(toValues.coin, fromValues.coin)
-                ) ?? '-'}
-              </Value>
-            </InnerRowContainer>
-            <InnerRowContainer gameEditionView={gameEditionView}>
-              <CustomLabel>Share of Pool</CustomLabel>
-              <Value gameEditionView={gameEditionView}>
-                {!pact.share(fromValues.amount)
-                  ? 0
-                  : reduceBalance(pact.share(fromValues.amount) * 100)}
-                %
-              </Value>
-            </InnerRowContainer>
-          </ResultContainer>
-        </>
-      )}
-      <ButtonContainer gameEditionView={gameEditionView}>
-        <Button.Group
-          fluid={gameEditionView}
-          style={{ padding: gameEditionView ? '0 10px' : 0 }}
-        >
-          <CustomButton
-            disabled={!buttonStatus().status}
-            onClick={() => setShowReview(true)}
+        {fromValues.coin && toValues.coin && (
+          <>
+            <ResultContainer gameEditionView={gameEditionView}>
+              <InnerRowContainer gameEditionView={gameEditionView}>
+                <CustomLabel>{`${toValues.coin} per ${fromValues.coin}`}</CustomLabel>
+                <Value gameEditionView={gameEditionView}>
+                  {reduceBalance(
+                    pact.getRatio(toValues.coin, fromValues.coin)
+                  ) ?? '-'}
+                </Value>
+              </InnerRowContainer>
+              <InnerRowContainer gameEditionView={gameEditionView}>
+                <CustomLabel>{`${fromValues.coin} per ${toValues.coin}`}</CustomLabel>
+                <Value gameEditionView={gameEditionView}>
+                  {reduceBalance(
+                    pact.getRatio1(toValues.coin, fromValues.coin)
+                  ) ?? '-'}
+                </Value>
+              </InnerRowContainer>
+              <InnerRowContainer gameEditionView={gameEditionView}>
+                <CustomLabel>Share of Pool</CustomLabel>
+                <Value gameEditionView={gameEditionView}>
+                  {!pact.share(fromValues.amount)
+                    ? 0
+                    : reduceBalance(pact.share(fromValues.amount) * 100)}
+                  %
+                </Value>
+              </InnerRowContainer>
+            </ResultContainer>
+          </>
+        )}
+        <ButtonContainer gameEditionView={gameEditionView}>
+          <Button.Group
+            fluid
+            style={{ padding: gameEditionView ? '0 10px' : 0 }}
           >
-            {buttonStatus().msg}
-          </CustomButton>
-        </Button.Group>
-      </ButtonContainer>
+            <CustomButton
+              disabled={!buttonStatus().status}
+              onClick={() => setShowReview(true)}
+            >
+              {buttonStatus().msg}
+            </CustomButton>
+          </Button.Group>
+        </ButtonContainer>
+      </FormContainer>
     </Container>
   );
 };

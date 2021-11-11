@@ -1,15 +1,15 @@
-import React, { useContext } from "react";
-import styled from "styled-components/macro";
-import { Button } from "semantic-ui-react";
+import React, { useContext } from 'react';
+import styled from 'styled-components/macro';
+import { Button } from 'semantic-ui-react';
 
 import {
   reduceBalance,
   extractDecimal,
   pairUnit,
-} from "../../utils/reduceBalance";
-import CustomButton from "../../shared/CustomButton";
-import { GameEditionContext } from "../../contexts/GameEditionContext";
-import theme from "../../styles/theme";
+} from '../../utils/reduceBalance';
+import CustomButton from '../../shared/CustomButton';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
+import theme from '../../styles/theme';
 
 const Container = styled.div`
   display: flex;
@@ -22,7 +22,7 @@ const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin: ${({ gameEditionView }) =>
-    gameEditionView ? "0px" : "15px 0px 32px"};
+    gameEditionView ? '0px' : '15px 0px 32px'};
   flex-flow: row;
   width: 100%;
   height: 100%;
@@ -52,8 +52,8 @@ const HeaderContainer = styled.span`
   font-family: ${({ gameEditionView, theme: { fontFamily } }) =>
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
   color: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? colors.black : "#FFFFFF"};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? "10px" : "16px")};
+    gameEditionView ? colors.black : '#FFFFFF'};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '16px')};
 `;
 
 const ButtonContainer = styled.div`
@@ -67,8 +67,8 @@ const RowContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  flex-flow: ${({ gameEditionView }) => (gameEditionView ? "row" : "column")};
-  margin-bottom: ${({ gameEditionView }) => (gameEditionView ? "8px" : "0px")};
+  flex-flow: ${({ gameEditionView }) => (gameEditionView ? 'row' : 'column')};
+  margin-bottom: ${({ gameEditionView }) => (gameEditionView ? '8px' : '0px')};
 `;
 
 const ColumnContainer = styled.div`
@@ -80,9 +80,9 @@ const Label = styled.span`
   font-family: ${({ gameEditionView, theme: { fontFamily } }) =>
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
   color: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? colors.black : "#FFFFFF"};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? "10px" : "16px")};
-  text-align: ${({ gameEditionView }) => gameEditionView && "left"};
+    gameEditionView ? colors.black : '#FFFFFF'};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '16px')};
+  text-align: ${({ gameEditionView }) => gameEditionView && 'left'};
 
   text-transform: capitalize;
 `;
@@ -90,11 +90,11 @@ const Label = styled.span`
 const Value = styled.span`
   font-family: ${({ gameEditionView, theme: { fontFamily } }) =>
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? "10px" : "16px")};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '16px')};
   line-height: 20px;
   color: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? colors.black : "#FFFFFF"};
-  text-align: ${({ gameEditionView }) => gameEditionView && "left"};
+    gameEditionView ? colors.black : '#FFFFFF'};
+  text-align: ${({ gameEditionView }) => gameEditionView && 'left'};
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
     margin-bottom: 5px;
@@ -136,7 +136,7 @@ const TokenPair = (props) => {
         </ResultContainer>
       ) : (
         <ResultContainer
-          style={{ flexFlow: "column" }}
+          style={{ flexFlow: 'column' }}
           gameEditionView={gameEditionView}
         >
           <RowContainer gameEditionView={gameEditionView}>
@@ -200,11 +200,13 @@ const TokenPair = (props) => {
         <Button.Group fluid>
           <CustomButton
             buttonStyle={{
-              marginRight: "30px",
-              width: "48%",
-              height: "40px",
+              marginRight: '30px',
+              width: '48%',
+              height: '40px',
             }}
-            background="transparent"
+            background='transparent'
+            color={gameEditionView ? theme.colors.black : '#fff'}
+            border={!gameEditionView && '1px solid #FFFFFF99'}
             onClick={() => {
               props.selectRemoveLiquidity();
               props.setTokenPair(props.pair);
@@ -214,11 +216,10 @@ const TokenPair = (props) => {
           </CustomButton>
           <CustomButton
             buttonStyle={{
-              marginLeft: "-20px",
-              width: "48%",
-              height: "40px",
+              marginLeft: '-20px',
+              width: '48%',
+              height: '40px',
             }}
-            background="transparent"
             onClick={() => {
               props.selectAddLiquidity();
               props.setTokenPair(props.pair);
@@ -230,7 +231,7 @@ const TokenPair = (props) => {
       </ButtonContainer>
     </Container>
   ) : (
-    ""
+    ''
   );
 };
 
