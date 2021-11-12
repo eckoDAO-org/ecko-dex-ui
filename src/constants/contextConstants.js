@@ -16,6 +16,20 @@ export const NETWORK_TYPE = 'mainnet';
 export const network = `https://api.chainweb.com/chainweb/0.0/${NETWORKID}/chain/${chainId}/pact`;
 
 export const creationTime = () => Math.round(new Date().getTime() / 1000) - 10;
+export const getCurrentDate = () => {
+  const d = new Date();
+  let day = d.getDate();
+  let month = d.getMonth();
+  let year = d.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+export const getCurrentTime = () => {
+  const t = new Date();
+  let hours = t.getHours();
+  let minutes = t.getMinutes();
+  let seconds = t.getSeconds();
+  return `${hours}:${minutes}:${seconds}`;
+};
 export const GAS_PRICE = 0.0000001;
 //Enable or disable gas station
 export const ENABLE_GAS_STATION = true;

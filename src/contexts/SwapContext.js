@@ -14,13 +14,21 @@ import {
   network,
   NETWORKID,
   ENABLE_GAS_STATION,
+  getCurrentDate,
+  getCurrentTime,
 } from '../constants/contextConstants';
+import { NotificationContext } from './NotificationContext';
 
 export const SwapContext = createContext();
 
 export const SwapProvider = (props) => {
   const pact = useContext(PactContext);
+  const notificationContext = useContext(NotificationContext);
   const { account, localRes, setLocalRes } = useContext(AccountContext);
+  console.log(
+    '🚀 ~ file: SwapContext.js ~ line 28 ~ SwapProvider ~ localRes',
+    localRes
+  );
 
   const wallet = useContext(WalletContext);
   const [pairAccount, setPairAccount] = useState('');
@@ -164,6 +172,13 @@ export const SwapProvider = (props) => {
         data = await Pact.wallet.sendSigned(cmd, network);
       }
       pact.pollingNotif(data.requestKeys[0]);
+      notificationContext.storeNotification({
+        type: 'info',
+        time: getCurrentTime(),
+        date: getCurrentDate(),
+        title: 'Transaction Pending',
+        description: data.requestKeys[0],
+      });
 
       await pact.listen(data.requestKeys[0]);
       pact.setPolling(false);
@@ -380,7 +395,7 @@ export const SwapProvider = (props) => {
           error: true,
           title: 'Wallet Signing Failure',
           content:
-            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kadenaswap.',
+            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kaddex.',
         }); //walletSigError();
       console.log(e);
     }

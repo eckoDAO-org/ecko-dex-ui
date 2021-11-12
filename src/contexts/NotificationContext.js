@@ -15,6 +15,11 @@ export const STATUSES = {
 
 const getStoredNotification = JSON.parse(localStorage.getItem('Notification'));
 
+console.log(
+  '🚀 ~ file: NotificationContext.js ~ line 17 ~ getStoredNotification',
+  getStoredNotification
+);
+
 export const NotificationProvider = ({ children }) => {
   const [notificationList, setNotificationList] = useState(
     getStoredNotification
@@ -65,12 +70,17 @@ export const NotificationProvider = ({ children }) => {
     localStorage.setItem(`Notification`, JSON.stringify(notificationList));
   }, [notificationList]);
 
+  useEffect(() => {
+    if (!getStoredNotification)
+      localStorage.setItem(`Notification`, JSON.stringify([]));
+  }, []);
+
   const storeNotification = (notification) => {
     const notificationListByStorage = JSON.parse(
       localStorage.getItem('Notification')
     );
     if (!notificationListByStorage) {
-      //first saving swapReqKeys in localstorage
+      //first saving notification in localstorage
       localStorage.setItem(`Notification`, JSON.stringify([notification]));
       setNotificationList(notification);
     } else {

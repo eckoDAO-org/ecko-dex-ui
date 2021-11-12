@@ -37,6 +37,10 @@ const FooterContainer = styled.div`
 
 const RightModalContent = () => {
   const notification = useContext(NotificationContext);
+  console.log(
+    '🚀 ~ file: RightModalContent.js ~ line 40 ~ RightModalContent ~ notification',
+    notification.notificationList
+  );
 
   return (
     <ModalContainer>
@@ -45,15 +49,16 @@ const RightModalContent = () => {
           <NotificationCard
             key={index}
             index={index}
-            type={notif.type}
-            time={notif.time}
-            date={notif.date}
-            title={notif.title}
-            description={notif.description}
-            removeItem={notification.removeItem}
+            type={notif?.type}
+            time={notif?.time}
+            date={notif?.date}
+            title={notif?.title}
+            description={notif?.description}
+            removeItem={notification?.removeItem}
+            link={notif?.link}
           />
         ))}
-        <Button
+        {/* <Button
           onClick={() => {
             notification.storeNotification({
               type: 'error',
@@ -105,7 +110,7 @@ const RightModalContent = () => {
           }}
         >
           Set Notification Warning
-        </Button>
+        </Button> */}
       </Content>
     </ModalContainer>
   );

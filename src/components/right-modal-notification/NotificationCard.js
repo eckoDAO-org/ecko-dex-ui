@@ -86,6 +86,8 @@ const Title = styled.span`
   font-size: 16px;
 `;
 const Description = styled.span`
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
   font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
   font-size: 14px;
 `;
@@ -98,6 +100,7 @@ const NotificationCard = ({
   description,
   type,
   removeItem,
+  link,
 }) => {
   const [isHover, setIsHover] = useState(false);
   const [animation, setAnimation] = useState(false);
@@ -159,11 +162,16 @@ const NotificationCard = ({
         setIsHover(false);
       }}
       animation={animation}
+      style={{ cursor: link && 'pointer' }}
     >
       <CustomDivider />
       <NotificationContainer>
         <IconColumn>{getIconByTypeNotification(type)}</IconColumn>
-        <DescriptionColumn>
+        <DescriptionColumn
+          onClick={async () => {
+            link && (await window.open(link, '_blank', 'noopener,noreferrer'));
+          }}
+        >
           <DateTimeText>{`${date} - ${time}`}</DateTimeText>
           <Title>{title}</Title>
           <Description>{description}</Description>
