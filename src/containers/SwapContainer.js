@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import { throttle, debounce } from 'throttle-debounce';
 import { FadeIn } from '../components/shared/animations';
-import TokenSelectorModal from '../components/swap/swap-modals/TokenSelectorModal';
 import TxView from '../components/swap/swap-modals/TxView';
 import WalletRequestView from '../components/swap/swap-modals/WalletRequestView';
 import SwapButtonsForm from '../components/swap/SwapButtonsForm';
