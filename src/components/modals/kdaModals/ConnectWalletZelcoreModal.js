@@ -6,6 +6,7 @@ import { AccountContext } from "../../../contexts/AccountContext";
 import { WalletContext } from "../../../contexts/WalletContext";
 import { ModalContext } from "../../../contexts/ModalContext";
 import GetZelcoreAccountModal from "./GetZelcoreAccountModal";
+import { WALLET } from "../../../constants/wallet";
 
 const Text = styled.span`
   font-size: 13px;
@@ -17,7 +18,6 @@ const ActionContainer = styled.div`
   flex-flow: row;
   align-items: center;
   justify-content: space-around;
-  
 `;
 
 const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
@@ -65,6 +65,7 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
   const handleConnect = async () => {
     await account.setVerifiedAccount(accountId);
     await wallet.signingWallet();
+    await wallet.setSelectedWallet(WALLET.ZELCORE);
 
     // if (response !== "success") {
     //   setError({ message: "Account does not exist!" });

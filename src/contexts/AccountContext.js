@@ -127,6 +127,7 @@ export const AccountProvider = (props) => {
     localStorage.removeItem("acct", null);
     localStorage.removeItem("signing", null);
     localStorage.removeItem("pk");
+    localStorage.removeItem("wallet");
     window.location.reload();
   };
 
