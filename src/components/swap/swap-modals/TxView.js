@@ -90,7 +90,7 @@ const SpaceBetweenRow = styled.div`
 const HighlightLabel = styled.span`
   font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '16px')};
   color: ${({ theme: { colors }, gameEditionView }) =>
     gameEditionView ? colors.black : '#ffffff'};
 `;
@@ -503,7 +503,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
   ) : (
     <Transition
       items={show}
-      from={{ opacity: 0 }}
+      from={{ opacity: 1 }}
       enter={{ opacity: 1 }}
       leave={{ opacity: 0 }}
     >

@@ -22,6 +22,7 @@ import HeaderItem from '../shared/HeaderItem';
 import CustomPopup from '../shared/CustomPopup';
 import { CogIcon } from '../assets';
 import SlippagePopupContent from '../components/layout/header/SlippagePopupContent';
+import { Logo } from '../assets';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -39,21 +40,19 @@ const FormContainer = styled.div`
   padding: ${({ gameEditionView }) =>
     gameEditionView ? `10px 10px` : `32px 32px`};
   width: 100%;
-  border-radius: 10px;
+  border-radius: 15px;
   border: ${({ gameEditionView }) =>
-    gameEditionView ? `none` : ` 2px solid transparent`};
+    gameEditionView ? `none` : ` 1px solid transparent`};
 
   background-clip: ${({ gameEditionView }) =>
     !gameEditionView && `padding-box`};
-
+  backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
   opacity: 1;
-  background: ${({ gameEditionView }) =>
-    gameEditionView
-      ? `transparent`
-      : `transparent linear-gradient(122deg, #070610 0%, #4c125a 100%) 0%
-    0% no-repeat padding-box`};
+  background: transparent;
 
-  &:before {
+  ${({ gameEditionView }) =>
+    !gameEditionView &&
+    `&:before {
     content: '';
     position: absolute;
     top: 0;
@@ -61,12 +60,32 @@ const FormContainer = styled.div`
     bottom: 0;
     left: 0;
     z-index: -1000;
-    margin: -2px;
-    border-radius: inherit;
-    background: ${({ gameEditionView }) =>
+    margin: -1px;
+    border-radius: 10px;
+    border-left: 1px solid #ed1cb5;
+    border-right: 1px solid #39fffc;
+    background-image: linear-gradient(to right, #ed1cb5, #ffa900, #39fffc),
+      linear-gradient(to right, #ed1cb5, #ffa900, #39fffc);
+    /* background: ${({ gameEditionView }) =>
       !gameEditionView &&
-      'linear-gradient(to right, #ed1cb5, #ffa900, #39fffc)'};
-  }
+      'linear-gradient(to right, #ed1cb5, #ffa900, #39fffc)'}; */
+    background-position: 0 0, 0 100%;
+    background-size: 100% 1px;
+    background-repeat: no-repeat;
+  }`}
+
+  /* 
+  &:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:  no-repeat;
+  background-size: 100%;
+  background-position: bottom;
+} */
 
   /* &:before {
     border-radius: inherit;
@@ -76,7 +95,7 @@ const FormContainer = styled.div`
   } */
 
   @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+    `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
     gap: 0px;
   }
@@ -112,6 +131,59 @@ const GameEditionTokenSelectorContainer = styled.div`
   flex-direction: column;
   width: 95%;
   height: 100%;
+`;
+
+const ResultContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: ${({ gameEditionView }) =>
+    gameEditionView ? `0px` : ` 12px 0px 0px 0px`};
+  padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : ` 0px`)};
+  flex-flow: column;
+  width: 100%;
+  /* position: ${({ gameEditionView }) => gameEditionView && 'absolute'}; */
+  margin-top: ${({ gameEditionView }) => gameEditionView && '30px'};
+  @media (max-width: ${({ theme: { mediaQueries } }) =>
+      `${mediaQueries.mobilePixel + 1}px`}) {
+    flex-flow: column;
+    margin-bottom: 0px;
+  }
+`;
+
+const LogoContainer = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  margin-left: auto;
+  margin-right: auto;
+  transform: translate(-50%, 0);
+`;
+const RowContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-flow: row;
+  @media (max-width: ${({ theme: { mediaQueries } }) =>
+      `${mediaQueries.mobilePixel + 1}px`}) {
+    flex-flow: row;
+  }
+`;
+
+const Label = styled.span`
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
+    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
+  color: ${({ theme: { colors }, gameEditionView }) =>
+    gameEditionView ? colors.black : '#ffffff'};
+  text-transform: capitalize;
+`;
+
+const Value = styled.span`
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
+    gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
+  line-height: 20px;
+  color: ${({ theme: { colors }, gameEditionView }) =>
+    gameEditionView ? colors.black : '#ffffff'};
 `;
 
 const SwapContainer = () => {
@@ -501,6 +573,12 @@ const SwapContainer = () => {
         error={wallet.walletError}
         onClose={() => onWalletRequestViewModalClose()}
       />
+      {!gameEditionView && (
+        <LogoContainer>
+          <Logo />
+        </LogoContainer>
+      )}
+
       <TitleContainer gameEditionView={gameEditionView}>
         <Title gameEditionView={gameEditionView}>Swap</Title>
         {!gameEditionView && (
@@ -543,7 +621,14 @@ const SwapContainer = () => {
             toValues={toValues}
           />
         ) : (
-          <></>
+          <ResultContainer gameEditionView={gameEditionView}>
+            <RowContainer gameEditionView={gameEditionView}>
+              <Label gameEditionView={gameEditionView}>max slippage</Label>
+              <Value gameEditionView={gameEditionView}>{`${
+                pact.slippage * 100
+              }%`}</Value>
+            </RowContainer>
+          </ResultContainer>
         )}
         <SwapButtonsForm
           setLoading={setLoading}

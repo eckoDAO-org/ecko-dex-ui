@@ -8,8 +8,7 @@ export { ReactComponent as AboutBigIcon } from './images/header/about-big.svg';
 export { ReactComponent as CodeIcon } from './images/header/code.svg';
 export { ReactComponent as DiscordIcon } from './images/header/discord.svg';
 export { ReactComponent as TelegramIcon } from './images/header/telegram.svg';
-export { ReactComponent as SwapArrowsIcon } from './images/shared/swap-token-arrow.svg';
-export { ReactComponent as SwapIcon } from './images/shared/swap-icon.svg';
+export { ReactComponent as SwapArrowsIcon } from './images/shared/invert.svg';
 export { ReactComponent as ArrowDown } from './images/shared/arrow-down-white.svg';
 export { ReactComponent as ZelcoreLogo } from './images/shared/zelcore-logo.svg';
 export { ReactComponent as LockLogo } from './images/shared/awesome-lock.svg';
@@ -27,3 +26,5 @@ export { ReactComponent as NotificationErrorIcon } from './images/shared/ic_erro
 export { ReactComponent as NotificationSuccessIcon } from './images/shared/ic_success.svg';
 export { ReactComponent as NotificationCautionBlueIcon } from './images/shared/ic_caution_blue.svg';
 export { ReactComponent as NotificationWarningIcon } from './images/shared/ic_caution_orange.svg';
+export { ReactComponent as SwapIcon } from './images/shared/swap-icon.svg';
+export { ReactComponent as Logo } from './images/shared/Logo.svg';
