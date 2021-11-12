@@ -3,10 +3,11 @@ import styled from 'styled-components';
 import ButtonDivider from '../../shared/ButtonDivider';
 import Input from '../../shared/Input';
 import InputToken from '../../shared/InputToken';
-import { SwapArrowsIcon } from '../../assets';
+import { SwapArrowsIcon, SwapIcon } from '../../assets';
 import { limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
 import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { Divider } from 'semantic-ui-react';
 
 const Container = styled.div`
   display: flex;
@@ -50,7 +51,7 @@ const SwapForm = ({
                 setInputSide('from');
                 setFromValues((prev) => ({
                   ...prev,
-                  amount: fromValues.balance,
+                  amount: reduceBalance(fromValues.balance),
                 }));
               }}
               disabledButton={toValues.amount === toValues.balance}
@@ -72,7 +73,10 @@ const SwapForm = ({
         }}
       />
       {gameEditionView ? null : (
-        <ButtonDivider icon={<SwapArrowsIcon />} onClick={swapValues} />
+        <Divider horizontal>
+          <SwapIcon style={{ cursor: 'pointer' }} onClick={swapValues} />
+        </Divider>
+        // <ButtonDivider icon={<SwapIcon />} onClick={swapValues} />
       )}
       <Input
         error={isNaN(toValues.amount)}

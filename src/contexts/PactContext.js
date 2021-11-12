@@ -8,6 +8,8 @@ import {
   creationTime,
   FEE,
   GAS_PRICE,
+  getCurrentDate,
+  getCurrentTime,
   network,
   NETWORK_TYPE,
 } from '../constants/contextConstants';
@@ -335,7 +337,10 @@ export const PactProvider = (props) => {
     console.log(pollRes[reqKey]);
     console.log(pollRes[reqKey].result);
     if (pollRes[reqKey].result.status === 'success') {
+      // setting reqKey for calling History Transaction
       setReqKeysLocalStorage(reqKey);
+
+      // open the toast SUCCESS message
       notificationContext.showNotification({
         title: 'Transaction Success!',
         message: 'Check it out in the block explorer',
@@ -347,7 +352,7 @@ export const PactProvider = (props) => {
         onClick: async () => {
           await toast.dismiss(toastId);
           await window.open(
-            `https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${reqKey}`,
+            `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
             '_blank',
             'noopener,noreferrer'
           );
@@ -356,7 +361,26 @@ export const PactProvider = (props) => {
           await toast.dismiss(toastId.current);
         },
       });
+      // store in local storage the success notification for the right modal
+      notificationContext.storeNotification({
+        type: 'success',
+        time: getCurrentTime(),
+        date: getCurrentDate(),
+        title: 'Transaction Success!',
+        description: 'Check it out in the block explorer',
+        link: `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
+      });
     } else {
+      // store in local storage the error notification for the right modal
+      notificationContext.storeNotification({
+        type: 'error',
+        time: getCurrentTime(),
+        date: getCurrentDate(),
+        title: 'Transaction Failure!',
+        description: 'Check it out in the block explorer',
+        link: `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
+      });
+      // open the toast FAILURE message
       notificationContext.showNotification({
         title: 'Transaction Failure!',
         message: 'Check it out in the block explorer',
@@ -368,7 +392,7 @@ export const PactProvider = (props) => {
         onClick: async () => {
           await toast.dismiss(toastId);
           await window.open(
-            `https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${reqKey}`,
+            `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
             '_blank',
             'noopener,noreferrer'
           );

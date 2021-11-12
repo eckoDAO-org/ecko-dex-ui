@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <g id="Invert" transform="translate(-624 -370)">
+    <g id="Group_67995" data-name="Group 67995" transform="translate(2195.204 -5241.828)">
+      <g id="Group_67996" data-name="Group 67996">
+        <path id="exchange-vertical" d="M-1556.32,5639.828v-24h-2.033v19.1l-7.413-7.406-1.437,1.423,9.867,9.875Zm-1.041-3.908h.047l-.022.024Z" transform="translate(0 0)" fill="#fff"/>
+      </g>
+      <path id="Path_39348" data-name="Path 39348" d="M-1538.686,5615.828v24h2.033v-19.1l7.413,7.407,1.438-1.424-9.867-9.875Z" transform="translate(-14.887)" fill="#fff"/>
+    </g>
+    <g id="Ellipse_3140" data-name="Ellipse 3140" transform="translate(624 370)" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1">
+      <circle cx="16" cy="16" r="16" stroke="none"/>
+      <circle cx="16" cy="16" r="15.5" fill="none"/>
+    </g>
+  </g>
+</svg>

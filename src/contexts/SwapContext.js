@@ -13,13 +13,22 @@ import {
   GAS_PRICE,
   network,
   NETWORKID,
+  ENABLE_GAS_STATION,
+  getCurrentDate,
+  getCurrentTime,
 } from '../constants/contextConstants';
+import { NotificationContext } from './NotificationContext';
 
 export const SwapContext = createContext();
 
 export const SwapProvider = (props) => {
   const pact = useContext(PactContext);
+  const notificationContext = useContext(NotificationContext);
   const { account, localRes, setLocalRes } = useContext(AccountContext);
+  console.log(
+    '🚀 ~ file: SwapContext.js ~ line 28 ~ SwapProvider ~ localRes',
+    localRes
+  );
 
   const wallet = useContext(WalletContext);
   const [pairAccount, setPairAccount] = useState('');
@@ -163,6 +172,14 @@ export const SwapProvider = (props) => {
         data = await Pact.wallet.sendSigned(cmd, network);
       }
       pact.pollingNotif(data.requestKeys[0]);
+      notificationContext.storeNotification({
+        type: 'info',
+        time: getCurrentTime(),
+        date: getCurrentDate(),
+        title: 'Transaction Pending',
+        description: data.requestKeys[0],
+      });
+
       await pact.listen(data.requestKeys[0]);
       pact.setPolling(false);
     } catch (e) {
@@ -205,10 +222,14 @@ export const SwapProvider = (props) => {
           publicKey: account.guard.keys[0],
           secretKey: privKey,
           clist: [
-            {
-              name: 'kswap.gas-station.GAS_PAYER',
-              args: ['free-gas', { int: 1 }, 1.0],
-            },
+            ...(ENABLE_GAS_STATION
+              ? [
+                  {
+                    name: 'kswap.gas-station.GAS_PAYER',
+                    args: ['free-gas', { int: 1 }, 1.0],
+                  },
+                ]
+              : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap]),
             {
               name: `${token0.address}.TRANSFER`,
               args: [
@@ -248,7 +269,7 @@ export const SwapProvider = (props) => {
         },
         networkId: NETWORKID,
         meta: Pact.lang.mkMeta(
-          'kswap-free-gas',
+          ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account,
           chainId,
           GAS_PRICE,
           3000,
@@ -268,7 +289,6 @@ export const SwapProvider = (props) => {
   };
 
   const swapWallet = async (token0, token1, isSwapIn) => {
-    debugger;
     try {
       const inPactCode = `(kswap.exchange.swap-exact-in
           (read-decimal 'token0Amount)
@@ -289,12 +309,16 @@ export const SwapProvider = (props) => {
       const signCmd = {
         pactCode: isSwapIn ? inPactCode : outPactCode,
         caps: [
-          Pact.lang.mkCap(
-            'Gas Station',
-            'free gas',
-            'kswap.gas-station.GAS_PAYER',
-            ['free-gas', { int: 1 }, 1.0]
-          ),
+          ...(ENABLE_GAS_STATION
+            ? [
+                Pact.lang.mkCap(
+                  'Gas Station',
+                  'free gas',
+                  'kswap.gas-station.GAS_PAYER',
+                  ['free-gas', { int: 1 }, 1.0]
+                ),
+              ]
+            : []),
           Pact.lang.mkCap(
             'transfer capability',
             'trasnsfer token in',
@@ -310,8 +334,11 @@ export const SwapProvider = (props) => {
                   ),
             ]
           ),
+          ...(!ENABLE_GAS_STATION
+            ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]
+            : []),
         ],
-        sender: 'kswap-free-gas',
+        sender: ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account,
         gasLimit: 3000,
         gasPrice: GAS_PRICE,
         chainId: chainId,
@@ -368,7 +395,7 @@ export const SwapProvider = (props) => {
           error: true,
           title: 'Wallet Signing Failure',
           content:
-            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kadenaswap.',
+            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kaddex.',
         }); //walletSigError();
       console.log(e);
     }

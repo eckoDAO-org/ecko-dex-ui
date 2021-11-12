@@ -6,7 +6,7 @@ import { reduceBalance } from '../../../utils/reduceBalance';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import theme from '../../../styles/theme';
 
-const Label = styled.span`
+const Label = styled.div`
   font-size: 13px;
   font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
@@ -15,9 +15,17 @@ const Label = styled.span`
 `;
 
 const Divider = styled.div`
-  border: 1px solid #ecebec;
+  border-top: ${({ gameEditionView, theme: { colors } }) =>
+    gameEditionView
+      ? `1px dashed ${theme.colors.black}`
+      : `1px solid ${theme.colors.white}99 `};
   margin: 16px 0px;
   width: 100%;
+`;
+
+const Content = styled.div`
+  display: block;
+  padding: 16px 0px;
 `;
 
 const TokensContainer = styled.div`
@@ -60,10 +68,10 @@ const TokenSelectorModalContent = ({
   console.log('selectedToken', selectedToken);
 
   return (
-    <>
+    <Content>
       <Label
         gameEditionView={gameEditionView}
-        style={{ marginTop: '20px', marginBottom: 4 }}
+        style={{ marginTop: 16, marginBottom: 8 }}
       >
         search token
       </Label>
@@ -74,7 +82,7 @@ const TokenSelectorModalContent = ({
           borderRadius: '4px',
           border: gameEditionView
             ? `2px dashed ${theme.colors.black}`
-            : `1px solid ${theme.colors.white}`,
+            : `1px solid ${theme.colors.white}99`,
           color: gameEditionView && `${theme.colors.black}`,
           /* boxShadow: "0 0 5px #FFFFFF" */
         }}
@@ -85,11 +93,7 @@ const TokenSelectorModalContent = ({
       <Label gameEditionView={gameEditionView} style={{ marginBottom: '0px' }}>
         token
       </Label>
-      <Divider
-        style={{
-          border: gameEditionView && `1px dashed ${theme.colors.black}`,
-        }}
-      />
+      <Divider gameEditionView={gameEditionView} />
       <TokensContainer>
         {Object.values(swap.tokenData)
           .filter((c) => {
@@ -151,7 +155,7 @@ const TokenSelectorModalContent = ({
             );
           })}
       </TokensContainer>
-    </>
+    </Content>
   );
 };
 

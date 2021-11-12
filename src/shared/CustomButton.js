@@ -57,6 +57,7 @@ const CustomButton = ({
   buttonStyle,
   background,
   color,
+  label,
   fontSize,
   children,
   onClick,
@@ -79,7 +80,7 @@ const CustomButton = ({
       boxShadow={boxShadow}
       hover={hover}
     >
-      {children}
+      {children || label}
     </StyledButton>
   );
 };

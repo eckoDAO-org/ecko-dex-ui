@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import NotificationContainer from '../components/notification/NotificationContainer';
 
@@ -13,7 +13,18 @@ export const STATUSES = {
   INFO: toast.TYPE.INFO,
 };
 
+const getStoredNotification = JSON.parse(localStorage.getItem('Notification'));
+
+console.log(
+  '🚀 ~ file: NotificationContext.js ~ line 17 ~ getStoredNotification',
+  getStoredNotification
+);
+
 export const NotificationProvider = ({ children }) => {
+  const [notificationList, setNotificationList] = useState(
+    getStoredNotification
+  );
+
   const showNotification = ({
     title = '',
     message = '',
@@ -55,10 +66,53 @@ export const NotificationProvider = ({ children }) => {
     );
   };
 
+  useEffect(() => {
+    localStorage.setItem(`Notification`, JSON.stringify(notificationList));
+  }, [notificationList]);
+
+  useEffect(() => {
+    if (!getStoredNotification)
+      localStorage.setItem(`Notification`, JSON.stringify([]));
+  }, []);
+
+  const storeNotification = (notification) => {
+    const notificationListByStorage = JSON.parse(
+      localStorage.getItem('Notification')
+    );
+    if (!notificationListByStorage) {
+      //first saving notification in localstorage
+      localStorage.setItem(`Notification`, JSON.stringify([notification]));
+      setNotificationList(notification);
+    } else {
+      notificationListByStorage.push(notification);
+      localStorage.setItem(
+        `Notification`,
+        JSON.stringify(notificationListByStorage)
+      );
+      setNotificationList(notificationListByStorage);
+    }
+  };
+
+  const removeItem = (indexToRemove) => {
+    const notifWithoutRemoved = notificationList.filter(
+      (notif, index) => index !== indexToRemove
+    );
+    setNotificationList(notifWithoutRemoved);
+  };
+
+  const removeAllItem = (list) => {
+    setNotificationList([]);
+  };
+
   return (
     <NotificationContext.Provider
       value={{
         showNotification,
+        notificationList,
+        setNotificationList,
+        storeNotification,
+        removeItem,
+        removeAllItem,
       }}
     >
       {children}

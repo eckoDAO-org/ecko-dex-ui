@@ -7,6 +7,9 @@ export const theme = {
   header: {
     height: 65,
   },
+  footer: {
+    modalFooter: 57,
+  },
   mediaQueries: {
     mobileBreakpoint: '48rem',
     mobileSmallPixel: 320,
@@ -22,6 +25,7 @@ export const theme = {
     black: '#15081F',
     yellow: '#FEDE75',
     white: '#FFFFFF',
+    error: '#DB2828',
   },
   fontFamily: {
     regular: 'montserrat-regular',
