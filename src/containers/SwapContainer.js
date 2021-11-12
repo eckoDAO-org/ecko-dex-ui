@@ -40,7 +40,7 @@ const FormContainer = styled.div`
   padding: ${({ gameEditionView }) =>
     gameEditionView ? `10px 10px` : `32px 32px`};
   width: 100%;
-  border-radius: 15px;
+  border-radius: 10px;
   border: ${({ gameEditionView }) =>
     gameEditionView ? `none` : ` 1px solid transparent`};
 
@@ -99,6 +99,10 @@ const FormContainer = styled.div`
     flex-flow: column;
     gap: 0px;
   }
+`;
+
+const TransactionSettingsContainer = styled(CustomPopup)`
+  border: 2px solid red !important;
 `;
 
 const TitleContainer = styled.div`

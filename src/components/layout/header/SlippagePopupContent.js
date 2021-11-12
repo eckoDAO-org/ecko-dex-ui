@@ -9,8 +9,7 @@ const Container = styled.div`
   position: relative;
   margin-bottom: 9px;
   padding: 10px;
-  background: transparent linear-gradient(122deg, #070610 0%, #4c125a 100%) 0%
-    0% no-repeat padding-box;
+  background: transparent;
 `;
 
 const BoldLabel = styled.span`
