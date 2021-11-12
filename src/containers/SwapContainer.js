@@ -39,65 +39,36 @@ const FormContainer = styled.div`
   padding: ${({ gameEditionView }) =>
     gameEditionView ? `10px 10px` : `32px 32px`};
   width: 100%;
-  border-radius: 15px;
+  border-radius: 10px;
   border: ${({ gameEditionView }) =>
     gameEditionView ? `none` : ` 1px solid transparent`};
 
-  background-clip: ${({ gameEditionView }) =>
-    !gameEditionView && `padding-box`};
   backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
   opacity: 1;
   background: transparent;
 
-  ${({ gameEditionView }) =>
-    !gameEditionView &&
-    `&:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -1000;
-    margin: -1px;
-    border-radius: 10px;
-    border-left: 1px solid #ed1cb5;
-    border-right: 1px solid #39fffc;
-    background-image: linear-gradient(to right, #ed1cb5, #ffa900, #39fffc),
-      linear-gradient(to right, #ed1cb5, #ffa900, #39fffc);
-    /* background: ${({ gameEditionView }) =>
-      !gameEditionView &&
-      'linear-gradient(to right, #ed1cb5, #ffa900, #39fffc)'}; */
-    background-position: 0 0, 0 100%;
-    background-size: 100% 1px;
-    background-repeat: no-repeat;
-  }`}
-
-  /* 
-  &:after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background:  no-repeat;
-  background-size: 100%;
-  background-position: bottom;
-} */
-
-  /* &:before {
-    border-radius: inherit;
-
-  /* & > *:not(:last-child) {
-    margin-right: 32px;
-  } */
-
   @media (max-width: ${({ theme: { mediaQueries } }) =>
-    `${mediaQueries.mobilePixel + 1}px`}) {
+      `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
     gap: 0px;
   }
+`;
+
+const Gradient = styled.div`
+  border-radius: 10px; /*1*/
+  border: 1px solid transparent; /*2*/
+  background: linear-gradient(90deg, #ed1cb5, #ffa900, #39fffc) border-box; /*3*/
+  -webkit-mask: /*4*/ linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out; /*5'*/
+  mask-composite: exclude; /*5*/
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  width: calc(100% + 20px);
+  height: calc(100% + 20px);
 `;
 
 const TitleContainer = styled.div`
@@ -596,6 +567,7 @@ const SwapContainer = () => {
         )}
       </TitleContainer>
       <FormContainer gameEditionView={gameEditionView}>
+        <Gradient />
         <SwapForm
           fromValues={fromValues}
           setFromValues={setFromValues}
