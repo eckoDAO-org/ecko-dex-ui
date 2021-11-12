@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components/macro";
 import { Transition } from "react-spring/renderprops";
 import ModalContainer from "../../../shared/ModalContainer";
 import { Loader, Icon } from "semantic-ui-react";
 import CustomButton from "../../../shared/CustomButton";
+import { WalletContext } from "../../../contexts/WalletContext";
+import { WALLET } from "../../../constants/wallet";
+import { openZelcore } from "../../../utils/zelcore";
 
 const Container = styled.div`
   position: absolute;
@@ -40,6 +43,11 @@ const SubTitle = styled.div`
 `;
 
 const WalletRequestView = ({ show, onClose, error }) => {
+  const wallet = useContext(WalletContext);
+
+  if (show && wallet.wallet.name === WALLET.ZELCORE.name) {
+    openZelcore();
+  }
   return (
     <Transition
       items={show}
