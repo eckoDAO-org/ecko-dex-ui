@@ -297,29 +297,50 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
   const successRemoveView = () => {
     return (
       <Content gameEditionView={gameEditionView}>
-        <SuccessfullIcon />
         <Title gameEditionView={gameEditionView}>Preview Successful!</Title>
-        <SubTitle gameEditionView={gameEditionView}>
-          Transaction Details
-        </SubTitle>
+
+        <SuccessfullIcon />
+
         <TransactionsDetails>
+          <FlexStartRow style={{ marginBottom: 16 }}>
+            <HighlightLabel gameEditionView={gameEditionView}>
+              Remove
+            </HighlightLabel>
+          </FlexStartRow>
           <SpaceBetweenRow>
-            <Label gameEditionView={gameEditionView}>Remove</Label>
-            <Label gameEditionView={gameEditionView}>
-              {`${extractDecimal(swap.localRes.result.data.amount0)} `}
-              {showTicker(token0)}
-            </Label>
+            <FlexStartRow>
+              {getTokenIcon(token0)}
+              <HighlightLabel gameEditionView={gameEditionView}>
+                {`${extractDecimal(swap.localRes.result.data.amount0)} `}
+              </HighlightLabel>
+            </FlexStartRow>
+            <HighlightLabel gameEditionView={gameEditionView}>
+              {` ${showTicker(token0)}`}
+            </HighlightLabel>
           </SpaceBetweenRow>
-          <SpaceBetweenRow style={{ padding: '16px 0px' }}>
-            <Label gameEditionView={gameEditionView}>Remove</Label>
-            <Label gameEditionView={gameEditionView}>
-              {`${extractDecimal(swap.localRes.result.data.amount1)} `}
-              {showTicker(token1)}
-            </Label>
+          <FlexStartRow style={{ marginBottom: 16 }}>
+            <HighlightLabel gameEditionView={gameEditionView}>
+              Remove
+            </HighlightLabel>
+          </FlexStartRow>
+          <SpaceBetweenRow>
+            <FlexStartRow>
+              {getTokenIcon(token1)}
+              <HighlightLabel gameEditionView={gameEditionView}>
+                {`${extractDecimal(swap.localRes.result.data.amount1)} `}
+              </HighlightLabel>
+            </FlexStartRow>
+            <HighlightLabel gameEditionView={gameEditionView}>
+              {` ${showTicker(token1)}`}
+            </HighlightLabel>
           </SpaceBetweenRow>
+
           <SpaceBetweenRow>
             <Label gameEditionView={gameEditionView}>Gas Cost</Label>
-            <Label gameEditionView={gameEditionView}>
+            <Label
+              gameEditionView={gameEditionView}
+              style={{ color: !gameEditionView && '#41CC41' }}
+            >
               {ENABLE_GAS_STATION ? (
                 <>
                   <s>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</s>
