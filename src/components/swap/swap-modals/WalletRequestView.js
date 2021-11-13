@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components/macro";
 import { Transition } from "react-spring/renderprops";
 import ModalContainer from "../../../shared/ModalContainer";
@@ -45,9 +45,12 @@ const SubTitle = styled.div`
 const WalletRequestView = ({ show, onClose, error }) => {
   const wallet = useContext(WalletContext);
 
-  if (show && wallet.wallet.name === WALLET.ZELCORE.name) {
-    openZelcore();
-  }
+  useEffect(() => {
+    if (show && wallet.wallet.name === WALLET.ZELCORE.name) {
+      openZelcore();
+    }
+  }, [show]);
+
   return (
     <Transition
       items={show}
