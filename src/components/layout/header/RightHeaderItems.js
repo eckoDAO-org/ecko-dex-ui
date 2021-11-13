@@ -140,16 +140,19 @@ const RightHeaderItems = () => {
           }}
         />
       </HeaderItem>
-      {/* <HeaderItem>
-        <CustomPopup
-          trigger={<CogIcon />}
-          on='click'
-          offset={[30, 10]}
-          position='bottom right'
-        >
-          <SlippagePopupContent />
-        </CustomPopup>
-      </HeaderItem> */}
+      {gameEditionView && (
+        <HeaderItem>
+          <CustomPopup
+            trigger={<CogIcon />}
+            on='click'
+            offset={[30, 10]}
+            position='bottom right'
+          >
+            <SlippagePopupContent />
+          </CustomPopup>
+        </HeaderItem>
+      )}
+
       <HeaderItem>
         <CustomPopup
           basic

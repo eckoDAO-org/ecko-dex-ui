@@ -62,28 +62,33 @@ export default createGlobalStyle`
     }
 
     .ui.popup {
-      background: transparent linear-gradient(122deg, #070610 0%, #4c125a 100%) 0%
-      0% no-repeat padding-box !important;
-
-    border: 2px solid transparent !important;
-    background-clip: padding-box !important;
-    &:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      z-index: -1000;
-      margin: -2px;
-      border-radius: inherit;
-      background: linear-gradient(
-        to right,
-        #ed1cb5,
-        #ffa900,
-        #39fffc
-      ) !important;
-    }
+      width: 100%;
+      display: flex;
+      position: relative !important;
+      background: transparent !important;
+      border-radius: 10px;
+      backdrop-filter: blur(50px) !important;
+      opacity: 1 !important;
+      border: 1px solid transparent !important;
+      background-clip: padding-box !important;
+      &:before {
+        content: '';
+        position: absolute !important;
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        z-index: -1000 !important;
+        margin: -1px !important;
+        border-radius: 10px !important;
+        border-left: 1px solid #ed1cb5 !important;
+        border-right: 1px solid #39fffc !important;
+        background-image: linear-gradient(to right, #ed1cb5, #ffa900, #39fffc),
+          linear-gradient(to right, #ed1cb5, #ffa900, #39fffc) !important;
+        background-position: 0 0, 0 100% !important;
+        background-size: 100% 1px !important;
+        background-repeat: no-repeat !important;
+      }
     }
 
     #tsparticles canvas{

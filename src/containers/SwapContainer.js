@@ -54,6 +54,10 @@ const FormContainer = styled.div`
   }
 `;
 
+const TransactionSettingsContainer = styled(CustomPopup)`
+  border: 2px solid red !important;
+`;
+
 const Gradient = styled.div`
   border-radius: 10px; /*1*/
   border: 1px solid transparent; /*2*/
