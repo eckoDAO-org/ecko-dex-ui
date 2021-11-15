@@ -73,10 +73,9 @@ const SwapForm = ({
         }}
       />
       {gameEditionView ? null : (
-        <Divider horizontal>
+        <Divider horizontal style={{ zIndex: 1 }}>
           <SwapIcon style={{ cursor: 'pointer' }} onClick={swapValues} />
         </Divider>
-        // <ButtonDivider icon={<SwapIcon />} onClick={swapValues} />
       )}
       <Input
         error={isNaN(toValues.amount)}
