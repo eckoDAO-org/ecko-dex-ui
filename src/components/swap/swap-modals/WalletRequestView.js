@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { Transition } from 'react-spring/renderprops';
 import ModalContainer from '../../../shared/ModalContainer';
@@ -7,6 +7,9 @@ import CustomButton from '../../../shared/CustomButton';
 import GameEditionModalsContainer from '../../game-edition/GameEditionModalsContainer';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import theme from '../../../styles/theme';
+import { WalletContext } from '../../../contexts/WalletContext';
+import { WALLET } from '../../../constants/wallet';
+import { openZelcore } from '../../../utils/zelcore';
 
 const Container = styled.div`
   position: absolute;
@@ -56,6 +59,14 @@ const SubTitle = styled.div`
 `;
 
 const WalletRequestView = ({ show, onClose, error }) => {
+  const wallet = useContext(WalletContext);
+
+  useEffect(() => {
+    if (show && wallet.wallet.name === WALLET.ZELCORE.name) {
+      openZelcore();
+    }
+  }, [show]);
+
   const { gameEditionView } = useContext(GameEditionContext);
 
   return gameEditionView && show ? (

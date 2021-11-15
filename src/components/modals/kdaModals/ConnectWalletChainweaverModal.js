@@ -6,6 +6,7 @@ import { Button } from 'semantic-ui-react';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { WalletContext } from '../../../contexts/WalletContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
+import { WALLET } from "../../../constants/wallet";
 
 const Text = styled.span`
   font-size: 13px;
@@ -61,6 +62,7 @@ const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
   const handleConnect = async () => {
     await account.setVerifiedAccount(accountId);
     await wallet.signingWallet();
+    await wallet.setSelectedWallet(WALLET.CHAINWEAVER);
 
     handleModalClose();
   };

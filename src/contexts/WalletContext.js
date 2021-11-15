@@ -44,6 +44,11 @@ export const WalletProvider = (props) => {
     setSigning({ method: "sign", key: "" });
   };
 
+  const setSelectedWallet = (wallet) => {
+    setWallet({ name: wallet.name });
+    localStorage.setItem("wallet", JSON.stringify({ name: wallet.name }));
+  };
+
   const disconnectWallet = () => {
     localStorage.removeItem("wallet", null);
     localStorage.removeItem("signing", null);
@@ -52,6 +57,7 @@ export const WalletProvider = (props) => {
 
   const contextValues = {
     wallet,
+    setSelectedWallet,
     signing,
     walletError,
     setWalletError,

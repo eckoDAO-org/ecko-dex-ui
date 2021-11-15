@@ -63,7 +63,14 @@ const HeaderContainer = styled.div`
 const Title = styled.span`
   font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
+
   font-size: 24px;
+
+  @media (max-width: ${({ theme: { mediaQueries } }) =>
+      `${mediaQueries.mobileSmallPixel}px`}) {
+    width: min-content;
+    font-size: 16px;
+  }
   text-transform: capitalize;
   color: 'white';
 `;
