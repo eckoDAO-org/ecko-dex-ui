@@ -376,6 +376,7 @@ const SwapContainer = () => {
       pact.setWalletSuccess(false);
     }
   }, [swap.walletSuccess]);
+
   const swapValues = () => {
     const from = { ...fromValues };
     const to = { ...toValues };

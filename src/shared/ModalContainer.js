@@ -119,7 +119,7 @@ const ModalContainer = ({
           </Title>
         )}
 
-        {onClose && (
+        {onClose ? (
           <CloseIcon
             style={{
               cursor: 'pointer',
@@ -127,6 +127,8 @@ const ModalContainer = ({
             }}
             onClick={onClose}
           />
+        ) : (
+          <div></div>
         )}
       </HeaderContainer>
 

@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { isMobile } from 'react-device-detect';
-import { Dimmer, Loader, Table } from 'semantic-ui-react';
+import { Dimmer, Divider, Loader } from 'semantic-ui-react';
 import styled from 'styled-components';
 import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
@@ -9,7 +8,12 @@ import CustomLabel from '../../shared/CustomLabel';
 import ModalContainer from '../../shared/ModalContainer';
 import theme from '../../styles/theme';
 import { extractDecimal, reduceBalance } from '../../utils/reduceBalance';
-import { PartialScrollableScrollSection } from '../layout/Containers';
+import {
+  PartialScrollableScrollSection,
+  Title,
+  TitleContainer,
+} from '../layout/Containers';
+import StatsCard from './StatsCard';
 
 const CustomGrid = styled.div`
   display: grid;
@@ -29,6 +33,39 @@ const IconsContainer = styled.div`
   }
 `;
 
+export const CardContainer = styled.div`
+  position: ${({ gameEditionView }) => !gameEditionView && `relative`};
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  padding: ${({ gameEditionView }) =>
+    gameEditionView ? `10px 10px` : `32px 32px`};
+  width: 100%;
+  border-radius: 10px;
+  border: ${({ gameEditionView }) =>
+    gameEditionView ? `none` : ` 2px solid ${theme.colors.white}29`};
+
+  background-clip: ${({ gameEditionView }) =>
+    !gameEditionView && `padding-box`};
+
+  opacity: 1;
+  background: ${({ gameEditionView }) =>
+    gameEditionView ? `transparent` : `transparent`}; // or add new style
+
+  /* &:before {
+    border-radius: inherit;
+
+  /* & > *:not(:last-child) {
+    margin-right: 32px;
+  } */
+
+  @media (max-width: ${({ theme: { mediaQueries } }) =>
+      `${mediaQueries.mobilePixel + 1}px`}) {
+    flex-flow: column;
+    gap: 0px;
+  }
+`;
+
 const StatsTab = () => {
   const pact = useContext(PactContext);
   const { gameEditionView } = useContext(GameEditionContext);
@@ -37,7 +74,7 @@ const StatsTab = () => {
     await pact.getPairList();
   }, []);
 
-  return isMobile || gameEditionView ? (
+  return gameEditionView ? (
     <ModalContainer
       title='pool stats'
       containerStyle={{
@@ -99,63 +136,57 @@ const StatsTab = () => {
   ) : (
     //DESKTOP
     <ModalContainer
-      title='pool stats'
+      title={gameEditionView && 'Stats'}
+      withoutRainbowBackground
       containerStyle={{
         maxHeight: '80vh',
-        maxWidth: 650,
+        padding: 0,
       }}
     >
-      <Table celled basic='very' style={{ color: '#FFFFFF' }}>
-        <Table.Header>
-          <Table.Row style={{ fontFamily: theme.fontFamily.bold }}>
-            <Table.HeaderCell textAlign='center' style={{ color: '#FFFFFF' }}>
-              Name
-            </Table.HeaderCell>
-            <Table.HeaderCell textAlign='center' style={{ color: '#FFFFFF' }}>
-              Total Reserve - <br /> token0
-            </Table.HeaderCell>
-            <Table.HeaderCell textAlign='center' style={{ color: '#FFFFFF' }}>
-              Total Reserve - <br /> token1
-            </Table.HeaderCell>
-            <Table.HeaderCell textAlign='center' style={{ color: '#FFFFFF' }}>
-              Rate
-            </Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        {pact.pairList[0] ? (
-          Object.values(pact.pairList).map((pair) =>
-            pair && pair.reserves ? (
-              <Table.Body key={pair.name}>
-                <Table.Row>
-                  <Table.Cell
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
-                    {tokenData[pair.token0].icon}
-                    {tokenData[pair.token1].icon}
-                    <div>{`${pair.token0}/${pair.token1}`}</div>
-                  </Table.Cell>
-                  <Table.Cell>{reduceBalance(pair.reserves[0])}</Table.Cell>
-                  <Table.Cell>{reduceBalance(pair.reserves[1])}</Table.Cell>
-                  <Table.Cell>{`${reduceBalance(
-                    extractDecimal(pair.reserves[0]) /
-                      extractDecimal(pair.reserves[1])
-                  )} ${pair.token0}/${pair.token1}`}</Table.Cell>
-                </Table.Row>
-              </Table.Body>
-            ) : (
-              ''
+      {!gameEditionView && (
+        <TitleContainer gameEditionView={gameEditionView}>
+          <Title gameEditionView={gameEditionView}>Stats</Title>
+        </TitleContainer>
+      )}
+      <PartialScrollableScrollSection>
+        <CardContainer gameEditionView={gameEditionView}>
+          {pact.pairList[0] ? (
+            Object.values(pact.pairList).map((pair, index) =>
+              pair && pair.reserves ? (
+                <>
+                  <StatsCard pair={pair} />
+                  {!Object.values(pact.pairList).length === index && (
+                    <Divider
+                      style={{
+                        width: '100%',
+                        margin: '20px 0px',
+                        borderTop: gameEditionView
+                          ? `1px dashed ${theme.colors.black}`
+                          : `1px solid  ${theme.colors.white}`,
+                      }}
+                    />
+                  )}
+                </>
+              ) : (
+                ''
+              )
             )
-          )
-        ) : (
-          <Dimmer active inverted>
-            <Loader>Loading</Loader>
-          </Dimmer>
-        )}
-      </Table>
+          ) : (
+            <Dimmer active inverted={gameEditionView}>
+              <Loader
+                style={{
+                  color: gameEditionView ? theme.colors.black : '#FFFFFF',
+                  fontFamily: gameEditionView
+                    ? theme.fontFamily.pressStartRegular
+                    : theme.fontFamily.regular,
+                }}
+              >
+                Loading
+              </Loader>
+            </Dimmer>
+          )}
+        </CardContainer>
+      </PartialScrollableScrollSection>
     </ModalContainer>
   );
 };
