@@ -4,7 +4,7 @@ import HeaderItem from '../../../shared/HeaderItem';
 import AccountInfo from './AccountInfo';
 import Button from '../../../shared/CustomButton';
 import CustomPopup from '../../../shared/CustomPopup';
-import { PowerIcon, CogIcon, AboutBigIcon } from '../../../assets';
+import { PowerIcon, CogIcon, AboutBigIcon, CopyIcon } from '../../../assets';
 import headerLinks from '../../headerLinks';
 import PopupContentList from './PopupContentList';
 import { AccountContext } from '../../../contexts/AccountContext';
@@ -16,7 +16,7 @@ import ConnectWalletModal from '../../modals/kdaModals/ConnectWalletModal';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import BellNotification from '../../right-modal-notification/BellNotification';
 import { RightModalContext } from '../../../contexts/RightModalContext';
-import { ModalContent } from 'semantic-ui-react';
+import { ModalContent, Popup } from 'semantic-ui-react';
 import RightModalContent from '../../right-modal-notification/RightModalContent';
 import { NotificationContext } from '../../../contexts/NotificationContext';
 
@@ -74,9 +74,28 @@ const RightHeaderItems = () => {
             onClick={() =>
               modalContext.openModal({
                 title: account?.account ? 'wallet connected' : 'connect wallet',
-                description: account?.account
-                  ? `Account ID: ${reduceToken(account.account)}`
-                  : 'Connect a wallet using one of the methods below',
+                description: account?.account ? (
+                  <div>
+                    Account ID: {reduceToken(account.account)}
+                    <Popup
+                      content='copied!'
+                      on='click'
+                      position='bottom right'
+                      style={{ opacity: 0.7, background: '#fff !important' }}
+                      pinned
+                      trigger={
+                        <CopyIcon
+                          style={{ marginLeft: '25px' }}
+                          onClick={() => {
+                            navigator.clipboard.writeText(account.account);
+                          }}
+                        />
+                      }
+                    />
+                  </div>
+                ) : (
+                  'Connect a wallet using one of the methods below'
+                ),
                 content: <ConnectWalletModal />,
               })
             }

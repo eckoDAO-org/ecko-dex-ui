@@ -65,13 +65,13 @@ export default createGlobalStyle`
       width: 100%;
       display: flex;
       position: relative !important;
-      background: transparent !important;
+      background: transparent;
       border-radius: 10px;
       backdrop-filter: blur(50px) !important;
       opacity: 1 !important;
-      border: 1px solid transparent !important;
+      border: 1px solid #FFFFFF99 !important;
       background-clip: padding-box !important;
-      &:before {
+      /* &:before {
         content: '';
         position: absolute !important;
         top: 0 !important;
@@ -88,7 +88,7 @@ export default createGlobalStyle`
         background-position: 0 0, 0 100% !important;
         background-size: 100% 1px !important;
         background-repeat: no-repeat !important;
-      }
+      } */
     }
 
     #tsparticles canvas{

@@ -101,10 +101,9 @@ const ConnectWalletModal = () => {
   return Object.values(WALLET).map((wallet, index) => (
     <CustomButton
       key={index}
-      buttonStyle={{
-        border: '1px solid #424242',
-      }}
+      border='1px solid #FFFFFF99'
       background='transparent'
+      color='#fff'
       onClick={() => {
         openWalletModal(wallet.name);
       }}

@@ -1,9 +1,9 @@
-import React from "react";
-import styled from "styled-components/macro";
+import React from 'react';
+import styled from 'styled-components/macro';
 
 const Container = styled.div`
   display: flex;
-  border-color: "pink";
+  border-color: 'pink';
   :hover {
     opacity: 0.7;
     cursor: pointer;
@@ -18,7 +18,6 @@ const BalanceContainer = styled.div`
   color: white;
   border-radius: 20px;
   border: 1px solid #ffffff;
-  box-shadow: 0 0 5px #ffffff;
   opacity: 1;
   background: transparent;
 `;
