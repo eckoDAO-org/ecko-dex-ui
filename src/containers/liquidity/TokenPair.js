@@ -1,13 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionTitle,
-  Button,
-  Divider,
-  Icon,
-} from 'semantic-ui-react';
+import { Accordion, Button, Icon } from 'semantic-ui-react';
 
 import {
   reduceBalance,
@@ -17,13 +10,14 @@ import {
 import CustomButton from '../../shared/CustomButton';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import theme from '../../styles/theme';
-
-const Container = styled.div`
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-  align-items: center;
-`;
+import {
+  ButtonContainer,
+  ColumnContainer,
+  Container,
+  Label,
+  RowContainer,
+  Value,
+} from '../../components/layout/Containers';
 
 const ResultContainer = styled.div`
   display: flex !important;
@@ -66,51 +60,6 @@ const HeaderContainer = styled(Accordion.Title)`
       ? `${colors.black} !important`
       : `${colors.white} !important`};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '16px')};
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-flow: row;
-  justify-content: center;
-  width: 100%;
-`;
-
-const RowContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  flex-flow: ${({ gameEditionView }) => (gameEditionView ? 'row' : 'column')};
-  margin-bottom: ${({ gameEditionView }) => (gameEditionView ? '8px' : '0px')};
-`;
-
-const ColumnContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Label = styled.span`
-  font-family: ${({ gameEditionView, theme: { fontFamily } }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
-  color: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? colors.black : '#FFFFFF !importsnt'};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
-  text-align: ${({ gameEditionView }) => gameEditionView && 'left'};
-
-  text-transform: capitalize;
-`;
-
-const Value = styled.span`
-  font-family: ${({ gameEditionView, theme: { fontFamily } }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '16px')};
-  line-height: 20px;
-  color: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? colors.black : '#FFFFFF'};
-  text-align: ${({ gameEditionView }) => gameEditionView && 'left'};
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
-    margin-bottom: 5px;
-  }
 `;
 
 const TokenPair = (props) => {
