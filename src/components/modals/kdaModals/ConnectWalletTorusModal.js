@@ -10,6 +10,7 @@ import { WalletContext } from '../../../contexts/WalletContext';
 import CustomButton from '../../../shared/CustomButton';
 import { ModalContext } from '../../../contexts/ModalContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
+import { WALLET } from "../../../constants/wallet";
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -132,10 +133,15 @@ function Login({ onClose, onBack }) {
       const keyPair = Pact.crypto.restoreKeyPairFromSecretKey(
         loginDetails.privateKey
       );
+
       setPublicKey(keyPair.publicKey);
       setPrivateKey(keyPair.secretKey);
+
       await account.setVerifiedAccount(keyPair.publicKey);
+
       await wallet.storePrivKey(keyPair.secretKey);
+      await wallet.setSelectedWallet(WALLET.TORUS);
+
       // const balance = await getBalance("coin", keyPair.publicKey);
       // setAccountBalance(balance[0]);
       setDataRetrieved(true);

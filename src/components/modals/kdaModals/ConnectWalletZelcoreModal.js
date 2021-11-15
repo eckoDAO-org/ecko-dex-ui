@@ -7,6 +7,7 @@ import { WalletContext } from '../../../contexts/WalletContext';
 import { ModalContext } from '../../../contexts/ModalContext';
 import GetZelcoreAccountModal from './GetZelcoreAccountModal';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
+import { WALLET } from "../../../constants/wallet";
 
 const Text = styled.span`
   font-size: 13px;
@@ -68,6 +69,7 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
   const handleConnect = async () => {
     await account.setVerifiedAccount(accountId);
     await wallet.signingWallet();
+    await wallet.setSelectedWallet(WALLET.ZELCORE);
 
     // if (response !== "success") {
     //   setError({ message: "Account does not exist!" });

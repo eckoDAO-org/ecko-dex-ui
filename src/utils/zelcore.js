@@ -35,4 +35,6 @@ const getAccounts = async () => {
   }
 };
 
-export default getAccounts;
+const openZelcore = () => window.open("zel:", "_self");
+
+export { getAccounts, openZelcore };

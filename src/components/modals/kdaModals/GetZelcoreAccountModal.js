@@ -3,12 +3,14 @@ import styled from 'styled-components/macro';
 import CustomButton from '../../../shared/CustomButton';
 import { Dropdown, Loader } from 'semantic-ui-react';
 import { Button } from 'semantic-ui-react';
-import getAccounts from '../../../utils/getZelcoreAccts';
 import reduceToken from '../../../utils/reduceToken';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { ModalContext } from '../../../contexts/ModalContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import theme from '../../../styles/theme';
+import { getAccounts, openZelcore } from "../../../utils/zelcore";
+import { WalletContext } from "../../../contexts/WalletContext";
+import { WALLET } from "../../../constants/wallet";
 
 const TopText = styled.span`
   font-size: 13px;
@@ -87,6 +89,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
   const account = useContext(AccountContext);
   const { gameEditionView, closeModal } = useContext(GameEditionContext);
 
+  const wallet = useContext(WalletContext);
   const [loading, setLoading] = useState(false);
   const [accounts, setAccounts] = useState(null);
   const [selectedAccount, setSelectedAccount] = useState(null);
@@ -95,6 +98,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
 
   const getAccountsFromWallet = async () => {
     setLoading(true);
+    openZelcore();
     const getAccountsResponse = await getAccounts();
     console.log(getAccountsResponse);
     if (getAccountsResponse.status === 'success') {
@@ -127,6 +131,8 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
 
   const handleConnect = async () => {
     await account.setVerifiedAccount(selectedAccount);
+    await wallet.signingWallet();
+    await wallet.setSelectedWallet(WALLET.ZELCORE);
     handleModalClose();
   };
 
