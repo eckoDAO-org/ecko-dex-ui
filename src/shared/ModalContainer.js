@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
 import { ArrowBack, CloseIcon } from '../assets';
 import { GameEditionContext } from '../contexts/GameEditionContext';
+import theme from '../styles/theme';
 
 const Container = styled.div`
   position: relative;
@@ -105,7 +106,7 @@ const ModalContainer = ({
           <ArrowBack
             style={{
               cursor: 'pointer',
-              color: '#FFFFFF 0% 0% no-repeat padding-box',
+              color: `${theme.colors.white} 0% 0% no-repeat padding-box`,
             }}
             onClick={onBack}
           />

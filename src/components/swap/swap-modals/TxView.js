@@ -23,6 +23,8 @@ import { AccountContext } from '../../../contexts/AccountContext';
 import { PactContext } from '../../../contexts/PactContext';
 import theme from '../../../styles/theme';
 import tokenData from '../../../constants/cryptoCurrencies';
+import CustomPopup from '../../../shared/CustomPopup';
+import PopupTxView from './PopupTxView';
 
 const Container = styled.div`
   position: absolute;
@@ -164,23 +166,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
             <Label gameEditionView={gameEditionView}>Account</Label>
             <Label gameEditionView={gameEditionView}>
               {`${reduceToken(account.account)}`}
-              <Popup
-                trigger={
-                  <Icon
-                    name='inverted info circle'
-                    style={{ margin: ' 0px 0px 0px 4px' }}
-                  />
-                }
-                position='top center'
-                style={{ color: !gameEditionView && theme.colors.white }}
-              >
-                <Popup.Header>Complete Public Key</Popup.Header>
-                <Popup.Content
-                  style={{ inlineSize: '150px', overflowWrap: ' break-word' }}
-                >
-                  {account.account}
-                </Popup.Content>
-              </Popup>
+              <PopupTxView isAccountPopup />
             </Label>
           </SpaceBetweenRow>
           <SpaceBetweenRow>
@@ -245,32 +231,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
               ) : (
                 <span>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</span>
               )}
-              {ENABLE_GAS_STATION && (
-                <Popup
-                  trigger={
-                    <Icon
-                      onClick={() => {
-                        window.open(
-                          'https://medium.com/kadena-io/the-first-crypto-gas-station-is-now-on-kadenas-blockchain-6dc43b4b3836',
-                          '_blank',
-                          'noopener,noreferrer'
-                        );
-                      }}
-                      name='help circle'
-                      style={{ marginLeft: '2px', marginRight: 0 }}
-                    />
-                  }
-                  position='top center'
-                  style={{ color: !gameEditionView && theme.colors.white }}
-                >
-                  <Popup.Header>Why is Gas free?</Popup.Header>
-                  <Popup.Content>
-                    Kadena has a novel concept called gas stations that allows
-                    smart contracts to pay for users' gas. This means you do not
-                    need to hold KDA to trade any token pair!
-                  </Popup.Content>
-                </Popup>
-              )}
+              {ENABLE_GAS_STATION && <PopupTxView />}
             </Label>
           </SpaceBetweenRow>
         </TransactionsDetails>
