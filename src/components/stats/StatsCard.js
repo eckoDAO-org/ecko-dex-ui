@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import CustomLabel from '../../shared/CustomLabel';
+import theme from '../../styles/theme';
 import { extractDecimal, reduceBalance } from '../../utils/reduceBalance';
 import { ColumnContainer, Container, Label, Value } from '../layout/Containers';
 
@@ -42,7 +43,7 @@ const StatsCard = ({ pair }) => {
       <IconsContainer style={{ marginRight: '16px' }}>
         {tokenData[pair.token0].icon}
         {tokenData[pair.token1].icon}
-        <CustomLabel>{`${pair.token0}-${pair.token1}`}</CustomLabel>
+        <CustomLabel bold>{`${pair.token0}-${pair.token1}`}</CustomLabel>
       </IconsContainer>
       {/* TR TOKEN 0 */}
       <ColumnContainer
@@ -76,10 +77,7 @@ const StatsCard = ({ pair }) => {
         <Label gameEditionView={gameEditionView} withShade='99'>
           Total Reserve - Token1
         </Label>
-        <Value
-          gameEditionView={gameEditionView}
-          style={{ fontSize: 10 }}
-        >{`${reduceBalance(
+        <Value gameEditionView={gameEditionView}>{`${reduceBalance(
           extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1])
         )} ${pair.token0}/${pair.token1}`}</Value>
       </ColumnContainer>

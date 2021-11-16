@@ -18,7 +18,7 @@ const ButtonContainer = styled.div`
   width: 100%;
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
   bottom: ${({ gameEditionView }) => gameEditionView && '10px'};
-  z-index: 1;
+  z-index: ${({ gameEditionView }) => !gameEditionView && '1'};
 `;
 
 const SwapButtonsForm = ({

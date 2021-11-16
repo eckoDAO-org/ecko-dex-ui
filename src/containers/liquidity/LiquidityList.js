@@ -68,34 +68,13 @@ const FormContainer = styled.div`
   border: ${({ gameEditionView, theme: { colors } }) =>
     gameEditionView
       ? `2px dashed ${colors.black} !important`
-      : '2px solid transparent'};
+      : '1px solid transparent'};
 
-  background-clip: ${({ gameEditionView }) =>
-    !gameEditionView && `padding-box`};
   opacity: 1;
-  background: ${({ gameEditionView }) =>
-    gameEditionView
-      ? `transparent`
-      : `transparent linear-gradient(122deg, #070610 0%, #4c125a 100%) 0%
-    0% no-repeat padding-box`};
-
-  ${({ gameEditionView }) =>
-    !gameEditionView &&
-    `&:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -1000;
-    margin: -2px;
-    border-radius: inherit;
-    background: linear-gradient(to right, #ed1cb5, #ffa900, #39fffc);
-  }`}
+  background: transparent;
 
   @media (max-width: ${({ theme: { mediaQueries } }) =>
-    `${mediaQueries.mobilePixel + 1}px`}) {
+      `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
     display: table;
   }
@@ -103,6 +82,24 @@ const FormContainer = styled.div`
       `${mediaQueries.mobileSmallPixel}px`}) {
     padding: 0;
   }
+`;
+
+const Gradient = styled.div`
+  border-radius: 10px; /*1*/
+  border: 1px solid transparent; /*2*/
+  background: linear-gradient(90deg, #ed1cb5, #ffa900, #39fffc) border-box; /*3*/
+  -webkit-mask: /*4*/ linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out; /*5'*/
+  mask-composite: exclude; /*5*/
+  position: absolute;
+  top: -10px;
+  left: 0px;
+  right: 0px;
+  bottom: -10px;
+  width: 100%;
+  height: calc(100% + 20px);
+  z-index: -10;
 `;
 
 const TopContainer = styled.div``;
@@ -240,6 +237,7 @@ const LiquidityList = (props) => {
             {account.account !== null ? (
               liquidity.pairListAccount[0] ? (
                 <FormContainer gameEditionView={gameEditionView}>
+                  <Gradient />
                   {Object.values(liquidity.pairListAccount).map(
                     (pair, index) => {
                       return pair && pair.balance ? (

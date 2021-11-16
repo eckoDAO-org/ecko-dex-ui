@@ -42,7 +42,7 @@ export const Label = styled.span`
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
   color: ${({ gameEditionView, withShade, theme: { colors } }) =>
     gameEditionView ? colors.black : `${colors.white}${withShade} !important`};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '10px')};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   text-align: ${({ gameEditionView }) => gameEditionView && 'left'};
 
   text-transform: capitalize;
@@ -51,7 +51,7 @@ export const Label = styled.span`
 export const Value = styled.span`
   font-family: ${({ gameEditionView, theme: { fontFamily } }) =>
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '16px')};
   line-height: 20px;
   color: ${({ gameEditionView, withShade, theme: { colors } }) =>
     gameEditionView ? colors.black : `${colors.white}${withShade} !important`};

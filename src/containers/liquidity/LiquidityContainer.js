@@ -21,8 +21,10 @@ import tokenData from '../../constants/cryptoCurrencies';
 import SwapForm from '../../components/swap/SwapForm';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import TokenSelectorModalContent from '../../components/swap/swap-modals/TokenSelectorModalContent';
+import { Logo } from '../../assets';
+import { FadeIn } from '../../components/shared/animations';
 
-const Container = styled.div`
+const Container = styled(FadeIn)`
   margin-top: ${({ theme: { header } }) => header.height};
   display: flex;
   justify-content: center;
@@ -63,45 +65,43 @@ const FormContainer = styled.div`
   width: 100%;
   border-radius: 10px;
   border: ${({ gameEditionView }) =>
-    gameEditionView ? `none` : ` 2px solid transparent`};
-
-  background-clip: ${({ gameEditionView }) =>
-    !gameEditionView && `padding-box`};
+    gameEditionView ? `none` : ` 1px solid transparent`};
 
   opacity: 1;
-  background: ${({ gameEditionView }) =>
-    gameEditionView
-      ? `transparent`
-      : `transparent linear-gradient(122deg, #070610 0%, #4c125a 100%) 0%
-    0% no-repeat padding-box`};
-
-  &:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -1000;
-    margin: -2px;
-    border-radius: inherit;
-    background: ${({ gameEditionView }) =>
-      !gameEditionView &&
-      'linear-gradient(to right, #ed1cb5, #ffa900, #39fffc)'};
-  }
-
-  /* &:before {
-    border-radius: inherit;
-
-  /* & > *:not(:last-child) {
-    margin-right: 32px;
-  } */
+  backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
+  background: transparent;
 
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
     gap: 0px;
   }
+`;
+
+const Gradient = styled.div`
+  border-radius: 10px; /*1*/
+  border: 1px solid transparent; /*2*/
+  background: linear-gradient(90deg, #ed1cb5, #ffa900, #39fffc) border-box; /*3*/
+  -webkit-mask: /*4*/ linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out; /*5'*/
+  mask-composite: exclude; /*5*/
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  width: calc(100% + 20px);
+  height: calc(100% + 20px);
+`;
+
+const LogoContainer = styled(FadeIn)`
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  margin-left: auto;
+  margin-right: auto;
+  transform: translate(-50%, 0);
 `;
 
 const ButtonContainer = styled.div`
@@ -187,6 +187,7 @@ const LiquidityContainer = (props) => {
   const [showTxModal, setShowTxModal] = useState(false);
   const [showReview, setShowReview] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isLogoVisible, setIsLogoVisible] = useState(false);
 
   useEffect(() => {
     if (showTxModal === false) {
@@ -648,7 +649,10 @@ const LiquidityContainer = (props) => {
   };
 
   return (
-    <Container>
+    <Container
+      gameEditionView={gameEditionView}
+      onAnimationEnd={() => setIsLogoVisible(true)}
+    >
       {/* <TokenSelectorModal
                 show={tokenSelectorType !== null}
                 selectedToken={selectedToken}
@@ -689,6 +693,12 @@ const LiquidityContainer = (props) => {
         liquidityView={selectedView}
       />
 
+      {!gameEditionView && isLogoVisible && (
+        <LogoContainer time={0.2}>
+          <Logo />
+        </LogoContainer>
+      )}
+
       <TitleContainer gameEditionView={gameEditionView}>
         <Title
           gameEditionView={gameEditionView}
@@ -714,6 +724,7 @@ const LiquidityContainer = (props) => {
         {gameEditionView && <CloseGE onClick={() => props.closeLiquidity()} />}
       </TitleContainer>
       <FormContainer gameEditionView={gameEditionView}>
+        <Gradient />
         <SwapForm
           fromValues={fromValues}
           setFromValues={setFromValues}

@@ -120,7 +120,7 @@ const ResultContainer = styled.div`
   }
 `;
 
-const LogoContainer = styled.div`
+const LogoContainer = styled(FadeIn)`
   position: absolute;
   left: 50%;
   top: 45%;
@@ -188,6 +188,8 @@ const SwapContainer = () => {
   const [fetchingPair, setFetchingPair] = useState(false);
   const [noLiquidity, setNoLiquidity] = useState(false);
   const [priceImpact, setPriceImpact] = useState('');
+  const [isLogoVisible, setIsLogoVisible] = useState(false);
+
   useEffect(() => {
     if (!isNaN(fromValues.amount)) {
       if (inputSide === 'from' && fromValues.amount !== '') {
@@ -449,13 +451,7 @@ const SwapContainer = () => {
   };
 
   useEffect(() => {
-    console.log('tokenSelectorType-----', tokenSelectorType);
-    console.log('fromValues.coin-----', fromValues.coin);
-
     if (tokenSelectorType === 'from') return setSelectedToken(fromValues.coin);
-    console.log('SETTEDD');
-    console.log('fromValues.coin-----', fromValues.coin);
-    console.log('selectedToken-----', selectedToken);
     if (tokenSelectorType === 'to') return setSelectedToken(toValues.coin);
     return setSelectedToken(null);
   }, [tokenSelectorType]);
@@ -467,8 +463,6 @@ const SwapContainer = () => {
   }, [tokenSelectorType]);
 
   const handleTokenSelectorType = () => {
-    console.log('I?M IN');
-    console.log('selectedToken INNNN', selectedToken);
     if (gameEditionView) {
       openModal({
         title: 'Select a Token',
@@ -523,7 +517,10 @@ const SwapContainer = () => {
     }
   };
   return (
-    <Container gameEditionView={gameEditionView}>
+    <Container
+      gameEditionView={gameEditionView}
+      onAnimationEnd={() => setIsLogoVisible(true)}
+    >
       {/* <TokenSelectorModal
         show={tokenSelectorType !== null}
         selectedToken={selectedToken}
@@ -544,8 +541,8 @@ const SwapContainer = () => {
         error={wallet.walletError}
         onClose={() => onWalletRequestViewModalClose()}
       />
-      {!gameEditionView && (
-        <LogoContainer>
+      {!gameEditionView && isLogoVisible && (
+        <LogoContainer time={0.2}>
           <Logo />
         </LogoContainer>
       )}
