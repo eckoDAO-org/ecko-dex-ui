@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 import styled from 'styled-components/macro';
 import Search from '../../../shared/Search';
 import { SwapContext } from '../../../contexts/SwapContext';
-import { reduceBalance } from '../../../utils/reduceBalance';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import theme from '../../../styles/theme';
 

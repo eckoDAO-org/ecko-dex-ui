@@ -162,7 +162,7 @@ const SwapContainer = () => {
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const modalContext = useContext(ModalContext);
-  const { gameEditionView, openModal, closeModal } =
+  const { gameEditionView, openModal, closeModal, isSwapping, setIsSwapping } =
     useContext(GameEditionContext);
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
@@ -188,6 +188,14 @@ const SwapContainer = () => {
   const [fetchingPair, setFetchingPair] = useState(false);
   const [noLiquidity, setNoLiquidity] = useState(false);
   const [priceImpact, setPriceImpact] = useState('');
+
+  useEffect(() => {
+    if (gameEditionView && isSwapping) {
+      swapValues();
+      setIsSwapping(false);
+    }
+  }, [isSwapping]);
+
   useEffect(() => {
     if (!isNaN(fromValues.amount)) {
       if (inputSide === 'from' && fromValues.amount !== '') {

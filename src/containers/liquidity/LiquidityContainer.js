@@ -173,7 +173,7 @@ const LiquidityContainer = (props) => {
   const wallet = useContext(WalletContext);
   const liquidity = useContext(LiquidityContext);
   const modalContext = useContext(ModalContext);
-  const { gameEditionView, openModal, closeModal } =
+  const { gameEditionView, openModal, closeModal, isSwapping, setIsSwapping } =
     useContext(GameEditionContext);
   const { selectedView, setSelectedView } = props;
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
@@ -194,6 +194,13 @@ const LiquidityContainer = (props) => {
       setToValues(initialStateValue);
     }
   }, [showTxModal]);
+
+  useEffect(() => {
+    if (gameEditionView && isSwapping) {
+      swapValues();
+      setIsSwapping(false);
+    }
+  }, [isSwapping]);
 
   /////// when pass pair by the container, set the token on InputToken
   const handleTokenValue = async (by, crypto) => {

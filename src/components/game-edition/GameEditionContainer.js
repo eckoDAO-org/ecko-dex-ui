@@ -35,7 +35,8 @@ const ContentContainer = styled.div`
 `;
 
 const GameEditionContainer = ({ children }) => {
-  const { modalState, closeModal } = useContext(GameEditionContext);
+  const { modalState, closeModal, setIsSwapping } =
+    useContext(GameEditionContext);
   const history = useHistory();
 
   const switchAppSection = (direction) => {
@@ -71,7 +72,7 @@ const GameEditionContainer = ({ children }) => {
           }}
           startLabel='SWAP'
           startOnClick={() => {
-            history.push(ROUTE_SWAP);
+            // startSwapFunction
             closeModal();
           }}
         >
@@ -98,14 +99,16 @@ const GameEditionContainer = ({ children }) => {
           }}
           startLabel='SWAP'
           startOnClick={() => {
-            history.push(ROUTE_SWAP);
+            setIsSwapping(true);
             closeModal();
           }}
           buttonLOnClick={() => {
             switchAppSection('left');
+            closeModal();
           }}
           buttonROnClick={() => {
             switchAppSection('right');
+            closeModal();
           }}
         >
           <ContentContainer>
