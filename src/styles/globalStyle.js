@@ -62,33 +62,10 @@ export default createGlobalStyle`
     }
 
     .ui.popup {
-      width: 100%;
-      display: flex;
-      position: relative !important;
-      background: transparent;
-      border-radius: 10px;
-      backdrop-filter: blur(50px) !important;
-      opacity: 1 !important;
-      border: 1px solid #FFFFFF99 !important;
-      background-clip: padding-box !important;
-      /* &:before {
-        content: '';
-        position: absolute !important;
-        top: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        left: 0 !important;
-        z-index: -1000 !important;
-        margin: -1px !important;
-        border-radius: 10px !important;
-        border-left: 1px solid #ed1cb5 !important;
-        border-right: 1px solid #39fffc !important;
-        background-image: linear-gradient(to right, #ed1cb5, #ffa900, #39fffc),
-          linear-gradient(to right, #ed1cb5, #ffa900, #39fffc) !important;
-        background-position: 0 0, 0 100% !important;
-        background-size: 100% 1px !important;
-        background-repeat: no-repeat !important;
-      } */
+      background:transparent !important;
+      border:none;
+      box-shadow:none;
+      color:#FFFFFF;
     }
 
     #tsparticles canvas{

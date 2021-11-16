@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components/macro';
 import { Transition } from 'react-spring/renderprops';
-import { Message, Popup, Icon, Divider } from 'semantic-ui-react';
+import { Message, Icon, Divider } from 'semantic-ui-react';
 import { ErrorIcon, SuccessfullIcon } from '../../../assets';
 import {
   extractDecimal,
@@ -21,8 +21,8 @@ import GameEditionModalsContainer from '../../game-edition/GameEditionModalsCont
 import reduceToken from '../../../utils/reduceToken';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { PactContext } from '../../../contexts/PactContext';
-import theme from '../../../styles/theme';
 import tokenData from '../../../constants/cryptoCurrencies';
+import PopupTxView from './PopupTxView';
 
 const Container = styled.div`
   position: absolute;
@@ -79,7 +79,7 @@ const Title = styled.div`
   }
   width: ${({ gameEditionView }) => (gameEditionView ? '100%' : 'auto')};
   color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : '#ffffff'};
+    gameEditionView ? colors.black : colors.white};
   text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
 `;
 
@@ -89,7 +89,7 @@ const SubTitle = styled.div`
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '14px' : '16px')};
   color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : '#ffffff'};
+    gameEditionView ? colors.black : colors.white};
   text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
 `;
 
@@ -118,7 +118,7 @@ const HighlightLabel = styled.span`
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '16px')};
   color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : '#ffffff'};
+    gameEditionView ? colors.black : colors.white};
 `;
 
 const Label = styled.span`
@@ -126,7 +126,7 @@ const Label = styled.span`
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : '#FFFFFF99'};
+    gameEditionView ? colors.black : `${colors.white}99`};
 `;
 
 const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
@@ -164,23 +164,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
             <Label gameEditionView={gameEditionView}>Account</Label>
             <Label gameEditionView={gameEditionView}>
               {`${reduceToken(account.account)}`}
-              <Popup
-                trigger={
-                  <Icon
-                    name='inverted info circle'
-                    style={{ margin: ' 0px 0px 0px 4px' }}
-                  />
-                }
-                position='top center'
-                style={{ color: !gameEditionView && theme.colors.white }}
-              >
-                <Popup.Header>Complete Public Key</Popup.Header>
-                <Popup.Content
-                  style={{ inlineSize: '150px', overflowWrap: ' break-word' }}
-                >
-                  {account.account}
-                </Popup.Content>
-              </Popup>
+              <PopupTxView isAccountPopup />
             </Label>
           </SpaceBetweenRow>
           <SpaceBetweenRow>
@@ -245,32 +229,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
               ) : (
                 <span>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</span>
               )}
-              {ENABLE_GAS_STATION && (
-                <Popup
-                  trigger={
-                    <Icon
-                      onClick={() => {
-                        window.open(
-                          'https://medium.com/kadena-io/the-first-crypto-gas-station-is-now-on-kadenas-blockchain-6dc43b4b3836',
-                          '_blank',
-                          'noopener,noreferrer'
-                        );
-                      }}
-                      name='help circle'
-                      style={{ marginLeft: '2px', marginRight: 0 }}
-                    />
-                  }
-                  position='top center'
-                  style={{ color: !gameEditionView && theme.colors.white }}
-                >
-                  <Popup.Header>Why is Gas free?</Popup.Header>
-                  <Popup.Content>
-                    Kadena has a novel concept called gas stations that allows
-                    smart contracts to pay for users' gas. This means you do not
-                    need to hold KDA to trade any token pair!
-                  </Popup.Content>
-                </Popup>
-              )}
+              {ENABLE_GAS_STATION && <PopupTxView />}
             </Label>
           </SpaceBetweenRow>
         </TransactionsDetails>
@@ -349,31 +308,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
               ) : (
                 <span>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</span>
               )}
-              {ENABLE_GAS_STATION && (
-                <Popup
-                  trigger={
-                    <Icon
-                      onClick={() => {
-                        window.open(
-                          'https://medium.com/kadena-io/the-first-crypto-gas-station-is-now-on-kadenas-blockchain-6dc43b4b3836',
-                          '_blank',
-                          'noopener,noreferrer'
-                        );
-                      }}
-                      name='help circle'
-                      style={{ marginLeft: '2px' }}
-                    />
-                  }
-                  position='top center'
-                >
-                  <Popup.Header>Why is Gas free?</Popup.Header>
-                  <Popup.Content>
-                    Kadena has a novel concept called gas stations that allows
-                    smart contracts to pay for users' gas. This means you do not
-                    need to hold KDA to trade any token pair!
-                  </Popup.Content>
-                </Popup>
-              )}
+              {ENABLE_GAS_STATION && <PopupTxView />}
             </Label>
           </SpaceBetweenRow>
         </TransactionsDetails>
@@ -431,20 +366,6 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
               {` ${showTicker(token1)}`}
             </HighlightLabel>
           </SpaceBetweenRow>
-
-          {/* <SpaceBetweenRow>
-            <Label gameEditionView={gameEditionView}>
-              {`${extractDecimal(swap.localRes.result.data.amount0)}`}
-              {showTicker(token0)}
-            </Label>
-          </SpaceBetweenRow> */}
-          {/* <SpaceBetweenRow style={{ padding: '16px 0px' }}>
-            <Label gameEditionView={gameEditionView}>Add</Label>
-            <Label gameEditionView={gameEditionView}>
-              {`${extractDecimal(swap.localRes.result.data.amount1)}`}
-              {showTicker(token1)}
-            </Label>
-          </SpaceBetweenRow> */}
           <SpaceBetweenRow>
             <Label gameEditionView={gameEditionView}>Gas Cost</Label>
             <Label
@@ -459,31 +380,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
               ) : (
                 <span>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</span>
               )}
-              {ENABLE_GAS_STATION && (
-                <Popup
-                  trigger={
-                    <Icon
-                      onClick={() => {
-                        window.open(
-                          'https://medium.com/kadena-io/the-first-crypto-gas-station-is-now-on-kadenas-blockchain-6dc43b4b3836',
-                          '_blank',
-                          'noopener,noreferrer'
-                        );
-                      }}
-                      name='help circle'
-                      style={{ marginLeft: '2px' }}
-                    />
-                  }
-                  position='top center'
-                >
-                  <Popup.Header>Why is Gas free?</Popup.Header>
-                  <Popup.Content>
-                    Kadena has a novel concept called gas stations that allows
-                    smart contracts to pay for users' gas. This means you do not
-                    need to hold KDA to trade any token pair!
-                  </Popup.Content>
-                </Popup>
-              )}
+              {ENABLE_GAS_STATION && <PopupTxView />}
             </Label>
           </SpaceBetweenRow>
         </TransactionsDetails>

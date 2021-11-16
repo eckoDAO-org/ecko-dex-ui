@@ -118,18 +118,18 @@ const StatsTab = () => {
             )
           )
         ) : (
-          <Dimmer active inverted={gameEditionView}>
-            <Loader
-              style={{
-                color: gameEditionView ? theme.colors.black : '#FFFFFF',
-                fontFamily: gameEditionView
-                  ? theme.fontFamily.pressStartRegular
-                  : theme.fontFamily.regular,
-              }}
-            >
-              Loading
-            </Loader>
-          </Dimmer>
+          // <Dimmer active inverted={gameEditionView}>
+          <Loader
+            style={{
+              color: gameEditionView ? theme.colors.black : theme.colors.white,
+              fontFamily: gameEditionView
+                ? theme.fontFamily.pressStartRegular
+                : theme.fontFamily.regular,
+            }}
+          >
+            Loading
+          </Loader>
+          // </Dimmer>
         )}
       </PartialScrollableScrollSection>
     </ModalContainer>

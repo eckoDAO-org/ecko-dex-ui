@@ -4,7 +4,9 @@ import HeaderItem from '../../../shared/HeaderItem';
 import { theme } from '../../../styles/theme';
 
 const ListContainer = styled.div`
-  border-radius: 4px;
+  border-radius: 10px;
+  padding: 8px;
+  z-index: 1;
   background: transparent;
 
   & svg {
