@@ -10,6 +10,7 @@ import { PactProvider } from "./contexts/PactContext";
 import ModalRender from "./components/modals/ModalRender";
 import { SwapProvider } from "./contexts/SwapContext";
 import { LiquidityProvider } from "./contexts/LiquidityContext";
+import { KadenaWalletProvider } from "./contexts/KadenaWalletContext";
 
 function App() {
   return (
@@ -19,13 +20,15 @@ function App() {
         <AccountProvider>
           <WalletProvider>
             <PactProvider>
-              <SwapProvider>
-                <LiquidityProvider>
-                  <ModalRender>
-                    <Router />
-                  </ModalRender>
-                </LiquidityProvider>
-              </SwapProvider>
+              <KadenaWalletProvider>
+                <SwapProvider>
+                  <LiquidityProvider>
+                    <ModalRender>
+                      <Router />
+                    </ModalRender>
+                  </LiquidityProvider>
+                </SwapProvider>
+              </KadenaWalletProvider>
             </PactProvider>
           </WalletProvider>
         </AccountProvider>

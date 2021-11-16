@@ -7,15 +7,18 @@ import { ModalContext } from "../../../contexts/ModalContext";
 import ConnectWalletZelcoreModal from "./ConnectWalletZelcoreModal";
 import ConnecWalletTorusModal from "./ConnectWalletTorusModal";
 import ConnectWalletChainweaverModal from "./ConnectWalletChainweaverModal";
+import { useKadenaWalletContext } from "../../../contexts";
 
 const ConnectWalletModal = () => {
   const modalContext = useContext(ModalContext);
+  const { initializeKDAWallet, isKDAWalletInstalled } =
+    useKadenaWalletContext();
 
   const openWalletModal = (walletName) => {
     switch (walletName) {
       default:
         return <div />;
-      case "Zelcore":
+      case WALLET.ZELCORE.name:
         return modalContext.openModal({
           id: "ZELCORE",
           title: "connect wallet",
@@ -28,7 +31,7 @@ const ConnectWalletModal = () => {
             />
           ),
         });
-      case "Torus":
+      case WALLET.TORUS.name:
         return modalContext.openModal({
           id: "TORUS",
           title: "connect wallet",
@@ -41,7 +44,14 @@ const ConnectWalletModal = () => {
             />
           ),
         });
-      case "Chainweaver":
+      case WALLET.KADENA_WALLET.name:
+        if (!isKDAWalletInstalled) {
+          alert("Please install Kda Wallet extension");
+        } else {
+          initializeKDAWallet();
+        }
+        break;
+      case WALLET.CHAINWEAVER.name:
         return modalContext.openModal({
           id: "CHIANWEAVER",
           title: "connect wallet",

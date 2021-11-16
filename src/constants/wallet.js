@@ -19,4 +19,8 @@ export const WALLET = {
     logo: <TorusLogo />,
     signMethod: "sign_required",
   },
+  KADENA_WALLET: {
+    name: "Kadena Wallet",
+    logo: null,
+  },
 };
