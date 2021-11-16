@@ -8,6 +8,7 @@ import GameEditionModalsContainer from './GameEditionModalsContainer';
 import { FadeIn } from '../shared/animations';
 import theme from '../../styles/theme';
 import GameEditionMobileWrapper from './GameEditionMobileWrapper';
+import menuItems from '../menuItems';
 
 const MainContainer = styled.div`
   display: flex;
@@ -36,6 +37,20 @@ const ContentContainer = styled.div`
 const GameEditionContainer = ({ children }) => {
   const { modalState, closeModal } = useContext(GameEditionContext);
   const history = useHistory();
+
+  const switchAppSection = (direction) => {
+    let cur = history.location.pathname;
+    if (direction === 'left') {
+      let prevPage = menuItems.findIndex((path) => path.route === cur) - 1;
+      if (prevPage < 0) history.push(menuItems[menuItems.length - 1].route);
+      else return history.push(menuItems[prevPage].route);
+    }
+    if (direction === 'right') {
+      let nextPage = menuItems.findIndex((path) => path.route === cur) + 1;
+      if (nextPage > menuItems.length - 1) history.push(menuItems[0]?.route);
+      else return history.push(menuItems[nextPage].route);
+    }
+  };
 
   // d3.select("#start_button").style("cursor","pointer").on("click",()=>setmessage("I'm swap Button"))
   // d3.select("#select_button").style("cursor","pointer").on("click",()=>setmessage("I'm Menu Button"))
@@ -85,6 +100,12 @@ const GameEditionContainer = ({ children }) => {
           startOnClick={() => {
             history.push(ROUTE_SWAP);
             closeModal();
+          }}
+          buttonLOnClick={() => {
+            switchAppSection('left');
+          }}
+          buttonROnClick={() => {
+            switchAppSection('right');
           }}
         >
           <ContentContainer>
