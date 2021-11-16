@@ -137,7 +137,7 @@ const TokenSelectorModalContent = ({
                 ) : (
                   <></>
                 )}
-                <span
+                {/* <span
                   style={{
                     marginLeft: 'auto',
                     marginRight: 1,
@@ -150,7 +150,7 @@ const TokenSelectorModalContent = ({
                         crypto.precision
                       )} ${crypto.name}`
                     : ''}
-                </span>
+                </span> */}
               </TokenItem>
             );
           })}

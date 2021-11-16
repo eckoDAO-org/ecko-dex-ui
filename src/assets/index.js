@@ -28,3 +28,4 @@ export { ReactComponent as NotificationCautionBlueIcon } from './images/shared/i
 export { ReactComponent as NotificationWarningIcon } from './images/shared/ic_caution_orange.svg';
 export { ReactComponent as SwapIcon } from './images/shared/swap-icon.svg';
 export { ReactComponent as Logo } from './images/shared/Logo.svg';
+export { ReactComponent as CopyIcon } from './images/shared/copy.svg';

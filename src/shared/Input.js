@@ -13,7 +13,7 @@ const Container = styled.div`
   width: 100%;
   border: ${({ gameEditionView }) => !gameEditionView && '1px solid #ffffff99'};
   border-radius: ${({ gameEditionView }) => !gameEditionView && '4px'};
-  padding: ${({ gameEditionView }) => !gameEditionView && '10px'};
+  padding: ${({ gameEditionView }) => !gameEditionView && '10px 10px 0px 10px'};
 
   .ui.input > input {
     padding: ${({ gameEditionView }) => !gameEditionView && ' 10px 2px'};
@@ -39,7 +39,11 @@ const Container = styled.div`
   .ui.labeled.input > .label:not(.corner) {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-    background: ${({ gameEditionView }) => gameEditionView && 'transparent'};
+    color: ${({ gameEditionView }) =>
+      gameEditionView ? `${theme.colors.black} !important` : `#ffffff`};
+    padding-left: ${({ gameEditionView }) => !gameEditionView && '0px'};
+    padding-right: ${({ gameEditionView }) => !gameEditionView && '0px'};
+    background: transparent;
     border: ${({ gameEditionView }) => gameEditionView && 'none'};
     font-family: ${({ gameEditionView }) =>
       gameEditionView

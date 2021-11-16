@@ -28,6 +28,9 @@ const Container = styled.div`
   align-items: center;
   flex-flow: column;
   width: 100%;
+  max-width: ${({ gameEditionView }) => !gameEditionView && `500px`};
+  margin-left: auto;
+  margin-right: auto;
   padding: ${({ gameEditionView }) => gameEditionView && `10px 10px`};
 `;
 
@@ -38,6 +41,10 @@ const SubContainer = styled.div`
   flex-flow: column;
   width: 100%;
   padding: ${({ gameEditionView }) => gameEditionView && '10px'};
+
+  & > *:first-child {
+    margin-bottom: 20px;
+  }
 `;
 
 const TitleContainer = styled.div`
@@ -65,7 +72,6 @@ const Title = styled.span`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 24px;
   width: 100%;
 `;
 
@@ -75,13 +81,31 @@ const MyButtonDivider = styled.div`
   display: inline-block;
 `;
 
+const Gradient = styled.div`
+  border-radius: 10px; /*1*/
+  border: 1px solid transparent; /*2*/
+  background: linear-gradient(90deg, #ed1cb5, #ffa900, #39fffc) border-box; /*3*/
+  -webkit-mask: /*4*/ linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out; /*5'*/
+  mask-composite: exclude; /*5*/
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
+  width: calc(100% + 40px);
+  height: calc(100% + 40px);
+  z-index: -10;
+`;
+
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 15px 0px;
-  flex-flow: ${({ gameEditionView }) => (gameEditionView ? 'column' : 'row')};
+  flex-flow: column;
   width: 100%;
-  top: ${({ gameEditionView }) => gameEditionView && '200px'};
+  top: ${({ gameEditionView }) => gameEditionView && '180px'};
   padding: ${({ gameEditionView }) => gameEditionView && '10px'};
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
   @media (max-width: ${({ theme: { mediaQueries } }) =>
@@ -93,7 +117,8 @@ const ResultContainer = styled.div`
 const InnerRowContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  flex-flow: ${({ gameEditionView }) => (gameEditionView ? 'row' : 'column')};
+  margin-top: ${({ gameEditionView }) => !gameEditionView && '10px'};
+  flex-flow: row;
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
     margin-bottom: 5px;
@@ -211,6 +236,7 @@ const RemoveLiqContainer = (props) => {
             : {}
         }
       >
+        {!gameEditionView && <Gradient />}
         <SubContainer gameEditionView={gameEditionView}>
           <Input
             value={amount}
@@ -235,7 +261,6 @@ const RemoveLiqContainer = (props) => {
             <Button.Group fluid>
               <CustomButton
                 buttonStyle={{
-                  border: '1px solid #424242',
                   width: '20%',
                 }}
                 background={
@@ -245,6 +270,7 @@ const RemoveLiqContainer = (props) => {
                       : `${theme.colors.white}`
                     : 'transparent'
                 }
+                border={!gameEditionView && '1px solid #FFFFFF99'}
                 color={
                   amount === 25
                     ? gameEditionView
@@ -261,9 +287,9 @@ const RemoveLiqContainer = (props) => {
               <MyButtonDivider />
               <CustomButton
                 buttonStyle={{
-                  border: '1px solid #424242',
                   width: '20%',
                 }}
+                border={!gameEditionView && '1px solid #FFFFFF99'}
                 background={
                   amount === 50
                     ? gameEditionView
@@ -287,9 +313,9 @@ const RemoveLiqContainer = (props) => {
               <MyButtonDivider />
               <CustomButton
                 buttonStyle={{
-                  border: '1px solid #424242',
                   width: '20%',
                 }}
+                border={!gameEditionView && '1px solid #FFFFFF99'}
                 background={
                   amount === 75
                     ? gameEditionView
@@ -313,9 +339,9 @@ const RemoveLiqContainer = (props) => {
               <MyButtonDivider />
               <CustomButton
                 buttonStyle={{
-                  border: '1px solid #424242',
                   width: '20%',
                 }}
+                border={!gameEditionView && '1px solid #FFFFFF99'}
                 background={
                   amount === 100
                     ? gameEditionView
@@ -339,86 +365,88 @@ const RemoveLiqContainer = (props) => {
             </Button.Group>
           </ButtonContainer>
         </SubContainer>
-      </FormContainer>
 
-      <ResultContainer gameEditionView={gameEditionView}>
-        <InnerRowContainer gameEditionView={gameEditionView}>
-          <Label gameEditionView={gameEditionView}>
-            {token0} per {token1}
-          </Label>
-          <Value gameEditionView={gameEditionView}>
-            {pairUnit(extractDecimal(pooled))}
-          </Value>
-        </InnerRowContainer>
-        <InnerRowContainer gameEditionView={gameEditionView}>
-          <Label gameEditionView={gameEditionView}>Pooled {token0}</Label>
-          <Value gameEditionView={gameEditionView}>
-            {pairUnit(extractDecimal(pooledToken0))}
-          </Value>
-        </InnerRowContainer>
-        <InnerRowContainer gameEditionView={gameEditionView}>
-          <Label gameEditionView={gameEditionView}>Pooled {token1}</Label>
-          <Value gameEditionView={gameEditionView}>
-            {pairUnit(extractDecimal(pooledToken1))}
-          </Value>
-        </InnerRowContainer>
-      </ResultContainer>
+        <ResultContainer gameEditionView={gameEditionView}>
+          <InnerRowContainer gameEditionView={gameEditionView}>
+            <Label gameEditionView={gameEditionView}>
+              {token0} per {token1}
+            </Label>
+            <Value gameEditionView={gameEditionView}>
+              {pairUnit(extractDecimal(pooled))}
+            </Value>
+          </InnerRowContainer>
+          <InnerRowContainer gameEditionView={gameEditionView}>
+            <Label gameEditionView={gameEditionView}>Pooled {token0}</Label>
+            <Value gameEditionView={gameEditionView}>
+              {pairUnit(extractDecimal(pooledToken0))}
+            </Value>
+          </InnerRowContainer>
+          <InnerRowContainer gameEditionView={gameEditionView}>
+            <Label gameEditionView={gameEditionView}>Pooled {token1}</Label>
+            <Value gameEditionView={gameEditionView}>
+              {pairUnit(extractDecimal(pooledToken1))}
+            </Value>
+          </InnerRowContainer>
+        </ResultContainer>
 
-      <ButtonContainer
-        gameEditionView={gameEditionView}
-        style={gameEditionView ? { position: 'absolute', bottom: '10px' } : {}}
-      >
-        <Button.Group
-          fluid={gameEditionView}
-          style={{ padding: gameEditionView ? '0 10px' : 0 }}
+        <ButtonContainer
+          gameEditionView={gameEditionView}
+          style={
+            gameEditionView ? { position: 'absolute', bottom: '-180px' } : {}
+          }
         >
-          <CustomButton
-            loading={loading}
-            disabled={isNaN(amount) || reduceBalance(amount) === 0}
-            onClick={async () => {
-              if (
-                wallet.signing.method !== 'sign' &&
-                wallet.signing.method !== 'none'
-              ) {
-                const res = await liquidity.removeLiquidityLocal(
-                  tokenData[token0].code,
-                  tokenData[token1].code,
-                  reduceBalance(pooled, PRECISION)
-                );
-                if (res === -1) {
-                  setLoading(false);
-                  alert(
-                    'Incorrect password. If forgotten, you can reset it with your private key'
-                  );
-                  return;
-                } else {
-                  setShowTxModal(true);
-                  setLoading(false);
-                }
-              } else {
-                setLoading(true);
-                const res = await liquidity.removeLiquidityWallet(
-                  tokenData[token0].code,
-                  tokenData[token1].code,
-                  reduceBalance(pooled, PRECISION)
-                );
-                if (!res) {
-                  wallet.setIsWaitingForWalletAuth(true);
-                  setLoading(false);
-                  /* pact.setWalletError(true); */
-                  /* walletError(); */
-                } else {
-                  wallet.setWalletError(null);
-                  setShowTxModal(true);
-                  setLoading(false);
-                }
-              }
-            }}
+          <Button.Group
+            fluid
+            style={{ padding: gameEditionView ? '0 10px' : 0 }}
           >
-            Remove Liquidity
-          </CustomButton>
-        </Button.Group>
-      </ButtonContainer>
+            <CustomButton
+              loading={loading}
+              disabled={isNaN(amount) || reduceBalance(amount) === 0}
+              onClick={async () => {
+                if (
+                  wallet.signing.method !== 'sign' &&
+                  wallet.signing.method !== 'none'
+                ) {
+                  const res = await liquidity.removeLiquidityLocal(
+                    tokenData[token0].code,
+                    tokenData[token1].code,
+                    reduceBalance(pooled, PRECISION)
+                  );
+                  if (res === -1) {
+                    setLoading(false);
+                    alert(
+                      'Incorrect password. If forgotten, you can reset it with your private key'
+                    );
+                    return;
+                  } else {
+                    setShowTxModal(true);
+                    setLoading(false);
+                  }
+                } else {
+                  setLoading(true);
+                  const res = await liquidity.removeLiquidityWallet(
+                    tokenData[token0].code,
+                    tokenData[token1].code,
+                    reduceBalance(pooled, PRECISION)
+                  );
+                  if (!res) {
+                    wallet.setIsWaitingForWalletAuth(true);
+                    setLoading(false);
+                    /* pact.setWalletError(true); */
+                    /* walletError(); */
+                  } else {
+                    wallet.setWalletError(null);
+                    setShowTxModal(true);
+                    setLoading(false);
+                  }
+                }
+              }}
+            >
+              Remove Liquidity
+            </CustomButton>
+          </Button.Group>
+        </ButtonContainer>
+      </FormContainer>
     </Container>
   );
 };

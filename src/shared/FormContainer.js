@@ -8,15 +8,11 @@ const Container = styled.div`
   position: relative;
   display: flex;
   flex-flow: column;
-  padding: 20px 20px;
   width: 100%;
   border-radius: 10px;
   border: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView
-      ? `2px dashed ${colors.black}`
-      : `2px solid ${colors.white}`};
-  box-shadow: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? `none` : `0 0 5px ${colors.white}`};
+    gameEditionView ? `2px dashed ${colors.black}` : `1px solid transparent`};
+
   opacity: 1;
   background: transparent;
 
@@ -33,7 +29,7 @@ const Container = styled.div`
 const Content = styled.div`
   position: relative;
   display: flex;
-  flex-flow: row;
+  flex-flow: column;
   width: 100%;
 
   & > *:not(:last-child) {

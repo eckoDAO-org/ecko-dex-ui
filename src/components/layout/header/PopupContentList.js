@@ -5,10 +5,9 @@ import { theme } from '../../../styles/theme';
 
 const ListContainer = styled.div`
   border-radius: 10px;
-  background: ${({ theme: { colors } }) => colors.purple} 0% 0% no-repeat
-    padding-box;
   padding: 8px;
   z-index: 1;
+  background: transparent;
 
   & svg {
     margin-right: 10px;

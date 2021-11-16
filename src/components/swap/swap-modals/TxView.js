@@ -342,7 +342,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           buttonStyle={{
             width: '100%',
             position: gameEditionView && 'absolute',
-            top: gameEditionView && 322,
+            top: gameEditionView && 300,
           }}
           onClick={async () => {
             setLoading(true);
