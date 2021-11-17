@@ -165,6 +165,7 @@ const SwapContainer = () => {
   const { gameEditionView, openModal, closeModal, isSwapping, setIsSwapping } =
     useContext(GameEditionContext);
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
+
   const [selectedToken, setSelectedToken] = useState(null);
   const [fromValues, setFromValues] = useState({
     amount: '',
@@ -181,6 +182,7 @@ const SwapContainer = () => {
     address: '',
     precision: 0,
   });
+
   const [inputSide, setInputSide] = useState('');
   const [fromNote, setFromNote] = useState('');
   const [toNote, setToNote] = useState('');
@@ -436,7 +438,7 @@ const SwapContainer = () => {
         balance = getCorrectBalance(acct.balance);
       }
     }
-    if (tokenSelectorType === 'from')
+    if (tokenSelectorType === 'from') {
       setFromValues((prev) => ({
         ...prev,
         balance: balance,
@@ -444,7 +446,8 @@ const SwapContainer = () => {
         address: crypto.code,
         precision: crypto.precision,
       }));
-    if (tokenSelectorType === 'to')
+    }
+    if (tokenSelectorType === 'to') {
       setToValues((prev) => ({
         ...prev,
         balance: balance,
@@ -452,7 +455,35 @@ const SwapContainer = () => {
         address: crypto.code,
         precision: crypto.precision,
       }));
+    }
   };
+
+  useEffect(() => {
+    if (tokenSelectorType === 'from') {
+      if (fromValues.coin === toValues.coin) {
+        setToValues({
+          amount: '',
+          balance: '',
+          coin: '',
+          address: '',
+          precision: 0,
+        });
+      }
+    }
+    if (tokenSelectorType === 'to') {
+      if (toValues.coin === fromValues.coin) {
+        setFromValues({
+          amount: '',
+          balance: '',
+          coin: '',
+          address: '',
+          precision: 0,
+        });
+      }
+    }
+    setTokenSelectorType(null);
+  }, [toValues, fromValues]);
+
   const onWalletRequestViewModalClose = () => {
     wallet.setIsWaitingForWalletAuth(false);
     wallet.setWalletError(null);
@@ -482,9 +513,9 @@ const SwapContainer = () => {
           <GameEditionTokenSelectorContainer>
             <TokenSelectorModalContent
               selectedToken={selectedToken}
+              tokenSelectorType={tokenSelectorType}
               onTokenClick={onTokenClick}
               onClose={() => {
-                setTokenSelectorType(null);
                 closeModal();
               }}
               fromToken={fromValues.coin}
@@ -512,6 +543,7 @@ const SwapContainer = () => {
         content: (
           <TokenSelectorModalContent
             selectedToken={selectedToken}
+            tokenSelectorType={tokenSelectorType}
             onTokenClick={onTokenClick}
             onClose={() => {
               modalContext.closeModal();

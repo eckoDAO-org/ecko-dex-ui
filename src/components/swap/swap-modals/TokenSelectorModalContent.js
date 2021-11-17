@@ -55,7 +55,8 @@ const TokenItem = styled.div`
 
 const TokenSelectorModalContent = ({
   show,
-  selectedToken,
+  // selectedToken,
+  tokenSelectorType,
   onTokenClick,
   onClose,
   fromToken,
@@ -65,7 +66,7 @@ const TokenSelectorModalContent = ({
   const swap = useContext(SwapContext);
   const { gameEditionView } = useContext(GameEditionContext);
 
-  console.log('selectedToken in modal content', selectedToken);
+  console.log('selectedToken in modal content', fromToken, toToken);
 
   return (
     <Content>
@@ -109,21 +110,30 @@ const TokenSelectorModalContent = ({
               <TokenItem
                 gameEditionView={gameEditionView}
                 key={crypto.name}
-                active={
-                  selectedToken === crypto.name ||
-                  fromToken === crypto.name ||
-                  toToken === crypto.name
-                }
+                // active={
+                //   selectedToken === crypto.name ||
+                //   fromToken === crypto.name ||
+                //   toToken === crypto.name
+                // }
                 // active={selectedToken === crypto.name}
                 // selected={selectedToken === crypto.name}
                 selected={fromToken === crypto.name || toToken === crypto.name}
                 style={{
-                  cursor: selectedToken === crypto.name ? 'default' : 'pointer',
+                  cursor:
+                    fromToken === crypto.name || toToken === crypto.name
+                      ? 'default'
+                      : 'pointer',
                 }}
                 onClick={() => {
-                  if (fromToken === crypto.name || toToken === crypto.name)
-                    return; // insert swapLogic???
-                  if (selectedToken !== crypto.name) {
+                  if (tokenSelectorType === 'from' && fromToken === crypto.name)
+                    return;
+                  if (tokenSelectorType === 'to' && toToken === crypto.name)
+                    return;
+                  if (
+                    (tokenSelectorType === 'from' &&
+                      fromToken !== crypto.name) ||
+                    (tokenSelectorType === 'to' && toToken !== crypto.name)
+                  ) {
                     onTokenClick({ crypto });
                     setSearchValue('');
                     onClose();
@@ -132,7 +142,8 @@ const TokenSelectorModalContent = ({
               >
                 {crypto.icon}
                 {crypto.name}
-                {selectedToken === crypto.name ? (
+                {(tokenSelectorType === 'from' && fromToken === crypto.name) ||
+                (tokenSelectorType === 'to' && toToken === crypto.name) ? (
                   <Label style={{ marginLeft: 5 }}>(Selected)</Label>
                 ) : (
                   <></>

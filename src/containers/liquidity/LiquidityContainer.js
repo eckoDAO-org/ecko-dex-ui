@@ -593,14 +593,38 @@ const LiquidityContainer = (props) => {
   };
 
   useEffect(() => {
+    if (tokenSelectorType === 'from') {
+      if (fromValues.coin === toValues.coin) {
+        setToValues({
+          amount: '',
+          balance: '',
+          coin: '',
+          address: '',
+          precision: 0,
+        });
+      }
+    }
+    if (tokenSelectorType === 'to') {
+      if (toValues.coin === fromValues.coin) {
+        setFromValues({
+          amount: '',
+          balance: '',
+          coin: '',
+          address: '',
+          precision: 0,
+        });
+      }
+    }
+    setTokenSelectorType(null);
+  }, [toValues, fromValues]);
+
+  useEffect(() => {
     if (tokenSelectorType !== null) {
       handleTokenSelectorType();
     }
   }, [tokenSelectorType]);
 
   const handleTokenSelectorType = () => {
-    console.log('I?M IN');
-    console.log('selectedToken INNNN', selectedToken);
     if (gameEditionView) {
       openModal({
         title: 'Select a Token',
@@ -612,9 +636,9 @@ const LiquidityContainer = (props) => {
           <GameEditionTokenSelectorContainer>
             <TokenSelectorModalContent
               selectedToken={selectedToken}
+              tokenSelectorType={tokenSelectorType}
               onTokenClick={onTokenClick}
               onClose={() => {
-                setTokenSelectorType(null);
                 closeModal();
               }}
               fromToken={fromValues.coin}
@@ -642,9 +666,9 @@ const LiquidityContainer = (props) => {
         content: (
           <TokenSelectorModalContent
             selectedToken={selectedToken}
+            tokenSelectorType={tokenSelectorType}
             onTokenClick={onTokenClick}
             onClose={() => {
-              setTokenSelectorType(null);
               modalContext.closeModal();
             }}
             fromToken={fromValues.coin}
