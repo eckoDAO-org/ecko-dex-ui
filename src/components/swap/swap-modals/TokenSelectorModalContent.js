@@ -66,8 +66,6 @@ const TokenSelectorModalContent = ({
   const swap = useContext(SwapContext);
   const { gameEditionView } = useContext(GameEditionContext);
 
-  console.log('selectedToken in modal content', fromToken, toToken);
-
   return (
     <Content>
       <Label

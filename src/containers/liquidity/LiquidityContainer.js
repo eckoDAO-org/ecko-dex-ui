@@ -9,7 +9,6 @@ import { ReactComponent as CloseGE } from '../../assets/images/shared/close-ge.s
 import { Button } from 'semantic-ui-react';
 import CustomLabel from '../../shared/CustomLabel';
 import CustomButton from '../../shared/CustomButton';
-import TokenSelectorModal from '../../components/swap/swap-modals/TokenSelectorModal';
 import ReviewTxModal from '../../components/modals/liquidity/ReviewTxModal';
 import TxView from '../../components/swap/swap-modals/TxView';
 import { ModalContext } from '../../contexts/ModalContext';
@@ -180,7 +179,15 @@ const LiquidityContainer = (props) => {
   const [selectedToken, setSelectedToken] = useState(null);
   const [inputSide, setInputSide] = useState('');
 
-  const [fromValues, setFromValues] = useState(initialStateValue);
+  const [fromValues, setFromValues] = useState({
+    coin: 'KDA',
+    account: '',
+    guard: null,
+    balance: account.account.balance,
+    amount: '',
+    precision: 12,
+  });
+
   const [toValues, setToValues] = useState(initialStateValue);
 
   const [pairExist, setPairExist] = useState(false);
@@ -191,7 +198,14 @@ const LiquidityContainer = (props) => {
 
   useEffect(() => {
     if (showTxModal === false) {
-      setFromValues(initialStateValue);
+      setFromValues({
+        coin: 'KDA',
+        account: '',
+        guard: null,
+        balance: account.account.balance,
+        amount: '',
+        precision: 12,
+      });
       setToValues(initialStateValue);
     }
   }, [showTxModal]);
