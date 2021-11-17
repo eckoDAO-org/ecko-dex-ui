@@ -27,7 +27,6 @@ const ResultContainer = styled.div`
   flex-direction: row;
   width: 100%;
   height: 100%;
-  padding: 10px;
 
   & > *:not(:last-child) {
     margin-right: 15px;
@@ -59,7 +58,8 @@ const HeaderContainer = styled(Accordion.Title)`
     gameEditionView
       ? `${colors.black} !important`
       : `${colors.white} !important`};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '16px')};
+  font-size: ${({ gameEditionView }) =>
+    gameEditionView ? '10px' : '16px !important'};
 `;
 
 const TokenPair = (props) => {

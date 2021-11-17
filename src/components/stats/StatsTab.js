@@ -41,6 +41,9 @@ export const CardContainer = styled.div`
   padding: ${({ gameEditionView }) =>
     gameEditionView ? `10px 10px` : `32px 32px`};
   width: 100%;
+  max-width: 1110px;
+  margin-left: auto;
+  margin-right: auto;
   border-radius: 10px;
   border: ${({ gameEditionView }) =>
     gameEditionView ? `none` : ` 2px solid ${theme.colors.white}29`};
@@ -144,7 +147,15 @@ const StatsTab = () => {
       }}
     >
       {!gameEditionView && (
-        <TitleContainer gameEditionView={gameEditionView}>
+        <TitleContainer
+          gameEditionView={gameEditionView}
+          style={{
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            maxWidth: '1110px',
+            justifyContent: 'flex-start',
+          }}
+        >
           <Title gameEditionView={gameEditionView}>Stats</Title>
         </TitleContainer>
       )}
@@ -172,7 +183,11 @@ const StatsTab = () => {
               )
             )
           ) : (
-            <Dimmer active inverted={gameEditionView}>
+            <Dimmer
+              active
+              inverted={gameEditionView}
+              style={{ background: !gameEditionView && 'transparent' }}
+            >
               <Loader
                 style={{
                   color: gameEditionView

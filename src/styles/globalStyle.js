@@ -62,7 +62,7 @@ export default createGlobalStyle`
     }
 
     .ui.popup {
-      background:transparent !important;
+      background:transparent;
       border:none;
       box-shadow:none;
       color:#FFFFFF;

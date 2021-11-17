@@ -65,7 +65,7 @@ const TokenSelectorModalContent = ({
   const swap = useContext(SwapContext);
   const { gameEditionView } = useContext(GameEditionContext);
 
-  console.log('selectedToken', selectedToken);
+  console.log('selectedToken in modal content', selectedToken);
 
   return (
     <Content>
@@ -84,7 +84,6 @@ const TokenSelectorModalContent = ({
             ? `2px dashed ${theme.colors.black}`
             : `1px solid ${theme.colors.white}99`,
           color: gameEditionView && `${theme.colors.black}`,
-          /* boxShadow: "0 0 5px #FFFFFF" */
         }}
         placeholder='Search'
         value={searchValue}
