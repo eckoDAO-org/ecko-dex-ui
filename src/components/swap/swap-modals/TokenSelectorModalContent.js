@@ -41,10 +41,11 @@ const TokenItem = styled.div`
   display: flex;
   align-items: center;
   font-size: 16px;
-  font-weight: ${({ active }) => (active ? 'bold' : 'normal')};
+  /* font-weight: ${({ active }) => (active ? 'bold' : 'normal')}; */
   font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
-  color: ${({ selected }) => (selected ? 'white' : '')};
+  color: ${({ selected, theme: { colors } }) =>
+    selected ? `${colors.white}99` : colors.white};
   svg {
     margin-right: 8px;
     width: 24px;
@@ -115,13 +116,14 @@ const TokenSelectorModalContent = ({
                   toToken === crypto.name
                 }
                 // active={selectedToken === crypto.name}
-                selected={selectedToken === crypto.name}
+                // selected={selectedToken === crypto.name}
+                selected={fromToken === crypto.name || toToken === crypto.name}
                 style={{
                   cursor: selectedToken === crypto.name ? 'default' : 'pointer',
                 }}
                 onClick={() => {
                   if (fromToken === crypto.name || toToken === crypto.name)
-                    return;
+                    return; // insert swapLogic???
                   if (selectedToken !== crypto.name) {
                     onTokenClick({ crypto });
                     setSearchValue('');

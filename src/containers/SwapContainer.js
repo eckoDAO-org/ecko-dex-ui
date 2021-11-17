@@ -168,11 +168,12 @@ const SwapContainer = () => {
   const [selectedToken, setSelectedToken] = useState(null);
   const [fromValues, setFromValues] = useState({
     amount: '',
-    balance: '',
-    coin: '',
-    address: '',
-    precision: 0,
+    balance: account.account.balance || '',
+    coin: 'KDA',
+    address: 'coin',
+    precision: 12,
   });
+
   const [toValues, setToValues] = useState({
     amount: '',
     balance: '',
@@ -520,7 +521,6 @@ const SwapContainer = () => {
             selectedToken={selectedToken}
             onTokenClick={onTokenClick}
             onClose={() => {
-              setTokenSelectorType(null);
               modalContext.closeModal();
             }}
             fromToken={fromValues.coin}
