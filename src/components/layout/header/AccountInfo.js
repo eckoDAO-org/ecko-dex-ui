@@ -11,25 +11,28 @@ const Container = styled.div`
 `;
 
 const BalanceContainer = styled.div`
-  padding: 10px 21px;
+  padding: 10px;
   /* background: rgba(205, 205, 205, 0.5); */
   font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
   font-size: 14px;
-  color: white;
-  border-radius: 20px;
-  border: 1px solid #ffffff;
+  white-space: nowrap;
+  color: ${({ theme: { colors } }) => colors.white};
+  border-radius: 10px;
+  border: ${({ theme: { colors } }) => `1px solid ${colors.white}`};
   opacity: 1;
   background: transparent;
 `;
 
 const AccountContainer = styled.div`
-  padding: 10px 21px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
   background: transparent;
   font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
-  font-size: 14px;
-  color: white;
+  font-size: 13px;
+  color: ${({ theme: { colors } }) => colors.white};
   border-radius: 4px;
-  margin-left: -10px;
   z-index: 2;
 `;
 

@@ -7,24 +7,38 @@ import theme from '../styles/theme';
 
 const StyledButton = styled(SUIButton)`
   cursor: pointer;
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView
-      ? fontFamily.pressStartRegular
-      : fontFamily.bold} !important;
+  font-family: ${({
+    theme: { fontFamily },
+    gameEditionView,
+    outGameEditionView,
+  }) => {
+    if (outGameEditionView) return fontFamily.bold + '!important';
+    if (gameEditionView) return fontFamily.pressStartRegular + '!important';
+    else return fontFamily.bold + '!important';
+  }};
   font-size: ${({ fontSize }) =>
     fontSize ? fontSize + ' !important' : '16px !important'};
-  color: ${({ disabled, color, gameEditionView }) => {
+  color: ${({
+    disabled,
+    color,
+    gameEditionView,
+    outGameEditionView,
+    theme: { colors },
+  }) => {
     if (color) return color + ' !important';
+    if (outGameEditionView) return `${colors.primary} !important`;
     if (gameEditionView) return `${theme.colors.black} !important`;
-    else if (disabled) return '#ffffff !important';
-    else return '#4C125A !important';
+    if (disabled) return `${colors.white} !important`;
+    else return `${colors.primary} !important`;
   }};
   background: ${({
     disabled,
     background,
     gameEditionView,
+    outGameEditionView,
     theme: { buttonBackgroundGradient },
   }) => {
+    if (outGameEditionView) return buttonBackgroundGradient + '!important';
     if (background) return background + ' !important';
     if (gameEditionView) return 'transparent !important';
     if (disabled) return 'transparent !important';
@@ -32,10 +46,16 @@ const StyledButton = styled(SUIButton)`
   }};
   border-radius: 10px !important;
   opacity: 1 !important;
-  border: ${({ border, gameEditionView }) => {
+  border: ${({
+    border,
+    gameEditionView,
+    outGameEditionView,
+    theme: { colors },
+  }) => {
+    if (outGameEditionView) return `1px solid ${colors.white} !important`;
     if (border) return border + ' !important';
-    else if (gameEditionView) return `2px dashed #000000 !important`;
-    else return '1px solid #FFFFFF !important';
+    if (gameEditionView) return `2px dashed ${colors.black} !important`;
+    else return `1px solid ${colors.white} !important`;
   }};
   /* box-shadow: ${({ boxShadow, gameEditionView }) => {
     if (boxShadow) return boxShadow + ' !important';
@@ -63,12 +83,14 @@ const CustomButton = ({
   onClick,
   loading,
   hover,
+  outGameEditionView,
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
   return (
     <StyledButton
       {...props}
       gameEditionView={gameEditionView}
+      outGameEditionView={outGameEditionView}
       disabled={disabled}
       background={background}
       color={color}

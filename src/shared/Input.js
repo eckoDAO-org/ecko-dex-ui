@@ -9,7 +9,11 @@ import { GameEditionContext } from '../contexts/GameEditionContext';
 const Container = styled.div`
   display: flex;
   flex-flow: column;
-  margin-bottom: ${({ gameEditionView }) => (gameEditionView ? '10px' : '0px')};
+  margin-bottom: ${({ gameEditionView, outGameEditionView }) => {
+    if (outGameEditionView) return '0px';
+    if (gameEditionView) return '10px';
+    else return '0px';
+  }};
   width: 100%;
   border: ${({ gameEditionView }) => !gameEditionView && '1px solid #ffffff99'};
   border-radius: ${({ gameEditionView }) => !gameEditionView && '4px'};
@@ -17,12 +21,20 @@ const Container = styled.div`
 
   .ui.input > input {
     padding: ${({ gameEditionView }) => !gameEditionView && ' 10px 2px'};
-    font-family: ${({ gameEditionView }) =>
-      gameEditionView
-        ? `${theme.fontFamily.pressStartRegular}`
-        : `${theme.fontFamily.regular}`};
-    color: ${({ gameEditionView }) =>
-      gameEditionView ? `${theme.colors.black} !important` : `#ffffff`};
+    font-family: ${({
+      gameEditionView,
+      outGameEditionView,
+      theme: { fontFamily },
+    }) => {
+      if (outGameEditionView) return fontFamily.regular + '!important';
+      if (gameEditionView) return fontFamily.pressStartRegular + '!important';
+      else return fontFamily.regular + '!important';
+    }};
+    color: ${({ gameEditionView, outGameEditionView, theme: { colors } }) => {
+      if (outGameEditionView) return colors.white + '!important';
+      if (gameEditionView) return colors.black + '!important';
+      else return colors.white + '!important';
+    }};
   }
   & input::placeholder {
     color: ${({ gameEditionView }) =>
@@ -143,6 +155,7 @@ const Input = ({
   error,
   type,
   maxLength,
+  outGameEditionView,
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
 
@@ -169,6 +182,7 @@ const Input = ({
   return (
     <Container
       gameEditionView={gameEditionView}
+      outGameEditionView={outGameEditionView}
       inputRightComponent={inputRightComponent || withSelectButton}
       inputComponentWidth={
         inputRightComponent

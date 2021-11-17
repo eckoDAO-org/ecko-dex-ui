@@ -155,6 +155,7 @@ const RightHeaderItems = () => {
                   }}
                   label=' Remove All Notification'
                   fontSize='12px'
+                  outGameEditionView
                 />
               ),
             });
