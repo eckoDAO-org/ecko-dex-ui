@@ -25,10 +25,6 @@ export const SwapProvider = (props) => {
   const pact = useContext(PactContext);
   const notificationContext = useContext(NotificationContext);
   const { account, localRes, setLocalRes } = useContext(AccountContext);
-  console.log(
-    '🚀 ~ file: SwapContext.js ~ line 28 ~ SwapProvider ~ localRes',
-    localRes
-  );
 
   const wallet = useContext(WalletContext);
   const [pairAccount, setPairAccount] = useState('');
@@ -178,6 +174,7 @@ export const SwapProvider = (props) => {
         date: getCurrentDate(),
         title: 'Transaction Pending',
         description: data.requestKeys[0],
+        isReaded: false,
       });
 
       await pact.listen(data.requestKeys[0]);

@@ -141,7 +141,9 @@ const RightHeaderItems = () => {
       )}
       <HeaderItem>
         <BellNotification
-          hasNotification={notification.notificationList?.length !== 0}
+          hasNotification={notification.notificationList?.some(
+            (notif) => notif.isReaded === false
+          )}
           onClick={() => {
             rightModal.openModal({
               title: 'Notifications',

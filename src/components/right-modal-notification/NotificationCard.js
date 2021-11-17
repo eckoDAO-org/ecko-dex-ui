@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Divider } from 'semantic-ui-react';
 import styled from 'styled-components';
 import {
@@ -13,10 +13,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-left: ${({ isHover, typeColor }) =>
-    isHover ? `4px solid ${typeColor}` : '4px solid transparent'};
-  background: ${({ isHover, typeColor }) =>
-    isHover
+  border-left: ${({ isHighlight, typeColor }) =>
+    isHighlight ? `4px solid ${typeColor}` : '4px solid transparent'};
+  background: ${({ isHighlight, typeColor }) =>
+    isHighlight
       ? `transparent linear-gradient(90deg, ${typeColor}1A 0%, #80621800 100%) 0% 0% no-repeat padding-box;`
       : 'none'};
   width: 100%;
@@ -101,8 +101,9 @@ const NotificationCard = ({
   type,
   removeItem,
   link,
+  isHighlight,
 }) => {
-  const [isHover, setIsHover] = useState(false);
+  console.log(`Notification ${type} - ${index}`, isHighlight);
   const [animation, setAnimation] = useState(false);
 
   const getIconByTypeNotification = (type) => {
@@ -137,30 +138,11 @@ const NotificationCard = ({
     }
   };
 
-  //   useEffect(() => {
-  //     if (animation) {
-  //       const timer = setTimeout(async () => {
-  //         await removeItem(index);
-  //       }, 1000);
-  //       return () => {
-  //         setAnimation(false);
-
-  //         clearTimeout(timer);
-  //       };
-  //     }
-  //   }, [animation]);
-
   return (
     <Container
       id={`notification_card_${index}`}
-      isHover={isHover}
       typeColor={getColorByType(type)}
-      onMouseOver={() => {
-        setIsHover(true);
-      }}
-      onMouseLeave={() => {
-        setIsHover(false);
-      }}
+      isHighlight={isHighlight}
       animation={animation}
       style={{ cursor: link && 'pointer' }}
     >

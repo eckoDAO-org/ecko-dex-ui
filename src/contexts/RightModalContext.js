@@ -1,4 +1,5 @@
-import React, { useState, createContext } from 'react';
+import React, { useState, createContext, useContext } from 'react';
+import { NotificationContext } from './NotificationContext';
 
 export const RightModalContext = createContext();
 
@@ -11,6 +12,8 @@ const initialState = {
 
 export const RightModalProvider = (props) => {
   const [state, setState] = useState(initialState);
+  const { notificationList, setNotificationList } =
+    useContext(NotificationContext);
 
   const openModal = (settings) => {
     setState((prev) => ({ ...prev, ...settings, open: true }));
@@ -22,6 +25,12 @@ export const RightModalProvider = (props) => {
 
   const closeModal = () => {
     setState(initialState);
+    // se in the notification list if the nofications are readed
+    const newNotificationList = notificationList.map((notif) => ({
+      ...notif,
+      isReaded: true,
+    }));
+    setNotificationList(newNotificationList);
   };
 
   return (

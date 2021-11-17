@@ -58,6 +58,7 @@ export const AccountProvider = (props) => {
         date: getCurrentDate(),
         title: 'Transaction Error',
         description: localRes,
+        isReaded: false,
       });
     }
   }, [localRes]);
@@ -139,10 +140,10 @@ export const AccountProvider = (props) => {
   };
 
   const logout = () => {
-    localStorage.removeItem("acct", null);
-    localStorage.removeItem("signing", null);
-    localStorage.removeItem("pk");
-    localStorage.removeItem("wallet");
+    localStorage.removeItem('acct', null);
+    localStorage.removeItem('signing', null);
+    localStorage.removeItem('pk');
+    localStorage.removeItem('wallet');
     window.location.reload();
   };
 

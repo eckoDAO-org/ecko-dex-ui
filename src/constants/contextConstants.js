@@ -16,13 +16,23 @@ export const NETWORK_TYPE = 'mainnet';
 export const network = `https://api.chainweb.com/chainweb/0.0/${NETWORKID}/chain/${chainId}/pact`;
 
 export const creationTime = () => Math.round(new Date().getTime() / 1000) - 10;
+
 export const getCurrentDate = () => {
   const d = new Date();
   let day = d.getDate();
-  let month = d.getMonth();
+  let month = d.getMonth() + 1;
   let year = d.getFullYear();
   return `${day}/${month}/${year}`;
 };
+
+export const getDateFromCustomDate = (date, time) => {
+  const splittedDate = date.split('/');
+  const d = new Date(
+    `${splittedDate[2]}/${splittedDate[1]}/${splittedDate[0]} ${time}`
+  );
+  return d;
+};
+
 export const getCurrentTime = () => {
   const t = new Date();
   let hours = t.getHours();
