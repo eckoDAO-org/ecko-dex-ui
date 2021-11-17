@@ -77,11 +77,9 @@ const RightHeaderItems = () => {
                 description: account?.account ? (
                   <div>
                     Account ID: {reduceToken(account.account)}
-                    <Popup
-                      content='copied!'
+                    <CustomPopup
                       on='click'
                       position='bottom right'
-                      style={{ opacity: 0.7, background: '#fff !important' }}
                       pinned
                       trigger={
                         <CopyIcon
@@ -91,7 +89,9 @@ const RightHeaderItems = () => {
                           }}
                         />
                       }
-                    />
+                    >
+                      copied!
+                    </CustomPopup>
                   </div>
                 ) : (
                   'Connect a wallet using one of the methods below'

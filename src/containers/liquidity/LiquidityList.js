@@ -1,10 +1,8 @@
 import React, { useEffect, useContext, useState } from 'react';
 import styled from 'styled-components/macro';
 import { Loader, Button, Header, Divider } from 'semantic-ui-react';
-
 import CustomButton from '../../shared/CustomButton';
 import TokenPair from './TokenPair';
-
 import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { AccountContext } from '../../contexts/AccountContext';
 import theme from '../../styles/theme';
@@ -13,6 +11,7 @@ import reduceToken from '../../utils/reduceToken';
 import ConnectWalletModal from '../../components/modals/kdaModals/ConnectWalletModal';
 import { ModalContext } from '../../contexts/ModalContext';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
+import GradientBorder from '../../shared/GradientBorder';
 
 const Container = styled.div`
   display: flex;
@@ -57,7 +56,7 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const FormContainer = styled.div`
+const LiquidityCardContainer = styled.div`
   position: ${({ gameEditionView }) => !gameEditionView && `relative`};
   display: table;
   flex-flow: column;
@@ -84,23 +83,25 @@ const FormContainer = styled.div`
   }
 `;
 
-const Gradient = styled.div`
-  border-radius: 10px; /*1*/
-  border: 1px solid transparent; /*2*/
-  background: linear-gradient(90deg, #ed1cb5, #ffa900, #39fffc) border-box; /*3*/
-  -webkit-mask: /*4*/ linear-gradient(#fff 0 0) padding-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: destination-out; /*5'*/
-  mask-composite: exclude; /*5*/
-  position: absolute;
-  top: -10px;
-  left: 0px;
-  right: 0px;
-  bottom: -10px;
-  width: 100%;
-  height: calc(100% + 20px);
-  z-index: -10;
-`;
+/* const FormContainerStyled = styled(FormContainer)`
+  display: table;
+  padding: ${({ gameEditionView }) => (gameEditionView ? '10px' : '20px')};
+  margin-bottom: 15px;
+  border: ${({ gameEditionView, theme: { colors } }) =>
+    gameEditionView
+      ? `2px dashed ${colors.black} !important`
+      : '1px solid transparent'};
+
+  @media (max-width: ${({ theme: { mediaQueries } }) =>
+      `${mediaQueries.mobilePixel + 1}px`}) {
+    flex-flow: column;
+    display: table;
+  }
+  @media (max-width: ${({ theme: { mediaQueries } }) =>
+      `${mediaQueries.mobileSmallPixel}px`}) {
+    padding: 0;
+  }
+`; */
 
 const TopContainer = styled.div``;
 
@@ -236,8 +237,8 @@ const LiquidityList = (props) => {
             </TopContainer>
             {account.account !== null ? (
               liquidity.pairListAccount[0] ? (
-                <FormContainer gameEditionView={gameEditionView}>
-                  <Gradient />
+                <LiquidityCardContainer gameEditionView={gameEditionView}>
+                  {!gameEditionView && <GradientBorder />}
                   {Object.values(liquidity.pairListAccount).map(
                     (pair, index) => {
                       return pair && pair.balance ? (
@@ -271,9 +272,9 @@ const LiquidityList = (props) => {
                       );
                     }
                   )}
-                </FormContainer>
+                </LiquidityCardContainer>
               ) : (
-                <FormContainer gameEditionView={gameEditionView}>
+                <LiquidityCardContainer gameEditionView={gameEditionView}>
                   <Loader
                     active
                     inline='centered'
@@ -286,7 +287,7 @@ const LiquidityList = (props) => {
                   >
                     Loading..
                   </Loader>
-                </FormContainer>
+                </LiquidityCardContainer>
               )
             ) : (
               <></>

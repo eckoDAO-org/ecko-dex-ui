@@ -7,7 +7,7 @@ import { WalletContext } from '../../../contexts/WalletContext';
 import { ModalContext } from '../../../contexts/ModalContext';
 import GetZelcoreAccountModal from './GetZelcoreAccountModal';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import { WALLET } from "../../../constants/wallet";
+import { WALLET } from '../../../constants/wallet';
 
 const Text = styled.span`
   font-size: 13px;
@@ -104,6 +104,7 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
         buttonStyle={{
           border: '1px solid #424242',
         }}
+        color='#fff'
         background='transparent'
         onClick={() => {
           if (gameEditionView) {
@@ -139,7 +140,7 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
           {!gameEditionView ? (
             <CustomButton
               border='none'
-              boxShadow='none'
+              color='#fff'
               background='transparent'
               onClick={() => {
                 handleModalBack();
