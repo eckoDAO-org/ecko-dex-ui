@@ -11,8 +11,7 @@ import { useKadenaWalletContext } from "../../../contexts";
 
 const ConnectWalletModal = () => {
   const modalContext = useContext(ModalContext);
-  const { initializeKDAWallet, isKDAWalletInstalled } =
-    useKadenaWalletContext();
+  const { initializeKDAWallet, isInstalled } = useKadenaWalletContext();
 
   const openWalletModal = (walletName) => {
     switch (walletName) {
@@ -45,10 +44,10 @@ const ConnectWalletModal = () => {
           ),
         });
       case WALLET.KADENA_WALLET.name:
-        if (!isKDAWalletInstalled) {
+        if (!isInstalled) {
           alert("Please install Kda Wallet extension");
         } else {
-          initializeKDAWallet();
+          initializeKDAWallet().then(() => modalContext.onBackModal());
         }
         break;
       case WALLET.CHAINWEAVER.name:

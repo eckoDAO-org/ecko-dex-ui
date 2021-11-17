@@ -1,5 +1,5 @@
 // export const chainId = process.env.REACT_APP_KDA_CHAIN_ID || "0";
-export const chainId = "2";
+export const chainId = "0";
 // export const PRECISION = process.env.REACT_APP_KDA_PRECISION || 12;
 export const PRECISION = 12;
 // export const NETWORKID = process.env.REACT_APP_KDA_NETWORK_ID || "testnet04";
