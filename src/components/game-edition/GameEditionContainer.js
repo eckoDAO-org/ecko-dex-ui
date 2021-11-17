@@ -72,7 +72,7 @@ const GameEditionContainer = ({ children }) => {
           }}
           startLabel='SWAP'
           startOnClick={() => {
-            // startSwapFunction
+            setIsSwapping(true);
             closeModal();
           }}
         >
