@@ -262,7 +262,7 @@ const LiquidityList = (props) => {
                                 margin: '20px 0px',
                                 borderTop: gameEditionView
                                   ? `1px dashed ${theme.colors.black}`
-                                  : `1px solid  ${theme.colors.white}`,
+                                  : `1px solid  ${theme.colors.white}99`,
                               }}
                             />
                           )}
