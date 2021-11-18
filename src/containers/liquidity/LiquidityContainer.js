@@ -22,6 +22,8 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 import TokenSelectorModalContent from '../../components/swap/swap-modals/TokenSelectorModalContent';
 import { Logo } from '../../assets';
 import { FadeIn } from '../../components/shared/animations';
+import FormContainer from '../../shared/FormContainer';
+import GradientBorder from '../../shared/GradientBorder';
 
 const Container = styled(FadeIn)`
   margin-top: ${({ theme: { header } }) => header.height};
@@ -35,9 +37,10 @@ const Container = styled(FadeIn)`
 
 const TitleContainer = styled.div`
   display: flex;
-  padding: ${(gameEditionView) => (gameEditionView ? '0 10px' : 0)};
+  padding: ${({ gameEditionView }) =>
+    gameEditionView ? '0px 10px' : '0px !important'};
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 14px;
   width: 100%;
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
   top: ${({ gameEditionView }) => gameEditionView && '10px'};
@@ -52,46 +55,6 @@ const Title = styled.span`
   color: ${({ gameEditionView }) =>
     gameEditionView ? theme.colors.black : '#ffffff'};
   text-transform: capitalize;
-`;
-
-const FormContainer = styled.div`
-  position: ${({ gameEditionView }) => !gameEditionView && `relative`};
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  padding: ${({ gameEditionView }) =>
-    gameEditionView ? `10px 10px` : `32px 32px`};
-  width: 100%;
-  border-radius: 10px;
-  border: ${({ gameEditionView }) =>
-    gameEditionView ? `none` : ` 1px solid transparent`};
-
-  opacity: 1;
-  backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
-  background: transparent;
-
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: column;
-    gap: 0px;
-  }
-`;
-
-const Gradient = styled.div`
-  border-radius: 10px; /*1*/
-  border: 1px solid transparent; /*2*/
-  background: linear-gradient(90deg, #ed1cb5, #ffa900, #39fffc) border-box; /*3*/
-  -webkit-mask: /*4*/ linear-gradient(#fff 0 0) padding-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: destination-out; /*5'*/
-  mask-composite: exclude; /*5*/
-  position: absolute;
-  top: -10px;
-  left: -10px;
-  right: -10px;
-  bottom: -10px;
-  width: calc(100% + 20px);
-  height: calc(100% + 20px);
 `;
 
 const LogoContainer = styled(FadeIn)`
@@ -769,7 +732,7 @@ const LiquidityContainer = (props) => {
         {gameEditionView && <CloseGE onClick={() => props.closeLiquidity()} />}
       </TitleContainer>
       <FormContainer gameEditionView={gameEditionView}>
-        <Gradient />
+        {!gameEditionView && <GradientBorder />}
         <SwapForm
           fromValues={fromValues}
           setFromValues={setFromValues}

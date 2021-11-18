@@ -5,21 +5,23 @@ import { GameEditionContext } from '../contexts/GameEditionContext';
 import theme from '../styles/theme';
 
 const Container = styled.div`
-  position: relative;
+  position: ${({ gameEditionView }) => !gameEditionView && `relative`};
   display: flex;
   flex-flow: column;
   width: 100%;
   border-radius: 10px;
   border: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? `2px dashed ${colors.black}` : `1px solid transparent`};
+    gameEditionView ? `none` : `1px solid transparent`};
 
   opacity: 1;
   background: transparent;
-
-  & > *:not(:last-child) {
+  backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
+  padding: ${({ gameEditionView }) =>
+    gameEditionView ? `10px 10px` : `32px 32px`};
+  /* & > *:not(:last-child) {
     margin-bottom: 32px;
   }
-
+ */
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
@@ -27,14 +29,14 @@ const Container = styled.div`
 `;
 
 const Content = styled.div`
-  position: relative;
+  /* position: relative;
   display: flex;
   flex-flow: column;
-  width: 100%;
+  width: 100%; */
 
-  & > *:not(:last-child) {
+  /* & > *:not(:last-child) {
     margin-right: 32px;
-  }
+  } */
 
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {

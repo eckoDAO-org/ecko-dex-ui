@@ -22,6 +22,8 @@ import CustomPopup from '../shared/CustomPopup';
 import { CogIcon } from '../assets';
 import SlippagePopupContent from '../components/layout/header/SlippagePopupContent';
 import { Logo } from '../assets';
+import FormContainer from '../shared/FormContainer';
+import GradientBorder from '../shared/GradientBorder';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -29,46 +31,6 @@ const Container = styled(FadeIn)`
   max-width: ${({ gameEditionView }) => !gameEditionView && `500px`};
   margin-left: auto;
   margin-right: auto;
-`;
-
-const FormContainer = styled.div`
-  position: ${({ gameEditionView }) => !gameEditionView && `relative`};
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  padding: ${({ gameEditionView }) =>
-    gameEditionView ? `10px 10px` : `32px 32px`};
-  width: 100%;
-  border-radius: 10px;
-  border: ${({ gameEditionView }) =>
-    gameEditionView ? `none` : ` 1px solid transparent`};
-
-  backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
-  opacity: 1;
-  background: transparent;
-
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: column;
-    gap: 0px;
-  }
-`;
-
-const Gradient = styled.div`
-  border-radius: 10px; /*1*/
-  border: 1px solid transparent; /*2*/
-  background: linear-gradient(90deg, #ed1cb5, #ffa900, #39fffc) border-box; /*3*/
-  -webkit-mask: /*4*/ linear-gradient(#fff 0 0) padding-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: destination-out; /*5'*/
-  mask-composite: exclude; /*5*/
-  position: absolute;
-  top: -10px;
-  left: -10px;
-  right: -10px;
-  bottom: -10px;
-  width: calc(100% + 20px);
-  height: calc(100% + 20px);
 `;
 
 const TitleContainer = styled.div`
@@ -604,7 +566,7 @@ const SwapContainer = () => {
         )}
       </TitleContainer>
       <FormContainer gameEditionView={gameEditionView}>
-        <Gradient />
+        {!gameEditionView && <GradientBorder />}
         <SwapForm
           fromValues={fromValues}
           setFromValues={setFromValues}

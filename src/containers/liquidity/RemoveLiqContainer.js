@@ -11,7 +11,6 @@ import FormContainer from '../../shared/FormContainer';
 import Input from '../../shared/Input';
 import { PRECISION } from '../../constants/contextConstants';
 import tokenData from '../../constants/cryptoCurrencies';
-
 import {
   extractDecimal,
   limitDecimalPlaces,
@@ -21,6 +20,7 @@ import {
 import theme from '../../styles/theme';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
+import GradientBorder from '../../shared/GradientBorder';
 
 const Container = styled.div`
   display: flex;
@@ -51,7 +51,7 @@ const TitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: ${({ gameEditionView }) =>
-    gameEditionView ? '10px' : `24px`};
+    gameEditionView ? '10px' : `14px`};
   width: 100%;
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
   top: ${({ gameEditionView }) => gameEditionView && '10px'};
@@ -79,24 +79,6 @@ const MyButtonDivider = styled.div`
   width: 2%;
   height: auto;
   display: inline-block;
-`;
-
-const Gradient = styled.div`
-  border-radius: 10px; /*1*/
-  border: 1px solid transparent; /*2*/
-  background: linear-gradient(90deg, #ed1cb5, #ffa900, #39fffc) border-box; /*3*/
-  -webkit-mask: /*4*/ linear-gradient(#fff 0 0) padding-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: destination-out; /*5'*/
-  mask-composite: exclude; /*5*/
-  position: absolute;
-  top: -20px;
-  left: -20px;
-  right: -20px;
-  bottom: -20px;
-  width: calc(100% + 40px);
-  height: calc(100% + 40px);
-  z-index: -10;
 `;
 
 const ResultContainer = styled.div`
@@ -236,7 +218,7 @@ const RemoveLiqContainer = (props) => {
             : {}
         }
       >
-        {!gameEditionView && <Gradient />}
+        {!gameEditionView && <GradientBorder />}
         <SubContainer gameEditionView={gameEditionView}>
           <Input
             value={amount}

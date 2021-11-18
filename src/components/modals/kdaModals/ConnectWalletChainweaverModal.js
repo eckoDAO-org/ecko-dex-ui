@@ -6,7 +6,7 @@ import { Button } from 'semantic-ui-react';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { WalletContext } from '../../../contexts/WalletContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import { WALLET } from "../../../constants/wallet";
+import { WALLET } from '../../../constants/wallet';
 
 const Text = styled.span`
   font-size: 13px;
@@ -97,7 +97,7 @@ const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
         <Button.Group fluid>
           <CustomButton
             border='none'
-            boxShadow='none'
+            color='#fff'
             background='transparent'
             onClick={() => {
               resetValues();
