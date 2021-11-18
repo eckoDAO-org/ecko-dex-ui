@@ -132,6 +132,12 @@ const Button = styled.button`
         `${mediaQueries.mobilePixel + 1}px`}) {
     }
   }
+
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white}!important;
+    }
+  }
 `;
 
 const Input = ({
@@ -175,7 +181,7 @@ const Input = ({
         >
           <span>
             {buttonLabel}
-            {gameEditionView ? <DropdownGe /> : <ArrowDown fill='white' />}
+            {gameEditionView ? <DropdownGe /> : <ArrowDown />}
           </span>
         </Button>
       );

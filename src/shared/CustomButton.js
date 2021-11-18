@@ -3,7 +3,6 @@ import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 import { Button as SUIButton } from 'semantic-ui-react';
 import { GameEditionContext } from '../contexts/GameEditionContext';
-import theme from '../styles/theme';
 
 const StyledButton = styled(SUIButton)`
   cursor: pointer;
@@ -19,11 +18,11 @@ const StyledButton = styled(SUIButton)`
   font-size: ${({ fontSize }) =>
     fontSize ? fontSize + ' !important' : '16px !important'};
   color: ${({
+    theme: { colors },
     disabled,
     color,
     gameEditionView,
     outGameEditionView,
-    theme: { colors },
   }) => {
     if (color) return color + ' !important';
     if (outGameEditionView) return `${colors.primary} !important`;
@@ -32,11 +31,11 @@ const StyledButton = styled(SUIButton)`
     else return `${colors.primary} !important`;
   }};
   background: ${({
+    theme: { buttonBackgroundGradient },
     disabled,
     background,
     gameEditionView,
     outGameEditionView,
-    theme: { buttonBackgroundGradient },
   }) => {
     if (outGameEditionView) return buttonBackgroundGradient + '!important';
     if (background) return background + ' !important';
@@ -47,10 +46,10 @@ const StyledButton = styled(SUIButton)`
   border-radius: 10px !important;
   opacity: 1 !important;
   border: ${({
+    theme: { colors },
     border,
     gameEditionView,
     outGameEditionView,
-    theme: { colors },
   }) => {
     if (outGameEditionView) return `1px solid ${colors.white} !important`;
     if (border) return border + ' !important';

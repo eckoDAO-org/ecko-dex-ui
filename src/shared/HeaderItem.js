@@ -4,23 +4,30 @@ import styled from 'styled-components/macro';
 import { GameEditionContext } from '../contexts/GameEditionContext';
 
 const Item = styled(NavLink)`
-  color: #ffffff;
+  color: ${({ theme: { colors } }) => colors.white};
   font-size: 14px;
   text-decoration: none;
   text-transform: capitalize;
   background: transparent;
 
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
+
   &.active {
     font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
   }
   &:hover {
-    color: ${({ gameEditionView }) => (gameEditionView ? 'none' : '#ffffff')};
-    text-shadow: ${({ gameEditionView }) =>
-      gameEditionView ? 'none' : '0 0 5px #ffffff'};
+    color: ${({ theme: { colors }, gameEditionView }) =>
+      gameEditionView ? 'none' : colors.white};
+    text-shadow: ${({ theme: { colors }, gameEditionView }) =>
+      gameEditionView ? 'none' : `0 0 5px ${colors.white}`};
     cursor: pointer;
     & svg {
       & path {
-        fill: #ffffff;
+        fill: ${({ theme: { colors } }) => colors.primary};
       }
     }
   }
