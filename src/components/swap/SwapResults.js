@@ -38,7 +38,7 @@ const Label = styled.span`
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : '#ffffff'};
+    gameEditionView ? colors.black : colors.white};
   text-transform: capitalize;
 `;
 
@@ -48,7 +48,7 @@ const Value = styled.span`
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   line-height: 20px;
   color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : '#ffffff'};
+    gameEditionView ? colors.black : colors.white};
 `;
 
 const SwapResults = ({ priceImpact, fromValues, toValues }) => {

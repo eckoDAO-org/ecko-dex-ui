@@ -23,6 +23,7 @@ import { AccountContext } from '../../../contexts/AccountContext';
 import { PactContext } from '../../../contexts/PactContext';
 import tokenData from '../../../constants/cryptoCurrencies';
 import PopupTxView from './PopupTxView';
+import { theme } from '../../../styles/theme';
 
 const Container = styled.div`
   position: absolute;
@@ -178,8 +179,8 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
               width: '100%',
               marginTop: 0,
               borderTop: gameEditionView
-                ? '1px dashed black'
-                : '1px solid #FFFFFF99',
+                ? `1px dashed ${theme().colors.black}`
+                : `1px solid ${theme().colors.white}`,
             }}
           />
 

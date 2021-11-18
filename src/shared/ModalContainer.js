@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
 import { ArrowBack, CloseIcon } from '../assets';
 import { GameEditionContext } from '../contexts/GameEditionContext';
-import theme from '../styles/theme';
 
 const Container = styled.div`
   position: relative;
@@ -13,14 +12,14 @@ const Container = styled.div`
   width: 100%;
   border-radius: 10px;
   border: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? `2px dashed ${colors.black}` : ' 2px solid transparent'};
+    gameEditionView ? `2px dashed ${colors.black}` : `2px solid transparent`};
   background-clip: ${({ gameEditionView }) =>
     !gameEditionView && `padding-box`};
   opacity: 1;
-  background: transparent;
+  background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
   backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
   color: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? colors.black : ' #ffffff'};
+    gameEditionView ? colors.black : colors.white};
 
   ${({ withoutRainbowBackground, gameEditionView }) =>
     !withoutRainbowBackground &&
@@ -59,6 +58,12 @@ const HeaderContainer = styled.div`
   margin-bottom: ${({ gameEditionView }) => !gameEditionView && '12px'};
   align-items: center;
   width: 100%;
+
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
 `;
 
 const Title = styled.span`
@@ -73,7 +78,7 @@ const Title = styled.span`
     font-size: 16px;
   }
   text-transform: capitalize;
-  color: 'white';
+  ${({ theme: { colors } }) => colors.white};
 `;
 
 const Description = styled.span`
@@ -106,7 +111,7 @@ const ModalContainer = ({
           <ArrowBack
             style={{
               cursor: 'pointer',
-              color: `${theme.colors.white} 0% 0% no-repeat padding-box`,
+              // color: `${theme().colors.white} 0% 0% no-repeat padding-box`,
             }}
             onClick={onBack}
           />
