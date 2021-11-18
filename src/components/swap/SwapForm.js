@@ -1,33 +1,25 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import ButtonDivider from '../../shared/ButtonDivider';
 import Input from '../../shared/Input';
 import InputToken from '../../shared/InputToken';
-import CustomButton from '../../shared/CustomButton';
-import { SwapArrowsIcon } from '../../assets';
+import { SwapArrowsIcon, SwapIcon } from '../../assets';
 import { limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
 import tokenData from '../../constants/cryptoCurrencies';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { Divider } from 'semantic-ui-react';
 
-const FormContainer = styled.div`
-  position: relative;
+const Container = styled.div`
   display: flex;
-  flex-flow: row;
-  padding: 20px 20px;
+  flex-flow: column;
   width: 100%;
-  border-radius: 10px;
-  border: 2px solid #ffffff;
-  box-shadow: 0 0 5px #ffffff;
-  opacity: 1;
-  background: transparent;
-
-  & > *:not(:last-child) {
-    margin-right: 32px;
-  }
-
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: column;
-    gap: 0px;
+  position: ${({ gameEditionView }) =>
+    gameEditionView && 'absolute !important'};
+  bottom: ${({ gameEditionView }) => gameEditionView && '50px !important'};
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
   }
 `;
 
@@ -42,20 +34,24 @@ const SwapForm = ({
   setInputSide,
   swapValues,
 }) => {
+  const { gameEditionView } = useContext(GameEditionContext);
   return (
-    <FormContainer>
+    <Container>
       <Input
         error={isNaN(fromValues.amount)}
-        topLeftLabel={fromNote ? `from ${fromNote}` : `input`}
-        bottomLeftLabel={`balance: ${reduceBalance(fromValues.balance) ?? '-'}`}
+        topLeftLabel={fromNote ? `from ${fromNote}` : `from`}
+        topRightLabel={`balance: ${reduceBalance(fromValues.balance) ?? '-'}`}
         placeholder='enter amount'
         maxLength='15'
+        size='big'
         inputRightComponent={
           fromValues.coin ? (
             <InputToken
               icon={tokenData[fromValues.coin].icon}
               code={tokenData[fromValues.coin].name}
-              onClick={() => setTokenSelectorType('from')}
+              onClick={() => {
+                setTokenSelectorType('from');
+              }}
               onClickButton={() => {
                 setInputSide('from');
                 setFromValues((prev) => ({
@@ -70,7 +66,9 @@ const SwapForm = ({
         withSelectButton
         numberOnly
         value={fromValues.amount}
-        onSelectButtonClick={() => setTokenSelectorType('from')}
+        onSelectButtonClick={() => {
+          setTokenSelectorType('from');
+        }}
         onChange={async (e, { value }) => {
           setInputSide('from');
           setFromValues((prev) => ({
@@ -79,11 +77,15 @@ const SwapForm = ({
           }));
         }}
       />
-      <ButtonDivider icon={<SwapArrowsIcon />} onClick={swapValues} />
+      {gameEditionView ? null : (
+        <Divider horizontal style={{ zIndex: 1 }}>
+          <SwapIcon style={{ cursor: 'pointer' }} onClick={swapValues} />
+        </Divider>
+      )}
       <Input
         error={isNaN(toValues.amount)}
-        topLeftLabel={toNote ? `to ${toNote}` : `input`}
-        bottomLeftLabel={`balance: ${reduceBalance(toValues.balance) ?? '-'}`}
+        topLeftLabel={toNote ? `to ${toNote}` : `to`}
+        topRightLabel={`balance: ${reduceBalance(toValues.balance) ?? '-'}`}
         placeholder='enter amount'
         maxLength='15'
         inputRightComponent={
@@ -96,7 +98,7 @@ const SwapForm = ({
                 setInputSide('to');
                 setToValues((prev) => ({
                   ...prev,
-                  amount: reduceBalance(toValues.balance),
+                  amount: toValues.balance,
                 }));
               }}
               disabledButton={fromValues.amount === fromValues.balance}
@@ -106,7 +108,9 @@ const SwapForm = ({
         withSelectButton
         numberOnly
         value={toValues.amount}
-        onSelectButtonClick={() => setTokenSelectorType('to')}
+        onSelectButtonClick={() => {
+          setTokenSelectorType('to');
+        }}
         onChange={async (e, { value }) => {
           setInputSide('to');
           setToValues((prev) => ({
@@ -115,7 +119,7 @@ const SwapForm = ({
           }));
         }}
       />
-    </FormContainer>
+    </Container>
   );
 };
 

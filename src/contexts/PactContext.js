@@ -8,6 +8,8 @@ import {
   creationTime,
   FEE,
   GAS_PRICE,
+  getCurrentDate,
+  getCurrentTime,
   network,
   NETWORK_TYPE,
 } from '../constants/contextConstants';
@@ -15,6 +17,7 @@ import { extractDecimal } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
 import { AccountContext } from './AccountContext';
 import { NotificationContext, STATUSES } from './NotificationContext';
+import { eventsRecentList } from '../chainweb/standalone-functions/call-chain-data';
 
 export const PactContext = createContext();
 
@@ -83,30 +86,16 @@ export const PactProvider = (props) => {
     }
   };
 
-  const getSwapList = async () => {
+  const getEventsSwapList = async () => {
     setSwapList({});
-    if (account.account) {
-      var reqKeyList = JSON.parse(localStorage.getItem('swapReqKeys'));
-      if (reqKeyList) {
-        let tx = await Pact.fetch.poll(
-          { requestKeys: Object.values(reqKeyList) },
-          network
-        );
-        if (Object.keys(tx).length !== 0) {
-          const searchSwap = Object.values(tx).some(
-            (t) =>
-              t?.events[3]?.params[0] === account.account.account ||
-              t?.events[3]?.params[1] === account.account.account
-          );
-          if (searchSwap)
-            setSwapList(
-              Object.values(tx)?.filter(
-                (swapTx) =>
-                  swapTx?.events[3]?.params[0] === account.account.account ||
-                  swapTx?.events[3]?.params[1] === account.account.account
-              )
-            );
-          else setSwapList('NO_SWAP_FOUND');
+    let events = await eventsRecentList?.then((res) => res);
+    if (Object.values(events).length !== 0) {
+      if (account.account) {
+        const swap = Object.values(events)
+          ?.filter((swapTx) => swapTx?.name === 'SWAP')
+          .filter((s) => s?.params[1] === account.account.account);
+        if (swap.length !== 0) {
+          setSwapList(swap);
         } else {
           setSwapList('NO_SWAP_FOUND');
         }
@@ -118,8 +107,44 @@ export const PactProvider = (props) => {
     }
   };
 
+  const getSwapList = async () => {
+    // setSwapList({});
+    // if (account.account) {
+    //   var reqKeyList = JSON.parse(localStorage.getItem("swapReqKeys"));
+    //   if (reqKeyList) {
+    //     let tx = await Pact.fetch.poll(
+    //       { requestKeys: Object.values(reqKeyList) },
+    //       network
+    //     );
+    //     if (Object.keys(tx).length !== 0) {
+    //       const searchSwap = Object.values(tx).some(
+    //         (t) =>
+    //           t?.events[3]?.params[0] === account.account.account ||
+    //           t?.events[3]?.params[1] === account.account.account
+    //       );
+    //       if (searchSwap)
+    //         setSwapList(
+    //           Object.values(tx)?.filter(
+    //             (swapTx) =>
+    //               swapTx?.events[3]?.params[0] === account.account.account ||
+    //               swapTx?.events[3]?.params[1] === account.account.account
+    //           )
+    //         );
+    //       else setSwapList("NO_SWAP_FOUND");
+    //     } else {
+    //       setSwapList("NO_SWAP_FOUND");
+    //     }
+    //   } else {
+    //     setSwapList("NO_SWAP_FOUND");
+    //   }
+    // } else {
+    //   setSwapList("NO_SWAP_FOUND");
+    // }
+  };
+
   useEffect(() => {
-    getSwapList();
+    getEventsSwapList();
+    // getSwapList();
   }, [account.sendRes, account.account]);
 
   const fetchAllBalances = async () => {
@@ -312,7 +337,10 @@ export const PactProvider = (props) => {
     console.log(pollRes[reqKey]);
     console.log(pollRes[reqKey].result);
     if (pollRes[reqKey].result.status === 'success') {
+      // setting reqKey for calling History Transaction
       setReqKeysLocalStorage(reqKey);
+
+      // open the toast SUCCESS message
       notificationContext.showNotification({
         title: 'Transaction Success!',
         message: 'Check it out in the block explorer',
@@ -333,7 +361,28 @@ export const PactProvider = (props) => {
           await toast.dismiss(toastId.current);
         },
       });
+      // store in local storage the success notification for the right modal
+      notificationContext.storeNotification({
+        type: 'success',
+        time: getCurrentTime(),
+        date: getCurrentDate(),
+        title: 'Transaction Success!',
+        description: 'Check it out in the block explorer',
+        link: `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
+        isReaded: false,
+      });
     } else {
+      // store in local storage the error notification for the right modal
+      notificationContext.storeNotification({
+        type: 'error',
+        time: getCurrentTime(),
+        date: getCurrentDate(),
+        title: 'Transaction Failure!',
+        description: 'Check it out in the block explorer',
+        link: `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
+        isReaded: false,
+      });
+      // open the toast FAILURE message
       notificationContext.showNotification({
         title: 'Transaction Failure!',
         message: 'Check it out in the block explorer',

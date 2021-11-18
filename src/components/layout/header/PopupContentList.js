@@ -1,12 +1,13 @@
-import React from "react";
-import styled from "styled-components";
-import HeaderItem from "../../../shared/HeaderItem";
-import { theme } from "../../../styles/theme";
+import React from 'react';
+import styled from 'styled-components';
+import HeaderItem from '../../../shared/HeaderItem';
+import theme from '../../../styles/theme';
 
 const ListContainer = styled.div`
-  border-radius: 4px;
-  background: ${({ theme: { colors } }) => colors.purple} 0% 0% no-repeat
-    padding-box;
+  border-radius: 10px;
+  padding: 8px;
+  z-index: 1;
+  background: transparent;
 
   & svg {
     margin-right: 10px;
@@ -25,8 +26,8 @@ const PopupContentList = ({ items }) => {
           icon={item?.icon}
           link={item?.link}
           headerItemStyle={{
-            display: "flex",
-            alignItems: "center",
+            display: 'flex',
+            alignItems: 'center',
             fontSize: 16,
             marginBottom: 9,
             fontFamily: theme.fontFamily.regular,

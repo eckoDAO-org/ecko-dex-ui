@@ -8,6 +8,9 @@ import StatsContainer from "../containers/StatsContainer";
 import StaticContainer from "../containers/StaticContainer";
 import KpennyContainer from "../containers/KpennyContainer";
 import KpennyRedeemContainer from "../containers/KpennyRedeemContainer";
+import GameEditionMenuContainer from "../components/game-edition/GameEditionMenuContainer";
+import GameEditionStartAnimation from "../components/game-edition/GameEditionStartAnimation";
+
 // import RedeemGuide from "../modals/RedeemGuide";
 import styled from "styled-components/macro";
 
@@ -19,6 +22,8 @@ import {
   ROUTE_STATIC,
   ROUTE_KPY_RES,
   ROUTE_KPY_RED,
+  ROUTE_GAME_START_ANIMATION,
+  ROUTE_GAME_EDITION_MENU,
 } from "./routes";
 
 const Container = styled.div`
@@ -39,6 +44,8 @@ export default () => {
           <Container>
             <Switch>
               <Route exact path={ROUTE_INDEX} component={SwapContainer} />
+              <Route exact path={ROUTE_GAME_START_ANIMATION} component={GameEditionStartAnimation} />
+              <Route exact path={ROUTE_GAME_EDITION_MENU} component={GameEditionMenuContainer} />
               <Route exact path={ROUTE_POOL} component={PoolContainer} />
               <Route exact path={ROUTE_WRAP} component={WrapContainer} />
               <Route exact path={ROUTE_STATS} component={StatsContainer} />

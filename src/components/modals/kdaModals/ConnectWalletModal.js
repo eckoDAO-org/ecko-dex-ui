@@ -7,42 +7,96 @@ import { ModalContext } from "../../../contexts/ModalContext";
 import ConnectWalletZelcoreModal from "./ConnectWalletZelcoreModal";
 import ConnecWalletTorusModal from "./ConnectWalletTorusModal";
 import ConnectWalletChainweaverModal from "./ConnectWalletChainweaverModal";
+import { GameEditionContext } from "../../../contexts/GameEditionContext";
 import { useKadenaWalletContext } from "../../../contexts";
 
 const ConnectWalletModal = () => {
   const modalContext = useContext(ModalContext);
   const { initializeKDAWallet, isInstalled } = useKadenaWalletContext();
+  const { gameEditionView, openModal } = useContext(GameEditionContext);
 
   const openWalletModal = (walletName) => {
     switch (walletName) {
       default:
         return <div />;
       case WALLET.ZELCORE.name:
-        return modalContext.openModal({
-          id: "ZELCORE",
-          title: "connect wallet",
-          description: "Zelcore Signing (Safest)",
-          onBack: () => modalContext.onBackModal(),
-          content: (
-            <ConnectWalletZelcoreModal
-              onClose={modalContext.closeModal()}
-              onBack={() => modalContext.onBackModal()}
-            />
-          ),
-        });
+        if (gameEditionView) {
+          return openModal({
+            title: "connect wallet",
+            description: "Zelcore Signing (Safest)",
+            content: (
+              <ConnectWalletZelcoreModal
+                onClose={modalContext.closeModal()}
+                onBack={() => modalContext.onBackModal()}
+              />
+            ),
+          });
+        } else {
+          return modalContext.openModal({
+            id: "ZELCORE",
+            title: "connect wallet",
+            description: "Zelcore Signing (Safest)",
+            onBack: () => modalContext.onBackModal(),
+            content: (
+              <ConnectWalletZelcoreModal
+                onClose={modalContext.closeModal()}
+                onBack={() => modalContext.onBackModal()}
+              />
+            ),
+          });
+        }
       case WALLET.TORUS.name:
-        return modalContext.openModal({
-          id: "TORUS",
-          title: "connect wallet",
-          description: "Torus Signing",
-          onBack: () => modalContext.onBackModal(),
-          content: (
-            <ConnecWalletTorusModal
-              onClose={() => modalContext.closeModal()}
-              onBack={() => modalContext.onBackModal()}
-            />
-          ),
-        });
+        if (gameEditionView) {
+          return openModal({
+            title: "connect wallet",
+            description: "Torus Signing",
+            content: (
+              <ConnecWalletTorusModal
+                onClose={() => modalContext.closeModal()}
+                onBack={() => modalContext.onBackModal()}
+              />
+            ),
+          });
+        } else {
+          return modalContext.openModal({
+            id: "TORUS",
+            title: "connect wallet",
+            description: "Torus Signing",
+            onBack: () => modalContext.onBackModal(),
+            content: (
+              <ConnecWalletTorusModal
+                onClose={() => modalContext.closeModal()}
+                onBack={() => modalContext.onBackModal()}
+              />
+            ),
+          });
+        }
+      case WALLET.CHAINWEAVER.name:
+        if (gameEditionView) {
+          return openModal({
+            title: "connect wallet",
+            description: "Chainweaver",
+            content: (
+              <ConnectWalletChainweaverModal
+                onClose={() => modalContext.closeModal()}
+                onBack={() => modalContext.onBackModal()}
+              />
+            ),
+          });
+        } else {
+          return modalContext.openModal({
+            id: "CHIANWEAVER",
+            title: "connect wallet",
+            description: "Chainweaver",
+            onBack: () => modalContext.onBackModal(),
+            content: (
+              <ConnectWalletChainweaverModal
+                onClose={() => modalContext.closeModal()}
+                onBack={() => modalContext.onBackModal()}
+              />
+            ),
+          });
+        }
       case WALLET.KADENA_WALLET.name:
         if (!isInstalled) {
           alert("Please install Kda Wallet extension");
@@ -51,34 +105,20 @@ const ConnectWalletModal = () => {
           modalContext.onBackModal();
         }
         break;
-      case WALLET.CHAINWEAVER.name:
-        return modalContext.openModal({
-          id: "CHIANWEAVER",
-          title: "connect wallet",
-          description: "Chainweaver",
-          onBack: () => modalContext.onBackModal(),
-          content: (
-            <ConnectWalletChainweaverModal
-              onClose={() => modalContext.closeModal()}
-              onBack={() => modalContext.onBackModal()}
-            />
-          ),
-        });
     }
   };
 
   return Object.values(WALLET).map((wallet, index) => (
     <CustomButton
       key={index}
-      buttonStyle={{
-        border: "1px solid #424242",
-      }}
+      border="1px solid #FFFFFF99"
       background="transparent"
+      color="#fff"
       onClick={() => {
         openWalletModal(wallet.name);
       }}
     >
-      {wallet.logo}
+      {!gameEditionView && wallet.logo}
       {` ${wallet.name}`}
     </CustomButton>
   ));

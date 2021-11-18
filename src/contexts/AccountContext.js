@@ -1,31 +1,34 @@
-import React, { createContext, useEffect, useState } from "react";
-import Pact from "pact-lang-api";
-import swal from "@sweetalert/with-react";
-import { getCorrectBalance } from "../utils/reduceBalance";
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import Pact from 'pact-lang-api';
+import swal from '@sweetalert/with-react';
+import { getCorrectBalance } from '../utils/reduceBalance';
 import {
   chainId,
   creationTime,
   GAS_PRICE,
+  getCurrentDate,
+  getCurrentTime,
   network,
-} from "../constants/contextConstants";
-import FailedLoginView from "../shared/FailedLoginView";
+} from '../constants/contextConstants';
+import { NotificationContext } from './NotificationContext';
 
 export const AccountContext = createContext();
 
-const savedAcct = localStorage.getItem("acct");
-const savedPrivKey = localStorage.getItem("pk");
-const savedSigning = localStorage.getItem("signing");
+const savedAcct = localStorage.getItem('acct');
+const savedPrivKey = localStorage.getItem('pk');
+const savedSigning = localStorage.getItem('signing');
 
 export const AccountProvider = (props) => {
   const [sendRes, setSendRes] = useState(null);
   const [localRes, setLocalRes] = useState(null);
+  const notificationContext = useContext(NotificationContext);
 
   const [account, setAccount] = useState(
     savedAcct
       ? JSON.parse(savedAcct)
       : { account: null, guard: null, balance: 0 }
   );
-  const [privKey, setPrivKey] = useState(savedPrivKey ? savedPrivKey : "");
+  const [privKey, setPrivKey] = useState(savedPrivKey ? savedPrivKey : '');
 
   const [registered, setRegistered] = useState(false);
 
@@ -47,6 +50,19 @@ export const AccountProvider = (props) => {
     if (account.account) setRegistered(true);
   }, [registered]);
 
+  useEffect(() => {
+    if (typeof localRes === 'string') {
+      return notificationContext.storeNotification({
+        type: 'error',
+        time: getCurrentTime(),
+        date: getCurrentDate(),
+        title: 'Transaction Error',
+        description: localRes,
+        isReaded: false,
+      });
+    }
+  }, [localRes]);
+
   const clearSendRes = () => {
     setVerifiedAccount(account.account);
     setSendRes(null);
@@ -59,7 +75,7 @@ export const AccountProvider = (props) => {
         {
           pactCode: `(coin.details ${JSON.stringify(accountName)})`,
           meta: Pact.lang.mkMeta(
-            "",
+            '',
             chainId,
             GAS_PRICE,
             3000,
@@ -69,17 +85,17 @@ export const AccountProvider = (props) => {
         },
         network
       );
-      if (data.result.status === "success") {
-        await localStorage.setItem("acct", JSON.stringify(data.result.data));
+      if (data.result.status === 'success') {
+        await localStorage.setItem('acct', JSON.stringify(data.result.data));
         setAccount({
           ...data.result.data,
           balance: getCorrectBalance(data.result.data.balance),
         });
-        await localStorage.setItem("acct", JSON.stringify(data.result.data));
+        await localStorage.setItem('acct', JSON.stringify(data.result.data));
       } else {
         await swal({
           text: `Please make sure the account ${accountName} exist on kadena blockchain`,
-          title: "No Account",
+          title: 'No Account',
         });
 
         setAccount({ account: null, guard: null, balance: 0 });
@@ -96,7 +112,7 @@ export const AccountProvider = (props) => {
           pactCode: `(${token}.details ${JSON.stringify(account)})`,
           keyPairs: Pact.crypto.genKeyPair(),
           meta: Pact.lang.mkMeta(
-            "",
+            '',
             chainId,
             0.01,
             100000000,
@@ -106,13 +122,13 @@ export const AccountProvider = (props) => {
         },
         network
       );
-      if (data.result.status === "success") {
+      if (data.result.status === 'success') {
         // setTokenAccount({...data.result.data, balance: getCorrectBalance(data.result.data.balance)});
         first
           ? setTokenFromAccount(data.result.data)
           : setTokenToAccount(data.result.data);
         return data.result.data;
-      } else if (data.result.status === "failure") {
+      } else if (data.result.status === 'failure') {
         first
           ? setTokenFromAccount({ account: null, guard: null, balance: 0 })
           : setTokenToAccount({ account: null, guard: null, balance: 0 });
@@ -124,10 +140,10 @@ export const AccountProvider = (props) => {
   };
 
   const logout = () => {
-    localStorage.removeItem("acct", null);
-    localStorage.removeItem("signing", null);
-    localStorage.removeItem("pk");
-    localStorage.removeItem("wallet");
+    localStorage.removeItem('acct', null);
+    localStorage.removeItem('signing', null);
+    localStorage.removeItem('pk');
+    localStorage.removeItem('wallet');
     window.location.reload();
   };
 

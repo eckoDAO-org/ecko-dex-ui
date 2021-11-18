@@ -1,5 +1,7 @@
 export const ROUTE_INDEX = "/";
 export const ROUTE_SWAP = "/";
+export const ROUTE_GAME_START_ANIMATION = "/start";
+export const ROUTE_GAME_EDITION_MENU = "/menu";
 export const ROUTE_POOL = "/pool";
 export const ROUTE_WRAP = "/wrap";
 export const ROUTE_STATS = "/stats";

@@ -1,16 +1,19 @@
-import React, { useState, useContext } from "react";
-import styled from "styled-components/macro";
-import { Button } from "semantic-ui-react";
-import CustomButton from "../../../shared/CustomButton";
-import { AccountContext } from "../../../contexts/AccountContext";
-import { WalletContext } from "../../../contexts/WalletContext";
-import { ModalContext } from "../../../contexts/ModalContext";
-import GetZelcoreAccountModal from "./GetZelcoreAccountModal";
-import { WALLET } from "../../../constants/wallet";
+import React, { useState, useContext } from 'react';
+import styled from 'styled-components/macro';
+import { Button } from 'semantic-ui-react';
+import CustomButton from '../../../shared/CustomButton';
+import { AccountContext } from '../../../contexts/AccountContext';
+import { WalletContext } from '../../../contexts/WalletContext';
+import { ModalContext } from '../../../contexts/ModalContext';
+import GetZelcoreAccountModal from './GetZelcoreAccountModal';
+import { GameEditionContext } from '../../../contexts/GameEditionContext';
+import { WALLET } from '../../../constants/wallet';
 
 const Text = styled.span`
   font-size: 13px;
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
+    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
+  text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
 `;
 
 const ActionContainer = styled.div`
@@ -24,7 +27,8 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
   const modalContext = useContext(ModalContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
-  const [accountId, setAccountId] = useState("");
+  const { gameEditionView, openModal } = useContext(GameEditionContext);
+  const [accountId, setAccountId] = useState('');
   const [openGetZelcoreAccountModal, setOpenGetZelcoreAccountModal] =
     useState(false);
 
@@ -49,7 +53,7 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
   };
 
   const resetValues = () => {
-    setAccountId("");
+    setAccountId('');
   };
 
   const handleModalClose = () => {
@@ -78,11 +82,11 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
 
   return (
     <>
-      <Text>
+      <Text gameEditionView={gameEditionView}>
         Please make sure the KDA account provided is controlled by your Zelcore
         wallet
       </Text>
-      <Text>
+      <Text gameEditionView={gameEditionView}>
         When submitting a transaction, Zelcore will show you a preview within
         the wallet before signing
       </Text>
@@ -98,38 +102,54 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
       {/* {error && error.message ? <Text>{error.message}</Text> : null} */}
       <CustomButton
         buttonStyle={{
-          border: "1px solid #424242",
+          border: '1px solid #424242',
         }}
-        background="transparent"
+        color='#fff'
+        background='transparent'
         onClick={() => {
-          setOpenGetZelcoreAccountModal(true);
-          modalContext.openModal({
-            id: "ZELCORE_ACCOUNT",
-            title: "get zelcore accounts",
-            description: "Select Accounts",
-            open: openGetZelcoreAccountModal,
-            content: (
-              <GetZelcoreAccountModal
-                onClose={() => modalContext.closeModal()}
-              />
-            ),
-          });
+          if (gameEditionView) {
+            openModal({
+              title: 'get zelcore accounts',
+              description: 'Select Accounts',
+              content: (
+                <GetZelcoreAccountModal
+                  onClose={() => modalContext.closeModal()}
+                />
+              ),
+            });
+          } else {
+            setOpenGetZelcoreAccountModal(true);
+            modalContext.openModal({
+              id: 'ZELCORE_ACCOUNT',
+              title: 'get zelcore accounts',
+              description: 'Select Accounts',
+              open: openGetZelcoreAccountModal,
+              content: (
+                <GetZelcoreAccountModal
+                  onClose={() => modalContext.closeModal()}
+                />
+              ),
+            });
+          }
         }}
       >
         Get Zelcore Accounts
       </CustomButton>
       <ActionContainer>
         <Button.Group fluid>
-          <CustomButton
-            border="none"
-            boxShadow="none"
-            background="transparent"
-            onClick={() => {
-              handleModalBack();
-            }}
-          >
-            Cancel
-          </CustomButton>
+          {!gameEditionView ? (
+            <CustomButton
+              border='none'
+              color='#fff'
+              background='transparent'
+              onClick={() => {
+                handleModalBack();
+              }}
+            >
+              Cancel
+            </CustomButton>
+          ) : null}
+
           <CustomButton
             disabled={!checkKey(accountId)}
             onClick={() => {

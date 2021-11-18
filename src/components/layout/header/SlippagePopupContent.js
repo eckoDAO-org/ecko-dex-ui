@@ -1,37 +1,45 @@
-import React, { useContext, useState, useEffect } from "react";
-import styled from "styled-components";
-import { PactContext } from "../../../contexts/PactContext";
-import Input from "../../../shared/Input";
+import React, { useContext, useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { PactContext } from '../../../contexts/PactContext';
+import Input from '../../../shared/Input';
+import ThemeToggle from '../../../styles/lightmode/ThemeToggle';
+import {
+  LightModeContext,
+  useLightMode,
+} from '../../../contexts/LightModeContext';
+import theme from '../../../styles/theme';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
   margin-bottom: 9px;
-  background: ${({ theme: colors }) => colors.purple} 0% 0% no-repeat
-    padding-box;
+  padding: 10px;
+  background: transparent;
 `;
 
 const BoldLabel = styled.span`
   font-size: 13px;
-  font-family: ${({ theme: fontFamily }) => fontFamily.bold};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold} !important;
   text-transform: capitalize;
 `;
 
 const RegularLabel = styled.span`
   font-size: 13px;
-  font-family: ${({ theme: fontFamily }) => fontFamily.regular};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
   text-transform: capitalize;
-  color: #ffffff;
+  color: ${({ theme: { colors } }) => colors.white};
 `;
 
 const SlippageTolleranceValue = styled.div`
   border-radius: 16px;
-  border: 1px solid #ffffff;
-  box-shadow: ${({ isSelected }) => (isSelected ? "0 0 5px #FFFFFF;" : "none")};
-  color: #ffffff;
-  text-shadow: ${({ isSelected }) =>
-    isSelected ? "0 0 5px #FFFFFF;" : "none"};
-  font-family: ${({ theme: fontFamily }) => fontFamily.regular};
+  border: ${({ theme: { colors } }) => `1px solid ${colors.white}`};
+  box-shadow: ${({ isSelected, theme: { colors } }) =>
+    isSelected ? `0 0 5px ${colors.white};` : 'none'};
+  color: ${({ theme: { colors } }) => colors.white};
+  text-shadow: ${({ isSelected, theme: { colors } }) =>
+    isSelected ? `0 0 5px ${colors.white};` : 'none'};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
   font-size: 14px;
   padding: 6.5px 8.5px;
   min-width: 48px;
@@ -39,8 +47,8 @@ const SlippageTolleranceValue = styled.div`
   justify-content: center;
   background-image: ${({ isSelected }) =>
     isSelected
-      ? "linear-gradient(to top right, #ed098f 0%,  #7a0196 100%)"
-      : "#ffffff"};
+      ? 'linear-gradient(to top right, #ed098f 0%,  #7a0196 100%)'
+      : '#ffffff'};
   cursor: pointer;
 `;
 
@@ -49,8 +57,8 @@ const ContainerInputTypeNumber = styled.div`
   align-items: center;
   padding: 6.5px 8.5px;
   border-radius: 16px;
-  border: 1px solid #ffffff;
-  color: #ffffff;
+  border: ${({ theme: { colors } }) => `1px solid ${colors.white}`};
+  color: ${({ theme: { colors } }) => colors.white};
   .ui.input > input {
     border: unset;
     padding: 0px;
@@ -65,20 +73,20 @@ const ContainerInputTypeNumber = styled.div`
 const Row = styled.div`
   display: flex;
   align-items: center;
-  
-  .restrictedInput{
+
+  .restrictedInput {
     @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
-        .ui.fluid.input > input {
-    width: 30px !important;
+        `${mediaQueries.mobilePixel + 1}px`}) {
+      .ui.fluid.input > input {
+        width: 30px !important;
+      }
     }
-  }
   }
 `;
 
 const SlippagePopupContent = () => {
   const pact = useContext(PactContext);
-
+  const { themeMode, themeToggler } = useContext(LightModeContext);
   const [slp, setSlp] = useState(pact.slippage * 100);
   const [tl, setTl] = useState(pact.ttl * 60);
   useEffect(() => {
@@ -89,7 +97,15 @@ const SlippagePopupContent = () => {
   }, [tl]);
   return (
     <Container>
-      <BoldLabel style={{ color: "#FFFFFF" }}>Transactions Settings</BoldLabel>
+      <BoldLabel style={{ color: theme.colors.white }}>
+        Transactions Settings
+      </BoldLabel>
+      <Row style={{ marginTop: 8 }}>
+        <RegularLabel style={{ marginRight: 8 }}>Light Mode</RegularLabel>
+
+        <ThemeToggle theme={themeMode} onClick={() => themeToggler()} />
+      </Row>
+
       <RegularLabel style={{ marginTop: 16 }}>Slippage Tolerance</RegularLabel>
 
       <Row style={{ marginTop: 8 }}>
@@ -114,11 +130,13 @@ const SlippagePopupContent = () => {
           1%
         </SlippageTolleranceValue>
 
-        <ContainerInputTypeNumber className="restrictedInput">
+        <ContainerInputTypeNumber className='restrictedInput'>
           <Input
+            outGameEditionView
             containerStyle={{
-              border: "none !important",
-              boxShadow: "none !important",
+              border: 'none ',
+              boxShadow: 'none !important',
+              padding: '0px',
             }}
             placeholder={slp}
             numberOnly
@@ -139,9 +157,11 @@ const SlippagePopupContent = () => {
       <Row style={{ marginTop: 8 }}>
         <ContainerInputTypeNumber>
           <Input
+            outGameEditionView
             containerStyle={{
-              border: "none !important",
-              boxShadow: "none !important",
+              border: 'none',
+              boxShadow: 'none !important',
+              padding: '0px',
             }}
             placeholder={tl}
             numberOnly
@@ -153,7 +173,7 @@ const SlippagePopupContent = () => {
             }}
           />
         </ContainerInputTypeNumber>
-        <RegularLabel style={{ color: "#FFFFFF", marginLeft: 8 }}>
+        <RegularLabel style={{ color: theme.colors.white, marginLeft: 8 }}>
           minutes
         </RegularLabel>
       </Row>
