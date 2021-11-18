@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import HeaderItem from '../../../shared/HeaderItem';
-import { theme } from '../../../styles/theme';
+import theme from '../../../styles/theme';
 
 const ListContainer = styled.div`
   border-radius: 10px;

@@ -7,7 +7,7 @@ const ToggleContainer = styled.div`
   display: flex;
   height: 100%;
   align-items: center;
-  color: #ffffff;
+  color: ${({ theme: { colors } }) => colors.white};
   justify-content: center;
   flex-direction: row;
   border-radius: 20px;
