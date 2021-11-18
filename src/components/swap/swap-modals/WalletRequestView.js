@@ -6,7 +6,6 @@ import { Loader, Icon } from 'semantic-ui-react';
 import CustomButton from '../../../shared/CustomButton';
 import GameEditionModalsContainer from '../../game-edition/GameEditionModalsContainer';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import theme from '../../../styles/theme';
 import { WalletContext } from '../../../contexts/WalletContext';
 import { WALLET } from '../../../constants/wallet';
 import { openZelcore } from '../../../utils/zelcore';
@@ -85,8 +84,8 @@ const WalletRequestView = ({ show, onClose, error }) => {
                 gameEditionView={gameEditionView}
                 style={{
                   color: gameEditionView
-                    ? theme.colors.black
-                    : theme.colors.white,
+                    ? ({ theme: { colors } }) => colors.black
+                    : ({ theme: { colors } }) => colors.white,
                 }}
               >
                 {error.content}
@@ -106,8 +105,8 @@ const WalletRequestView = ({ show, onClose, error }) => {
               gameEditionView={gameEditionView}
               style={{
                 color: gameEditionView
-                  ? theme.colors.black
-                  : theme.colors.white,
+                  ? ({ theme: { colors } }) => colors.black
+                  : ({ theme: { colors } }) => colors.white,
               }}
             >
               Follow instructions in the wallet to preview and sign your
@@ -119,8 +118,8 @@ const WalletRequestView = ({ show, onClose, error }) => {
                 inline='centered'
                 style={{
                   color: gameEditionView
-                    ? theme.colors.black
-                    : theme.colors.white,
+                    ? ({ theme: { colors } }) => colors.black
+                    : ({ theme: { colors } }) => colors.white,
                 }}
               ></Loader>
             </LoaderContainer>

@@ -8,9 +8,9 @@ import { AccountContext } from '../../../contexts/AccountContext';
 import { ModalContext } from '../../../contexts/ModalContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import theme from '../../../styles/theme';
-import { getAccounts, openZelcore } from "../../../utils/zelcore";
-import { WalletContext } from "../../../contexts/WalletContext";
-import { WALLET } from "../../../constants/wallet";
+import { getAccounts, openZelcore } from '../../../utils/zelcore';
+import { WalletContext } from '../../../contexts/WalletContext';
+import { WALLET } from '../../../constants/wallet';
 
 const TopText = styled.span`
   font-size: 13px;
@@ -44,7 +44,7 @@ const ActionContainer = styled.div`
 const DropdownContainer = styled.div`
   .ui.selection.dropdown {
     background: transparent;
-    border: 2px dashed ${theme.colors.black};
+    border: 2px dashed ${({ theme: { colors } }) => colors.black};
     position: absolute;
     width: 97%;
     top: -22px;

@@ -27,7 +27,7 @@ const StyledButton = styled(SUIButton)`
   }) => {
     if (color) return color + ' !important';
     if (outGameEditionView) return `${colors.primary} !important`;
-    if (gameEditionView) return `${theme.colors.black} !important`;
+    if (gameEditionView) return `${colors.black} !important`;
     if (disabled) return `${colors.white} !important`;
     else return `${colors.primary} !important`;
   }};

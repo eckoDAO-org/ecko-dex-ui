@@ -2,6 +2,11 @@ import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { PactContext } from '../../../contexts/PactContext';
 import Input from '../../../shared/Input';
+import ThemeToggle from '../../../styles/lightmode/ThemeToggle';
+import {
+  LightModeContext,
+  useLightMode,
+} from '../../../contexts/LightModeContext';
 import theme from '../../../styles/theme';
 
 const Container = styled.div`
@@ -81,7 +86,7 @@ const Row = styled.div`
 
 const SlippagePopupContent = () => {
   const pact = useContext(PactContext);
-
+  const { themeMode, themeToggler } = useContext(LightModeContext);
   const [slp, setSlp] = useState(pact.slippage * 100);
   const [tl, setTl] = useState(pact.ttl * 60);
   useEffect(() => {
@@ -95,6 +100,12 @@ const SlippagePopupContent = () => {
       <BoldLabel style={{ color: theme.colors.white }}>
         Transactions Settings
       </BoldLabel>
+      <Row style={{ marginTop: 8 }}>
+        <RegularLabel style={{ marginRight: 8 }}>Light Mode</RegularLabel>
+
+        <ThemeToggle theme={themeMode} onClick={() => themeToggler()} />
+      </Row>
+
       <RegularLabel style={{ marginTop: 16 }}>Slippage Tolerance</RegularLabel>
 
       <Row style={{ marginTop: 8 }}>

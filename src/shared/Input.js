@@ -15,7 +15,9 @@ const Container = styled.div`
     else return '0px';
   }};
   width: 100%;
-  border: ${({ gameEditionView }) => !gameEditionView && '1px solid #ffffff99'};
+  background-color: ${({ theme: { backgroundInput } }) => backgroundInput};
+  border: ${({ gameEditionView, theme: { colors } }) =>
+    !gameEditionView && `1px solid ${colors.white}99`};
   border-radius: ${({ gameEditionView }) => !gameEditionView && '4px'};
   padding: ${({ gameEditionView }) => !gameEditionView && '10px 10px 0px 10px'};
 
@@ -37,8 +39,8 @@ const Container = styled.div`
     }};
   }
   & input::placeholder {
-    color: ${({ gameEditionView }) =>
-      gameEditionView ? `#15081F70 !important` : ``};
+    color: ${({ gameEditionView, theme: { colors } }) =>
+      gameEditionView ? `${colors.black}70 !important` : ``};
     text-transform: capitalize;
   }
   .ui.icon.input > input {
@@ -51,16 +53,18 @@ const Container = styled.div`
   .ui.labeled.input > .label:not(.corner) {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-    color: ${({ gameEditionView }) =>
-      gameEditionView ? `${theme.colors.black} !important` : `#ffffff`};
+    color: ${({ gameEditionView, theme: { colors } }) =>
+      gameEditionView
+        ? `${colors.black} !important`
+        : `${colors.white} !important`};
     padding-left: ${({ gameEditionView }) => !gameEditionView && '0px'};
     padding-right: ${({ gameEditionView }) => !gameEditionView && '0px'};
     background: transparent;
     border: ${({ gameEditionView }) => gameEditionView && 'none'};
-    font-family: ${({ gameEditionView }) =>
+    font-family: ${({ gameEditionView, theme: { fontFamily } }) =>
       gameEditionView
-        ? `${theme.fontFamily.pressStartRegular}`
-        : `${theme.fontFamily.regular}`};
+        ? `${fontFamily.pressStartRegular}`
+        : `${fontFamily.regular}`};
   }
 `;
 
@@ -77,8 +81,8 @@ const TopLabelsContainer = styled.div`
         ? `normal normal normal 14px/17px ${theme.fontFamily.pressStartRegular}`
         : `normal normal bold 16px/20px Montserrat`};
     letter-spacing: 0px;
-    color: ${({ gameEditionView }) =>
-      gameEditionView ? `${theme.colors.black}` : `#ffffff`};
+    color: ${({ gameEditionView, theme: { colors } }) =>
+      gameEditionView ? `${colors.black}` : `${colors.white}`};
     text-transform: capitalize;
   }
 `;
@@ -95,8 +99,8 @@ const BottomLabelsContainer = styled.div`
         ? `normal normal normal 10px/12px ${theme.fontFamily.pressStartRegular}`
         : `normal normal normal 13px/16px Montserrat`};
     letter-spacing: 0px;
-    color: ${({ gameEditionView }) =>
-      gameEditionView ? `${theme.colors.black}` : `#ffffff`};
+    color: ${({ gameEditionView, theme: { colors } }) =>
+      gameEditionView ? `${colors.black}` : `${colors.white}`};
     text-transform: capitalize;
   }
 `;
@@ -116,12 +120,12 @@ const Button = styled.button`
   background: transparent;
   border-radius: 20px;
   span {
-    font: ${({ gameEditionView }) =>
+    font: ${({ gameEditionView, theme: { fontFamily } }) =>
       gameEditionView
-        ? `normal normal normal 14px/18px ${theme.fontFamily.pressStartRegular}`
-        : `normal normal bold 14px/18px ${theme.fontFamily.bold}`};
-    color: ${({ gameEditionView }) =>
-      gameEditionView ? `${theme.colors.black}` : `#ffffff`};
+        ? `normal normal normal 14px/18px ${fontFamily.pressStartRegular}`
+        : `normal normal bold 14px/18px ${fontFamily.bold}`};
+    color: ${({ gameEditionView, theme: { colors } }) =>
+      gameEditionView ? `${colors.black}` : `${colors.white}`};
     text-transform: capitalize;
 
     @media (max-width: ${({ theme: { mediaQueries } }) =>
@@ -197,8 +201,8 @@ const Input = ({
             <span
               style={{
                 fontFamily: gameEditionView
-                  ? theme.fontFamily.pressStartRegular
-                  : theme.fontFamily.bold,
+                  ? theme().fontFamily.pressStartRegular
+                  : theme().fontFamily.bold,
                 ...topLeftLabelStyle,
               }}
             >
@@ -209,8 +213,8 @@ const Input = ({
             <span
               style={{
                 fontFamily: gameEditionView
-                  ? theme.fontFamily.pressStartRegular
-                  : theme.fontFamily.regular,
+                  ? theme().fontFamily.pressStartRegular
+                  : theme().fontFamily.regular,
                 marginLeft: !topLeftLabel ? 'auto' : 'unset',
                 ...topRightLabelStyle,
               }}
@@ -243,7 +247,9 @@ const Input = ({
             : {
                 padding: !gameEditionView && '0px !important',
                 borderRadius: '10px',
-                border: gameEditionView ? '2px dashed #15081F' : 'none',
+                border: gameEditionView
+                  ? `2px dashed ${theme.colors.black}`
+                  : 'none',
                 opacity: 1,
                 backgroundColor: 'transparent',
               }
