@@ -26,7 +26,7 @@ export default createGlobalStyle`
       min-width: 0;
       font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
       color: ${({ theme: { colors } }) => colors.primary};
-      background: transparent linear-gradient(122deg, #070610 0%, #4C125A 100%) 0% 0% no-repeat padding-box;
+      background: ${({ theme: { backgroundBody } }) => backgroundBody};
       opacity: 1;
       background-size: cover;
       background-repeat: no-repeat;

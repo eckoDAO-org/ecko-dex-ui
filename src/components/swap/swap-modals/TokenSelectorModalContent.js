@@ -3,7 +3,6 @@ import styled from 'styled-components/macro';
 import Search from '../../../shared/Search';
 import { SwapContext } from '../../../contexts/SwapContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import theme from '../../../styles/theme';
 
 const Label = styled.div`
   font-size: 13px;
@@ -14,10 +13,10 @@ const Label = styled.div`
 `;
 
 const Divider = styled.div`
-  border-top: ${({ gameEditionView, theme: { colors } }) =>
+  border-top: ${({ theme: { colors }, gameEditionView }) =>
     gameEditionView
-      ? `1px dashed ${theme.colors.black}`
-      : `1px solid ${theme.colors.white}99 `};
+      ? `1px dashed ${({ theme: { colors } }) => colors.black}`
+      : `1px solid ${({ theme: { colors } }) => colors.white}99 `};
   margin: 16px 0px;
   width: 100%;
 `;
@@ -58,7 +57,6 @@ const TokenItem = styled.div`
     height: 24px;
   }
 `;
-
 const TokenSelectorModalContent = ({
   show,
   // selectedToken,
@@ -81,15 +79,9 @@ const TokenSelectorModalContent = ({
         search token
       </Label>
       <Search
+        gameEditionView={gameEditionView}
         fluid
-        containerStyle={{
-          marginBottom: 15,
-          borderRadius: '4px',
-          border: gameEditionView
-            ? `2px dashed ${theme.colors.black}`
-            : `1px solid ${theme.colors.white}99`,
-          color: gameEditionView && `${theme.colors.black}`,
-        }}
+        // containerStyle={{ }}
         placeholder='Search'
         value={searchValue}
         onChange={(e, { value }) => setSearchValue(value)}

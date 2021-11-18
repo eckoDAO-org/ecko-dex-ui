@@ -6,6 +6,15 @@ import { GameEditionContext } from '../contexts/GameEditionContext';
 import { SearchGEIcon } from '../assets';
 
 const Container = styled.div.attrs({ icon: 'search' })`
+  margin-bottom: 15px;
+
+  border-radius: 4px;
+  border: ${({ theme: { colors }, gameEditionView }) =>
+    gameEditionView
+      ? `2px dashed ${colors.black} `
+      : `1px solid ${colors.white}99 `};
+  color: ${({ gameEditionView, theme: { colors } }) =>
+    gameEditionView && colors.black};
   .ui.search .prompt {
     border-radius: 4px;
   }
