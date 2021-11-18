@@ -5,13 +5,14 @@ import CustomButton from '../../shared/CustomButton';
 import TokenPair from './TokenPair';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { AccountContext } from '../../contexts/AccountContext';
-import theme from '../../styles/theme';
+import { theme } from '../../styles/theme';
 import ModalContainer from '../../shared/ModalContainer';
 import reduceToken from '../../utils/reduceToken';
 import ConnectWalletModal from '../../components/modals/kdaModals/ConnectWalletModal';
 import { ModalContext } from '../../contexts/ModalContext';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import GradientBorder from '../../shared/GradientBorder';
+import { LightModeContext } from '../../contexts/LightModeContext';
 
 const Container = styled.div`
   display: flex;
@@ -132,6 +133,7 @@ const LiquidityList = (props) => {
   const liquidity = useContext(LiquidityContext);
   const { account } = useContext(AccountContext);
   const { gameEditionView, openModal } = useContext(GameEditionContext);
+  const { themeMode } = useContext(LightModeContext);
   const [activeIndex, setActiveIndex] = useState(null);
 
   useEffect(async () => {
@@ -169,8 +171,8 @@ const LiquidityList = (props) => {
             style={{
               fontSize: gameEditionView ? 16 : 24,
               fontFamily: gameEditionView
-                ? theme.fontFamily.pressStartRegular
-                : theme.fontFamily.bold,
+                ? theme(themeMode).fontFamily.pressStartRegular
+                : theme(themeMode).fontFamily.bold,
             }}
           >
             Liquidity provider rewards
@@ -179,8 +181,8 @@ const LiquidityList = (props) => {
             style={{
               fontSize: gameEditionView ? 12 : 16,
               fontFamily: gameEditionView
-                ? theme.fontFamily.pressStartRegular
-                : theme.fontFamily.regular,
+                ? theme(themeMode).fontFamily.pressStartRegular
+                : theme(themeMode).fontFamily.regular,
             }}
           >
             Liquidity providers earn a 0.3% fee on all trades proportional to
@@ -198,11 +200,11 @@ const LiquidityList = (props) => {
                   fontSize: gameEditionView ? 16 : 32,
                   textAlign: 'left ',
                   color: gameEditionView
-                    ? `${theme.colors.black}`
-                    : `${theme.colors.white}`,
+                    ? theme(themeMode).colors.black
+                    : theme(themeMode).colors.white,
                   fontFamily: gameEditionView
-                    ? theme.fontFamily.pressStartRegular
-                    : theme.fontFamily.bold,
+                    ? theme(themeMode).fontFamily.pressStartRegular
+                    : theme(themeMode).fontFamily.bold,
                 }}
               >
                 Your Liquidity
@@ -261,8 +263,12 @@ const LiquidityList = (props) => {
                                 width: '100%',
                                 margin: '20px 0px',
                                 borderTop: gameEditionView
-                                  ? `1px dashed ${theme.colors.black}`
-                                  : `1px solid  ${theme.colors.white}99`,
+                                  ? `1px dashed ${
+                                      theme(themeMode).colors.black
+                                    }`
+                                  : `1px solid  ${
+                                      theme(themeMode).colors.white
+                                    }99`,
                               }}
                             />
                           )}
@@ -280,11 +286,11 @@ const LiquidityList = (props) => {
                     inline='centered'
                     style={{
                       color: gameEditionView
-                        ? theme.colors.black
-                        : theme.colors.white,
+                        ? theme(themeMode).colors.black
+                        : theme(themeMode).colors.white,
                       fontFamily: gameEditionView
-                        ? theme.fontFamily.pressStartRegular
-                        : theme.fontFamily.regular,
+                        ? theme(themeMode).fontFamily.pressStartRegular
+                        : theme(themeMode).fontFamily.regular,
                     }}
                   >
                     Loading..
