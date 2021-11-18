@@ -170,8 +170,10 @@ const TokenPair = (props) => {
                   height: '40px',
                 }}
                 background='transparent'
-                color={gameEditionView ? theme.colors.black : '#fff'}
-                border={!gameEditionView && '1px solid #FFFFFF99'}
+                color={
+                  gameEditionView ? theme.colors.black : theme.colors.white
+                }
+                border={!gameEditionView && `1px solid ${theme.colors.white}99`}
                 onClick={() => {
                   props.selectRemoveLiquidity();
                   props.setTokenPair(props.pair);

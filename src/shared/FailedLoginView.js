@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components/macro";
-import { Transition } from "react-spring/renderprops";
-import { ErrorIcon } from "../assets";
-import CustomButton from "./CustomButton";
-import Backdrop from "./Backdrop";
-import ModalContainer from "./ModalContainer";
+import React from 'react';
+import styled from 'styled-components/macro';
+import { Transition } from 'react-spring/renderprops';
+import { ErrorIcon } from '../assets';
+import CustomButton from './CustomButton';
+import Backdrop from './Backdrop';
+import ModalContainer from './ModalContainer';
 
 const Container = styled.div`
   position: absolute;
@@ -29,16 +29,16 @@ const Content = styled.div`
 `;
 
 const Title = styled.div`
- font-family: ${({ theme: { fontFamily } }) =>
-   fontFamily.bold};  font-size: 24px;
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+  font-size: 24px;
   padding: 16px;
-  color: color: #FFFFFF;
+  color: #ffffff;
 `;
 
 const SubTitle = styled.div`
- font-family: ${({ theme: { fontFamily } }) =>
-   fontFamily.bold};  font-size: 16px;
-  color: color: #FFFFFF;
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+  font-size: 16px;
+  color: #ffffff;
 `;
 
 const FailedLoginView = ({ onClose, show, accountName }) => {
@@ -55,10 +55,10 @@ const FailedLoginView = ({ onClose, show, accountName }) => {
           <Container style={props}>
             <Backdrop onClose={onClose} />
             <ModalContainer
-              title="transaction details"
+              title='transaction details'
               containerStyle={{
-                maxHeight: "80vh",
-                maxWidth: "90vw",
+                maxHeight: '80vh',
+                maxWidth: '90vw',
               }}
               onClose={onClose}
             >
