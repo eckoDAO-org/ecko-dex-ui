@@ -76,9 +76,9 @@ const TopLabelsContainer = styled.div`
   margin-left: 2px;
   margin-right: 2px;
   span {
-    font: ${({ gameEditionView }) =>
+    font: ${({ gameEditionView, theme: { fontFamily } }) =>
       gameEditionView
-        ? `normal normal normal 14px/17px ${theme.fontFamily.pressStartRegular}`
+        ? `normal normal normal 14px/17px ${fontFamily.pressStartRegular}`
         : `normal normal bold 16px/20px Montserrat`};
     letter-spacing: 0px;
     color: ${({ gameEditionView, theme: { colors } }) =>
@@ -94,9 +94,9 @@ const BottomLabelsContainer = styled.div`
   margin-left: 2px;
   margin-right: 2px;
   span {
-    font: ${({ gameEditionView }) =>
+    font: ${({ gameEditionView, theme: { fontFamily } }) =>
       gameEditionView
-        ? `normal normal normal 10px/12px ${theme.fontFamily.pressStartRegular}`
+        ? `normal normal normal 10px/12px ${fontFamily.pressStartRegular}`
         : `normal normal normal 13px/16px Montserrat`};
     letter-spacing: 0px;
     color: ${({ gameEditionView, theme: { colors } }) =>
@@ -190,8 +190,8 @@ const Input = ({
       inputRightComponent={inputRightComponent || withSelectButton}
       inputComponentWidth={
         inputRightComponent
-          ? theme.inputTokenWidth
-          : theme.inputSelectButtonWidth
+          ? theme().inputTokenWidth
+          : theme().inputSelectButtonWidth
       }
       style={containerStyle}
     >
@@ -248,7 +248,7 @@ const Input = ({
                 padding: !gameEditionView && '0px !important',
                 borderRadius: '10px',
                 border: gameEditionView
-                  ? `2px dashed ${theme.colors.black}`
+                  ? `2px dashed ${theme().colors.black}`
                   : 'none',
                 opacity: 1,
                 backgroundColor: 'transparent',
@@ -261,8 +261,8 @@ const Input = ({
             <span
               style={{
                 fontFamily: gameEditionView
-                  ? theme.fontFamily.pressStartRegular
-                  : theme.fontFamily.regular,
+                  ? theme().fontFamily.pressStartRegular
+                  : theme().fontFamily.regular,
                 ...bottomLeftLabelStyle,
               }}
             >
@@ -273,8 +273,8 @@ const Input = ({
             <span
               style={{
                 fontFamily: gameEditionView
-                  ? theme.fontFamily.pressStartRegular
-                  : theme.fontFamily.regular,
+                  ? theme().fontFamily.pressStartRegular
+                  : theme().fontFamily.regular,
                 marginLeft: !topLeftLabel ? 'auto' : 'unset',
                 ...bottomRightLabelStyle,
               }}
