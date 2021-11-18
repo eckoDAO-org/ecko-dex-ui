@@ -47,7 +47,8 @@ const ConnectWalletModal = () => {
         if (!isInstalled) {
           alert("Please install Kda Wallet extension");
         } else {
-          initializeKDAWallet().then(() => modalContext.onBackModal());
+          initializeKDAWallet();
+          modalContext.onBackModal();
         }
         break;
       case WALLET.CHAINWEAVER.name:

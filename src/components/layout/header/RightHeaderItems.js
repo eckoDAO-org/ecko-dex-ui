@@ -13,6 +13,7 @@ import { reduceBalance } from "../../../utils/reduceBalance";
 import SlippagePopupContent from "./SlippagePopupContent";
 import { ModalContext } from "../../../contexts/ModalContext";
 import ConnectWalletModal from "../../modals/kdaModals/ConnectWalletModal";
+import { chainId } from "../../../constants/contextConstants";
 
 const RightContainerHeader = styled.div`
   display: flex;
@@ -47,7 +48,7 @@ const RightHeaderItems = () => {
   return (
     <RightContainerHeader>
       <HeaderItem className="mobile-none">
-        <Label>mainnet BETA chain 2</Label>
+        <Label>mainnet BETA chain {chainId}</Label>
       </HeaderItem>
       {account?.account ? (
         <HeaderItem className="mobile-none">
