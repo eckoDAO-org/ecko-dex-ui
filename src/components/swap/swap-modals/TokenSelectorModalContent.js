@@ -43,8 +43,14 @@ const TokenItem = styled.div`
   /* font-weight: ${({ active }) => (active ? 'bold' : 'normal')}; */
   font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
-  color: ${({ selected, theme: { colors } }) =>
-    selected ? `${colors.white}99` : colors.white};
+  color: ${({ gameEditionView, selected, theme: { colors } }) =>
+    gameEditionView
+      ? selected
+        ? `${colors.black}99`
+        : colors.black
+      : selected
+      ? `${colors.white}99`
+      : colors.white};
   svg {
     margin-right: 8px;
     width: 24px;
@@ -134,7 +140,12 @@ const TokenSelectorModalContent = ({
                 {crypto.name}
                 {(tokenSelectorType === 'from' && fromToken === crypto.name) ||
                 (tokenSelectorType === 'to' && toToken === crypto.name) ? (
-                  <Label style={{ marginLeft: 5 }}>(Selected)</Label>
+                  <Label
+                    gameEditionView={gameEditionView}
+                    style={{ marginLeft: 5 }}
+                  >
+                    (Selected)
+                  </Label>
                 ) : (
                   <></>
                 )}
