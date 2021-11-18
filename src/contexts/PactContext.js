@@ -369,6 +369,7 @@ export const PactProvider = (props) => {
         title: 'Transaction Success!',
         description: 'Check it out in the block explorer',
         link: `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
+        isReaded: false,
       });
     } else {
       // store in local storage the error notification for the right modal
@@ -379,6 +380,7 @@ export const PactProvider = (props) => {
         title: 'Transaction Failure!',
         description: 'Check it out in the block explorer',
         link: `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
+        isReaded: false,
       });
       // open the toast FAILURE message
       notificationContext.showNotification({

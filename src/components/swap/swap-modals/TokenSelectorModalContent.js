@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 import styled from 'styled-components/macro';
 import Search from '../../../shared/Search';
 import { SwapContext } from '../../../contexts/SwapContext';
-import { reduceBalance } from '../../../utils/reduceBalance';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import theme from '../../../styles/theme';
 
@@ -42,10 +41,11 @@ const TokenItem = styled.div`
   display: flex;
   align-items: center;
   font-size: 16px;
-  font-weight: ${({ active }) => (active ? 'bold' : 'normal')};
+  /* font-weight: ${({ active }) => (active ? 'bold' : 'normal')}; */
   font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
-  color: ${({ selected }) => (selected ? 'white' : '')};
+  color: ${({ selected, theme: { colors } }) =>
+    selected ? `${colors.white}99` : colors.white};
   svg {
     margin-right: 8px;
     width: 24px;
@@ -55,7 +55,8 @@ const TokenItem = styled.div`
 
 const TokenSelectorModalContent = ({
   show,
-  selectedToken,
+  // selectedToken,
+  tokenSelectorType,
   onTokenClick,
   onClose,
   fromToken,
@@ -64,8 +65,6 @@ const TokenSelectorModalContent = ({
   const [searchValue, setSearchValue] = useState('');
   const swap = useContext(SwapContext);
   const { gameEditionView } = useContext(GameEditionContext);
-
-  console.log('selectedToken in modal content', selectedToken);
 
   return (
     <Content>
@@ -109,20 +108,30 @@ const TokenSelectorModalContent = ({
               <TokenItem
                 gameEditionView={gameEditionView}
                 key={crypto.name}
-                active={
-                  selectedToken === crypto.name ||
-                  fromToken === crypto.name ||
-                  toToken === crypto.name
-                }
+                // active={
+                //   selectedToken === crypto.name ||
+                //   fromToken === crypto.name ||
+                //   toToken === crypto.name
+                // }
                 // active={selectedToken === crypto.name}
-                selected={selectedToken === crypto.name}
+                // selected={selectedToken === crypto.name}
+                selected={fromToken === crypto.name || toToken === crypto.name}
                 style={{
-                  cursor: selectedToken === crypto.name ? 'default' : 'pointer',
+                  cursor:
+                    fromToken === crypto.name || toToken === crypto.name
+                      ? 'default'
+                      : 'pointer',
                 }}
                 onClick={() => {
-                  if (fromToken === crypto.name || toToken === crypto.name)
+                  if (tokenSelectorType === 'from' && fromToken === crypto.name)
                     return;
-                  if (selectedToken !== crypto.name) {
+                  if (tokenSelectorType === 'to' && toToken === crypto.name)
+                    return;
+                  if (
+                    (tokenSelectorType === 'from' &&
+                      fromToken !== crypto.name) ||
+                    (tokenSelectorType === 'to' && toToken !== crypto.name)
+                  ) {
                     onTokenClick({ crypto });
                     setSearchValue('');
                     onClose();
@@ -131,7 +140,8 @@ const TokenSelectorModalContent = ({
               >
                 {crypto.icon}
                 {crypto.name}
-                {selectedToken === crypto.name ? (
+                {(tokenSelectorType === 'from' && fromToken === crypto.name) ||
+                (tokenSelectorType === 'to' && toToken === crypto.name) ? (
                   <Label style={{ marginLeft: 5 }}>(Selected)</Label>
                 ) : (
                   <></>

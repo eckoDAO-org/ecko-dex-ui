@@ -15,11 +15,6 @@ export const STATUSES = {
 
 const getStoredNotification = JSON.parse(localStorage.getItem('Notification'));
 
-console.log(
-  '🚀 ~ file: NotificationContext.js ~ line 17 ~ getStoredNotification',
-  getStoredNotification
-);
-
 export const NotificationProvider = ({ children }) => {
   const [notificationList, setNotificationList] = useState(
     getStoredNotification

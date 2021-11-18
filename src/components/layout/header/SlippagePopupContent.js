@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { PactContext } from '../../../contexts/PactContext';
 import Input from '../../../shared/Input';
+import theme from '../../../styles/theme';
 
 const Container = styled.div`
   display: flex;
@@ -22,16 +23,17 @@ const RegularLabel = styled.span`
   font-size: 13px;
   font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
   text-transform: capitalize;
-  color: #ffffff;
+  color: ${({ theme: { colors } }) => colors.white};
 `;
 
 const SlippageTolleranceValue = styled.div`
   border-radius: 16px;
-  border: 1px solid #ffffff;
-  box-shadow: ${({ isSelected }) => (isSelected ? '0 0 5px #FFFFFF;' : 'none')};
-  color: #ffffff;
-  text-shadow: ${({ isSelected }) =>
-    isSelected ? '0 0 5px #FFFFFF;' : 'none'};
+  border: ${({ theme: { colors } }) => `1px solid ${colors.white}`};
+  box-shadow: ${({ isSelected, theme: { colors } }) =>
+    isSelected ? `0 0 5px ${colors.white};` : 'none'};
+  color: ${({ theme: { colors } }) => colors.white};
+  text-shadow: ${({ isSelected, theme: { colors } }) =>
+    isSelected ? `0 0 5px ${colors.white};` : 'none'};
   font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
   font-size: 14px;
   padding: 6.5px 8.5px;
@@ -50,8 +52,8 @@ const ContainerInputTypeNumber = styled.div`
   align-items: center;
   padding: 6.5px 8.5px;
   border-radius: 16px;
-  border: 1px solid #ffffff;
-  color: #ffffff;
+  border: ${({ theme: { colors } }) => `1px solid ${colors.white}`};
+  color: ${({ theme: { colors } }) => colors.white};
   .ui.input > input {
     border: unset;
     padding: 0px;
@@ -90,7 +92,9 @@ const SlippagePopupContent = () => {
   }, [tl]);
   return (
     <Container>
-      <BoldLabel style={{ color: '#FFFFFF' }}>Transactions Settings</BoldLabel>
+      <BoldLabel style={{ color: theme.colors.white }}>
+        Transactions Settings
+      </BoldLabel>
       <RegularLabel style={{ marginTop: 16 }}>Slippage Tolerance</RegularLabel>
 
       <Row style={{ marginTop: 8 }}>
@@ -117,6 +121,7 @@ const SlippagePopupContent = () => {
 
         <ContainerInputTypeNumber className='restrictedInput'>
           <Input
+            outGameEditionView
             containerStyle={{
               border: 'none ',
               boxShadow: 'none !important',
@@ -141,6 +146,7 @@ const SlippagePopupContent = () => {
       <Row style={{ marginTop: 8 }}>
         <ContainerInputTypeNumber>
           <Input
+            outGameEditionView
             containerStyle={{
               border: 'none',
               boxShadow: 'none !important',
@@ -156,7 +162,7 @@ const SlippagePopupContent = () => {
             }}
           />
         </ContainerInputTypeNumber>
-        <RegularLabel style={{ color: '#FFFFFF', marginLeft: 8 }}>
+        <RegularLabel style={{ color: theme.colors.white, marginLeft: 8 }}>
           minutes
         </RegularLabel>
       </Row>

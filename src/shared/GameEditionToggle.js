@@ -52,11 +52,19 @@ const ToggleContainer = styled.div`
 
 const GameLabel = styled.div`
   width: 100%;
+  white-space: nowrap;
+
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobileSmallPixel}px`}) {
     width: min-content;
     font-size: 10px;
   }
+
+  @media (max-width: ${({ theme: { mediaQueries } }) =>
+      `${mediaQueries.mobilePixel}px`}) {
+    white-space: normal;
+  }
+
   vertical-align: text-bottom !important;
   margin-right: 4px;
 `;

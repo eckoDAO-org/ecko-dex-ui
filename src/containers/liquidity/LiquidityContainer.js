@@ -9,7 +9,6 @@ import { ReactComponent as CloseGE } from '../../assets/images/shared/close-ge.s
 import { Button } from 'semantic-ui-react';
 import CustomLabel from '../../shared/CustomLabel';
 import CustomButton from '../../shared/CustomButton';
-import TokenSelectorModal from '../../components/swap/swap-modals/TokenSelectorModal';
 import ReviewTxModal from '../../components/modals/liquidity/ReviewTxModal';
 import TxView from '../../components/swap/swap-modals/TxView';
 import { ModalContext } from '../../contexts/ModalContext';
@@ -136,14 +135,22 @@ const LiquidityContainer = (props) => {
   const wallet = useContext(WalletContext);
   const liquidity = useContext(LiquidityContext);
   const modalContext = useContext(ModalContext);
-  const { gameEditionView, openModal, closeModal } =
+  const { gameEditionView, openModal, closeModal, isSwapping, setIsSwapping } =
     useContext(GameEditionContext);
   const { selectedView, setSelectedView } = props;
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
   const [inputSide, setInputSide] = useState('');
 
-  const [fromValues, setFromValues] = useState(initialStateValue);
+  const [fromValues, setFromValues] = useState({
+    coin: 'KDA',
+    account: '',
+    guard: null,
+    balance: account.account.balance,
+    amount: '',
+    precision: 12,
+  });
+
   const [toValues, setToValues] = useState(initialStateValue);
 
   const [pairExist, setPairExist] = useState(false);
@@ -154,10 +161,24 @@ const LiquidityContainer = (props) => {
 
   useEffect(() => {
     if (showTxModal === false) {
-      setFromValues(initialStateValue);
+      setFromValues({
+        coin: 'KDA',
+        account: '',
+        guard: null,
+        balance: account.account.balance,
+        amount: '',
+        precision: 12,
+      });
       setToValues(initialStateValue);
     }
   }, [showTxModal]);
+
+  useEffect(() => {
+    if (gameEditionView && isSwapping) {
+      swapValues();
+      setIsSwapping(false);
+    }
+  }, [isSwapping]);
 
   /////// when pass pair by the container, set the token on InputToken
   const handleTokenValue = async (by, crypto) => {
@@ -549,14 +570,38 @@ const LiquidityContainer = (props) => {
   };
 
   useEffect(() => {
+    if (tokenSelectorType === 'from') {
+      if (fromValues.coin === toValues.coin) {
+        setToValues({
+          amount: '',
+          balance: '',
+          coin: '',
+          address: '',
+          precision: 0,
+        });
+      }
+    }
+    if (tokenSelectorType === 'to') {
+      if (toValues.coin === fromValues.coin) {
+        setFromValues({
+          amount: '',
+          balance: '',
+          coin: '',
+          address: '',
+          precision: 0,
+        });
+      }
+    }
+    setTokenSelectorType(null);
+  }, [toValues, fromValues]);
+
+  useEffect(() => {
     if (tokenSelectorType !== null) {
       handleTokenSelectorType();
     }
   }, [tokenSelectorType]);
 
   const handleTokenSelectorType = () => {
-    console.log('I?M IN');
-    console.log('selectedToken INNNN', selectedToken);
     if (gameEditionView) {
       openModal({
         title: 'Select a Token',
@@ -568,9 +613,9 @@ const LiquidityContainer = (props) => {
           <GameEditionTokenSelectorContainer>
             <TokenSelectorModalContent
               selectedToken={selectedToken}
+              tokenSelectorType={tokenSelectorType}
               onTokenClick={onTokenClick}
               onClose={() => {
-                setTokenSelectorType(null);
                 closeModal();
               }}
               fromToken={fromValues.coin}
@@ -598,9 +643,9 @@ const LiquidityContainer = (props) => {
         content: (
           <TokenSelectorModalContent
             selectedToken={selectedToken}
+            tokenSelectorType={tokenSelectorType}
             onTokenClick={onTokenClick}
             onClose={() => {
-              setTokenSelectorType(null);
               modalContext.closeModal();
             }}
             fromToken={fromValues.coin}

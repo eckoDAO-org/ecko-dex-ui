@@ -190,7 +190,9 @@ const StatsTab = () => {
             >
               <Loader
                 style={{
-                  color: gameEditionView ? theme.colors.black : '#FFFFFF',
+                  color: gameEditionView
+                    ? theme.colors.black
+                    : theme.colors.white,
                   fontFamily: gameEditionView
                     ? theme.fontFamily.pressStartRegular
                     : theme.fontFamily.regular,
