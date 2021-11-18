@@ -41,6 +41,7 @@ export const lightTheme = {
   inputSelectButtonWidth: 81,
   buttonBackgroundGradient: '#4C125A',
   backgroundInput: '#4C125A1A',
+  backgroundContainer: '#FFFFFF',
 };
 
 export const darkTheme = {
@@ -86,6 +87,7 @@ export const darkTheme = {
   inputSelectButtonWidth: 81,
   buttonBackgroundGradient: '#FFFFFF',
   backgroundInput: 'transparent',
+  backgroundContainer: 'transparent',
 };
 
 export const theme = (mode = 'light') => {
