@@ -41,7 +41,7 @@ export const Label = styled.span`
   font-family: ${({ gameEditionView, theme: { fontFamily } }) =>
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
   color: ${({ gameEditionView, withShade, theme: { colors } }) =>
-    gameEditionView ? colors.black : `${colors.white}${withShade} !important`};
+    gameEditionView ? colors.black : `${colors.white}99 !important`};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   text-align: ${({ gameEditionView }) => gameEditionView && 'left'};
 
@@ -54,7 +54,7 @@ export const Value = styled.span`
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '16px')};
   line-height: 20px;
   color: ${({ gameEditionView, withShade, theme: { colors } }) =>
-    gameEditionView ? colors.black : `${colors.white}${withShade} !important`};
+    gameEditionView ? colors.black : `${colors.white} !important`};
   text-align: ${({ gameEditionView }) => gameEditionView && 'left'};
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {

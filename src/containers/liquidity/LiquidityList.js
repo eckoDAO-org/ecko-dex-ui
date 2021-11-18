@@ -27,6 +27,8 @@ const TextContainer = styled.div`
   text-align: left;
   justify-content: flex-start;
   width: 100%;
+  color: ${({ theme: { colors }, gameEditionView }) =>
+    gameEditionView ? `${colors.black} !important` : colors.white};
 
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
@@ -120,7 +122,7 @@ const Title = styled.span`
       : ` normal normal bold 32px/57px ${theme.fontFamily.bold}`};
   letter-spacing: 0px;
   color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : '#ffffff'};
+    gameEditionView ? colors.black : colors.white};
   text-transform: ${({ gameEditionView }) =>
     gameEditionView ? `uppercase` : ` capitalize`}; ;
 `;
@@ -131,10 +133,6 @@ const LiquidityList = (props) => {
   const { account } = useContext(AccountContext);
   const { gameEditionView, openModal } = useContext(GameEditionContext);
   const [activeIndex, setActiveIndex] = useState(null);
-  console.log(
-    '🚀 ~ file: LiquidityList.js ~ line 136 ~ LiquidityList ~ activeIndex',
-    activeIndex
-  );
 
   useEffect(async () => {
     liquidity.getPairListAccountBalance(account.account);
@@ -160,11 +158,11 @@ const LiquidityList = (props) => {
           </TitleContainer>
         )}
         <TextContainer
+          gameEditionView={gameEditionView}
           style={{
             marginBottom: gameEditionView ? 15 : 30,
             background: 'transparent',
             textAlign: 'left',
-            color: gameEditionView ? theme.colors.black : '#FFFFFF',
           }}
         >
           <h1
@@ -199,7 +197,9 @@ const LiquidityList = (props) => {
                 style={{
                   fontSize: gameEditionView ? 16 : 32,
                   textAlign: 'left ',
-                  color: gameEditionView ? theme.colors.black : '#FFFFFF',
+                  color: gameEditionView
+                    ? `${theme.colors.black}`
+                    : `${theme.colors.white}`,
                   fontFamily: gameEditionView
                     ? theme.fontFamily.pressStartRegular
                     : theme.fontFamily.bold,
