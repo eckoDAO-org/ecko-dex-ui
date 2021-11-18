@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { KaddexLogo } from '../../../assets';
+import { KaddexLightModeLogo, KaddexLogo } from '../../../assets';
 import { ROUTE_INDEX } from '../../../router/routes';
 import menuItems from '../../menuItems';
 import RightHeaderItems from './RightHeaderItems';
 import HeaderItem from '../../../shared/HeaderItem';
 import GameEditionToggle from '../../../shared/GameEditionToggle';
+import { LightModeContext } from '../../../contexts/LightModeContext';
 
 const Container = styled.div`
   display: flex;
@@ -55,13 +56,25 @@ const AnimatedDiv = styled.div`
 
 const DesktopHeader = ({ className, gameEditionView }) => {
   const history = useHistory();
+  const { themeMode } = useContext(LightModeContext);
+  console.log(
+    '🚀 ~ file: DesktopHeader.js ~ line 60 ~ DesktopHeader ~ themeMode',
+    themeMode
+  );
   return (
     <Container className={className}>
       <LeftContainer>
-        <KaddexLogo
-          style={{ cursor: 'pointer' }}
-          onClick={() => history.push(ROUTE_INDEX)}
-        />
+        {themeMode === 'dark' ? (
+          <KaddexLogo
+            style={{ cursor: 'pointer' }}
+            onClick={() => history.push(ROUTE_INDEX)}
+          />
+        ) : (
+          <KaddexLightModeLogo
+            style={{ cursor: 'pointer' }}
+            onClick={() => history.push(ROUTE_INDEX)}
+          />
+        )}
 
         <AnimatedDiv className={gameEditionView ? 'fadeOut' : 'fadeIn'}>
           {menuItems.map((item, index) => (
