@@ -17,7 +17,7 @@ const getStoredNotification = JSON.parse(localStorage.getItem('Notification'));
 
 export const NotificationProvider = ({ children }) => {
   const [notificationList, setNotificationList] = useState(
-    getStoredNotification
+    getStoredNotification || []
   );
 
   const showNotification = ({

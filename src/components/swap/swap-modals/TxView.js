@@ -201,10 +201,10 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
             </HighlightLabel>
           </SpaceBetweenRow>
           <SpaceBetweenRow>
-            <HighlightLabel>
+            <HighlightLabel gameEditionView={gameEditionView}>
               <Icon name='long arrow alternate down' style={{}} />
             </HighlightLabel>
-            <Label>{`1 ${showTicker(
+            <Label gameEditionView={gameEditionView}>{`1 ${showTicker(
               swap.localRes.result.data[0].token
             )} = ${reduceBalance(pact.computeOut(1), 12)} ${showTicker(
               swap.localRes.result.data[1].token
