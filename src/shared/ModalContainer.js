@@ -16,7 +16,11 @@ const Container = styled.div`
   background-clip: ${({ gameEditionView }) =>
     !gameEditionView && `padding-box`};
   opacity: 1;
-  background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
+  background: ${({
+    theme: { backgroundContainer },
+    backgroundNotChangebleWithTheme,
+  }) =>
+    backgroundNotChangebleWithTheme ? 'transparent' : backgroundContainer};
   backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
   color: ${({ gameEditionView, theme: { colors } }) =>
     gameEditionView ? colors.black : colors.white};
@@ -97,6 +101,7 @@ const ModalContainer = ({
   onBack,
   onClose,
   withoutRainbowBackground = false,
+  backgroundNotChangebleWithTheme,
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
 
@@ -105,6 +110,7 @@ const ModalContainer = ({
       style={containerStyle}
       gameEditionView={gameEditionView}
       withoutRainbowBackground={withoutRainbowBackground}
+      backgroundNotChangebleWithTheme={backgroundNotChangebleWithTheme}
     >
       <HeaderContainer>
         {onBack ? (

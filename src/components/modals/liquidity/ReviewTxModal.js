@@ -28,6 +28,9 @@ const Content = styled.div`
   flex-direction: column;
   svg {
     display: ${({ gameEditionView }) => gameEditionView && 'none '};
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
   }
   width: ${({ gameEditionView }) => (gameEditionView ? '97%' : '100%')};
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};

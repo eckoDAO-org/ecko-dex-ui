@@ -3,11 +3,8 @@ import styled from 'styled-components';
 import { PactContext } from '../../../contexts/PactContext';
 import Input from '../../../shared/Input';
 import ThemeToggle from '../../../styles/lightmode/ThemeToggle';
-import {
-  LightModeContext,
-  useLightMode,
-} from '../../../contexts/LightModeContext';
-import theme from '../../../styles/theme';
+import { LightModeContext } from '../../../contexts/LightModeContext';
+import { theme } from '../../../styles/theme';
 
 const Container = styled.div`
   display: flex;
@@ -34,21 +31,20 @@ const RegularLabel = styled.span`
 const SlippageTolleranceValue = styled.div`
   border-radius: 16px;
   border: ${({ theme: { colors } }) => `1px solid ${colors.white}`};
-  box-shadow: ${({ isSelected, theme: { colors } }) =>
-    isSelected ? `0 0 5px ${colors.white};` : 'none'};
-  color: ${({ theme: { colors } }) => colors.white};
-  text-shadow: ${({ isSelected, theme: { colors } }) =>
-    isSelected ? `0 0 5px ${colors.white};` : 'none'};
+  /* box-shadow: ${({ isSelected, theme: { colors } }) =>
+    isSelected ? `0 0 5px ${colors.white};` : 'none'}; */
+  color: ${({ isSelected, theme: { colors } }) =>
+    isSelected ? colors.primary : colors.white};
+  /* text-shadow: ${({ isSelected, theme: { colors } }) =>
+    isSelected ? `0 0 5px ${colors.white};` : 'none'}; */
   font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
   font-size: 14px;
   padding: 6.5px 8.5px;
   min-width: 48px;
   display: flex;
   justify-content: center;
-  background-image: ${({ isSelected }) =>
-    isSelected
-      ? 'linear-gradient(to top right, #ed098f 0%,  #7a0196 100%)'
-      : '#ffffff'};
+  background-color: ${({ isSelected, theme: { colors } }) =>
+    isSelected && colors.white};
   cursor: pointer;
 `;
 
@@ -97,7 +93,7 @@ const SlippagePopupContent = () => {
   }, [tl]);
   return (
     <Container>
-      <BoldLabel style={{ color: theme.colors.white }}>
+      <BoldLabel style={{ color: theme(themeMode).colors.white }}>
         Transactions Settings
       </BoldLabel>
       <Row style={{ marginTop: 8 }}>
@@ -173,7 +169,9 @@ const SlippagePopupContent = () => {
             }}
           />
         </ContainerInputTypeNumber>
-        <RegularLabel style={{ color: theme.colors.white, marginLeft: 8 }}>
+        <RegularLabel
+          style={{ color: theme(themeMode).colors.white, marginLeft: 8 }}
+        >
           minutes
         </RegularLabel>
       </Row>
