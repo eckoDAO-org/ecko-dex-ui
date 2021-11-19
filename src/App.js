@@ -12,17 +12,10 @@ import RightModalRender from './components/right-modal-notification/RightModalRe
 import { SwapProvider } from './contexts/SwapContext';
 import { LiquidityProvider } from './contexts/LiquidityContext';
 import { GameEditionProvider } from './contexts/GameEditionContext';
-import {
-  LightModeContext,
-  LightModeProvider,
-  useLightMode,
-} from './contexts/LightModeContext';
+import { LightModeContext } from './contexts/LightModeContext';
 
 function App() {
-  const { themeMode, mountedComponent } = useContext(LightModeContext);
-  console.log('🚀 ~ file: App.js ~ line 19 ~ App ~ themeMode', themeMode);
-
-  if (!mountedComponent) return <div />;
+  const { themeMode } = useContext(LightModeContext);
 
   return (
     <ThemeProvider theme={theme(themeMode)}>
