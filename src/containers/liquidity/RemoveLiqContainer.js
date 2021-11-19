@@ -262,7 +262,9 @@ const RemoveLiqContainer = (props) => {
                   amount === 25
                     ? gameEditionView
                       ? `${theme(themeMode).colors.yellow}`
-                      : `${theme(themeMode).colors.black}`
+                      : themeMode === 'dark'
+                      ? `${theme(themeMode).colors.black}`
+                      : `${theme(themeMode).colors.primary}`
                     : gameEditionView
                     ? `${theme(themeMode).colors.black}`
                     : `${theme(themeMode).colors.white}`
@@ -291,7 +293,9 @@ const RemoveLiqContainer = (props) => {
                   amount === 50
                     ? gameEditionView
                       ? `${theme(themeMode).colors.yellow}`
-                      : `${theme(themeMode).colors.black}`
+                      : themeMode === 'dark'
+                      ? `${theme(themeMode).colors.black}`
+                      : `${theme(themeMode).colors.primary}`
                     : gameEditionView
                     ? `${theme(themeMode).colors.black}`
                     : `${theme(themeMode).colors.white}`
@@ -320,7 +324,9 @@ const RemoveLiqContainer = (props) => {
                   amount === 75
                     ? gameEditionView
                       ? `${theme(themeMode).colors.yellow}`
-                      : `${theme(themeMode).colors.black}`
+                      : themeMode === 'dark'
+                      ? `${theme(themeMode).colors.black}`
+                      : `${theme(themeMode).colors.primary}`
                     : gameEditionView
                     ? `${theme(themeMode).colors.black}`
                     : `${theme(themeMode).colors.white}`
@@ -349,7 +355,9 @@ const RemoveLiqContainer = (props) => {
                   amount === 100
                     ? gameEditionView
                       ? `${theme(themeMode).colors.yellow}`
-                      : `${theme(themeMode).colors.black}`
+                      : themeMode === 'dark'
+                      ? `${theme(themeMode).colors.black}`
+                      : `${theme(themeMode).colors.primary}`
                     : gameEditionView
                     ? `${theme(themeMode).colors.black}`
                     : `${theme(themeMode).colors.white}`
