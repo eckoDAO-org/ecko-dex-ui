@@ -222,6 +222,8 @@ const Input = ({
                   ? theme().fontFamily.pressStartRegular
                   : theme().fontFamily.regular,
                 marginLeft: !topLeftLabel ? 'auto' : 'unset',
+                textAlign: 'end',
+                whiteSpace: 'nowrap',
                 ...topRightLabelStyle,
               }}
             >

@@ -36,7 +36,7 @@ const ToggleContainer = styled.div`
 
   .ui.toggle.checkbox input ~ .box:after,
   .ui.toggle.checkbox input ~ label:after {
-    top: 2.5px;
+    top: 0.15rem;
     left: 0.2rem;
   }
 

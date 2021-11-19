@@ -21,7 +21,8 @@ const Container = styled.div`
     backgroundNotChangebleWithTheme,
   }) =>
     backgroundNotChangebleWithTheme ? 'transparent' : backgroundContainer};
-  backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
+  backdrop-filter: ${({ gameEditionView, withoutRainbowBackground }) =>
+    !gameEditionView && !withoutRainbowBackground && `blur(50px)`};
   color: ${({ gameEditionView, theme: { colors } }) =>
     gameEditionView ? colors.black : colors.white};
 
@@ -82,6 +83,7 @@ const Title = styled.span`
     font-size: 16px;
   }
   text-transform: capitalize;
+  white-space: nowrap;
   ${({ theme: { colors } }) => colors.white};
 `;
 

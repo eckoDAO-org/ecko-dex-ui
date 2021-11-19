@@ -27,7 +27,7 @@ const Item = styled(NavLink)`
     cursor: pointer;
     & svg {
       & path {
-        fill: #ffffff;
+        fill: ${({ theme: { colors } }) => colors.white};
       }
     }
   }
