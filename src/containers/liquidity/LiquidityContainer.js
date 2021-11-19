@@ -15,7 +15,7 @@ import { ModalContext } from '../../contexts/ModalContext';
 import { AccountContext } from '../../contexts/AccountContext';
 import { WalletContext } from '../../contexts/WalletContext';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
-import theme from '../../styles/theme';
+import { theme } from '../../styles/theme';
 import tokenData from '../../constants/cryptoCurrencies';
 import SwapForm from '../../components/swap/SwapForm';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
@@ -24,6 +24,7 @@ import { Logo } from '../../assets';
 import { FadeIn } from '../../components/shared/animations';
 import FormContainer from '../../shared/FormContainer';
 import GradientBorder from '../../shared/GradientBorder';
+import { LightModeContext } from '../../contexts/LightModeContext';
 
 const Container = styled(FadeIn)`
   margin-top: ${({ theme: { header } }) => header.height};
@@ -52,9 +53,14 @@ const Title = styled.span`
       ? `normal normal normal 16px/19px ${fontFamily.pressStartRegular}`
       : 'normal normal bold 32px/57px Montserrat'};
   letter-spacing: 0px;
-  color: ${({ gameEditionView }) =>
-    gameEditionView ? theme.colors.black : '#ffffff'};
+  color: ${({ gameEditionView, theme: { colors } }) =>
+    gameEditionView ? colors.black : colors.white};
   text-transform: capitalize;
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
 `;
 
 const LogoContainer = styled(FadeIn)`
@@ -108,7 +114,7 @@ const Value = styled.span`
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   line-height: 20px;
   color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : '#FFFFFF'};
+    gameEditionView ? colors.black : colors.white};
 `;
 
 const initialStateValue = {
@@ -135,6 +141,7 @@ const LiquidityContainer = (props) => {
   const wallet = useContext(WalletContext);
   const liquidity = useContext(LiquidityContext);
   const modalContext = useContext(ModalContext);
+  const { themeMode } = useContext(LightModeContext);
   const { gameEditionView, openModal, closeModal, isSwapping, setIsSwapping } =
     useContext(GameEditionContext);
   const { selectedView, setSelectedView } = props;
@@ -712,15 +719,15 @@ const LiquidityContainer = (props) => {
           gameEditionView={gameEditionView}
           style={{
             fontFamily: gameEditionView
-              ? theme.fontFamily.pressStartRegular
-              : theme.fontFamily.bold,
+              ? theme(themeMode).fontFamily.pressStartRegular
+              : theme(themeMode).fontFamily.bold,
           }}
         >
           {!gameEditionView && (
             <ArrowBack
               style={{
                 cursor: 'pointer',
-                color: '#FFFFFF',
+                color: theme(themeMode).colors.white,
                 marginRight: '15px',
                 justifyContent: 'center',
               }}
