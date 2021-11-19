@@ -17,7 +17,8 @@ const ButtonContainer = styled.div`
   margin-top: 12px;
   width: 100%;
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  bottom: ${({ gameEditionView }) => gameEditionView && '10px'};
+  top: ${({ gameEditionView }) => gameEditionView && '290px'};
+  left: ${({ gameEditionView }) => gameEditionView && 0};
   z-index: ${({ gameEditionView }) => !gameEditionView && '1'};
 `;
 

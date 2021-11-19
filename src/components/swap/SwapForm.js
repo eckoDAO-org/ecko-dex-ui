@@ -13,9 +13,9 @@ const Container = styled.div`
   display: flex;
   flex-flow: column;
   width: 100%;
-  position: ${({ gameEditionView }) =>
+  /* position: ${({ gameEditionView }) =>
     gameEditionView && 'absolute !important'};
-  bottom: ${({ gameEditionView }) => gameEditionView && '50px !important'};
+  bottom: ${({ gameEditionView }) => gameEditionView && '50px !important'}; */
   svg {
     path {
       fill: ${({ theme: { colors } }) => colors.white};

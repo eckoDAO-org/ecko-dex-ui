@@ -60,7 +60,7 @@ const Content = styled.div`
   }
   width: ${({ gameEditionView }) => (gameEditionView ? '97%' : '100%')};
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  bottom: ${({ gameEditionView }) => gameEditionView && '82px'};
+  bottom: ${({ gameEditionView }) => gameEditionView && '66px'};
   padding: ${({ gameEditionView }) => gameEditionView && '4px'};
 
   @media (max-width: ${({ theme: { mediaQueries } }) =>
@@ -261,7 +261,10 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
 
   const successRemoveView = () => {
     return (
-      <Content gameEditionView={gameEditionView}>
+      <Content
+        gameEditionView={gameEditionView}
+        style={{ bottom: gameEditionView && '132px' }}
+      >
         <Title gameEditionView={gameEditionView}>Preview Successful!</Title>
 
         <SuccessfullIcon />
@@ -322,7 +325,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           buttonStyle={{
             width: '100%',
             position: gameEditionView && 'absolute',
-            top: gameEditionView && 300,
+            top: gameEditionView && 316,
           }}
           onClick={async () => {
             setLoading(true);
@@ -340,7 +343,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
 
   const successAddView = () => {
     return (
-      <Content gameEditionView={gameEditionView} style={{ bottom: '148px' }}>
+      <Content gameEditionView={gameEditionView} style={{ bottom: '128px' }}>
         <Title gameEditionView={gameEditionView}>Preview Successful!</Title>
         <SuccessfullIcon />
         <TransactionsDetails>
@@ -391,7 +394,11 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           </SpaceBetweenRow>
         </TransactionsDetails>
         <CustomButton
-          buttonStyle={{ width: '100%' }}
+          buttonStyle={{
+            width: '100%',
+            position: gameEditionView && 'absolute',
+            top: gameEditionView && 316,
+          }}
           onClick={async () => {
             setLoading(true);
             if (view === 'Add Liquidity') {

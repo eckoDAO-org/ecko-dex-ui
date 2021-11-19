@@ -78,7 +78,8 @@ const ButtonContainer = styled.div`
   margin-top: 20px;
   width: 100%;
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  bottom: ${({ gameEditionView }) => gameEditionView && '10px'};
+  top: ${({ gameEditionView }) => gameEditionView && '280px'};
+  left: ${({ gameEditionView }) => gameEditionView && 0};
 `;
 
 const ResultContainer = styled.div`
