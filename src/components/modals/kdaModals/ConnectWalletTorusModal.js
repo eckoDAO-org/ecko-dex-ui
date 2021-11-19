@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 /* import "./App.css"; */
 import TorusSdk from '@toruslabs/torus-direct-web-sdk';
 import Pact from 'pact-lang-api';
-import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { Loader } from 'semantic-ui-react';
 import { AccountContext } from '../../../contexts/AccountContext';
@@ -11,6 +10,8 @@ import CustomButton from '../../../shared/CustomButton';
 import { ModalContext } from '../../../contexts/ModalContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { WALLET } from '../../../constants/wallet';
+import { theme } from '../../../styles/theme';
+import { LightModeContext } from '../../../contexts/LightModeContext';
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -74,18 +75,17 @@ function Login({ onClose, onBack }) {
   const modalContext = useContext(ModalContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
+  const { themeMode } = useContext(LightModeContext);
+
   const { gameEditionView, closeModal } = useContext(GameEditionContext);
-  const [selectedVerifier, setSelectedVerifier] = useState(GOOGLE);
+  const [selectedVerifier] = useState(GOOGLE);
   const [torusdirectsdk, setTorusdirectsdk] = useState(null);
-  const [loginHint, setLoginHint] = useState('');
-  const [consoleText, setConsoleText] = useState('');
-  const [publicKey, setPublicKey] = useState('');
-  const [privateKey, setPrivateKey] = useState('');
-  const [userName, setUserName] = useState('');
-  const [dataRetrieved, setDataRetrieved] = useState(false);
-  const [loginClicked, setLoginClicked] = useState(false);
-  const history = useHistory();
-  const [accountBalance, setAccountBalance] = useState(0);
+  const [, setConsoleText] = useState('');
+  const [, setPublicKey] = useState('');
+  const [, setPrivateKey] = useState('');
+  const [, setUserName] = useState('');
+  const [, setDataRetrieved] = useState(false);
+  const [, setLoginClicked] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -174,7 +174,7 @@ function Login({ onClose, onBack }) {
           <CustomButton
             disabled={loading}
             border='none'
-            color='#fff'
+            color={theme(themeMode).colors.white}
             background='transparent'
             onClick={() => {
               modalContext.onBackModal();

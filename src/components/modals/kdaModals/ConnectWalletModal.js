@@ -104,9 +104,17 @@ const ConnectWalletModal = () => {
   return Object.values(WALLET).map((wallet, index) => (
     <CustomButton
       key={index}
-      border={`1px solid ${theme(themeMode).colors.white}99`}
+      border={
+        gameEditionView
+          ? `2px dashed ${theme(themeMode).colors.black}`
+          : `1px solid ${theme(themeMode).colors.white}99`
+      }
       background='transparent'
-      color={theme(themeMode).colors.white}
+      color={
+        gameEditionView
+          ? theme(themeMode).colors.black
+          : theme(themeMode).colors.white
+      }
       onClick={() => {
         openWalletModal(wallet.name);
       }}

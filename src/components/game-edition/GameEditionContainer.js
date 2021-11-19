@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router';
-import { ROUTE_GAME_EDITION_MENU, ROUTE_SWAP } from '../../router/routes';
+import { ROUTE_GAME_EDITION_MENU } from '../../router/routes';
 import { GameEditionWrapper } from './GameEditionWrapper';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
@@ -14,6 +14,7 @@ const MainContainer = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
+  height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
 `;
 
 const ContentContainer = styled.div`
@@ -92,6 +93,7 @@ const GameEditionContainer = ({ children }) => {
         </GameEditionMobileWrapper>
       ) : (
         <GameEditionWrapper
+          style={{ height: 'auto !important' }}
           selectLabel='MENU'
           selectOnClick={() => {
             history.push(ROUTE_GAME_EDITION_MENU);

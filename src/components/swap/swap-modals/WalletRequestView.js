@@ -9,6 +9,8 @@ import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { WalletContext } from '../../../contexts/WalletContext';
 import { WALLET } from '../../../constants/wallet';
 import { openZelcore } from '../../../utils/zelcore';
+import { theme } from '../../../styles/theme';
+import { LightModeContext } from '../../../contexts/LightModeContext';
 
 const Container = styled.div`
   position: absolute;
@@ -59,6 +61,7 @@ const SubTitle = styled.div`
 
 const WalletRequestView = ({ show, onClose, error }) => {
   const wallet = useContext(WalletContext);
+  const { themeMode } = useContext(LightModeContext);
 
   useEffect(() => {
     if (show && wallet.wallet.name === WALLET.ZELCORE.name) {
@@ -84,8 +87,8 @@ const WalletRequestView = ({ show, onClose, error }) => {
                 gameEditionView={gameEditionView}
                 style={{
                   color: gameEditionView
-                    ? ({ theme: { colors } }) => colors.black
-                    : ({ theme: { colors } }) => colors.white,
+                    ? theme(themeMode).colors.black
+                    : theme(themeMode).colors.white,
                 }}
               >
                 {error.content}
@@ -105,8 +108,8 @@ const WalletRequestView = ({ show, onClose, error }) => {
               gameEditionView={gameEditionView}
               style={{
                 color: gameEditionView
-                  ? ({ theme: { colors } }) => colors.black
-                  : ({ theme: { colors } }) => colors.white,
+                  ? theme(themeMode).colors.black
+                  : theme(themeMode).colors.white,
               }}
             >
               Follow instructions in the wallet to preview and sign your
@@ -118,8 +121,8 @@ const WalletRequestView = ({ show, onClose, error }) => {
                 inline='centered'
                 style={{
                   color: gameEditionView
-                    ? ({ theme: { colors } }) => colors.black
-                    : ({ theme: { colors } }) => colors.white,
+                    ? theme(themeMode).colors.black
+                    : theme(themeMode).colors.white,
                 }}
               ></Loader>
             </LoaderContainer>
@@ -148,7 +151,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
                 onClose={onClose}
               >
                 <Content style={{ marginBottom: '30px' }}>
-                  <SubTitle style={{ color: '#FFFFFF' }}>
+                  <SubTitle style={{ color: theme(themeMode).colors.white }}>
                     {error.content}
                   </SubTitle>
                 </Content>
@@ -170,7 +173,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
                 }} /* onClose={onClose} */
               >
                 <Content>
-                  <SubTitle style={{ color: '#FFFFFF' }}>
+                  <SubTitle style={{ color: theme(themeMode).colors.white }}>
                     Follow instructions in the wallet to preview and sign your
                     transaction.
                   </SubTitle>
@@ -178,7 +181,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
                     <Loader
                       active
                       inline='centered'
-                      style={{ color: '#FFFFFF' }}
+                      style={{ color: theme(themeMode).colors.white }}
                     ></Loader>
                   </LoaderContainer>
                 </Content>

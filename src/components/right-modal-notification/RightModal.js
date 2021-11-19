@@ -14,8 +14,7 @@ const Container = styled(Modal)`
   right: 0;
   top: 0;
   margin: 0px !important;
-  background-color: ${({ theme: { backgroundRightModal } }) =>
-    backgroundRightModal + '40'} !important;
+  background-color: #4e125a40 !important;
   opacity: 1;
   -webkit-backdrop-filter: blur(2em);
   backdrop-filter: blur(2em);

@@ -7,6 +7,8 @@ import { AccountContext } from '../../../contexts/AccountContext';
 import { WalletContext } from '../../../contexts/WalletContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { WALLET } from '../../../constants/wallet';
+import { LightModeContext } from '../../../contexts/LightModeContext';
+import { theme } from '../../../styles/theme';
 
 const Text = styled.span`
   font-size: 13px;
@@ -27,6 +29,8 @@ const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const { gameEditionView } = useContext(GameEditionContext);
+  const { themeMode } = useContext(LightModeContext);
+
   const [accountId, setAccountId] = useState('');
   useState(false);
 
@@ -39,8 +43,8 @@ const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
   const checkKey = (key) => {
     try {
       let keyToCheck = key;
-      if (key.startsWith("k:")) {
-        keyToCheck = key.split(":")[1];
+      if (key.startsWith('k:')) {
+        keyToCheck = key.split(':')[1];
       }
 
       if (keyToCheck.length !== 64) {
@@ -97,7 +101,7 @@ const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
         <Button.Group fluid>
           <CustomButton
             border='none'
-            color='#fff'
+            color={`${theme(themeMode).colors.white} !important`}
             background='transparent'
             onClick={() => {
               resetValues();
