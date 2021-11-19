@@ -14,7 +14,7 @@ const ResultContainer = styled.div`
   flex-flow: column;
   width: 100%;
   /* position: ${({ gameEditionView }) => gameEditionView && 'absolute'}; */
-  margin-top: ${({ gameEditionView }) => gameEditionView && '30px'};
+  margin-top: ${({ gameEditionView }) => gameEditionView && '20px'};
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;

@@ -5,7 +5,9 @@ import { GameEditionContext } from '../contexts/GameEditionContext';
 import theme from '../styles/theme';
 
 const Container = styled.div`
-  position: ${({ gameEditionView }) => !gameEditionView && `relative`};
+  position: ${({ gameEditionView }) =>
+    gameEditionView ? 'absolute' : 'relative'};
+  top: ${({ gameEditionView }) => gameEditionView && '60px'};
   display: flex;
   flex-flow: column;
   width: 100%;

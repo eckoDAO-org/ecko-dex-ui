@@ -68,6 +68,12 @@ const Title = styled.span`
   color: ${({ theme: { colors }, gameEditionView }) =>
     gameEditionView ? `${colors.black}` : `${colors.white}`};
   text-transform: capitalize;
+
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -201,7 +207,7 @@ const RemoveLiqContainer = (props) => {
             <ArrowBack
               style={{
                 cursor: 'pointer',
-                color: `${theme(themeMode).colors.white}`,
+                color: theme(themeMode).colors.white,
                 marginRight: '15px',
                 justifyContent: 'center',
               }}
@@ -225,8 +231,8 @@ const RemoveLiqContainer = (props) => {
           <Input
             value={amount}
             error={isNaN(amount)}
-            topLeftLabel='Pool Tokens to Remove '
-            placeholder=' Enter Amount'
+            topLeftLabel='Pool Tokens to Remove'
+            placeholder='Enter Amount'
             label={{ content: '%' }}
             onChange={(e) => {
               if (
