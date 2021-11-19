@@ -107,7 +107,11 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
         buttonStyle={{
           border: '1px solid #424242',
         }}
-        color={`${theme(themeMode).colors.white}`}
+        color={
+          gameEditionView
+            ? theme(themeMode).colors.black
+            : theme(themeMode).colors.white
+        }
         background='transparent'
         onClick={() => {
           if (gameEditionView) {
