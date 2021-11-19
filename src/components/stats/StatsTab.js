@@ -3,10 +3,11 @@ import { Dimmer, Divider, Loader } from 'semantic-ui-react';
 import styled from 'styled-components';
 import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { LightModeContext } from '../../contexts/LightModeContext';
 import { PactContext } from '../../contexts/PactContext';
 import CustomLabel from '../../shared/CustomLabel';
 import ModalContainer from '../../shared/ModalContainer';
-import theme from '../../styles/theme';
+import { theme } from '../../styles/theme';
 import { extractDecimal, reduceBalance } from '../../utils/reduceBalance';
 import {
   PartialScrollableScrollSection,
@@ -45,8 +46,8 @@ export const CardContainer = styled.div`
   margin-left: auto;
   margin-right: auto;
   border-radius: 10px;
-  border: ${({ gameEditionView }) =>
-    gameEditionView ? `none` : ` 2px solid ${theme.colors.white}29`};
+  border: ${({ theme: { colors }, gameEditionView }) =>
+    gameEditionView ? `none` : ` 2px solid ${colors.white}29`};
 
   background-clip: ${({ gameEditionView }) =>
     !gameEditionView && `padding-box`};
@@ -72,6 +73,7 @@ export const CardContainer = styled.div`
 const StatsTab = () => {
   const pact = useContext(PactContext);
   const { gameEditionView } = useContext(GameEditionContext);
+  const { themeMode } = useContext(LightModeContext);
 
   useEffect(async () => {
     await pact.getPairList();
@@ -124,10 +126,12 @@ const StatsTab = () => {
           // <Dimmer active inverted={gameEditionView}>
           <Loader
             style={{
-              color: gameEditionView ? theme.colors.black : theme.colors.white,
+              color: gameEditionView
+                ? theme(themeMode).colors.black
+                : theme(themeMode).colors.white,
               fontFamily: gameEditionView
-                ? theme.fontFamily.pressStartRegular
-                : theme.fontFamily.regular,
+                ? theme(themeMode).fontFamily.pressStartRegular
+                : theme(themeMode).fontFamily.regular,
             }}
           >
             Loading
@@ -172,8 +176,8 @@ const StatsTab = () => {
                         width: '100%',
                         margin: '20px 0px',
                         borderTop: gameEditionView
-                          ? `1px dashed ${theme.colors.black}`
-                          : `1px solid  ${theme.colors.white}`,
+                          ? `1px dashed ${theme(themeMode).colors.black}`
+                          : `1px solid  ${theme(themeMode).colors.white}`,
                       }}
                     />
                   )}
@@ -191,14 +195,14 @@ const StatsTab = () => {
               <Loader
                 style={{
                   color: gameEditionView
-                    ? theme.colors.black
-                    : theme.colors.white,
+                    ? theme(themeMode).colors.black
+                    : theme(themeMode).colors.white,
                   fontFamily: gameEditionView
-                    ? theme.fontFamily.pressStartRegular
-                    : theme.fontFamily.regular,
+                    ? theme(themeMode).fontFamily.pressStartRegular
+                    : theme(themeMode).fontFamily.regular,
                 }}
               >
-                Loading
+                Loading..
               </Loader>
             </Dimmer>
           )}

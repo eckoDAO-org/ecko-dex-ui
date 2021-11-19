@@ -9,7 +9,7 @@ import {
 } from '../../utils/reduceBalance';
 import CustomButton from '../../shared/CustomButton';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
-import theme from '../../styles/theme';
+import { theme } from '../../styles/theme';
 import {
   ButtonContainer,
   ColumnContainer,
@@ -18,6 +18,7 @@ import {
   RowContainer,
   Value,
 } from '../../components/layout/Containers';
+import { LightModeContext } from '../../contexts/LightModeContext';
 
 const ResultContainer = styled.div`
   display: flex !important;
@@ -64,6 +65,7 @@ const HeaderContainer = styled(Accordion.Title)`
 
 const TokenPair = (props) => {
   const { gameEditionView } = useContext(GameEditionContext);
+  const { themeMode } = useContext(LightModeContext);
   let { token0, token1, balance, supply, pooledAmount } = props.pair;
 
   const handleActiveIndex = (index) => {
@@ -171,9 +173,14 @@ const TokenPair = (props) => {
                 }}
                 background='transparent'
                 color={
-                  gameEditionView ? theme.colors.black : theme.colors.white
+                  gameEditionView
+                    ? theme(themeMode).colors.black
+                    : theme(themeMode).colors.white
                 }
-                border={!gameEditionView && `1px solid ${theme.colors.white}99`}
+                border={
+                  !gameEditionView &&
+                  `1px solid ${theme(themeMode).colors.white}99`
+                }
                 onClick={() => {
                   props.selectRemoveLiquidity();
                   props.setTokenPair(props.pair);

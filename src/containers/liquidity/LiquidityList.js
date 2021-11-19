@@ -117,10 +117,10 @@ const TitleContainer = styled.div`
   width: 93%;
 `;
 const Title = styled.span`
-  font: ${({ gameEditionView }) =>
+  font: ${({ gameEditionView, theme: { fontFamily } }) =>
     gameEditionView
-      ? `normal normal normal 16px/19px  ${theme.fontFamily.pressStartRegular}`
-      : ` normal normal bold 32px/57px ${theme.fontFamily.bold}`};
+      ? `normal normal normal 16px/19px  ${fontFamily.pressStartRegular}`
+      : ` normal normal bold 32px/57px ${fontFamily.bold}`};
   letter-spacing: 0px;
   color: ${({ theme: { colors }, gameEditionView }) =>
     gameEditionView ? colors.black : colors.white};
