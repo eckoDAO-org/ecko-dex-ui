@@ -22,6 +22,10 @@ const PopupContainer = styled.div`
   backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
   opacity: 1;
   background: transparent;
+
+  i.inverted.icon {
+    color: none;
+  }
 `;
 
 const CustomPopup = ({

@@ -145,6 +145,7 @@ const StatsTab = () => {
     <ModalContainer
       title={gameEditionView && 'Stats'}
       withoutRainbowBackground
+      backgroundNotChangebleWithTheme
       containerStyle={{
         maxHeight: '80vh',
         padding: 0,

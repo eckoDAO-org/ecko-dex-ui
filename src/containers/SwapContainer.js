@@ -51,7 +51,7 @@ const Title = styled.span`
       : ` normal normal bold 32px/57px ${theme.fontFamily.bold}`};
   letter-spacing: 0px;
   color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : '#ffffff'};
+    gameEditionView ? colors.black : colors.white};
   text-transform: ${({ gameEditionView }) =>
     gameEditionView ? `uppercase` : ` capitalize`};
 `;
@@ -105,7 +105,7 @@ const Label = styled.span`
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : '#ffffff'};
+    gameEditionView ? colors.black : colors.white};
   text-transform: capitalize;
 `;
 
@@ -115,7 +115,7 @@ const Value = styled.span`
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   line-height: 20px;
   color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : '#ffffff'};
+    gameEditionView ? colors.black : colors.white};
 `;
 
 const SwapContainer = () => {

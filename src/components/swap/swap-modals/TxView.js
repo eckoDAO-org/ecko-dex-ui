@@ -23,6 +23,8 @@ import { AccountContext } from '../../../contexts/AccountContext';
 import { PactContext } from '../../../contexts/PactContext';
 import tokenData from '../../../constants/cryptoCurrencies';
 import PopupTxView from './PopupTxView';
+import { theme } from '../../../styles/theme';
+import { LightModeContext } from '../../../contexts/LightModeContext';
 
 const Container = styled.div`
   position: absolute;
@@ -52,6 +54,9 @@ const Content = styled.div`
   flex-direction: column;
   svg {
     display: ${({ gameEditionView }) => gameEditionView && 'none '};
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
   }
   width: ${({ gameEditionView }) => (gameEditionView ? '97%' : '100%')};
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
@@ -97,7 +102,7 @@ const TransactionsDetails = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 24px 0px;
+  padding: 12px;
 `;
 
 const SpaceBetweenRow = styled.div`
@@ -133,6 +138,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
   const swap = useContext(SwapContext);
   const { gameEditionView } = useContext(GameEditionContext);
   const { account } = useContext(AccountContext);
+  const { themeMode } = useContext(LightModeContext);
   const pact = useContext(PactContext);
 
   const [loading, setLoading] = useState(false);
@@ -178,8 +184,8 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
               width: '100%',
               marginTop: 0,
               borderTop: gameEditionView
-                ? '1px dashed black'
-                : '1px solid #FFFFFF99',
+                ? `1px dashed ${theme(themeMode).colors.black}`
+                : `1px solid ${theme(themeMode).colors.white}`,
             }}
           />
 
@@ -196,7 +202,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           </SpaceBetweenRow>
           <SpaceBetweenRow>
             <HighlightLabel>
-              <Icon name='inverted  long arrow alternate down' style={{}} />
+              <Icon name='long arrow alternate down' style={{}} />
             </HighlightLabel>
             <Label>{`1 ${showTicker(
               swap.localRes.result.data[0].token

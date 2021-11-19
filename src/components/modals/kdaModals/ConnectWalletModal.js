@@ -8,10 +8,13 @@ import ConnectWalletZelcoreModal from './ConnectWalletZelcoreModal';
 import ConnecWalletTorusModal from './ConnectWalletTorusModal';
 import ConnectWalletChainweaverModal from './ConnectWalletChainweaverModal';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
+import { theme } from '../../../styles/theme';
+import { LightModeContext } from '../../../contexts/LightModeContext';
 
 const ConnectWalletModal = () => {
   const modalContext = useContext(ModalContext);
   const { gameEditionView, openModal } = useContext(GameEditionContext);
+  const { themeMode } = useContext(LightModeContext);
 
   const openWalletModal = (walletName) => {
     switch (walletName) {
@@ -101,9 +104,9 @@ const ConnectWalletModal = () => {
   return Object.values(WALLET).map((wallet, index) => (
     <CustomButton
       key={index}
-      border='1px solid #FFFFFF99'
+      border={`1px solid ${theme(themeMode).colors.white}99`}
       background='transparent'
-      color='#fff'
+      color={theme(themeMode).colors.white}
       onClick={() => {
         openWalletModal(wallet.name);
       }}

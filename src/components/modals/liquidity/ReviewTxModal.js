@@ -28,6 +28,9 @@ const Content = styled.div`
   flex-direction: column;
   svg {
     display: ${({ gameEditionView }) => gameEditionView && 'none '};
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
   }
   width: ${({ gameEditionView }) => (gameEditionView ? '97%' : '100%')};
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
@@ -37,7 +40,7 @@ const Content = styled.div`
 const Title = styled.div`
   font-family: montserrat-bold;
   font-size: 24px;
-  color: #ffffff; ;
+  ${({ theme: { colors } }) => colors.white};
 `;
 
 const TransactionsDetails = styled.div`
@@ -77,7 +80,7 @@ const SubTitle = styled.div`
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '14px' : '13px')};
   color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : '#ffffff'};
+    gameEditionView ? colors.black : colors.white};
   text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
   width: ${({ gameEditionView }) => (gameEditionView ? '100%' : 'auto')};
   align-items: center;
@@ -90,7 +93,7 @@ const Label = styled.span`
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : '#ffffff'};
+    gameEditionView ? colors.black : colors.white};
 `;
 
 const Value = styled.span`
@@ -98,7 +101,7 @@ const Value = styled.span`
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
   font-size: 10px;
   color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : '#ffffff99'};
+    gameEditionView ? colors.black : `${colors.white}99`};
 `;
 
 const ReviewTxModal = ({

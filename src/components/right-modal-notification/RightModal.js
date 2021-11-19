@@ -14,7 +14,8 @@ const Container = styled(Modal)`
   right: 0;
   top: 0;
   margin: 0px !important;
-  background-color: rgba(78, 18, 90, 0.4) !important;
+  background-color: ${({ theme: { backgroundRightModal } }) =>
+    backgroundRightModal + '40'} !important;
   opacity: 1;
   -webkit-backdrop-filter: blur(2em);
   backdrop-filter: blur(2em);
@@ -39,7 +40,7 @@ const ContentContainer = styled.div`
 const Title = styled.div`
   font-size: 16px;
   font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
-  color: ${({ theme: { colors } }) => colors.white};
+  color: white;
   margin-left: 10px;
   width: 100%;
 `;
@@ -50,7 +51,6 @@ const Header = styled.div`
   position: relative;
   z-index: 2;
   padding: 10px 19px;
-  background-color: ${({ theme: { colors } }) => colors.hippiePink};
   color: white;
   min-height: 56px;
   font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
@@ -59,7 +59,7 @@ const Header = styled.div`
   box-shadow: ${({ theme }) => theme.boxShadow};
   svg {
     path {
-      fill: ${({ theme: { colors } }) => colors.white};
+      fill: white;
     }
   }
 `;

@@ -16,6 +16,11 @@ const Container = styled.div`
   position: ${({ gameEditionView }) =>
     gameEditionView && 'absolute !important'};
   bottom: ${({ gameEditionView }) => gameEditionView && '50px !important'};
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
 `;
 
 const SwapForm = ({
