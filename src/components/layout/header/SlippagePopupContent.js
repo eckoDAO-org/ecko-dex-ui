@@ -5,6 +5,7 @@ import Input from '../../../shared/Input';
 import ThemeToggle from '../../../styles/lightmode/ThemeToggle';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 import { theme } from '../../../styles/theme';
+import { GameEditionContext } from '../../../contexts/GameEditionContext';
 
 const Container = styled.div`
   display: flex;
@@ -82,6 +83,7 @@ const Row = styled.div`
 
 const SlippagePopupContent = () => {
   const pact = useContext(PactContext);
+  const { gameEditionView } = useContext(GameEditionContext);
   const { themeMode, themeToggler } = useContext(LightModeContext);
   const [slp, setSlp] = useState(pact.slippage * 100);
   const [tl, setTl] = useState(pact.ttl * 60);
@@ -96,11 +98,13 @@ const SlippagePopupContent = () => {
       <BoldLabel style={{ color: theme(themeMode).colors.white }}>
         Transactions Settings
       </BoldLabel>
-      <Row style={{ marginTop: 8 }}>
-        <RegularLabel style={{ marginRight: 8 }}>Light Mode</RegularLabel>
+      {!gameEditionView && (
+        <Row style={{ marginTop: 8 }}>
+          <RegularLabel style={{ marginRight: 8 }}>Light Mode</RegularLabel>
 
-        <ThemeToggle theme={themeMode} onClick={() => themeToggler()} />
-      </Row>
+          <ThemeToggle theme={themeMode} onClick={() => themeToggler()} />
+        </Row>
+      )}
 
       <RegularLabel style={{ marginTop: 16 }}>Slippage Tolerance</RegularLabel>
 

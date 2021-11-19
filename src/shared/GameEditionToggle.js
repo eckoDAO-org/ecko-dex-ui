@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Checkbox } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { GameEditionContext } from '../contexts/GameEditionContext';
+import { LightModeContext } from '../contexts/LightModeContext';
 
 const ToggleContainer = styled.div`
   display: flex;
@@ -71,12 +72,14 @@ const GameLabel = styled.div`
 
 const GameEditionToggle = ({ animation }) => {
   const game = useContext(GameEditionContext);
+  const { themeMode, themeToggler } = useContext(LightModeContext);
   return (
     <ToggleContainer animation={animation}>
       <GameLabel gameEditionView={game.gameEditionView}>Game Edition</GameLabel>
       <Checkbox
         toggle
         onChange={() => {
+          if (themeMode === 'light') themeToggler();
           game.setGameEditionView(!game.gameEditionView);
           game.closeModal();
         }}
