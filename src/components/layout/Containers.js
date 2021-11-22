@@ -26,7 +26,8 @@ export const ButtonContainer = styled.div`
 
 export const RowContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: ${({ gameEditionView }) =>
+    gameEditionView ? 'space-between' : 'center'};
   width: 100%;
   flex-flow: ${({ gameEditionView }) => (gameEditionView ? 'row' : 'column')};
   margin-bottom: ${({ gameEditionView }) => (gameEditionView ? '8px' : '0px')};

@@ -8,6 +8,9 @@ const ListContainer = styled.div`
   padding: 8px;
   z-index: 1;
   background: transparent;
+  & > *:not(:last-child) {
+    margin-bottom: 8px;
+  }
 
   & svg {
     margin-right: 10px;
@@ -29,7 +32,6 @@ const PopupContentList = ({ items }) => {
             display: 'flex',
             alignItems: 'center',
             fontSize: 16,
-            marginBottom: 9,
             fontFamily: theme.fontFamily.regular,
           }}
         >

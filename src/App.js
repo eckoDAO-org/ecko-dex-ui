@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyle from './styles/globalStyle';
 import Router from './router/router';
 import NotificationRender from './components/notification/NotificationRender';
-import { darkTheme, lightTheme, theme } from './styles/theme';
+import { theme } from './styles/theme';
 import { AccountProvider } from './contexts/AccountContext';
 import { WalletProvider } from './contexts/WalletContext';
 import { PactProvider } from './contexts/PactContext';

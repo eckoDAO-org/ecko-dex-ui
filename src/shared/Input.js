@@ -223,7 +223,6 @@ const Input = ({
                   : theme().fontFamily.regular,
                 marginLeft: !topLeftLabel ? 'auto' : 'unset',
                 textAlign: 'end',
-                whiteSpace: 'nowrap',
                 ...topRightLabelStyle,
               }}
             >

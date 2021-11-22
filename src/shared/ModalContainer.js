@@ -12,7 +12,7 @@ const Container = styled.div`
   width: 100%;
   border-radius: 10px;
   border: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? `2px dashed ${colors.black}` : `2px solid transparent`};
+    gameEditionView ? `2px dashed ${colors.black}` : `1px solid transparent`};
   background-clip: ${({ gameEditionView }) =>
     !gameEditionView && `padding-box`};
   opacity: 1;
