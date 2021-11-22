@@ -216,7 +216,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
                 <CustomButton
                   border='none'
                   boxShadow='none'
-                  color={`${theme(themeMode).colors.white} !important`}
+                  color={theme(themeMode).colors.white}
                   background='transparent'
                   onClick={() => handleCancel()}
                 >

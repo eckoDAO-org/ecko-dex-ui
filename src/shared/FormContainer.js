@@ -12,8 +12,8 @@ const Container = styled.div`
   flex-flow: column;
   width: 100%;
   border-radius: 10px;
-  border: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? `none` : `1px solid transparent`};
+  /* border: ${({ gameEditionView, theme: { colors } }) =>
+    gameEditionView ? `none` : `1px solid transparent`}; */
 
   opacity: 1;
   background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
