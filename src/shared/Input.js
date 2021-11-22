@@ -42,6 +42,7 @@ const Container = styled.div`
     color: ${({ gameEditionView, theme: { colors } }) =>
       gameEditionView ? `${colors.black}70 !important` : ``};
     text-transform: capitalize;
+    font-family: 14px;
   }
   .ui.icon.input > input {
     padding-right: ${({ inputRightComponent, inputComponentWidth }) =>

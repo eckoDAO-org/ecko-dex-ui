@@ -20,20 +20,21 @@ import tokenData from '../../constants/cryptoCurrencies';
 import SwapForm from '../../components/swap/SwapForm';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import TokenSelectorModalContent from '../../components/swap/swap-modals/TokenSelectorModalContent';
-import { Logo } from '../../assets';
+import { CogIcon, Logo } from '../../assets';
 import { FadeIn } from '../../components/shared/animations';
 import FormContainer from '../../shared/FormContainer';
 import GradientBorder from '../../shared/GradientBorder';
 import { LightModeContext } from '../../contexts/LightModeContext';
+import HeaderItem from '../../shared/HeaderItem';
+import CustomPopup from '../../shared/CustomPopup';
+import SlippagePopupContent from '../../components/layout/header/SlippagePopupContent';
 
 const Container = styled(FadeIn)`
-  margin-top: ${({ theme: { header } }) => header.height};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-flow: column;
   width: 100%;
+  margin-left: auto;
+  margin-right: auto;
   max-width: ${({ gameEditionView }) => !gameEditionView && `500px`};
+  overflow: auto;
 `;
 
 const TitleContainer = styled.div`
@@ -668,6 +669,7 @@ const LiquidityContainer = (props) => {
     <Container
       gameEditionView={gameEditionView}
       onAnimationEnd={() => setIsLogoVisible(true)}
+      className='scrollbar-none'
     >
       {/* <TokenSelectorModal
                 show={tokenSelectorType !== null}
@@ -737,7 +739,26 @@ const LiquidityContainer = (props) => {
           )}
           Add Liquidity
         </Title>
-        {gameEditionView && <CloseGE onClick={() => props.closeLiquidity()} />}
+        {gameEditionView && (
+          <CloseGE
+            style={{ cursor: 'pointer' }}
+            onClick={() => props.closeLiquidity()}
+          />
+        )}
+        {!gameEditionView && (
+          <HeaderItem
+            headerItemStyle={{ alignItems: 'center', display: 'flex' }}
+          >
+            <CustomPopup
+              trigger={<CogIcon />}
+              on='click'
+              offset={[10, 10]}
+              position='bottom right'
+            >
+              <SlippagePopupContent />
+            </CustomPopup>
+          </HeaderItem>
+        )}
       </TitleContainer>
       <FormContainer gameEditionView={gameEditionView}>
         {!gameEditionView && <GradientBorder />}
