@@ -43,7 +43,7 @@ const SwapForm = ({
         topRightLabel={`balance: ${reduceBalance(fromValues.balance) ?? '-'}`}
         placeholder='enter amount'
         maxLength='15'
-        size='big'
+        size='medium'
         inputRightComponent={
           fromValues.coin ? (
             <InputToken
@@ -87,6 +87,7 @@ const SwapForm = ({
         topLeftLabel={toNote ? `to ${toNote}` : `to`}
         topRightLabel={`balance: ${reduceBalance(toValues.balance) ?? '-'}`}
         placeholder='enter amount'
+        size='medium'
         maxLength='15'
         inputRightComponent={
           toValues.coin ? (

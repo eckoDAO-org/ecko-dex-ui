@@ -6,6 +6,7 @@ import ThemeToggle from '../../../styles/lightmode/ThemeToggle';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 import { theme } from '../../../styles/theme';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
+import LightModeToggle from '../../../shared/LightModeToggle';
 
 const Container = styled.div`
   display: flex;
@@ -99,10 +100,11 @@ const SlippagePopupContent = () => {
         Transactions Settings
       </BoldLabel>
       {!gameEditionView && (
-        <Row style={{ marginTop: 8 }}>
-          <RegularLabel style={{ marginRight: 8 }}>Light Mode</RegularLabel>
+        <Row style={{ marginTop: 16 }}>
+          <LightModeToggle />
+          {/* <RegularLabel style={{ marginRight: 8 }}>Light Mode</RegularLabel>
 
-          <ThemeToggle theme={themeMode} onClick={() => themeToggler()} />
+          <ThemeToggle theme={themeMode} onClick={() => themeToggler()} /> */}
         </Row>
       )}
 

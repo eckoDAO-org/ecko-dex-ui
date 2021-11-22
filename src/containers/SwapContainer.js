@@ -27,10 +27,11 @@ import GradientBorder from '../shared/GradientBorder';
 
 const Container = styled(FadeIn)`
   width: 100%;
-  margin-top: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 24px`)};
+  margin-top: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 0px`)};
   max-width: ${({ gameEditionView }) => !gameEditionView && `500px`};
   margin-left: auto;
   margin-right: auto;
+  overflow: auto;
 `;
 
 const TitleContainer = styled.div`
@@ -521,6 +522,7 @@ const SwapContainer = () => {
     <Container
       gameEditionView={gameEditionView}
       onAnimationEnd={() => setIsLogoVisible(true)}
+      className='scrollbar-none'
     >
       {/* <TokenSelectorModal
         show={tokenSelectorType !== null}

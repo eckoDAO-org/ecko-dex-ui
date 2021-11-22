@@ -16,7 +16,7 @@ import { LightModeContext } from '../../contexts/LightModeContext';
 
 const Container = styled.div`
   display: flex;
-  margin-top: 24px;
+  margin-top: ${({ gameEditionView }) => (gameEditionView ? '0px' : '24px')};
   margin-left: auto;
   margin-right: auto;
   height: ${({ gameEditionView }) => gameEditionView && '100%'};
@@ -114,7 +114,6 @@ const TitleContainer = styled.div`
     gameEditionView ? `center` : ` space-between`};
   margin-bottom: ${({ gameEditionView }) =>
     gameEditionView ? `20px` : ` 24px`};
-  width: 93%;
 `;
 const Title = styled.span`
   font: ${({ gameEditionView, theme: { fontFamily } }) =>
