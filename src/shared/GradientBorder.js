@@ -7,8 +7,8 @@ const Container = styled.div`
   background: linear-gradient(90deg, #ed1cb5, #ffa900, #39fffc) border-box; /*3*/
   -webkit-mask: /*4*/ linear-gradient(#fff 0 0) padding-box,
     linear-gradient(#fff 0 0);
-  -webkit-mask-composite: destination-out; /*5'*/
-  mask-composite: exclude; /*5*/
+  -webkit-mask-composite: source-out !important; /*5'*/
+  mask-composite: exclude !important; /*5*/
   position: absolute;
   top: 0px;
   left: 0px;
