@@ -44,7 +44,7 @@ const SubContainer = styled.div`
   padding: ${({ gameEditionView }) => gameEditionView && '10px'};
 
   & > *:first-child {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 `;
 
@@ -91,7 +91,7 @@ const MyButtonDivider = styled.div`
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 15px 0px;
+  margin: 16px 0px;
   flex-flow: column;
   width: 100%;
   top: ${({ gameEditionView }) => gameEditionView && '180px'};
@@ -119,7 +119,7 @@ const Label = styled.span`
   font: ${({ theme: { fontFamily }, gameEditionView }) =>
     gameEditionView
       ? `normal normal normal 10px/12px ${fontFamily.pressStartRegular}`
-      : `normal normal normal 14px/15px ${fontFamily.regular}`};
+      : `normal normal normal 13px/16px ${fontFamily.regular}`};
   color: ${({ theme: { colors }, gameEditionView }) =>
     gameEditionView ? `${colors.black}` : `${colors.white}`};
   text-transform: capitalize;
@@ -129,7 +129,7 @@ const Value = styled.span`
   font: ${({ theme: { fontFamily }, gameEditionView }) =>
     gameEditionView
       ? `normal normal normal 10px/12px ${fontFamily.pressStartRegular}`
-      : `normal normal normal 16px/20px ${fontFamily.bold}`};
+      : `normal normal normal 13px/16px ${fontFamily.bold}`};
   line-height: 20px;
   color: ${({ theme: { colors }, gameEditionView }) =>
     gameEditionView ? `${colors.black}` : `${colors.white}`};
@@ -233,6 +233,7 @@ const RemoveLiqContainer = (props) => {
             error={isNaN(amount)}
             topLeftLabel='Pool Tokens to Remove'
             placeholder='Enter Amount'
+            size='large'
             label={{ content: '%' }}
             onChange={(e) => {
               if (

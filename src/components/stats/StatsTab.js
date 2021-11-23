@@ -6,6 +6,7 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { LightModeContext } from '../../contexts/LightModeContext';
 import { PactContext } from '../../contexts/PactContext';
 import CustomLabel from '../../shared/CustomLabel';
+import GradientBorder from '../../shared/GradientBorder';
 import ModalContainer from '../../shared/ModalContainer';
 import { theme } from '../../styles/theme';
 import { extractDecimal, reduceBalance } from '../../utils/reduceBalance';
@@ -46,8 +47,6 @@ export const CardContainer = styled.div`
   margin-left: auto;
   margin-right: auto;
   border-radius: 10px;
-  border: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? `none` : ` 2px solid ${colors.white}29`};
 
   background-clip: ${({ gameEditionView }) =>
     !gameEditionView && `padding-box`};
@@ -166,22 +165,25 @@ const StatsTab = () => {
       )}
       <PartialScrollableScrollSection>
         <CardContainer gameEditionView={gameEditionView}>
+          {!gameEditionView && <GradientBorder />}
+
           {pact.pairList[0] ? (
             Object.values(pact.pairList).map((pair, index) =>
               pair && pair.reserves ? (
                 <>
                   <StatsCard pair={pair} />
-                  {!Object.values(pact.pairList).length === index && (
-                    <Divider
-                      style={{
-                        width: '100%',
-                        margin: '20px 0px',
-                        borderTop: gameEditionView
-                          ? `1px dashed ${theme(themeMode).colors.black}`
-                          : `1px solid  ${theme(themeMode).colors.white}`,
-                      }}
-                    />
-                  )}
+                  {/* {!Object.values(pact.pairList).length === index && ( */}
+                  <Divider
+                    style={{
+                      width: '100%',
+                      margin: '32px 0px',
+                      borderTop: gameEditionView
+                        ? `1px dashed ${theme(themeMode).colors.black}`
+                        : `1px solid  ${theme(themeMode).colors.white}`,
+                    }}
+                  />
+                  {/*  )} */}
+                  <StatsCard pair={pair} />
                 </>
               ) : (
                 ''

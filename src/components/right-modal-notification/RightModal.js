@@ -14,10 +14,11 @@ const Container = styled(Modal)`
   right: 0;
   top: 0;
   margin: 0px !important;
-  background-color: #4e125a40 !important;
+  background-color: ${({ theme: { backgroundRightModal } }) =>
+    backgroundRightModal} !important;
   opacity: 1;
-  -webkit-backdrop-filter: blur(2em);
-  backdrop-filter: blur(2em);
+  /* -webkit-backdrop-filter: blur(2em);
+  backdrop-filter: blur(2em); */
 
   font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
   border-radius: 0px !important;
@@ -39,7 +40,7 @@ const ContentContainer = styled.div`
 const Title = styled.div`
   font-size: 16px;
   font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
-  color: white;
+  color: ${({ theme: { colors } }) => colors.white};
   margin-left: 10px;
   width: 100%;
 `;
@@ -49,8 +50,8 @@ const Header = styled.div`
   align-items: center;
   position: relative;
   z-index: 2;
-  padding: 10px 19px;
-  color: white;
+  padding: 10px 22px 10px 26px;
+  color: ${({ theme: { colors } }) => colors.white};
   min-height: 56px;
   font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
   font-size: 16px;
@@ -58,7 +59,7 @@ const Header = styled.div`
   box-shadow: ${({ theme }) => theme.boxShadow};
   svg {
     path {
-      fill: white;
+      fill: ${({ theme: { colors } }) => colors.white};
     }
   }
 `;
@@ -82,7 +83,7 @@ const FooterContainer = styled.div`
   width: 100%;
   /* margin: 10px 10px 0 10px; */
   z-index: 1;
-  padding: 10px;
+  padding: 16px 26px;
   & > * {
     width: 200px;
   }

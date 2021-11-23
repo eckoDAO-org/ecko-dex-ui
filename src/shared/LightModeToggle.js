@@ -23,7 +23,6 @@ const ToggleContainer = styled.div`
   .ui.toggle.checkbox input:checked ~ .box:before,
   .ui.toggle.checkbox input:checked ~ label:before {
     background-color: ${({ theme: { colors } }) => colors.white} !important;
-    width: 4rem;
     height: 1.8em;
   }
 
@@ -42,7 +41,7 @@ const ToggleContainer = styled.div`
 
   .ui.toggle.checkbox input:checked ~ .box:after,
   .ui.toggle.checkbox input:checked ~ label:after {
-    left: 2.3rem;
+    left: 1.8rem;
   }
 `;
 

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
-import { Accordion, Button, Icon } from 'semantic-ui-react';
+import { Accordion, Button } from 'semantic-ui-react';
 
 import {
   reduceBalance,
@@ -19,12 +19,13 @@ import {
   Value,
 } from '../../components/layout/Containers';
 import { LightModeContext } from '../../contexts/LightModeContext';
+import { ArrowDown, DropdownGe } from '../../assets';
 
 const ResultContainer = styled.div`
   display: flex !important;
   justify-content: space-between;
   margin: ${({ gameEditionView }) =>
-    gameEditionView ? '0px' : '0px 0px 22px'};
+    gameEditionView ? '10px 0px 0px 0px' : '16px 0px 32px 0px'};
   flex-direction: row;
   width: 100%;
   height: 100%;
@@ -49,18 +50,31 @@ const HeaderContainer = styled(Accordion.Title)`
   margin: 0;
   text-align: left;
   justify-content: space-between;
-  padding: 10px;
+  padding: 0px !important;
 
   font-family: ${({ gameEditionView, theme: { fontFamily } }) =>
     gameEditionView
       ? `${fontFamily.pressStartRegular} !important`
-      : `${fontFamily.regular} !important`};
+      : `${fontFamily.bold} !important`};
   color: ${({ gameEditionView, theme: { colors } }) =>
     gameEditionView
       ? `${colors.black} !important`
       : `${colors.white} !important`};
   font-size: ${({ gameEditionView }) =>
     gameEditionView ? '10px' : '16px !important'};
+
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
+`;
+
+const IconContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: ${({ active }) => (active ? 'rotate(0deg)' : 'rotate(-90deg)')};
 `;
 
 const TokenPair = (props) => {
@@ -85,7 +99,9 @@ const TokenPair = (props) => {
           onClick={() => handleActiveIndex(props.index)}
         >
           {token0} / {token1}
-          <Icon name='dropdown' />
+          <IconContainer active={props.activeIndex === props.index}>
+            {gameEditionView ? <DropdownGe /> : <ArrowDown />}
+          </IconContainer>
         </HeaderContainer>
         <Accordion.Content
           style={{ flexFlow: 'column', padding: 0 }}

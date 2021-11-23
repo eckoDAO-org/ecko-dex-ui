@@ -1,11 +1,14 @@
 import React, { useContext } from 'react';
 import { Icon, Popup } from 'semantic-ui-react';
+import { GameEditionContext } from '../contexts/GameEditionContext';
 import { LightModeContext } from '../contexts/LightModeContext';
 import { theme } from '../styles/theme';
 import CustomPopup from './CustomPopup';
 
 const CopyPopup = ({ textToCopy }) => {
   const { themeMode } = useContext(LightModeContext);
+  const { gameEditionView } = useContext(GameEditionContext);
+
   return (
     <CustomPopup
       on='click'
@@ -24,7 +27,9 @@ const CopyPopup = ({ textToCopy }) => {
       <Popup.Content
         style={{
           padding: '8px',
-          color: theme(themeMode).colors.white,
+          color: gameEditionView
+            ? `${theme(themeMode).colors.black}`
+            : `${theme(themeMode).colors.white}`,
         }}
       >
         Copied!

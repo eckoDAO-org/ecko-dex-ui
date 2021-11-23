@@ -23,7 +23,6 @@ const Divider = styled.div`
 
 const Content = styled.div`
   display: block;
-  padding: 16px 0px;
 `;
 
 const TokensContainer = styled.div`
@@ -74,7 +73,7 @@ const TokenSelectorModalContent = ({
     <Content>
       <Label
         gameEditionView={gameEditionView}
-        style={{ marginTop: 16, marginBottom: 8 }}
+        style={{ marginTop: 12, marginBottom: 8 }}
       >
         search token
       </Label>

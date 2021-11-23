@@ -102,7 +102,7 @@ const TransactionsDetails = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 12px;
+  padding: ${({ gameEditionView }) => gameEditionView && '12px'}; ;
 `;
 
 const SpaceBetweenRow = styled.div`
@@ -131,7 +131,7 @@ const Label = styled.span`
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : `${colors.white}99`};
+    gameEditionView ? colors.black : `${colors.white}`};
 `;
 
 const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
@@ -159,7 +159,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
         <Title gameEditionView={gameEditionView}>Preview Successful!</Title>
         <SuccessfullIcon />
 
-        <TransactionsDetails>
+        <TransactionsDetails gameEditionView={gameEditionView}>
           <SpaceBetweenRow>
             <HighlightLabel gameEditionView={gameEditionView}>
               From
@@ -244,6 +244,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
             width: '100%',
             position: gameEditionView && 'absolute',
             top: gameEditionView && '332px',
+            marginTop: !gameEditionView && '16px',
           }}
           onClick={async () => {
             setLoading(true);
@@ -269,7 +270,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
 
         <SuccessfullIcon />
 
-        <TransactionsDetails>
+        <TransactionsDetails gameEditionView={gameEditionView}>
           <FlexStartRow style={{ marginBottom: 16 }}>
             <HighlightLabel gameEditionView={gameEditionView}>
               Remove
@@ -326,6 +327,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
             width: '100%',
             position: gameEditionView && 'absolute',
             top: gameEditionView && 316,
+            marginTop: !gameEditionView && '16px',
           }}
           onClick={async () => {
             setLoading(true);
@@ -346,7 +348,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
       <Content gameEditionView={gameEditionView} style={{ bottom: '128px' }}>
         <Title gameEditionView={gameEditionView}>Preview Successful!</Title>
         <SuccessfullIcon />
-        <TransactionsDetails>
+        <TransactionsDetails gameEditionView={gameEditionView}>
           <FlexStartRow style={{ marginBottom: 16 }}>
             <Label gameEditionView={gameEditionView}>Add</Label>
           </FlexStartRow>
@@ -398,6 +400,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
             width: '100%',
             position: gameEditionView && 'absolute',
             top: gameEditionView && 316,
+            marginTop: !gameEditionView && '16px',
           }}
           onClick={async () => {
             setLoading(true);
@@ -425,7 +428,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
         <ErrorIcon />
         <Title gameEditionView={gameEditionView}>Preview Failed!</Title>
         <SubTitle gameEditionView={gameEditionView}>Error Message</SubTitle>
-        <TransactionsDetails>
+        <TransactionsDetails gameEditionView={gameEditionView}>
           <Message
             color='red'
             style={{ wordBreak: 'break-all', backgroundColor: '#424242' }}
@@ -452,6 +455,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
             position: gameEditionView && 'absolute',
             top: gameEditionView && '282px',
             width: gameEditionView && '100%',
+            marginTop: !gameEditionView && '16px',
           }}
         >
           Retry
@@ -469,7 +473,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
         <ErrorIcon />
         <Title gameEditionView={gameEditionView}>Transaction Error!</Title>
         <SubTitle gameEditionView={gameEditionView}>Error Message</SubTitle>
-        <TransactionsDetails>
+        <TransactionsDetails gameEditionView={gameEditionView}>
           <Message
             color='red'
             style={{ wordBreak: 'break-all', backgroundColor: '#424242' }}
@@ -484,6 +488,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
             position: gameEditionView && 'absolute',
             top: gameEditionView && '282px',
             width: gameEditionView && '100%',
+            marginTop: !gameEditionView && '16px',
           }}
           onClick={() => {
             onClose();

@@ -8,7 +8,7 @@ const Container = styled.div`
   position: relative;
   display: flex;
   flex-flow: column;
-  padding: 20px 20px;
+  padding: ${({ gameEditionView }) => (gameEditionView ? '20px' : '32px')};
   width: 100%;
   border-radius: 10px;
   border: ${({ gameEditionView, theme: { colors } }) =>
@@ -17,10 +17,13 @@ const Container = styled.div`
     !gameEditionView && `padding-box`};
   opacity: 1;
   background: ${({
+    gameEditionView,
     theme: { backgroundContainer },
     backgroundNotChangebleWithTheme,
   }) =>
-    backgroundNotChangebleWithTheme ? 'transparent' : backgroundContainer};
+    backgroundNotChangebleWithTheme || gameEditionView
+      ? 'transparent'
+      : backgroundContainer};
   backdrop-filter: ${({ gameEditionView, withoutRainbowBackground }) =>
     !gameEditionView && !withoutRainbowBackground && `blur(50px)`};
   color: ${({ gameEditionView, theme: { colors } }) =>
@@ -91,6 +94,8 @@ const Description = styled.span`
   font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
   font-size: 16px;
   margin-bottom: 24px;
+
+  margin-top: 12px;
 `;
 
 const ModalContainer = ({

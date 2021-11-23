@@ -76,7 +76,7 @@ const LogoContainer = styled(FadeIn)`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 16px;
   width: 100%;
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
   top: ${({ gameEditionView }) => gameEditionView && '280px'};
@@ -87,7 +87,7 @@ const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin: ${({ gameEditionView }) =>
-    gameEditionView ? `0px` : ` 20px 0px 0px 0px`};
+    gameEditionView ? `0px` : ` 16px 0px 0px 0px`};
   flex-flow: column;
   width: 100%;
   padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : 0)};
@@ -97,13 +97,16 @@ const ResultContainer = styled.div`
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
   }
+
+  & > *:not(:last-child) {
+    margin-bottom: ${({ gameEditionView }) => !gameEditionView && `10px`};
+  }
 `;
 
 const InnerRowContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-flow: row;
-  margin-bottom: ${({ gameEditionView }) => !gameEditionView && `10px`};
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: row;

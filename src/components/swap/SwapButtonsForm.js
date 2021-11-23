@@ -14,7 +14,6 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 12px;
   width: 100%;
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
   top: ${({ gameEditionView }) => gameEditionView && '290px'};

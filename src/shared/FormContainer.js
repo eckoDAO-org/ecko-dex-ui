@@ -16,7 +16,8 @@ const Container = styled.div`
     gameEditionView ? `none` : `1px solid transparent`}; */
 
   opacity: 1;
-  background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
+  background: ${({ gameEditionView, theme: { backgroundContainer } }) =>
+    gameEditionView ? 'transparent' : backgroundContainer};
   backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
   padding: ${({ gameEditionView }) =>
     gameEditionView ? `10px 10px` : `32px 32px`};
