@@ -72,14 +72,12 @@ const GameLabel = styled.div`
 
 const GameEditionToggle = ({ animation }) => {
   const game = useContext(GameEditionContext);
-  const { themeMode, themeToggler } = useContext(LightModeContext);
   return (
     <ToggleContainer animation={animation}>
       <GameLabel gameEditionView={game.gameEditionView}>Game Edition</GameLabel>
       <Checkbox
         toggle
         onChange={() => {
-          if (themeMode === 'light') themeToggler();
           game.setGameEditionView(!game.gameEditionView);
           game.closeModal();
         }}

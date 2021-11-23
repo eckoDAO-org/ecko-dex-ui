@@ -8,7 +8,7 @@ import CustomPopup from '../../../shared/CustomPopup';
 import { theme } from '../../../styles/theme';
 
 const PopupTxView = ({ isAccountPopup }) => {
-  const gameEditionView = useContext(GameEditionContext);
+  const { gameEditionView } = useContext(GameEditionContext);
   const { account } = useContext(AccountContext);
   const { themeMode } = useContext(LightModeContext);
 
@@ -28,7 +28,9 @@ const PopupTxView = ({ isAccountPopup }) => {
       <Popup.Header
         style={{
           padding: '12px 12px 4px 12px',
-          color: theme(themeMode).colors.white,
+          color: gameEditionView
+            ? `${theme(themeMode).colors.black}`
+            : `${theme(themeMode).colors.white}`,
         }}
       >
         Public Key
@@ -39,7 +41,9 @@ const PopupTxView = ({ isAccountPopup }) => {
           inlineSize: '270px',
           overflowWrap: ' break-word',
           padding: '4px 12px 12px 12px',
-          color: theme(themeMode).colors.white,
+          color: gameEditionView
+            ? `${theme(themeMode).colors.black}`
+            : `${theme(themeMode).colors.white}`,
         }}
       >
         {account.account}
@@ -70,7 +74,9 @@ const PopupTxView = ({ isAccountPopup }) => {
       <Popup.Header
         style={{
           padding: '8px 8px 4px 8px',
-          color: theme(themeMode).colors.white,
+          color: gameEditionView
+            ? `${theme(themeMode).colors.black} !important`
+            : `${theme(themeMode).colors.white} !important`,
         }}
       >
         Why is Gas free?
@@ -78,7 +84,9 @@ const PopupTxView = ({ isAccountPopup }) => {
       <Popup.Content
         style={{
           padding: '8px 4px 8px 8px',
-          color: theme(themeMode).colors.white,
+          color: gameEditionView
+            ? `${theme(themeMode).colors.black} !important`
+            : `${theme(themeMode).colors.white} !important`,
         }}
       >
         Kadena has a novel concept called gas stations that allows smart

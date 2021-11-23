@@ -4,7 +4,12 @@ import HeaderItem from '../../../shared/HeaderItem';
 import AccountInfo from './AccountInfo';
 import Button from '../../../shared/CustomButton';
 import CustomPopup from '../../../shared/CustomPopup';
-import { PowerIcon, CogIcon, AboutBigIcon } from '../../../assets';
+import {
+  PowerIcon,
+  CogIcon,
+  AboutBigIcon,
+  ThreeDotsIcon,
+} from '../../../assets';
 import headerLinks from '../../headerLinks';
 import PopupContentList from './PopupContentList';
 import { AccountContext } from '../../../contexts/AccountContext';
@@ -50,6 +55,18 @@ const RightContainerHeader = styled.div`
 
 const FadeContainer = styled.div``;
 
+const AccountIdContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: ${({ gameEditionView, theme: { fontFamily } }) =>
+    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
+  & > span:first-child {
+    font-family: ${({ gameEditionView, theme: { fontFamily } }) =>
+      !gameEditionView && fontFamily.bold};
+  }
+`;
+
 // const Label = styled.span`
 //   font-size: 13px;
 //   font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
@@ -62,7 +79,7 @@ const FadeContainer = styled.div``;
 const RightHeaderItems = () => {
   const { account, logout } = useContext(AccountContext);
   const modalContext = useContext(ModalContext);
-  const { gameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView, openModal } = useContext(GameEditionContext);
   const notification = useContext(NotificationContext);
   const rightModal = useContext(RightModalContext);
 
@@ -71,20 +88,46 @@ const RightHeaderItems = () => {
       {account?.account ? (
         <HeaderItem className='mobile-none'>
           <AccountInfo
-            onClick={() =>
-              modalContext.openModal({
-                title: account?.account ? 'wallet connected' : 'connect wallet',
-                description: account?.account ? (
-                  <div>
-                    Account ID: {reduceToken(account.account)}
-                    <CopyPopup textToCopy={account.account} />
-                  </div>
-                ) : (
-                  'Connect a wallet using one of the methods below'
-                ),
-                content: <ConnectWalletModal />,
-              })
-            }
+            onClick={() => {
+              if (gameEditionView) {
+                return openModal({
+                  isVisible: true,
+                  title: account?.account
+                    ? 'wallet connected'
+                    : 'connect wallet',
+                  description: account?.account ? (
+                    <AccountIdContainer gameEditionView={gameEditionView}>
+                      <span>Account ID:</span>
+                      <span>
+                        {reduceToken(account.account)}{' '}
+                        <CopyPopup textToCopy={account.account} />
+                      </span>
+                    </AccountIdContainer>
+                  ) : (
+                    'Connect a wallet using one of the methods below'
+                  ),
+                  content: <ConnectWalletModal />,
+                });
+              } else {
+                modalContext.openModal({
+                  title: account?.account
+                    ? 'wallet connected'
+                    : 'connect wallet',
+                  description: account?.account ? (
+                    <AccountIdContainer>
+                      <span>Account ID:</span>
+                      <span>
+                        {reduceToken(account.account)}{' '}
+                        <CopyPopup textToCopy={account.account} />
+                      </span>
+                    </AccountIdContainer>
+                  ) : (
+                    'Connect a wallet using one of the methods below'
+                  ),
+                  content: <ConnectWalletModal />,
+                });
+              }
+            }}
             account={
               account.account ? `${reduceToken(account.account)}` : 'KDA'
             }
@@ -103,17 +146,30 @@ const RightHeaderItems = () => {
               hover={true}
               buttonStyle={{ padding: '10px 16px' }}
               fontSize={14}
-              onClick={() =>
-                modalContext.openModal({
-                  title: account?.account
-                    ? 'wallet connected'
-                    : 'connect wallet',
-                  description: account?.account
-                    ? `Account ID: ${reduceToken(account.account)}`
-                    : 'Connect a wallet using one of the methods below',
-                  content: <ConnectWalletModal />,
-                })
-              }
+              onClick={() => {
+                if (gameEditionView) {
+                  return openModal({
+                    isVisible: true,
+                    title: account?.account
+                      ? 'wallet connected'
+                      : 'connect wallet',
+                    description: account?.account
+                      ? `Account ID: ${reduceToken(account.account)}`
+                      : 'Connect a wallet using one of the methods below',
+                    content: <ConnectWalletModal />,
+                  });
+                } else {
+                  return modalContext.openModal({
+                    title: account?.account
+                      ? 'wallet connected'
+                      : 'connect wallet',
+                    description: account?.account
+                      ? `Account ID: ${reduceToken(account.account)}`
+                      : 'Connect a wallet using one of the methods below',
+                    content: <ConnectWalletModal />,
+                  });
+                }
+              }}
             >
               Connect Wallet
             </Button>
@@ -141,6 +197,7 @@ const RightHeaderItems = () => {
                   }}
                   label=' Remove All Notification'
                   fontSize='12px'
+                  buttonStyle={{ width: '100%' }}
                   outGameEditionView
                 />
               ),
@@ -164,12 +221,12 @@ const RightHeaderItems = () => {
       <HeaderItem>
         <CustomPopup
           basic
-          trigger={<AboutBigIcon />}
+          trigger={<ThreeDotsIcon />}
           on='click'
           offset={[0, 10]}
           position='bottom right'
         >
-          <PopupContentList items={headerLinks} />
+          <PopupContentList items={headerLinks} viewOtherComponents />
         </CustomPopup>
       </HeaderItem>
     </RightContainerHeader>

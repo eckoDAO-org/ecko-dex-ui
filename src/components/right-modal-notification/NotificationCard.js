@@ -21,6 +21,8 @@ const Container = styled.div`
       : 'none'};
   width: 100%;
   height: 100%;
+  padding: 0px 26px;
+
   /* 
   transform: ${({ animation }) =>
     !animation ? 'translateX(0px)' : 'translateX(500px)'};
@@ -30,12 +32,13 @@ const Container = styled.div`
 const NotificationContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   height: 100%;
   width: 100%;
-  color: #fff;
-  padding: 16px 26px;
+  color: ${({ theme: { colors } }) => colors.white};
+  padding: 16px 0px;
+  border-top: 1px solid #707070;
 `;
 
 const CustomDivider = styled(Divider)`
@@ -59,18 +62,20 @@ const IconColumn = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  svg {
-    width: 40px;
-    height: 40px;
-  }
+  margin-right: 16px;
+`;
+
+const Content = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const DescriptionColumn = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  max-width: 200px;
   & > span:not(:last-child) {
     margin-bottom: 4px;
   }
@@ -88,6 +93,7 @@ const Title = styled.span`
 const Description = styled.span`
   word-wrap: break-word;
   overflow-wrap: anywhere;
+  line-height: 18px;
   font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
   font-size: 14px;
 `;
@@ -146,18 +152,20 @@ const NotificationCard = ({
       animation={animation}
       style={{ cursor: link && 'pointer' }}
     >
-      <CustomDivider />
+      {/* <CustomDivider /> */}
       <NotificationContainer>
-        <IconColumn>{getIconByTypeNotification(type)}</IconColumn>
-        <DescriptionColumn
-          onClick={async () => {
-            link && (await window.open(link, '_blank', 'noopener,noreferrer'));
-          }}
-        >
-          <DateTimeText>{`${date} - ${time}`}</DateTimeText>
-          <Title>{title}</Title>
-          <Description>{description}</Description>
-        </DescriptionColumn>
+        <Content>
+          <IconColumn>{getIconByTypeNotification(type)}</IconColumn>
+          <DescriptionColumn
+            onClick={() => {
+              link && window.open(link, '_blank', 'noopener,noreferrer');
+            }}
+          >
+            <DateTimeText>{`${date} - ${time}`}</DateTimeText>
+            <Title>{title}</Title>
+            <Description>{description}</Description>
+          </DescriptionColumn>
+        </Content>
         <CloseIconColumn>
           <CloseIcon
             style={{ cursor: 'pointer' }}

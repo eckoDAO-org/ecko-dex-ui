@@ -12,8 +12,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  margin-bottom: 9px;
-  padding: 10px;
+  padding: 16px;
   background: transparent;
 `;
 
@@ -39,7 +38,8 @@ const SlippageTolleranceValue = styled.div`
     isSelected ? colors.primary : colors.white};
   /* text-shadow: ${({ isSelected, theme: { colors } }) =>
     isSelected ? `0 0 5px ${colors.white};` : 'none'}; */
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
+  font-family: ${({ isSelected, theme: { fontFamily } }) =>
+    isSelected ? fontFamily.bold : fontFamily.regular};
   font-size: 14px;
   padding: 6.5px 8.5px;
   min-width: 48px;

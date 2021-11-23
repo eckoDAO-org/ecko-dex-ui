@@ -15,7 +15,8 @@ const Container = styled.div`
     else return '0px';
   }};
   width: 100%;
-  background-color: ${({ theme: { backgroundInput } }) => backgroundInput};
+  background-color: ${({ gameEditionView, theme: { backgroundInput } }) =>
+    gameEditionView ? 'transparent' : backgroundInput};
   border: ${({ gameEditionView, theme: { colors } }) =>
     !gameEditionView && `1px solid ${colors.white}99`};
   border-radius: ${({ gameEditionView }) => !gameEditionView && '4px'};
@@ -79,8 +80,8 @@ const TopLabelsContainer = styled.div`
   span {
     font: ${({ gameEditionView, theme: { fontFamily } }) =>
       gameEditionView
-        ? `normal normal normal 14px/17px ${fontFamily.pressStartRegular}`
-        : `normal normal bold 16px/20px Montserrat`};
+        ? `normal normal normal 13px/16px ${fontFamily.pressStartRegular}`
+        : `normal normal bold 13px/16px Montserrat`};
     letter-spacing: 0px;
     color: ${({ gameEditionView, theme: { colors } }) =>
       gameEditionView ? `${colors.black}` : `${colors.white}`};

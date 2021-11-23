@@ -63,7 +63,7 @@ const LiquidityCardContainer = styled.div`
   position: ${({ gameEditionView }) => !gameEditionView && `relative`};
   display: table;
   flex-flow: column;
-  padding: ${({ gameEditionView }) => (gameEditionView ? '10px' : '20px')};
+  padding: ${({ gameEditionView }) => (gameEditionView ? '32px' : '32px')};
   margin-bottom: 15px;
   width: 100%;
   border-radius: 10px;
@@ -255,22 +255,30 @@ const LiquidityList = (props) => {
                             index={index}
                             setActiveIndex={setActiveIndex}
                           />{' '}
-                          {!Object.values(liquidity.pairListAccount).length ===
-                            index && (
-                            <Divider
-                              style={{
-                                width: '100%',
-                                margin: '20px 0px',
-                                borderTop: gameEditionView
-                                  ? `1px dashed ${
-                                      theme(themeMode).colors.black
-                                    }`
-                                  : `1px solid  ${
-                                      theme(themeMode).colors.white
-                                    }99`,
-                              }}
-                            />
-                          )}
+                          {/* {!Object.values(liquidity.pairListAccount).length ===
+                            index && ( */}
+                          <Divider
+                            style={{
+                              width: '100%',
+                              margin: '32px 0px',
+                              borderTop: gameEditionView
+                                ? `1px dashed ${theme(themeMode).colors.black}`
+                                : `1px solid  ${
+                                    theme(themeMode).colors.white
+                                  }99`,
+                            }}
+                          />
+                          {/* )} */}
+                          <TokenPair
+                            key={pair.name}
+                            pair={pair}
+                            selectAddLiquidity={props.selectAddLiquidity}
+                            selectRemoveLiquidity={props.selectRemoveLiquidity}
+                            setTokenPair={props.setTokenPair}
+                            activeIndex={activeIndex}
+                            index={2}
+                            setActiveIndex={setActiveIndex}
+                          />{' '}
                         </>
                       ) : (
                         <></>

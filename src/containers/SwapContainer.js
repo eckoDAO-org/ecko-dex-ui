@@ -69,8 +69,7 @@ const GameEditionTokenSelectorContainer = styled.div`
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: ${({ gameEditionView }) =>
-    gameEditionView ? `0px` : ` 12px 0px 0px 0px`};
+  margin: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 0px`)};
   padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : ` 0px`)};
   flex-flow: column;
   width: 100%;
@@ -95,6 +94,7 @@ const RowContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-flow: row;
+  margin: 16px 0px;
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: row;
@@ -559,7 +559,7 @@ const SwapContainer = () => {
             <CustomPopup
               trigger={<CogIcon />}
               on='click'
-              offset={[10, 10]}
+              offset={[2, 10]}
               position='bottom right'
             >
               <SlippagePopupContent />
