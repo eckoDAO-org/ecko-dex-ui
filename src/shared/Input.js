@@ -15,8 +15,12 @@ const Container = styled.div`
     else return '0px';
   }};
   width: 100%;
-  background-color: ${({ gameEditionView, theme: { backgroundInput } }) =>
-    gameEditionView ? 'transparent' : backgroundInput};
+  background-color: ${({
+    gameEditionView,
+    noInputBackground,
+    theme: { backgroundInput },
+  }) =>
+    gameEditionView || noInputBackground ? 'transparent' : backgroundInput};
   border: ${({ gameEditionView, theme: { colors } }) =>
     !gameEditionView && `1px solid ${colors.white}99`};
   border-radius: ${({ gameEditionView }) => !gameEditionView && '4px'};
@@ -168,6 +172,7 @@ const Input = ({
   type,
   maxLength,
   outGameEditionView,
+  noInputBackground,
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
 
@@ -195,6 +200,7 @@ const Input = ({
     <Container
       gameEditionView={gameEditionView}
       outGameEditionView={outGameEditionView}
+      noInputBackground={noInputBackground}
       inputRightComponent={inputRightComponent || withSelectButton}
       inputComponentWidth={
         inputRightComponent

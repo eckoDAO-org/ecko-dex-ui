@@ -221,7 +221,7 @@ const RightHeaderItems = () => {
       <HeaderItem>
         <CustomPopup
           basic
-          trigger={<ThreeDotsIcon />}
+          trigger={<ThreeDotsIcon style={{ marginBottom: '4px' }} />}
           on='click'
           offset={[0, 10]}
           position='bottom right'

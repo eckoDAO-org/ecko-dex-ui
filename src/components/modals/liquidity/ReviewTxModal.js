@@ -13,11 +13,17 @@ import tokenData from '../../../constants/cryptoCurrencies';
 
 const Container = styled.div`
   position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: flex;
   flex-flow: column;
   justify-content: center;
   align-items: center;
-  max-width: 385px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 550px;
   width: 100%;
   z-index: 5;
 `;
@@ -230,7 +236,7 @@ const ReviewTxModal = ({
   ) : (
     <Transition
       items={show}
-      from={{ opacity: 0 }}
+      from={{ opacity: 1 }}
       enter={{ opacity: 1 }}
       leave={{ opacity: 0 }}
     >
@@ -239,15 +245,7 @@ const ReviewTxModal = ({
         ((props) => (
           <Container style={props}>
             <Backdrop onClose={onClose} />
-            <ModalContainer
-              title='Transaction Details'
-              containerStyle={{
-                height: '100%',
-                maxHeight: '80vh',
-                maxWidth: '90vw',
-              }}
-              onClose={onClose}
-            >
+            <ModalContainer title='Transaction Details' onClose={onClose}>
               <Content>
                 <Title style={{ padding: '16px 0px', fontSize: 16 }}>
                   Preview Succesful

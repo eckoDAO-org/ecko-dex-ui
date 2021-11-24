@@ -134,6 +134,7 @@ const SlippagePopupContent = () => {
 
         <ContainerInputTypeNumber className='restrictedInput'>
           <Input
+            noInputBackground
             outGameEditionView
             containerStyle={{
               border: 'none ',
@@ -159,6 +160,7 @@ const SlippagePopupContent = () => {
       <Row style={{ marginTop: 8 }}>
         <ContainerInputTypeNumber>
           <Input
+            noInputBackground
             outGameEditionView
             containerStyle={{
               border: 'none',
