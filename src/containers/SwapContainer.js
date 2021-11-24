@@ -524,15 +524,6 @@ const SwapContainer = () => {
       onAnimationEnd={() => setIsLogoVisible(true)}
       className='scrollbar-none'
     >
-      {/* <TokenSelectorModal
-        show={tokenSelectorType !== null}
-        selectedToken={selectedToken}
-        onTokenClick={onTokenClick}
-        fromToken={fromValues.coin}
-        toToken={toValues.coin}
-        onClose={() => setTokenSelectorType(null)}
-      /> */}
-
       <TxView
         show={showTxModal}
         selectedToken={selectedToken}

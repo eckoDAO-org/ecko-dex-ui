@@ -243,7 +243,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           buttonStyle={{
             width: '100%',
             position: gameEditionView && 'absolute',
-            top: gameEditionView && '332px',
+            top: gameEditionView && '325px',
             marginTop: !gameEditionView && '16px',
           }}
           onClick={async () => {

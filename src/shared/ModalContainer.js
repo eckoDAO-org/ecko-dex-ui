@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
 import { ArrowBack, CloseIcon } from '../assets';
 import { GameEditionContext } from '../contexts/GameEditionContext';
+import GradientBorder from './GradientBorder';
 
 const Container = styled.div`
   position: relative;
@@ -28,31 +29,6 @@ const Container = styled.div`
     !gameEditionView && !withoutRainbowBackground && `blur(50px)`};
   color: ${({ gameEditionView, theme: { colors } }) =>
     gameEditionView ? colors.black : colors.white};
-
-  ${({ withoutRainbowBackground, gameEditionView }) =>
-    !withoutRainbowBackground &&
-    !gameEditionView &&
-    `::before {
-      content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -1000;
-    margin: -1px;
-    border-radius: 10px;
-    border-left: 1px solid #ed1cb5;
-    border-right: 1px solid #39fffc;
-    background-image: linear-gradient(to right, #ed1cb5, #ffa900, #39fffc),
-      linear-gradient(to right, #ed1cb5, #ffa900, #39fffc);
-    /* background: ${({ gameEditionView }) =>
-      !gameEditionView &&
-      'linear-gradient(to right, #ed1cb5, #ffa900, #39fffc)'}; */
-    background-position: 0 0, 0 100%;
-    background-size: 100% 1px;
-    background-repeat: no-repeat;
-    }`}
 
   ::-webkit-scrollbar {
     display: none;
@@ -119,6 +95,7 @@ const ModalContainer = ({
       withoutRainbowBackground={withoutRainbowBackground}
       backgroundNotChangebleWithTheme={backgroundNotChangebleWithTheme}
     >
+      {!gameEditionView && !withoutRainbowBackground && <GradientBorder />}
       <HeaderContainer>
         {onBack ? (
           <ArrowBack

@@ -157,7 +157,6 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
             )
           )
         ) : (
-          // <Dimmer active inverted={gameEditionView}>
           <Loader
             style={{
               color: gameEditionView
@@ -168,9 +167,8 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
                 : theme(themeMode).fontFamily.regular,
             }}
           >
-            Loading
+            Loading..
           </Loader>
-          // </Dimmer>
         )}
       </PartialScrollableScrollSection>
     </ModalContainer>
@@ -238,12 +236,9 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
               )
             )
           ) : (
-            <Dimmer
-              active
-              inverted={gameEditionView}
-              style={{ background: !gameEditionView && 'transparent' }}
-            >
+            <div style={{ padding: '16px' }}>
               <Loader
+                active
                 style={{
                   color: gameEditionView
                     ? theme(themeMode).colors.black
@@ -255,7 +250,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
               >
                 Loading..
               </Loader>
-            </Dimmer>
+            </div>
           )}
         </CardContainer>
       </PartialScrollableScrollSection>
