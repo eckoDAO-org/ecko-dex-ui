@@ -8,17 +8,19 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: ${({ gameEditionView }) =>
-    gameEditionView ? `0px` : ` 20px 0px 0px 0px`};
+  margin: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 16px 0px`)};
   padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : ` 0px`)};
   flex-flow: column;
   width: 100%;
   /* position: ${({ gameEditionView }) => gameEditionView && 'absolute'}; */
-  margin-top: ${({ gameEditionView }) => gameEditionView && '30px'};
+  margin-top: ${({ gameEditionView }) => gameEditionView && '20px'};
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
     margin-bottom: 0px;
+  }
+  & > *:not(:last-child) {
+    margin-bottom: ${({ gameEditionView }) => !gameEditionView && `10px`};
   }
 `;
 
@@ -26,7 +28,6 @@ const RowContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-flow: row;
-  margin-bottom: ${({ gameEditionView }) => !gameEditionView && `10px`};
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: row;
@@ -89,10 +90,6 @@ const SwapResults = ({ priceImpact, fromValues, toValues }) => {
           {`${(
             liquidity.liquidityProviderFee * parseFloat(fromValues.amount)
           ).toFixed(fromValues.precision)} ${fromValues.coin}`}
-          {/* {`${reduceBalance(
-            liquidity.liquidityProviderFee * parseFloat(fromValues.amount),
-            14
-          )} ${fromValues.coin}`} */}
         </Value>
       </RowContainer>
     </ResultContainer>

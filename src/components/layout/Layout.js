@@ -29,7 +29,7 @@ const WrapperContainer = styled(Wrapper)`
 const MainContent = styled.div`
   height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
   & > div:first-child {
-    height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
+    height: ${({ theme: { header } }) => `90%`};
   }
 `;
 

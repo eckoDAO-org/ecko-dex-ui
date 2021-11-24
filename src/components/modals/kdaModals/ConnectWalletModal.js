@@ -2,18 +2,21 @@ import React, { useContext } from "react";
 
 import CustomButton from "../../../shared/CustomButton";
 
-import { WALLET } from "../../../constants/wallet";
-import { ModalContext } from "../../../contexts/ModalContext";
-import ConnectWalletZelcoreModal from "./ConnectWalletZelcoreModal";
-import ConnecWalletTorusModal from "./ConnectWalletTorusModal";
-import ConnectWalletChainweaverModal from "./ConnectWalletChainweaverModal";
-import { GameEditionContext } from "../../../contexts/GameEditionContext";
+import { WALLET } from '../../../constants/wallet';
+import { ModalContext } from '../../../contexts/ModalContext';
+import ConnectWalletZelcoreModal from './ConnectWalletZelcoreModal';
+import ConnecWalletTorusModal from './ConnectWalletTorusModal';
+import ConnectWalletChainweaverModal from './ConnectWalletChainweaverModal';
+import { GameEditionContext } from '../../../contexts/GameEditionContext';
+import { theme } from '../../../styles/theme';
+import { LightModeContext } from '../../../contexts/LightModeContext';
 import { useKadenaWalletContext } from "../../../contexts";
 
 const ConnectWalletModal = () => {
   const modalContext = useContext(ModalContext);
   const { initializeKDAWallet, isInstalled } = useKadenaWalletContext();
   const { gameEditionView, openModal } = useContext(GameEditionContext);
+  const { themeMode } = useContext(LightModeContext);
 
   const openWalletModal = (walletName) => {
     switch (walletName) {
@@ -111,9 +114,17 @@ const ConnectWalletModal = () => {
   return Object.values(WALLET).map((wallet, index) => (
     <CustomButton
       key={index}
-      border="1px solid #FFFFFF99"
-      background="transparent"
-      color="#fff"
+      border={
+        gameEditionView
+          ? `2px dashed ${theme(themeMode).colors.black}`
+          : `1px solid ${theme(themeMode).colors.white}99`
+      }
+      background='transparent'
+      color={
+        gameEditionView
+          ? theme(themeMode).colors.black
+          : theme(themeMode).colors.white
+      }
       onClick={() => {
         openWalletModal(wallet.name);
       }}

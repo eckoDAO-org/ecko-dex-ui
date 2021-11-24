@@ -5,6 +5,7 @@ import { GameEditionContext } from '../contexts/GameEditionContext';
 
 const Item = styled(NavLink)`
   color: ${({ theme: { colors } }) => colors.white};
+  display: flex;
   font-size: 14px;
   text-decoration: none;
   text-transform: capitalize;
@@ -27,7 +28,7 @@ const Item = styled(NavLink)`
     cursor: pointer;
     & svg {
       & path {
-        fill: #ffffff;
+        fill: ${({ theme: { colors } }) => colors.white};
       }
     }
   }

@@ -17,10 +17,11 @@ import {
   pairUnit,
   reduceBalance,
 } from '../../utils/reduceBalance';
-import theme from '../../styles/theme';
+import { theme } from '../../styles/theme';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import GradientBorder from '../../shared/GradientBorder';
+import { LightModeContext } from '../../contexts/LightModeContext';
 
 const Container = styled.div`
   display: flex;
@@ -43,7 +44,7 @@ const SubContainer = styled.div`
   padding: ${({ gameEditionView }) => gameEditionView && '10px'};
 
   & > *:first-child {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 `;
 
@@ -59,14 +60,20 @@ const TitleContainer = styled.div`
 `;
 
 const Title = styled.span`
-  font: ${({ gameEditionView }) =>
+  font: ${({ theme: { fontFamily }, gameEditionView }) =>
     gameEditionView
-      ? `normal normal normal 16px/19px ${theme.fontFamily.pressStartRegular}`
-      : `normal normal bold 32px/57px ${theme.fontFamily.bold}`};
+      ? `normal normal normal 16px/19px ${fontFamily.pressStartRegular}`
+      : `normal normal bold 32px/57px ${fontFamily.bold}`};
   letter-spacing: 0px;
-  color: ${({ gameEditionView }) =>
-    gameEditionView ? `${theme.colors.black}` : `#fff`};
+  color: ${({ theme: { colors }, gameEditionView }) =>
+    gameEditionView ? `${colors.black}` : `${colors.white}`};
   text-transform: capitalize;
+
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -84,7 +91,7 @@ const MyButtonDivider = styled.div`
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 15px 0px;
+  margin: 16px 0px;
   flex-flow: column;
   width: 100%;
   top: ${({ gameEditionView }) => gameEditionView && '180px'};
@@ -109,28 +116,29 @@ const InnerRowContainer = styled.div`
 `;
 
 const Label = styled.span`
-  font: ${({ gameEditionView }) =>
+  font: ${({ theme: { fontFamily }, gameEditionView }) =>
     gameEditionView
-      ? `normal normal normal 10px/12px ${theme.fontFamily.pressStartRegular}`
-      : `normal normal normal 14px/15px ${theme.fontFamily.regular}`};
-  color: ${({ gameEditionView }) =>
-    gameEditionView ? `${theme.colors.black}` : `#fff`};
+      ? `normal normal normal 10px/12px ${fontFamily.pressStartRegular}`
+      : `normal normal normal 13px/16px ${fontFamily.regular}`};
+  color: ${({ theme: { colors }, gameEditionView }) =>
+    gameEditionView ? `${colors.black}` : `${colors.white}`};
   text-transform: capitalize;
 `;
 
 const Value = styled.span`
-  font: ${({ gameEditionView }) =>
+  font: ${({ theme: { fontFamily }, gameEditionView }) =>
     gameEditionView
-      ? `normal normal normal 10px/12px ${theme.fontFamily.pressStartRegular}`
-      : `normal normal normal 16px/20px ${theme.fontFamily.bold}`};
+      ? `normal normal normal 10px/12px ${fontFamily.pressStartRegular}`
+      : `normal normal normal 13px/16px ${fontFamily.bold}`};
   line-height: 20px;
-  color: ${({ gameEditionView }) =>
-    gameEditionView ? `${theme.colors.black}` : `#fff`};
+  color: ${({ theme: { colors }, gameEditionView }) =>
+    gameEditionView ? `${colors.black}` : `${colors.white}`};
 `;
 
 const RemoveLiqContainer = (props) => {
   const wallet = useContext(WalletContext);
   const liquidity = useContext(LiquidityContext);
+  const { themeMode } = useContext(LightModeContext);
   const { gameEditionView } = useContext(GameEditionContext);
   const { token0, token1, balance, pooledAmount } = props.pair;
 
@@ -199,7 +207,7 @@ const RemoveLiqContainer = (props) => {
             <ArrowBack
               style={{
                 cursor: 'pointer',
-                color: '#FFFFFF',
+                color: theme(themeMode).colors.white,
                 marginRight: '15px',
                 justifyContent: 'center',
               }}
@@ -223,9 +231,10 @@ const RemoveLiqContainer = (props) => {
           <Input
             value={amount}
             error={isNaN(amount)}
-            topLeftLabel='Pool Tokens to Remove '
-            placeholder=' Enter Amount'
-            label={{ basic: true, content: '%' }}
+            topLeftLabel='Pool Tokens to Remove'
+            placeholder='Enter Amount'
+            size='large'
+            label={{ content: '%' }}
             onChange={(e) => {
               if (
                 Number(e.target.value) <= 100 &&
@@ -248,19 +257,24 @@ const RemoveLiqContainer = (props) => {
                 background={
                   amount === 25
                     ? gameEditionView
-                      ? `${theme.colors.black}`
-                      : `${theme.colors.white}`
+                      ? `${theme(themeMode).colors.black}`
+                      : `${theme(themeMode).colors.white}`
                     : 'transparent'
                 }
-                border={!gameEditionView && '1px solid #FFFFFF99'}
+                border={
+                  !gameEditionView &&
+                  `1px solid ${theme(themeMode).colors.white}99`
+                }
                 color={
                   amount === 25
                     ? gameEditionView
-                      ? `${theme.colors.yellow}`
-                      : `${theme.colors.black}`
+                      ? `${theme(themeMode).colors.yellow}`
+                      : themeMode === 'dark'
+                      ? `${theme(themeMode).colors.black}`
+                      : `${theme(themeMode).colors.primary}`
                     : gameEditionView
-                    ? `${theme.colors.black}`
-                    : `${theme.colors.white}`
+                    ? `${theme(themeMode).colors.black}`
+                    : `${theme(themeMode).colors.white}`
                 }
                 onClick={() => setAmount(25)}
               >
@@ -271,22 +285,27 @@ const RemoveLiqContainer = (props) => {
                 buttonStyle={{
                   width: '20%',
                 }}
-                border={!gameEditionView && '1px solid #FFFFFF99'}
+                border={
+                  !gameEditionView &&
+                  `1px solid ${theme(themeMode).colors.white}99`
+                }
                 background={
                   amount === 50
                     ? gameEditionView
-                      ? `${theme.colors.black}`
-                      : `${theme.colors.white}`
+                      ? `${theme(themeMode).colors.black}`
+                      : `${theme(themeMode).colors.white}`
                     : 'transparent'
                 }
                 color={
                   amount === 50
                     ? gameEditionView
-                      ? `${theme.colors.yellow}`
-                      : `${theme.colors.black}`
+                      ? `${theme(themeMode).colors.yellow}`
+                      : themeMode === 'dark'
+                      ? `${theme(themeMode).colors.black}`
+                      : `${theme(themeMode).colors.primary}`
                     : gameEditionView
-                    ? `${theme.colors.black}`
-                    : `${theme.colors.white}`
+                    ? `${theme(themeMode).colors.black}`
+                    : `${theme(themeMode).colors.white}`
                 }
                 onClick={() => setAmount(50)}
               >
@@ -297,22 +316,27 @@ const RemoveLiqContainer = (props) => {
                 buttonStyle={{
                   width: '20%',
                 }}
-                border={!gameEditionView && '1px solid #FFFFFF99'}
+                border={
+                  !gameEditionView &&
+                  `1px solid ${theme(themeMode).colors.white}99`
+                }
                 background={
                   amount === 75
                     ? gameEditionView
-                      ? `${theme.colors.black}`
-                      : `${theme.colors.white}`
+                      ? `${theme(themeMode).colors.black}`
+                      : `${theme(themeMode).colors.white}`
                     : 'transparent'
                 }
                 color={
                   amount === 75
                     ? gameEditionView
-                      ? `${theme.colors.yellow}`
-                      : `${theme.colors.black}`
+                      ? `${theme(themeMode).colors.yellow}`
+                      : themeMode === 'dark'
+                      ? `${theme(themeMode).colors.black}`
+                      : `${theme(themeMode).colors.primary}`
                     : gameEditionView
-                    ? `${theme.colors.black}`
-                    : `${theme.colors.white}`
+                    ? `${theme(themeMode).colors.black}`
+                    : `${theme(themeMode).colors.white}`
                 }
                 onClick={() => setAmount(75)}
               >
@@ -323,22 +347,27 @@ const RemoveLiqContainer = (props) => {
                 buttonStyle={{
                   width: '20%',
                 }}
-                border={!gameEditionView && '1px solid #FFFFFF99'}
+                border={
+                  !gameEditionView &&
+                  `1px solid ${theme(themeMode).colors.white}99`
+                }
                 background={
                   amount === 100
                     ? gameEditionView
-                      ? `${theme.colors.black}`
-                      : `${theme.colors.white}`
+                      ? `${theme(themeMode).colors.black}`
+                      : `${theme(themeMode).colors.white}`
                     : 'transparent'
                 }
                 color={
                   amount === 100
                     ? gameEditionView
-                      ? `${theme.colors.yellow}`
-                      : `${theme.colors.black}`
+                      ? `${theme(themeMode).colors.yellow}`
+                      : themeMode === 'dark'
+                      ? `${theme(themeMode).colors.black}`
+                      : `${theme(themeMode).colors.primary}`
                     : gameEditionView
-                    ? `${theme.colors.black}`
-                    : `${theme.colors.white}`
+                    ? `${theme(themeMode).colors.black}`
+                    : `${theme(themeMode).colors.white}`
                 }
                 onClick={() => setAmount(100)}
               >

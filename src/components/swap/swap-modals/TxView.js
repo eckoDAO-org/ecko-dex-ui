@@ -24,6 +24,7 @@ import { PactContext } from '../../../contexts/PactContext';
 import tokenData from '../../../constants/cryptoCurrencies';
 import PopupTxView from './PopupTxView';
 import { theme } from '../../../styles/theme';
+import { LightModeContext } from '../../../contexts/LightModeContext';
 
 const Container = styled.div`
   position: absolute;
@@ -53,10 +54,13 @@ const Content = styled.div`
   flex-direction: column;
   svg {
     display: ${({ gameEditionView }) => gameEditionView && 'none '};
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
   }
   width: ${({ gameEditionView }) => (gameEditionView ? '97%' : '100%')};
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  bottom: ${({ gameEditionView }) => gameEditionView && '82px'};
+  bottom: ${({ gameEditionView }) => gameEditionView && '66px'};
   padding: ${({ gameEditionView }) => gameEditionView && '4px'};
 
   @media (max-width: ${({ theme: { mediaQueries } }) =>
@@ -98,7 +102,7 @@ const TransactionsDetails = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 24px 0px;
+  padding: ${({ gameEditionView }) => gameEditionView && '12px'}; ;
 `;
 
 const SpaceBetweenRow = styled.div`
@@ -127,13 +131,14 @@ const Label = styled.span`
     gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : `${colors.white}99`};
+    gameEditionView ? colors.black : `${colors.white}`};
 `;
 
 const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
   const swap = useContext(SwapContext);
   const { gameEditionView } = useContext(GameEditionContext);
   const { account } = useContext(AccountContext);
+  const { themeMode } = useContext(LightModeContext);
   const pact = useContext(PactContext);
 
   const [loading, setLoading] = useState(false);
@@ -154,7 +159,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
         <Title gameEditionView={gameEditionView}>Preview Successful!</Title>
         <SuccessfullIcon />
 
-        <TransactionsDetails>
+        <TransactionsDetails gameEditionView={gameEditionView}>
           <SpaceBetweenRow>
             <HighlightLabel gameEditionView={gameEditionView}>
               From
@@ -179,8 +184,8 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
               width: '100%',
               marginTop: 0,
               borderTop: gameEditionView
-                ? `1px dashed ${theme().colors.black}`
-                : `1px solid ${theme().colors.white}`,
+                ? `1px dashed ${theme(themeMode).colors.black}`
+                : `1px solid ${theme(themeMode).colors.white}`,
             }}
           />
 
@@ -196,10 +201,10 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
             </HighlightLabel>
           </SpaceBetweenRow>
           <SpaceBetweenRow>
-            <HighlightLabel>
-              <Icon name='inverted  long arrow alternate down' style={{}} />
+            <HighlightLabel gameEditionView={gameEditionView}>
+              <Icon name='long arrow alternate down' style={{}} />
             </HighlightLabel>
-            <Label>{`1 ${showTicker(
+            <Label gameEditionView={gameEditionView}>{`1 ${showTicker(
               swap.localRes.result.data[0].token
             )} = ${reduceBalance(pact.computeOut(1), 12)} ${showTicker(
               swap.localRes.result.data[1].token
@@ -239,6 +244,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
             width: '100%',
             position: gameEditionView && 'absolute',
             top: gameEditionView && '332px',
+            marginTop: !gameEditionView && '16px',
           }}
           onClick={async () => {
             setLoading(true);
@@ -256,12 +262,15 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
 
   const successRemoveView = () => {
     return (
-      <Content gameEditionView={gameEditionView}>
+      <Content
+        gameEditionView={gameEditionView}
+        style={{ bottom: gameEditionView && '132px' }}
+      >
         <Title gameEditionView={gameEditionView}>Preview Successful!</Title>
 
         <SuccessfullIcon />
 
-        <TransactionsDetails>
+        <TransactionsDetails gameEditionView={gameEditionView}>
           <FlexStartRow style={{ marginBottom: 16 }}>
             <HighlightLabel gameEditionView={gameEditionView}>
               Remove
@@ -317,7 +326,8 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           buttonStyle={{
             width: '100%',
             position: gameEditionView && 'absolute',
-            top: gameEditionView && 300,
+            top: gameEditionView && 316,
+            marginTop: !gameEditionView && '16px',
           }}
           onClick={async () => {
             setLoading(true);
@@ -335,10 +345,10 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
 
   const successAddView = () => {
     return (
-      <Content gameEditionView={gameEditionView} style={{ bottom: '148px' }}>
+      <Content gameEditionView={gameEditionView} style={{ bottom: '128px' }}>
         <Title gameEditionView={gameEditionView}>Preview Successful!</Title>
         <SuccessfullIcon />
-        <TransactionsDetails>
+        <TransactionsDetails gameEditionView={gameEditionView}>
           <FlexStartRow style={{ marginBottom: 16 }}>
             <Label gameEditionView={gameEditionView}>Add</Label>
           </FlexStartRow>
@@ -386,7 +396,12 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           </SpaceBetweenRow>
         </TransactionsDetails>
         <CustomButton
-          buttonStyle={{ width: '100%' }}
+          buttonStyle={{
+            width: '100%',
+            position: gameEditionView && 'absolute',
+            top: gameEditionView && 316,
+            marginTop: !gameEditionView && '16px',
+          }}
           onClick={async () => {
             setLoading(true);
             if (view === 'Add Liquidity') {
@@ -413,7 +428,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
         <ErrorIcon />
         <Title gameEditionView={gameEditionView}>Preview Failed!</Title>
         <SubTitle gameEditionView={gameEditionView}>Error Message</SubTitle>
-        <TransactionsDetails>
+        <TransactionsDetails gameEditionView={gameEditionView}>
           <Message
             color='red'
             style={{ wordBreak: 'break-all', backgroundColor: '#424242' }}
@@ -440,6 +455,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
             position: gameEditionView && 'absolute',
             top: gameEditionView && '282px',
             width: gameEditionView && '100%',
+            marginTop: !gameEditionView && '16px',
           }}
         >
           Retry
@@ -457,7 +473,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
         <ErrorIcon />
         <Title gameEditionView={gameEditionView}>Transaction Error!</Title>
         <SubTitle gameEditionView={gameEditionView}>Error Message</SubTitle>
-        <TransactionsDetails>
+        <TransactionsDetails gameEditionView={gameEditionView}>
           <Message
             color='red'
             style={{ wordBreak: 'break-all', backgroundColor: '#424242' }}
@@ -472,6 +488,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
             position: gameEditionView && 'absolute',
             top: gameEditionView && '282px',
             width: gameEditionView && '100%',
+            marginTop: !gameEditionView && '16px',
           }}
           onClick={() => {
             onClose();

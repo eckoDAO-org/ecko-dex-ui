@@ -16,12 +16,16 @@ const PopupContainer = styled.div`
 
   width: 100%;
   border-radius: 10px;
-  border: ${({ gameEditionView }) =>
-    gameEditionView ? `none` : ` 1px solid transparent`};
+  /* border: ${({ gameEditionView }) =>
+    gameEditionView ? `none` : ` 1px solid transparent`}; */
 
   backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
   opacity: 1;
-  background: transparent;
+  background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
+
+  i.inverted.icon {
+    color: none;
+  }
 `;
 
 const CustomPopup = ({

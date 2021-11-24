@@ -8,16 +8,24 @@ const Container = styled.div`
   position: relative;
   display: flex;
   flex-flow: column;
-  padding: 20px 20px;
+  padding: ${({ gameEditionView }) => (gameEditionView ? '20px' : '32px')};
   width: 100%;
   border-radius: 10px;
   border: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? `2px dashed ${colors.black}` : `2px solid transparent`};
+    gameEditionView ? `2px dashed ${colors.black}` : `1px solid transparent`};
   background-clip: ${({ gameEditionView }) =>
     !gameEditionView && `padding-box`};
   opacity: 1;
-  background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
-  backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
+  background: ${({
+    gameEditionView,
+    theme: { backgroundContainer },
+    backgroundNotChangebleWithTheme,
+  }) =>
+    backgroundNotChangebleWithTheme || gameEditionView
+      ? 'transparent'
+      : backgroundContainer};
+  backdrop-filter: ${({ gameEditionView, withoutRainbowBackground }) =>
+    !gameEditionView && !withoutRainbowBackground && `blur(50px)`};
   color: ${({ gameEditionView, theme: { colors } }) =>
     gameEditionView ? colors.black : colors.white};
 
@@ -78,6 +86,7 @@ const Title = styled.span`
     font-size: 16px;
   }
   text-transform: capitalize;
+  white-space: nowrap;
   ${({ theme: { colors } }) => colors.white};
 `;
 
@@ -85,6 +94,8 @@ const Description = styled.span`
   font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
   font-size: 16px;
   margin-bottom: 24px;
+
+  margin-top: 12px;
 `;
 
 const ModalContainer = ({
@@ -97,6 +108,7 @@ const ModalContainer = ({
   onBack,
   onClose,
   withoutRainbowBackground = false,
+  backgroundNotChangebleWithTheme,
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
 
@@ -105,6 +117,7 @@ const ModalContainer = ({
       style={containerStyle}
       gameEditionView={gameEditionView}
       withoutRainbowBackground={withoutRainbowBackground}
+      backgroundNotChangebleWithTheme={backgroundNotChangebleWithTheme}
     >
       <HeaderContainer>
         {onBack ? (

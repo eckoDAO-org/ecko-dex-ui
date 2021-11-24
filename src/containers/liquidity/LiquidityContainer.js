@@ -15,24 +15,26 @@ import { ModalContext } from '../../contexts/ModalContext';
 import { AccountContext } from '../../contexts/AccountContext';
 import { WalletContext } from '../../contexts/WalletContext';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
-import theme from '../../styles/theme';
+import { theme } from '../../styles/theme';
 import tokenData from '../../constants/cryptoCurrencies';
 import SwapForm from '../../components/swap/SwapForm';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import TokenSelectorModalContent from '../../components/swap/swap-modals/TokenSelectorModalContent';
-import { Logo } from '../../assets';
+import { CogIcon, Logo } from '../../assets';
 import { FadeIn } from '../../components/shared/animations';
 import FormContainer from '../../shared/FormContainer';
 import GradientBorder from '../../shared/GradientBorder';
+import { LightModeContext } from '../../contexts/LightModeContext';
+import HeaderItem from '../../shared/HeaderItem';
+import CustomPopup from '../../shared/CustomPopup';
+import SlippagePopupContent from '../../components/layout/header/SlippagePopupContent';
 
 const Container = styled(FadeIn)`
-  margin-top: ${({ theme: { header } }) => header.height};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-flow: column;
   width: 100%;
+  margin-left: auto;
+  margin-right: auto;
   max-width: ${({ gameEditionView }) => !gameEditionView && `500px`};
+  overflow: auto;
 `;
 
 const TitleContainer = styled.div`
@@ -52,9 +54,14 @@ const Title = styled.span`
       ? `normal normal normal 16px/19px ${fontFamily.pressStartRegular}`
       : 'normal normal bold 32px/57px Montserrat'};
   letter-spacing: 0px;
-  color: ${({ gameEditionView }) =>
-    gameEditionView ? theme.colors.black : '#ffffff'};
+  color: ${({ gameEditionView, theme: { colors } }) =>
+    gameEditionView ? colors.black : colors.white};
   text-transform: capitalize;
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
 `;
 
 const LogoContainer = styled(FadeIn)`
@@ -69,17 +76,18 @@ const LogoContainer = styled(FadeIn)`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 16px;
   width: 100%;
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  bottom: ${({ gameEditionView }) => gameEditionView && '10px'};
+  top: ${({ gameEditionView }) => gameEditionView && '280px'};
+  left: ${({ gameEditionView }) => gameEditionView && 0};
 `;
 
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin: ${({ gameEditionView }) =>
-    gameEditionView ? `0px` : ` 20px 0px 0px 0px`};
+    gameEditionView ? `0px` : ` 16px 0px 0px 0px`};
   flex-flow: column;
   width: 100%;
   padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : 0)};
@@ -89,13 +97,16 @@ const ResultContainer = styled.div`
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
   }
+
+  & > *:not(:last-child) {
+    margin-bottom: ${({ gameEditionView }) => !gameEditionView && `10px`};
+  }
 `;
 
 const InnerRowContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-flow: row;
-  margin-bottom: ${({ gameEditionView }) => !gameEditionView && `10px`};
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: row;
@@ -108,7 +119,7 @@ const Value = styled.span`
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   line-height: 20px;
   color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : '#FFFFFF'};
+    gameEditionView ? colors.black : colors.white};
 `;
 
 const initialStateValue = {
@@ -135,6 +146,7 @@ const LiquidityContainer = (props) => {
   const wallet = useContext(WalletContext);
   const liquidity = useContext(LiquidityContext);
   const modalContext = useContext(ModalContext);
+  const { themeMode } = useContext(LightModeContext);
   const { gameEditionView, openModal, closeModal, isSwapping, setIsSwapping } =
     useContext(GameEditionContext);
   const { selectedView, setSelectedView } = props;
@@ -660,6 +672,7 @@ const LiquidityContainer = (props) => {
     <Container
       gameEditionView={gameEditionView}
       onAnimationEnd={() => setIsLogoVisible(true)}
+      className='scrollbar-none'
     >
       {/* <TokenSelectorModal
                 show={tokenSelectorType !== null}
@@ -712,15 +725,15 @@ const LiquidityContainer = (props) => {
           gameEditionView={gameEditionView}
           style={{
             fontFamily: gameEditionView
-              ? theme.fontFamily.pressStartRegular
-              : theme.fontFamily.bold,
+              ? theme(themeMode).fontFamily.pressStartRegular
+              : theme(themeMode).fontFamily.bold,
           }}
         >
           {!gameEditionView && (
             <ArrowBack
               style={{
                 cursor: 'pointer',
-                color: '#FFFFFF',
+                color: theme(themeMode).colors.white,
                 marginRight: '15px',
                 justifyContent: 'center',
               }}
@@ -729,7 +742,26 @@ const LiquidityContainer = (props) => {
           )}
           Add Liquidity
         </Title>
-        {gameEditionView && <CloseGE onClick={() => props.closeLiquidity()} />}
+        {gameEditionView && (
+          <CloseGE
+            style={{ cursor: 'pointer' }}
+            onClick={() => props.closeLiquidity()}
+          />
+        )}
+        {!gameEditionView && (
+          <HeaderItem
+            headerItemStyle={{ alignItems: 'center', display: 'flex' }}
+          >
+            <CustomPopup
+              trigger={<CogIcon />}
+              on='click'
+              offset={[10, 10]}
+              position='bottom right'
+            >
+              <SlippagePopupContent />
+            </CustomPopup>
+          </HeaderItem>
+        )}
       </TitleContainer>
       <FormContainer gameEditionView={gameEditionView}>
         {!gameEditionView && <GradientBorder />}

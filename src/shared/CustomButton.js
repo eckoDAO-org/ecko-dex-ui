@@ -6,6 +6,9 @@ import { GameEditionContext } from '../contexts/GameEditionContext';
 
 const StyledButton = styled(SUIButton)`
   cursor: pointer;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
   font-family: ${({
     theme: { fontFamily },
     gameEditionView,
@@ -56,6 +59,13 @@ const StyledButton = styled(SUIButton)`
     if (gameEditionView) return `2px dashed ${colors.black} !important`;
     else return `1px solid ${colors.white} !important`;
   }};
+
+  svg {
+    margin-right: 4px;
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
   /* box-shadow: ${({ boxShadow, gameEditionView }) => {
     if (boxShadow) return boxShadow + ' !important';
     else if (gameEditionView) return `none !important`;

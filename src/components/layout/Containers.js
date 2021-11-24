@@ -26,7 +26,8 @@ export const ButtonContainer = styled.div`
 
 export const RowContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: ${({ gameEditionView }) =>
+    gameEditionView ? 'space-between' : 'center'};
   width: 100%;
   flex-flow: ${({ gameEditionView }) => (gameEditionView ? 'row' : 'column')};
   margin-bottom: ${({ gameEditionView }) => (gameEditionView ? '8px' : '0px')};
@@ -58,8 +59,9 @@ export const Value = styled.span`
   text-align: ${({ gameEditionView }) => gameEditionView && 'left'};
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
-    margin-bottom: 5px;
+    /* margin-bottom: 5px; */
   }
+  line-break: anywhere;
 `;
 
 export const TitleContainer = styled.div`

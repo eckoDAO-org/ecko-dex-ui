@@ -13,9 +13,9 @@ const Container = styled.div`
   display: flex;
   flex-flow: column;
   width: 100%;
-  position: ${({ gameEditionView }) =>
+  /* position: ${({ gameEditionView }) =>
     gameEditionView && 'absolute !important'};
-  bottom: ${({ gameEditionView }) => gameEditionView && '50px !important'};
+  bottom: ${({ gameEditionView }) => gameEditionView && '50px !important'}; */
   svg {
     path {
       fill: ${({ theme: { colors } }) => colors.white};
@@ -43,7 +43,7 @@ const SwapForm = ({
         topRightLabel={`balance: ${reduceBalance(fromValues.balance) ?? '-'}`}
         placeholder='enter amount'
         maxLength='15'
-        size='big'
+        size='large'
         inputRightComponent={
           fromValues.coin ? (
             <InputToken
@@ -87,6 +87,7 @@ const SwapForm = ({
         topLeftLabel={toNote ? `to ${toNote}` : `to`}
         topRightLabel={`balance: ${reduceBalance(toValues.balance) ?? '-'}`}
         placeholder='enter amount'
+        size='large'
         maxLength='15'
         inputRightComponent={
           toValues.coin ? (

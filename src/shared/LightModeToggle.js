@@ -12,8 +12,7 @@ const ToggleContainer = styled.div`
   justify-content: center;
   flex-direction: row;
   border-radius: 20px;
-  font-family: ${({ theme: { fontFamily } }) =>
-    `${fontFamily.pressStartRegular}`};
+  font-family: ${({ theme: { fontFamily } }) => `${fontFamily.bold}`};
 
   .ui.checkbox {
     margin-bottom: 4px;
@@ -23,16 +22,15 @@ const ToggleContainer = styled.div`
   .ui.toggle.checkbox label:before,
   .ui.toggle.checkbox input:checked ~ .box:before,
   .ui.toggle.checkbox input:checked ~ label:before {
-    background: transparent linear-gradient(112deg, #5c4499 0%, #271259 100%) 0%
-      0% no-repeat padding-box;
-    width: 4rem;
+    background-color: ${({ theme: { colors } }) => colors.white} !important;
     height: 1.8em;
   }
 
   .ui.toggle.checkbox .box:after,
   .ui.toggle.checkbox label:after {
-    background: #74c04b 0% 0% no-repeat padding-box !important;
-    box-shadow: inset 2px 5px 9px #00f04129 !important;
+    background: ${({ theme: { colors } }) => colors.primary} 0% 0% no-repeat
+      padding-box !important;
+    box-shadow: inset 2px 5px 9px ${({ theme: { colors } }) => colors.primary}29 !important;
   }
 
   .ui.toggle.checkbox input ~ .box:after,
@@ -43,17 +41,13 @@ const ToggleContainer = styled.div`
 
   .ui.toggle.checkbox input:checked ~ .box:after,
   .ui.toggle.checkbox input:checked ~ label:after {
-    left: 2.3rem;
+    left: 1.8rem;
   }
-
-  transform: ${({ animation }) =>
-    !animation ? 'translateX(0px)' : 'translateX(-180px)'};
-  transition: transform 1s ease-in-out;
 `;
 
 const GameLabel = styled.div`
-  width: 100%;
   white-space: nowrap;
+  text-transform: capitalize;
 
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobileSmallPixel}px`}) {
@@ -67,23 +61,29 @@ const GameLabel = styled.div`
   }
 
   vertical-align: text-bottom !important;
-  margin-right: 4px;
+  margin-right: 8px;
 `;
 
-const GameEditionToggle = ({ animation }) => {
+const LightModeToggle = ({ animation }) => {
   const game = useContext(GameEditionContext);
+  const { themeMode, themeToggler } = useContext(LightModeContext);
+
+  const getModeLabel = () => {
+    return themeMode === 'light' ? 'dark' : 'light';
+  };
   return (
     <ToggleContainer animation={animation}>
-      <GameLabel gameEditionView={game.gameEditionView}>Game Edition</GameLabel>
+      <GameLabel
+        gameEditionView={game.gameEditionView}
+      >{`${getModeLabel()}`}</GameLabel>
       <Checkbox
         toggle
         onChange={() => {
-          game.setGameEditionView(!game.gameEditionView);
-          game.closeModal();
+          themeToggler();
         }}
       />
     </ToggleContainer>
   );
 };
 
-export default GameEditionToggle;
+export default LightModeToggle;

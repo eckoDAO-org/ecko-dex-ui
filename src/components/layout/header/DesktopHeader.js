@@ -57,10 +57,7 @@ const AnimatedDiv = styled.div`
 const DesktopHeader = ({ className, gameEditionView }) => {
   const history = useHistory();
   const { themeMode } = useContext(LightModeContext);
-  console.log(
-    '🚀 ~ file: DesktopHeader.js ~ line 60 ~ DesktopHeader ~ themeMode',
-    themeMode
-  );
+
   return (
     <Container className={className}>
       <LeftContainer>

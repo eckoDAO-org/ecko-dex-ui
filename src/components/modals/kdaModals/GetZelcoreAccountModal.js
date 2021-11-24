@@ -7,10 +7,11 @@ import reduceToken from '../../../utils/reduceToken';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { ModalContext } from '../../../contexts/ModalContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import theme from '../../../styles/theme';
+import { theme } from '../../../styles/theme';
 import { getAccounts, openZelcore } from '../../../utils/zelcore';
 import { WalletContext } from '../../../contexts/WalletContext';
 import { WALLET } from '../../../constants/wallet';
+import { LightModeContext } from '../../../contexts/LightModeContext';
 
 const TopText = styled.span`
   font-size: 13px;
@@ -53,7 +54,7 @@ const DropdownContainer = styled.div`
   .ui.selection.dropdown .menu {
     margin-top: 10px !important;
     background: transparent;
-    border: 2px dashed ${theme.colors.black};
+    border: 2px dashed ${({ theme: { colors } }) => colors.black};
 
     @media (min-width: ${({ theme: { mediaQueries } }) =>
         `${mediaQueries.mobilePixel + 1}px`}) {
@@ -67,7 +68,7 @@ const DropdownContainer = styled.div`
   }
 
   .ui.selection.visible.dropdown .menu {
-    border: 2px dashed ${theme.colors.black};
+    border: 2px dashed ${({ theme: { colors } }) => colors.black};
   }
 
   .ui.selection.dropdown .menu > .item {
@@ -75,12 +76,12 @@ const DropdownContainer = styled.div`
   }
 
   .ui.selection.active.dropdown:hover {
-    border: 2px dashed ${theme.colors.black};
+    border: 2px dashed ${({ theme: { colors } }) => colors.black};
   }
 
   .ui.default.dropdown:not(.button) > .text,
   .ui.dropdown:not(.button) > .default.text {
-    color: ${theme.colors.black};
+    color: ${({ theme: { colors } }) => colors.black};
   }
 `;
 
@@ -88,6 +89,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
   const modalContext = useContext(ModalContext);
   const account = useContext(AccountContext);
   const { gameEditionView, closeModal } = useContext(GameEditionContext);
+  const { themeMode } = useContext(LightModeContext);
 
   const wallet = useContext(WalletContext);
   const [loading, setLoading] = useState(false);
@@ -153,7 +155,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
               <Loader
                 active
                 inline='centered'
-                style={{ color: '#FFFFFF' }}
+                style={{ color: theme(themeMode).colors.white }}
               ></Loader>
             ) : (
               <CustomButton
@@ -214,6 +216,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
                 <CustomButton
                   border='none'
                   boxShadow='none'
+                  color={theme(themeMode).colors.white}
                   background='transparent'
                   onClick={() => handleCancel()}
                 >

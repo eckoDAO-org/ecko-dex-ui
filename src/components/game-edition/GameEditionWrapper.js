@@ -15,7 +15,7 @@ export const GameEditionWrapper = ({
       xmlns='http://www.w3.org/2000/svg'
       xmlnsXlink='http://www.w3.org/1999/xlink'
       width='1000.552'
-      height='590'
+      height='auto !important'
       viewBox='0 0 1110.552 631.954'
       id='gameEdition'
     >

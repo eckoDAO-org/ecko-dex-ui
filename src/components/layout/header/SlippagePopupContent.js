@@ -3,18 +3,16 @@ import styled from 'styled-components';
 import { PactContext } from '../../../contexts/PactContext';
 import Input from '../../../shared/Input';
 import ThemeToggle from '../../../styles/lightmode/ThemeToggle';
-import {
-  LightModeContext,
-  useLightMode,
-} from '../../../contexts/LightModeContext';
-import theme from '../../../styles/theme';
+import { LightModeContext } from '../../../contexts/LightModeContext';
+import { theme } from '../../../styles/theme';
+import { GameEditionContext } from '../../../contexts/GameEditionContext';
+import LightModeToggle from '../../../shared/LightModeToggle';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  margin-bottom: 9px;
-  padding: 10px;
+  padding: 16px;
   background: transparent;
 `;
 
@@ -34,21 +32,21 @@ const RegularLabel = styled.span`
 const SlippageTolleranceValue = styled.div`
   border-radius: 16px;
   border: ${({ theme: { colors } }) => `1px solid ${colors.white}`};
-  box-shadow: ${({ isSelected, theme: { colors } }) =>
-    isSelected ? `0 0 5px ${colors.white};` : 'none'};
-  color: ${({ theme: { colors } }) => colors.white};
-  text-shadow: ${({ isSelected, theme: { colors } }) =>
-    isSelected ? `0 0 5px ${colors.white};` : 'none'};
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
+  /* box-shadow: ${({ isSelected, theme: { colors } }) =>
+    isSelected ? `0 0 5px ${colors.white};` : 'none'}; */
+  color: ${({ isSelected, theme: { colors } }) =>
+    isSelected ? colors.primary : colors.white};
+  /* text-shadow: ${({ isSelected, theme: { colors } }) =>
+    isSelected ? `0 0 5px ${colors.white};` : 'none'}; */
+  font-family: ${({ isSelected, theme: { fontFamily } }) =>
+    isSelected ? fontFamily.bold : fontFamily.regular};
   font-size: 14px;
   padding: 6.5px 8.5px;
   min-width: 48px;
   display: flex;
   justify-content: center;
-  background-image: ${({ isSelected }) =>
-    isSelected
-      ? 'linear-gradient(to top right, #ed098f 0%,  #7a0196 100%)'
-      : '#ffffff'};
+  background-color: ${({ isSelected, theme: { colors } }) =>
+    isSelected && colors.white};
   cursor: pointer;
 `;
 
@@ -86,6 +84,7 @@ const Row = styled.div`
 
 const SlippagePopupContent = () => {
   const pact = useContext(PactContext);
+  const { gameEditionView } = useContext(GameEditionContext);
   const { themeMode, themeToggler } = useContext(LightModeContext);
   const [slp, setSlp] = useState(pact.slippage * 100);
   const [tl, setTl] = useState(pact.ttl * 60);
@@ -97,14 +96,17 @@ const SlippagePopupContent = () => {
   }, [tl]);
   return (
     <Container>
-      <BoldLabel style={{ color: theme.colors.white }}>
+      <BoldLabel style={{ color: theme(themeMode).colors.white }}>
         Transactions Settings
       </BoldLabel>
-      <Row style={{ marginTop: 8 }}>
-        <RegularLabel style={{ marginRight: 8 }}>Light Mode</RegularLabel>
+      {!gameEditionView && (
+        <Row style={{ marginTop: 16 }}>
+          <LightModeToggle />
+          {/* <RegularLabel style={{ marginRight: 8 }}>Light Mode</RegularLabel>
 
-        <ThemeToggle theme={themeMode} onClick={() => themeToggler()} />
-      </Row>
+          <ThemeToggle theme={themeMode} onClick={() => themeToggler()} /> */}
+        </Row>
+      )}
 
       <RegularLabel style={{ marginTop: 16 }}>Slippage Tolerance</RegularLabel>
 
@@ -173,7 +175,9 @@ const SlippagePopupContent = () => {
             }}
           />
         </ContainerInputTypeNumber>
-        <RegularLabel style={{ color: theme.colors.white, marginLeft: 8 }}>
+        <RegularLabel
+          style={{ color: theme(themeMode).colors.white, marginLeft: 8 }}
+        >
           minutes
         </RegularLabel>
       </Row>

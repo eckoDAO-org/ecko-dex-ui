@@ -27,10 +27,11 @@ import GradientBorder from '../shared/GradientBorder';
 
 const Container = styled(FadeIn)`
   width: 100%;
-  margin-top: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 24px`)};
+  margin-top: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 0px`)};
   max-width: ${({ gameEditionView }) => !gameEditionView && `500px`};
   margin-left: auto;
   margin-right: auto;
+  overflow: auto;
 `;
 
 const TitleContainer = styled.div`
@@ -68,13 +69,12 @@ const GameEditionTokenSelectorContainer = styled.div`
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: ${({ gameEditionView }) =>
-    gameEditionView ? `0px` : ` 12px 0px 0px 0px`};
+  margin: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 0px`)};
   padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : ` 0px`)};
   flex-flow: column;
   width: 100%;
   /* position: ${({ gameEditionView }) => gameEditionView && 'absolute'}; */
-  margin-top: ${({ gameEditionView }) => gameEditionView && '30px'};
+  margin-top: ${({ gameEditionView }) => gameEditionView && '75px'};
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
@@ -94,6 +94,7 @@ const RowContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-flow: row;
+  margin: 16px 0px;
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: row;
@@ -521,6 +522,7 @@ const SwapContainer = () => {
     <Container
       gameEditionView={gameEditionView}
       onAnimationEnd={() => setIsLogoVisible(true)}
+      className='scrollbar-none'
     >
       {/* <TokenSelectorModal
         show={tokenSelectorType !== null}
@@ -557,7 +559,7 @@ const SwapContainer = () => {
             <CustomPopup
               trigger={<CogIcon />}
               on='click'
-              offset={[10, 10]}
+              offset={[2, 10]}
               position='bottom right'
             >
               <SlippagePopupContent />

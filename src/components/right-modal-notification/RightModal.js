@@ -14,10 +14,11 @@ const Container = styled(Modal)`
   right: 0;
   top: 0;
   margin: 0px !important;
-  background-color: rgba(78, 18, 90, 0.4) !important;
+  background-color: ${({ theme: { backgroundRightModal } }) =>
+    backgroundRightModal} !important;
   opacity: 1;
-  -webkit-backdrop-filter: blur(2em);
-  backdrop-filter: blur(2em);
+  /* -webkit-backdrop-filter: blur(2em);
+  backdrop-filter: blur(2em); */
 
   font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
   border-radius: 0px !important;
@@ -49,9 +50,8 @@ const Header = styled.div`
   align-items: center;
   position: relative;
   z-index: 2;
-  padding: 10px 19px;
-  background-color: ${({ theme: { colors } }) => colors.hippiePink};
-  color: white;
+  padding: 10px 22px 10px 26px;
+  color: ${({ theme: { colors } }) => colors.white};
   min-height: 56px;
   font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
   font-size: 16px;
@@ -83,7 +83,7 @@ const FooterContainer = styled.div`
   width: 100%;
   /* margin: 10px 10px 0 10px; */
   z-index: 1;
-  padding: 10px;
+  padding: 16px 26px;
   & > * {
     width: 200px;
   }

@@ -16,7 +16,7 @@ import { LightModeContext } from '../../contexts/LightModeContext';
 
 const Container = styled.div`
   display: flex;
-  margin-top: 24px;
+  margin-top: ${({ gameEditionView }) => (gameEditionView ? '0px' : '24px')};
   margin-left: auto;
   margin-right: auto;
   height: ${({ gameEditionView }) => gameEditionView && '100%'};
@@ -63,7 +63,7 @@ const LiquidityCardContainer = styled.div`
   position: ${({ gameEditionView }) => !gameEditionView && `relative`};
   display: table;
   flex-flow: column;
-  padding: ${({ gameEditionView }) => (gameEditionView ? '10px' : '20px')};
+  padding: ${({ gameEditionView }) => (gameEditionView ? '32px' : '32px')};
   margin-bottom: 15px;
   width: 100%;
   border-radius: 10px;
@@ -114,13 +114,12 @@ const TitleContainer = styled.div`
     gameEditionView ? `center` : ` space-between`};
   margin-bottom: ${({ gameEditionView }) =>
     gameEditionView ? `20px` : ` 24px`};
-  width: 93%;
 `;
 const Title = styled.span`
-  font: ${({ gameEditionView }) =>
+  font: ${({ gameEditionView, theme: { fontFamily } }) =>
     gameEditionView
-      ? `normal normal normal 16px/19px  ${theme.fontFamily.pressStartRegular}`
-      : ` normal normal bold 32px/57px ${theme.fontFamily.bold}`};
+      ? `normal normal normal 16px/19px  ${fontFamily.pressStartRegular}`
+      : ` normal normal bold 32px/57px ${fontFamily.bold}`};
   letter-spacing: 0px;
   color: ${({ theme: { colors }, gameEditionView }) =>
     gameEditionView ? colors.black : colors.white};
@@ -256,22 +255,30 @@ const LiquidityList = (props) => {
                             index={index}
                             setActiveIndex={setActiveIndex}
                           />{' '}
-                          {!Object.values(liquidity.pairListAccount).length ===
-                            index && (
-                            <Divider
-                              style={{
-                                width: '100%',
-                                margin: '20px 0px',
-                                borderTop: gameEditionView
-                                  ? `1px dashed ${
-                                      theme(themeMode).colors.black
-                                    }`
-                                  : `1px solid  ${
-                                      theme(themeMode).colors.white
-                                    }99`,
-                              }}
-                            />
-                          )}
+                          {/* {!Object.values(liquidity.pairListAccount).length ===
+                            index && ( */}
+                          <Divider
+                            style={{
+                              width: '100%',
+                              margin: '32px 0px',
+                              borderTop: gameEditionView
+                                ? `1px dashed ${theme(themeMode).colors.black}`
+                                : `1px solid  ${
+                                    theme(themeMode).colors.white
+                                  }99`,
+                            }}
+                          />
+                          {/* )} */}
+                          <TokenPair
+                            key={pair.name}
+                            pair={pair}
+                            selectAddLiquidity={props.selectAddLiquidity}
+                            selectRemoveLiquidity={props.selectRemoveLiquidity}
+                            setTokenPair={props.setTokenPair}
+                            activeIndex={activeIndex}
+                            index={2}
+                            setActiveIndex={setActiveIndex}
+                          />{' '}
                         </>
                       ) : (
                         <></>
