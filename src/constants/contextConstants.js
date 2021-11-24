@@ -40,6 +40,18 @@ export const getCurrentTime = () => {
   let seconds = t.getSeconds();
   return `${hours}:${minutes}:${seconds}`;
 };
+
+export const getDate = (date) => {
+  const d = new Date(date);
+  let day = d.getDate();
+  let month = d.getMonth() + 1;
+  let year = d.getFullYear();
+  let hours = d.getHours();
+  let minutes = d.getMinutes();
+  let seconds = d.getSeconds();
+  return `${day}/${month}/${year} - ${hours}:${minutes}:${seconds}`;
+};
+
 export const GAS_PRICE = 0.0000001;
 //Enable or disable gas station
 export const ENABLE_GAS_STATION = true;

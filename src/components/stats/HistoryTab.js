@@ -15,6 +15,7 @@ import {
   Title,
   TitleContainer,
 } from '../layout/Containers';
+import HistoryCard from './HistoryCard';
 import StatsCard from './StatsCard';
 
 const CustomGrid = styled.div`
@@ -96,12 +97,55 @@ const Tabs = styled(Title)`
   cursor: pointer;
 `;
 
-const StatsTab = ({ activeTabs, setActiveTabs }) => {
+const HistoryTab = ({ activeTabs, setActiveTabs }) => {
   const pact = useContext(PactContext);
   const { gameEditionView } = useContext(GameEditionContext);
   const { themeMode } = useContext(LightModeContext);
 
-  console.log(pact.pairList);
+  const fakeObjTx = {
+    0: {
+      reqkey: '3C8-r_p-Mrp1xTseo3Isicwq6mQGpwu-sB3AMvuJtv0',
+      amount: '125',
+      token0: 'KDA',
+      token1: 'FLUX',
+    },
+    1: {
+      reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
+      amount: '1000',
+      token0: 'FLUX',
+      token1: 'KDA',
+    },
+    2: {
+      reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
+      amount: '1000',
+      token0: 'FLUX',
+      token1: 'KDA',
+    },
+    3: {
+      reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
+      amount: '1000',
+      token0: 'FLUX',
+      token1: 'KDA',
+    },
+    4: {
+      reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
+      amount: '1000',
+      token0: 'FLUX',
+      token1: 'KDA',
+    },
+    5: {
+      reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
+      amount: '1000',
+      token0: 'FLUX',
+      token1: 'KDA',
+    },
+    6: {
+      reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
+      amount: '1000',
+      token0: 'FLUX',
+      token1: 'KDA',
+    },
+  };
 
   useEffect(async () => {
     await pact.getPairList();
@@ -122,7 +166,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
       }}
     >
       <PartialScrollableScrollSection>
-        {pact.pairList[0] ? (
+        {/* {pact.pairList[0] ? (
           Object.values(pact.pairList).map((pair) =>
             pair && pair.reserves ? (
               <CustomGrid>
@@ -157,6 +201,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
             )
           )
         ) : (
+          // <Dimmer active inverted={gameEditionView}>
           <Loader
             style={{
               color: gameEditionView
@@ -167,9 +212,10 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
                 : theme(themeMode).fontFamily.regular,
             }}
           >
-            Loading..
+            Loading
           </Loader>
-        )}
+          // </Dimmer>
+        )} */}
       </PartialScrollableScrollSection>
     </ModalContainer>
   ) : (
@@ -196,44 +242,42 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
           <Tabs
             gameEditionView={gameEditionView}
             active={activeTabs === 'POOL_STATS'}
-            // onClick={setActiveTabs('POOL_STATS')}
+            onClick={setActiveTabs}
           >
             Stats
           </Tabs>
           <Tabs
             gameEditionView={gameEditionView}
             active={activeTabs === 'HISTORY'}
-            onClick={setActiveTabs}
           >
             History
           </Tabs>
         </TitleContainer>
       )}
-      <PartialScrollableScrollSection>
+      <PartialScrollableScrollSection className='scrollbar-none'>
         <CardContainer gameEditionView={gameEditionView}>
           {!gameEditionView && <GradientBorder />}
 
-          {pact.pairList[0] ? (
-            Object.values(pact.pairList).map((pair, index) =>
-              pair && pair.reserves ? (
+          {pact.swapList !== [] ? (
+            !pact.swapList?.error ? (
+              pact.swapList?.map((tx, index) => (
                 <>
-                  <StatsCard pair={pair} />
-                  {/* {!Object.values(pact.pairList).length -1 !== index && ( */}
-                  <Divider
-                    style={{
-                      width: '100%',
-                      margin: '32px 0px',
-                      borderTop: gameEditionView
-                        ? `1px dashed ${theme(themeMode).colors.black}`
-                        : `1px solid  ${theme(themeMode).colors.white}`,
-                    }}
-                  />
-                  {/*  )} */}
-                  <StatsCard pair={pair} />
+                  <HistoryCard tx={tx} />
+                  {pact.swapList?.length - 1 !== index && (
+                    <Divider
+                      style={{
+                        width: '100%',
+                        margin: '32px 0px',
+                        borderTop: gameEditionView
+                          ? `1px dashed ${theme(themeMode).colors.black}`
+                          : `1px solid  ${theme(themeMode).colors.white}`,
+                      }}
+                    />
+                  )}
                 </>
-              ) : (
-                ''
-              )
+              ))
+            ) : (
+              <>{pact.swapList?.error}</>
             )
           ) : (
             <div style={{ padding: '16px' }}>
@@ -258,4 +302,4 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
   );
 };
 
-export default StatsTab;
+export default HistoryTab;
