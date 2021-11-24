@@ -1,12 +1,12 @@
-import React, { useState, createContext, useContext } from "react";
-import Pact from "pact-lang-api";
-import tokenData from "../constants/cryptoCurrencies";
-import pwPrompt from "../components/alerts/pwPrompt";
-import { AccountContext } from "./AccountContext";
-import { WalletContext } from "./WalletContext";
-import { reduceBalance } from "../utils/reduceBalance";
-import { PactContext } from "./PactContext";
-import { decryptKey } from "../utils/keyUtils";
+import React, { useState, createContext, useContext } from 'react';
+import Pact from 'pact-lang-api';
+import tokenData from '../constants/cryptoCurrencies';
+import pwPrompt from '../components/alerts/pwPrompt';
+import { AccountContext } from './AccountContext';
+import { WalletContext } from './WalletContext';
+import { reduceBalance } from '../utils/reduceBalance';
+import { PactContext } from './PactContext';
+import { decryptKey } from '../utils/keyUtils';
 import {
   chainId,
   creationTime,
@@ -14,24 +14,28 @@ import {
   network,
   NETWORKID,
   ENABLE_GAS_STATION,
-} from "../constants/contextConstants";
+  getCurrentDate,
+  getCurrentTime,
+} from '../constants/contextConstants';
+import { NotificationContext } from './NotificationContext';
 
 export const SwapContext = createContext();
 
 export const SwapProvider = (props) => {
   const pact = useContext(PactContext);
+  const notificationContext = useContext(NotificationContext);
   const { account, localRes, setLocalRes } = useContext(AccountContext);
 
   const wallet = useContext(WalletContext);
-  const [pairAccount, setPairAccount] = useState("");
+  const [pairAccount, setPairAccount] = useState('');
   const [cmd, setCmd] = useState(null);
 
   const mkReq = function (cmd) {
     return {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(cmd),
     };
   };
@@ -54,7 +58,7 @@ export const SwapProvider = (props) => {
         {
           pactCode: `(at 'account (kswap.exchange.get-pair ${token0} ${token1}))`,
           meta: Pact.lang.mkMeta(
-            "",
+            '',
             chainId,
             GAS_PRICE,
             3000,
@@ -64,7 +68,7 @@ export const SwapProvider = (props) => {
         },
         network
       );
-      if (data.result.status === "success") {
+      if (data.result.status === 'success') {
         setPairAccount(data.result.data);
         return data.result.data;
       }
@@ -118,7 +122,7 @@ export const SwapProvider = (props) => {
           ],
         },
         envData: {
-          "user-ks": account.guard,
+          'user-ks': account.guard,
           token0Amount: reduceBalance(
             token0.amount,
             tokenData[token0.coin].precision
@@ -136,7 +140,7 @@ export const SwapProvider = (props) => {
             tokenData[token0.coin].precision
           ),
         },
-        meta: Pact.lang.mkMeta("", "", 0, 0, 0, 0),
+        meta: Pact.lang.mkMeta('', '', 0, 0, 0, 0),
         networkId: NETWORKID,
         meta: Pact.lang.mkMeta(
           account.account,
@@ -164,6 +168,15 @@ export const SwapProvider = (props) => {
         data = await Pact.wallet.sendSigned(cmd, network);
       }
       pact.pollingNotif(data.requestKeys[0]);
+      notificationContext.storeNotification({
+        type: 'info',
+        time: getCurrentTime(),
+        date: getCurrentDate(),
+        title: 'Transaction Pending',
+        description: data.requestKeys[0],
+        isReaded: false,
+      });
+
       await pact.listen(data.requestKeys[0]);
       pact.setPolling(false);
     } catch (e) {
@@ -175,7 +188,7 @@ export const SwapProvider = (props) => {
   const swapLocal = async (token0, token1, isSwapIn) => {
     try {
       let privKey = wallet.signing.key;
-      if (wallet.signing.method === "pk+pw") {
+      if (wallet.signing.method === 'pk+pw') {
         const pw = await pwPrompt();
         privKey = await decryptKey(pw);
       }
@@ -209,11 +222,11 @@ export const SwapProvider = (props) => {
             ...(ENABLE_GAS_STATION
               ? [
                   {
-                    name: "kswap.gas-station.GAS_PAYER",
-                    args: ["free-gas", { int: 1 }, 1.0],
+                    name: 'kswap.gas-station.GAS_PAYER',
+                    args: ['free-gas', { int: 1 }, 1.0],
                   },
                 ]
-              : [Pact.lang.mkCap("gas", "pay gas", "coin.GAS").cap]),
+              : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap]),
             {
               name: `${token0.address}.TRANSFER`,
               args: [
@@ -233,7 +246,7 @@ export const SwapProvider = (props) => {
           ],
         },
         envData: {
-          "user-ks": account.guard,
+          'user-ks': account.guard,
           token0Amount: reduceBalance(
             token0.amount,
             tokenData[token0.coin].precision
@@ -253,7 +266,7 @@ export const SwapProvider = (props) => {
         },
         networkId: NETWORKID,
         meta: Pact.lang.mkMeta(
-          ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
+          ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account,
           chainId,
           GAS_PRICE,
           3000,
@@ -296,16 +309,16 @@ export const SwapProvider = (props) => {
           ...(ENABLE_GAS_STATION
             ? [
                 Pact.lang.mkCap(
-                  "Gas Station",
-                  "free gas",
-                  "kswap.gas-station.GAS_PAYER",
-                  ["free-gas", { int: 1 }, 1.0]
+                  'Gas Station',
+                  'free gas',
+                  'kswap.gas-station.GAS_PAYER',
+                  ['free-gas', { int: 1 }, 1.0]
                 ),
               ]
             : []),
           Pact.lang.mkCap(
-            "transfer capability",
-            "trasnsfer token in",
+            'transfer capability',
+            'trasnsfer token in',
             `${token0.address}.TRANSFER`,
             [
               account.account,
@@ -319,16 +332,16 @@ export const SwapProvider = (props) => {
             ]
           ),
           ...(!ENABLE_GAS_STATION
-            ? [Pact.lang.mkCap("gas", "pay gas", "coin.GAS")]
+            ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]
             : []),
         ],
-        sender: ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
+        sender: ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account,
         gasLimit: 3000,
         gasPrice: GAS_PRICE,
         chainId: chainId,
         ttl: 600,
         envData: {
-          "user-ks": account.guard,
+          'user-ks': account.guard,
           token0Amount: reduceBalance(
             token0.amount,
             tokenData[token0.coin].precision
@@ -353,7 +366,7 @@ export const SwapProvider = (props) => {
       /* walletLoading(); */
       wallet.setIsWaitingForWalletAuth(true);
       const cmd = await Pact.wallet.sign(signCmd);
-      console.log("cmd: ", cmd);
+      console.log('cmd: ', cmd);
       //close alert programmatically
       /* swal.close(); */
       wallet.setIsWaitingForWalletAuth(false);
@@ -367,19 +380,19 @@ export const SwapProvider = (props) => {
     } catch (e) {
       //wallet error alert
       /* setLocalRes({}); */
-      if (e.message.includes("Failed to fetch"))
+      if (e.message.includes('Failed to fetch'))
         wallet.setWalletError({
           error: true,
-          title: "No Wallet",
-          content: "Please make sure you open and login to your wallet.",
+          title: 'No Wallet',
+          content: 'Please make sure you open and login to your wallet.',
         });
       //walletError();
       else
         wallet.setWalletError({
           error: true,
-          title: "Wallet Signing Failure",
+          title: 'Wallet Signing Failure',
           content:
-            "You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kadenaswap.",
+            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kaddex.',
         }); //walletSigError();
       console.log(e);
     }

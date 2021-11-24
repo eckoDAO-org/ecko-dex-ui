@@ -1,8 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components/macro";
-import { ArrowDown } from "../assets";
-import CustomButton from "./CustomButton";
+import React, { useContext } from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components/macro';
+import { ArrowDown, DropdownGe } from '../assets';
+import CustomButton from './CustomButton';
+import { GameEditionContext } from '../contexts/GameEditionContext';
+import { theme } from '../styles/theme';
+import { LightModeContext } from '../contexts/LightModeContext';
 
 const Container = styled.div`
   position: absolute;
@@ -12,6 +15,11 @@ const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   min-width: ${({ theme: { inputTokenWidth } }) => `${inputTokenWidth}px`};
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
 `;
 
 const ElementsContainer = styled.div`
@@ -26,30 +34,42 @@ const ElementsContainer = styled.div`
   span {
     font-size: 16px;
     margin-right: 13px;
-    color: #fff;
+    font: ${({ gameEditionView, theme: { fontFamily } }) => {
+      if (gameEditionView)
+        return `normal normal normal 14px/17px ${fontFamily.pressStartRegular}`;
+    }};
+    color: ${({ gameEditionView, theme: { colors } }) =>
+      gameEditionView ? colors.black : colors.white};
   }
 `;
 
 const InputToken = ({ icon, code, onClick, onClickButton, disabledButton }) => {
-  return (
-    <Container>
-      <ElementsContainer onClick={onClick}>
-        {icon}
+  const { gameEditionView } = useContext(GameEditionContext);
+  const { themeMode } = useContext(LightModeContext);
 
-        <span>{code}</span>
-      </ElementsContainer>
-      <ArrowDown />
+  return (
+    <Container gameEditionView={gameEditionView}>
       <CustomButton
         buttonStyle={{
           padding: 12,
           marginLeft: 12,
+          textTransform: gameEditionView ? 'capitalize' : 'uppercase',
         }}
-        fontSize="8px"
+        border='none'
+        color={!gameEditionView && theme(themeMode).colors.white}
+        background='transparent'
+        fontSize={gameEditionView ? '13px' : '13px'}
         onClick={onClickButton}
         disabled={disabledButton}
       >
-        MAX
+        Max
       </CustomButton>
+      <ElementsContainer gameEditionView={gameEditionView} onClick={onClick}>
+        {!gameEditionView && <>{icon}</>}
+
+        <span>{code}</span>
+      </ElementsContainer>
+      {gameEditionView ? <DropdownGe /> : <ArrowDown />}
     </Container>
   );
 };
@@ -61,7 +81,7 @@ InputToken.propTypes = {
 
 InputToken.defaultProps = {
   icon: null,
-  code: "",
+  code: '',
 };
 
 export default InputToken;

@@ -1,7 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components/macro";
-import { ArrowBack, CloseIcon } from "../assets";
+import React, { useContext } from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components/macro';
+import { ArrowBack, CloseIcon } from '../assets';
+import { GameEditionContext } from '../contexts/GameEditionContext';
 
 const Container = styled.div`
   position: relative;
@@ -10,11 +11,40 @@ const Container = styled.div`
   padding: 20px 20px;
   width: 100%;
   border-radius: 10px;
-  border: 2px solid #ffffff;
-  box-shadow: 0 0 5px #ffffff;
+  border: ${({ gameEditionView, theme: { colors } }) =>
+    gameEditionView ? `2px dashed ${colors.black}` : `2px solid transparent`};
+  background-clip: ${({ gameEditionView }) =>
+    !gameEditionView && `padding-box`};
   opacity: 1;
-  background: #240b2f 0% 0% no-repeat padding-box;
-  color: #ffffff;
+  background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
+  backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
+  color: ${({ gameEditionView, theme: { colors } }) =>
+    gameEditionView ? colors.black : colors.white};
+
+  ${({ withoutRainbowBackground, gameEditionView }) =>
+    !withoutRainbowBackground &&
+    !gameEditionView &&
+    `::before {
+      content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1000;
+    margin: -1px;
+    border-radius: 10px;
+    border-left: 1px solid #ed1cb5;
+    border-right: 1px solid #39fffc;
+    background-image: linear-gradient(to right, #ed1cb5, #ffa900, #39fffc),
+      linear-gradient(to right, #ed1cb5, #ffa900, #39fffc);
+    /* background: ${({ gameEditionView }) =>
+      !gameEditionView &&
+      'linear-gradient(to right, #ed1cb5, #ffa900, #39fffc)'}; */
+    background-position: 0 0, 0 100%;
+    background-size: 100% 1px;
+    background-repeat: no-repeat;
+    }`}
 
   ::-webkit-scrollbar {
     display: none;
@@ -25,15 +55,30 @@ const HeaderContainer = styled.div`
   display: flex;
   flex-flow: row;
   justify-content: space-between;
+  margin-bottom: ${({ gameEditionView }) => !gameEditionView && '12px'};
+  align-items: center;
   width: 100%;
-  margin-bottom: 24px;
+
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
 `;
 
 const Title = styled.span`
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
+    gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
+
   font-size: 24px;
+
+  @media (max-width: ${({ theme: { mediaQueries } }) =>
+      `${mediaQueries.mobileSmallPixel}px`}) {
+    width: min-content;
+    font-size: 16px;
+  }
   text-transform: capitalize;
-  color: "white";
+  ${({ theme: { colors } }) => colors.white};
 `;
 
 const Description = styled.span`
@@ -51,30 +96,45 @@ const ModalContainer = ({
   children,
   onBack,
   onClose,
+  withoutRainbowBackground = false,
 }) => {
+  const { gameEditionView } = useContext(GameEditionContext);
+
   return (
-    <Container style={containerStyle}>
+    <Container
+      style={containerStyle}
+      gameEditionView={gameEditionView}
+      withoutRainbowBackground={withoutRainbowBackground}
+    >
       <HeaderContainer>
-        {onBack && (
+        {onBack ? (
           <ArrowBack
             style={{
-              cursor: "pointer",
-              color: "#FFFFFF 0% 0% no-repeat padding-box",
+              cursor: 'pointer',
+              // color: `${theme().colors.white} 0% 0% no-repeat padding-box`,
             }}
             onClick={onBack}
           />
+        ) : (
+          <div></div>
         )}
 
-        {title && <Title style={titleStyle}>{title}</Title>}
+        {title && (
+          <Title style={titleStyle} gameEditionView={gameEditionView}>
+            {title}
+          </Title>
+        )}
 
-        {onClose && (
+        {onClose ? (
           <CloseIcon
             style={{
-              cursor: "pointer",
+              cursor: 'pointer',
               opacity: 1,
             }}
             onClick={onClose}
           />
+        ) : (
+          <div></div>
         )}
       </HeaderContainer>
 
@@ -92,7 +152,7 @@ ModalContainer.propTypes = {
 };
 
 ModalContainer.defaultProps = {
-  title: "",
+  title: '',
   onClose: null,
 };
 

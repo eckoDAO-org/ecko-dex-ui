@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 export default createGlobalStyle`
     *, *:before, *:after {
@@ -26,7 +26,7 @@ export default createGlobalStyle`
       min-width: 0;
       font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
       color: ${({ theme: { colors } }) => colors.primary};
-      background: transparent linear-gradient(122deg, #070610 0%, #4C125A 100%) 0% 0% no-repeat padding-box;
+      background: ${({ theme: { backgroundBody } }) => backgroundBody};
       opacity: 1;
       background-size: cover;
       background-repeat: no-repeat;
@@ -41,6 +41,10 @@ export default createGlobalStyle`
         height: 100%;
       }
     }
+/* 
+    .ui.dimmer {
+      background-color: rgba(0,0,0,.40) !important;
+    } */
 
     .ui.input>input {
       background: transparent 0% 0% no-repeat padding-box;
@@ -57,20 +61,27 @@ export default createGlobalStyle`
       opacity: 1 !important;
     }
 
+    .ui.popup {
+      background:transparent;
+      border:none;
+      box-shadow:none;
+      color:#FFFFFF;
+    }
+
     #tsparticles canvas{
       z-index:-1 !important;
     }
 
     .desktop-none {
       @media (min-width: ${({ theme: { mediaQueries } }) =>
-        `${mediaQueries.mobilePixel + 1}px`}) {
+        `${mediaQueries.desktopPixel + 1}px`}) {
         display: none !important;
       }
     }
 
     .mobile-none {
       @media (max-width: ${({ theme: { mediaQueries } }) =>
-        `${mediaQueries.mobilePixel}px`}) {
+        `${mediaQueries.desktopPixel}px`}) {
         display: none !important;
       }
     }

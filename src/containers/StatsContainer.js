@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
-import styled from "styled-components/macro";
-import { PactContext } from "../contexts/PactContext";
-import CustomButton from "../shared/CustomButton";
-import StatsTab from "../components/stats/StatsTab";
-import SwapHistoryTab from "../components/stats/SwapHistoryTab";
+import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components/macro';
+import { PactContext } from '../contexts/PactContext';
+import CustomButton from '../shared/CustomButton';
+import StatsTab from '../components/stats/StatsTab';
+import SwapHistoryTab from '../components/stats/SwapHistoryTab';
 
 const Container = styled.div`
-  margin-left: auto;
-  margin-right: auto;
+  display: flex;
+  width: 100%;
 `;
 
 const ButtonContainer = styled.div`
@@ -19,7 +19,7 @@ const ButtonContainer = styled.div`
 
 const StatsContainer = () => {
   const pact = useContext(PactContext);
-  const [activeTabs, setactiveTabs] = useState("POOL_STATS");
+  const [activeTabs, setactiveTabs] = useState('POOL_STATS');
 
   useEffect(async () => {
     await pact.getPairList();
@@ -28,7 +28,7 @@ const StatsContainer = () => {
   return (
     //MOBILE
     <Container>
-      <ButtonContainer>
+      {/* <ButtonContainer>
         <CustomButton
           onClick={() => {
             setactiveTabs("POOL_STATS");
@@ -44,7 +44,8 @@ const StatsContainer = () => {
           Swap History
         </CustomButton>
       </ButtonContainer>
-      {activeTabs === "POOL_STATS" ? <StatsTab /> : <SwapHistoryTab />}
+      {activeTabs === "POOL_STATS" ? <StatsTab /> : <SwapHistoryTab />} */}
+      <StatsTab />
     </Container>
   );
 };
