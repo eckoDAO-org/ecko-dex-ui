@@ -59,8 +59,9 @@ export const Value = styled.span`
   text-align: ${({ gameEditionView }) => gameEditionView && 'left'};
   @media (max-width: ${({ theme: { mediaQueries } }) =>
       `${mediaQueries.mobilePixel + 1}px`}) {
-    margin-bottom: 5px;
+    /* margin-bottom: 5px; */
   }
+  line-break: anywhere;
 `;
 
 export const TitleContainer = styled.div`
