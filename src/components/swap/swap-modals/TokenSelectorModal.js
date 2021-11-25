@@ -26,14 +26,7 @@ const Container = styled.div`
   z-index: 5;
 `;
 
-const TokenSelectorModal = ({
-  show,
-  selectedToken,
-  onTokenClick,
-  onClose,
-  fromToken,
-  toToken,
-}) => {
+const TokenSelectorModal = ({ show, selectedToken, onTokenClick, onClose, fromToken, toToken }) => {
   const game = useContext(GameEditionContext);
   const [searchValue, setSearchValue] = useState('');
 
@@ -58,12 +51,7 @@ const TokenSelectorModal = ({
   return (
     <>
       {!game.gameEditionView && (
-        <Transition
-          items={show}
-          from={{ opacity: 0 }}
-          enter={{ opacity: 1 }}
-          leave={{ opacity: 0 }}
-        >
+        <Transition items={show} from={{ opacity: 0 }} enter={{ opacity: 1 }} leave={{ opacity: 0 }}>
           {(show) =>
             show &&
             ((props) => (
@@ -75,11 +63,11 @@ const TokenSelectorModal = ({
                   }}
                 />
                 <ModalContainer
-                  title='select a token'
+                  title="select a token"
                   containerStyle={{
                     //height: "100%",
                     maxHeight: '80vh',
-                    maxWidth: '90vw',
+                    maxWidth: '90vw'
                   }}
                   onClose={() => {
                     setSearchValue('');

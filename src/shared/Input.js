@@ -15,19 +15,15 @@ const Container = styled.div`
     else return '0px';
   }};
   width: 100%;
-  background-color: ${({ theme: { backgroundInput } }) => backgroundInput};
-  border: ${({ gameEditionView, theme: { colors } }) =>
-    !gameEditionView && `1px solid ${colors.white}99`};
+  background-color: ${({ gameEditionView, noInputBackground, theme: { backgroundInput } }) =>
+    gameEditionView || noInputBackground ? 'transparent' : backgroundInput};
+  border: ${({ gameEditionView, theme: { colors } }) => !gameEditionView && `1px solid ${colors.white}99`};
   border-radius: ${({ gameEditionView }) => !gameEditionView && '4px'};
   padding: ${({ gameEditionView }) => !gameEditionView && '10px 10px 0px 10px'};
 
   .ui.input > input {
     padding: ${({ gameEditionView }) => !gameEditionView && ' 10px 2px'};
-    font-family: ${({
-      gameEditionView,
-      outGameEditionView,
-      theme: { fontFamily },
-    }) => {
+    font-family: ${({ gameEditionView, outGameEditionView, theme: { fontFamily } }) => {
       if (outGameEditionView) return fontFamily.regular + '!important';
       if (gameEditionView) return fontFamily.pressStartRegular + '!important';
       else return fontFamily.regular + '!important';
@@ -39,13 +35,12 @@ const Container = styled.div`
     }};
   }
   & input::placeholder {
-    color: ${({ gameEditionView, theme: { colors } }) =>
-      gameEditionView ? `${colors.black}70 !important` : ``};
+    color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `${colors.black}70 !important` : ``)};
     text-transform: capitalize;
+    font-family: 14px;
   }
   .ui.icon.input > input {
-    padding-right: ${({ inputRightComponent, inputComponentWidth }) =>
-      inputRightComponent ? `${inputComponentWidth + 25}px !important` : 0};
+    padding-right: ${({ inputRightComponent, inputComponentWidth }) => (inputRightComponent ? `${inputComponentWidth + 25}px !important` : 0)};
   }
   .ui.button:hover .icon {
     opacity: 1;
@@ -53,18 +48,12 @@ const Container = styled.div`
   .ui.labeled.input > .label:not(.corner) {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-    color: ${({ gameEditionView, theme: { colors } }) =>
-      gameEditionView
-        ? `${colors.black} !important`
-        : `${colors.white} !important`};
+    color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `${colors.black} !important` : `${colors.white} !important`)};
     padding-left: ${({ gameEditionView }) => !gameEditionView && '0px'};
     padding-right: ${({ gameEditionView }) => !gameEditionView && '0px'};
     background: transparent;
     border: ${({ gameEditionView }) => gameEditionView && 'none'};
-    font-family: ${({ gameEditionView, theme: { fontFamily } }) =>
-      gameEditionView
-        ? `${fontFamily.pressStartRegular}`
-        : `${fontFamily.regular}`};
+    font-family: ${({ gameEditionView, theme: { fontFamily } }) => (gameEditionView ? `${fontFamily.pressStartRegular}` : `${fontFamily.regular}`)};
   }
 `;
 
@@ -77,12 +66,9 @@ const TopLabelsContainer = styled.div`
   margin-right: 2px;
   span {
     font: ${({ gameEditionView, theme: { fontFamily } }) =>
-      gameEditionView
-        ? `normal normal normal 14px/17px ${fontFamily.pressStartRegular}`
-        : `normal normal bold 16px/20px Montserrat`};
+      gameEditionView ? `normal normal normal 13px/16px ${fontFamily.pressStartRegular}` : `normal normal bold 13px/16px Montserrat`};
     letter-spacing: 0px;
-    color: ${({ gameEditionView, theme: { colors } }) =>
-      gameEditionView ? `${colors.black}` : `${colors.white}`};
+    color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `${colors.black}` : `${colors.white}`)};
     text-transform: capitalize;
   }
 `;
@@ -95,12 +81,9 @@ const BottomLabelsContainer = styled.div`
   margin-right: 2px;
   span {
     font: ${({ gameEditionView, theme: { fontFamily } }) =>
-      gameEditionView
-        ? `normal normal normal 10px/12px ${fontFamily.pressStartRegular}`
-        : `normal normal normal 13px/16px Montserrat`};
+      gameEditionView ? `normal normal normal 10px/12px ${fontFamily.pressStartRegular}` : `normal normal normal 13px/16px Montserrat`};
     letter-spacing: 0px;
-    color: ${({ gameEditionView, theme: { colors } }) =>
-      gameEditionView ? `${colors.black}` : `${colors.white}`};
+    color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `${colors.black}` : `${colors.white}`)};
     text-transform: capitalize;
   }
 `;
@@ -121,15 +104,11 @@ const Button = styled.button`
   border-radius: 20px;
   span {
     font: ${({ gameEditionView, theme: { fontFamily } }) =>
-      gameEditionView
-        ? `normal normal normal 14px/18px ${fontFamily.pressStartRegular}`
-        : `normal normal bold 14px/18px ${fontFamily.bold}`};
-    color: ${({ gameEditionView, theme: { colors } }) =>
-      gameEditionView ? `${colors.black}` : `${colors.white}`};
+      gameEditionView ? `normal normal normal 14px/18px ${fontFamily.pressStartRegular}` : `normal normal bold 14px/18px ${fontFamily.bold}`};
+    color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `${colors.black}` : `${colors.white}`)};
     text-transform: capitalize;
 
-    @media (max-width: ${({ theme: { mediaQueries } }) =>
-        `${mediaQueries.mobilePixel + 1}px`}) {
+    @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     }
   }
 
@@ -166,6 +145,7 @@ const Input = ({
   type,
   maxLength,
   outGameEditionView,
+  noInputBackground
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
 
@@ -176,7 +156,7 @@ const Input = ({
           gameEditionView={gameEditionView}
           onClick={onSelectButtonClick}
           style={{
-            border: 'none',
+            border: 'none'
           }}
         >
           <span>
@@ -193,12 +173,9 @@ const Input = ({
     <Container
       gameEditionView={gameEditionView}
       outGameEditionView={outGameEditionView}
+      noInputBackground={noInputBackground}
       inputRightComponent={inputRightComponent || withSelectButton}
-      inputComponentWidth={
-        inputRightComponent
-          ? theme().inputTokenWidth
-          : theme().inputSelectButtonWidth
-      }
+      inputComponentWidth={inputRightComponent ? theme().inputTokenWidth : theme().inputSelectButtonWidth}
       style={containerStyle}
     >
       {(topLeftLabel || topRightLabel) && (
@@ -206,10 +183,8 @@ const Input = ({
           {topLeftLabel && (
             <span
               style={{
-                fontFamily: gameEditionView
-                  ? theme().fontFamily.pressStartRegular
-                  : theme().fontFamily.bold,
-                ...topLeftLabelStyle,
+                fontFamily: gameEditionView ? theme().fontFamily.pressStartRegular : theme().fontFamily.bold,
+                ...topLeftLabelStyle
               }}
             >
               {topLeftLabel}
@@ -218,11 +193,10 @@ const Input = ({
           {topRightLabel && (
             <span
               style={{
-                fontFamily: gameEditionView
-                  ? theme().fontFamily.pressStartRegular
-                  : theme().fontFamily.regular,
+                fontFamily: gameEditionView ? theme().fontFamily.pressStartRegular : theme().fontFamily.regular,
                 marginLeft: !topLeftLabel ? 'auto' : 'unset',
-                ...topRightLabelStyle,
+                textAlign: 'end',
+                ...topRightLabelStyle
               }}
             >
               {topRightLabel}
@@ -239,7 +213,7 @@ const Input = ({
         disabled={disabled}
         value={value}
         label={label}
-        labelPosition='right'
+        labelPosition="right"
         error={error}
         type={type}
         maxLength={maxLength}
@@ -253,11 +227,9 @@ const Input = ({
             : {
                 padding: !gameEditionView && '0px !important',
                 borderRadius: '10px',
-                border: gameEditionView
-                  ? `2px dashed ${theme().colors.black}`
-                  : 'none',
+                border: gameEditionView ? `2px dashed ${theme().colors.black}` : 'none',
                 opacity: 1,
-                backgroundColor: 'transparent',
+                backgroundColor: 'transparent'
               }
         }
       />
@@ -266,10 +238,8 @@ const Input = ({
           {bottomLeftLabel && (
             <span
               style={{
-                fontFamily: gameEditionView
-                  ? theme().fontFamily.pressStartRegular
-                  : theme().fontFamily.regular,
-                ...bottomLeftLabelStyle,
+                fontFamily: gameEditionView ? theme().fontFamily.pressStartRegular : theme().fontFamily.regular,
+                ...bottomLeftLabelStyle
               }}
             >
               {bottomLeftLabel}
@@ -278,11 +248,9 @@ const Input = ({
           {bottomRightLabel && (
             <span
               style={{
-                fontFamily: gameEditionView
-                  ? theme().fontFamily.pressStartRegular
-                  : theme().fontFamily.regular,
+                fontFamily: gameEditionView ? theme().fontFamily.pressStartRegular : theme().fontFamily.regular,
                 marginLeft: !topLeftLabel ? 'auto' : 'unset',
-                ...bottomRightLabelStyle,
+                ...bottomRightLabelStyle
               }}
             >
               {bottomRightLabel}
@@ -303,7 +271,7 @@ Input.propTypes = {
   inputRightComponent: PropTypes.element,
   withSelectButton: PropTypes.bool,
   numberOnly: PropTypes.bool,
-  buttonLabel: PropTypes.string,
+  buttonLabel: PropTypes.string
 };
 
 Input.defaultProps = {
@@ -315,7 +283,7 @@ Input.defaultProps = {
   inputRightComponent: null,
   withSelectButton: false,
   numberOnly: false,
-  buttonLabel: 'select ',
+  buttonLabel: 'select '
 };
 
 export default Input;

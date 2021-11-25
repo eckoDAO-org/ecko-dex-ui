@@ -27,10 +27,11 @@ import GradientBorder from '../shared/GradientBorder';
 
 const Container = styled(FadeIn)`
   width: 100%;
-  margin-top: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 24px`)};
+  margin-top: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 0px`)};
   max-width: ${({ gameEditionView }) => !gameEditionView && `500px`};
   margin-left: auto;
   margin-right: auto;
+  overflow: auto;
 `;
 
 const TitleContainer = styled.div`
@@ -38,10 +39,8 @@ const TitleContainer = styled.div`
   justify-content: space-between;
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
   top: ${({ gameEditionView }) => gameEditionView && '10px'};
-  justify-content: ${({ gameEditionView }) =>
-    gameEditionView ? `center` : ` space-between`};
-  margin-bottom: ${({ gameEditionView }) =>
-    gameEditionView ? `0px` : ` 14px`};
+  justify-content: ${({ gameEditionView }) => (gameEditionView ? `center` : ` space-between`)};
+  margin-bottom: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 14px`)};
   width: 100%;
 `;
 const Title = styled.span`
@@ -50,10 +49,8 @@ const Title = styled.span`
       ? `normal normal normal 16px/19px  ${theme.fontFamily.pressStartRegular}`
       : ` normal normal bold 32px/57px ${theme.fontFamily.bold}`};
   letter-spacing: 0px;
-  color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : colors.white};
-  text-transform: ${({ gameEditionView }) =>
-    gameEditionView ? `uppercase` : ` capitalize`};
+  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
+  text-transform: ${({ gameEditionView }) => (gameEditionView ? `uppercase` : ` capitalize`)};
 `;
 
 const GameEditionTokenSelectorContainer = styled.div`
@@ -68,15 +65,13 @@ const GameEditionTokenSelectorContainer = styled.div`
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: ${({ gameEditionView }) =>
-    gameEditionView ? `0px` : ` 12px 0px 0px 0px`};
+  margin: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 0px`)};
   padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : ` 0px`)};
   flex-flow: column;
   width: 100%;
   /* position: ${({ gameEditionView }) => gameEditionView && 'absolute'}; */
-  margin-top: ${({ gameEditionView }) => gameEditionView && '30px'};
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+  margin-top: ${({ gameEditionView }) => gameEditionView && '75px'};
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
     margin-bottom: 0px;
   }
@@ -94,28 +89,24 @@ const RowContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-flow: row;
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+  margin: 16px 0px;
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: row;
   }
 `;
 
 const Label = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
-  color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : colors.white};
+  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
   text-transform: capitalize;
 `;
 
 const Value = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   line-height: 20px;
-  color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : colors.white};
+  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
 `;
 
 const SwapContainer = () => {
@@ -124,8 +115,7 @@ const SwapContainer = () => {
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const modalContext = useContext(ModalContext);
-  const { gameEditionView, openModal, closeModal, isSwapping, setIsSwapping } =
-    useContext(GameEditionContext);
+  const { gameEditionView, openModal, closeModal, isSwapping, setIsSwapping } = useContext(GameEditionContext);
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
 
   const [selectedToken, setSelectedToken] = useState(null);
@@ -134,7 +124,7 @@ const SwapContainer = () => {
     balance: account.account.balance || '',
     coin: 'KDA',
     address: 'coin',
-    precision: 12,
+    precision: 12
   });
 
   const [toValues, setToValues] = useState({
@@ -142,7 +132,7 @@ const SwapContainer = () => {
     balance: '',
     coin: '',
     address: '',
-    precision: 0,
+    precision: 0
   });
 
   const [inputSide, setInputSide] = useState('');
@@ -168,11 +158,7 @@ const SwapContainer = () => {
         setToNote('(estimated)');
         setFromNote('');
         setInputSide(null);
-        if (
-          fromValues.coin !== '' &&
-          toValues.coin !== '' &&
-          !isNaN(pact.ratio)
-        ) {
+        if (fromValues.coin !== '' && toValues.coin !== '' && !isNaN(pact.ratio)) {
           if (fromValues.amount.length < 5) {
             throttle(
               500,
@@ -182,7 +168,7 @@ const SwapContainer = () => {
                   // fromValues.amount / pact.ratio,
                   pact.computeOut(fromValues.amount),
                   toValues.precision
-                ),
+                )
               })
             );
           } else {
@@ -194,7 +180,7 @@ const SwapContainer = () => {
                   // fromValues.amount / pact.ratio,
                   pact.computeOut(fromValues.amount),
                   toValues.precision
-                ).toFixed(toValues.precision),
+                ).toFixed(toValues.precision)
               })
             );
           }
@@ -211,11 +197,7 @@ const SwapContainer = () => {
         setFromNote('(estimated)');
         setToNote('');
         setInputSide(null);
-        if (
-          fromValues.coin !== '' &&
-          toValues.coin !== '' &&
-          !isNaN(pact.ratio)
-        ) {
+        if (fromValues.coin !== '' && toValues.coin !== '' && !isNaN(pact.ratio)) {
           if (toValues.amount.length < 5) {
             throttle(
               500,
@@ -225,7 +207,7 @@ const SwapContainer = () => {
                   // toValues.amount * pact.ratio,
                   pact.computeIn(toValues.amount),
                   fromValues.precision
-                ),
+                )
               })
             );
             throttle(500, safeSetFrom(), fromValues.precision);
@@ -238,7 +220,7 @@ const SwapContainer = () => {
                   // toValues.amount * pact.ratio,
                   pact.computeIn(toValues.amount),
                   fromValues.precision
-                ).toFixed(fromValues.precision),
+                ).toFixed(fromValues.precision)
               })
             );
             debounce(500, safeSetFrom(), fromValues.precision);
@@ -255,75 +237,47 @@ const SwapContainer = () => {
       if (fromValues.amount !== '' && toValues.amount === '') {
         setToValues({
           ...toValues,
-          amount: reduceBalance(
-            pact.computeOut(fromValues.amount),
-            toValues.precision
-          ),
+          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision)
         });
       }
       if (fromValues.amount === '' && toValues.amount !== '') {
         setFromValues({
           ...fromValues,
-          amount: reduceBalance(
-            pact.computeIn(toValues.amount),
-            fromValues.precision
-          ),
+          amount: reduceBalance(pact.computeIn(toValues.amount), fromValues.precision)
         });
       }
       if (fromValues.amount !== '' && toValues.amount !== '') {
         setToValues({
           ...toValues,
-          amount: reduceBalance(
-            pact.computeOut(fromValues.amount),
-            toValues.precision
-          ),
+          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision)
         });
       }
     }
   }, [pact.ratio]);
   useEffect(() => {
     if (!isNaN(pact.ratio)) {
-      setPriceImpact(
-        pact.computePriceImpact(
-          Number(fromValues.amount),
-          Number(toValues.amount)
-        )
-      );
+      setPriceImpact(pact.computePriceImpact(Number(fromValues.amount), Number(toValues.amount)));
     } else {
       setPriceImpact('');
     }
-  }, [
-    fromValues.coin,
-    toValues.coin,
-    fromValues.amount,
-    toValues.amount,
-    pact.ratio,
-  ]);
+  }, [fromValues.coin, toValues.coin, fromValues.amount, toValues.amount, pact.ratio]);
   useEffect(() => {
     const getBalance = async () => {
       if (account.account && toValues.coin !== '' && fromValues.coin !== '') {
-        let acctOfFromValues = await account.getTokenAccount(
-          tokenData[fromValues.coin]?.code,
-          account.account.account,
-          tokenSelectorType === 'from'
-        );
-        let acctOfToValues = await account.getTokenAccount(
-          tokenData[toValues.coin]?.code,
-          account.account.account,
-          tokenSelectorType === 'to'
-        );
+        let acctOfFromValues = await account.getTokenAccount(tokenData[fromValues.coin]?.code, account.account.account, tokenSelectorType === 'from');
+        let acctOfToValues = await account.getTokenAccount(tokenData[toValues.coin]?.code, account.account.account, tokenSelectorType === 'to');
         if (acctOfFromValues) {
           let balanceFrom = getCorrectBalance(acctOfFromValues.balance);
           setFromValues((prev) => ({
             ...prev,
-            balance: balanceFrom,
+            balance: balanceFrom
           }));
         }
         if (acctOfToValues) {
           let balanceTo = getCorrectBalance(acctOfToValues.balance);
           setToValues((prev) => ({
             ...prev,
-            balance: balanceTo,
+            balance: balanceTo
           }));
         }
       }
@@ -372,15 +326,12 @@ const SwapContainer = () => {
       setNoLiquidity(true);
       setFromValues({
         ...fromValues,
-        amount: 0,
+        amount: 0
       });
     } else {
       setFromValues({
         ...fromValues,
-        amount: reduceBalance(
-          pact.computeIn(toValues.amount),
-          fromValues.precision
-        ),
+        amount: reduceBalance(pact.computeIn(toValues.amount), fromValues.precision)
       });
     }
   };
@@ -391,11 +342,7 @@ const SwapContainer = () => {
         balance = account.account.balance;
       }
     } else {
-      let acct = await account.getTokenAccount(
-        crypto.code,
-        account.account.account,
-        tokenSelectorType === 'from'
-      );
+      let acct = await account.getTokenAccount(crypto.code, account.account.account, tokenSelectorType === 'from');
       if (acct) {
         balance = getCorrectBalance(acct.balance);
       }
@@ -406,7 +353,7 @@ const SwapContainer = () => {
         balance: balance,
         coin: crypto.name,
         address: crypto.code,
-        precision: crypto.precision,
+        precision: crypto.precision
       }));
     }
     if (tokenSelectorType === 'to') {
@@ -415,7 +362,7 @@ const SwapContainer = () => {
         balance: balance,
         coin: crypto.name,
         address: crypto.code,
-        precision: crypto.precision,
+        precision: crypto.precision
       }));
     }
   };
@@ -428,7 +375,7 @@ const SwapContainer = () => {
           balance: '',
           coin: '',
           address: '',
-          precision: 0,
+          precision: 0
         });
       }
     }
@@ -439,7 +386,7 @@ const SwapContainer = () => {
           balance: '',
           coin: '',
           address: '',
-          precision: 0,
+          precision: 0
         });
       }
     }
@@ -484,7 +431,7 @@ const SwapContainer = () => {
               toToken={toValues.coin}
             />
           </GameEditionTokenSelectorContainer>
-        ),
+        )
       });
     } else {
       modalContext.openModal({
@@ -492,7 +439,7 @@ const SwapContainer = () => {
         description: '',
         containerStyle: {
           //height: "100%",
-          width: '75%',
+          width: '75%'
         },
         onBack: () => {
           modalContext.onBackModal();
@@ -513,35 +460,14 @@ const SwapContainer = () => {
             fromToken={fromValues.coin}
             toToken={toValues.coin}
           />
-        ),
+        )
       });
     }
   };
   return (
-    <Container
-      gameEditionView={gameEditionView}
-      onAnimationEnd={() => setIsLogoVisible(true)}
-    >
-      {/* <TokenSelectorModal
-        show={tokenSelectorType !== null}
-        selectedToken={selectedToken}
-        onTokenClick={onTokenClick}
-        fromToken={fromValues.coin}
-        toToken={toValues.coin}
-        onClose={() => setTokenSelectorType(null)}
-      /> */}
-
-      <TxView
-        show={showTxModal}
-        selectedToken={selectedToken}
-        onTokenClick={onTokenClick}
-        onClose={() => setShowTxModal(false)}
-      />
-      <WalletRequestView
-        show={wallet.isWaitingForWalletAuth}
-        error={wallet.walletError}
-        onClose={() => onWalletRequestViewModalClose()}
-      />
+    <Container gameEditionView={gameEditionView} onAnimationEnd={() => setIsLogoVisible(true)} className="scrollbar-none">
+      <TxView show={showTxModal} selectedToken={selectedToken} onTokenClick={onTokenClick} onClose={() => setShowTxModal(false)} />
+      <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
       {!gameEditionView && isLogoVisible && (
         <LogoContainer time={0.2}>
           <Logo />
@@ -551,15 +477,8 @@ const SwapContainer = () => {
       <TitleContainer gameEditionView={gameEditionView}>
         <Title gameEditionView={gameEditionView}>Swap</Title>
         {!gameEditionView && (
-          <HeaderItem
-            headerItemStyle={{ alignItems: 'center', display: 'flex' }}
-          >
-            <CustomPopup
-              trigger={<CogIcon />}
-              on='click'
-              offset={[10, 10]}
-              position='bottom right'
-            >
+          <HeaderItem headerItemStyle={{ alignItems: 'center', display: 'flex' }}>
+            <CustomPopup trigger={<CogIcon />} on="click" offset={[2, 10]} position="bottom right">
               <SlippagePopupContent />
             </CustomPopup>
           </HeaderItem>
@@ -580,23 +499,13 @@ const SwapContainer = () => {
           setShowTxModal={setShowTxModal}
           /* handleTokenSelectorType={handleTokenSelectorType} */
         />
-        {!isNaN(pact.ratio) &&
-        fromValues.amount &&
-        fromValues.coin &&
-        toValues.amount &&
-        toValues.coin ? (
-          <SwapResults
-            priceImpact={priceImpact}
-            fromValues={fromValues}
-            toValues={toValues}
-          />
+        {!isNaN(pact.ratio) && fromValues.amount && fromValues.coin && toValues.amount && toValues.coin ? (
+          <SwapResults priceImpact={priceImpact} fromValues={fromValues} toValues={toValues} />
         ) : (
           <ResultContainer gameEditionView={gameEditionView}>
             <RowContainer gameEditionView={gameEditionView}>
               <Label gameEditionView={gameEditionView}>max slippage</Label>
-              <Value gameEditionView={gameEditionView}>{`${
-                pact.slippage * 100
-              }%`}</Value>
+              <Value gameEditionView={gameEditionView}>{`${pact.slippage * 100}%`}</Value>
             </RowContainer>
           </ResultContainer>
         )}

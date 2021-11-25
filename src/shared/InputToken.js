@@ -9,7 +9,7 @@ import { LightModeContext } from '../contexts/LightModeContext';
 
 const Container = styled.div`
   position: absolute;
-  top: 13%;
+  top: ${({ gameEditionView }) => gameEditionView && '4px'};
   right: 4px;
   display: flex;
   justify-content: space-between;
@@ -20,6 +20,11 @@ const Container = styled.div`
       fill: ${({ theme: { colors } }) => colors.white};
     }
   }
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
+    button {
+      padding: 12px 4px !important;
+    }
+  }
 `;
 
 const ElementsContainer = styled.div`
@@ -27,20 +32,33 @@ const ElementsContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  svg:first-child {
-    margin-right: 8px;
-  }
 
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
   span {
     font-size: 16px;
     margin-right: 13px;
     font: ${({ gameEditionView, theme: { fontFamily } }) => {
-      if (gameEditionView)
-        return `normal normal normal 14px/17px ${fontFamily.pressStartRegular}`;
+      if (gameEditionView) return `normal normal normal 14px/17px ${fontFamily.pressStartRegular}`;
     }};
-    color: ${({ gameEditionView, theme: { colors } }) =>
-      gameEditionView ? colors.black : colors.white};
+    color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.black : colors.white)};
   }
+
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
+    img {
+      margin-right: 4px !important;
+    }
+    span {
+      margin-right: 4px;
+    }
+  }
+
+  /* svg:first-child {
+    margin-right: 8px;
+  } */
 `;
 
 const InputToken = ({ icon, code, onClick, onClickButton, disabledButton }) => {
@@ -51,13 +69,12 @@ const InputToken = ({ icon, code, onClick, onClickButton, disabledButton }) => {
     <Container gameEditionView={gameEditionView}>
       <CustomButton
         buttonStyle={{
-          padding: 12,
-          marginLeft: 12,
-          textTransform: gameEditionView ? 'capitalize' : 'uppercase',
+          padding: '12px 8px',
+          textTransform: gameEditionView ? 'capitalize' : 'uppercase'
         }}
-        border='none'
+        border="none"
         color={!gameEditionView && theme(themeMode).colors.white}
-        background='transparent'
+        background="transparent"
         fontSize={gameEditionView ? '13px' : '13px'}
         onClick={onClickButton}
         disabled={disabledButton}
@@ -76,12 +93,12 @@ const InputToken = ({ icon, code, onClick, onClickButton, disabledButton }) => {
 
 InputToken.propTypes = {
   icon: PropTypes.element,
-  code: PropTypes.string,
+  code: PropTypes.string
 };
 
 InputToken.defaultProps = {
   icon: null,
-  code: '',
+  code: ''
 };
 
 export default InputToken;

@@ -14,10 +14,10 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 12px;
   width: 100%;
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  bottom: ${({ gameEditionView }) => gameEditionView && '10px'};
+  top: ${({ gameEditionView }) => gameEditionView && '290px'};
+  left: ${({ gameEditionView }) => gameEditionView && 0};
   z-index: ${({ gameEditionView }) => !gameEditionView && '1'};
 `;
 
@@ -32,14 +32,13 @@ const SwapButtonsForm = ({
   fromNote,
   noLiquidity,
   ratio,
-  setShowTxModal,
+  setShowTxModal
 }) => {
   const modalContext = useContext(ModalContext);
   const { account } = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const swap = useContext(SwapContext);
-  const { gameEditionView, openModal, closeModal } =
-    useContext(GameEditionContext);
+  const { gameEditionView, openModal, closeModal } = useContext(GameEditionContext);
 
   const getButtonLabel = () => {
     if (!account.account) return 'Connect wallet';
@@ -49,8 +48,7 @@ const SwapButtonsForm = ({
     if (isNaN(ratio)) return 'Pair does not exist!';
     if (noLiquidity) return 'not enough liquidity';
     if (!fromValues.amount || !toValues.amount) return 'Enter an amount';
-    if (fromValues.amount > fromValues.balance)
-      return `Insufficient ${fromValues.coin} balance`;
+    if (fromValues.amount > fromValues.balance) return `Insufficient ${fromValues.coin} balance`;
     return 'SWAP';
   };
   return (
@@ -58,53 +56,37 @@ const SwapButtonsForm = ({
       <Button.Group fluid style={{ padding: gameEditionView ? '0 10px' : 0 }}>
         <CustomButton
           /* background="none" */
-          disabled={
-            account.account &&
-            (getButtonLabel() !== 'SWAP' ||
-              isNaN(fromValues.amount) ||
-              isNaN(toValues.amount))
-          }
+          disabled={account.account && (getButtonLabel() !== 'SWAP' || isNaN(fromValues.amount) || isNaN(toValues.amount))}
           loading={loading}
           onClick={async () => {
             if (!account.account) {
               if (gameEditionView) {
                 return openModal({
                   isVisible: true,
-                  title: account?.account
-                    ? 'wallet connected'
-                    : 'connect wallet',
-                  description: account?.account
-                    ? `Account ID: ${reduceToken(account.account)}`
-                    : 'Connect a wallet using one of the methods below',
-                  content: <ConnectWalletModal />,
+                  title: account?.account ? 'wallet connected' : 'connect wallet',
+                  description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
+                  content: <ConnectWalletModal />
                 });
               } else {
                 return modalContext.openModal({
-                  title: account?.account
-                    ? 'wallet connected'
-                    : 'connect wallet',
-                  description: account?.account
-                    ? `Account ID: ${reduceToken(account.account)}`
-                    : 'Connect a wallet using one of the methods below',
-                  content: <ConnectWalletModal />,
+                  title: account?.account ? 'wallet connected' : 'connect wallet',
+                  description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
+                  content: <ConnectWalletModal />
                 });
               }
             }
             setLoading(true);
-            if (
-              wallet.signing.method !== 'sign' &&
-              wallet.signing.method !== 'none'
-            ) {
+            if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
               const res = await swap.swapLocal(
                 {
                   amount: fromValues.amount,
                   address: fromValues.address,
-                  coin: fromValues.coin,
+                  coin: fromValues.coin
                 },
                 {
                   amount: toValues.amount,
                   address: toValues.address,
-                  coin: toValues.coin,
+                  coin: toValues.coin
                 },
                 fromNote === '(estimated)' ? false : true
               );
@@ -119,11 +101,11 @@ const SwapButtonsForm = ({
                 if (res?.result?.status === 'success') {
                   setFromValues((prev) => ({
                     ...prev,
-                    amount: '',
+                    amount: ''
                   }));
                   setToValues((prev) => ({
                     ...prev,
-                    amount: '',
+                    amount: ''
                   }));
                 }
                 setLoading(false);
@@ -133,12 +115,12 @@ const SwapButtonsForm = ({
                 {
                   amount: fromValues.amount,
                   address: fromValues.address,
-                  coin: fromValues.coin,
+                  coin: fromValues.coin
                 },
                 {
                   amount: toValues.amount,
                   address: toValues.address,
-                  coin: toValues.coin,
+                  coin: toValues.coin
                 },
                 fromNote === '(estimated)' ? false : true
               );
@@ -152,11 +134,11 @@ const SwapButtonsForm = ({
               if (res?.result?.status === 'success') {
                 setFromValues((prev) => ({
                   ...prev,
-                  amount: '',
+                  amount: ''
                 }));
                 setToValues((prev) => ({
                   ...prev,
-                  amount: '',
+                  amount: ''
                 }));
               }
               setLoading(false);

@@ -73,17 +73,23 @@ export default createGlobalStyle`
     }
 
     .desktop-none {
-      @media (min-width: ${({ theme: { mediaQueries } }) =>
-        `${mediaQueries.desktopPixel + 1}px`}) {
+      @media (min-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel + 1}px`}) {
         display: none !important;
       }
     }
 
     .mobile-none {
-      @media (max-width: ${({ theme: { mediaQueries } }) =>
-        `${mediaQueries.desktopPixel}px`}) {
+      @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
         display: none !important;
       }
+    }
+
+    .scrollbar-none::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-none{
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
     }
 
 `;

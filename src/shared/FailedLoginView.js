@@ -43,22 +43,17 @@ const SubTitle = styled.div`
 
 const FailedLoginView = ({ onClose, show, accountName }) => {
   return (
-    <Transition
-      items={show}
-      from={{ opacity: 0 }}
-      enter={{ opacity: 1 }}
-      leave={{ opacity: 0 }}
-    >
+    <Transition items={show} from={{ opacity: 0 }} enter={{ opacity: 1 }} leave={{ opacity: 0 }}>
       {(show) =>
         show &&
         ((props) => (
           <Container style={props}>
             <Backdrop onClose={onClose} />
             <ModalContainer
-              title='transaction details'
+              title="transaction details"
               containerStyle={{
                 maxHeight: '80vh',
-                maxWidth: '90vw',
+                maxWidth: '90vw'
               }}
               onClose={onClose}
             >

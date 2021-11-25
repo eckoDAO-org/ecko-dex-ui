@@ -20,8 +20,7 @@ const MainContainer = styled.div`
 const WrapperContainer = styled(Wrapper)`
   height: 100%;
   padding: 0 7.5em;
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     padding: 0 1.5em;
   }
 `;
@@ -29,7 +28,7 @@ const WrapperContainer = styled(Wrapper)`
 const MainContent = styled.div`
   height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
   & > div:first-child {
-    height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
+    height: ${({ theme: { header } }) => `90%`};
   }
 `;
 
@@ -38,8 +37,7 @@ const StripesContainer = styled.div`
   bottom: 0px;
   left: 0;
   line-height: 0;
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     display: none;
   }
 `;
@@ -55,25 +53,16 @@ const Layout = ({ children }) => {
   const game = useContext(GameEditionContext);
 
   useEffect(() => {
-    game.gameEditionView
-      ? history.push(ROUTE_GAME_START_ANIMATION)
-      : history.push(ROUTE_SWAP);
+    game.gameEditionView ? history.push(ROUTE_GAME_START_ANIMATION) : history.push(ROUTE_SWAP);
   }, [game.gameEditionView]);
 
   return (
     <MainContainer>
       {/* <CustomParticles /> */}
       <WrapperContainer>
-        <MobileHeader className='desktop-none' />
-        <DesktopHeader
-          className='mobile-none'
-          gameEditionView={game.gameEditionView}
-        />
-        {game.gameEditionView ? (
-          <GameEditionContainer>{children}</GameEditionContainer>
-        ) : (
-          <MainContent>{children}</MainContent>
-        )}
+        <MobileHeader className="desktop-none" />
+        <DesktopHeader className="mobile-none" gameEditionView={game.gameEditionView} />
+        {game.gameEditionView ? <GameEditionContainer>{children}</GameEditionContainer> : <MainContent>{children}</MainContent>}
       </WrapperContainer>
       <StripesContainer>
         <Stripes />

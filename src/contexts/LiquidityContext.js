@@ -1,23 +1,15 @@
-import React, { useState, useContext, createContext } from "react";
-import pairTokens from "../constants/pairs.json";
-import Pact from "pact-lang-api";
-import { PactContext } from "./PactContext";
-import {
-  chainId,
-  creationTime,
-  GAS_PRICE,
-  network,
-  NETWORKID,
-  PRECISION,
-  ENABLE_GAS_STATION,
-} from "../constants/contextConstants";
-import { AccountContext } from "./AccountContext";
-import { WalletContext } from "./WalletContext";
-import { reduceBalance } from "../utils/reduceBalance";
-import tokenData from "../constants/cryptoCurrencies";
-import { SwapContext } from "./SwapContext";
-import pwPrompt from "../components/alerts/pwPrompt";
-import { decryptKey } from "../utils/keyUtils";
+import React, { useState, useContext, createContext } from 'react';
+import pairTokens from '../constants/pairs.json';
+import Pact from 'pact-lang-api';
+import { PactContext } from './PactContext';
+import { chainId, creationTime, GAS_PRICE, network, NETWORKID, PRECISION, ENABLE_GAS_STATION } from '../constants/contextConstants';
+import { AccountContext } from './AccountContext';
+import { WalletContext } from './WalletContext';
+import { reduceBalance } from '../utils/reduceBalance';
+import tokenData from '../constants/cryptoCurrencies';
+import { SwapContext } from './SwapContext';
+import pwPrompt from '../components/alerts/pwPrompt';
+import { decryptKey } from '../utils/keyUtils';
 
 export const LiquidityContext = createContext(null);
 
@@ -32,9 +24,9 @@ export const LiquidityProvider = (props) => {
   const getPairListAccountBalance = async (account) => {
     try {
       const tokenPairList = Object.keys(pact.pairList).reduce((accum, pair) => {
-        accum += `[${pair.split(":").join(" ")}] `;
+        accum += `[${pair.split(':').join(' ')}] `;
         return accum;
-      }, "");
+      }, '');
       let data = await Pact.fetch.local(
         {
           pactCode: `
@@ -54,9 +46,7 @@ export const LiquidityProvider = (props) => {
                   (reserveB (kswap.exchange.reserve-for p token1))
                   (totalBal (kswap.tokens.total-supply (kswap.exchange.get-pair-key token0 token1)))
                   (acctBal
-                      (try 0.0 (kswap.tokens.get-balance (kswap.exchange.get-pair-key token0 token1) ${JSON.stringify(
-                        account
-                      )})
+                      (try 0.0 (kswap.tokens.get-balance (kswap.exchange.get-pair-key token0 token1) ${JSON.stringify(account)})
                     ))
                 )
                 [(kswap.exchange.get-pair-key token0 token1)
@@ -71,31 +61,24 @@ export const LiquidityProvider = (props) => {
             )
             (map (kswap-read.pair-info) [${tokenPairList}])
              `,
-          meta: Pact.lang.mkMeta(
-            "",
-            chainId,
-            GAS_PRICE,
-            3000,
-            creationTime(),
-            600
-          ),
+          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 3000, creationTime(), 600)
         },
         network
       );
-      if (data.result.status === "success") {
+      if (data.result.status === 'success') {
         let dataList = data.result.data.reduce((accum, data) => {
           accum[data[0]] = {
             balance: data[4],
             supply: data[3],
             reserves: [data[1], data[2]],
-            pooledAmount: [data[5], data[6]],
+            pooledAmount: [data[5], data[6]]
           };
           return accum;
         }, {});
         const pairList = Object.values(pairTokens).map((pair) => {
           return {
             ...pair,
-            ...dataList[pair.name],
+            ...dataList[pair.name]
           };
         });
         setPairListAccount(pairList);
@@ -105,12 +88,7 @@ export const LiquidityProvider = (props) => {
     }
   };
 
-  const createTokenPairLocal = async (
-    token0,
-    token1,
-    amountDesired0,
-    amountDesired1
-  ) => {
+  const createTokenPairLocal = async (token0, token1, amountDesired0, amountDesired1) => {
     try {
       let data = await Pact.fetch.local(
         {
@@ -119,15 +97,8 @@ export const LiquidityProvider = (props) => {
               ${token1.code}
               ""
             )`,
-          meta: Pact.lang.mkMeta(
-            "",
-            chainId,
-            GAS_PRICE,
-            5000,
-            creationTime(),
-            28800
-          ),
-          networkId: NETWORKID,
+          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 5000, creationTime(), 28800),
+          networkId: NETWORKID
         },
         network
       );
@@ -156,50 +127,31 @@ export const LiquidityProvider = (props) => {
             clist: [
               {
                 name: `${token0.code}.TRANSFER`,
-                args: [account.account, pair, Number(amountDesired0)],
+                args: [account.account, pair, Number(amountDesired0)]
               },
               {
                 name: `${token1.code}.TRANSFER`,
-                args: [account.account, pair, Number(amountDesired1)],
+                args: [account.account, pair, Number(amountDesired1)]
               },
               ...(ENABLE_GAS_STATION
                 ? [
                     {
-                      name: "kswap.gas-station.GAS_PAYER",
-                      args: ["free-gas", { int: 1 }, 1.0],
-                    },
+                      name: 'kswap.gas-station.GAS_PAYER',
+                      args: ['free-gas', { int: 1 }, 1.0]
+                    }
                   ]
-                : [Pact.lang.mkCap("gas", "pay gas", "coin.GAS").cap]),
-            ],
+                : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap])
+            ]
           },
           envData: {
-            "user-ks": [wallet.keyPair.publicKey],
-            amountDesired0: reduceBalance(
-              amountDesired0,
-              tokenData[token0.name].precision
-            ),
-            amountDesired1: reduceBalance(
-              amountDesired1,
-              tokenData[token1.name].precision
-            ),
-            amountMinimum0: reduceBalance(
-              amountDesired0 * (1 - parseFloat(pact.slippage)),
-              tokenData[token0.name].precision
-            ),
-            amountMinimum1: reduceBalance(
-              amountDesired1 * (1 - parseFloat(pact.slippage)),
-              tokenData[token1.name].precision
-            ),
+            'user-ks': [wallet.keyPair.publicKey],
+            amountDesired0: reduceBalance(amountDesired0, tokenData[token0.name].precision),
+            amountDesired1: reduceBalance(amountDesired1, tokenData[token1.name].precision),
+            amountMinimum0: reduceBalance(amountDesired0 * (1 - parseFloat(pact.slippage)), tokenData[token0.name].precision),
+            amountMinimum1: reduceBalance(amountDesired1 * (1 - parseFloat(pact.slippage)), tokenData[token1.name].precision)
           },
-          meta: Pact.lang.mkMeta(
-            ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
-            chainId,
-            GAS_PRICE,
-            5000,
-            creationTime(),
-            600
-          ),
-          networkId: NETWORKID,
+          meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account, chainId, GAS_PRICE, 5000, creationTime(), 600),
+          networkId: NETWORKID
         };
         let data = await Pact.fetch.local(cmd, network);
         swap.setCmd(cmd);
@@ -214,15 +166,10 @@ export const LiquidityProvider = (props) => {
       console.log(e);
     }
   };
-  const addLiquidityLocal = async (
-    token0,
-    token1,
-    amountDesired0,
-    amountDesired1
-  ) => {
+  const addLiquidityLocal = async (token0, token1, amountDesired0, amountDesired1) => {
     try {
       let privKey = wallet.signing.key;
-      if (wallet.signing.method === "pk+pw") {
+      if (wallet.signing.method === 'pk+pw') {
         // mod with new wallet json
         const pw = await pwPrompt();
         privKey = await decryptKey(pw);
@@ -249,50 +196,31 @@ export const LiquidityProvider = (props) => {
           clist: [
             {
               name: `${token0.code}.TRANSFER`,
-              args: [account.account, pair, Number(amountDesired0)],
+              args: [account.account, pair, Number(amountDesired0)]
             },
             {
               name: `${token1.code}.TRANSFER`,
-              args: [account.account, pair, Number(amountDesired1)],
+              args: [account.account, pair, Number(amountDesired1)]
             },
             ...(ENABLE_GAS_STATION
               ? [
                   {
-                    name: "kswap.gas-station.GAS_PAYER",
-                    args: ["free-gas", { int: 1 }, 1.0],
-                  },
+                    name: 'kswap.gas-station.GAS_PAYER',
+                    args: ['free-gas', { int: 1 }, 1.0]
+                  }
                 ]
-              : [Pact.lang.mkCap("gas", "pay gas", "coin.GAS").cap]),
-          ],
+              : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap])
+          ]
         },
         envData: {
-          "user-ks": account.guard,
-          amountDesired0: reduceBalance(
-            amountDesired0,
-            tokenData[token0.name].precision
-          ),
-          amountDesired1: reduceBalance(
-            amountDesired1,
-            tokenData[token1.name].precision
-          ),
-          amountMinimum0: reduceBalance(
-            amountDesired0 * (1 - parseFloat(pact.slippage)),
-            tokenData[token0.name].precision
-          ),
-          amountMinimum1: reduceBalance(
-            amountDesired1 * (1 - parseFloat(pact.slippage)),
-            tokenData[token1.name].precision
-          ),
+          'user-ks': account.guard,
+          amountDesired0: reduceBalance(amountDesired0, tokenData[token0.name].precision),
+          amountDesired1: reduceBalance(amountDesired1, tokenData[token1.name].precision),
+          amountMinimum0: reduceBalance(amountDesired0 * (1 - parseFloat(pact.slippage)), tokenData[token0.name].precision),
+          amountMinimum1: reduceBalance(amountDesired1 * (1 - parseFloat(pact.slippage)), tokenData[token1.name].precision)
         },
-        meta: Pact.lang.mkMeta(
-          ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
-          chainId,
-          GAS_PRICE,
-          3000,
-          creationTime(),
-          600
-        ),
-        networkId: NETWORKID,
+        meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account, chainId, GAS_PRICE, 3000, creationTime(), 600),
+        networkId: NETWORKID
       };
       let data = await Pact.fetch.local(cmd, network);
       swap.setCmd(cmd);
@@ -305,12 +233,7 @@ export const LiquidityProvider = (props) => {
     }
   };
 
-  const addLiquidityWallet = async (
-    token0,
-    token1,
-    amountDesired0,
-    amountDesired1
-  ) => {
+  const addLiquidityWallet = async (token0, token1, amountDesired0, amountDesired1) => {
     try {
       let pair = await swap.getPairAccount(token0.code, token1.code);
       const signCmd = {
@@ -326,58 +249,33 @@ export const LiquidityProvider = (props) => {
             (read-keyset 'user-ks)
           )`,
         caps: [
-          ...(ENABLE_GAS_STATION
-            ? [
-                Pact.lang.mkCap(
-                  "Gas Station",
-                  "free gas",
-                  "kswap.gas-station.GAS_PAYER",
-                  ["free-gas", { int: 1 }, 1.0]
-                ),
-              ]
-            : []),
-          Pact.lang.mkCap(
-            "transfer capability",
-            "Transfer Token to Pool",
-            `${token0.code}.TRANSFER`,
-            [account.account, pair, Number(amountDesired0)]
-          ),
-          Pact.lang.mkCap(
-            "transfer capability",
-            "Transfer Token to Pool",
-            `${token1.code}.TRANSFER`,
-            [account.account, pair, Number(amountDesired1)]
-          ),
-          ...(!ENABLE_GAS_STATION
-            ? [Pact.lang.mkCap("gas", "pay gas", "coin.GAS")]
-            : []),
+          ...(ENABLE_GAS_STATION ? [Pact.lang.mkCap('Gas Station', 'free gas', 'kswap.gas-station.GAS_PAYER', ['free-gas', { int: 1 }, 1.0])] : []),
+          Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${token0.code}.TRANSFER`, [
+            account.account,
+            pair,
+            Number(amountDesired0)
+          ]),
+          Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${token1.code}.TRANSFER`, [
+            account.account,
+            pair,
+            Number(amountDesired1)
+          ]),
+          ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : [])
         ],
-        sender: ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
+        sender: ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account,
         gasLimit: 3000,
         gasPrice: GAS_PRICE,
         chainId: chainId,
         ttl: 600,
         envData: {
-          "user-ks": account.guard,
-          amountDesired0: reduceBalance(
-            amountDesired0,
-            tokenData[token0.name].precision
-          ),
-          amountDesired1: reduceBalance(
-            amountDesired1,
-            tokenData[token1.name].precision
-          ),
-          amountMinimum0: reduceBalance(
-            amountDesired0 * (1 - parseFloat(pact.slippage)),
-            tokenData[token0.name].precision
-          ),
-          amountMinimum1: reduceBalance(
-            amountDesired1 * (1 - parseFloat(pact.slippage)),
-            tokenData[token1.name].precision
-          ),
+          'user-ks': account.guard,
+          amountDesired0: reduceBalance(amountDesired0, tokenData[token0.name].precision),
+          amountDesired1: reduceBalance(amountDesired1, tokenData[token1.name].precision),
+          amountMinimum0: reduceBalance(amountDesired0 * (1 - parseFloat(pact.slippage)), tokenData[token0.name].precision),
+          amountMinimum1: reduceBalance(amountDesired1 * (1 - parseFloat(pact.slippage)), tokenData[token1.name].precision)
         },
         signingPubKey: account.guard.keys[0],
-        networkId: NETWORKID,
+        networkId: NETWORKID
       };
       //alert to sign tx
       /* walletLoading(); */
@@ -395,19 +293,19 @@ export const LiquidityProvider = (props) => {
       return data;
     } catch (e) {
       //wallet error alert
-      if (e.message.includes("Failed to fetch"))
+      if (e.message.includes('Failed to fetch'))
         wallet.setWalletError({
           error: true,
-          title: "No Wallet",
-          content: "Please make sure you open and login to your wallet.",
+          title: 'No Wallet',
+          content: 'Please make sure you open and login to your wallet.'
         });
       //walletError();
       else
         wallet.setWalletError({
           error: true,
-          title: "Wallet Signing Failure",
+          title: 'Wallet Signing Failure',
           content:
-            "You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kadenaswap.",
+            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kadenaswap.'
         }); //walletSigError();
       console.log(e);
     }
@@ -416,7 +314,7 @@ export const LiquidityProvider = (props) => {
   const removeLiquidityLocal = async (token0, token1, liquidity) => {
     try {
       let privKey = wallet.signing.key;
-      if (wallet.signing.method === "pk+pw") {
+      if (wallet.signing.method === 'pk+pw') {
         const pw = await pwPrompt();
         privKey = await decryptKey(pw);
       }
@@ -443,34 +341,27 @@ export const LiquidityProvider = (props) => {
           clist: [
             {
               name: `kswap.tokens.TRANSFER`,
-              args: [pairKey, account.account, pair, Number(liquidity)],
+              args: [pairKey, account.account, pair, Number(liquidity)]
             },
             {
               name: `kswap.tokens.TRANSFER`,
-              args: [pairKey, account.account, pair, Number(liquidity)],
+              args: [pairKey, account.account, pair, Number(liquidity)]
             },
             ...(ENABLE_GAS_STATION
               ? [
                   {
-                    name: "kswap.gas-station.GAS_PAYER",
-                    args: ["free-gas", { int: 1 }, 1.0],
-                  },
+                    name: 'kswap.gas-station.GAS_PAYER',
+                    args: ['free-gas', { int: 1 }, 1.0]
+                  }
                 ]
-              : [Pact.lang.mkCap("gas", "pay gas", "coin.GAS").cap]),
-          ],
+              : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap])
+          ]
         },
         envData: {
-          "user-ks": account.guard,
-          liquidity: reduceBalance(liquidity, PRECISION),
+          'user-ks': account.guard,
+          liquidity: reduceBalance(liquidity, PRECISION)
         },
-        meta: Pact.lang.mkMeta(
-          ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
-          chainId,
-          GAS_PRICE,
-          3000,
-          creationTime(),
-          600
-        ),
+        meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account, chainId, GAS_PRICE, 3000, creationTime(), 600)
       };
       swap.setCmd(cmd);
       let data = await Pact.fetch.local(cmd, network);
@@ -478,7 +369,7 @@ export const LiquidityProvider = (props) => {
       return data;
     } catch (e) {
       setLocalRes({});
-      if (e.message.includes("Failed to fetch")) wallet.walletError();
+      if (e.message.includes('Failed to fetch')) wallet.walletError();
       else wallet.walletSigError();
       return -1;
     }
@@ -500,43 +391,32 @@ export const LiquidityProvider = (props) => {
             (read-keyset 'user-ks)
           )`,
         caps: [
-          ...(ENABLE_GAS_STATION
-            ? [
-                Pact.lang.mkCap(
-                  "Gas Station",
-                  "free gas",
-                  "kswap.gas-station.GAS_PAYER",
-                  ["free-gas", { int: 1 }, 1.0]
-                ),
-              ]
-            : []),
-          Pact.lang.mkCap(
-            "transfer capability",
-            "Transfer Token to Pool",
-            `kswap.tokens.TRANSFER`,
-            [pairKey, account.account, pair, Number(liquidity)]
-          ),
-          Pact.lang.mkCap(
-            "transfer capability",
-            "Transfer Token to Pool",
-            `kswap.tokens.TRANSFER`,
-            [pairKey, account.account, pair, Number(liquidity)]
-          ),
-          ...(!ENABLE_GAS_STATION
-            ? [Pact.lang.mkCap("gas", "pay gas", "coin.GAS")]
-            : []),
+          ...(ENABLE_GAS_STATION ? [Pact.lang.mkCap('Gas Station', 'free gas', 'kswap.gas-station.GAS_PAYER', ['free-gas', { int: 1 }, 1.0])] : []),
+          Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `kswap.tokens.TRANSFER`, [
+            pairKey,
+            account.account,
+            pair,
+            Number(liquidity)
+          ]),
+          Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `kswap.tokens.TRANSFER`, [
+            pairKey,
+            account.account,
+            pair,
+            Number(liquidity)
+          ]),
+          ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : [])
         ],
-        sender: ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
+        sender: ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account,
         gasLimit: 3000,
         gasPrice: GAS_PRICE,
         chainId: chainId,
         ttl: 600,
         envData: {
-          "user-ks": account.guard,
-          liquidity: reduceBalance(liquidity, PRECISION),
+          'user-ks': account.guard,
+          liquidity: reduceBalance(liquidity, PRECISION)
         },
         signingPubKey: account.guard.keys[0],
-        networkId: NETWORKID,
+        networkId: NETWORKID
       };
       //alert to sign tx
       /* walletLoading(); */
@@ -554,19 +434,19 @@ export const LiquidityProvider = (props) => {
     } catch (e) {
       //wallet error alert
       setLocalRes({});
-      if (e.message.includes("Failed to fetch"))
+      if (e.message.includes('Failed to fetch'))
         wallet.setWalletError({
           error: true,
-          title: "No Wallet",
-          content: "Please make sure you open and login to your wallet.",
+          title: 'No Wallet',
+          content: 'Please make sure you open and login to your wallet.'
         });
       //walletError();
       else
         wallet.setWalletError({
           error: true,
-          title: "Wallet Signing Failure",
+          title: 'Wallet Signing Failure',
           content:
-            "You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kadenaswap.",
+            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kadenaswap.'
         }); //walletSigError();
       console.log(e);
     }
@@ -582,14 +462,10 @@ export const LiquidityProvider = (props) => {
     addLiquidityLocal,
     addLiquidityWallet,
     removeLiquidityLocal,
-    removeLiquidityWallet,
+    removeLiquidityWallet
   };
 
-  return (
-    <LiquidityContext.Provider value={contextValue}>
-      {props.children}
-    </LiquidityContext.Provider>
-  );
+  return <LiquidityContext.Provider value={contextValue}>{props.children}</LiquidityContext.Provider>;
 };
 
 export const LiquidityConsumer = LiquidityContext.Consumer;

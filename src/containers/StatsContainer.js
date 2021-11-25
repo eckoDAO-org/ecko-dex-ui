@@ -4,6 +4,7 @@ import { PactContext } from '../contexts/PactContext';
 import CustomButton from '../shared/CustomButton';
 import StatsTab from '../components/stats/StatsTab';
 import SwapHistoryTab from '../components/stats/SwapHistoryTab';
+import HistoryTab from '../components/stats/HistoryTab';
 
 const Container = styled.div`
   display: flex;
@@ -19,7 +20,7 @@ const ButtonContainer = styled.div`
 
 const StatsContainer = () => {
   const pact = useContext(PactContext);
-  const [activeTabs, setactiveTabs] = useState('POOL_STATS');
+  const [activeTabs, setActiveTabs] = useState('POOL_STATS');
 
   useEffect(async () => {
     await pact.getPairList();
@@ -27,26 +28,28 @@ const StatsContainer = () => {
 
   return (
     //MOBILE
-    <Container>
-      {/* <ButtonContainer>
-        <CustomButton
-          onClick={() => {
-            setactiveTabs("POOL_STATS");
-          }}
-        >
-          Pool Stats
-        </CustomButton>
-        <CustomButton
-          onClick={() => {
-            setactiveTabs("SWAP_HISTORY");
-          }}
-        >
-          Swap History
-        </CustomButton>
-      </ButtonContainer>
-      {activeTabs === "POOL_STATS" ? <StatsTab /> : <SwapHistoryTab />} */}
-      <StatsTab />
-    </Container>
+    // <Container>
+    //   <ButtonContainer>
+    //     <CustomButton
+    //       onClick={() => {
+    //         setactiveTabs("POOL_STATS");
+    //       }}
+    //     >
+    //       Pool Stats
+    //     </CustomButton>
+    //     <CustomButton
+    //       onClick={() => {
+    //         setactiveTabs("SWAP_HISTORY");
+    //       }}
+    //     >
+    //       Swap History
+    //     </CustomButton>
+    //   </ButtonContainer>
+    activeTabs === 'POOL_STATS' ? (
+      <StatsTab activeTabs={activeTabs} setActiveTabs={() => setActiveTabs('HISTORY')} />
+    ) : (
+      <HistoryTab activeTabs={activeTabs} setActiveTabs={() => setActiveTabs('POOL_STATS')} />
+    )
   );
 };
 

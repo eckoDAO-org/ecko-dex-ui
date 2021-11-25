@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyle from './styles/globalStyle';
 import Router from './router/router';
 import NotificationRender from './components/notification/NotificationRender';
-import { darkTheme, lightTheme, theme } from './styles/theme';
+import { theme } from './styles/theme';
 import { AccountProvider } from './contexts/AccountContext';
 import { WalletProvider } from './contexts/WalletContext';
 import { PactProvider } from './contexts/PactContext';
@@ -12,18 +12,11 @@ import RightModalRender from './components/right-modal-notification/RightModalRe
 import { SwapProvider } from './contexts/SwapContext';
 import { LiquidityProvider } from './contexts/LiquidityContext';
 import { GameEditionProvider } from './contexts/GameEditionContext';
-import {
-  LightModeContext,
-  LightModeProvider,
-  useLightMode,
-} from './contexts/LightModeContext';
-import { KadenaWalletProvider } from "./contexts/KadenaWalletContext";
+import { LightModeContext, LightModeProvider, useLightMode } from './contexts/LightModeContext';
+import { KadenaWalletProvider } from './contexts/KadenaWalletContext';
 
 function App() {
-  const { themeMode, mountedComponent } = useContext(LightModeContext);
-  console.log('🚀 ~ file: App.js ~ line 19 ~ App ~ themeMode', themeMode);
-
-  if (!mountedComponent) return <div />;
+  const { themeMode } = useContext(LightModeContext);
 
   return (
     <ThemeProvider theme={theme(themeMode)}>
@@ -34,16 +27,16 @@ function App() {
             <WalletProvider>
               <PactProvider>
                 <KadenaWalletProvider>
-                <SwapProvider>
-                  <LiquidityProvider>
-                    <RightModalRender>
-                      <ModalRender>
-                            <Router />
-                      </ModalRender>
-                    </RightModalRender>
-                  </LiquidityProvider>
-                </SwapProvider>
-              </KadenaWalletProvider>
+                  <SwapProvider>
+                    <LiquidityProvider>
+                      <RightModalRender>
+                        <ModalRender>
+                          <Router />
+                        </ModalRender>
+                      </RightModalRender>
+                    </LiquidityProvider>
+                  </SwapProvider>
+                </KadenaWalletProvider>
               </PactProvider>
             </WalletProvider>
           </AccountProvider>

@@ -1,16 +1,16 @@
-import React, { useContext } from "react";
-import styled from "styled-components/macro";
+import React, { useContext } from 'react';
+import styled from 'styled-components/macro';
 
-import FormContainer from "../../components/shared/FormContainer";
-import Input from "../../components/shared/Input";
+import FormContainer from '../../components/shared/FormContainer';
+import Input from '../../components/shared/Input';
 
-import TokenSelector from "../../components/shared/TokenSelector";
+import TokenSelector from '../../components/shared/TokenSelector';
 
-import { PactContext } from "../../contexts/PactContext";
-import { reduceBalance } from "../../utils/reduceBalance";
+import { PactContext } from '../../contexts/PactContext';
+import { reduceBalance } from '../../utils/reduceBalance';
 
-import { ReactComponent as ArrowBack } from "../../assets/images/shared/arrow-back.svg";
-import theme from "../../styles/theme";
+import { ReactComponent as ArrowBack } from '../../assets/images/shared/arrow-back.svg';
+import theme from '../../styles/theme';
 
 const Container = styled.div`
   display: flex;
@@ -72,10 +72,10 @@ const PreviewContainer = (props) => {
         <Title style={{ fontFamily: theme.fontFamily.regular }}>
           <ArrowBack
             style={{
-              cursor: "pointer",
-              color: "#FFFFFF",
-              marginRight: "15px",
-              justifyContent: "center",
+              cursor: 'pointer',
+              color: '#FFFFFF',
+              marginRight: '15px',
+              justifyContent: 'center'
             }}
             onClick={() => props.closeLiquidity()}
           />
@@ -88,13 +88,11 @@ const PreviewContainer = (props) => {
         <Input topLeftLabel="Deposit Desired" numberOnly />
       </FormContainer>
 
-      {liquidityView === "Add Liquidity" ? (
+      {liquidityView === 'Add Liquidity' ? (
         <ResultContainer>
           <RowContainer2>
             <Label>{`1 ${fromValues?.coin}`}</Label>
-            <Value>{`${reduceBalance(1 / pact.ratio)} ${
-              toValues?.coin
-            }`}</Value>
+            <Value>{`${reduceBalance(1 / pact.ratio)} ${toValues?.coin}`}</Value>
           </RowContainer2>
           <RowContainer2>
             <Label>{`1 ${toValues?.coin} `}</Label>
@@ -102,13 +100,11 @@ const PreviewContainer = (props) => {
           </RowContainer2>
           <RowContainer2>
             <Label>Share of Pool</Label>
-            <Value>
-              {reduceBalance(pact.share(fromValues?.amount) * 100)}%
-            </Value>
+            <Value>{reduceBalance(pact.share(fromValues?.amount) * 100)}%</Value>
           </RowContainer2>
         </ResultContainer>
       ) : (
-        ""
+        ''
       )}
     </Container>
   );

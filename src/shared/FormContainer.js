@@ -5,25 +5,23 @@ import { GameEditionContext } from '../contexts/GameEditionContext';
 import theme from '../styles/theme';
 
 const Container = styled.div`
-  position: ${({ gameEditionView }) => !gameEditionView && `relative`};
+  position: ${({ gameEditionView }) => (gameEditionView ? 'absolute' : 'relative')};
+  top: ${({ gameEditionView }) => gameEditionView && '60px'};
   display: flex;
   flex-flow: column;
   width: 100%;
   border-radius: 10px;
-  border: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? `none` : `1px solid transparent`};
+  /* border: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `none` : `1px solid transparent`)}; */
 
   opacity: 1;
-  background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
+  background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? 'transparent' : backgroundContainer)};
   backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
-  padding: ${({ gameEditionView }) =>
-    gameEditionView ? `10px 10px` : `32px 32px`};
+  padding: ${({ gameEditionView }) => (gameEditionView ? `10px 10px` : `32px 32px`)};
   /* & > *:not(:last-child) {
     margin-bottom: 32px;
   }
  */
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
   }
 `;
@@ -38,8 +36,7 @@ const Content = styled.div`
     margin-right: 32px;
   } */
 
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
     gap: 0px;
   }
@@ -76,12 +73,12 @@ const FormContainer = ({ containerStyle, title, titleStyle, children }) => {
 
 FormContainer.propTypes = {
   title: PropTypes.string,
-  onClose: PropTypes.func,
+  onClose: PropTypes.func
 };
 
 FormContainer.defaultProps = {
   title: '',
-  onClose: null,
+  onClose: null
 };
 
 export default FormContainer;

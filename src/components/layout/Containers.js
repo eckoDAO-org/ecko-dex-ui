@@ -26,7 +26,7 @@ export const ButtonContainer = styled.div`
 
 export const RowContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: ${({ gameEditionView }) => (gameEditionView ? 'space-between' : 'center')};
   width: 100%;
   flex-flow: ${({ gameEditionView }) => (gameEditionView ? 'row' : 'column')};
   margin-bottom: ${({ gameEditionView }) => (gameEditionView ? '8px' : '0px')};
@@ -38,10 +38,8 @@ export const ColumnContainer = styled.div`
 `;
 
 export const Label = styled.span`
-  font-family: ${({ gameEditionView, theme: { fontFamily } }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
-  color: ${({ gameEditionView, withShade, theme: { colors } }) =>
-    gameEditionView ? colors.black : `${colors.white}99 !important`};
+  font-family: ${({ gameEditionView, theme: { fontFamily } }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
+  color: ${({ gameEditionView, withShade, theme: { colors } }) => (gameEditionView ? colors.black : `${colors.white}99 !important`)};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   text-align: ${({ gameEditionView }) => gameEditionView && 'left'};
 
@@ -49,17 +47,15 @@ export const Label = styled.span`
 `;
 
 export const Value = styled.span`
-  font-family: ${({ gameEditionView, theme: { fontFamily } }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
+  font-family: ${({ gameEditionView, theme: { fontFamily } }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '16px')};
   line-height: 20px;
-  color: ${({ gameEditionView, withShade, theme: { colors } }) =>
-    gameEditionView ? colors.black : `${colors.white} !important`};
+  color: ${({ gameEditionView, withShade, theme: { colors } }) => (gameEditionView ? colors.black : `${colors.white} !important`)};
   text-align: ${({ gameEditionView }) => gameEditionView && 'left'};
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
-    margin-bottom: 5px;
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    /* margin-bottom: 5px; */
   }
+  line-break: anywhere;
 `;
 
 export const TitleContainer = styled.div`
@@ -74,11 +70,8 @@ export const TitleContainer = styled.div`
 
 export const Title = styled.span`
   font: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView
-      ? `normal normal normal 16px/19px ${fontFamily.pressStartRegular}`
-      : `normal normal bold 32px/57px ${fontFamily.bold}`};
+    gameEditionView ? `normal normal normal 16px/19px ${fontFamily.pressStartRegular}` : `normal normal bold 32px/57px ${fontFamily.bold}`};
   letter-spacing: 0px;
-  color: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? colors.black : colors.white};
+  color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.black : colors.white)};
   text-transform: capitalize;
 `;

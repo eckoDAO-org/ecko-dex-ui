@@ -7,15 +7,15 @@ import reduceToken from '../../../utils/reduceToken';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { ModalContext } from '../../../contexts/ModalContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import theme from '../../../styles/theme';
+import { theme } from '../../../styles/theme';
 import { getAccounts, openZelcore } from '../../../utils/zelcore';
 import { WalletContext } from '../../../contexts/WalletContext';
 import { WALLET } from '../../../constants/wallet';
+import { LightModeContext } from '../../../contexts/LightModeContext';
 
 const TopText = styled.span`
   font-size: 13px;
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
   text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
   position: ${({ gameEditionView }) => (gameEditionView ? 'absolute' : 'none')};
   bottom: ${({ gameEditionView }) => (gameEditionView ? '292px' : '0')};
@@ -23,8 +23,7 @@ const TopText = styled.span`
 
 const BottomText = styled.span`
   font-size: 13px;
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
   text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
   position: ${({ gameEditionView }) => (gameEditionView ? 'absolute' : 'none')};
   top: ${({ gameEditionView }) => (gameEditionView ? '-48px' : '0')};
@@ -53,21 +52,19 @@ const DropdownContainer = styled.div`
   .ui.selection.dropdown .menu {
     margin-top: 10px !important;
     background: transparent;
-    border: 2px dashed ${theme.colors.black};
+    border: 2px dashed ${({ theme: { colors } }) => colors.black};
 
-    @media (min-width: ${({ theme: { mediaQueries } }) =>
-        `${mediaQueries.mobilePixel + 1}px`}) {
+    @media (min-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
       max-height: 13em;
     }
 
-    @media (min-width: ${({ theme: { mediaQueries } }) =>
-        `${mediaQueries.desktopPixel}px`}) {
+    @media (min-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
       max-height: 11em;
     }
   }
 
   .ui.selection.visible.dropdown .menu {
-    border: 2px dashed ${theme.colors.black};
+    border: 2px dashed ${({ theme: { colors } }) => colors.black};
   }
 
   .ui.selection.dropdown .menu > .item {
@@ -75,12 +72,12 @@ const DropdownContainer = styled.div`
   }
 
   .ui.selection.active.dropdown:hover {
-    border: 2px dashed ${theme.colors.black};
+    border: 2px dashed ${({ theme: { colors } }) => colors.black};
   }
 
   .ui.default.dropdown:not(.button) > .text,
   .ui.dropdown:not(.button) > .default.text {
-    color: ${theme.colors.black};
+    color: ${({ theme: { colors } }) => colors.black};
   }
 `;
 
@@ -88,6 +85,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
   const modalContext = useContext(ModalContext);
   const account = useContext(AccountContext);
   const { gameEditionView, closeModal } = useContext(GameEditionContext);
+  const { themeMode } = useContext(LightModeContext);
 
   const wallet = useContext(WalletContext);
   const [loading, setLoading] = useState(false);
@@ -145,16 +143,10 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
     <>
       {!approved ? (
         <>
-          <TopText gameEditionView={gameEditionView}>
-            Follow instructions in the wallet to share your accounts
-          </TopText>
+          <TopText gameEditionView={gameEditionView}>Follow instructions in the wallet to share your accounts</TopText>
           <ActionContainer gameEditionView={gameEditionView}>
             {loading ? (
-              <Loader
-                active
-                inline='centered'
-                style={{ color: '#FFFFFF' }}
-              ></Loader>
+              <Loader active inline="centered" style={{ color: theme(themeMode).colors.white }}></Loader>
             ) : (
               <CustomButton
                 onClick={() => {
@@ -168,13 +160,11 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
         </>
       ) : (
         <>
-          <BottomText gameEditionView={gameEditionView}>
-            Choose Public Key you intend to use
-          </BottomText>
+          <BottomText gameEditionView={gameEditionView}>Choose Public Key you intend to use</BottomText>
           {gameEditionView ? (
             <DropdownContainer>
               <Dropdown
-                placeholder='More'
+                placeholder="More"
                 fluid
                 selection
                 closeOnChange
@@ -183,7 +173,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
                   accounts.map((item, index) => ({
                     key: index,
                     text: reduceToken(item),
-                    value: item,
+                    value: item
                   }))
                 }
                 onChange={handleDropdownChange}
@@ -192,7 +182,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
             </DropdownContainer>
           ) : (
             <Dropdown
-              placeholder='More'
+              placeholder="More"
               fluid
               selection
               closeOnChange
@@ -201,7 +191,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
                 accounts.map((item, index) => ({
                   key: index,
                   text: reduceToken(item),
-                  value: item,
+                  value: item
                 }))
               }
               onChange={handleDropdownChange}
@@ -212,19 +202,17 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
             <Button.Group fluid>
               {!gameEditionView && (
                 <CustomButton
-                  border='none'
-                  boxShadow='none'
-                  background='transparent'
+                  border="none"
+                  boxShadow="none"
+                  color={theme(themeMode).colors.white}
+                  background="transparent"
                   onClick={() => handleCancel()}
                 >
                   Cancel
                 </CustomButton>
               )}
 
-              <CustomButton
-                disabled={!selectedAccount}
-                onClick={() => handleConnect()}
-              >
+              <CustomButton disabled={!selectedAccount} onClick={() => handleConnect()}>
                 Connect
               </CustomButton>
             </Button.Group>

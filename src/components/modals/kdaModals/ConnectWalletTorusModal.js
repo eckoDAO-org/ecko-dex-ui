@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 /* import "./App.css"; */
 import TorusSdk from '@toruslabs/torus-direct-web-sdk';
 import Pact from 'pact-lang-api';
-import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { Loader } from 'semantic-ui-react';
 import { AccountContext } from '../../../contexts/AccountContext';
@@ -11,6 +10,8 @@ import CustomButton from '../../../shared/CustomButton';
 import { ModalContext } from '../../../contexts/ModalContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { WALLET } from '../../../constants/wallet';
+import { theme } from '../../../styles/theme';
+import { LightModeContext } from '../../../contexts/LightModeContext';
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -34,8 +35,7 @@ const LoaderContainer = styled.div`
 
 const TopText = styled.span`
   font-size: 13px;
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
   text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
   position: ${({ gameEditionView }) => (gameEditionView ? 'absolute' : 'none')};
   top: ${({ gameEditionView }) => (gameEditionView ? '-41px' : '0')};
@@ -44,8 +44,7 @@ const TopText = styled.span`
 
 const BottomText = styled.span`
   font-size: 13px;
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
   text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
   position: ${({ gameEditionView }) => (gameEditionView ? 'absolute' : 'none')};
   top: ${({ gameEditionView }) => gameEditionView && '0'};
@@ -59,14 +58,11 @@ const verifierMap = {
     name: 'Google',
     typeOfLogin: 'google',
     verifier: process.env.REACT_APP_TORUS_VERIFIER,
-    clientId: process.env.REACT_APP_TORUS_GOOGLE_CLIENT_ID,
-  },
+    clientId: process.env.REACT_APP_TORUS_GOOGLE_CLIENT_ID
+  }
 };
 
-console.log(
-  '🚀 ~ file: ConnectWalletTorusModal.js ~ line 61 ~  process.env.REACT_APP_TORUS_VERIFIER',
-  process.env.REACT_APP_TORUS_VERIFIER
-);
+console.log('🚀 ~ file: ConnectWalletTorusModal.js ~ line 61 ~  process.env.REACT_APP_TORUS_VERIFIER', process.env.REACT_APP_TORUS_VERIFIER);
 
 /* const createAPIHost = (network, chainId) => `https://${network}.testnet.chainweb.com/chainweb/0.0/testnet02/chain/${chainId}/pact` */
 
@@ -74,18 +70,17 @@ function Login({ onClose, onBack }) {
   const modalContext = useContext(ModalContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
+  const { themeMode } = useContext(LightModeContext);
+
   const { gameEditionView, closeModal } = useContext(GameEditionContext);
-  const [selectedVerifier, setSelectedVerifier] = useState(GOOGLE);
+  const [selectedVerifier] = useState(GOOGLE);
   const [torusdirectsdk, setTorusdirectsdk] = useState(null);
-  const [loginHint, setLoginHint] = useState('');
-  const [consoleText, setConsoleText] = useState('');
-  const [publicKey, setPublicKey] = useState('');
-  const [privateKey, setPrivateKey] = useState('');
-  const [userName, setUserName] = useState('');
-  const [dataRetrieved, setDataRetrieved] = useState(false);
-  const [loginClicked, setLoginClicked] = useState(false);
-  const history = useHistory();
-  const [accountBalance, setAccountBalance] = useState(0);
+  const [, setConsoleText] = useState('');
+  const [, setPublicKey] = useState('');
+  const [, setPrivateKey] = useState('');
+  const [, setUserName] = useState('');
+  const [, setDataRetrieved] = useState(false);
+  const [, setLoginClicked] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -95,7 +90,7 @@ function Login({ onClose, onBack }) {
           baseUrl: `${window.location.origin}/serviceworker`,
           enableLogging: true,
           redirectToOpener: true,
-          network: process.env.REACT_APP_TORUS_NETWORK, // details for test net
+          network: process.env.REACT_APP_TORUS_NETWORK // details for test net
         });
 
         await torusdirectsdk.init({ skipSw: true });
@@ -120,19 +115,13 @@ function Login({ onClose, onBack }) {
       const loginDetails = await torusdirectsdk.triggerLogin({
         typeOfLogin,
         verifier,
-        clientId,
+        clientId
       });
-      setConsoleText(
-        typeof loginDetails === 'object'
-          ? JSON.stringify(loginDetails)
-          : loginDetails
-      );
+      setConsoleText(typeof loginDetails === 'object' ? JSON.stringify(loginDetails) : loginDetails);
 
       setUserName(loginDetails?.userInfo?.name);
 
-      const keyPair = Pact.crypto.restoreKeyPairFromSecretKey(
-        loginDetails.privateKey
-      );
+      const keyPair = Pact.crypto.restoreKeyPairFromSecretKey(loginDetails.privateKey);
 
       setPublicKey(keyPair.publicKey);
       setPrivateKey(keyPair.secretKey);
@@ -157,13 +146,8 @@ function Login({ onClose, onBack }) {
 
   return (
     <>
-      <TopText gameEditionView={gameEditionView}>
-        Please press 'Connect with Torus' in order to access your wallet with
-        Torus.
-      </TopText>
-      <BottomText gameEditionView={gameEditionView}>
-        When submitting a transaction, you will sign it through Torus.
-      </BottomText>
+      <TopText gameEditionView={gameEditionView}>Please press 'Connect with Torus' in order to access your wallet with Torus.</TopText>
+      <BottomText gameEditionView={gameEditionView}>When submitting a transaction, you will sign it through Torus.</BottomText>
       <ButtonContainer gameEditionView={gameEditionView}>
         <CustomButton disabled={loading} onClick={login}>
           Connect with Torus
@@ -173,9 +157,9 @@ function Login({ onClose, onBack }) {
         {!gameEditionView ? (
           <CustomButton
             disabled={loading}
-            border='none'
-            color='#fff'
-            background='transparent'
+            border="none"
+            color={theme(themeMode).colors.white}
+            background="transparent"
             onClick={() => {
               modalContext.onBackModal();
             }}
@@ -186,11 +170,7 @@ function Login({ onClose, onBack }) {
       </ButtonContainer>
       {loading && (
         <LoaderContainer gameEditionView={gameEditionView}>
-          <Loader
-            active
-            inline='centered'
-            style={{ color: '#e0e0e0' }}
-          ></Loader>
+          <Loader active inline="centered" style={{ color: '#e0e0e0' }}></Loader>
         </LoaderContainer>
       )}
     </>

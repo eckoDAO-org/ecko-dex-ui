@@ -7,7 +7,7 @@ const initialState = {
   open: false,
   title: '',
   content: null,
-  containerStyle: null,
+  containerStyle: null
 };
 
 export const ModalProvider = (props) => {
@@ -39,7 +39,7 @@ export const ModalProvider = (props) => {
         onBackModal,
         openModal,
         setModalLoading,
-        closeModal,
+        closeModal
       }}
     >
       {props.children}
@@ -50,10 +50,4 @@ export const ModalProvider = (props) => {
 export const ModalConsumer = ModalContext.Consumer;
 
 export const withModalContext = (Component) => (props) =>
-  (
-    <ModalConsumer>
-      {(providerProps) => (
-        <Component {...props} modalContextProps={providerProps} />
-      )}
-    </ModalConsumer>
-  );
+  <ModalConsumer>{(providerProps) => <Component {...props} modalContextProps={providerProps} />}</ModalConsumer>;
