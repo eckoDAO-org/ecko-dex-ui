@@ -1,14 +1,15 @@
-import React, { useContext } from 'react';
-import styled from 'styled-components';
-import { useHistory } from 'react-router';
-import { ROUTE_GAME_EDITION_MENU } from '../../router/routes';
-import { GameEditionWrapper } from './GameEditionWrapper';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
-import GameEditionModalsContainer from './GameEditionModalsContainer';
-import { FadeIn } from '../shared/animations';
-import theme from '../../styles/theme';
-import GameEditionMobileWrapper from './GameEditionMobileWrapper';
-import menuItems from '../menuItems';
+import React, { useContext } from "react";
+import styled from "styled-components";
+import { useHistory } from "react-router";
+import { ROUTE_GAME_EDITION_MENU } from "../../router/routes";
+import { GameEditionWrapper } from "./GameEditionWrapper";
+import { GameEditionContext } from "../../contexts/GameEditionContext";
+import GameEditionModalsContainer from "./GameEditionModalsContainer";
+import { FadeIn } from "../shared/animations";
+import theme from "../../styles/theme";
+import GameEditionMobileWrapper from "./GameEditionMobileWrapper";
+import menuItems from "../menuItems";
+import useWindowSize from "../../hooks/useWindowSize";
 
 const MainContainer = styled.div`
   display: flex;
@@ -42,12 +43,12 @@ const GameEditionContainer = ({ children }) => {
 
   const switchAppSection = (direction) => {
     let cur = history.location.pathname;
-    if (direction === 'left') {
+    if (direction === "left") {
       let prevPage = menuItems.findIndex((path) => path.route === cur) - 1;
       if (prevPage < 0) history.push(menuItems[menuItems.length - 1].route);
       else return history.push(menuItems[prevPage].route);
     }
-    if (direction === 'right') {
+    if (direction === "right") {
       let nextPage = menuItems.findIndex((path) => path.route === cur) + 1;
       if (nextPage > menuItems.length - 1) history.push(menuItems[0]?.route);
       else return history.push(menuItems[nextPage].route);
@@ -61,17 +62,17 @@ const GameEditionContainer = ({ children }) => {
   // d3.select("#power_button").style("cursor","pointer").on("click",()=>setmessage("I'm Power Button"))
   // d3.select("#a_button").style("cursor","pointer").on("click",()=>setmessage("I'm A Button"))
   // d3.select("#b_button").style("cursor","pointer").on("click",()=>setmessage("I'm B Button"))
-
+  const [width] = useWindowSize();
   return (
     <MainContainer>
-      {window.innerWidth <= theme.mediaQueries.mobilePixel - 1 ? (
+      {width < theme.mediaQueries.desktopPixel ? (
         <GameEditionMobileWrapper
-          selectLabel='MENU'
+          selectLabel="MENU"
           selectOnClick={() => {
             history.push(ROUTE_GAME_EDITION_MENU);
             closeModal();
           }}
-          startLabel='SWAP'
+          startLabel="SWAP"
           startOnClick={() => {
             setIsSwapping(true);
             closeModal();
@@ -93,23 +94,23 @@ const GameEditionContainer = ({ children }) => {
         </GameEditionMobileWrapper>
       ) : (
         <GameEditionWrapper
-          style={{ height: 'auto !important' }}
-          selectLabel='MENU'
+          style={{ height: "auto !important" }}
+          selectLabel="MENU"
           selectOnClick={() => {
             history.push(ROUTE_GAME_EDITION_MENU);
             closeModal();
           }}
-          startLabel='SWAP'
+          startLabel="SWAP"
           startOnClick={() => {
             setIsSwapping(true);
             closeModal();
           }}
           buttonLOnClick={() => {
-            switchAppSection('left');
+            switchAppSection("left");
             closeModal();
           }}
           buttonROnClick={() => {
-            switchAppSection('right');
+            switchAppSection("right");
             closeModal();
           }}
         >
