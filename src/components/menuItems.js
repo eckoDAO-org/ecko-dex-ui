@@ -1,22 +1,17 @@
-import {
-  ROUTE_POOL,
-  ROUTE_STATS,
-  ROUTE_SWAP,
-  ROUTE_WRAP,
-} from '../router/routes';
+import { ROUTE_POOL, ROUTE_STATS, ROUTE_SWAP, ROUTE_WRAP } from '../router/routes';
 
 export default [
   {
     id: 0,
     label: 'swap',
     route: ROUTE_SWAP,
-    className: '',
+    className: ''
   },
   {
     id: 1,
     label: 'pool',
     route: ROUTE_POOL,
-    className: '',
+    className: ''
   },
   // {
   //   id: 2,
@@ -28,6 +23,6 @@ export default [
     id: 2,
     label: 'stats',
     route: ROUTE_STATS,
-    className: '',
-  },
+    className: ''
+  }
 ];

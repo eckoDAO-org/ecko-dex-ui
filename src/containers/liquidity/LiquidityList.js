@@ -28,11 +28,9 @@ const TextContainer = styled.div`
   text-align: left;
   justify-content: flex-start;
   width: 100%;
-  color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? `${colors.black} !important` : colors.white};
+  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? `${colors.black} !important` : colors.white)};
 
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     display: table;
   }
 `;
@@ -53,8 +51,7 @@ const ButtonContainer = styled.div`
   width: 100%;
   position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
   bottom: ${({ gameEditionView }) => gameEditionView && '10px'};
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
   }
 `;
@@ -67,21 +64,16 @@ const LiquidityCardContainer = styled.div`
   margin-bottom: 15px;
   width: 100%;
   border-radius: 10px;
-  border: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView
-      ? `2px dashed ${colors.black} !important`
-      : '1px solid transparent'};
+  border: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `2px dashed ${colors.black} !important` : '1px solid transparent')};
 
   opacity: 1;
   background: transparent;
 
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
     display: table;
   }
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobileSmallPixel}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
     padding: 0;
   }
 `;
@@ -110,21 +102,15 @@ const TopContainer = styled.div``;
 
 const TitleContainer = styled.div`
   display: flex;
-  justify-content: ${({ gameEditionView }) =>
-    gameEditionView ? `center` : ` space-between`};
-  margin-bottom: ${({ gameEditionView }) =>
-    gameEditionView ? `20px` : ` 24px`};
+  justify-content: ${({ gameEditionView }) => (gameEditionView ? `center` : ` space-between`)};
+  margin-bottom: ${({ gameEditionView }) => (gameEditionView ? `20px` : ` 24px`)};
 `;
 const Title = styled.span`
   font: ${({ gameEditionView, theme: { fontFamily } }) =>
-    gameEditionView
-      ? `normal normal normal 16px/19px  ${fontFamily.pressStartRegular}`
-      : ` normal normal bold 32px/57px ${fontFamily.bold}`};
+    gameEditionView ? `normal normal normal 16px/19px  ${fontFamily.pressStartRegular}` : ` normal normal bold 32px/57px ${fontFamily.bold}`};
   letter-spacing: 0px;
-  color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : colors.white};
-  text-transform: ${({ gameEditionView }) =>
-    gameEditionView ? `uppercase` : ` capitalize`}; ;
+  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
+  text-transform: ${({ gameEditionView }) => (gameEditionView ? `uppercase` : ` capitalize`)}; ;
 `;
 
 const LiquidityList = (props) => {
@@ -150,7 +136,7 @@ const LiquidityList = (props) => {
           overflow: 'auto',
           border: 'none',
           boxShadow: 'none',
-          background: 'none',
+          background: 'none'
         }}
       >
         {gameEditionView && (
@@ -163,15 +149,13 @@ const LiquidityList = (props) => {
           style={{
             marginBottom: gameEditionView ? 15 : 30,
             background: 'transparent',
-            textAlign: 'left',
+            textAlign: 'left'
           }}
         >
           <h1
             style={{
               fontSize: gameEditionView ? 16 : 24,
-              fontFamily: gameEditionView
-                ? theme(themeMode).fontFamily.pressStartRegular
-                : theme(themeMode).fontFamily.bold,
+              fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.bold
             }}
           >
             Liquidity provider rewards
@@ -179,16 +163,12 @@ const LiquidityList = (props) => {
           <p
             style={{
               fontSize: gameEditionView ? 12 : 16,
-              fontFamily: gameEditionView
-                ? theme(themeMode).fontFamily.pressStartRegular
-                : theme(themeMode).fontFamily.regular,
+              fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular
             }}
           >
-            Liquidity providers earn a 0.3% fee on all trades proportional to
-            their share of the pool.
+            Liquidity providers earn a 0.3% fee on all trades proportional to their share of the pool.
             <br />
-            Fees are added to the pool, accrue in real time and can be claimed
-            by withdrawing your liquidity.
+            Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.
           </p>
         </TextContainer>
         {account.account !== null ? (
@@ -198,26 +178,20 @@ const LiquidityList = (props) => {
                 style={{
                   fontSize: gameEditionView ? 16 : 32,
                   textAlign: 'left ',
-                  color: gameEditionView
-                    ? theme(themeMode).colors.black
-                    : theme(themeMode).colors.white,
-                  fontFamily: gameEditionView
-                    ? theme(themeMode).fontFamily.pressStartRegular
-                    : theme(themeMode).fontFamily.bold,
+                  color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
+                  fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.bold
                 }}
               >
                 Your Liquidity
               </Header>
-              <ButtonContainer
-                style={{ marginBottom: gameEditionView ? 15 : 30 }}
-              >
+              <ButtonContainer style={{ marginBottom: gameEditionView ? 15 : 30 }}>
                 <Button.Group fluid>
                   <CustomButton
                     disabled
                     buttonStyle={{
                       marginRight: '15px',
                       borderRadius: '20px',
-                      width: '48%',
+                      width: '48%'
                     }}
                     onClick={() => props.selectCreatePair()}
                   >
@@ -227,7 +201,7 @@ const LiquidityList = (props) => {
                     buttonStyle={{
                       marginLeft: '-5px',
                       borderRadius: '20px',
-                      width: '48%',
+                      width: '48%'
                     }}
                     onClick={() => props.selectAddLiquidity()}
                   >
@@ -240,64 +214,56 @@ const LiquidityList = (props) => {
               liquidity.pairListAccount[0] ? (
                 <LiquidityCardContainer gameEditionView={gameEditionView}>
                   {!gameEditionView && <GradientBorder />}
-                  {Object.values(liquidity.pairListAccount).map(
-                    (pair, index) => {
-                      return pair && pair.balance ? (
-                        <>
-                          {' '}
-                          <TokenPair
-                            key={pair.name}
-                            pair={pair}
-                            selectAddLiquidity={props.selectAddLiquidity}
-                            selectRemoveLiquidity={props.selectRemoveLiquidity}
-                            setTokenPair={props.setTokenPair}
-                            activeIndex={activeIndex}
-                            index={index}
-                            setActiveIndex={setActiveIndex}
-                          />{' '}
-                          {/* {!Object.values(liquidity.pairListAccount).length ===
+                  {Object.values(liquidity.pairListAccount).map((pair, index) => {
+                    return pair && pair.balance ? (
+                      <>
+                        {' '}
+                        <TokenPair
+                          key={pair.name}
+                          pair={pair}
+                          selectAddLiquidity={props.selectAddLiquidity}
+                          selectRemoveLiquidity={props.selectRemoveLiquidity}
+                          setTokenPair={props.setTokenPair}
+                          activeIndex={activeIndex}
+                          index={index}
+                          setActiveIndex={setActiveIndex}
+                        />{' '}
+                        {/* {!Object.values(liquidity.pairListAccount).length ===
                             index && ( */}
-                          <Divider
-                            style={{
-                              width: '100%',
-                              margin: '32px 0px',
-                              borderTop: gameEditionView
-                                ? `1px dashed ${theme(themeMode).colors.black}`
-                                : `1px solid  ${
-                                    theme(themeMode).colors.white
-                                  }99`,
-                            }}
-                          />
-                          {/* )} */}
-                          <TokenPair
-                            key={pair.name}
-                            pair={pair}
-                            selectAddLiquidity={props.selectAddLiquidity}
-                            selectRemoveLiquidity={props.selectRemoveLiquidity}
-                            setTokenPair={props.setTokenPair}
-                            activeIndex={activeIndex}
-                            index={2}
-                            setActiveIndex={setActiveIndex}
-                          />{' '}
-                        </>
-                      ) : (
-                        <></>
-                      );
-                    }
-                  )}
+                        <Divider
+                          style={{
+                            width: '100%',
+                            margin: '32px 0px',
+                            borderTop: gameEditionView
+                              ? `1px dashed ${theme(themeMode).colors.black}`
+                              : `1px solid  ${theme(themeMode).colors.white}99`
+                          }}
+                        />
+                        {/* )} */}
+                        <TokenPair
+                          key={pair.name}
+                          pair={pair}
+                          selectAddLiquidity={props.selectAddLiquidity}
+                          selectRemoveLiquidity={props.selectRemoveLiquidity}
+                          setTokenPair={props.setTokenPair}
+                          activeIndex={activeIndex}
+                          index={2}
+                          setActiveIndex={setActiveIndex}
+                        />{' '}
+                      </>
+                    ) : (
+                      <></>
+                    );
+                  })}
                 </LiquidityCardContainer>
               ) : (
                 <LiquidityCardContainer gameEditionView={gameEditionView}>
                   <Loader
                     active
-                    inline='centered'
+                    inline="centered"
                     style={{
-                      color: gameEditionView
-                        ? theme(themeMode).colors.black
-                        : theme(themeMode).colors.white,
-                      fontFamily: gameEditionView
-                        ? theme(themeMode).fontFamily.pressStartRegular
-                        : theme(themeMode).fontFamily.regular,
+                      color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
+                      fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular
                     }}
                   >
                     Loading..
@@ -313,7 +279,7 @@ const LiquidityList = (props) => {
             gameEditionView={gameEditionView}
             style={{
               width: gameEditionView && '93%',
-              justifyContent: !gameEditionView && 'start',
+              justifyContent: !gameEditionView && 'start'
             }}
           >
             <Button.Group fluid={gameEditionView}>
@@ -322,30 +288,26 @@ const LiquidityList = (props) => {
                 buttonStyle={{
                   padding: !gameEditionView && '10px 16px',
                   width: !gameEditionView && '214px',
-                  height: !gameEditionView && '40px',
+                  height: !gameEditionView && '40px'
                 }}
                 fontSize={14}
                 onClick={() => {
                   if (gameEditionView) {
                     return openModal({
                       isVisible: true,
-                      title: account?.account
-                        ? 'wallet connected'
-                        : 'connect wallet',
+                      title: account?.account ? 'wallet connected' : 'connect wallet',
                       description: account?.account
                         ? `Account ID: ${reduceToken(account.account)}`
                         : 'Connect a wallet using one of the methods below',
-                      content: <ConnectWalletModal />,
+                      content: <ConnectWalletModal />
                     });
                   } else {
                     modalContext.openModal({
-                      title: account?.account
-                        ? 'wallet connected'
-                        : 'connect wallet',
+                      title: account?.account ? 'wallet connected' : 'connect wallet',
                       description: account?.account
                         ? `Account ID: ${reduceToken(account.account)}`
                         : 'Connect a wallet using one of the methods below',
-                      content: <ConnectWalletModal />,
+                      content: <ConnectWalletModal />
                     });
                   }
                 }}

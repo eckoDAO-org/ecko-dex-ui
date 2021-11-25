@@ -39,8 +39,7 @@ const Container = styled(FadeIn)`
 
 const TitleContainer = styled.div`
   display: flex;
-  padding: ${({ gameEditionView }) =>
-    gameEditionView ? '0px 10px' : '0px !important'};
+  padding: ${({ gameEditionView }) => (gameEditionView ? '0px 10px' : '0px !important')};
   justify-content: space-between;
   margin-bottom: 14px;
   width: 100%;
@@ -50,12 +49,9 @@ const TitleContainer = styled.div`
 
 const Title = styled.span`
   font: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView
-      ? `normal normal normal 16px/19px ${fontFamily.pressStartRegular}`
-      : 'normal normal bold 32px/57px Montserrat'};
+    gameEditionView ? `normal normal normal 16px/19px ${fontFamily.pressStartRegular}` : 'normal normal bold 32px/57px Montserrat'};
   letter-spacing: 0px;
-  color: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? colors.black : colors.white};
+  color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.black : colors.white)};
   text-transform: capitalize;
   svg {
     path {
@@ -86,15 +82,13 @@ const ButtonContainer = styled.div`
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: ${({ gameEditionView }) =>
-    gameEditionView ? `0px` : ` 16px 0px 0px 0px`};
+  margin: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 16px 0px 0px 0px`)};
   flex-flow: column;
   width: 100%;
   padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : 0)};
   /* position: ${({ gameEditionView }) => gameEditionView && 'absolute'}; */
   margin-top: ${({ gameEditionView }) => gameEditionView && '30px'};
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
   }
 
@@ -107,19 +101,16 @@ const InnerRowContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-flow: row;
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: row;
   }
 `;
 
 const Value = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   line-height: 20px;
-  color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : colors.white};
+  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
 `;
 
 const initialStateValue = {
@@ -128,7 +119,7 @@ const initialStateValue = {
   guard: null,
   balance: null,
   amount: '',
-  precision: 0,
+  precision: 0
 };
 
 const GameEditionTokenSelectorContainer = styled.div`
@@ -147,8 +138,7 @@ const LiquidityContainer = (props) => {
   const liquidity = useContext(LiquidityContext);
   const modalContext = useContext(ModalContext);
   const { themeMode } = useContext(LightModeContext);
-  const { gameEditionView, openModal, closeModal, isSwapping, setIsSwapping } =
-    useContext(GameEditionContext);
+  const { gameEditionView, openModal, closeModal, isSwapping, setIsSwapping } = useContext(GameEditionContext);
   const { selectedView, setSelectedView } = props;
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
@@ -160,7 +150,7 @@ const LiquidityContainer = (props) => {
     guard: null,
     balance: account.account.balance,
     amount: '',
-    precision: 12,
+    precision: 12
   });
 
   const [toValues, setToValues] = useState(initialStateValue);
@@ -179,7 +169,7 @@ const LiquidityContainer = (props) => {
         guard: null,
         balance: account.account.balance,
         amount: '',
-        precision: 12,
+        precision: 12
       });
       setToValues(initialStateValue);
     }
@@ -200,11 +190,7 @@ const LiquidityContainer = (props) => {
         balance = account.account.balance;
       }
     } else {
-      let acct = await account.getTokenAccount(
-        crypto?.code,
-        account.account.account,
-        tokenSelectorType === 'from'
-      );
+      let acct = await account.getTokenAccount(crypto?.code, account.account.account, tokenSelectorType === 'from');
       if (acct) {
         balance = getCorrectBalance(acct.balance);
       }
@@ -214,14 +200,14 @@ const LiquidityContainer = (props) => {
         ...prev,
         balance: balance,
         coin: crypto?.name,
-        precision: crypto.precision,
+        precision: crypto.precision
       }));
     if (by === 'to')
       return setToValues((prev) => ({
         ...prev,
         balance: balance,
         coin: crypto?.name,
-        precision: crypto.precision,
+        precision: crypto.precision
       }));
     else return null;
   };
@@ -249,28 +235,14 @@ const LiquidityContainer = (props) => {
 
   useEffect(async () => {
     if (fromValues.coin !== '') {
-      await account.getTokenAccount(
-        tokenData[fromValues.coin].code,
-        account.account.account,
-        true
-      );
+      await account.getTokenAccount(tokenData[fromValues.coin].code, account.account.account, true);
     }
     if (toValues.coin !== '') {
-      await account.getTokenAccount(
-        tokenData[toValues.coin].code,
-        account.account.account,
-        false
-      );
+      await account.getTokenAccount(tokenData[toValues.coin].code, account.account.account, false);
     }
     if (fromValues.coin !== '' && toValues.coin !== '') {
-      await pact.getPair(
-        tokenData[fromValues.coin].code,
-        tokenData[toValues.coin].code
-      );
-      await pact.getReserves(
-        tokenData[fromValues.coin].code,
-        tokenData[toValues.coin].code
-      );
+      await pact.getPair(tokenData[fromValues.coin].code, tokenData[toValues.coin].code);
+      await pact.getReserves(tokenData[fromValues.coin].code, tokenData[toValues.coin].code);
       if (pact.pair) {
         setPairExist(true);
       }
@@ -284,11 +256,7 @@ const LiquidityContainer = (props) => {
         balance = account.account.balance;
       }
     } else {
-      let acct = await account.getTokenAccount(
-        crypto?.code,
-        account.account.account,
-        tokenSelectorType === 'from'
-      );
+      let acct = await account.getTokenAccount(crypto?.code, account.account.account, tokenSelectorType === 'from');
       if (acct) {
         balance = getCorrectBalance(acct.balance);
       }
@@ -298,14 +266,14 @@ const LiquidityContainer = (props) => {
         ...prev,
         balance: balance,
         coin: crypto?.name,
-        precision: crypto?.precision,
+        precision: crypto?.precision
       }));
     if (tokenSelectorType === 'to')
       setToValues((prev) => ({
         ...prev,
         balance: balance,
         coin: crypto?.name,
-        precision: crypto?.precision,
+        precision: crypto?.precision
       }));
   };
 
@@ -317,20 +285,13 @@ const LiquidityContainer = (props) => {
   useEffect(() => {
     if (inputSide === 'from' && fromValues.amount !== '') {
       setInputSide(null);
-      if (
-        fromValues.coin !== '' &&
-        toValues.coin !== '' &&
-        !isNaN(pact.ratio)
-      ) {
+      if (fromValues.coin !== '' && toValues.coin !== '' && !isNaN(pact.ratio)) {
         if (fromValues.amount.length < 5) {
           throttle(
             500,
             setToValues({
               ...toValues,
-              amount: reduceBalance(
-                fromValues.amount / pact.ratio,
-                toValues.precision
-              ),
+              amount: reduceBalance(fromValues.amount / pact.ratio, toValues.precision)
             })
           );
         } else {
@@ -338,10 +299,7 @@ const LiquidityContainer = (props) => {
             500,
             setToValues({
               ...toValues,
-              amount: reduceBalance(
-                fromValues.amount / pact.ratio,
-                toValues.precision
-              )?.toFixed(toValues.precision),
+              amount: reduceBalance(fromValues.amount / pact.ratio, toValues.precision)?.toFixed(toValues.precision)
             })
           );
         }
@@ -357,20 +315,13 @@ const LiquidityContainer = (props) => {
   useEffect(() => {
     if (inputSide === 'to' && toValues.amount !== '') {
       setInputSide(null);
-      if (
-        fromValues.coin !== '' &&
-        toValues.coin !== '' &&
-        !isNaN(pact.ratio)
-      ) {
+      if (fromValues.coin !== '' && toValues.coin !== '' && !isNaN(pact.ratio)) {
         if (toValues.amount.length < 5) {
           throttle(
             500,
             setFromValues({
               ...fromValues,
-              amount: reduceBalance(
-                toValues.amount * pact.ratio,
-                fromValues.precision
-              ),
+              amount: reduceBalance(toValues.amount * pact.ratio, fromValues.precision)
             })
           );
         } else {
@@ -378,10 +329,7 @@ const LiquidityContainer = (props) => {
             500,
             setFromValues({
               ...fromValues,
-              amount: reduceBalance(
-                toValues.amount * pact.ratio,
-                fromValues.precision
-              )?.toFixed(fromValues?.precision),
+              amount: reduceBalance(toValues.amount * pact.ratio, fromValues.precision)?.toFixed(fromValues?.precision)
             })
           );
         }
@@ -403,7 +351,7 @@ const LiquidityContainer = (props) => {
         guard: null,
         balance: null,
         amount: '',
-        precision: 0,
+        precision: 0
       });
       setToValues({
         coin: '',
@@ -411,7 +359,7 @@ const LiquidityContainer = (props) => {
         guard: null,
         balance: null,
         amount: '',
-        precision: 0,
+        precision: 0
       });
       wallet.setWalletSuccess(false);
     }
@@ -422,28 +370,19 @@ const LiquidityContainer = (props) => {
       if (fromValues.amount !== '' && toValues.amount === '') {
         setToValues({
           ...toValues,
-          amount: reduceBalance(
-            pact.computeOut(fromValues.amount),
-            toValues.precision
-          ),
+          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision)
         });
       }
       if (fromValues.amount === '' && toValues.amount !== '') {
         setFromValues({
           ...fromValues,
-          amount: reduceBalance(
-            pact.computeIn(toValues.amount),
-            fromValues.precision
-          ),
+          amount: reduceBalance(pact.computeIn(toValues.amount), fromValues.precision)
         });
       }
       if (fromValues.amount !== '' && toValues.amount !== '') {
         setToValues({
           ...toValues,
-          amount: reduceBalance(
-            pact.computeOut(fromValues.amount),
-            toValues.precision
-          ),
+          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision)
         });
       }
     }
@@ -456,11 +395,11 @@ const LiquidityContainer = (props) => {
       2: { msg: 'Supply', status: true },
       3: {
         msg: (token) => `Insufficient ${token} Balance`,
-        status: false,
+        status: false
       },
       4: { msg: 'Pair does not exist yet', status: false },
       5: { msg: 'Pair Already Exists', status: false },
-      6: { msg: 'Select different tokens', status: false },
+      6: { msg: 'Select different tokens', status: false }
     };
     if (!account.account.account) return status[0];
     if (selectedView === 'Create A Pair') {
@@ -470,10 +409,8 @@ const LiquidityContainer = (props) => {
     } else if (isNaN(pact.ratio)) {
       return status[4];
     } else if (!fromValues.amount || !toValues.amount) return status[1];
-    else if (Number(fromValues.amount) > Number(fromValues.balance))
-      return { ...status[3], msg: status[3].msg(fromValues.coin) };
-    else if (Number(toValues.amount) > Number(toValues.balance))
-      return { ...status[3], msg: status[3].msg(toValues.coin) };
+    else if (Number(fromValues.amount) > Number(fromValues.balance)) return { ...status[3], msg: status[3].msg(fromValues.coin) };
+    else if (Number(toValues.amount) > Number(toValues.balance)) return { ...status[3], msg: status[3].msg(toValues.coin) };
     else if (fromValues.coin === toValues.coin) return status[6];
     else {
       if (isNaN(pact.ratio)) {
@@ -486,17 +423,10 @@ const LiquidityContainer = (props) => {
     if (selectedView === 'Create A Pair') {
       if (wallet.signing.method !== 'sign') {
         setLoading(true);
-        const res = await liquidity.createTokenPairLocal(
-          tokenData[fromValues.coin],
-          tokenData[toValues.coin],
-          fromValues.amount,
-          toValues.amount
-        );
+        const res = await liquidity.createTokenPairLocal(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
         if (res === -1) {
           setLoading(false);
-          alert(
-            'Incorrect password. If forgotten, you can reset it with your private key'
-          );
+          alert('Incorrect password. If forgotten, you can reset it with your private key');
           return;
         } else {
           setShowReview(false);
@@ -507,22 +437,12 @@ const LiquidityContainer = (props) => {
         console.log('not signed');
       }
     } else {
-      if (
-        wallet.signing.method !== 'sign' &&
-        wallet.signing.method !== 'none'
-      ) {
+      if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
         setLoading(true);
-        const res = await liquidity.addLiquidityLocal(
-          tokenData[fromValues.coin],
-          tokenData[toValues.coin],
-          fromValues.amount,
-          toValues.amount
-        );
+        const res = await liquidity.addLiquidityLocal(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
         if (res === -1) {
           setLoading(false);
-          alert(
-            'Incorrect password. If forgotten, you can reset it with your private key'
-          );
+          alert('Incorrect password. If forgotten, you can reset it with your private key');
           return;
         } else {
           setShowReview(false);
@@ -532,19 +452,8 @@ const LiquidityContainer = (props) => {
       } else {
         setLoading(true);
         setShowReview(false);
-        console.log(
-          'param,',
-          tokenData[fromValues.coin],
-          tokenData[toValues.coin],
-          fromValues.amount,
-          toValues.amount
-        );
-        const res = await liquidity.addLiquidityWallet(
-          tokenData[fromValues.coin],
-          tokenData[toValues.coin],
-          fromValues.amount,
-          toValues.amount
-        );
+        console.log('param,', tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
+        const res = await liquidity.addLiquidityWallet(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
         if (!res) {
           wallet.setIsWaitingForWalletAuth(true);
           /* pact.setWalletError(true); */
@@ -561,14 +470,14 @@ const LiquidityContainer = (props) => {
           guard: null,
           balance: null,
           amount: '',
-          coin: '',
+          coin: ''
         });
         setToValues({
           account: null,
           guard: null,
           balance: null,
           amount: '',
-          coin: '',
+          coin: ''
         });
       }
     }
@@ -589,7 +498,7 @@ const LiquidityContainer = (props) => {
           balance: '',
           coin: '',
           address: '',
-          precision: 0,
+          precision: 0
         });
       }
     }
@@ -600,7 +509,7 @@ const LiquidityContainer = (props) => {
           balance: '',
           coin: '',
           address: '',
-          precision: 0,
+          precision: 0
         });
       }
     }
@@ -634,7 +543,7 @@ const LiquidityContainer = (props) => {
               toToken={toValues.coin}
             />
           </GameEditionTokenSelectorContainer>
-        ),
+        )
       });
     } else {
       modalContext.openModal({
@@ -642,7 +551,7 @@ const LiquidityContainer = (props) => {
         description: '',
         containerStyle: {
           //height: "100%",
-          width: '75%',
+          width: '75%'
         },
         onBack: () => {
           modalContext.onBackModal();
@@ -663,17 +572,13 @@ const LiquidityContainer = (props) => {
             fromToken={fromValues.coin}
             toToken={toValues.coin}
           />
-        ),
+        )
       });
     }
   };
 
   return (
-    <Container
-      gameEditionView={gameEditionView}
-      onAnimationEnd={() => setIsLogoVisible(true)}
-      className='scrollbar-none'
-    >
+    <Container gameEditionView={gameEditionView} onAnimationEnd={() => setIsLogoVisible(true)} className="scrollbar-none">
       {/* <TokenSelectorModal
                 show={tokenSelectorType !== null}
                 selectedToken={selectedToken}
@@ -690,20 +595,11 @@ const LiquidityContainer = (props) => {
         fromToken={fromValues.coin}
         toToken={toValues.coin}
         createTokenPair={() =>
-          liquidity.createTokenPairLocal(
-            tokenData[fromValues.coin].name,
-            tokenData[toValues.coin].name,
-            fromValues.amount,
-            toValues.amount
-          )
+          liquidity.createTokenPairLocal(tokenData[fromValues.coin].name, tokenData[toValues.coin].name, fromValues.amount, toValues.amount)
         }
         onClose={() => setShowTxModal(false)}
       />
-      <WalletRequestView
-        show={wallet.isWaitingForWalletAuth}
-        error={wallet.walletError}
-        onClose={() => onWalletRequestViewModalClose()}
-      />
+      <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
       <ReviewTxModal
         onClose={() => setShowReview(false)}
         fromValues={fromValues}
@@ -724,9 +620,7 @@ const LiquidityContainer = (props) => {
         <Title
           gameEditionView={gameEditionView}
           style={{
-            fontFamily: gameEditionView
-              ? theme(themeMode).fontFamily.pressStartRegular
-              : theme(themeMode).fontFamily.bold,
+            fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.bold
           }}
         >
           {!gameEditionView && (
@@ -735,29 +629,17 @@ const LiquidityContainer = (props) => {
                 cursor: 'pointer',
                 color: theme(themeMode).colors.white,
                 marginRight: '15px',
-                justifyContent: 'center',
+                justifyContent: 'center'
               }}
               onClick={() => props.closeLiquidity()}
             />
           )}
           Add Liquidity
         </Title>
-        {gameEditionView && (
-          <CloseGE
-            style={{ cursor: 'pointer' }}
-            onClick={() => props.closeLiquidity()}
-          />
-        )}
+        {gameEditionView && <CloseGE style={{ cursor: 'pointer' }} onClick={() => props.closeLiquidity()} />}
         {!gameEditionView && (
-          <HeaderItem
-            headerItemStyle={{ alignItems: 'center', display: 'flex' }}
-          >
-            <CustomPopup
-              trigger={<CogIcon />}
-              on='click'
-              offset={[10, 10]}
-              position='bottom right'
-            >
+          <HeaderItem headerItemStyle={{ alignItems: 'center', display: 'flex' }}>
+            <CustomPopup trigger={<CogIcon />} on="click" offset={[10, 10]} position="bottom right">
               <SlippagePopupContent />
             </CustomPopup>
           </HeaderItem>
@@ -781,41 +663,24 @@ const LiquidityContainer = (props) => {
             <ResultContainer gameEditionView={gameEditionView}>
               <InnerRowContainer gameEditionView={gameEditionView}>
                 <CustomLabel>{`${toValues.coin} per ${fromValues.coin}`}</CustomLabel>
-                <Value gameEditionView={gameEditionView}>
-                  {reduceBalance(
-                    pact.getRatio(toValues.coin, fromValues.coin)
-                  ) ?? '-'}
-                </Value>
+                <Value gameEditionView={gameEditionView}>{reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}</Value>
               </InnerRowContainer>
               <InnerRowContainer gameEditionView={gameEditionView}>
                 <CustomLabel>{`${fromValues.coin} per ${toValues.coin}`}</CustomLabel>
-                <Value gameEditionView={gameEditionView}>
-                  {reduceBalance(
-                    pact.getRatio1(toValues.coin, fromValues.coin)
-                  ) ?? '-'}
-                </Value>
+                <Value gameEditionView={gameEditionView}>{reduceBalance(pact.getRatio1(toValues.coin, fromValues.coin)) ?? '-'}</Value>
               </InnerRowContainer>
               <InnerRowContainer gameEditionView={gameEditionView}>
                 <CustomLabel>Share of Pool</CustomLabel>
                 <Value gameEditionView={gameEditionView}>
-                  {!pact.share(fromValues.amount)
-                    ? 0
-                    : reduceBalance(pact.share(fromValues.amount) * 100)}
-                  %
+                  {!pact.share(fromValues.amount) ? 0 : reduceBalance(pact.share(fromValues.amount) * 100)}%
                 </Value>
               </InnerRowContainer>
             </ResultContainer>
           </>
         )}
         <ButtonContainer gameEditionView={gameEditionView}>
-          <Button.Group
-            fluid
-            style={{ padding: gameEditionView ? '0 10px' : 0 }}
-          >
-            <CustomButton
-              disabled={!buttonStatus().status}
-              onClick={() => setShowReview(true)}
-            >
+          <Button.Group fluid style={{ padding: gameEditionView ? '0 10px' : 0 }}>
+            <CustomButton disabled={!buttonStatus().status} onClick={() => setShowReview(true)}>
               {buttonStatus().msg}
             </CustomButton>
           </Button.Group>

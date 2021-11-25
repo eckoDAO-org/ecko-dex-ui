@@ -8,11 +8,9 @@ import { ColumnContainer, Container, Label, Value } from '../layout/Containers';
 
 const StatsCardContainer = styled(Container)`
   width: 100%;
-  flex-direction: ${({ gameEditionView }) =>
-    !gameEditionView ? 'row' : 'column'};
+  flex-direction: ${({ gameEditionView }) => (!gameEditionView ? 'row' : 'column')};
   justify-content: space-between;
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     & > *:not(:last-child) {
       margin-bottom: 16px;
     }
@@ -45,40 +43,27 @@ const StatsCard = ({ pair }) => {
         <CustomLabel bold>{`${pair.token0}-${pair.token1}`}</CustomLabel>
       </IconsContainer>
       {/* TR TOKEN 0 */}
-      <ColumnContainer
-        gameEditionView={gameEditionView}
-        style={{ marginRight: '16px' }}
-      >
-        <Label gameEditionView={gameEditionView} withShade='99'>
+      <ColumnContainer gameEditionView={gameEditionView} style={{ marginRight: '16px' }}>
+        <Label gameEditionView={gameEditionView} withShade="99">
           Total Reserve - Token0
         </Label>
-        <Value gameEditionView={gameEditionView}>
-          {reduceBalance(pair.reserves[0])}0
-        </Value>
+        <Value gameEditionView={gameEditionView}>{reduceBalance(pair.reserves[0])}0</Value>
       </ColumnContainer>
       {/* TR TOKEN 1 */}
-      <ColumnContainer
-        gameEditionView={gameEditionView}
-        style={{ marginRight: '16px' }}
-      >
-        <Label gameEditionView={gameEditionView} withShade='99'>
+      <ColumnContainer gameEditionView={gameEditionView} style={{ marginRight: '16px' }}>
+        <Label gameEditionView={gameEditionView} withShade="99">
           Total Reserve - Token1
         </Label>
-        <Value gameEditionView={gameEditionView}>
-          {reduceBalance(pair.reserves[1])}0
-        </Value>
+        <Value gameEditionView={gameEditionView}>{reduceBalance(pair.reserves[1])}0</Value>
       </ColumnContainer>
       {/* RATE */}
-      <ColumnContainer
-        gameEditionView={gameEditionView}
-        style={{ marginRight: '16px' }}
-      >
-        <Label gameEditionView={gameEditionView} withShade='99'>
+      <ColumnContainer gameEditionView={gameEditionView} style={{ marginRight: '16px' }}>
+        <Label gameEditionView={gameEditionView} withShade="99">
           Total Reserve - Token1
         </Label>
-        <Value gameEditionView={gameEditionView}>{`${reduceBalance(
-          extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1])
-        )} ${pair.token0}/${pair.token1}`}</Value>
+        <Value gameEditionView={gameEditionView}>{`${reduceBalance(extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1]))} ${
+          pair.token0
+        }/${pair.token1}`}</Value>
       </ColumnContainer>
     </StatsCardContainer>
   );

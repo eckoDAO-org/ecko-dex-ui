@@ -1,31 +1,21 @@
 import React, { useState } from 'react';
 import { Divider } from 'semantic-ui-react';
 import styled from 'styled-components';
-import {
-  CloseIcon,
-  NotificationCautionBlueIcon,
-  NotificationErrorIcon,
-  NotificationSuccessIcon,
-  NotificationWarningIcon,
-} from '../../assets';
+import { CloseIcon, NotificationCautionBlueIcon, NotificationErrorIcon, NotificationSuccessIcon, NotificationWarningIcon } from '../../assets';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-left: ${({ isHighlight, typeColor }) =>
-    isHighlight ? `4px solid ${typeColor}` : '4px solid transparent'};
+  border-left: ${({ isHighlight, typeColor }) => (isHighlight ? `4px solid ${typeColor}` : '4px solid transparent')};
   background: ${({ isHighlight, typeColor }) =>
-    isHighlight
-      ? `transparent linear-gradient(90deg, ${typeColor}1A 0%, #80621800 100%) 0% 0% no-repeat padding-box;`
-      : 'none'};
+    isHighlight ? `transparent linear-gradient(90deg, ${typeColor}1A 0%, #80621800 100%) 0% 0% no-repeat padding-box;` : 'none'};
   width: 100%;
   height: 100%;
   padding: 0px 26px;
 
   /* 
-  transform: ${({ animation }) =>
-    !animation ? 'translateX(0px)' : 'translateX(500px)'};
+  transform: ${({ animation }) => (!animation ? 'translateX(0px)' : 'translateX(500px)')};
   transition: transform 1s ease-in-out; */
 `;
 
@@ -98,17 +88,7 @@ const Description = styled.span`
   font-size: 14px;
 `;
 
-const NotificationCard = ({
-  index,
-  time,
-  date,
-  title,
-  description,
-  type,
-  removeItem,
-  link,
-  isHighlight,
-}) => {
+const NotificationCard = ({ index, time, date, title, description, type, removeItem, link, isHighlight }) => {
   console.log(`Notification ${type} - ${index}`, isHighlight);
   const [animation, setAnimation] = useState(false);
 

@@ -12,8 +12,7 @@ import { theme } from '../../../styles/theme';
 
 const Text = styled.span`
   font-size: 13px;
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
   text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
 `;
 
@@ -80,17 +79,13 @@ const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
 
   return (
     <>
+      <Text gameEditionView={gameEditionView}>Please make sure the KDA account provided is controlled by your Chainweaver wallet.</Text>
       <Text gameEditionView={gameEditionView}>
-        Please make sure the KDA account provided is controlled by your
-        Chainweaver wallet.
-      </Text>
-      <Text gameEditionView={gameEditionView}>
-        When submitting a transaction, Chainweaver will show you a preview
-        within the wallet before signing.
+        When submitting a transaction, Chainweaver will show you a preview within the wallet before signing.
       </Text>
       <Input
         topLeftLabel={'Account'}
-        placeholder='Insert your Account'
+        placeholder="Insert your Account"
         value={accountId}
         error={accountId !== '' ? !checkKey(accountId) : false}
         onChange={async (e, { value }) => {
@@ -100,9 +95,9 @@ const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
       <ActionContainer>
         <Button.Group fluid>
           <CustomButton
-            border='none'
+            border="none"
             color={`${theme(themeMode).colors.white} !important`}
-            background='transparent'
+            background="transparent"
             onClick={() => {
               resetValues();
             }}

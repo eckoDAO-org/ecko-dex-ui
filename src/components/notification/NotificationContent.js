@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components/macro";
-import theme from "../../styles/theme";
+import React from 'react';
+import styled from 'styled-components/macro';
+import theme from '../../styles/theme';
 
 const Container = styled.div`
   display: flex;
@@ -15,16 +15,13 @@ const TextContainer = styled.div`
 
 const Text = styled.span`
   margin-left: 16px;
-  margin-bottom: ${({ marginBottom }) => `${marginBottom}px` || "0px"};
+  margin-bottom: ${({ marginBottom }) => `${marginBottom}px` || '0px'};
   font-size: 16px;
-  font-family: ${({ fontWeight }) =>
-    fontWeight ? theme.fontFamily.bold : theme.fontFamily.regular};
+  font-family: ${({ fontWeight }) => (fontWeight ? theme.fontFamily.bold : theme.fontFamily.regular)};
 `;
 
 const capitalizeFirstLetter = (string) => {
-  return typeof string === "string"
-    ? string.charAt(0).toUpperCase() + string.slice(1)
-    : null;
+  return typeof string === 'string' ? string.charAt(0).toUpperCase() + string.slice(1) : null;
 };
 
 const NotificationContent = ({ icon, type, message, title }) => {

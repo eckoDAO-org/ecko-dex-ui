@@ -12,12 +12,8 @@ import RightModalRender from './components/right-modal-notification/RightModalRe
 import { SwapProvider } from './contexts/SwapContext';
 import { LiquidityProvider } from './contexts/LiquidityContext';
 import { GameEditionProvider } from './contexts/GameEditionContext';
-import {
-  LightModeContext,
-  LightModeProvider,
-  useLightMode,
-} from './contexts/LightModeContext';
-import { KadenaWalletProvider } from "./contexts/KadenaWalletContext";
+import { LightModeContext, LightModeProvider, useLightMode } from './contexts/LightModeContext';
+import { KadenaWalletProvider } from './contexts/KadenaWalletContext';
 
 function App() {
   const { themeMode } = useContext(LightModeContext);
@@ -31,16 +27,16 @@ function App() {
             <WalletProvider>
               <PactProvider>
                 <KadenaWalletProvider>
-                <SwapProvider>
-                  <LiquidityProvider>
-                    <RightModalRender>
-                      <ModalRender>
-                            <Router />
-                      </ModalRender>
-                    </RightModalRender>
-                  </LiquidityProvider>
-                </SwapProvider>
-              </KadenaWalletProvider>
+                  <SwapProvider>
+                    <LiquidityProvider>
+                      <RightModalRender>
+                        <ModalRender>
+                          <Router />
+                        </ModalRender>
+                      </RightModalRender>
+                    </LiquidityProvider>
+                  </SwapProvider>
+                </KadenaWalletProvider>
               </PactProvider>
             </WalletProvider>
           </AccountProvider>

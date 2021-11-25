@@ -24,11 +24,7 @@ export const LightModeProvider = (props) => {
   const contextValues = {
     themeMode,
     themeToggler,
-    mountedComponent,
+    mountedComponent
   };
-  return (
-    <LightModeContext.Provider value={contextValues}>
-      {props.children}
-    </LightModeContext.Provider>
-  );
+  return <LightModeContext.Provider value={contextValues}>{props.children}</LightModeContext.Provider>;
 };

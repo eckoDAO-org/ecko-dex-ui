@@ -13,8 +13,7 @@ import { LightModeContext } from '../../../contexts/LightModeContext';
 
 const Text = styled.span`
   font-size: 13px;
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
   text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
 `;
 
@@ -32,8 +31,7 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
   const { themeMode } = useContext(LightModeContext);
   const { gameEditionView, openModal } = useContext(GameEditionContext);
   const [accountId, setAccountId] = useState('');
-  const [openGetZelcoreAccountModal, setOpenGetZelcoreAccountModal] =
-    useState(false);
+  const [openGetZelcoreAccountModal, setOpenGetZelcoreAccountModal] = useState(false);
 
   const is_hexadecimal = (str) => {
     const regexp = /^[0-9a-fA-F]+$/;
@@ -85,14 +83,8 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
 
   return (
     <>
-      <Text gameEditionView={gameEditionView}>
-        Please make sure the KDA account provided is controlled by your Zelcore
-        wallet
-      </Text>
-      <Text gameEditionView={gameEditionView}>
-        When submitting a transaction, Zelcore will show you a preview within
-        the wallet before signing
-      </Text>
+      <Text gameEditionView={gameEditionView}>Please make sure the KDA account provided is controlled by your Zelcore wallet</Text>
+      <Text gameEditionView={gameEditionView}>When submitting a transaction, Zelcore will show you a preview within the wallet before signing</Text>
       {/* <Input
                     topLeftLabel={"Account"}
                     placeholder="Insert your Account ID"
@@ -105,24 +97,16 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
       {/* {error && error.message ? <Text>{error.message}</Text> : null} */}
       <CustomButton
         buttonStyle={{
-          border: '1px solid #424242',
+          border: '1px solid #424242'
         }}
-        color={
-          gameEditionView
-            ? theme(themeMode).colors.black
-            : theme(themeMode).colors.white
-        }
-        background='transparent'
+        color={gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white}
+        background="transparent"
         onClick={() => {
           if (gameEditionView) {
             openModal({
               title: 'get zelcore accounts',
               description: 'Select Accounts',
-              content: (
-                <GetZelcoreAccountModal
-                  onClose={() => modalContext.closeModal()}
-                />
-              ),
+              content: <GetZelcoreAccountModal onClose={() => modalContext.closeModal()} />
             });
           } else {
             setOpenGetZelcoreAccountModal(true);
@@ -131,11 +115,7 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
               title: 'get zelcore accounts',
               description: 'Select Accounts',
               open: openGetZelcoreAccountModal,
-              content: (
-                <GetZelcoreAccountModal
-                  onClose={() => modalContext.closeModal()}
-                />
-              ),
+              content: <GetZelcoreAccountModal onClose={() => modalContext.closeModal()} />
             });
           }
         }}
@@ -146,9 +126,9 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
         <Button.Group fluid>
           {!gameEditionView ? (
             <CustomButton
-              border='none'
+              border="none"
               color={`${theme(themeMode).colors.white} `}
-              background='transparent'
+              background="transparent"
               onClick={() => {
                 handleModalBack();
               }}

@@ -28,8 +28,7 @@ const ToggleContainer = styled.div`
 
   .ui.toggle.checkbox .box:after,
   .ui.toggle.checkbox label:after {
-    background: ${({ theme: { colors } }) => colors.primary} 0% 0% no-repeat
-      padding-box !important;
+    background: ${({ theme: { colors } }) => colors.primary} 0% 0% no-repeat padding-box !important;
     box-shadow: inset 2px 5px 9px ${({ theme: { colors } }) => colors.primary}29 !important;
   }
 
@@ -49,14 +48,12 @@ const GameLabel = styled.div`
   white-space: nowrap;
   text-transform: capitalize;
 
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobileSmallPixel}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
     width: min-content;
     font-size: 10px;
   }
 
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {
     white-space: normal;
   }
 
@@ -73,9 +70,7 @@ const LightModeToggle = ({ animation }) => {
   };
   return (
     <ToggleContainer animation={animation}>
-      <GameLabel
-        gameEditionView={game.gameEditionView}
-      >{`${getModeLabel()}`}</GameLabel>
+      <GameLabel gameEditionView={game.gameEditionView}>{`${getModeLabel()}`}</GameLabel>
       <Checkbox
         toggle
         onChange={() => {

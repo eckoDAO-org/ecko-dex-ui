@@ -4,12 +4,7 @@ import HeaderItem from '../../../shared/HeaderItem';
 import AccountInfo from './AccountInfo';
 import Button from '../../../shared/CustomButton';
 import CustomPopup from '../../../shared/CustomPopup';
-import {
-  PowerIcon,
-  CogIcon,
-  AboutBigIcon,
-  ThreeDotsIcon,
-} from '../../../assets';
+import { PowerIcon, CogIcon, AboutBigIcon, ThreeDotsIcon } from '../../../assets';
 import headerLinks from '../../headerLinks';
 import PopupContentList from './PopupContentList';
 import { AccountContext } from '../../../contexts/AccountContext';
@@ -34,8 +29,7 @@ const RightContainerHeader = styled.div`
   & > *:not(:first-child):not(:last-child) {
     margin-right: 14px;
   }
-  @media (min-width: ${({ theme: { mediaQueries } }) =>
-      mediaQueries.mobileBreakpoint}) {
+  @media (min-width: ${({ theme: { mediaQueries } }) => mediaQueries.mobileBreakpoint}) {
     & > *:not(:first-child):not(:last-child) {
       margin-right: 16px;
     }
@@ -59,11 +53,9 @@ const AccountIdContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: ${({ gameEditionView, theme: { fontFamily } }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
+  font-family: ${({ gameEditionView, theme: { fontFamily } }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
   & > span:first-child {
-    font-family: ${({ gameEditionView, theme: { fontFamily } }) =>
-      !gameEditionView && fontFamily.bold};
+    font-family: ${({ gameEditionView, theme: { fontFamily } }) => !gameEditionView && fontFamily.bold};
   }
 `;
 
@@ -86,54 +78,44 @@ const RightHeaderItems = () => {
   return (
     <RightContainerHeader>
       {account?.account ? (
-        <HeaderItem className='mobile-none'>
+        <HeaderItem className="mobile-none">
           <AccountInfo
             onClick={() => {
               if (gameEditionView) {
                 return openModal({
                   isVisible: true,
-                  title: account?.account
-                    ? 'wallet connected'
-                    : 'connect wallet',
+                  title: account?.account ? 'wallet connected' : 'connect wallet',
                   description: account?.account ? (
                     <AccountIdContainer gameEditionView={gameEditionView}>
                       <span>Account ID:</span>
                       <span>
-                        {reduceToken(account.account)}{' '}
-                        <CopyPopup textToCopy={account.account} />
+                        {reduceToken(account.account)} <CopyPopup textToCopy={account.account} />
                       </span>
                     </AccountIdContainer>
                   ) : (
                     'Connect a wallet using one of the methods below'
                   ),
-                  content: <ConnectWalletModal />,
+                  content: <ConnectWalletModal />
                 });
               } else {
                 modalContext.openModal({
-                  title: account?.account
-                    ? 'wallet connected'
-                    : 'connect wallet',
+                  title: account?.account ? 'wallet connected' : 'connect wallet',
                   description: account?.account ? (
                     <AccountIdContainer>
                       <span>Account ID:</span>
                       <span>
-                        {reduceToken(account.account)}{' '}
-                        <CopyPopup textToCopy={account.account} />
+                        {reduceToken(account.account)} <CopyPopup textToCopy={account.account} />
                       </span>
                     </AccountIdContainer>
                   ) : (
                     'Connect a wallet using one of the methods below'
                   ),
-                  content: <ConnectWalletModal />,
+                  content: <ConnectWalletModal />
                 });
               }
             }}
-            account={
-              account.account ? `${reduceToken(account.account)}` : 'KDA'
-            }
-            balance={
-              account.account ? `${reduceBalance(account.balance)} KDA` : ''
-            }
+            account={account.account ? `${reduceToken(account.account)}` : 'KDA'}
+            balance={account.account ? `${reduceBalance(account.balance)} KDA` : ''}
           ></AccountInfo>
         </HeaderItem>
       ) : (
@@ -141,7 +123,7 @@ const RightHeaderItems = () => {
       )}
       {!account.account && (
         <FadeContainer className={gameEditionView ? 'fadeOut' : 'fadeIn'}>
-          <HeaderItem className='mobile-none'>
+          <HeaderItem className="mobile-none">
             <Button
               hover={true}
               buttonStyle={{ padding: '10px 16px' }}
@@ -150,23 +132,15 @@ const RightHeaderItems = () => {
                 if (gameEditionView) {
                   return openModal({
                     isVisible: true,
-                    title: account?.account
-                      ? 'wallet connected'
-                      : 'connect wallet',
-                    description: account?.account
-                      ? `Account ID: ${reduceToken(account.account)}`
-                      : 'Connect a wallet using one of the methods below',
-                    content: <ConnectWalletModal />,
+                    title: account?.account ? 'wallet connected' : 'connect wallet',
+                    description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
+                    content: <ConnectWalletModal />
                   });
                 } else {
                   return modalContext.openModal({
-                    title: account?.account
-                      ? 'wallet connected'
-                      : 'connect wallet',
-                    description: account?.account
-                      ? `Account ID: ${reduceToken(account.account)}`
-                      : 'Connect a wallet using one of the methods below',
-                    content: <ConnectWalletModal />,
+                    title: account?.account ? 'wallet connected' : 'connect wallet',
+                    description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
+                    content: <ConnectWalletModal />
                   });
                 }
               }}
@@ -183,9 +157,7 @@ const RightHeaderItems = () => {
       )}
       <HeaderItem>
         <BellNotification
-          hasNotification={notification.notificationList?.some(
-            (notif) => notif.isReaded === false
-          )}
+          hasNotification={notification.notificationList?.some((notif) => notif.isReaded === false)}
           onClick={() => {
             rightModal.openModal({
               title: 'Notifications',
@@ -195,37 +167,26 @@ const RightHeaderItems = () => {
                   onClick={() => {
                     notification.removeAllItem();
                   }}
-                  label=' Remove All Notification'
-                  fontSize='12px'
+                  label=" Remove All Notification"
+                  fontSize="12px"
                   buttonStyle={{ width: '100%' }}
                   outGameEditionView
                 />
-              ),
+              )
             });
           }}
         />
       </HeaderItem>
       {gameEditionView && (
         <HeaderItem>
-          <CustomPopup
-            trigger={<CogIcon />}
-            on='click'
-            offset={[30, 10]}
-            position='bottom right'
-          >
+          <CustomPopup trigger={<CogIcon />} on="click" offset={[30, 10]} position="bottom right">
             <SlippagePopupContent />
           </CustomPopup>
         </HeaderItem>
       )}
 
       <HeaderItem>
-        <CustomPopup
-          basic
-          trigger={<ThreeDotsIcon style={{ marginBottom: '4px' }} />}
-          on='click'
-          offset={[0, 10]}
-          position='bottom right'
-        >
+        <CustomPopup basic trigger={<ThreeDotsIcon style={{ marginBottom: '4px' }} />} on="click" offset={[0, 10]} position="bottom right">
           <PopupContentList items={headerLinks} viewOtherComponents />
         </CustomPopup>
       </HeaderItem>

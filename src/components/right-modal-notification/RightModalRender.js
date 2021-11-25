@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  RightModalConsumer,
-  RightModalProvider,
-} from '../../contexts/RightModalContext';
+import { RightModalConsumer, RightModalProvider } from '../../contexts/RightModalContext';
 import RightModal from './RightModal';
 
 const RightModalRender = ({ children }) => {
@@ -13,9 +10,7 @@ const RightModalRender = ({ children }) => {
         {(value) =>
           value.open && (
             <RightModal
-              mountNode={
-                value.mountNode || document.getElementById('main-content')
-              }
+              mountNode={value.mountNode || document.getElementById('main-content')}
               open={value.open || false}
               title={value.title}
               content={value?.content ?? null}

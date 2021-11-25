@@ -29,23 +29,9 @@ const ContentContainer = styled.div`
   }
 `;
 
-const LayoutModal = ({
-  title,
-  description,
-  open,
-  onClose,
-  onBack,
-  containerStyle,
-  children,
-  content,
-}) => {
+const LayoutModal = ({ title, description, open, onClose, onBack, containerStyle, children, content }) => {
   return (
-    <Transition
-      items={open}
-      from={{ opacity: 1 }}
-      enter={{ opacity: 1 }}
-      leave={{ opacity: 0 }}
-    >
+    <Transition items={open} from={{ opacity: 1 }} enter={{ opacity: 1 }} leave={{ opacity: 0 }}>
       {(open) =>
         open &&
         ((props) => (
@@ -61,7 +47,7 @@ const LayoutModal = ({
               containerStyle={{
                 maxHeight: '80vh',
                 maxWidth: '90vw',
-                ...containerStyle,
+                ...containerStyle
               }}
               onClose={() => {
                 onClose();
