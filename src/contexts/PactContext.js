@@ -93,29 +93,28 @@ export const PactProvider = (props) => {
   const getEventsSwapList = async () => {
     setSwapList([]);
     try {
-      const response = await axios.get(
-        'https://estats.chainweb.com/txs/events',
-        {
-          params: {
-            search: account.account.account,
-            offset: 0,
-            limit: 20,
-          },
-        }
-      );
-      console.log(response);
-      if (account.account) {
+      if (account.account.account) {
+        const response = await axios.get(
+          'https://estats.chainweb.com/txs/events',
+          {
+            params: {
+              search: account.account.account,
+              offset: 0,
+              limit: 20,
+            },
+          }
+        );
+        console.log(response);
+
         if (Object.values(response?.data).length !== 0) {
           const swap = Object.values(response?.data)?.filter(
             (swapTx) => swapTx?.name === 'kswap.exchange.SWAP'
           );
-
           // .filter((s) => s?.params[1] === account.account.account);
-          if (swap.length !== 0) {
-            setSwapList(swap);
-          } else {
-            setSwapList({ error: 'NO SWAP FOUND' });
-          }
+          if (swap.length !== 0) setSwapList(swap);
+          else setSwapList({ error: 'NO SWAP FOUND' });
+        } else {
+          setSwapList({ error: 'NO SWAP FOUND (1)' });
         }
       } else {
         setSwapList({ error: 'CONNECT YOUR WALLET FOR MORE INFORMATION' });
@@ -123,25 +122,25 @@ export const PactProvider = (props) => {
     } catch (error) {
       console.log(error);
     }
-
-    // let events = await eventsRecentList?.then((res) => res);
-    // if (Object.values(events).length !== 0) {
-    //   if (account.account) {
-    //     const swap = Object.values(events)
-    //       ?.filter((swapTx) => swapTx?.name === 'SWAP')
-    //       .filter((s) => s?.params[1] === account.account.account);
-    //     if (swap.length !== 0) {
-    //       setSwapList(swap);
-    //     } else {
-    //       setSwapList('NO_SWAP_FOUND');
-    //     }
-    //   } else {
-    //     setSwapList('NO_SWAP_FOUND');
-    //   }
-    // } else {
-    //   setSwapList('NO_SWAP_FOUND');
-    // }
   };
+
+  // let events = await eventsRecentList?.then((res) => res);
+  // if (Object.values(events).length !== 0) {
+  //   if (account.account) {
+  //     const swap = Object.values(events)
+  //       ?.filter((swapTx) => swapTx?.name === 'SWAP')
+  //       .filter((s) => s?.params[1] === account.account.account);
+  //     if (swap.length !== 0) {
+  //       setSwapList(swap);
+  //     } else {
+  //       setSwapList('NO_SWAP_FOUND');
+  //     }
+  //   } else {
+  //     setSwapList('NO_SWAP_FOUND');
+  //   }
+  // } else {
+  //   setSwapList('NO_SWAP_FOUND');
+  // }
 
   const getSwapList = async () => {
     // setSwapList({});
