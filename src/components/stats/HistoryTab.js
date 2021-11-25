@@ -258,7 +258,44 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
         <CardContainer gameEditionView={gameEditionView}>
           {!gameEditionView && <GradientBorder />}
 
-          {pact.swapList?.error}
+          {!pact.swapList?.error ? (
+            pact.swapList[0] ? (
+              pact.swapList?.map((tx, index) => (
+                <>
+                  <HistoryCard tx={tx} />
+                  {pact.swapList?.length - 1 !== index && (
+                    <Divider
+                      style={{
+                        width: '100%',
+                        margin: '32px 0px',
+                        borderTop: gameEditionView
+                          ? `1px dashed ${theme(themeMode).colors.black}`
+                          : `1px solid  ${theme(themeMode).colors.white}`,
+                      }}
+                    />
+                  )}
+                </>
+              ))
+            ) : (
+              <div style={{ padding: '16px' }}>
+                <Loader
+                  active
+                  style={{
+                    color: gameEditionView
+                      ? theme(themeMode).colors.black
+                      : theme(themeMode).colors.white,
+                    fontFamily: gameEditionView
+                      ? theme(themeMode).fontFamily.pressStartRegular
+                      : theme(themeMode).fontFamily.regular,
+                  }}
+                >
+                  Loading..
+                </Loader>
+              </div>
+            )
+          ) : (
+            pact.swapList?.error
+          )}
         </CardContainer>
       </PartialScrollableScrollSection>
     </ModalContainer>

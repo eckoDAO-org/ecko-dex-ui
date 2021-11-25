@@ -101,8 +101,6 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
   const { gameEditionView } = useContext(GameEditionContext);
   const { themeMode } = useContext(LightModeContext);
 
-  console.log(pact.pairList);
-
   useEffect(async () => {
     await pact.getPairList();
   }, []);

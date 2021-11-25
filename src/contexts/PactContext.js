@@ -41,6 +41,7 @@ export const PactProvider = (props) => {
   const [ratio, setRatio] = useState(NaN);
   const [pairList, setPairList] = useState(pairTokens);
   const [swapList, setSwapList] = useState([]);
+  const [offsetSwapList, setOffsetSwapList] = useState(100);
   console.log(
     '🚀 ~ file: PactContext.js ~ line 44 ~ PactProvider ~ swapList',
     swapList
@@ -90,91 +91,69 @@ export const PactProvider = (props) => {
     }
   };
 
-  const getEventsSwapList = async () => {
+  const getEventsSwapList = async (offset = 0) => {
     setSwapList([]);
+    const limit = 100;
+
     try {
       if (account.account.account) {
-        const response = await axios.get(
+        let response = await axios.get(
           'https://estats.chainweb.com/txs/events',
           {
             params: {
               search: account.account.account,
-              offset: 0,
-              limit: 20,
+              offset: offset,
+              limit: limit,
             },
           }
         );
         console.log(response);
-
         if (Object.values(response?.data).length !== 0) {
-          const swap = Object.values(response?.data)?.filter(
+          let swap = Object.values(response?.data)?.filter(
             (swapTx) => swapTx?.name === 'kswap.exchange.SWAP'
           );
           // .filter((s) => s?.params[1] === account.account.account);
           if (swap.length !== 0) setSwapList(swap);
-          else setSwapList({ error: 'NO SWAP FOUND' });
+          else setSwapList({ error: 'No swaps found' });
         } else {
-          setSwapList({ error: 'NO SWAP FOUND (1)' });
+          setSwapList({ error: 'No movement was performed' });
         }
       } else {
-        setSwapList({ error: 'CONNECT YOUR WALLET FOR MORE INFORMATION' });
+        setSwapList({ error: 'Connect your wallet to view the swap history' });
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  // let events = await eventsRecentList?.then((res) => res);
-  // if (Object.values(events).length !== 0) {
-  //   if (account.account) {
-  //     const swap = Object.values(events)
-  //       ?.filter((swapTx) => swapTx?.name === 'SWAP')
-  //       .filter((s) => s?.params[1] === account.account.account);
-  //     if (swap.length !== 0) {
-  //       setSwapList(swap);
-  //     } else {
-  //       setSwapList('NO_SWAP_FOUND');
-  //     }
-  //   } else {
-  //     setSwapList('NO_SWAP_FOUND');
-  //   }
-  // } else {
-  //   setSwapList('NO_SWAP_FOUND');
-  // }
+  const getMoreEventsSwapList = async (offset = 0) => {
+    const limit = 20;
+    //IN PROGRESS
 
-  const getSwapList = async () => {
-    // setSwapList({});
-    // if (account.account) {
-    //   var reqKeyList = JSON.parse(localStorage.getItem("swapReqKeys"));
-    //   if (reqKeyList) {
-    //     let tx = await Pact.fetch.poll(
-    //       { requestKeys: Object.values(reqKeyList) },
-    //       network
-    //     );
-    //     if (Object.keys(tx).length !== 0) {
-    //       const searchSwap = Object.values(tx).some(
-    //         (t) =>
-    //           t?.events[3]?.params[0] === account.account.account ||
-    //           t?.events[3]?.params[1] === account.account.account
-    //       );
-    //       if (searchSwap)
-    //         setSwapList(
-    //           Object.values(tx)?.filter(
-    //             (swapTx) =>
-    //               swapTx?.events[3]?.params[0] === account.account.account ||
-    //               swapTx?.events[3]?.params[1] === account.account.account
-    //           )
-    //         );
-    //       else setSwapList("NO_SWAP_FOUND");
-    //     } else {
-    //       setSwapList("NO_SWAP_FOUND");
-    //     }
-    //   } else {
-    //     setSwapList("NO_SWAP_FOUND");
-    //   }
-    // } else {
-    //   setSwapList("NO_SWAP_FOUND");
-    // }
+    try {
+      if (account.account.account) {
+        let response = await axios.get(
+          'https://estats.chainweb.com/txs/events',
+          {
+            params: {
+              search: account.account.account,
+              offset: offset,
+              limit: limit,
+            },
+          }
+        );
+        console.log(response);
+        let swap = Object.values(response?.data)?.filter(
+          (swapTx) => swapTx?.name === 'kswap.exchange.SWAP'
+        );
+        // .filter((s) => s?.params[1] === account.account.account);
+        if (swap.length !== 0) setSwapList([...swapList, swap]);
+      } else {
+        setSwapList({ error: 'Connect your wallet to view the swap history' });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
