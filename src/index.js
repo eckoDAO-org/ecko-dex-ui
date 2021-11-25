@@ -5,6 +5,7 @@ import './styles/styles.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { LightModeProvider } from './contexts/LightModeContext';
+import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -19,3 +20,4 @@ ReactDOM.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+serviceWorker.register();
