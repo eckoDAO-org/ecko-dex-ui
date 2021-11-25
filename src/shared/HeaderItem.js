@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { GameEditionContext } from '../contexts/GameEditionContext';
@@ -19,9 +19,18 @@ const Item = styled(NavLink)`
   &.active {
     font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
   }
+
+  .underline {
+    width: ${({ isHover }) => (isHover ? '100%' : 0)};
+    transition: width 0.3s;
+    background: #fff;
+    height: 3px;
+  }
+
   &:hover {
     color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? 'none' : colors.white)};
-    text-shadow: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? 'none' : `0 0 5px ${colors.white}`)};
+
+    /* text-shadow: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? 'none' : `0 0 5px ${colors.white}`)}; */
     cursor: pointer;
     & svg {
       & path {
@@ -31,8 +40,9 @@ const Item = styled(NavLink)`
   }
 `;
 
-const HeaderItem = ({ id, className, route, children, icon, link, onClick, onMouseOver, headerItemStyle }) => {
+const HeaderItem = ({ id, className, route, children, icon, link, onClick, onMouseOver, onMouseLeave, isHover, headerItemStyle }) => {
   const { gameEditionView } = useContext(GameEditionContext);
+
   const getTo = () => {
     if (route) return route;
     else if (link) return '/';
@@ -48,10 +58,13 @@ const HeaderItem = ({ id, className, route, children, icon, link, onClick, onMou
       onClick={() => (link ? window.open(link, '_blank', 'noopener,noreferrer') : onClick)}
       style={headerItemStyle}
       onMouseOver={onMouseOver}
+      onMouseLeave={onMouseLeave}
       gameEditionView={gameEditionView}
+      isHover={isHover}
     >
       {icon}
       {children}
+      <div className="underline"></div>
     </Item>
   );
 };

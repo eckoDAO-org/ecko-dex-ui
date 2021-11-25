@@ -19,6 +19,7 @@ import { RightModalContext } from '../../../contexts/RightModalContext';
 import RightModalContent from '../../right-modal-notification/RightModalContent';
 import { NotificationContext } from '../../../contexts/NotificationContext';
 import CopyPopup from '../../../shared/CopyPopup';
+import { NotificationModalContext } from '../../../contexts/NotificationModalContext';
 
 const RightContainerHeader = styled.div`
   display: flex;
@@ -72,6 +73,7 @@ const RightHeaderItems = () => {
   const { account, logout } = useContext(AccountContext);
   const modalContext = useContext(ModalContext);
   const { gameEditionView, openModal } = useContext(GameEditionContext);
+  const notificationModalContext = useContext(NotificationModalContext);
   const notification = useContext(NotificationContext);
   const rightModal = useContext(RightModalContext);
 
@@ -95,7 +97,7 @@ const RightHeaderItems = () => {
                   ) : (
                     'Connect a wallet using one of the methods below'
                   ),
-                  content: <ConnectWalletModal />
+                  content: <ConnectWalletModal />,
                 });
               } else {
                 modalContext.openModal({
@@ -110,7 +112,7 @@ const RightHeaderItems = () => {
                   ) : (
                     'Connect a wallet using one of the methods below'
                   ),
-                  content: <ConnectWalletModal />
+                  content: <ConnectWalletModal />,
                 });
               }
             }}
@@ -134,13 +136,13 @@ const RightHeaderItems = () => {
                     isVisible: true,
                     title: account?.account ? 'wallet connected' : 'connect wallet',
                     description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
-                    content: <ConnectWalletModal />
+                    content: <ConnectWalletModal />,
                   });
                 } else {
                   return modalContext.openModal({
                     title: account?.account ? 'wallet connected' : 'connect wallet',
                     description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
-                    content: <ConnectWalletModal />
+                    content: <ConnectWalletModal />,
                   });
                 }
               }}
@@ -159,8 +161,9 @@ const RightHeaderItems = () => {
         <BellNotification
           hasNotification={notification.notificationList?.some((notif) => notif.isReaded === false)}
           onClick={() => {
-            rightModal.openModal({
+            notificationModalContext.openModal({
               title: 'Notifications',
+              dimmer: false,
               content: <RightModalContent />,
               footer: (
                 <Button
@@ -172,7 +175,7 @@ const RightHeaderItems = () => {
                   buttonStyle={{ width: '100%' }}
                   outGameEditionView
                 />
-              )
+              ),
             });
           }}
         />
@@ -185,8 +188,8 @@ const RightHeaderItems = () => {
         </HeaderItem>
       )}
 
-      <HeaderItem>
-        <CustomPopup basic trigger={<ThreeDotsIcon style={{ marginBottom: '4px' }} />} on="click" offset={[0, 10]} position="bottom right">
+      <HeaderItem headerItemStyle={{ padding: '14px 0', display: 'flex' }}>
+        <CustomPopup basic trigger={<ThreeDotsIcon />} on="click" offset={[0, 10]} position="bottom right">
           <PopupContentList items={headerLinks} viewOtherComponents />
         </CustomPopup>
       </HeaderItem>
