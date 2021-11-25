@@ -27,9 +27,7 @@ export const getCurrentDate = () => {
 
 export const getDateFromCustomDate = (date, time) => {
   const splittedDate = date.split('/');
-  const d = new Date(
-    `${splittedDate[2]}/${splittedDate[1]}/${splittedDate[0]} ${time}`
-  );
+  const d = new Date(`${splittedDate[2]}/${splittedDate[1]}/${splittedDate[0]} ${time}`);
   return d;
 };
 

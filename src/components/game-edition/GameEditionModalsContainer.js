@@ -7,11 +7,7 @@ const GEModalContainer = styled.div`
   top: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    180deg,
-    rgba(254, 251, 102, 1) 35%,
-    rgba(255, 54, 208, 1) 100%
-  );
+  background: linear-gradient(180deg, rgba(254, 251, 102, 1) 35%, rgba(255, 54, 208, 1) 100%);
   position: absolute;
   border-radius: 20px;
   display: flex;
@@ -56,13 +52,7 @@ const ContentModalContainer = styled.div`
   padding: 10px;
 `;
 
-const GameEditionModalsContainer = ({
-  title,
-  description,
-  content,
-  onClose,
-  modalStyle,
-}) => {
+const GameEditionModalsContainer = ({ title, description, content, onClose, modalStyle }) => {
   const { closeModal } = useContext(GameEditionContext);
   return (
     <GEModalContainer style={modalStyle}>

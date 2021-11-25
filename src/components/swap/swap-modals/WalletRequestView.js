@@ -51,11 +51,9 @@ const SubTitle = styled.div`
   /* font-size: normal normal normal 12px/18px Montserrat; */
 
   width: ${({ gameEditionView }) => (gameEditionView ? '100%' : 'auto')};
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '12px' : '18px')};
-  color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : colors.primary};
+  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.primary)};
   text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
 `;
 
@@ -79,16 +77,11 @@ const WalletRequestView = ({ show, onClose, error }) => {
       content={
         error?.error ? (
           <>
-            <Content
-              gameEditionView={gameEditionView}
-              style={{ marginBottom: '30px' }}
-            >
+            <Content gameEditionView={gameEditionView} style={{ marginBottom: '30px' }}>
               <SubTitle
                 gameEditionView={gameEditionView}
                 style={{
-                  color: gameEditionView
-                    ? theme(themeMode).colors.black
-                    : theme(themeMode).colors.white,
+                  color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white
                 }}
               >
                 {error.content}
@@ -99,7 +92,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
                 onClose();
               }}
             >
-              <Icon name='checkmark' /> Got it
+              <Icon name="checkmark" /> Got it
             </CustomButton>{' '}
           </>
         ) : (
@@ -107,22 +100,17 @@ const WalletRequestView = ({ show, onClose, error }) => {
             <SubTitle
               gameEditionView={gameEditionView}
               style={{
-                color: gameEditionView
-                  ? theme(themeMode).colors.black
-                  : theme(themeMode).colors.white,
+                color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white
               }}
             >
-              Follow instructions in the wallet to preview and sign your
-              transaction.
+              Follow instructions in the wallet to preview and sign your transaction.
             </SubTitle>
             <LoaderContainer>
               <Loader
                 active
-                inline='centered'
+                inline="centered"
                 style={{
-                  color: gameEditionView
-                    ? theme(themeMode).colors.black
-                    : theme(themeMode).colors.white,
+                  color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white
                 }}
               ></Loader>
             </LoaderContainer>
@@ -131,12 +119,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
       }
     />
   ) : (
-    <Transition
-      items={show}
-      from={{ opacity: 0 }}
-      enter={{ opacity: 1 }}
-      leave={{ opacity: 0 }}
-    >
+    <Transition items={show} from={{ opacity: 0 }} enter={{ opacity: 1 }} leave={{ opacity: 0 }}>
       {(show) =>
         show &&
         ((props) => (
@@ -146,43 +129,36 @@ const WalletRequestView = ({ show, onClose, error }) => {
                 title={error.title}
                 containerStyle={{
                   maxHeight: '80vh',
-                  maxWidth: '90vw',
+                  maxWidth: '90vw'
                 }}
                 onClose={onClose}
               >
                 <Content style={{ marginBottom: '30px' }}>
-                  <SubTitle style={{ color: theme(themeMode).colors.white }}>
-                    {error.content}
-                  </SubTitle>
+                  <SubTitle style={{ color: theme(themeMode).colors.white }}>{error.content}</SubTitle>
                 </Content>
                 <CustomButton
                   onClick={() => {
                     onClose();
                   }}
                 >
-                  <Icon name='checkmark' /> Got it
+                  <Icon name="checkmark" /> Got it
                 </CustomButton>
               </ModalContainer>
             ) : (
               /* <Backdrop onClose={onClose} /> */
               <ModalContainer
-                title='Please Sign'
+                title="Please Sign"
                 containerStyle={{
                   maxHeight: '80vh',
-                  maxWidth: '90vw',
+                  maxWidth: '90vw'
                 }} /* onClose={onClose} */
               >
                 <Content>
                   <SubTitle style={{ color: theme(themeMode).colors.white }}>
-                    Follow instructions in the wallet to preview and sign your
-                    transaction.
+                    Follow instructions in the wallet to preview and sign your transaction.
                   </SubTitle>
                   <LoaderContainer>
-                    <Loader
-                      active
-                      inline='centered'
-                      style={{ color: theme(themeMode).colors.white }}
-                    ></Loader>
+                    <Loader active inline="centered" style={{ color: theme(themeMode).colors.white }}></Loader>
                   </LoaderContainer>
                 </Content>
               </ModalContainer>

@@ -11,12 +11,12 @@ const CopyPopup = ({ textToCopy }) => {
 
   return (
     <CustomPopup
-      on='click'
-      position='bottom right'
+      on="click"
+      position="bottom right"
       pinned
       trigger={
         <Icon
-          name='copy'
+          name="copy"
           style={{ marginLeft: '8px' }}
           onClick={() => {
             navigator.clipboard.writeText(textToCopy);
@@ -27,9 +27,7 @@ const CopyPopup = ({ textToCopy }) => {
       <Popup.Content
         style={{
           padding: '8px',
-          color: gameEditionView
-            ? `${theme(themeMode).colors.black}`
-            : `${theme(themeMode).colors.white}`,
+          color: gameEditionView ? `${theme(themeMode).colors.black}` : `${theme(themeMode).colors.white}`
         }}
       >
         Copied!

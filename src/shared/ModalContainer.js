@@ -12,23 +12,13 @@ const Container = styled.div`
   padding: ${({ gameEditionView }) => (gameEditionView ? '20px' : '32px')};
   width: 100%;
   border-radius: 10px;
-  border: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? `2px dashed ${colors.black}` : `1px solid transparent`};
-  background-clip: ${({ gameEditionView }) =>
-    !gameEditionView && `padding-box`};
+  border: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `2px dashed ${colors.black}` : `1px solid transparent`)};
+  background-clip: ${({ gameEditionView }) => !gameEditionView && `padding-box`};
   opacity: 1;
-  background: ${({
-    gameEditionView,
-    theme: { backgroundContainer },
-    backgroundNotChangebleWithTheme,
-  }) =>
-    backgroundNotChangebleWithTheme || gameEditionView
-      ? 'transparent'
-      : backgroundContainer};
-  backdrop-filter: ${({ gameEditionView, withoutRainbowBackground }) =>
-    !gameEditionView && !withoutRainbowBackground && `blur(50px)`};
-  color: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? colors.black : colors.white};
+  background: ${({ gameEditionView, theme: { backgroundContainer }, backgroundNotChangebleWithTheme }) =>
+    backgroundNotChangebleWithTheme || gameEditionView ? 'transparent' : backgroundContainer};
+  backdrop-filter: ${({ gameEditionView, withoutRainbowBackground }) => !gameEditionView && !withoutRainbowBackground && `blur(50px)`};
+  color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.black : colors.white)};
 
   ::-webkit-scrollbar {
     display: none;
@@ -51,13 +41,11 @@ const HeaderContainer = styled.div`
 `;
 
 const Title = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
 
   font-size: 24px;
 
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobileSmallPixel}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
     width: min-content;
     font-size: 16px;
   }
@@ -84,7 +72,7 @@ const ModalContainer = ({
   onBack,
   onClose,
   withoutRainbowBackground = false,
-  backgroundNotChangebleWithTheme,
+  backgroundNotChangebleWithTheme
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
 
@@ -100,7 +88,7 @@ const ModalContainer = ({
         {onBack ? (
           <ArrowBack
             style={{
-              cursor: 'pointer',
+              cursor: 'pointer'
               // color: `${theme().colors.white} 0% 0% no-repeat padding-box`,
             }}
             onClick={onBack}
@@ -119,7 +107,7 @@ const ModalContainer = ({
           <CloseIcon
             style={{
               cursor: 'pointer',
-              opacity: 1,
+              opacity: 1
             }}
             onClick={onClose}
           />
@@ -128,9 +116,7 @@ const ModalContainer = ({
         )}
       </HeaderContainer>
 
-      {description && (
-        <Description style={descriptionStyle}>{description}</Description>
-      )}
+      {description && <Description style={descriptionStyle}>{description}</Description>}
       {children}
     </Container>
   );
@@ -138,12 +124,12 @@ const ModalContainer = ({
 
 ModalContainer.propTypes = {
   title: PropTypes.string,
-  onClose: PropTypes.func,
+  onClose: PropTypes.func
 };
 
 ModalContainer.defaultProps = {
   title: '',
-  onClose: null,
+  onClose: null
 };
 
 export default ModalContainer;

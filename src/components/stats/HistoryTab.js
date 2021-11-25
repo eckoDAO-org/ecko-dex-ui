@@ -10,11 +10,7 @@ import GradientBorder from '../../shared/GradientBorder';
 import ModalContainer from '../../shared/ModalContainer';
 import { theme } from '../../styles/theme';
 import { extractDecimal, reduceBalance } from '../../utils/reduceBalance';
-import {
-  PartialScrollableScrollSection,
-  Title,
-  TitleContainer,
-} from '../layout/Containers';
+import { PartialScrollableScrollSection, Title, TitleContainer } from '../layout/Containers';
 import HistoryCard from './HistoryCard';
 import StatsCard from './StatsCard';
 
@@ -49,20 +45,17 @@ export const CardContainer = styled.div`
   display: flex;
   flex-flow: column;
   align-items: center;
-  padding: ${({ gameEditionView }) =>
-    gameEditionView ? `10px 10px` : `32px 32px`};
+  padding: ${({ gameEditionView }) => (gameEditionView ? `10px 10px` : `32px 32px`)};
   width: 100%;
   max-width: 1110px;
   margin-left: auto;
   margin-right: auto;
   border-radius: 10px;
 
-  background-clip: ${({ gameEditionView }) =>
-    !gameEditionView && `padding-box`};
+  background-clip: ${({ gameEditionView }) => !gameEditionView && `padding-box`};
 
   opacity: 1;
-  background: ${({ gameEditionView }) =>
-    gameEditionView ? `transparent` : `transparent`}; // or add new style
+  background: ${({ gameEditionView }) => (gameEditionView ? `transparent` : `transparent`)}; // or add new style
 
   /* &:before {
     border-radius: inherit;
@@ -71,8 +64,7 @@ export const CardContainer = styled.div`
     margin-right: 32px;
   } */
 
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
     gap: 0px;
   }
@@ -107,44 +99,44 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
       reqkey: '3C8-r_p-Mrp1xTseo3Isicwq6mQGpwu-sB3AMvuJtv0',
       amount: '125',
       token0: 'KDA',
-      token1: 'FLUX',
+      token1: 'FLUX'
     },
     1: {
       reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
       amount: '1000',
       token0: 'FLUX',
-      token1: 'KDA',
+      token1: 'KDA'
     },
     2: {
       reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
       amount: '1000',
       token0: 'FLUX',
-      token1: 'KDA',
+      token1: 'KDA'
     },
     3: {
       reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
       amount: '1000',
       token0: 'FLUX',
-      token1: 'KDA',
+      token1: 'KDA'
     },
     4: {
       reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
       amount: '1000',
       token0: 'FLUX',
-      token1: 'KDA',
+      token1: 'KDA'
     },
     5: {
       reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
       amount: '1000',
       token0: 'FLUX',
-      token1: 'KDA',
+      token1: 'KDA'
     },
     6: {
       reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
       amount: '1000',
       token0: 'FLUX',
-      token1: 'KDA',
-    },
+      token1: 'KDA'
+    }
   };
 
   useEffect(async () => {
@@ -153,7 +145,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
 
   return gameEditionView ? (
     <ModalContainer
-      title='stats'
+      title="stats"
       // {
       //   <TitleTabs>
       //     <Tabs>Stats</Tabs>
@@ -162,7 +154,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
       // }
       containerStyle={{
         maxHeight: '80vh',
-        maxWidth: 650,
+        maxWidth: 650
       }}
     >
       <PartialScrollableScrollSection>
@@ -226,7 +218,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
       backgroundNotChangebleWithTheme
       containerStyle={{
         maxHeight: '80vh',
-        padding: 0,
+        padding: 0
       }}
     >
       {!gameEditionView && (
@@ -236,25 +228,18 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
             marginLeft: 'auto',
             marginRight: 'auto',
             maxWidth: '1110px',
-            justifyContent: 'space-between',
+            justifyContent: 'space-between'
           }}
         >
-          <Tabs
-            gameEditionView={gameEditionView}
-            active={activeTabs === 'POOL_STATS'}
-            onClick={setActiveTabs}
-          >
+          <Tabs gameEditionView={gameEditionView} active={activeTabs === 'POOL_STATS'} onClick={setActiveTabs}>
             Stats
           </Tabs>
-          <Tabs
-            gameEditionView={gameEditionView}
-            active={activeTabs === 'HISTORY'}
-          >
+          <Tabs gameEditionView={gameEditionView} active={activeTabs === 'HISTORY'}>
             History
           </Tabs>
         </TitleContainer>
       )}
-      <PartialScrollableScrollSection className='scrollbar-none'>
+      <PartialScrollableScrollSection className="scrollbar-none">
         <CardContainer gameEditionView={gameEditionView}>
           {!gameEditionView && <GradientBorder />}
 
@@ -268,9 +253,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
                       style={{
                         width: '100%',
                         margin: '32px 0px',
-                        borderTop: gameEditionView
-                          ? `1px dashed ${theme(themeMode).colors.black}`
-                          : `1px solid  ${theme(themeMode).colors.white}`,
+                        borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`
                       }}
                     />
                   )}
@@ -284,12 +267,8 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
               <Loader
                 active
                 style={{
-                  color: gameEditionView
-                    ? theme(themeMode).colors.black
-                    : theme(themeMode).colors.white,
-                  fontFamily: gameEditionView
-                    ? theme(themeMode).fontFamily.pressStartRegular
-                    : theme(themeMode).fontFamily.regular,
+                  color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
+                  fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular
                 }}
               >
                 Loading..

@@ -50,7 +50,7 @@ const GameEditionMenuContainer = () => {
           <RowMenuContainer key={index}>
             <MenuGEIcon
               style={{
-                display: arrowVisible === item.label ? 'block' : 'none',
+                display: arrowVisible === item.label ? 'block' : 'none'
               }}
             />
             <HeaderItem
@@ -59,7 +59,7 @@ const GameEditionMenuContainer = () => {
               headerItemStyle={{
                 fontFamily: theme.fontFamily.pressStartRegular,
                 color: 'black',
-                margin: '0px 8px',
+                margin: '0px 8px'
               }}
               onMouseOver={() => setArrowVisible(item.label)}
             >
@@ -68,7 +68,7 @@ const GameEditionMenuContainer = () => {
             <MenuGEIcon
               style={{
                 transform: 'rotate(180deg)',
-                display: arrowVisible === item.label ? 'block' : 'none',
+                display: arrowVisible === item.label ? 'block' : 'none'
               }}
             />
           </RowMenuContainer>
@@ -79,7 +79,7 @@ const GameEditionMenuContainer = () => {
           <RowMenuContainer key={index}>
             <MenuGEIcon
               style={{
-                display: arrowVisible === item.label ? 'block' : 'none',
+                display: arrowVisible === item.label ? 'block' : 'none'
               }}
             />
             <HeaderItem
@@ -90,7 +90,7 @@ const GameEditionMenuContainer = () => {
               headerItemStyle={{
                 fontFamily: theme.fontFamily.pressStartRegular,
                 color: 'black',
-                margin: '0px 8px',
+                margin: '0px 8px'
               }}
               onMouseOver={() => setArrowVisible(item.label)}
             >
@@ -99,7 +99,7 @@ const GameEditionMenuContainer = () => {
             <MenuGEIcon
               style={{
                 transform: 'rotate(180deg)',
-                display: arrowVisible === item.label ? 'block' : 'none',
+                display: arrowVisible === item.label ? 'block' : 'none'
               }}
             />
           </RowMenuContainer>

@@ -46,15 +46,9 @@ const StatsContainer = () => {
     //     </CustomButton>
     //   </ButtonContainer>
     activeTabs === 'POOL_STATS' ? (
-      <StatsTab
-        activeTabs={activeTabs}
-        setActiveTabs={() => setActiveTabs('HISTORY')}
-      />
+      <StatsTab activeTabs={activeTabs} setActiveTabs={() => setActiveTabs('HISTORY')} />
     ) : (
-      <HistoryTab
-        activeTabs={activeTabs}
-        setActiveTabs={() => setActiveTabs('POOL_STATS')}
-      />
+      <HistoryTab activeTabs={activeTabs} setActiveTabs={() => setActiveTabs('POOL_STATS')} />
     )
   );
 };

@@ -23,11 +23,7 @@ const ContentContainer = styled.div`
   height: 100%;
   border-radius: 24px;
   background: rgb(254, 251, 102);
-  background: linear-gradient(
-    180deg,
-    rgba(254, 251, 102, 1) 35%,
-    rgba(255, 54, 208, 1) 100%
-  );
+  background: linear-gradient(180deg, rgba(254, 251, 102, 1) 35%, rgba(255, 54, 208, 1) 100%);
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -37,8 +33,7 @@ const ContentContainer = styled.div`
 `;
 
 const GameEditionContainer = ({ children }) => {
-  const { modalState, closeModal, setIsSwapping } =
-    useContext(GameEditionContext);
+  const { modalState, closeModal, setIsSwapping } = useContext(GameEditionContext);
   const history = useHistory();
 
   const switchAppSection = (direction) => {
@@ -94,7 +89,7 @@ const GameEditionContainer = ({ children }) => {
         </GameEditionMobileWrapper>
       ) : (
         <GameEditionWrapper
-          style={{ height: "auto !important" }}
+          style={{ height: 'auto !important' }}
           selectLabel="MENU"
           selectOnClick={() => {
             history.push(ROUTE_GAME_EDITION_MENU);

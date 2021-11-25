@@ -1,26 +1,26 @@
-import React from "react";
-import { LockLogo, ZelcoreLogo, TorusLogo } from "../assets";
+import React from 'react';
+import { LockLogo, ZelcoreLogo, TorusLogo } from '../assets';
 
 export const WALLET = {
   ZELCORE: {
-    name: "Zelcore",
+    name: 'Zelcore',
     logo: <ZelcoreLogo />,
-    signMethod: "wallet",
-    getAccountsUrl: "http://127.0.0.1:9467/v1/accounts",
+    signMethod: 'wallet',
+    getAccountsUrl: 'http://127.0.0.1:9467/v1/accounts'
   },
   CHAINWEAVER: {
-    name: "Chainweaver",
+    name: 'Chainweaver',
     logo: <LockLogo />,
-    signMethod: "wallet",
-    getAccountsUrl: "http://127.0.0.1:9467/v1/accounts",
+    signMethod: 'wallet',
+    getAccountsUrl: 'http://127.0.0.1:9467/v1/accounts'
   },
   TORUS: {
-    name: "Torus",
+    name: 'Torus',
     logo: <TorusLogo />,
-    signMethod: "sign_required",
+    signMethod: 'sign_required'
   },
   KADENA_WALLET: {
-    name: "Kadena Wallet",
-    logo: null,
-  },
+    name: 'Kadena Wallet',
+    logo: null
+  }
 };

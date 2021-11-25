@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components/macro";
-import { Container } from "semantic-ui-react";
+import React from 'react';
+import styled from 'styled-components/macro';
+import { Container } from 'semantic-ui-react';
 
 const Wrapper = styled(Container)`
   &.ui {

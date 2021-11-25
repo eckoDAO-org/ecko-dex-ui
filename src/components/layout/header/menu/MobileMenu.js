@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import HeaderItem from "../../../../shared/HeaderItem";
-import menuItems from "../../../menuItems";
+import React from 'react';
+import styled from 'styled-components';
+import HeaderItem from '../../../../shared/HeaderItem';
+import menuItems from '../../../menuItems';
 
 const StyledMenu = styled.nav`
   display: flex;
@@ -15,7 +15,7 @@ const StyledMenu = styled.nav`
   top: 0;
   left: 0;
   transition: transform 0.3s ease-in-out;
-  transform: ${({ open }) => (open ? "translateX(0)" : "translateX(-100%)")};
+  transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(-100%)')};
 
   @media (max-width: ${({ theme }) => theme.mediaQueries.mobilePixel}) {
     width: 100%;
@@ -46,12 +46,7 @@ const MobileMenu = ({ open, setOpen }) => {
   return (
     <StyledMenu open={open}>
       {menuItems.map((item, index) => (
-        <HeaderItem
-          id={index}
-          className={item.className}
-          route={item.route}
-          onClick={() => setOpen(!open)}
-        >
+        <HeaderItem id={index} className={item.className} route={item.route} onClick={() => setOpen(!open)}>
           {item.label}
         </HeaderItem>
       ))}

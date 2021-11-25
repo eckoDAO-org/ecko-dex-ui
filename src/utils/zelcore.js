@@ -1,17 +1,17 @@
-import { WALLET } from "../constants/wallet";
+import { WALLET } from '../constants/wallet';
 
-const fetch = require("node-fetch");
+const fetch = require('node-fetch');
 
 const cmd = {
-  asset: "kadena",
+  asset: 'kadena'
 };
 var mkReq = function (cmd) {
   return {
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
-    method: "POST",
-    body: JSON.stringify(cmd),
+    method: 'POST',
+    body: JSON.stringify(cmd)
   };
 };
 var parseRes = async function (raw) {
@@ -35,6 +35,6 @@ const getAccounts = async () => {
   }
 };
 
-const openZelcore = () => window.open("zel:", "_self");
+const openZelcore = () => window.open('zel:', '_self');
 
 export { getAccounts, openZelcore };

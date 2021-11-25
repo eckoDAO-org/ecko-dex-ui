@@ -24,10 +24,8 @@ const CustomLabel = ({ children, bold, fontSize, labelStyle, start }) => {
           ? theme(themeMode).fontFamily.bold
           : theme(themeMode).fontFamily.regular,
         fontSize: gameEditionView ? '10px' : fontSize ? fontSize : 13,
-        color: gameEditionView
-          ? theme(themeMode).colors.black
-          : theme(themeMode).colors.white,
-        ...labelStyle,
+        color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
+        ...labelStyle
       }}
       start={start}
     >

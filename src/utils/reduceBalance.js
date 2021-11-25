@@ -5,15 +5,13 @@ export const reduceBalance = (balance, prec = 6) => {
     if (parseFloat(balance) % 1 === 0) {
       return parseInt(balance);
     }
-    return (
-      Math.trunc(parseFloat(balance) * Math.pow(10, prec)) / Math.pow(10, prec)
-    );
+    return Math.trunc(parseFloat(balance) * Math.pow(10, prec)) / Math.pow(10, prec);
   }
   if (balance === 0) return 0;
 };
 
 export const keepDecimal = (decimal) => {
-  const num = decimal.toString().indexOf(".") === -1 ? `${decimal}.0` : decimal;
+  const num = decimal.toString().indexOf('.') === -1 ? `${decimal}.0` : decimal;
   return num;
 };
 
@@ -32,17 +30,14 @@ export const extractDecimal = (num) => {
 };
 
 export const limitDecimalPlaces = (numStr, count) => {
-  if (numStr.indexOf(".") === -1) {
-    if (numStr === "") return "";
+  if (numStr.indexOf('.') === -1) {
+    if (numStr === '') return '';
     if (!isNaN(numStr)) return Number(numStr);
   }
-  if (
-    numStr.indexOf(".") === numStr.length - 1 &&
-    !isNaN(numStr.slice(0, numStr.length - 1))
-  ) {
+  if (numStr.indexOf('.') === numStr.length - 1 && !isNaN(numStr.slice(0, numStr.length - 1))) {
     return numStr;
   }
-  if (numStr.length - numStr.indexOf(".") > count && count !== 0) {
+  if (numStr.length - numStr.indexOf('.') > count && count !== 0) {
     numStr = parseFloat(numStr).toFixed(count);
     return numStr;
   } else {
