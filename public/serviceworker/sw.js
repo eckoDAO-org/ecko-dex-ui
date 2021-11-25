@@ -294,7 +294,7 @@ self.addEventListener('fetch', function (event) {
 </html>
                         
 ${''}
-  `
+  `,
             ],
             { type: 'text/html' }
           )
