@@ -35,9 +35,8 @@ const Content = styled.div`
   svg {
     display: ${({ gameEditionView }) => gameEditionView && 'none '};
   }
-  width: 97%;
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  bottom: ${({ gameEditionView }) => gameEditionView && '285px'};
+  width: 100%;
+  justify-content: space-between;
 `;
 
 const LoaderContainer = styled.div`
@@ -47,14 +46,22 @@ const LoaderContainer = styled.div`
   margin-top: 15px;
 `;
 
+const ContentContainer = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
 const SubTitle = styled.div`
   /* font-size: normal normal normal 12px/18px Montserrat; */
 
   width: ${({ gameEditionView }) => (gameEditionView ? '100%' : 'auto')};
   font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '12px' : '18px')};
+  margin: ${({ gameEditionView }) => !gameEditionView && '16px 0px'};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '12px' : '14px')};
   color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.primary)};
-  text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
+  text-align: left;
 `;
 
 const WalletRequestView = ({ show, onClose, error }) => {
@@ -76,12 +83,12 @@ const WalletRequestView = ({ show, onClose, error }) => {
       onClose={onClose}
       content={
         error?.error ? (
-          <>
+          <ContentContainer>
             <Content gameEditionView={gameEditionView} style={{ marginBottom: '30px' }}>
               <SubTitle
                 gameEditionView={gameEditionView}
                 style={{
-                  color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white
+                  color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
                 }}
               >
                 {error.content}
@@ -94,13 +101,13 @@ const WalletRequestView = ({ show, onClose, error }) => {
             >
               <Icon name="checkmark" /> Got it
             </CustomButton>{' '}
-          </>
+          </ContentContainer>
         ) : (
           <Content gameEditionView={gameEditionView}>
             <SubTitle
               gameEditionView={gameEditionView}
               style={{
-                color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white
+                color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
               }}
             >
               Follow instructions in the wallet to preview and sign your transaction.
@@ -110,7 +117,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
                 active
                 inline="centered"
                 style={{
-                  color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white
+                  color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
                 }}
               ></Loader>
             </LoaderContainer>
@@ -129,7 +136,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
                 title={error.title}
                 containerStyle={{
                   maxHeight: '80vh',
-                  maxWidth: '90vw'
+                  maxWidth: '90vw',
                 }}
                 onClose={onClose}
               >
@@ -150,7 +157,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
                 title="Please Sign"
                 containerStyle={{
                   maxHeight: '80vh',
-                  maxWidth: '90vw'
+                  maxWidth: '90vw',
                 }} /* onClose={onClose} */
               >
                 <Content>

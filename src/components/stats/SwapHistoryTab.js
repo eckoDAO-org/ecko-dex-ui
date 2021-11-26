@@ -40,7 +40,7 @@ const SwapHistoryTab = () => {
       title="Swap History"
       containerStyle={{
         maxHeight: '60vh',
-        maxWidth: 650
+        maxWidth: 650,
       }}
     >
       <Grid style={{ width: '100%', marginLeft: 0 }}>

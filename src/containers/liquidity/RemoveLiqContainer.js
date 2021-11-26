@@ -48,8 +48,6 @@ const TitleContainer = styled.div`
   justify-content: space-between;
   margin-bottom: ${({ gameEditionView }) => (gameEditionView ? '10px' : `14px`)};
   width: 100%;
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  top: ${({ gameEditionView }) => gameEditionView && '10px'};
   padding: ${({ gameEditionView }) => gameEditionView && '10px'};
 `;
 
@@ -85,9 +83,7 @@ const ResultContainer = styled.div`
   margin: 16px 0px;
   flex-flow: column;
   width: 100%;
-  top: ${({ gameEditionView }) => gameEditionView && '180px'};
   padding: ${({ gameEditionView }) => gameEditionView && '10px'};
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
   }
@@ -176,7 +172,7 @@ const RemoveLiqContainer = (props) => {
         {gameEditionView && <CloseGE onClick={() => props.closeLiquidity()} />}
       </TitleContainer>
 
-      <FormContainer containerStyle={gameEditionView ? { border: 'none', padding: 0, position: 'absolute', top: '60px' } : {}}>
+      <FormContainer containerStyle={gameEditionView ? { border: 'none', padding: 0 } : {}}>
         {!gameEditionView && <GradientBorder />}
         <SubContainer gameEditionView={gameEditionView}>
           <Input
@@ -311,8 +307,8 @@ const RemoveLiqContainer = (props) => {
           </InnerRowContainer>
         </ResultContainer>
 
-        <ButtonContainer gameEditionView={gameEditionView} style={gameEditionView ? { position: 'absolute', bottom: '-180px' } : {}}>
-          <Button.Group fluid style={{ padding: gameEditionView ? '0 10px' : 0 }}>
+        <ButtonContainer gameEditionView={gameEditionView}>
+          <Button.Group fluid style={{ padding: 0 }}>
             <CustomButton
               loading={loading}
               disabled={isNaN(amount) || reduceBalance(amount) === 0}

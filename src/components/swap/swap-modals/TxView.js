@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { Transition } from 'react-spring/renderprops';
 import { Message, Icon, Divider } from 'semantic-ui-react';
 import { ErrorIcon, SuccessfullIcon } from '../../../assets';
@@ -20,13 +20,18 @@ import { theme } from '../../../styles/theme';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 
 const Container = styled.div`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
   margin-left: auto;
   margin-right: auto;
+  ${({ gameEditionView }) =>
+    !gameEditionView &&
+    css`
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    `}
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -51,11 +56,9 @@ const Content = styled.div`
       fill: ${({ theme: { colors } }) => colors.white};
     }
   }
-  width: ${({ gameEditionView }) => (gameEditionView ? '97%' : '100%')};
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  bottom: ${({ gameEditionView }) => gameEditionView && '66px'};
-  padding: ${({ gameEditionView }) => gameEditionView && '4px'};
-
+  justify-content: space-between;
+  width: 100%;
+  height: ${({ gameEditionView }) => gameEditionView && '100%'};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
     svg {
       width: 40px;
@@ -67,7 +70,7 @@ const Content = styled.div`
 const Title = styled.div`
   font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
   font-size: 16px;
-  padding: ${({ gameEditionView }) => (gameEditionView ? '20px 0px' : '16px')};
+  padding: ${({ gameEditionView }) => (gameEditionView ? '0px' : '16px')};
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
     padding: ${({ gameEditionView }) => (gameEditionView ? '20px 0px' : '8px')};
@@ -89,7 +92,6 @@ const TransactionsDetails = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: ${({ gameEditionView }) => gameEditionView && '12px'}; ;
 `;
 
 const SpaceBetweenRow = styled.div`
@@ -162,7 +164,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
             style={{
               width: '100%',
               marginTop: 0,
-              borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid ${theme(themeMode).colors.white}`
+              borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid ${theme(themeMode).colors.white}`,
             }}
           />
 
@@ -207,9 +209,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
         <CustomButton
           buttonStyle={{
             width: '100%',
-            position: gameEditionView && 'absolute',
-            top: gameEditionView && '325px',
-            marginTop: !gameEditionView && '16px'
+            marginTop: !gameEditionView && '16px',
           }}
           onClick={async () => {
             setLoading(true);
@@ -272,9 +272,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
         <CustomButton
           buttonStyle={{
             width: '100%',
-            position: gameEditionView && 'absolute',
-            top: gameEditionView && 316,
-            marginTop: !gameEditionView && '16px'
+            marginTop: !gameEditionView && '16px',
           }}
           onClick={async () => {
             setLoading(true);
@@ -292,7 +290,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
 
   const successAddView = () => {
     return (
-      <Content gameEditionView={gameEditionView} style={{ bottom: '128px' }}>
+      <Content gameEditionView={gameEditionView}>
         <Title gameEditionView={gameEditionView}>Preview Successful!</Title>
         <SuccessfullIcon />
         <TransactionsDetails gameEditionView={gameEditionView}>
@@ -334,9 +332,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
         <CustomButton
           buttonStyle={{
             width: '100%',
-            position: gameEditionView && 'absolute',
-            top: gameEditionView && 316,
-            marginTop: !gameEditionView && '16px'
+            marginTop: !gameEditionView && '16px',
           }}
           onClick={async () => {
             setLoading(true);
@@ -365,7 +361,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
         <Title gameEditionView={gameEditionView}>Preview Failed!</Title>
         <SubTitle gameEditionView={gameEditionView}>Error Message</SubTitle>
         <TransactionsDetails gameEditionView={gameEditionView}>
-          <Message color="red" style={{ wordBreak: 'break-all', backgroundColor: '#424242' }}>
+          <Message color="red" style={{ wordBreak: 'break-all', backgroundColor: theme(themeMode).colors.black }}>
             <RowContainer>
               <span style={{ wordBreak: 'break-all' }}>{swap.localRes.result.error.message}</span>
             </RowContainer>
@@ -381,10 +377,8 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
             onClose();
           }}
           buttonStyle={{
-            position: gameEditionView && 'absolute',
-            top: gameEditionView && '282px',
             width: gameEditionView && '100%',
-            marginTop: !gameEditionView && '16px'
+            marginTop: !gameEditionView && '16px',
           }}
         >
           Retry
@@ -395,12 +389,14 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
 
   const localError = () => {
     return (
-      <Content gameEditionView={gameEditionView} style={{ bottom: gameEditionView && '156px' }}>
-        <ErrorIcon />
+      <Content gameEditionView={gameEditionView} style={{ marginTop: 16 }}>
         <Title gameEditionView={gameEditionView}>Transaction Error!</Title>
-        <SubTitle gameEditionView={gameEditionView}>Error Message</SubTitle>
+        <ErrorIcon style={{ width: '60px', height: ' 60px' }} />
+        <SubTitle style={{ textAlign: 'start', width: '100%', marginBottom: ' 12px', marginTop: 16 }} gameEditionView={gameEditionView}>
+          Error Message
+        </SubTitle>
         <TransactionsDetails gameEditionView={gameEditionView}>
-          <Message color="red" style={{ wordBreak: 'break-all', backgroundColor: '#424242' }}>
+          <Message color="red" style={{ wordBreak: 'break-all', backgroundColor: theme(themeMode).colors.black }}>
             <RowContainer>
               <span style={{ wordBreak: 'break-all' }}>{swap.localRes}</span>
             </RowContainer>
@@ -408,10 +404,8 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
         </TransactionsDetails>
         <CustomButton
           buttonStyle={{
-            position: gameEditionView && 'absolute',
-            top: gameEditionView && '282px',
-            width: gameEditionView && '100%',
-            marginTop: !gameEditionView && '16px'
+            width: '100%',
+            marginTop: !gameEditionView && '32px',
           }}
           onClick={() => {
             onClose();
@@ -457,7 +451,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
               title="transaction details"
               containerStyle={{
                 maxHeight: '90vh',
-                maxWidth: '90vw'
+                maxWidth: '90vw',
               }}
               onClose={onClose}
             >

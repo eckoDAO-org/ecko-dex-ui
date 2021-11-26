@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { throttle, debounce } from 'throttle-debounce';
 import { FadeIn } from '../components/shared/animations';
 import TxView from '../components/swap/swap-modals/TxView';
@@ -27,8 +27,20 @@ import GradientBorder from '../shared/GradientBorder';
 
 const Container = styled(FadeIn)`
   width: 100%;
-  margin-top: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 0px`)};
-  max-width: ${({ gameEditionView }) => !gameEditionView && `500px`};
+  margin-top: 0px;
+  ${({ gameEditionView }) => {
+    if (gameEditionView) {
+      return css`
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      `;
+    } else {
+      return css`
+        max-width: 500px;
+      `;
+    }
+  }}
   margin-left: auto;
   margin-right: auto;
   overflow: auto;
@@ -37,10 +49,21 @@ const Container = styled(FadeIn)`
 const TitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  top: ${({ gameEditionView }) => gameEditionView && '10px'};
-  justify-content: ${({ gameEditionView }) => (gameEditionView ? `center` : ` space-between`)};
-  margin-bottom: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 14px`)};
+  ${({ gameEditionView }) => {
+    if (gameEditionView) {
+      return css`
+        margin-top: 16px;
+        margin-bottom: 0px;
+        justify-content: center;
+      `;
+    } else {
+      return css`
+        margin-top: 0px;
+        margin-bottom: 14px;
+        justify-content: space-between;
+      `;
+    }
+  }}
   width: 100%;
 `;
 const Title = styled.span`
@@ -54,11 +77,9 @@ const Title = styled.span`
 `;
 
 const GameEditionTokenSelectorContainer = styled.div`
-  position: absolute;
-  bottom: 75px;
   display: flex;
   flex-direction: column;
-  width: 95%;
+  width: 100%;
   height: 100%;
 `;
 
@@ -69,8 +90,6 @@ const ResultContainer = styled.div`
   padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : ` 0px`)};
   flex-flow: column;
   width: 100%;
-  /* position: ${({ gameEditionView }) => gameEditionView && 'absolute'}; */
-  margin-top: ${({ gameEditionView }) => gameEditionView && '75px'};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
     margin-bottom: 0px;
@@ -124,7 +143,7 @@ const SwapContainer = () => {
     balance: account.account.balance || '',
     coin: 'KDA',
     address: 'coin',
-    precision: 12
+    precision: 12,
   });
 
   const [toValues, setToValues] = useState({
@@ -132,7 +151,7 @@ const SwapContainer = () => {
     balance: '',
     coin: '',
     address: '',
-    precision: 0
+    precision: 0,
   });
 
   const [inputSide, setInputSide] = useState('');
@@ -168,7 +187,7 @@ const SwapContainer = () => {
                   // fromValues.amount / pact.ratio,
                   pact.computeOut(fromValues.amount),
                   toValues.precision
-                )
+                ),
               })
             );
           } else {
@@ -180,7 +199,7 @@ const SwapContainer = () => {
                   // fromValues.amount / pact.ratio,
                   pact.computeOut(fromValues.amount),
                   toValues.precision
-                ).toFixed(toValues.precision)
+                ).toFixed(toValues.precision),
               })
             );
           }
@@ -207,7 +226,7 @@ const SwapContainer = () => {
                   // toValues.amount * pact.ratio,
                   pact.computeIn(toValues.amount),
                   fromValues.precision
-                )
+                ),
               })
             );
             throttle(500, safeSetFrom(), fromValues.precision);
@@ -220,7 +239,7 @@ const SwapContainer = () => {
                   // toValues.amount * pact.ratio,
                   pact.computeIn(toValues.amount),
                   fromValues.precision
-                ).toFixed(fromValues.precision)
+                ).toFixed(fromValues.precision),
               })
             );
             debounce(500, safeSetFrom(), fromValues.precision);
@@ -237,19 +256,19 @@ const SwapContainer = () => {
       if (fromValues.amount !== '' && toValues.amount === '') {
         setToValues({
           ...toValues,
-          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision)
+          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision),
         });
       }
       if (fromValues.amount === '' && toValues.amount !== '') {
         setFromValues({
           ...fromValues,
-          amount: reduceBalance(pact.computeIn(toValues.amount), fromValues.precision)
+          amount: reduceBalance(pact.computeIn(toValues.amount), fromValues.precision),
         });
       }
       if (fromValues.amount !== '' && toValues.amount !== '') {
         setToValues({
           ...toValues,
-          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision)
+          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision),
         });
       }
     }
@@ -270,14 +289,14 @@ const SwapContainer = () => {
           let balanceFrom = getCorrectBalance(acctOfFromValues.balance);
           setFromValues((prev) => ({
             ...prev,
-            balance: balanceFrom
+            balance: balanceFrom,
           }));
         }
         if (acctOfToValues) {
           let balanceTo = getCorrectBalance(acctOfToValues.balance);
           setToValues((prev) => ({
             ...prev,
-            balance: balanceTo
+            balance: balanceTo,
           }));
         }
       }
@@ -326,12 +345,12 @@ const SwapContainer = () => {
       setNoLiquidity(true);
       setFromValues({
         ...fromValues,
-        amount: 0
+        amount: 0,
       });
     } else {
       setFromValues({
         ...fromValues,
-        amount: reduceBalance(pact.computeIn(toValues.amount), fromValues.precision)
+        amount: reduceBalance(pact.computeIn(toValues.amount), fromValues.precision),
       });
     }
   };
@@ -353,7 +372,7 @@ const SwapContainer = () => {
         balance: balance,
         coin: crypto.name,
         address: crypto.code,
-        precision: crypto.precision
+        precision: crypto.precision,
       }));
     }
     if (tokenSelectorType === 'to') {
@@ -362,7 +381,7 @@ const SwapContainer = () => {
         balance: balance,
         coin: crypto.name,
         address: crypto.code,
-        precision: crypto.precision
+        precision: crypto.precision,
       }));
     }
   };
@@ -375,7 +394,7 @@ const SwapContainer = () => {
           balance: '',
           coin: '',
           address: '',
-          precision: 0
+          precision: 0,
         });
       }
     }
@@ -386,7 +405,7 @@ const SwapContainer = () => {
           balance: '',
           coin: '',
           address: '',
-          precision: 0
+          precision: 0,
         });
       }
     }
@@ -431,7 +450,7 @@ const SwapContainer = () => {
               toToken={toValues.coin}
             />
           </GameEditionTokenSelectorContainer>
-        )
+        ),
       });
     } else {
       modalContext.openModal({
@@ -439,11 +458,7 @@ const SwapContainer = () => {
         description: '',
         containerStyle: {
           //height: "100%",
-          width: '75%'
-        },
-        onBack: () => {
-          modalContext.onBackModal();
-          setTokenSelectorType(null);
+          width: '75%',
         },
         onClose: () => {
           setTokenSelectorType(null);
@@ -460,7 +475,7 @@ const SwapContainer = () => {
             fromToken={fromValues.coin}
             toToken={toValues.coin}
           />
-        )
+        ),
       });
     }
   };
@@ -484,7 +499,24 @@ const SwapContainer = () => {
           </HeaderItem>
         )}
       </TitleContainer>
-      <FormContainer gameEditionView={gameEditionView}>
+      <FormContainer
+        gameEditionView={gameEditionView}
+        footer={
+          <SwapButtonsForm
+            setLoading={setLoading}
+            fetchingPair={fetchingPair}
+            fromValues={fromValues}
+            setFromValues={setFromValues}
+            toValues={toValues}
+            setToValues={setToValues}
+            fromNote={fromNote}
+            ratio={pact.ratio}
+            loading={loading}
+            noLiquidity={noLiquidity}
+            setShowTxModal={setShowTxModal}
+          />
+        }
+      >
         {!gameEditionView && <GradientBorder />}
         <SwapForm
           fromValues={fromValues}
@@ -509,19 +541,6 @@ const SwapContainer = () => {
             </RowContainer>
           </ResultContainer>
         )}
-        <SwapButtonsForm
-          setLoading={setLoading}
-          fetchingPair={fetchingPair}
-          fromValues={fromValues}
-          setFromValues={setFromValues}
-          toValues={toValues}
-          setToValues={setToValues}
-          fromNote={fromNote}
-          ratio={pact.ratio}
-          loading={loading}
-          noLiquidity={noLiquidity}
-          setShowTxModal={setShowTxModal}
-        />
       </FormContainer>
     </Container>
   );

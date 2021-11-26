@@ -120,7 +120,7 @@ const RightModal = ({
         width={width}
         id="right_modal"
         onUnmount={onClose}
-        dimmer="blurring"
+        dimmer=""
         style={containerStyle}
         onClose={() => {
           if (!disableBackdrop) {

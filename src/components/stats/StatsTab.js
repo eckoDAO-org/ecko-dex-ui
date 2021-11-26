@@ -51,17 +51,9 @@ export const CardContainer = styled.div`
   margin-right: auto;
   border-radius: 10px;
 
-  background-clip: ${({ gameEditionView }) => !gameEditionView && `padding-box`};
-
   opacity: 1;
-  background: ${({ gameEditionView }) => (gameEditionView ? `transparent` : `transparent`)}; // or add new style
-
-  /* &:before {
-    border-radius: inherit;
-
-  /* & > *:not(:last-child) {
-    margin-right: 32px;
-  } */
+  background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? `transparent` : backgroundContainer)}; // or add new style
+  backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
@@ -110,7 +102,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
       // }
       containerStyle={{
         maxHeight: '80vh',
-        maxWidth: 650
+        maxWidth: 650,
       }}
     >
       <PartialScrollableScrollSection>
@@ -145,7 +137,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
           <Loader
             style={{
               color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
-              fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular
+              fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
             }}
           >
             Loading..
@@ -161,7 +153,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
       backgroundNotChangebleWithTheme
       containerStyle={{
         maxHeight: '80vh',
-        padding: 0
+        padding: 0,
       }}
     >
       {!gameEditionView && (
@@ -171,7 +163,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
             marginLeft: 'auto',
             marginRight: 'auto',
             maxWidth: '1110px',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
           }}
         >
           <Tabs
@@ -200,7 +192,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
                     style={{
                       width: '100%',
                       margin: '32px 0px',
-                      borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`
+                      borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`,
                     }}
                   />
                   {/*  )} */}
@@ -216,7 +208,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
                 active
                 style={{
                   color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
-                  fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular
+                  fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
                 }}
               >
                 Loading..

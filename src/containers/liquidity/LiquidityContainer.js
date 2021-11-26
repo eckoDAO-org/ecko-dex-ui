@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { throttle, debounce } from 'throttle-debounce';
 import { PactContext } from '../../contexts/PactContext';
 import { reduceBalance, getCorrectBalance } from '../../utils/reduceBalance';
@@ -33,8 +33,21 @@ const Container = styled(FadeIn)`
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  max-width: ${({ gameEditionView }) => !gameEditionView && `500px`};
   overflow: auto;
+
+  ${({ gameEditionView }) => {
+    if (gameEditionView) {
+      return css`
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      `;
+    } else {
+      return css`
+        max-width: 500px;
+      `;
+    }
+  }}
 `;
 
 const TitleContainer = styled.div`
@@ -43,8 +56,7 @@ const TitleContainer = styled.div`
   justify-content: space-between;
   margin-bottom: 14px;
   width: 100%;
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  top: ${({ gameEditionView }) => gameEditionView && '10px'};
+  margin-top: 16px;
 `;
 
 const Title = styled.span`
@@ -74,9 +86,6 @@ const ButtonContainer = styled.div`
   justify-content: center;
   margin-top: 16px;
   width: 100%;
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  top: ${({ gameEditionView }) => gameEditionView && '280px'};
-  left: ${({ gameEditionView }) => gameEditionView && 0};
 `;
 
 const ResultContainer = styled.div`
@@ -86,7 +95,6 @@ const ResultContainer = styled.div`
   flex-flow: column;
   width: 100%;
   padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : 0)};
-  /* position: ${({ gameEditionView }) => gameEditionView && 'absolute'}; */
   margin-top: ${({ gameEditionView }) => gameEditionView && '30px'};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
@@ -119,15 +127,13 @@ const initialStateValue = {
   guard: null,
   balance: null,
   amount: '',
-  precision: 0
+  precision: 0,
 };
 
 const GameEditionTokenSelectorContainer = styled.div`
-  position: absolute;
-  bottom: 75px;
   display: flex;
   flex-direction: column;
-  width: 95%;
+  width: 100%;
   height: 100%;
 `;
 
@@ -150,7 +156,7 @@ const LiquidityContainer = (props) => {
     guard: null,
     balance: account.account.balance,
     amount: '',
-    precision: 12
+    precision: 12,
   });
 
   const [toValues, setToValues] = useState(initialStateValue);
@@ -169,7 +175,7 @@ const LiquidityContainer = (props) => {
         guard: null,
         balance: account.account.balance,
         amount: '',
-        precision: 12
+        precision: 12,
       });
       setToValues(initialStateValue);
     }
@@ -200,14 +206,14 @@ const LiquidityContainer = (props) => {
         ...prev,
         balance: balance,
         coin: crypto?.name,
-        precision: crypto.precision
+        precision: crypto.precision,
       }));
     if (by === 'to')
       return setToValues((prev) => ({
         ...prev,
         balance: balance,
         coin: crypto?.name,
-        precision: crypto.precision
+        precision: crypto.precision,
       }));
     else return null;
   };
@@ -266,14 +272,14 @@ const LiquidityContainer = (props) => {
         ...prev,
         balance: balance,
         coin: crypto?.name,
-        precision: crypto?.precision
+        precision: crypto?.precision,
       }));
     if (tokenSelectorType === 'to')
       setToValues((prev) => ({
         ...prev,
         balance: balance,
         coin: crypto?.name,
-        precision: crypto?.precision
+        precision: crypto?.precision,
       }));
   };
 
@@ -291,7 +297,7 @@ const LiquidityContainer = (props) => {
             500,
             setToValues({
               ...toValues,
-              amount: reduceBalance(fromValues.amount / pact.ratio, toValues.precision)
+              amount: reduceBalance(fromValues.amount / pact.ratio, toValues.precision),
             })
           );
         } else {
@@ -299,7 +305,7 @@ const LiquidityContainer = (props) => {
             500,
             setToValues({
               ...toValues,
-              amount: reduceBalance(fromValues.amount / pact.ratio, toValues.precision)?.toFixed(toValues.precision)
+              amount: reduceBalance(fromValues.amount / pact.ratio, toValues.precision)?.toFixed(toValues.precision),
             })
           );
         }
@@ -321,7 +327,7 @@ const LiquidityContainer = (props) => {
             500,
             setFromValues({
               ...fromValues,
-              amount: reduceBalance(toValues.amount * pact.ratio, fromValues.precision)
+              amount: reduceBalance(toValues.amount * pact.ratio, fromValues.precision),
             })
           );
         } else {
@@ -329,7 +335,7 @@ const LiquidityContainer = (props) => {
             500,
             setFromValues({
               ...fromValues,
-              amount: reduceBalance(toValues.amount * pact.ratio, fromValues.precision)?.toFixed(fromValues?.precision)
+              amount: reduceBalance(toValues.amount * pact.ratio, fromValues.precision)?.toFixed(fromValues?.precision),
             })
           );
         }
@@ -351,7 +357,7 @@ const LiquidityContainer = (props) => {
         guard: null,
         balance: null,
         amount: '',
-        precision: 0
+        precision: 0,
       });
       setToValues({
         coin: '',
@@ -359,7 +365,7 @@ const LiquidityContainer = (props) => {
         guard: null,
         balance: null,
         amount: '',
-        precision: 0
+        precision: 0,
       });
       wallet.setWalletSuccess(false);
     }
@@ -370,19 +376,19 @@ const LiquidityContainer = (props) => {
       if (fromValues.amount !== '' && toValues.amount === '') {
         setToValues({
           ...toValues,
-          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision)
+          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision),
         });
       }
       if (fromValues.amount === '' && toValues.amount !== '') {
         setFromValues({
           ...fromValues,
-          amount: reduceBalance(pact.computeIn(toValues.amount), fromValues.precision)
+          amount: reduceBalance(pact.computeIn(toValues.amount), fromValues.precision),
         });
       }
       if (fromValues.amount !== '' && toValues.amount !== '') {
         setToValues({
           ...toValues,
-          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision)
+          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision),
         });
       }
     }
@@ -395,11 +401,11 @@ const LiquidityContainer = (props) => {
       2: { msg: 'Supply', status: true },
       3: {
         msg: (token) => `Insufficient ${token} Balance`,
-        status: false
+        status: false,
       },
       4: { msg: 'Pair does not exist yet', status: false },
       5: { msg: 'Pair Already Exists', status: false },
-      6: { msg: 'Select different tokens', status: false }
+      6: { msg: 'Select different tokens', status: false },
     };
     if (!account.account.account) return status[0];
     if (selectedView === 'Create A Pair') {
@@ -470,14 +476,14 @@ const LiquidityContainer = (props) => {
           guard: null,
           balance: null,
           amount: '',
-          coin: ''
+          coin: '',
         });
         setToValues({
           account: null,
           guard: null,
           balance: null,
           amount: '',
-          coin: ''
+          coin: '',
         });
       }
     }
@@ -498,7 +504,7 @@ const LiquidityContainer = (props) => {
           balance: '',
           coin: '',
           address: '',
-          precision: 0
+          precision: 0,
         });
       }
     }
@@ -509,7 +515,7 @@ const LiquidityContainer = (props) => {
           balance: '',
           coin: '',
           address: '',
-          precision: 0
+          precision: 0,
         });
       }
     }
@@ -543,7 +549,7 @@ const LiquidityContainer = (props) => {
               toToken={toValues.coin}
             />
           </GameEditionTokenSelectorContainer>
-        )
+        ),
       });
     } else {
       modalContext.openModal({
@@ -551,11 +557,7 @@ const LiquidityContainer = (props) => {
         description: '',
         containerStyle: {
           //height: "100%",
-          width: '75%'
-        },
-        onBack: () => {
-          modalContext.onBackModal();
-          setTokenSelectorType(null);
+          width: '75%',
         },
         onClose: () => {
           setTokenSelectorType(null);
@@ -572,7 +574,7 @@ const LiquidityContainer = (props) => {
             fromToken={fromValues.coin}
             toToken={toValues.coin}
           />
-        )
+        ),
       });
     }
   };
@@ -620,7 +622,7 @@ const LiquidityContainer = (props) => {
         <Title
           gameEditionView={gameEditionView}
           style={{
-            fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.bold
+            fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.bold,
           }}
         >
           {!gameEditionView && (
@@ -629,7 +631,7 @@ const LiquidityContainer = (props) => {
                 cursor: 'pointer',
                 color: theme(themeMode).colors.white,
                 marginRight: '15px',
-                justifyContent: 'center'
+                justifyContent: 'center',
               }}
               onClick={() => props.closeLiquidity()}
             />
@@ -645,7 +647,18 @@ const LiquidityContainer = (props) => {
           </HeaderItem>
         )}
       </TitleContainer>
-      <FormContainer gameEditionView={gameEditionView}>
+      <FormContainer
+        gameEditionView={gameEditionView}
+        footer={
+          <ButtonContainer gameEditionView={gameEditionView}>
+            <Button.Group fluid>
+              <CustomButton disabled={!buttonStatus().status} onClick={() => setShowReview(true)}>
+                {buttonStatus().msg}
+              </CustomButton>
+            </Button.Group>
+          </ButtonContainer>
+        }
+      >
         {!gameEditionView && <GradientBorder />}
         <SwapForm
           fromValues={fromValues}
@@ -678,13 +691,6 @@ const LiquidityContainer = (props) => {
             </ResultContainer>
           </>
         )}
-        <ButtonContainer gameEditionView={gameEditionView}>
-          <Button.Group fluid style={{ padding: gameEditionView ? '0 10px' : 0 }}>
-            <CustomButton disabled={!buttonStatus().status} onClick={() => setShowReview(true)}>
-              {buttonStatus().msg}
-            </CustomButton>
-          </Button.Group>
-        </ButtonContainer>
       </FormContainer>
     </Container>
   );

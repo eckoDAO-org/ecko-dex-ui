@@ -52,10 +52,9 @@ export const CardContainer = styled.div`
   margin-right: auto;
   border-radius: 10px;
 
-  background-clip: ${({ gameEditionView }) => !gameEditionView && `padding-box`};
-
   opacity: 1;
-  background: ${({ gameEditionView }) => (gameEditionView ? `transparent` : `transparent`)}; // or add new style
+  background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? `transparent` : backgroundContainer)}; // or add new style
+  backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
 
   /* &:before {
     border-radius: inherit;
@@ -99,44 +98,44 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
       reqkey: '3C8-r_p-Mrp1xTseo3Isicwq6mQGpwu-sB3AMvuJtv0',
       amount: '125',
       token0: 'KDA',
-      token1: 'FLUX'
+      token1: 'FLUX',
     },
     1: {
       reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
       amount: '1000',
       token0: 'FLUX',
-      token1: 'KDA'
+      token1: 'KDA',
     },
     2: {
       reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
       amount: '1000',
       token0: 'FLUX',
-      token1: 'KDA'
+      token1: 'KDA',
     },
     3: {
       reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
       amount: '1000',
       token0: 'FLUX',
-      token1: 'KDA'
+      token1: 'KDA',
     },
     4: {
       reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
       amount: '1000',
       token0: 'FLUX',
-      token1: 'KDA'
+      token1: 'KDA',
     },
     5: {
       reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
       amount: '1000',
       token0: 'FLUX',
-      token1: 'KDA'
+      token1: 'KDA',
     },
     6: {
       reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
       amount: '1000',
       token0: 'FLUX',
-      token1: 'KDA'
-    }
+      token1: 'KDA',
+    },
   };
 
   useEffect(async () => {
@@ -154,7 +153,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
       // }
       containerStyle={{
         maxHeight: '80vh',
-        maxWidth: 650
+        maxWidth: 650,
       }}
     >
       <PartialScrollableScrollSection>
@@ -218,7 +217,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
       backgroundNotChangebleWithTheme
       containerStyle={{
         maxHeight: '80vh',
-        padding: 0
+        padding: 0,
       }}
     >
       {!gameEditionView && (
@@ -228,7 +227,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
             marginLeft: 'auto',
             marginRight: 'auto',
             maxWidth: '1110px',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
           }}
         >
           <Tabs gameEditionView={gameEditionView} active={activeTabs === 'POOL_STATS'} onClick={setActiveTabs}>
@@ -253,7 +252,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
                       style={{
                         width: '100%',
                         margin: '32px 0px',
-                        borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`
+                        borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`,
                       }}
                     />
                   )}
@@ -268,7 +267,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
                 active
                 style={{
                   color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
-                  fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular
+                  fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
                 }}
               >
                 Loading..

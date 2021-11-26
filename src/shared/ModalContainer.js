@@ -12,7 +12,7 @@ const Container = styled.div`
   padding: ${({ gameEditionView }) => (gameEditionView ? '20px' : '32px')};
   width: 100%;
   border-radius: 10px;
-  border: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `2px dashed ${colors.black}` : `1px solid transparent`)};
+  border: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `2px dashed ${colors.black}`};
   background-clip: ${({ gameEditionView }) => !gameEditionView && `padding-box`};
   opacity: 1;
   background: ${({ gameEditionView, theme: { backgroundContainer }, backgroundNotChangebleWithTheme }) =>
@@ -29,7 +29,7 @@ const HeaderContainer = styled.div`
   display: flex;
   flex-flow: row;
   justify-content: space-between;
-  margin-bottom: ${({ gameEditionView }) => !gameEditionView && '12px'};
+  /* margin-bottom: ${({ gameEditionView }) => !gameEditionView && '12px'}; */
   align-items: center;
   width: 100%;
 
@@ -72,7 +72,7 @@ const ModalContainer = ({
   onBack,
   onClose,
   withoutRainbowBackground = false,
-  backgroundNotChangebleWithTheme
+  backgroundNotChangebleWithTheme,
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
 
@@ -84,17 +84,16 @@ const ModalContainer = ({
       backgroundNotChangebleWithTheme={backgroundNotChangebleWithTheme}
     >
       {!gameEditionView && !withoutRainbowBackground && <GradientBorder />}
-      <HeaderContainer>
+      <HeaderContainer style={{ justifyContent: !onBack && !onClose && 'center' }}>
         {onBack ? (
           <ArrowBack
             style={{
-              cursor: 'pointer'
-              // color: `${theme().colors.white} 0% 0% no-repeat padding-box`,
+              cursor: 'pointer',
             }}
             onClick={onBack}
           />
         ) : (
-          <div></div>
+          <></>
         )}
 
         {title && (
@@ -107,7 +106,7 @@ const ModalContainer = ({
           <CloseIcon
             style={{
               cursor: 'pointer',
-              opacity: 1
+              opacity: 1,
             }}
             onClick={onClose}
           />
@@ -124,12 +123,12 @@ const ModalContainer = ({
 
 ModalContainer.propTypes = {
   title: PropTypes.string,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
 };
 
 ModalContainer.defaultProps = {
   title: '',
-  onClose: null
+  onClose: null,
 };
 
 export default ModalContainer;
