@@ -7,7 +7,7 @@ import theme from '../../../styles/theme';
 
 const ListContainer = styled.div`
   border-radius: 10px;
-  padding: 16px;
+  padding: 32px;
   z-index: 1;
   background: transparent;
   & > *:not(:last-child) {
@@ -40,7 +40,7 @@ const PopupContentList = ({ items, viewOtherComponents }) => {
             display: 'flex',
             alignItems: 'center',
             fontSize: 16,
-            fontFamily: theme.fontFamily.regular
+            fontFamily: theme.fontFamily.regular,
           }}
         >
           {item.label}

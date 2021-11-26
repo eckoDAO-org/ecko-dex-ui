@@ -16,7 +16,7 @@ import { LightModeContext } from '../../../contexts/LightModeContext';
 const TopText = styled.span`
   font-size: 13px;
   font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
+  text-align: left;
   position: ${({ gameEditionView }) => (gameEditionView ? 'absolute' : 'none')};
   bottom: ${({ gameEditionView }) => (gameEditionView ? '292px' : '0')};
 `;
@@ -173,7 +173,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
                   accounts.map((item, index) => ({
                     key: index,
                     text: reduceToken(item),
-                    value: item
+                    value: item,
                   }))
                 }
                 onChange={handleDropdownChange}
@@ -191,7 +191,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
                 accounts.map((item, index) => ({
                   key: index,
                   text: reduceToken(item),
-                  value: item
+                  value: item,
                 }))
               }
               onChange={handleDropdownChange}

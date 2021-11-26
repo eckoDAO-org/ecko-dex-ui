@@ -41,7 +41,7 @@ const MobileHeader = ({ className }) => {
     <Container className={className}>
       <LeftContainer>
         <HeaderItem>
-          <CustomPopup basic trigger={<HamburgerIcon />} on="click" offset={[0, 10]} position="bottom left">
+          <CustomPopup basic trigger={<HamburgerIcon />} on="click" offset={[0, 16]} position="bottom left">
             <PopupContentList items={menuItems} />
           </CustomPopup>
         </HeaderItem>

@@ -22,7 +22,7 @@ const Container = styled.div`
   padding: ${({ gameEditionView }) => !gameEditionView && '10px 10px 0px 10px'};
 
   .ui.input > input {
-    padding: ${({ gameEditionView }) => !gameEditionView && ' 10px 2px'};
+    padding: ${({ gameEditionView }) => !gameEditionView && '10px 2px'};
     font-family: ${({ gameEditionView, outGameEditionView, theme: { fontFamily } }) => {
       if (outGameEditionView) return fontFamily.regular + '!important';
       if (gameEditionView) return fontFamily.pressStartRegular + '!important';
@@ -40,7 +40,7 @@ const Container = styled.div`
     font-family: 14px;
   }
   .ui.icon.input > input {
-    padding-right: ${({ inputRightComponent, inputComponentWidth }) => (inputRightComponent ? `${inputComponentWidth + 25}px !important` : 0)};
+    padding-right: ${({ inputRightComponent, inputComponentWidth }) => (inputRightComponent ? `${inputComponentWidth + 70}px !important` : 0)};
   }
   .ui.button:hover .icon {
     opacity: 1;
@@ -145,7 +145,7 @@ const Input = ({
   type,
   maxLength,
   outGameEditionView,
-  noInputBackground
+  noInputBackground,
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
 
@@ -156,7 +156,7 @@ const Input = ({
           gameEditionView={gameEditionView}
           onClick={onSelectButtonClick}
           style={{
-            border: 'none'
+            border: 'none',
           }}
         >
           <span>
@@ -184,7 +184,7 @@ const Input = ({
             <span
               style={{
                 fontFamily: gameEditionView ? theme().fontFamily.pressStartRegular : theme().fontFamily.bold,
-                ...topLeftLabelStyle
+                ...topLeftLabelStyle,
               }}
             >
               {topLeftLabel}
@@ -196,7 +196,7 @@ const Input = ({
                 fontFamily: gameEditionView ? theme().fontFamily.pressStartRegular : theme().fontFamily.regular,
                 marginLeft: !topLeftLabel ? 'auto' : 'unset',
                 textAlign: 'end',
-                ...topRightLabelStyle
+                ...topRightLabelStyle,
               }}
             >
               {topRightLabel}
@@ -229,7 +229,7 @@ const Input = ({
                 borderRadius: '10px',
                 border: gameEditionView ? `2px dashed ${theme().colors.black}` : 'none',
                 opacity: 1,
-                backgroundColor: 'transparent'
+                backgroundColor: 'transparent',
               }
         }
       />
@@ -239,7 +239,7 @@ const Input = ({
             <span
               style={{
                 fontFamily: gameEditionView ? theme().fontFamily.pressStartRegular : theme().fontFamily.regular,
-                ...bottomLeftLabelStyle
+                ...bottomLeftLabelStyle,
               }}
             >
               {bottomLeftLabel}
@@ -250,7 +250,7 @@ const Input = ({
               style={{
                 fontFamily: gameEditionView ? theme().fontFamily.pressStartRegular : theme().fontFamily.regular,
                 marginLeft: !topLeftLabel ? 'auto' : 'unset',
-                ...bottomRightLabelStyle
+                ...bottomRightLabelStyle,
               }}
             >
               {bottomRightLabel}
@@ -271,7 +271,7 @@ Input.propTypes = {
   inputRightComponent: PropTypes.element,
   withSelectButton: PropTypes.bool,
   numberOnly: PropTypes.bool,
-  buttonLabel: PropTypes.string
+  buttonLabel: PropTypes.string,
 };
 
 Input.defaultProps = {
@@ -283,7 +283,7 @@ Input.defaultProps = {
   inputRightComponent: null,
   withSelectButton: false,
   numberOnly: false,
-  buttonLabel: 'select '
+  buttonLabel: 'select ',
 };
 
 export default Input;

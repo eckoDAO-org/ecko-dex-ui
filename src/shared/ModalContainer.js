@@ -11,6 +11,7 @@ const Container = styled.div`
   flex-flow: column;
   padding: ${({ gameEditionView }) => (gameEditionView ? '20px' : '32px')};
   width: 100%;
+  min-width: 550px;
   border-radius: 10px;
   border: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `2px dashed ${colors.black}` : `1px solid transparent`)};
   background-clip: ${({ gameEditionView }) => !gameEditionView && `padding-box`};
@@ -19,6 +20,10 @@ const Container = styled.div`
     backgroundNotChangebleWithTheme || gameEditionView ? 'transparent' : backgroundContainer};
   backdrop-filter: ${({ gameEditionView, withoutRainbowBackground }) => !gameEditionView && !withoutRainbowBackground && `blur(50px)`};
   color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.black : colors.white)};
+
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    min-width: 50px;
+  }
 
   ::-webkit-scrollbar {
     display: none;
@@ -57,9 +62,7 @@ const Title = styled.span`
 const Description = styled.span`
   font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
   font-size: 16px;
-  margin-bottom: 24px;
-
-  margin-top: 12px;
+  margin: 24px 0px;
 `;
 
 const ModalContainer = ({
@@ -72,7 +75,7 @@ const ModalContainer = ({
   onBack,
   onClose,
   withoutRainbowBackground = false,
-  backgroundNotChangebleWithTheme
+  backgroundNotChangebleWithTheme,
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
 
@@ -88,7 +91,7 @@ const ModalContainer = ({
         {onBack ? (
           <ArrowBack
             style={{
-              cursor: 'pointer'
+              cursor: 'pointer',
               // color: `${theme().colors.white} 0% 0% no-repeat padding-box`,
             }}
             onClick={onBack}
@@ -107,7 +110,7 @@ const ModalContainer = ({
           <CloseIcon
             style={{
               cursor: 'pointer',
-              opacity: 1
+              opacity: 1,
             }}
             onClick={onClose}
           />
@@ -124,12 +127,12 @@ const ModalContainer = ({
 
 ModalContainer.propTypes = {
   title: PropTypes.string,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
 };
 
 ModalContainer.defaultProps = {
   title: '',
-  onClose: null
+  onClose: null,
 };
 
 export default ModalContainer;

@@ -183,7 +183,7 @@ const RightHeaderItems = () => {
             </div>
           }
           on="click"
-          offset={[0, 10]}
+          offset={[0, -14]}
           position="bottom right"
         >
           <PopupContentList items={headerLinks} viewOtherComponents />

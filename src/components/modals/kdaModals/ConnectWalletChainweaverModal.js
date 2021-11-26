@@ -13,7 +13,7 @@ import { theme } from '../../../styles/theme';
 const Text = styled.span`
   font-size: 13px;
   font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
+  text-align: left;
 `;
 
 const ActionContainer = styled.div`
@@ -96,7 +96,7 @@ const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
         <Button.Group fluid>
           <CustomButton
             border="none"
-            color={`${theme(themeMode).colors.white} !important`}
+            color={theme(themeMode).colors.white}
             background="transparent"
             onClick={() => {
               resetValues();

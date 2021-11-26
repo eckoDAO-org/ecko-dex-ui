@@ -23,12 +23,13 @@ const Item = styled(NavLink)`
   .underline {
     width: ${({ isHover }) => (isHover ? '100%' : 0)};
     transition: width 0.3s;
-    background: #fff;
+    background: ${({ theme: { colors } }) => colors.white};
     height: 3px;
   }
 
   &:hover {
-    color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? 'none' : colors.white)};
+    font-family: ${({ theme: { fontFamily }, gameEditionView }) => !gameEditionView && `${fontFamily.bold} !important`};
+    color: ${({ theme: { colors }, gameEditionView }) => !gameEditionView && colors.white};
 
     /* text-shadow: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? 'none' : `0 0 5px ${colors.white}`)}; */
     cursor: pointer;

@@ -439,12 +439,8 @@ const SwapContainer = () => {
         title: 'select a token',
         description: '',
         containerStyle: {
-          //height: "100%",
+          minWidth: '0px',
           width: '75%',
-        },
-        onBack: () => {
-          modalContext.onBackModal();
-          setTokenSelectorType(null);
         },
         onClose: () => {
           setTokenSelectorType(null);
