@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { throttle, debounce } from 'throttle-debounce';
 import { FadeIn } from '../components/shared/animations';
 import TxView from '../components/swap/swap-modals/TxView';
@@ -27,8 +27,20 @@ import GradientBorder from '../shared/GradientBorder';
 
 const Container = styled(FadeIn)`
   width: 100%;
-  margin-top: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 0px`)};
-  max-width: ${({ gameEditionView }) => !gameEditionView && `500px`};
+  margin-top: 0px;
+  ${({ gameEditionView }) => {
+    if (gameEditionView) {
+      return css`
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      `;
+    } else {
+      return css`
+        max-width: 500px;
+      `;
+    }
+  }}
   margin-left: auto;
   margin-right: auto;
   overflow: auto;
@@ -37,10 +49,21 @@ const Container = styled(FadeIn)`
 const TitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  top: ${({ gameEditionView }) => gameEditionView && '10px'};
-  justify-content: ${({ gameEditionView }) => (gameEditionView ? `center` : ` space-between`)};
-  margin-bottom: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 14px`)};
+  ${({ gameEditionView }) => {
+    if (gameEditionView) {
+      return css`
+        margin-top: 16px;
+        margin-bottom: 0px;
+        justify-content: center;
+      `;
+    } else {
+      return css`
+        margin-top: 0px;
+        margin-bottom: 14px;
+        justify-content: space-between;
+      `;
+    }
+  }}
   width: 100%;
 `;
 const Title = styled.span`
@@ -54,11 +77,9 @@ const Title = styled.span`
 `;
 
 const GameEditionTokenSelectorContainer = styled.div`
-  position: absolute;
-  bottom: 75px;
   display: flex;
   flex-direction: column;
-  width: 95%;
+  width: 100%;
   height: 100%;
 `;
 
@@ -69,8 +90,6 @@ const ResultContainer = styled.div`
   padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : ` 0px`)};
   flex-flow: column;
   width: 100%;
-  /* position: ${({ gameEditionView }) => gameEditionView && 'absolute'}; */
-  margin-top: ${({ gameEditionView }) => gameEditionView && '75px'};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
     margin-bottom: 0px;
@@ -484,7 +503,24 @@ const SwapContainer = () => {
           </HeaderItem>
         )}
       </TitleContainer>
-      <FormContainer gameEditionView={gameEditionView}>
+      <FormContainer
+        gameEditionView={gameEditionView}
+        footer={
+          <SwapButtonsForm
+            setLoading={setLoading}
+            fetchingPair={fetchingPair}
+            fromValues={fromValues}
+            setFromValues={setFromValues}
+            toValues={toValues}
+            setToValues={setToValues}
+            fromNote={fromNote}
+            ratio={pact.ratio}
+            loading={loading}
+            noLiquidity={noLiquidity}
+            setShowTxModal={setShowTxModal}
+          />
+        }
+      >
         {!gameEditionView && <GradientBorder />}
         <SwapForm
           fromValues={fromValues}
@@ -509,19 +545,6 @@ const SwapContainer = () => {
             </RowContainer>
           </ResultContainer>
         )}
-        <SwapButtonsForm
-          setLoading={setLoading}
-          fetchingPair={fetchingPair}
-          fromValues={fromValues}
-          setFromValues={setFromValues}
-          toValues={toValues}
-          setToValues={setToValues}
-          fromNote={fromNote}
-          ratio={pact.ratio}
-          loading={loading}
-          noLiquidity={noLiquidity}
-          setShowTxModal={setShowTxModal}
-        />
       </FormContainer>
     </Container>
   );

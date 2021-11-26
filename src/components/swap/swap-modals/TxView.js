@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { Transition } from 'react-spring/renderprops';
 import { Message, Icon, Divider } from 'semantic-ui-react';
 import { ErrorIcon, SuccessfullIcon } from '../../../assets';
@@ -20,13 +20,18 @@ import { theme } from '../../../styles/theme';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 
 const Container = styled.div`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
   margin-left: auto;
   margin-right: auto;
+  ${({ gameEditionView }) =>
+    !gameEditionView &&
+    css`
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    `}
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -51,11 +56,9 @@ const Content = styled.div`
       fill: ${({ theme: { colors } }) => colors.white};
     }
   }
-  width: ${({ gameEditionView }) => (gameEditionView ? '97%' : '100%')};
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  bottom: ${({ gameEditionView }) => gameEditionView && '66px'};
-  padding: ${({ gameEditionView }) => gameEditionView && '4px'};
-
+  justify-content: space-between;
+  width: 100%;
+  height: ${({ gameEditionView }) => gameEditionView && '100%'};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
     svg {
       width: 40px;
@@ -67,7 +70,7 @@ const Content = styled.div`
 const Title = styled.div`
   font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
   font-size: 16px;
-  padding: ${({ gameEditionView }) => (gameEditionView ? '20px 0px' : '16px')};
+  padding: ${({ gameEditionView }) => (gameEditionView ? '0px' : '16px')};
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
     padding: ${({ gameEditionView }) => (gameEditionView ? '20px 0px' : '8px')};
@@ -89,7 +92,6 @@ const TransactionsDetails = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: ${({ gameEditionView }) => gameEditionView && '12px'}; ;
 `;
 
 const SpaceBetweenRow = styled.div`
@@ -207,8 +209,6 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
         <CustomButton
           buttonStyle={{
             width: '100%',
-            position: gameEditionView && 'absolute',
-            top: gameEditionView && '325px',
             marginTop: !gameEditionView && '16px'
           }}
           onClick={async () => {
@@ -272,8 +272,6 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
         <CustomButton
           buttonStyle={{
             width: '100%',
-            position: gameEditionView && 'absolute',
-            top: gameEditionView && 316,
             marginTop: !gameEditionView && '16px'
           }}
           onClick={async () => {
@@ -334,8 +332,6 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
         <CustomButton
           buttonStyle={{
             width: '100%',
-            position: gameEditionView && 'absolute',
-            top: gameEditionView && 316,
             marginTop: !gameEditionView && '16px'
           }}
           onClick={async () => {
@@ -381,8 +377,6 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
             onClose();
           }}
           buttonStyle={{
-            position: gameEditionView && 'absolute',
-            top: gameEditionView && '282px',
             width: gameEditionView && '100%',
             marginTop: !gameEditionView && '16px'
           }}
@@ -408,8 +402,6 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
         </TransactionsDetails>
         <CustomButton
           buttonStyle={{
-            position: gameEditionView && 'absolute',
-            top: gameEditionView && '282px',
             width: gameEditionView && '100%',
             marginTop: !gameEditionView && '16px'
           }}
