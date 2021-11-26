@@ -84,12 +84,11 @@ const ModalContainer = ({
       backgroundNotChangebleWithTheme={backgroundNotChangebleWithTheme}
     >
       {!gameEditionView && !withoutRainbowBackground && <GradientBorder />}
-      <HeaderContainer>
+      <HeaderContainer style={{ justifyContent: !onBack && !onClose && 'center' }}>
         {onBack ? (
           <ArrowBack
             style={{
               cursor: 'pointer',
-              // color: `${theme().colors.white} 0% 0% no-repeat padding-box`,
             }}
             onClick={onBack}
           />

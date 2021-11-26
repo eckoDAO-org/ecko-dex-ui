@@ -164,7 +164,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
             style={{
               width: '100%',
               marginTop: 0,
-              borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid ${theme(themeMode).colors.white}`
+              borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid ${theme(themeMode).colors.white}`,
             }}
           />
 
@@ -209,7 +209,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
         <CustomButton
           buttonStyle={{
             width: '100%',
-            marginTop: !gameEditionView && '16px'
+            marginTop: !gameEditionView && '16px',
           }}
           onClick={async () => {
             setLoading(true);
@@ -272,7 +272,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
         <CustomButton
           buttonStyle={{
             width: '100%',
-            marginTop: !gameEditionView && '16px'
+            marginTop: !gameEditionView && '16px',
           }}
           onClick={async () => {
             setLoading(true);
@@ -290,7 +290,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
 
   const successAddView = () => {
     return (
-      <Content gameEditionView={gameEditionView} style={{ bottom: '128px' }}>
+      <Content gameEditionView={gameEditionView}>
         <Title gameEditionView={gameEditionView}>Preview Successful!</Title>
         <SuccessfullIcon />
         <TransactionsDetails gameEditionView={gameEditionView}>
@@ -332,7 +332,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
         <CustomButton
           buttonStyle={{
             width: '100%',
-            marginTop: !gameEditionView && '16px'
+            marginTop: !gameEditionView && '16px',
           }}
           onClick={async () => {
             setLoading(true);
@@ -361,7 +361,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
         <Title gameEditionView={gameEditionView}>Preview Failed!</Title>
         <SubTitle gameEditionView={gameEditionView}>Error Message</SubTitle>
         <TransactionsDetails gameEditionView={gameEditionView}>
-          <Message color="red" style={{ wordBreak: 'break-all', backgroundColor: '#424242' }}>
+          <Message color="red" style={{ wordBreak: 'break-all', backgroundColor: theme(themeMode).colors.black }}>
             <RowContainer>
               <span style={{ wordBreak: 'break-all' }}>{swap.localRes.result.error.message}</span>
             </RowContainer>
@@ -378,7 +378,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
           }}
           buttonStyle={{
             width: gameEditionView && '100%',
-            marginTop: !gameEditionView && '16px'
+            marginTop: !gameEditionView && '16px',
           }}
         >
           Retry
@@ -389,12 +389,14 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
 
   const localError = () => {
     return (
-      <Content gameEditionView={gameEditionView} style={{ bottom: gameEditionView && '156px' }}>
-        <ErrorIcon />
+      <Content gameEditionView={gameEditionView} style={{ marginTop: 16 }}>
         <Title gameEditionView={gameEditionView}>Transaction Error!</Title>
-        <SubTitle gameEditionView={gameEditionView}>Error Message</SubTitle>
+        <ErrorIcon style={{ width: '60px', height: ' 60px' }} />
+        <SubTitle style={{ textAlign: 'start', width: '100%', marginBottom: ' 12px', marginTop: 16 }} gameEditionView={gameEditionView}>
+          Error Message
+        </SubTitle>
         <TransactionsDetails gameEditionView={gameEditionView}>
-          <Message color="red" style={{ wordBreak: 'break-all', backgroundColor: '#424242' }}>
+          <Message color="red" style={{ wordBreak: 'break-all', backgroundColor: theme(themeMode).colors.black }}>
             <RowContainer>
               <span style={{ wordBreak: 'break-all' }}>{swap.localRes}</span>
             </RowContainer>
@@ -402,8 +404,8 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
         </TransactionsDetails>
         <CustomButton
           buttonStyle={{
-            width: gameEditionView && '100%',
-            marginTop: !gameEditionView && '16px'
+            width: '100%',
+            marginTop: !gameEditionView && '32px',
           }}
           onClick={() => {
             onClose();
@@ -449,7 +451,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
               title="transaction details"
               containerStyle={{
                 maxHeight: '90vh',
-                maxWidth: '90vw'
+                maxWidth: '90vw',
               }}
               onClose={onClose}
             >
