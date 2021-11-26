@@ -51,11 +51,11 @@ const FadeContainer = styled.div``;
 
 const AccountIdContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
   font-family: ${({ gameEditionView, theme: { fontFamily } }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
   & > span:first-child {
     font-family: ${({ gameEditionView, theme: { fontFamily } }) => !gameEditionView && fontFamily.bold};
+    margin-right: 10px;
   }
 `;
 
@@ -95,7 +95,7 @@ const RightHeaderItems = () => {
                   ) : (
                     'Connect a wallet using one of the methods below'
                   ),
-                  content: <ConnectWalletModal />
+                  content: <ConnectWalletModal />,
                 });
               } else {
                 modalContext.openModal({
@@ -110,7 +110,7 @@ const RightHeaderItems = () => {
                   ) : (
                     'Connect a wallet using one of the methods below'
                   ),
-                  content: <ConnectWalletModal />
+                  content: <ConnectWalletModal />,
                 });
               }
             }}
@@ -134,13 +134,13 @@ const RightHeaderItems = () => {
                     isVisible: true,
                     title: account?.account ? 'wallet connected' : 'connect wallet',
                     description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
-                    content: <ConnectWalletModal />
+                    content: <ConnectWalletModal />,
                   });
                 } else {
                   return modalContext.openModal({
                     title: account?.account ? 'wallet connected' : 'connect wallet',
                     description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
-                    content: <ConnectWalletModal />
+                    content: <ConnectWalletModal />,
                   });
                 }
               }}
@@ -172,7 +172,7 @@ const RightHeaderItems = () => {
                   buttonStyle={{ width: '100%' }}
                   outGameEditionView
                 />
-              )
+              ),
             });
           }}
         />
