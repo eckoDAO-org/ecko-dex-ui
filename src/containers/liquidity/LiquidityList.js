@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useContext, useState } from 'react';
 import styled from 'styled-components/macro';
 import { Loader, Button, Header, Divider } from 'semantic-ui-react';
@@ -136,7 +137,7 @@ const LiquidityList = (props) => {
           overflow: 'auto',
           border: 'none',
           boxShadow: 'none',
-          background: 'none'
+          background: 'none',
         }}
       >
         {gameEditionView && (
@@ -149,13 +150,13 @@ const LiquidityList = (props) => {
           style={{
             marginBottom: gameEditionView ? 15 : 30,
             background: 'transparent',
-            textAlign: 'left'
+            textAlign: 'left',
           }}
         >
           <h1
             style={{
               fontSize: gameEditionView ? 16 : 24,
-              fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.bold
+              fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.bold,
             }}
           >
             Liquidity provider rewards
@@ -163,7 +164,7 @@ const LiquidityList = (props) => {
           <p
             style={{
               fontSize: gameEditionView ? 12 : 16,
-              fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular
+              fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
             }}
           >
             Liquidity providers earn a 0.3% fee on all trades proportional to their share of the pool.
@@ -179,7 +180,7 @@ const LiquidityList = (props) => {
                   fontSize: gameEditionView ? 16 : 32,
                   textAlign: 'left ',
                   color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
-                  fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.bold
+                  fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.bold,
                 }}
               >
                 Your Liquidity
@@ -191,7 +192,7 @@ const LiquidityList = (props) => {
                     buttonStyle={{
                       marginRight: '15px',
                       borderRadius: '20px',
-                      width: '48%'
+                      width: '48%',
                     }}
                     onClick={() => props.selectCreatePair()}
                   >
@@ -201,7 +202,7 @@ const LiquidityList = (props) => {
                     buttonStyle={{
                       marginLeft: '-5px',
                       borderRadius: '20px',
-                      width: '48%'
+                      width: '48%',
                     }}
                     onClick={() => props.selectAddLiquidity()}
                   >
@@ -236,7 +237,7 @@ const LiquidityList = (props) => {
                             margin: '32px 0px',
                             borderTop: gameEditionView
                               ? `1px dashed ${theme(themeMode).colors.black}`
-                              : `1px solid  ${theme(themeMode).colors.white}99`
+                              : `1px solid  ${theme(themeMode).colors.white}99`,
                           }}
                         />
                         {/* )} */}
@@ -263,7 +264,7 @@ const LiquidityList = (props) => {
                     inline="centered"
                     style={{
                       color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
-                      fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular
+                      fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
                     }}
                   >
                     Loading..
@@ -279,7 +280,7 @@ const LiquidityList = (props) => {
             gameEditionView={gameEditionView}
             style={{
               width: gameEditionView && '93%',
-              justifyContent: !gameEditionView && 'start'
+              justifyContent: !gameEditionView && 'start',
             }}
           >
             <Button.Group fluid={gameEditionView}>
@@ -288,7 +289,7 @@ const LiquidityList = (props) => {
                 buttonStyle={{
                   padding: !gameEditionView && '10px 16px',
                   width: !gameEditionView && '214px',
-                  height: !gameEditionView && '40px'
+                  height: !gameEditionView && '40px',
                 }}
                 fontSize={14}
                 onClick={() => {
@@ -299,7 +300,7 @@ const LiquidityList = (props) => {
                       description: account?.account
                         ? `Account ID: ${reduceToken(account.account)}`
                         : 'Connect a wallet using one of the methods below',
-                      content: <ConnectWalletModal />
+                      content: <ConnectWalletModal />,
                     });
                   } else {
                     modalContext.openModal({
@@ -307,7 +308,7 @@ const LiquidityList = (props) => {
                       description: account?.account
                         ? `Account ID: ${reduceToken(account.account)}`
                         : 'Connect a wallet using one of the methods below',
-                      content: <ConnectWalletModal />
+                      content: <ConnectWalletModal />,
                     });
                   }
                 }}

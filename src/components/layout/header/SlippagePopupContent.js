@@ -1,8 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { PactContext } from '../../../contexts/PactContext';
 import Input from '../../../shared/Input';
-import ThemeToggle from '../../../styles/lightmode/ThemeToggle';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 import { theme } from '../../../styles/theme';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
@@ -79,7 +79,7 @@ const Row = styled.div`
 const SlippagePopupContent = () => {
   const pact = useContext(PactContext);
   const { gameEditionView } = useContext(GameEditionContext);
-  const { themeMode, themeToggler } = useContext(LightModeContext);
+  const { themeMode } = useContext(LightModeContext);
   const [slp, setSlp] = useState(pact.slippage * 100);
   const [tl, setTl] = useState(pact.ttl * 60);
   useEffect(() => {
@@ -94,9 +94,6 @@ const SlippagePopupContent = () => {
       {!gameEditionView && (
         <Row style={{ marginTop: 16 }}>
           <LightModeToggle />
-          {/* <RegularLabel style={{ marginRight: 8 }}>Light Mode</RegularLabel>
-
-          <ThemeToggle theme={themeMode} onClick={() => themeToggler()} /> */}
         </Row>
       )}
 
@@ -120,7 +117,7 @@ const SlippagePopupContent = () => {
             containerStyle={{
               border: 'none ',
               boxShadow: 'none !important',
-              padding: '0px'
+              padding: '0px',
             }}
             placeholder={slp}
             numberOnly
@@ -144,7 +141,7 @@ const SlippagePopupContent = () => {
             containerStyle={{
               border: 'none',
               boxShadow: 'none !important',
-              padding: '0px'
+              padding: '0px',
             }}
             placeholder={tl}
             numberOnly

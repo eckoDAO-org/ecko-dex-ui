@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
-import { Dimmer, Divider, Input, Loader } from 'semantic-ui-react';
+import { Divider, Loader } from 'semantic-ui-react';
 import styled from 'styled-components';
 import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
@@ -77,12 +78,6 @@ export const CardContainer = styled.div`
   } */
 `;
 
-const TitleTabs = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
 const Tabs = styled(Title)`
   opacity: ${({ active }) => (active ? '1' : '0.4')};
   cursor: pointer;
@@ -110,7 +105,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
       // }
       containerStyle={{
         maxHeight: '80vh',
-        maxWidth: 650
+        maxWidth: 650,
       }}
     >
       <PartialScrollableScrollSection>
@@ -145,7 +140,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
           <Loader
             style={{
               color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
-              fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular
+              fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
             }}
           >
             Loading..
@@ -161,7 +156,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
       backgroundNotChangebleWithTheme
       containerStyle={{
         maxHeight: '80vh',
-        padding: 0
+        padding: 0,
       }}
     >
       {!gameEditionView && (
@@ -171,7 +166,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
             marginLeft: 'auto',
             marginRight: 'auto',
             maxWidth: '1110px',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
           }}
         >
           <Tabs
@@ -200,7 +195,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
                     style={{
                       width: '100%',
                       margin: '32px 0px',
-                      borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`
+                      borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`,
                     }}
                   />
                   {/*  )} */}
@@ -216,7 +211,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
                 active
                 style={{
                   color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
-                  fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular
+                  fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
                 }}
               >
                 Loading..

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { Transition } from 'react-spring/renderprops';
@@ -81,7 +82,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
               <SubTitle
                 gameEditionView={gameEditionView}
                 style={{
-                  color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white
+                  color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
                 }}
               >
                 {error.content}
@@ -100,7 +101,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
             <SubTitle
               gameEditionView={gameEditionView}
               style={{
-                color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white
+                color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
               }}
             >
               Follow instructions in the wallet to preview and sign your transaction.
@@ -110,7 +111,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
                 active
                 inline="centered"
                 style={{
-                  color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white
+                  color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
                 }}
               ></Loader>
             </LoaderContainer>
@@ -129,7 +130,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
                 title={error.title}
                 containerStyle={{
                   maxHeight: '80vh',
-                  maxWidth: '90vw'
+                  maxWidth: '90vw',
                 }}
                 onClose={onClose}
               >
@@ -150,7 +151,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
                 title="Please Sign"
                 containerStyle={{
                   maxHeight: '80vh',
-                  maxWidth: '90vw'
+                  maxWidth: '90vw',
                 }} /* onClose={onClose} */
               >
                 <Content>

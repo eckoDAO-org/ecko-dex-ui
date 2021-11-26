@@ -75,12 +75,6 @@ const FlexEndRow = styled.div`
   justify-content: flex-end;
 `;
 
-const SubTitleContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
 const SubTitle = styled.div`
   font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '14px' : '13px')};
@@ -126,7 +120,7 @@ const ReviewTxModal = ({ show, onClose, fromValues, toValues, loading, supply, l
             <SubTitle
               style={{
                 margin: '16px 0',
-                justifyContent: 'center'
+                justifyContent: 'center',
               }}
               gameEditionView={gameEditionView}
             >
@@ -193,7 +187,7 @@ const ReviewTxModal = ({ show, onClose, fromValues, toValues, loading, supply, l
             buttonStyle={{
               width: '100%',
               position: 'absolute',
-              bottom: '-130px'
+              bottom: '-130px',
             }}
             loading={loading}
             onClick={supply}

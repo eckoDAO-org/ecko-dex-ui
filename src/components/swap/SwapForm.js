@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import ButtonDivider from '../../shared/ButtonDivider';
 import Input from '../../shared/Input';
 import InputToken from '../../shared/InputToken';
-import { SwapArrowsIcon, SwapIcon } from '../../assets';
+import { SwapIcon } from '../../assets';
 import { limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
 import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
@@ -13,8 +12,7 @@ const Container = styled.div`
   display: flex;
   flex-flow: column;
   width: 100%;
-  /* position: ${({ gameEditionView }) => gameEditionView && 'absolute !important'};
-  bottom: ${({ gameEditionView }) => gameEditionView && '50px !important'}; */
+
   svg {
     path {
       fill: ${({ theme: { colors } }) => colors.white};
@@ -45,7 +43,7 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
                 setInputSide('from');
                 setFromValues((prev) => ({
                   ...prev,
-                  amount: reduceBalance(fromValues.balance)
+                  amount: reduceBalance(fromValues.balance),
                 }));
               }}
               disabledButton={toValues.amount === toValues.balance}
@@ -62,7 +60,7 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
           setInputSide('from');
           setFromValues((prev) => ({
             ...prev,
-            amount: limitDecimalPlaces(value, fromValues.precision)
+            amount: limitDecimalPlaces(value, fromValues.precision),
           }));
         }}
       />
@@ -88,7 +86,7 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
                 setInputSide('to');
                 setToValues((prev) => ({
                   ...prev,
-                  amount: toValues.balance
+                  amount: toValues.balance,
                 }));
               }}
               disabledButton={fromValues.amount === fromValues.balance}
@@ -105,7 +103,7 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
           setInputSide('to');
           setToValues((prev) => ({
             ...prev,
-            amount: limitDecimalPlaces(value, toValues.precision)
+            amount: limitDecimalPlaces(value, toValues.precision),
           }));
         }}
       />

@@ -4,7 +4,7 @@ import HeaderItem from '../../../shared/HeaderItem';
 import AccountInfo from './AccountInfo';
 import Button from '../../../shared/CustomButton';
 import CustomPopup from '../../../shared/CustomPopup';
-import { PowerIcon, CogIcon, AboutBigIcon, ThreeDotsIcon } from '../../../assets';
+import { PowerIcon, CogIcon, ThreeDotsIcon } from '../../../assets';
 import headerLinks from '../../headerLinks';
 import PopupContentList from './PopupContentList';
 import { AccountContext } from '../../../contexts/AccountContext';
@@ -16,7 +16,6 @@ import ConnectWalletModal from '../../modals/kdaModals/ConnectWalletModal';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import BellNotification from '../../right-modal-notification/BellNotification';
 import { RightModalContext } from '../../../contexts/RightModalContext';
-import RightModalContent from '../../right-modal-notification/RightModalContent';
 import { NotificationContext } from '../../../contexts/NotificationContext';
 import CopyPopup from '../../../shared/CopyPopup';
 import { NotificationModalContext } from '../../../contexts/NotificationModalContext';
@@ -60,22 +59,12 @@ const AccountIdContainer = styled.div`
   }
 `;
 
-// const Label = styled.span`
-//   font-size: 13px;
-//   font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
-//   text-transform: capitalize;
-//   padding: 10px 16px;
-//   color: white;
-//   font-size: 16;
-// `;
-
 const RightHeaderItems = () => {
   const { account, logout } = useContext(AccountContext);
   const modalContext = useContext(ModalContext);
   const { gameEditionView, openModal } = useContext(GameEditionContext);
   const notificationModalContext = useContext(NotificationModalContext);
   const notification = useContext(NotificationContext);
-  const rightModal = useContext(RightModalContext);
 
   return (
     <RightContainerHeader>
@@ -162,9 +151,6 @@ const RightHeaderItems = () => {
           hasNotification={notification.notificationList?.some((notif) => notif.isReaded === false)}
           onClick={() => {
             notificationModalContext.openModal({
-              title: 'Notifications',
-              dimmer: false,
-              content: <RightModalContent />,
               footer: (
                 <Button
                   onClick={() => {
@@ -188,8 +174,18 @@ const RightHeaderItems = () => {
         </HeaderItem>
       )}
 
-      <HeaderItem headerItemStyle={{ padding: '14px 0', display: 'flex' }}>
-        <CustomPopup basic trigger={<ThreeDotsIcon />} on="click" offset={[0, 10]} position="bottom right">
+      <HeaderItem headerItemStyle={{ height: '100%' }}>
+        <CustomPopup
+          basic
+          trigger={
+            <div style={{ height: '100%' }}>
+              <ThreeDotsIcon style={{ height: '100%' }} />
+            </div>
+          }
+          on="click"
+          offset={[0, 10]}
+          position="bottom right"
+        >
           <PopupContentList items={headerLinks} viewOtherComponents />
         </CustomPopup>
       </HeaderItem>
