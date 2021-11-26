@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import Input from '../../shared/Input';
 import InputToken from '../../shared/InputToken';
@@ -22,6 +22,8 @@ const Container = styled.div`
 
 const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, toNote, setTokenSelectorType, setInputSide, swapValues }) => {
   const { gameEditionView } = useContext(GameEditionContext);
+  const [rotation, setRotation] = useState(0);
+
   return (
     <Container>
       <Input
@@ -66,7 +68,14 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
       />
       {gameEditionView ? null : (
         <Divider horizontal style={{ zIndex: 1 }}>
-          <SwapIcon style={{ cursor: 'pointer' }} onClick={swapValues} />
+          <SwapIcon
+            id="swap-button"
+            style={{ cursor: 'pointer', transform: `rotate(${rotation}deg)`, transition: 'width 0.3s, transform 0.3s' }}
+            onClick={() => {
+              swapValues();
+              setRotation((prev) => prev + 180);
+            }}
+          />
         </Divider>
       )}
       <Input
