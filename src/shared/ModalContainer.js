@@ -29,7 +29,7 @@ const HeaderContainer = styled.div`
   display: flex;
   flex-flow: row;
   justify-content: space-between;
-  margin-bottom: ${({ gameEditionView }) => !gameEditionView && '12px'};
+  /* margin-bottom: ${({ gameEditionView }) => !gameEditionView && '12px'}; */
   align-items: center;
   width: 100%;
 

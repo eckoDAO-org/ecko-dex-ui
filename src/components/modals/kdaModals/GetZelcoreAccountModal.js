@@ -16,50 +16,43 @@ import { LightModeContext } from '../../../contexts/LightModeContext';
 const TopText = styled.span`
   font-size: 13px;
   font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
-  position: ${({ gameEditionView }) => (gameEditionView ? 'absolute' : 'none')};
-  bottom: ${({ gameEditionView }) => (gameEditionView ? '292px' : '0')};
+  text-align: left;
 `;
 
 const BottomText = styled.span`
   font-size: 13px;
   font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
-  position: ${({ gameEditionView }) => (gameEditionView ? 'absolute' : 'none')};
-  top: ${({ gameEditionView }) => (gameEditionView ? '-48px' : '0')};
+  text-align: left;
+  margin-bottom: 16px;
 `;
 
 const ActionContainer = styled.div`
   display: flex;
-  flex-flow: row;
   align-items: center;
-  justify-content: space-around;
-  margin-top: 32px;
-  width: ${({ gameEditionView }) => gameEditionView && '97%'};
-  position: ${({ gameEditionView }) => (gameEditionView ? 'absolute' : 'none')};
-  top: ${({ gameEditionView }) => (gameEditionView ? '188px' : '0')};
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+`;
+
+const ZelcoreModalContent = styled.div`
+  display: flex;
+  flex-flow: column;
+  height: 100%;
 `;
 
 const DropdownContainer = styled.div`
   .ui.selection.dropdown {
     background: transparent;
     border: 2px dashed ${({ theme: { colors } }) => colors.black};
-    position: absolute;
-    width: 97%;
-    top: -22px;
   }
 
   .ui.selection.dropdown .menu {
     margin-top: 10px !important;
     background: transparent;
     border: 2px dashed ${({ theme: { colors } }) => colors.black};
-
-    @media (min-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-      max-height: 13em;
-    }
-
+    max-height: fit-content;
     @media (min-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
-      max-height: 11em;
+      max-height: 8em;
     }
   }
 
@@ -149,6 +142,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
               <Loader active inline="centered" style={{ color: theme(themeMode).colors.white }}></Loader>
             ) : (
               <CustomButton
+                buttonStyle={{ width: gameEditionView && '100%' }}
                 onClick={() => {
                   getAccountsFromWallet();
                 }}
@@ -159,7 +153,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
           </ActionContainer>
         </>
       ) : (
-        <>
+        <ZelcoreModalContent>
           <BottomText gameEditionView={gameEditionView}>Choose Public Key you intend to use</BottomText>
           {gameEditionView ? (
             <DropdownContainer>
@@ -217,7 +211,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
               </CustomButton>
             </Button.Group>
           </ActionContainer>
-        </>
+        </ZelcoreModalContent>
       )}
     </>
   );

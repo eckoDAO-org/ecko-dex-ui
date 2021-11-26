@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { throttle, debounce } from 'throttle-debounce';
 import { PactContext } from '../../contexts/PactContext';
 import { reduceBalance, getCorrectBalance } from '../../utils/reduceBalance';
@@ -33,8 +33,21 @@ const Container = styled(FadeIn)`
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  max-width: ${({ gameEditionView }) => !gameEditionView && `500px`};
   overflow: auto;
+
+  ${({ gameEditionView }) => {
+    if (gameEditionView) {
+      return css`
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      `;
+    } else {
+      return css`
+        max-width: 500px;
+      `;
+    }
+  }}
 `;
 
 const TitleContainer = styled.div`
@@ -43,8 +56,7 @@ const TitleContainer = styled.div`
   justify-content: space-between;
   margin-bottom: 14px;
   width: 100%;
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  top: ${({ gameEditionView }) => gameEditionView && '10px'};
+  margin-top: 16px;
 `;
 
 const Title = styled.span`
@@ -74,9 +86,6 @@ const ButtonContainer = styled.div`
   justify-content: center;
   margin-top: 16px;
   width: 100%;
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  top: ${({ gameEditionView }) => gameEditionView && '280px'};
-  left: ${({ gameEditionView }) => gameEditionView && 0};
 `;
 
 const ResultContainer = styled.div`
@@ -86,7 +95,6 @@ const ResultContainer = styled.div`
   flex-flow: column;
   width: 100%;
   padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : 0)};
-  /* position: ${({ gameEditionView }) => gameEditionView && 'absolute'}; */
   margin-top: ${({ gameEditionView }) => gameEditionView && '30px'};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
@@ -123,11 +131,9 @@ const initialStateValue = {
 };
 
 const GameEditionTokenSelectorContainer = styled.div`
-  position: absolute;
-  bottom: 75px;
   display: flex;
   flex-direction: column;
-  width: 95%;
+  width: 100%;
   height: 100%;
 `;
 
@@ -645,7 +651,18 @@ const LiquidityContainer = (props) => {
           </HeaderItem>
         )}
       </TitleContainer>
-      <FormContainer gameEditionView={gameEditionView}>
+      <FormContainer
+        gameEditionView={gameEditionView}
+        footer={
+          <ButtonContainer gameEditionView={gameEditionView}>
+            <Button.Group fluid>
+              <CustomButton disabled={!buttonStatus().status} onClick={() => setShowReview(true)}>
+                {buttonStatus().msg}
+              </CustomButton>
+            </Button.Group>
+          </ButtonContainer>
+        }
+      >
         {!gameEditionView && <GradientBorder />}
         <SwapForm
           fromValues={fromValues}
@@ -678,13 +695,6 @@ const LiquidityContainer = (props) => {
             </ResultContainer>
           </>
         )}
-        <ButtonContainer gameEditionView={gameEditionView}>
-          <Button.Group fluid style={{ padding: gameEditionView ? '0 10px' : 0 }}>
-            <CustomButton disabled={!buttonStatus().status} onClick={() => setShowReview(true)}>
-              {buttonStatus().msg}
-            </CustomButton>
-          </Button.Group>
-        </ButtonContainer>
       </FormContainer>
     </Container>
   );

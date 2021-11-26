@@ -20,10 +20,8 @@ const TitleContainer = styled.div`
   font-size: '16px';
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+
   width: 100%;
-  position: absolute;
-  top: 10px;
   padding: 10px;
   text-transform: capitalize;
 `;
@@ -34,21 +32,23 @@ const DescriptionContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   text-align: left;
-  position: absolute;
-  top: 60px;
   margin-bottom: 10px;
   width: 100%;
   padding: 10px;
 `;
 const ContentModalContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  @media (min-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
+    justify-content: space-between;
+  }
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
+    & > *:not(:last-child) {
+      margin-bottom: 16px;
+    }
+  }
   flex-direction: column;
-  margin-bottom: 10px;
   width: 100%;
-  height: 65%;
-  position: absolute;
-  top: 145px;
+  height: 100%;
   padding: 10px;
 `;
 
@@ -69,7 +69,7 @@ const GameEditionModalsContainer = ({ title, description, content, onClose, moda
           }}
         />
       </TitleContainer>
-      <DescriptionContainer>{description}</DescriptionContainer>
+      {description && <DescriptionContainer>{description}</DescriptionContainer>}
       <ContentModalContainer>{content}</ContentModalContainer>
     </GEModalContainer>
   );

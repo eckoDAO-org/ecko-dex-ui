@@ -15,9 +15,6 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  top: ${({ gameEditionView }) => gameEditionView && '290px'};
-  left: ${({ gameEditionView }) => gameEditionView && 0};
   z-index: ${({ gameEditionView }) => !gameEditionView && '1'};
 `;
 
@@ -53,7 +50,7 @@ const SwapButtonsForm = ({
   };
   return (
     <ButtonContainer gameEditionView={gameEditionView}>
-      <Button.Group fluid style={{ padding: gameEditionView ? '0 10px' : 0 }}>
+      <Button.Group fluid>
         <CustomButton
           /* background="none" */
           disabled={account.account && (getButtonLabel() !== 'SWAP' || isNaN(fromValues.amount) || isNaN(toValues.amount))}
