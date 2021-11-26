@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { throttle, debounce } from 'throttle-debounce';
 import { FadeIn } from '../components/shared/animations';
 import TxView from '../components/swap/swap-modals/TxView';
@@ -27,8 +27,20 @@ import GradientBorder from '../shared/GradientBorder';
 
 const Container = styled(FadeIn)`
   width: 100%;
-  margin-top: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 0px`)};
-  max-width: ${({ gameEditionView }) => !gameEditionView && `500px`};
+  margin-top: 0px;
+  ${({ gameEditionView }) => {
+    if (gameEditionView) {
+      return css`
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      `;
+    } else {
+      return css`
+        max-width: 500px;
+      `;
+    }
+  }}
   margin-left: auto;
   margin-right: auto;
   overflow: auto;
@@ -37,12 +49,21 @@ const Container = styled(FadeIn)`
 const TitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  top: ${({ gameEditionView }) => gameEditionView && '10px'};
-  justify-content: ${({ gameEditionView }) =>
-    gameEditionView ? `center` : ` space-between`};
-  margin-bottom: ${({ gameEditionView }) =>
-    gameEditionView ? `0px` : ` 14px`};
+  ${({ gameEditionView }) => {
+    if (gameEditionView) {
+      return css`
+        margin-top: 16px;
+        margin-bottom: 0px;
+        justify-content: center;
+      `;
+    } else {
+      return css`
+        margin-top: 0px;
+        margin-bottom: 14px;
+        justify-content: space-between;
+      `;
+    }
+  }}
   width: 100%;
 `;
 const Title = styled.span`
@@ -51,18 +72,14 @@ const Title = styled.span`
       ? `normal normal normal 16px/19px  ${theme.fontFamily.pressStartRegular}`
       : ` normal normal bold 32px/57px ${theme.fontFamily.bold}`};
   letter-spacing: 0px;
-  color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : colors.white};
-  text-transform: ${({ gameEditionView }) =>
-    gameEditionView ? `uppercase` : ` capitalize`};
+  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
+  text-transform: ${({ gameEditionView }) => (gameEditionView ? `uppercase` : ` capitalize`)};
 `;
 
 const GameEditionTokenSelectorContainer = styled.div`
-  position: absolute;
-  bottom: 75px;
   display: flex;
   flex-direction: column;
-  width: 95%;
+  width: 100%;
   height: 100%;
 `;
 
@@ -73,10 +90,7 @@ const ResultContainer = styled.div`
   padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : ` 0px`)};
   flex-flow: column;
   width: 100%;
-  /* position: ${({ gameEditionView }) => gameEditionView && 'absolute'}; */
-  margin-top: ${({ gameEditionView }) => gameEditionView && '75px'};
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
     margin-bottom: 0px;
   }
@@ -95,28 +109,23 @@ const RowContainer = styled.div`
   justify-content: space-between;
   flex-flow: row;
   margin: 16px 0px;
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: row;
   }
 `;
 
 const Label = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
-  color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : colors.white};
+  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
   text-transform: capitalize;
 `;
 
 const Value = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   line-height: 20px;
-  color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : colors.white};
+  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
 `;
 
 const SwapContainer = () => {
@@ -125,8 +134,7 @@ const SwapContainer = () => {
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const modalContext = useContext(ModalContext);
-  const { gameEditionView, openModal, closeModal, isSwapping, setIsSwapping } =
-    useContext(GameEditionContext);
+  const { gameEditionView, openModal, closeModal, isSwapping, setIsSwapping } = useContext(GameEditionContext);
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
 
   const [selectedToken, setSelectedToken] = useState(null);
@@ -169,11 +177,7 @@ const SwapContainer = () => {
         setToNote('(estimated)');
         setFromNote('');
         setInputSide(null);
-        if (
-          fromValues.coin !== '' &&
-          toValues.coin !== '' &&
-          !isNaN(pact.ratio)
-        ) {
+        if (fromValues.coin !== '' && toValues.coin !== '' && !isNaN(pact.ratio)) {
           if (fromValues.amount.length < 5) {
             throttle(
               500,
@@ -212,11 +216,7 @@ const SwapContainer = () => {
         setFromNote('(estimated)');
         setToNote('');
         setInputSide(null);
-        if (
-          fromValues.coin !== '' &&
-          toValues.coin !== '' &&
-          !isNaN(pact.ratio)
-        ) {
+        if (fromValues.coin !== '' && toValues.coin !== '' && !isNaN(pact.ratio)) {
           if (toValues.amount.length < 5) {
             throttle(
               500,
@@ -256,63 +256,35 @@ const SwapContainer = () => {
       if (fromValues.amount !== '' && toValues.amount === '') {
         setToValues({
           ...toValues,
-          amount: reduceBalance(
-            pact.computeOut(fromValues.amount),
-            toValues.precision
-          ),
+          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision),
         });
       }
       if (fromValues.amount === '' && toValues.amount !== '') {
         setFromValues({
           ...fromValues,
-          amount: reduceBalance(
-            pact.computeIn(toValues.amount),
-            fromValues.precision
-          ),
+          amount: reduceBalance(pact.computeIn(toValues.amount), fromValues.precision),
         });
       }
       if (fromValues.amount !== '' && toValues.amount !== '') {
         setToValues({
           ...toValues,
-          amount: reduceBalance(
-            pact.computeOut(fromValues.amount),
-            toValues.precision
-          ),
+          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision),
         });
       }
     }
   }, [pact.ratio]);
   useEffect(() => {
     if (!isNaN(pact.ratio)) {
-      setPriceImpact(
-        pact.computePriceImpact(
-          Number(fromValues.amount),
-          Number(toValues.amount)
-        )
-      );
+      setPriceImpact(pact.computePriceImpact(Number(fromValues.amount), Number(toValues.amount)));
     } else {
       setPriceImpact('');
     }
-  }, [
-    fromValues.coin,
-    toValues.coin,
-    fromValues.amount,
-    toValues.amount,
-    pact.ratio,
-  ]);
+  }, [fromValues.coin, toValues.coin, fromValues.amount, toValues.amount, pact.ratio]);
   useEffect(() => {
     const getBalance = async () => {
       if (account.account && toValues.coin !== '' && fromValues.coin !== '') {
-        let acctOfFromValues = await account.getTokenAccount(
-          tokenData[fromValues.coin]?.code,
-          account.account.account,
-          tokenSelectorType === 'from'
-        );
-        let acctOfToValues = await account.getTokenAccount(
-          tokenData[toValues.coin]?.code,
-          account.account.account,
-          tokenSelectorType === 'to'
-        );
+        let acctOfFromValues = await account.getTokenAccount(tokenData[fromValues.coin]?.code, account.account.account, tokenSelectorType === 'from');
+        let acctOfToValues = await account.getTokenAccount(tokenData[toValues.coin]?.code, account.account.account, tokenSelectorType === 'to');
         if (acctOfFromValues) {
           let balanceFrom = getCorrectBalance(acctOfFromValues.balance);
           setFromValues((prev) => ({
@@ -378,10 +350,7 @@ const SwapContainer = () => {
     } else {
       setFromValues({
         ...fromValues,
-        amount: reduceBalance(
-          pact.computeIn(toValues.amount),
-          fromValues.precision
-        ),
+        amount: reduceBalance(pact.computeIn(toValues.amount), fromValues.precision),
       });
     }
   };
@@ -392,11 +361,7 @@ const SwapContainer = () => {
         balance = account.account.balance;
       }
     } else {
-      let acct = await account.getTokenAccount(
-        crypto.code,
-        account.account.account,
-        tokenSelectorType === 'from'
-      );
+      let acct = await account.getTokenAccount(crypto.code, account.account.account, tokenSelectorType === 'from');
       if (acct) {
         balance = getCorrectBalance(acct.balance);
       }
@@ -495,10 +460,6 @@ const SwapContainer = () => {
           //height: "100%",
           width: '75%',
         },
-        onBack: () => {
-          modalContext.onBackModal();
-          setTokenSelectorType(null);
-        },
         onClose: () => {
           setTokenSelectorType(null);
           modalContext.closeModal();
@@ -519,31 +480,9 @@ const SwapContainer = () => {
     }
   };
   return (
-    <Container
-      gameEditionView={gameEditionView}
-      onAnimationEnd={() => setIsLogoVisible(true)}
-      className='scrollbar-none'
-    >
-      {/* <TokenSelectorModal
-        show={tokenSelectorType !== null}
-        selectedToken={selectedToken}
-        onTokenClick={onTokenClick}
-        fromToken={fromValues.coin}
-        toToken={toValues.coin}
-        onClose={() => setTokenSelectorType(null)}
-      /> */}
-
-      <TxView
-        show={showTxModal}
-        selectedToken={selectedToken}
-        onTokenClick={onTokenClick}
-        onClose={() => setShowTxModal(false)}
-      />
-      <WalletRequestView
-        show={wallet.isWaitingForWalletAuth}
-        error={wallet.walletError}
-        onClose={() => onWalletRequestViewModalClose()}
-      />
+    <Container gameEditionView={gameEditionView} onAnimationEnd={() => setIsLogoVisible(true)} className="scrollbar-none">
+      <TxView show={showTxModal} selectedToken={selectedToken} onTokenClick={onTokenClick} onClose={() => setShowTxModal(false)} />
+      <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
       {!gameEditionView && isLogoVisible && (
         <LogoContainer time={0.2}>
           <Logo />
@@ -553,21 +492,31 @@ const SwapContainer = () => {
       <TitleContainer gameEditionView={gameEditionView}>
         <Title gameEditionView={gameEditionView}>Swap</Title>
         {!gameEditionView && (
-          <HeaderItem
-            headerItemStyle={{ alignItems: 'center', display: 'flex' }}
-          >
-            <CustomPopup
-              trigger={<CogIcon />}
-              on='click'
-              offset={[2, 10]}
-              position='bottom right'
-            >
+          <HeaderItem headerItemStyle={{ alignItems: 'center', display: 'flex' }}>
+            <CustomPopup trigger={<CogIcon />} on="click" offset={[2, 10]} position="bottom right">
               <SlippagePopupContent />
             </CustomPopup>
           </HeaderItem>
         )}
       </TitleContainer>
-      <FormContainer gameEditionView={gameEditionView}>
+      <FormContainer
+        gameEditionView={gameEditionView}
+        footer={
+          <SwapButtonsForm
+            setLoading={setLoading}
+            fetchingPair={fetchingPair}
+            fromValues={fromValues}
+            setFromValues={setFromValues}
+            toValues={toValues}
+            setToValues={setToValues}
+            fromNote={fromNote}
+            ratio={pact.ratio}
+            loading={loading}
+            noLiquidity={noLiquidity}
+            setShowTxModal={setShowTxModal}
+          />
+        }
+      >
         {!gameEditionView && <GradientBorder />}
         <SwapForm
           fromValues={fromValues}
@@ -582,39 +531,16 @@ const SwapContainer = () => {
           setShowTxModal={setShowTxModal}
           /* handleTokenSelectorType={handleTokenSelectorType} */
         />
-        {!isNaN(pact.ratio) &&
-        fromValues.amount &&
-        fromValues.coin &&
-        toValues.amount &&
-        toValues.coin ? (
-          <SwapResults
-            priceImpact={priceImpact}
-            fromValues={fromValues}
-            toValues={toValues}
-          />
+        {!isNaN(pact.ratio) && fromValues.amount && fromValues.coin && toValues.amount && toValues.coin ? (
+          <SwapResults priceImpact={priceImpact} fromValues={fromValues} toValues={toValues} />
         ) : (
           <ResultContainer gameEditionView={gameEditionView}>
             <RowContainer gameEditionView={gameEditionView}>
               <Label gameEditionView={gameEditionView}>max slippage</Label>
-              <Value gameEditionView={gameEditionView}>{`${
-                pact.slippage * 100
-              }%`}</Value>
+              <Value gameEditionView={gameEditionView}>{`${pact.slippage * 100}%`}</Value>
             </RowContainer>
           </ResultContainer>
         )}
-        <SwapButtonsForm
-          setLoading={setLoading}
-          fetchingPair={fetchingPair}
-          fromValues={fromValues}
-          setFromValues={setFromValues}
-          toValues={toValues}
-          setToValues={setToValues}
-          fromNote={fromNote}
-          ratio={pact.ratio}
-          loading={loading}
-          noLiquidity={noLiquidity}
-          setShowTxModal={setShowTxModal}
-        />
       </FormContainer>
     </Container>
   );

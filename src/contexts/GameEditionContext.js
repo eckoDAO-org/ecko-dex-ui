@@ -6,10 +6,10 @@ const initialModalState = {
   open: false,
   title: null,
   description: null,
-  content: null,
+  content: null
 };
 export const GameEditionProvider = (props) => {
-  const [gameEditionView, setGameEditionView] = useState(false);
+  const [gameEditionView, setGameEditionView] = useState(true);
   const [modalState, setModalState] = useState(initialModalState);
   const [isSwapping, setIsSwapping] = useState(false);
 
@@ -31,7 +31,7 @@ export const GameEditionProvider = (props) => {
         openModal,
         closeModal,
         isSwapping,
-        setIsSwapping,
+        setIsSwapping
       }}
     >
       {props.children}

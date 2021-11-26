@@ -1,18 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-export const GameEditionWrapper = ({
-  startLabel,
-  startOnClick,
-  selectLabel,
-  selectOnClick,
-  buttonLOnClick,
-  buttonROnClick,
-  children,
-}) => {
+export const GameEditionWrapper = ({ startLabel, startOnClick, selectLabel, selectOnClick, buttonLOnClick, buttonROnClick, children }) => {
   const setSvgContentWidth = () => {
-    const svgContent = document.getElementById("svgContent");
-    const svgContainer = document.getElementById("screen");
+    const svgContent = document.getElementById('svgContent');
+    const svgContainer = document.getElementById('screen');
     if (svgContent && svgContainer) {
       const containerRect = svgContainer.getBoundingClientRect();
       svgContent.style.left = `${containerRect.left}px`;
@@ -23,13 +15,13 @@ export const GameEditionWrapper = ({
   };
 
   useEffect(() => {
-    window.addEventListener("resize", setSvgContentWidth);
+    window.addEventListener('resize', setSvgContentWidth);
     setSvgContentWidth();
   }, []);
 
   return (
     <div>
-      <div id="svgContent" style={{ position: "absolute" }}>
+      <div id="svgContent" style={{ position: 'absolute' }}>
         {children}
       </div>
       <svg
@@ -40,72 +32,26 @@ export const GameEditionWrapper = ({
         id="gameEdition"
       >
         <defs>
-          <linearGradient
-            id="linear-gradient"
-            x1="0.107"
-            y1="-0.401"
-            x2="0.98"
-            y2="1.196"
-            gradientUnits="objectBoundingBox"
-          >
+          <linearGradient id="linear-gradient" x1="0.107" y1="-0.401" x2="0.98" y2="1.196" gradientUnits="objectBoundingBox">
             <stop offset="0" stopColor="#22fefe" />
             <stop offset="0.552" stopColor="#6f6ede" />
             <stop offset="1" stopColor="#4a186f" />
           </linearGradient>
-          <linearGradient
-            id="linear-gradient-2"
-            x2="1"
-            y2="1"
-            gradientUnits="objectBoundingBox"
-          >
+          <linearGradient id="linear-gradient-2" x2="1" y2="1" gradientUnits="objectBoundingBox">
             <stop offset="0" stopColor="#5c4499" />
             <stop offset="1" stopColor="#271259" />
           </linearGradient>
-          <linearGradient
-            id="linear-gradient-3"
-            x1="0.5"
-            y1="-0.032"
-            x2="0.5"
-            y2="1"
-            gradientUnits="objectBoundingBox"
-          >
+          <linearGradient id="linear-gradient-3" x1="0.5" y1="-0.032" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
             <stop offset="0" stopColor="#fefb66" />
             <stop offset="1" stopColor="#ff36d0" />
           </linearGradient>
-          <linearGradient
-            id="linear-gradient-6"
-            x1="78.443"
-            y1="66.987"
-            x2="78.412"
-            y2="67.03"
-            gradientUnits="objectBoundingBox"
-          >
+          <linearGradient id="linear-gradient-6" x1="78.443" y1="66.987" x2="78.412" y2="67.03" gradientUnits="objectBoundingBox">
             <stop offset="0" stopColor="#f2248d" />
             <stop offset="1" stopColor="#791247" />
           </linearGradient>
-          <linearGradient
-            id="linear-gradient-8"
-            x1="30.661"
-            y1="35.41"
-            x2="30.645"
-            y2="35.433"
-            xlinkHref="#linear-gradient-6"
-          />
-          <linearGradient
-            id="linear-gradient-10"
-            x1="29.04"
-            y1="36.018"
-            x2="29.023"
-            y2="36.041"
-            xlinkHref="#linear-gradient-6"
-          />
-          <linearGradient
-            id="linear-gradient-11"
-            x1="0.5"
-            x2="0.331"
-            y2="1.275"
-            gradientUnits="objectBoundingBox"
-          >
+          <linearGradient id="linear-gradient-8" x1="30.661" y1="35.41" x2="30.645" y2="35.433" xlinkHref="#linear-gradient-6" />
+          <linearGradient id="linear-gradient-10" x1="29.04" y1="36.018" x2="29.023" y2="36.041" xlinkHref="#linear-gradient-6" />
+          <linearGradient id="linear-gradient-11" x1="0.5" x2="0.331" y2="1.275" gradientUnits="objectBoundingBox">
             <stop offset="0" stopColor="#52a3ea" />
             <stop offset="1" stopColor="#2b1443" stopOpacity="0" />
           </linearGradient>
@@ -117,25 +63,14 @@ export const GameEditionWrapper = ({
             <feComposite operator="in" in="color" />
             <feComposite operator="in" in2="SourceGraphic" />
           </filter>
-          <linearGradient
-            id="linear-gradient-12"
-            x1="-0.305"
-            y1="-0.563"
-            x2="0.911"
-            y2="1.053"
-            gradientUnits="objectBoundingBox"
-          >
+          <linearGradient id="linear-gradient-12" x1="-0.305" y1="-0.563" x2="0.911" y2="1.053" gradientUnits="objectBoundingBox">
             <stop offset="0" stopColor="#feb43f" />
             <stop offset="1" stopColor="#fe9845" />
           </linearGradient>
           <filter id="Rectangle_4937">
             <feOffset dx="2" dy="5" input="SourceAlpha" />
             <feGaussianBlur stdDeviation="2" result="blur-2" />
-            <feFlood
-              floodColor="#631ba1"
-              floodOpacity="0.22"
-              result="color-2"
-            />
+            <feFlood floodColor="#631ba1" floodOpacity="0.22" result="color-2" />
             <feComposite operator="out" in="SourceGraphic" in2="blur-2" />
             <feComposite operator="in" in="color-2" />
             <feComposite operator="in" in2="SourceGraphic" />
@@ -143,23 +78,12 @@ export const GameEditionWrapper = ({
           <filter id="Ellipse_907">
             <feOffset dx="2" dy="5" input="SourceAlpha" />
             <feGaussianBlur stdDeviation="4.5" result="blur-3" />
-            <feFlood
-              floodColor="#00f041"
-              floodOpacity="0.161"
-              result="color-3"
-            />
+            <feFlood floodColor="#00f041" floodOpacity="0.161" result="color-3" />
             <feComposite operator="out" in="SourceGraphic" in2="blur-3" />
             <feComposite operator="in" in="color-3" />
             <feComposite operator="in" in2="SourceGraphic" />
           </filter>
-          <linearGradient
-            id="linear-gradient-16"
-            x1="-0.125"
-            y1="-0.859"
-            x2="0.772"
-            y2="1.336"
-            gradientUnits="objectBoundingBox"
-          >
+          <linearGradient id="linear-gradient-16" x1="-0.125" y1="-0.859" x2="0.772" y2="1.336" gradientUnits="objectBoundingBox">
             <stop offset="0" stopColor="#fff" />
             <stop offset="1" stopColor="#6cc34a" />
           </linearGradient>
@@ -174,7 +98,7 @@ export const GameEditionWrapper = ({
               stroke="#707070"
               strokeLinejoin="round"
               strokeWidth="4"
-              style={{ cursor: "pointer" }}
+              style={{ cursor: 'pointer' }}
               onClick={buttonLOnClick}
             />
             <path
@@ -185,17 +109,11 @@ export const GameEditionWrapper = ({
               stroke="#707070"
               strokeLinejoin="round"
               strokeWidth="4"
-              style={{ cursor: "pointer" }}
+              style={{ cursor: 'pointer' }}
               onClick={buttonROnClick}
             />
           </g>
-          <g
-            id="Union_16"
-            data-name="Union 16"
-            transform="translate(3040.813 1788.015)"
-            strokeLinejoin="round"
-            fill="url(#linear-gradient)"
-          >
+          <g id="Union_16" data-name="Union 16" transform="translate(3040.813 1788.015)" strokeLinejoin="round" fill="url(#linear-gradient)">
             <path
               d="M -2489.289306640625 -1161.81494140625 L -2489.2900390625 -1161.81494140625 L -2489.290771484375 -1161.81494140625 L -2489.7822265625 -1161.81494140625 C -2526.24951171875 -1161.83740234375 -2562.6455078125 -1163.156005859375 -2597.960693359375 -1165.734008789062 C -2632.510498046875 -1168.255126953125 -2666.378173828125 -1172.005249023438 -2698.623779296875 -1176.880249023438 C -2730.283447265625 -1181.666015625 -2760.6455078125 -1187.575439453125 -2788.869873046875 -1194.445190429688 L -2788.869873046875 -1194.445068359375 C -2814.97900390625 -1200.699829101562 -2841.018310546875 -1208.495483398438 -2866.2666015625 -1217.615844726562 L -2985.772216796875 -1254.085083007812 C -2991.923583984375 -1255.965454101562 -2997.82177734375 -1258.613159179688 -3003.303955078125 -1261.955078125 C -3008.705322265625 -1265.247680664062 -3013.691650390625 -1269.20654296875 -3018.124755859375 -1273.7216796875 C -3022.5576171875 -1278.236938476562 -3026.42236328125 -1283.29345703125 -3029.611328125 -1288.750366210938 C -3032.807861328125 -1294.220581054688 -3035.31787109375 -1300.081665039062 -3037.073974609375 -1306.175537109375 C -3037.87451171875 -1307.648803710938 -3038.56640625 -1310.047241210938 -3039.18505859375 -1313.490356445312 C -3039.793701171875 -1316.876708984375 -3040.33740234375 -1321.322875976562 -3040.80126953125 -1326.705444335938 C -3041.7333984375 -1337.521606445312 -3042.3505859375 -1352.019653320312 -3042.6357421875 -1369.797119140625 C -3043.2138671875 -1405.709716796875 -3042.36474609375 -1452.16064453125 -3040.244873046875 -1500.593017578125 C -3038.49853515625 -1540.5283203125 -3036.027587890625 -1578.872436523438 -3033.099365234375 -1611.479858398438 C -3030.237548828125 -1643.350341796875 -3027.138671875 -1667.572387695312 -3024.13720703125 -1681.533935546875 C -3022.27392578125 -1692.587768554688 -3020.71875 -1695.995727539062 -3019.65673828125 -1697.440307617188 C -3018.54931640625 -1700.201416015625 -3016.824462890625 -1702.729614257812 -3014.65478515625 -1704.768188476562 C -3012.443115234375 -1706.846313476562 -3009.749755859375 -1708.433837890625 -3006.858154296875 -1709.364624023438 C -3005.267578125 -1710.084350585938 -3003.60400390625 -1710.60546875 -3001.892578125 -1710.92138671875 L -3001.892578125 -1711.15283203125 L -3000.027587890625 -1711.279174804688 C -2982.963134765625 -1712.435302734375 -2965.8583984375 -1714.93408203125 -2949.188720703125 -1718.706298828125 L -2949.185791015625 -1718.706787109375 L -2949.182861328125 -1718.70751953125 C -2930.023681640625 -1722.983032226562 -2910.964599609375 -1728.564331054688 -2892.535400390625 -1735.296264648438 L -2891.660400390625 -1735.616088867188 L -2891.18017578125 -1735.794189453125 L -2848.61328125 -1753.830932617188 C -2842.115478515625 -1756.989868164062 -2835.74755859375 -1760.292846679688 -2829.68603515625 -1763.64794921875 L -2829.640380859375 -1763.673461914062 L -2829.593017578125 -1763.6962890625 L -2791.054931640625 -1782.458862304688 C -2786.642333984375 -1784.843139648438 -2781.939208984375 -1786.67626953125 -2777.074951171875 -1787.907836914062 C -2772.19775390625 -1789.142578125 -2767.173828125 -1789.768676757812 -2762.142822265625 -1789.768676757812 L -2762.035400390625 -1789.7685546875 L -2217.03515625 -1789.7685546875 L -2216.9501953125 -1789.7685546875 C -2211.915283203125 -1789.7685546875 -2206.8876953125 -1789.1416015625 -2202.007568359375 -1787.90478515625 C -2197.142333984375 -1786.671875 -2192.437744140625 -1784.836669921875 -2188.023193359375 -1782.449829101562 L -2149.4873046875 -1763.689697265625 L -2149.440185546875 -1763.666748046875 L -2149.39453125 -1763.641357421875 C -2143.299072265625 -1760.26953125 -2136.931396484375 -1756.966796875 -2130.4677734375 -1753.824951171875 L -2087.877685546875 -1735.77978515625 L -2087.867919921875 -1735.776000976562 L -2087.571044921875 -1735.667236328125 C -2087.229248046875 -1735.542114257812 -2086.88720703125 -1735.4169921875 -2086.54638671875 -1735.293579101562 L -2086.543212890625 -1735.292602539062 L -2086.54052734375 -1735.291381835938 C -2068.101318359375 -1728.5576171875 -2049.04248046875 -1722.9775390625 -2029.892944335938 -1718.706420898438 L -2029.89013671875 -1718.705810546875 L -2029.887084960938 -1718.705078125 C -2013.2080078125 -1714.9326171875 -1996.10205078125 -1712.43408203125 -1979.044311523438 -1711.279174804688 L -1977.179443359375 -1711.15283203125 L -1977.179443359375 -1710.921142578125 C -1975.469848632812 -1710.605224609375 -1973.807373046875 -1710.083862304688 -1972.216674804688 -1709.363891601562 C -1969.32421875 -1708.433227539062 -1966.629760742188 -1706.845336914062 -1964.417846679688 -1704.766723632812 C -1962.248779296875 -1702.728149414062 -1960.524047851562 -1700.19921875 -1959.416625976562 -1697.437622070312 C -1958.356201171875 -1695.995361328125 -1956.802490234375 -1692.588500976562 -1954.934326171875 -1681.52587890625 C -1951.932373046875 -1667.554809570312 -1948.83349609375 -1643.3310546875 -1945.97216796875 -1611.468383789062 C -1943.044555664062 -1578.869750976562 -1940.57421875 -1540.529541015625 -1938.828247070312 -1500.592895507812 C -1936.708129882812 -1452.134521484375 -1935.859008789062 -1405.68359375 -1936.437255859375 -1369.796875 C -1936.7216796875 -1352.023681640625 -1937.338745117188 -1337.525756835938 -1938.27099609375 -1326.70556640625 C -1938.734741210938 -1321.323120117188 -1939.2783203125 -1316.876953125 -1939.886474609375 -1313.490234375 C -1940.505004882812 -1310.046142578125 -1941.196411132812 -1307.647338867188 -1941.996459960938 -1306.173950195312 C -1943.712524414062 -1300.23046875 -1946.147338867188 -1294.499877929688 -1949.234985351562 -1289.137939453125 C -1952.36279296875 -1283.706420898438 -1956.155029296875 -1278.6630859375 -1960.505859375 -1274.148315429688 C -1965.0048828125 -1269.483032226562 -1970.090087890625 -1265.402465820312 -1975.620849609375 -1262.01953125 C -1981.151123046875 -1258.636962890625 -1987.102172851562 -1255.967163085938 -1993.308471679688 -1254.084106445312 L -2112.81103515625 -1217.614868164062 C -2138.0556640625 -1208.495239257812 -2164.094970703125 -1200.69970703125 -2190.200927734375 -1194.445922851562 L -2190.200927734375 -1194.44580078125 C -2218.418701171875 -1187.575805664062 -2248.783447265625 -1181.66552734375 -2280.452392578125 -1176.878784179688 C -2312.711669921875 -1172.0029296875 -2346.579345703125 -1168.252807617188 -2381.114990234375 -1165.732543945312 C -2416.435791015625 -1163.155517578125 -2452.8310546875 -1161.83740234375 -2489.289306640625 -1161.81494140625 Z"
               stroke="none"
@@ -213,7 +131,7 @@ export const GameEditionWrapper = ({
             transform="translate(628.086 348.292)"
             fill="#563392"
             opacity="0.203"
-            style={{ mixBlendMode: "multiply", isolation: "isolate" }}
+            style={{ mixBlendMode: 'multiply', isolation: 'isolate' }}
           />
           <path
             id="Path_38861"
@@ -221,7 +139,7 @@ export const GameEditionWrapper = ({
             d="M-2103.664-1372.772c-1.354-48.912-3.123-97.809-4.8-146.709q-2.281-66.319-6.74-132.515c-2.408-36.069-20.688-54.389-56.791-59.722-32.306-4.774-65.009-7.338-97.625-9.511-58.777-3.905-117.609-7.12-176.566-6.317-17.811,0-35.644-.557-53.433.1-58.589,2.166-117.159,4.8-175.522,10.649-17.694,1.771-35.574,2.372-52.969,6.292-25.717,5.792-46.17,21.707-48.915,52.449-3.387,37.861-5.048,75.8-6.869,113.723-2.111,43.93-3.527,87.9-4.739,131.865-1.508,54.381-2.415,108.779-3.772,163.163-.453,18.165,7.484,32,21.038,43.317,15.921,13.292,35.133,19.5,54.729,24.4,76.542,19.128,154.7,26.362,233.262,29.437a1082.071,1082.071,0,0,0,119.333-2.4c54.372-3.873,108.424-9.868,161.8-20.969,24.35-5.063,48.8-10.258,70.476-23.3,20.8-12.518,32.132-29.917,31.28-55.315C-2101.827-1293.667-2102.572-1333.225-2103.664-1372.772Z"
             transform="translate(2999.439 1756.732)"
             fill="#38226d"
-            style={{ mixBlendMode: "multiply", isolation: "isolate" }}
+            style={{ mixBlendMode: 'multiply', isolation: 'isolate' }}
           />
           <path
             id="Path_38861-2"
@@ -230,13 +148,7 @@ export const GameEditionWrapper = ({
             transform="translate(3008.633 1764.335)"
             fill="url(#linear-gradient-2)"
           />
-          <g
-            id="screen"
-            transform="translate(257.557 78.496)"
-            stroke="#15081F"
-            strokeWidth="2"
-            fill="url(#linear-gradient-3)"
-          >
+          <g id="screen" transform="translate(257.557 78.496)" stroke="#15081F" strokeWidth="2" fill="url(#linear-gradient-3)">
             <rect width="589" height="425" rx="24" stroke="none" />
 
             <rect x="1" y="1" width="587" height="423" rx="23" fill="none" />
@@ -262,11 +174,7 @@ export const GameEditionWrapper = ({
               fill="url(#linear-gradient-2)"
             />
           </g>
-          <g
-            id="arrow-2"
-            data-name="arrow"
-            transform="translate(52.472 163.825)"
-          >
+          <g id="arrow-2" data-name="arrow" transform="translate(52.472 163.825)">
             <rect
               id="Rectangle_39-2"
               data-name="Rectangle 39"
@@ -285,20 +193,8 @@ export const GameEditionWrapper = ({
               transform="translate(0 48.343)"
               fill="#fe43c0"
             />
-            <g
-              id="Ellipse_20"
-              data-name="Ellipse 20"
-              transform="translate(49.729 49.614)"
-            >
-              <ellipse
-                id="Ellipse_895"
-                data-name="Ellipse 895"
-                cx="21.038"
-                cy="21"
-                rx="21.038"
-                ry="21"
-                fill="#f2248d"
-              />
+            <g id="Ellipse_20" data-name="Ellipse 20" transform="translate(49.729 49.614)">
+              <ellipse id="Ellipse_895" data-name="Ellipse 895" cx="21.038" cy="21" rx="21.038" ry="21" fill="#f2248d" />
               <ellipse
                 id="Ellipse_896"
                 data-name="Ellipse 896"
@@ -312,20 +208,8 @@ export const GameEditionWrapper = ({
                 strokeWidth="1"
               />
             </g>
-            <g
-              id="Ellipse_25"
-              data-name="Ellipse 25"
-              transform="translate(53.554 52.157)"
-            >
-              <ellipse
-                id="Ellipse_897"
-                data-name="Ellipse 897"
-                cx="17.851"
-                cy="17.818"
-                rx="17.851"
-                ry="17.818"
-                fill="url(#linear-gradient-6)"
-              />
+            <g id="Ellipse_25" data-name="Ellipse 25" transform="translate(53.554 52.157)">
+              <ellipse id="Ellipse_897" data-name="Ellipse 897" cx="17.851" cy="17.818" rx="17.851" ry="17.818" fill="url(#linear-gradient-6)" />
               <ellipse
                 id="Ellipse_898"
                 data-name="Ellipse 898"
@@ -339,19 +223,8 @@ export const GameEditionWrapper = ({
                 strokeWidth="1"
               />
             </g>
-            <g
-              id="Rectangle_44"
-              data-name="Rectangle 44"
-              transform="translate(53.554 4.983)"
-            >
-              <rect
-                id="Rectangle_5323"
-                data-name="Rectangle 5323"
-                width="35.702"
-                height="2.546"
-                rx="1"
-                fill="#f2248d"
-              />
+            <g id="Rectangle_44" data-name="Rectangle 44" transform="translate(53.554 4.983)">
+              <rect id="Rectangle_5323" data-name="Rectangle 5323" width="35.702" height="2.546" rx="1" fill="#f2248d" />
               <rect
                 id="Rectangle_5324"
                 data-name="Rectangle 5324"
@@ -364,19 +237,8 @@ export const GameEditionWrapper = ({
                 strokeWidth="1"
               />
             </g>
-            <g
-              id="Rectangle_45"
-              data-name="Rectangle 45"
-              transform="translate(98.181 52.133)"
-            >
-              <rect
-                id="Rectangle_5325"
-                data-name="Rectangle 5325"
-                width="35.702"
-                height="3.818"
-                rx="1"
-                fill="#f2248d"
-              />
+            <g id="Rectangle_45" data-name="Rectangle 45" transform="translate(98.181 52.133)">
+              <rect id="Rectangle_5325" data-name="Rectangle 5325" width="35.702" height="3.818" rx="1" fill="#f2248d" />
               <rect
                 id="Rectangle_5326"
                 data-name="Rectangle 5326"
@@ -389,19 +251,8 @@ export const GameEditionWrapper = ({
                 strokeWidth="1"
               />
             </g>
-            <g
-              id="Rectangle_46"
-              data-name="Rectangle 46"
-              transform="translate(6.376 52.133)"
-            >
-              <rect
-                id="Rectangle_5327"
-                data-name="Rectangle 5327"
-                width="36.978"
-                height="3.818"
-                rx="1"
-                fill="#f2248d"
-              />
+            <g id="Rectangle_46" data-name="Rectangle 46" transform="translate(6.376 52.133)">
+              <rect id="Rectangle_5327" data-name="Rectangle 5327" width="36.978" height="3.818" rx="1" fill="#f2248d" />
               <rect
                 id="Rectangle_5328"
                 data-name="Rectangle 5328"
@@ -415,11 +266,7 @@ export const GameEditionWrapper = ({
               />
             </g>
           </g>
-          <g
-            id="A_-_B_Button"
-            data-name="A - B Button"
-            transform="translate(912.396 170.035)"
-          >
+          <g id="A_-_B_Button" data-name="A - B Button" transform="translate(912.396 170.035)">
             <g id="b" transform="translate(0 34.748)">
               <ellipse
                 id="Ellipse_21"
@@ -441,20 +288,8 @@ export const GameEditionWrapper = ({
                 transform="translate(4.221 4.212)"
                 fill="#fe43c0"
               />
-              <g
-                id="Ellipse_23"
-                data-name="Ellipse 23"
-                transform="translate(10.758 6.941)"
-              >
-                <ellipse
-                  id="Ellipse_899"
-                  data-name="Ellipse 899"
-                  cx="28.346"
-                  cy="28.294"
-                  rx="28.346"
-                  ry="28.294"
-                  fill="url(#linear-gradient-8)"
-                />
+              <g id="Ellipse_23" data-name="Ellipse 23" transform="translate(10.758 6.941)">
+                <ellipse id="Ellipse_899" data-name="Ellipse 899" cx="28.346" cy="28.294" rx="28.346" ry="28.294" fill="url(#linear-gradient-8)" />
                 <ellipse
                   id="Ellipse_900"
                   data-name="Ellipse 900"
@@ -477,8 +312,8 @@ export const GameEditionWrapper = ({
                 fontFamily="Helvetica Neue"
                 fontWeight="500"
                 style={{
-                  mixBlendMode: "multiply",
-                  isolation: "isolate",
+                  mixBlendMode: 'multiply',
+                  isolation: 'isolate'
                 }}
               >
                 <tspan x="0" y="0">
@@ -507,20 +342,8 @@ export const GameEditionWrapper = ({
                 transform="translate(4.221 4.212)"
                 fill="#fe43c0"
               />
-              <g
-                id="Ellipse_24"
-                data-name="Ellipse 24"
-                transform="translate(9.846 7.302)"
-              >
-                <ellipse
-                  id="Ellipse_901"
-                  data-name="Ellipse 901"
-                  cx="28.346"
-                  cy="28.294"
-                  rx="28.346"
-                  ry="28.294"
-                  fill="url(#linear-gradient-10)"
-                />
+              <g id="Ellipse_24" data-name="Ellipse 24" transform="translate(9.846 7.302)">
+                <ellipse id="Ellipse_901" data-name="Ellipse 901" cx="28.346" cy="28.294" rx="28.346" ry="28.294" fill="url(#linear-gradient-10)" />
                 <ellipse
                   id="Ellipse_902"
                   data-name="Ellipse 902"
@@ -544,8 +367,8 @@ export const GameEditionWrapper = ({
                 strokeWidth="1"
                 opacity="0.198"
                 style={{
-                  mixBlendMode: "normal",
-                  isolation: "isolate",
+                  mixBlendMode: 'normal',
+                  isolation: 'isolate'
                 }}
               />
               <text
@@ -557,8 +380,8 @@ export const GameEditionWrapper = ({
                 fontFamily="Helvetica Neue"
                 fontWeight="500"
                 style={{
-                  mixBlendMode: "multiply",
-                  isolation: "isolate",
+                  mixBlendMode: 'multiply',
+                  isolation: 'isolate'
                 }}
               >
                 <tspan x="0" y="0">
@@ -604,11 +427,7 @@ export const GameEditionWrapper = ({
               fill="#0a0b27"
             />
           </g>
-          <g
-            id="Swap_Button"
-            data-name="Swap Button"
-            transform="translate(78.689 366.176)"
-          >
+          <g id="Swap_Button" data-name="Swap Button" transform="translate(78.689 366.176)">
             <g data-type="innerShadowGroup">
               <path
                 id="Rectangle_41-2"
@@ -617,16 +436,16 @@ export const GameEditionWrapper = ({
                 transform="translate(2935.509 1400.847)"
                 fill="url(#linear-gradient-11)"
                 style={{
-                  mixBlendMode: "multiply",
-                  isolation: "isolate",
+                  mixBlendMode: 'multiply',
+                  isolation: 'isolate'
                 }}
               />
               <g
                 transform="matrix(1, 0, 0, 1, -82.69, -369.93)"
                 filter="url(#Rectangle_41)"
                 style={{
-                  mixBlendMode: "multiply",
-                  isolation: "isolate",
+                  mixBlendMode: 'multiply',
+                  isolation: 'isolate'
                 }}
               >
                 <path
@@ -638,13 +457,7 @@ export const GameEditionWrapper = ({
                 />
               </g>
             </g>
-            <g
-              id="start_button"
-              data-name="Group 54080"
-              transform="translate(84.199 21.227)"
-              style={{ cursor: "pointer" }}
-              onClick={startOnClick}
-            >
+            <g id="start_button" data-name="Group 54080" transform="translate(84.199 21.227)" style={{ cursor: 'pointer' }} onClick={startOnClick}>
               <ellipse
                 id="Ellipse_21-2-2"
                 data-name="Ellipse 21-2"
@@ -655,20 +468,8 @@ export const GameEditionWrapper = ({
                 transform="translate(0 0)"
                 fill="#feb43f"
               />
-              <g
-                id="Ellipse_23-2"
-                data-name="Ellipse 23-2"
-                transform="translate(3.188 2.571)"
-              >
-                <ellipse
-                  id="Ellipse_903"
-                  data-name="Ellipse 903"
-                  cx="15.359"
-                  cy="15.331"
-                  rx="15.359"
-                  ry="15.331"
-                  fill="url(#linear-gradient-12)"
-                />
+              <g id="Ellipse_23-2" data-name="Ellipse 23-2" transform="translate(3.188 2.571)">
+                <ellipse id="Ellipse_903" data-name="Ellipse 903" cx="15.359" cy="15.331" rx="15.359" ry="15.331" fill="url(#linear-gradient-12)" />
                 <ellipse
                   id="Ellipse_904"
                   data-name="Ellipse 904"
@@ -681,8 +482,8 @@ export const GameEditionWrapper = ({
                   stroke="#fee63f"
                   strokeWidth="1"
                   style={{
-                    mixBlendMode: "overlay",
-                    isolation: "isolate",
+                    mixBlendMode: 'overlay',
+                    isolation: 'isolate'
                   }}
                 />
               </g>
@@ -701,11 +502,7 @@ export const GameEditionWrapper = ({
               </tspan>
             </text>
           </g>
-          <g
-            id="Pool_Button"
-            data-name="Pool Button"
-            transform="translate(78.689 432.307)"
-          >
+          <g id="Pool_Button" data-name="Pool Button" transform="translate(78.689 432.307)">
             <g data-type="innerShadowGroup">
               <path
                 id="Rectangle_4937-2"
@@ -714,16 +511,16 @@ export const GameEditionWrapper = ({
                 transform="translate(2935.509 1334.706)"
                 fill="url(#linear-gradient-11)"
                 style={{
-                  mixBlendMode: "multiply",
-                  isolation: "isolate",
+                  mixBlendMode: 'multiply',
+                  isolation: 'isolate'
                 }}
               />
               <g
                 transform="matrix(1, 0, 0, 1, -82.69, -436.06)"
                 filter="url(#Rectangle_4937)"
                 style={{
-                  mixBlendMode: "multiply",
-                  isolation: "isolate",
+                  mixBlendMode: 'multiply',
+                  isolation: 'isolate'
                 }}
               >
                 <path
@@ -735,36 +532,10 @@ export const GameEditionWrapper = ({
                 />
               </g>
             </g>
-            <g
-              id="select_button"
-              data-name="Group 54081"
-              transform="translate(83.621 20.679)"
-              style={{ cursor: "pointer" }}
-              onClick={selectOnClick}
-            >
-              <ellipse
-                id="Ellipse_21-3"
-                data-name="Ellipse 21-3"
-                cx="18.183"
-                cy="18.15"
-                rx="18.183"
-                ry="18.15"
-                fill="#feb43f"
-              />
-              <g
-                id="Ellipse_23-3"
-                data-name="Ellipse 23-3"
-                transform="translate(3.513 2.733)"
-              >
-                <ellipse
-                  id="Ellipse_905"
-                  data-name="Ellipse 905"
-                  cx="14.933"
-                  cy="14.905"
-                  rx="14.933"
-                  ry="14.905"
-                  fill="url(#linear-gradient-12)"
-                />
+            <g id="select_button" data-name="Group 54081" transform="translate(83.621 20.679)" style={{ cursor: 'pointer' }} onClick={selectOnClick}>
+              <ellipse id="Ellipse_21-3" data-name="Ellipse 21-3" cx="18.183" cy="18.15" rx="18.183" ry="18.15" fill="#feb43f" />
+              <g id="Ellipse_23-3" data-name="Ellipse 23-3" transform="translate(3.513 2.733)">
+                <ellipse id="Ellipse_905" data-name="Ellipse 905" cx="14.933" cy="14.905" rx="14.933" ry="14.905" fill="url(#linear-gradient-12)" />
                 <ellipse
                   id="Ellipse_906"
                   data-name="Ellipse 906"
@@ -827,10 +598,7 @@ export const GameEditionWrapper = ({
                 transform="translate(4.926 4.362)"
                 fill="#74c04b"
               />
-              <g
-                transform="matrix(1, 0, 0, 1, -937.57, -77.76)"
-                filter="url(#Ellipse_907)"
-              >
+              <g transform="matrix(1, 0, 0, 1, -937.57, -77.76)" filter="url(#Ellipse_907)">
                 <circle
                   id="Ellipse_907-3"
                   data-name="Ellipse 907"
@@ -852,20 +620,9 @@ export const GameEditionWrapper = ({
               fill="url(#linear-gradient-16)"
             />
           </g>
-          <g
-            id="KADDEX-logo"
-            transform="translate(453.593 534.325)"
-            style={{ mixBlendMode: "overlay", isolation: "isolate" }}
-          >
+          <g id="KADDEX-logo" transform="translate(453.593 534.325)" style={{ mixBlendMode: 'overlay', isolation: 'isolate' }}>
             <g id="Group_427" data-name="Group 427" transform="translate(0 0)">
-              <rect
-                id="Rectangle_11"
-                data-name="Rectangle 11"
-                width="4.157"
-                height="30.746"
-                transform="translate(0 0.192)"
-                fill="#fff"
-              />
+              <rect id="Rectangle_11" data-name="Rectangle 11" width="4.157" height="30.746" transform="translate(0 0.192)" fill="#fff" />
               <path
                 id="Path_898"
                 data-name="Path 898"

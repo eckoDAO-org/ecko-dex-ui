@@ -11,6 +11,7 @@ import ModalContainer from '../../shared/ModalContainer';
 import { theme } from '../../styles/theme';
 import { extractDecimal, reduceBalance } from '../../utils/reduceBalance';
 import { PartialScrollableScrollSection, Title, TitleContainer } from '../layout/Containers';
+import HistoryCard from './HistoryCard';
 import StatsCard from './StatsCard';
 
 const CustomGrid = styled.div`
@@ -55,6 +56,13 @@ export const CardContainer = styled.div`
   background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? `transparent` : backgroundContainer)}; // or add new style
   backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
 
+  /* &:before {
+    border-radius: inherit;
+
+  /* & > *:not(:last-child) {
+    margin-right: 32px;
+  } */
+
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
     gap: 0px;
@@ -80,12 +88,55 @@ const Tabs = styled(Title)`
   cursor: pointer;
 `;
 
-const StatsTab = ({ activeTabs, setActiveTabs }) => {
+const HistoryTab = ({ activeTabs, setActiveTabs }) => {
   const pact = useContext(PactContext);
   const { gameEditionView } = useContext(GameEditionContext);
   const { themeMode } = useContext(LightModeContext);
 
-  console.log(pact.pairList);
+  const fakeObjTx = {
+    0: {
+      reqkey: '3C8-r_p-Mrp1xTseo3Isicwq6mQGpwu-sB3AMvuJtv0',
+      amount: '125',
+      token0: 'KDA',
+      token1: 'FLUX',
+    },
+    1: {
+      reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
+      amount: '1000',
+      token0: 'FLUX',
+      token1: 'KDA',
+    },
+    2: {
+      reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
+      amount: '1000',
+      token0: 'FLUX',
+      token1: 'KDA',
+    },
+    3: {
+      reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
+      amount: '1000',
+      token0: 'FLUX',
+      token1: 'KDA',
+    },
+    4: {
+      reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
+      amount: '1000',
+      token0: 'FLUX',
+      token1: 'KDA',
+    },
+    5: {
+      reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
+      amount: '1000',
+      token0: 'FLUX',
+      token1: 'KDA',
+    },
+    6: {
+      reqkey: '5zBR4FCRRd_XpwADosD7-4TexgQu4Wwu3a2vtFbBMCQ',
+      amount: '1000',
+      token0: 'FLUX',
+      token1: 'KDA',
+    },
+  };
 
   useEffect(async () => {
     await pact.getPairList();
@@ -106,13 +157,15 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
       }}
     >
       <PartialScrollableScrollSection>
-        {pact.pairList[0] ? (
+        {/* {pact.pairList[0] ? (
           Object.values(pact.pairList).map((pair) =>
             pair && pair.reserves ? (
               <CustomGrid>
                 <CustomLabel bold>Name</CustomLabel>
                 {gameEditionView ? (
-                  <CustomLabel start>{`${pair.token0}/${pair.token1}`}</CustomLabel>
+                  <CustomLabel
+                    start
+                  >{`${pair.token0}/${pair.token1}`}</CustomLabel>
                 ) : (
                   <IconsContainer>
                     {tokenData[pair.token0].icon}
@@ -121,28 +174,39 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
                   </IconsContainer>
                 )}
                 <CustomLabel bold>token0</CustomLabel>
-                <CustomLabel start>{reduceBalance(pair.reserves[0])}</CustomLabel>
+                <CustomLabel start>
+                  {reduceBalance(pair.reserves[0])}
+                </CustomLabel>
                 <CustomLabel bold>token1</CustomLabel>
-                <CustomLabel start>{reduceBalance(pair.reserves[1])}</CustomLabel>
+                <CustomLabel start>
+                  {reduceBalance(pair.reserves[1])}
+                </CustomLabel>
                 <CustomLabel bold>Rate</CustomLabel>
-                <CustomLabel start>{`${reduceBalance(extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1]))} ${pair.token0}/${
-                  pair.token1
-                }`}</CustomLabel>
+                <CustomLabel start>{`${reduceBalance(
+                  extractDecimal(pair.reserves[0]) /
+                    extractDecimal(pair.reserves[1])
+                )} ${pair.token0}/${pair.token1}`}</CustomLabel>
               </CustomGrid>
             ) : (
               ''
             )
           )
         ) : (
+          // <Dimmer active inverted={gameEditionView}>
           <Loader
             style={{
-              color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
-              fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
+              color: gameEditionView
+                ? theme(themeMode).colors.black
+                : theme(themeMode).colors.white,
+              fontFamily: gameEditionView
+                ? theme(themeMode).fontFamily.pressStartRegular
+                : theme(themeMode).fontFamily.regular,
             }}
           >
-            Loading..
+            Loading
           </Loader>
-        )}
+          // </Dimmer>
+        )} */}
       </PartialScrollableScrollSection>
     </ModalContainer>
   ) : (
@@ -166,41 +230,36 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
             justifyContent: 'space-between',
           }}
         >
-          <Tabs
-            gameEditionView={gameEditionView}
-            active={activeTabs === 'POOL_STATS'}
-            // onClick={setActiveTabs('POOL_STATS')}
-          >
+          <Tabs gameEditionView={gameEditionView} active={activeTabs === 'POOL_STATS'} onClick={setActiveTabs}>
             Stats
           </Tabs>
-          <Tabs gameEditionView={gameEditionView} active={activeTabs === 'HISTORY'} onClick={setActiveTabs}>
+          <Tabs gameEditionView={gameEditionView} active={activeTabs === 'HISTORY'}>
             History
           </Tabs>
         </TitleContainer>
       )}
-      <PartialScrollableScrollSection>
+      <PartialScrollableScrollSection className="scrollbar-none">
         <CardContainer gameEditionView={gameEditionView}>
           {!gameEditionView && <GradientBorder />}
 
-          {pact.pairList[0] ? (
-            Object.values(pact.pairList).map((pair, index) =>
-              pair && pair.reserves ? (
+          {pact.swapList !== [] ? (
+            !pact.swapList?.error ? (
+              pact.swapList?.map((tx, index) => (
                 <>
-                  <StatsCard pair={pair} />
-                  {/* {!Object.values(pact.pairList).length -1 !== index && ( */}
-                  <Divider
-                    style={{
-                      width: '100%',
-                      margin: '32px 0px',
-                      borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`,
-                    }}
-                  />
-                  {/*  )} */}
-                  <StatsCard pair={pair} />
+                  <HistoryCard tx={tx} />
+                  {pact.swapList?.length - 1 !== index && (
+                    <Divider
+                      style={{
+                        width: '100%',
+                        margin: '32px 0px',
+                        borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`,
+                      }}
+                    />
+                  )}
                 </>
-              ) : (
-                ''
-              )
+              ))
+            ) : (
+              <>{pact.swapList?.error}</>
             )
           ) : (
             <div style={{ padding: '16px' }}>
@@ -221,4 +280,4 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
   );
 };
 
-export default StatsTab;
+export default HistoryTab;

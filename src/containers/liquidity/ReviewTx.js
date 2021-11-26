@@ -1,22 +1,13 @@
-import React, { useContext } from "react";
-import { Header, Modal } from "semantic-ui-react";
-import { Statistic, List, Divider } from "semantic-ui-react";
-import { reduceBalance } from "../../utils/reduceBalance";
-import CustomButton from "../../shared/CustomButton";
-import { PactContext } from "../../contexts/PactContext";
+import React, { useContext } from 'react';
+import { Header, Modal } from 'semantic-ui-react';
+import { Statistic, List, Divider } from 'semantic-ui-react';
+import { reduceBalance } from '../../utils/reduceBalance';
+import CustomButton from '../../shared/CustomButton';
+import { PactContext } from '../../contexts/PactContext';
 
 function ReviewTx(props) {
   const pact = useContext(PactContext);
-  const {
-    fromValues,
-    toValues,
-    buttonStatus,
-    liquidityView,
-    loading,
-    supply,
-    open,
-    setOpen,
-  } = props;
+  const { fromValues, toValues, buttonStatus, liquidityView, loading, supply, open, setOpen } = props;
 
   return (
     <Modal
@@ -24,13 +15,10 @@ function ReviewTx(props) {
       onOpen={() => setOpen(true)}
       open={open}
       style={{
-        width: 327,
+        width: 327
       }}
       trigger={
-        <CustomButton
-          disabled={!buttonStatus().status || pact.isWaitingForWalletAuth}
-          buttonStyle={{ marginTop: 24, marginRight: 0 }}
-        >
+        <CustomButton disabled={!buttonStatus().status || pact.isWaitingForWalletAuth} buttonStyle={{ marginTop: 24, marginRight: 0 }}>
           {buttonStatus().msg}
         </CustomButton>
       }
@@ -42,41 +30,26 @@ function ReviewTx(props) {
             <Statistic.Label>{`${fromValues.coin} / ${toValues.coin} Pool Tokens`}</Statistic.Label>
           </Statistic>
           <Divider />
-          {liquidityView === "Add Liquidity" ? (
+          {liquidityView === 'Add Liquidity' ? (
             <List>
               <List.Item>{`${fromValues.coin} Deposit Desired: ${fromValues.amount}`}</List.Item>
               <List.Item>{`${toValues.coin} Deposit Desired: ${toValues.amount}`}</List.Item>
               <br />
               <List.Item>{`Rates:`}</List.Item>
               <br />
-              <List.Item>{`1 ${fromValues.coin} = ${reduceBalance(
-                1 / pact.ratio
-              )} ${toValues.coin}`}</List.Item>
-              <List.Item>{`1 ${toValues.coin} = ${reduceBalance(pact.ratio)} ${
-                fromValues.coin
-              }`}</List.Item>
-              <List.Item>
-                Share of the Pool :{" "}
-                {reduceBalance(pact.share(fromValues.amount) * 100)}%
-              </List.Item>
+              <List.Item>{`1 ${fromValues.coin} = ${reduceBalance(1 / pact.ratio)} ${toValues.coin}`}</List.Item>
+              <List.Item>{`1 ${toValues.coin} = ${reduceBalance(pact.ratio)} ${fromValues.coin}`}</List.Item>
+              <List.Item>Share of the Pool : {reduceBalance(pact.share(fromValues.amount) * 100)}%</List.Item>
             </List>
           ) : (
             <List>
-              <List.Item>{`${fromValues.coin} Deposit Desired: ${reduceBalance(
-                fromValues.amount
-              )}`}</List.Item>
-              <List.Item>{`${toValues.coin} Deposit Desired: ${reduceBalance(
-                toValues.amount
-              )}`}</List.Item>
+              <List.Item>{`${fromValues.coin} Deposit Desired: ${reduceBalance(fromValues.amount)}`}</List.Item>
+              <List.Item>{`${toValues.coin} Deposit Desired: ${reduceBalance(toValues.amount)}`}</List.Item>
               <br />
               <List.Item>{`Rates:`}</List.Item>
               <br />
-              <List.Item>{`1 ${fromValues.coin} = ${reduceBalance(
-                toValues.amount / fromValues.amount
-              )} ${toValues.coin}`}</List.Item>
-              <List.Item>{`1 ${toValues.coin} = ${reduceBalance(
-                fromValues.amount / toValues.amount
-              )} ${fromValues.coin}`}</List.Item>
+              <List.Item>{`1 ${fromValues.coin} = ${reduceBalance(toValues.amount / fromValues.amount)} ${toValues.coin}`}</List.Item>
+              <List.Item>{`1 ${toValues.coin} = ${reduceBalance(fromValues.amount / toValues.amount)} ${fromValues.coin}`}</List.Item>
             </List>
           )}
         </Modal.Description>

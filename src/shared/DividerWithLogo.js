@@ -55,7 +55,7 @@ const Container = styled.div`
 
 const DividerWithLogo = () => {
   return (
-    <Container class='divider'>
+    <Container class="divider">
       <span>
         <SwapArrowsIcon />
       </span>

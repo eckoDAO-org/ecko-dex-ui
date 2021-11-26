@@ -32,21 +32,16 @@ const RegularLabel = styled.span`
 const SlippageTolleranceValue = styled.div`
   border-radius: 16px;
   border: ${({ theme: { colors } }) => `1px solid ${colors.white}`};
-  /* box-shadow: ${({ isSelected, theme: { colors } }) =>
-    isSelected ? `0 0 5px ${colors.white};` : 'none'}; */
-  color: ${({ isSelected, theme: { colors } }) =>
-    isSelected ? colors.primary : colors.white};
-  /* text-shadow: ${({ isSelected, theme: { colors } }) =>
-    isSelected ? `0 0 5px ${colors.white};` : 'none'}; */
-  font-family: ${({ isSelected, theme: { fontFamily } }) =>
-    isSelected ? fontFamily.bold : fontFamily.regular};
+  /* box-shadow: ${({ isSelected, theme: { colors } }) => (isSelected ? `0 0 5px ${colors.white};` : 'none')}; */
+  color: ${({ isSelected, theme: { colors } }) => (isSelected ? colors.primary : colors.white)};
+  /* text-shadow: ${({ isSelected, theme: { colors } }) => (isSelected ? `0 0 5px ${colors.white};` : 'none')}; */
+  font-family: ${({ isSelected, theme: { fontFamily } }) => (isSelected ? fontFamily.bold : fontFamily.regular)};
   font-size: 14px;
   padding: 6.5px 8.5px;
   min-width: 48px;
   display: flex;
   justify-content: center;
-  background-color: ${({ isSelected, theme: { colors } }) =>
-    isSelected && colors.white};
+  background-color: ${({ isSelected, theme: { colors } }) => isSelected && colors.white};
   cursor: pointer;
 `;
 
@@ -73,8 +68,7 @@ const Row = styled.div`
   align-items: center;
 
   .restrictedInput {
-    @media (max-width: ${({ theme: { mediaQueries } }) =>
-        `${mediaQueries.mobilePixel + 1}px`}) {
+    @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
       .ui.fluid.input > input {
         width: 30px !important;
       }
@@ -96,9 +90,7 @@ const SlippagePopupContent = () => {
   }, [tl]);
   return (
     <Container>
-      <BoldLabel style={{ color: theme(themeMode).colors.white }}>
-        Transactions Settings
-      </BoldLabel>
+      <BoldLabel style={{ color: theme(themeMode).colors.white }}>Transactions Settings</BoldLabel>
       {!gameEditionView && (
         <Row style={{ marginTop: 16 }}>
           <LightModeToggle />
@@ -111,34 +103,24 @@ const SlippagePopupContent = () => {
       <RegularLabel style={{ marginTop: 16 }}>Slippage Tolerance</RegularLabel>
 
       <Row style={{ marginTop: 8 }}>
-        <SlippageTolleranceValue
-          isSelected={slp === 0.1}
-          onClick={() => setSlp(0.1)}
-        >
+        <SlippageTolleranceValue isSelected={slp === 0.1} onClick={() => setSlp(0.1)}>
           0.1%
         </SlippageTolleranceValue>
-        <SlippageTolleranceValue
-          isSelected={slp === 0.5}
-          style={{ marginLeft: 4, marginRight: 4 }}
-          onClick={() => setSlp(0.5)}
-        >
+        <SlippageTolleranceValue isSelected={slp === 0.5} style={{ marginLeft: 4, marginRight: 4 }} onClick={() => setSlp(0.5)}>
           0.5%
         </SlippageTolleranceValue>
-        <SlippageTolleranceValue
-          isSelected={slp === 1}
-          style={{ marginRight: 8 }}
-          onClick={() => setSlp(1)}
-        >
+        <SlippageTolleranceValue isSelected={slp === 1} style={{ marginRight: 8 }} onClick={() => setSlp(1)}>
           1%
         </SlippageTolleranceValue>
 
-        <ContainerInputTypeNumber className='restrictedInput'>
+        <ContainerInputTypeNumber className="restrictedInput">
           <Input
+            noInputBackground
             outGameEditionView
             containerStyle={{
               border: 'none ',
               boxShadow: 'none !important',
-              padding: '0px',
+              padding: '0px'
             }}
             placeholder={slp}
             numberOnly
@@ -153,17 +135,16 @@ const SlippagePopupContent = () => {
         </ContainerInputTypeNumber>
       </Row>
 
-      <RegularLabel style={{ marginTop: 16 }}>
-        Transaction deadline
-      </RegularLabel>
+      <RegularLabel style={{ marginTop: 16 }}>Transaction deadline</RegularLabel>
       <Row style={{ marginTop: 8 }}>
         <ContainerInputTypeNumber>
           <Input
+            noInputBackground
             outGameEditionView
             containerStyle={{
               border: 'none',
               boxShadow: 'none !important',
-              padding: '0px',
+              padding: '0px'
             }}
             placeholder={tl}
             numberOnly
@@ -175,11 +156,7 @@ const SlippagePopupContent = () => {
             }}
           />
         </ContainerInputTypeNumber>
-        <RegularLabel
-          style={{ color: theme(themeMode).colors.white, marginLeft: 8 }}
-        >
-          minutes
-        </RegularLabel>
+        <RegularLabel style={{ color: theme(themeMode).colors.white, marginLeft: 8 }}>minutes</RegularLabel>
       </Row>
     </Container>
   );

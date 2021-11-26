@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
 import { ArrowBack, CloseIcon } from '../assets';
 import { GameEditionContext } from '../contexts/GameEditionContext';
+import GradientBorder from './GradientBorder';
 
 const Container = styled.div`
   position: relative;
@@ -11,48 +12,13 @@ const Container = styled.div`
   padding: ${({ gameEditionView }) => (gameEditionView ? '20px' : '32px')};
   width: 100%;
   border-radius: 10px;
-  border: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? `2px dashed ${colors.black}` : `1px solid transparent`};
-  background-clip: ${({ gameEditionView }) =>
-    !gameEditionView && `padding-box`};
+  border: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `2px dashed ${colors.black}`};
+  background-clip: ${({ gameEditionView }) => !gameEditionView && `padding-box`};
   opacity: 1;
-  background: ${({
-    gameEditionView,
-    theme: { backgroundContainer },
-    backgroundNotChangebleWithTheme,
-  }) =>
-    backgroundNotChangebleWithTheme || gameEditionView
-      ? 'transparent'
-      : backgroundContainer};
-  backdrop-filter: ${({ gameEditionView, withoutRainbowBackground }) =>
-    !gameEditionView && !withoutRainbowBackground && `blur(50px)`};
-  color: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView ? colors.black : colors.white};
-
-  ${({ withoutRainbowBackground, gameEditionView }) =>
-    !withoutRainbowBackground &&
-    !gameEditionView &&
-    `::before {
-      content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -1000;
-    margin: -1px;
-    border-radius: 10px;
-    border-left: 1px solid #ed1cb5;
-    border-right: 1px solid #39fffc;
-    background-image: linear-gradient(to right, #ed1cb5, #ffa900, #39fffc),
-      linear-gradient(to right, #ed1cb5, #ffa900, #39fffc);
-    /* background: ${({ gameEditionView }) =>
-      !gameEditionView &&
-      'linear-gradient(to right, #ed1cb5, #ffa900, #39fffc)'}; */
-    background-position: 0 0, 0 100%;
-    background-size: 100% 1px;
-    background-repeat: no-repeat;
-    }`}
+  background: ${({ gameEditionView, theme: { backgroundContainer }, backgroundNotChangebleWithTheme }) =>
+    backgroundNotChangebleWithTheme || gameEditionView ? 'transparent' : backgroundContainer};
+  backdrop-filter: ${({ gameEditionView, withoutRainbowBackground }) => !gameEditionView && !withoutRainbowBackground && `blur(50px)`};
+  color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.black : colors.white)};
 
   ::-webkit-scrollbar {
     display: none;
@@ -63,7 +29,7 @@ const HeaderContainer = styled.div`
   display: flex;
   flex-flow: row;
   justify-content: space-between;
-  margin-bottom: ${({ gameEditionView }) => !gameEditionView && '12px'};
+  /* margin-bottom: ${({ gameEditionView }) => !gameEditionView && '12px'}; */
   align-items: center;
   width: 100%;
 
@@ -75,13 +41,11 @@ const HeaderContainer = styled.div`
 `;
 
 const Title = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
 
   font-size: 24px;
 
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobileSmallPixel}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
     width: min-content;
     font-size: 16px;
   }
@@ -119,17 +83,17 @@ const ModalContainer = ({
       withoutRainbowBackground={withoutRainbowBackground}
       backgroundNotChangebleWithTheme={backgroundNotChangebleWithTheme}
     >
-      <HeaderContainer>
+      {!gameEditionView && !withoutRainbowBackground && <GradientBorder />}
+      <HeaderContainer style={{ justifyContent: !onBack && !onClose && 'center' }}>
         {onBack ? (
           <ArrowBack
             style={{
               cursor: 'pointer',
-              // color: `${theme().colors.white} 0% 0% no-repeat padding-box`,
             }}
             onClick={onBack}
           />
         ) : (
-          <div></div>
+          <></>
         )}
 
         {title && (
@@ -151,9 +115,7 @@ const ModalContainer = ({
         )}
       </HeaderContainer>
 
-      {description && (
-        <Description style={descriptionStyle}>{description}</Description>
-      )}
+      {description && <Description style={descriptionStyle}>{description}</Description>}
       {children}
     </Container>
   );

@@ -14,23 +14,17 @@ const PopupTxView = ({ isAccountPopup }) => {
 
   return isAccountPopup ? (
     <CustomPopup
-      trigger={
-        <Icon name=' info circle' style={{ margin: ' 0px 0px 0px 4px' }} />
-      }
-      position='top right'
-      on='click'
+      trigger={<Icon name=" info circle" style={{ margin: ' 0px 0px 0px 4px' }} />}
+      position="top right"
+      on="click"
       containerStyle={{
-        color: gameEditionView
-          ? `${theme(themeMode).colors.black}`
-          : `${theme(themeMode).colors.white}`,
+        color: gameEditionView ? `${theme(themeMode).colors.black}` : `${theme(themeMode).colors.white}`
       }}
     >
       <Popup.Header
         style={{
           padding: '12px 12px 4px 12px',
-          color: gameEditionView
-            ? `${theme(themeMode).colors.black}`
-            : `${theme(themeMode).colors.white}`,
+          color: gameEditionView ? `${theme(themeMode).colors.black}` : `${theme(themeMode).colors.white}`
         }}
       >
         Public Key
@@ -41,9 +35,7 @@ const PopupTxView = ({ isAccountPopup }) => {
           inlineSize: '270px',
           overflowWrap: ' break-word',
           padding: '4px 12px 12px 12px',
-          color: gameEditionView
-            ? `${theme(themeMode).colors.black}`
-            : `${theme(themeMode).colors.white}`,
+          color: gameEditionView ? `${theme(themeMode).colors.black}` : `${theme(themeMode).colors.white}`
         }}
       >
         {account.account}
@@ -60,23 +52,19 @@ const PopupTxView = ({ isAccountPopup }) => {
               'noopener,noreferrer'
             );
           }}
-          name='help circle'
+          name="help circle"
           style={{ marginLeft: '2px', marginRight: 0 }}
         />
       }
-      position='top center'
+      position="top center"
       containerStyle={{
-        color: gameEditionView
-          ? `${theme(themeMode).colors.black} !important`
-          : `${theme(themeMode).colors.white} !important`,
+        color: gameEditionView ? `${theme(themeMode).colors.black} !important` : `${theme(themeMode).colors.white} !important`
       }}
     >
       <Popup.Header
         style={{
           padding: '8px 8px 4px 8px',
-          color: gameEditionView
-            ? `${theme(themeMode).colors.black} !important`
-            : `${theme(themeMode).colors.white} !important`,
+          color: gameEditionView ? `${theme(themeMode).colors.black} !important` : `${theme(themeMode).colors.white} !important`
         }}
       >
         Why is Gas free?
@@ -84,14 +72,11 @@ const PopupTxView = ({ isAccountPopup }) => {
       <Popup.Content
         style={{
           padding: '8px 4px 8px 8px',
-          color: gameEditionView
-            ? `${theme(themeMode).colors.black} !important`
-            : `${theme(themeMode).colors.white} !important`,
+          color: gameEditionView ? `${theme(themeMode).colors.black} !important` : `${theme(themeMode).colors.white} !important`
         }}
       >
-        Kadena has a novel concept called gas stations that allows smart
-        contracts to pay for users' gas. This means you do not need to hold KDA
-        to trade any token pair!
+        Kadena has a novel concept called gas stations that allows smart contracts to pay for users' gas. This means you do not need to hold KDA to
+        trade any token pair!
       </Popup.Content>
     </CustomPopup>
   );

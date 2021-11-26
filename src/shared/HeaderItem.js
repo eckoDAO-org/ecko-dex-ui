@@ -5,7 +5,6 @@ import { GameEditionContext } from '../contexts/GameEditionContext';
 
 const Item = styled(NavLink)`
   color: ${({ theme: { colors } }) => colors.white};
-  display: flex;
   font-size: 14px;
   text-decoration: none;
   text-transform: capitalize;
@@ -21,10 +20,8 @@ const Item = styled(NavLink)`
     font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
   }
   &:hover {
-    color: ${({ theme: { colors }, gameEditionView }) =>
-      gameEditionView ? 'none' : colors.white};
-    text-shadow: ${({ theme: { colors }, gameEditionView }) =>
-      gameEditionView ? 'none' : `0 0 5px ${colors.white}`};
+    color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? 'none' : colors.white)};
+    text-shadow: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? 'none' : `0 0 5px ${colors.white}`)};
     cursor: pointer;
     & svg {
       & path {
@@ -34,17 +31,7 @@ const Item = styled(NavLink)`
   }
 `;
 
-const HeaderItem = ({
-  id,
-  className,
-  route,
-  children,
-  icon,
-  link,
-  onClick,
-  onMouseOver,
-  headerItemStyle,
-}) => {
+const HeaderItem = ({ id, className, route, children, icon, link, onClick, onMouseOver, headerItemStyle }) => {
   const { gameEditionView } = useContext(GameEditionContext);
   const getTo = () => {
     if (route) return route;
@@ -58,9 +45,7 @@ const HeaderItem = ({
       className={className}
       exact
       to={getTo()}
-      onClick={() =>
-        link ? window.open(link, '_blank', 'noopener,noreferrer') : onClick
-      }
+      onClick={() => (link ? window.open(link, '_blank', 'noopener,noreferrer') : onClick)}
       style={headerItemStyle}
       onMouseOver={onMouseOver}
       gameEditionView={gameEditionView}

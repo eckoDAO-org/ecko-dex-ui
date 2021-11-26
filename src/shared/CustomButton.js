@@ -9,37 +9,20 @@ const StyledButton = styled(SUIButton)`
   display: flex !important;
   justify-content: center;
   align-items: center;
-  font-family: ${({
-    theme: { fontFamily },
-    gameEditionView,
-    outGameEditionView,
-  }) => {
+  font-family: ${({ theme: { fontFamily }, gameEditionView, outGameEditionView }) => {
     if (outGameEditionView) return fontFamily.bold + '!important';
     if (gameEditionView) return fontFamily.pressStartRegular + '!important';
     else return fontFamily.bold + '!important';
   }};
-  font-size: ${({ fontSize }) =>
-    fontSize ? fontSize + ' !important' : '16px !important'};
-  color: ${({
-    theme: { colors },
-    disabled,
-    color,
-    gameEditionView,
-    outGameEditionView,
-  }) => {
+  font-size: ${({ fontSize }) => (fontSize ? fontSize + ' !important' : '16px !important')};
+  color: ${({ theme: { colors }, disabled, color, gameEditionView, outGameEditionView }) => {
     if (color) return color + ' !important';
     if (outGameEditionView) return `${colors.primary} !important`;
     if (gameEditionView) return `${colors.black} !important`;
     if (disabled) return `${colors.white} !important`;
     else return `${colors.primary} !important`;
   }};
-  background: ${({
-    theme: { buttonBackgroundGradient },
-    disabled,
-    background,
-    gameEditionView,
-    outGameEditionView,
-  }) => {
+  background: ${({ theme: { buttonBackgroundGradient }, disabled, background, gameEditionView, outGameEditionView }) => {
     if (outGameEditionView) return buttonBackgroundGradient + '!important';
     if (background) return background + ' !important';
     if (gameEditionView) return 'transparent !important';
@@ -48,12 +31,7 @@ const StyledButton = styled(SUIButton)`
   }};
   border-radius: 10px !important;
   opacity: 1 !important;
-  border: ${({
-    theme: { colors },
-    border,
-    gameEditionView,
-    outGameEditionView,
-  }) => {
+  border: ${({ theme: { colors }, border, gameEditionView, outGameEditionView }) => {
     if (outGameEditionView) return `1px solid ${colors.white} !important`;
     if (border) return border + ' !important';
     if (gameEditionView) return `2px dashed ${colors.black} !important`;
@@ -92,7 +70,7 @@ const CustomButton = ({
   onClick,
   loading,
   hover,
-  outGameEditionView,
+  outGameEditionView
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
   return (

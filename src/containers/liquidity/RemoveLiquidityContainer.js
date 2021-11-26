@@ -1,17 +1,13 @@
-import React, { useEffect, useState, useContext } from "react";
-import styled from "styled-components/macro";
-import ModalContainer from "../../components/shared/ModalContainer";
+import React, { useEffect, useState, useContext } from 'react';
+import styled from 'styled-components/macro';
+import ModalContainer from '../../components/shared/ModalContainer';
 
-import { default as StyledButton } from "../../components/shared/Button";
-import { Header, Input, Button, List, Statistic } from "semantic-ui-react";
-import TxView from "../../components/shared/TxView";
-import { PactContext } from "../../contexts/PactContext";
-import { ReactComponent as LeftIcon } from "../../assets/images/shared/left-arrow.svg";
-import {
-  reduceBalance,
-  extractDecimal,
-  limitDecimalPlaces,
-} from "../../utils/reduceBalance";
+import { default as StyledButton } from '../../components/shared/Button';
+import { Header, Input, Button, List, Statistic } from 'semantic-ui-react';
+import TxView from '../../components/shared/TxView';
+import { PactContext } from '../../contexts/PactContext';
+import { ReactComponent as LeftIcon } from '../../assets/images/shared/left-arrow.svg';
+import { reduceBalance, extractDecimal, limitDecimalPlaces } from '../../utils/reduceBalance';
 
 const Container = styled.div`
   margin: 15px 0px;
@@ -29,30 +25,14 @@ const RemoveLiquidityContainer = (props) => {
   const [showTxModal, setShowTxModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [pooled, setPooled] = useState(balance);
-  const [pooledToken0, setPooledToken0] = useState(
-    reduceBalance(pooledAmount[0], 12)
-  );
-  const [pooledToken1, setPooledToken1] = useState(
-    reduceBalance(pooledAmount[1], 12)
-  );
+  const [pooledToken0, setPooledToken0] = useState(reduceBalance(pooledAmount[0], 12));
+  const [pooledToken1, setPooledToken1] = useState(reduceBalance(pooledAmount[1], 12));
 
   useEffect(() => {
     if (!isNaN(amount)) {
-      setPooled(
-        reduceBalance((extractDecimal(balance) * amount) / 100, pact.PRECISION)
-      );
-      setPooledToken0(
-        reduceBalance(
-          (extractDecimal(pooledAmount[0]) * amount) / 100,
-          pact.PRECISION
-        )
-      );
-      setPooledToken1(
-        reduceBalance(
-          (extractDecimal(pooledAmount[1]) * amount) / 100,
-          pact.PRECISION
-        )
-      );
+      setPooled(reduceBalance((extractDecimal(balance) * amount) / 100, pact.PRECISION));
+      setPooledToken0(reduceBalance((extractDecimal(pooledAmount[0]) * amount) / 100, pact.PRECISION));
+      setPooledToken1(reduceBalance((extractDecimal(pooledAmount[1]) * amount) / 100, pact.PRECISION));
     }
   }, [amount]);
 
@@ -65,21 +45,15 @@ const RemoveLiquidityContainer = (props) => {
 
   return (
     <ModalContainer title={liquidityView}>
-      <TxView
-        view="Remove Liquidity"
-        show={showTxModal}
-        token0={token0}
-        token1={token1}
-        onClose={() => setShowTxModal(false)}
-      />
+      <TxView view="Remove Liquidity" show={showTxModal} token0={token0} token1={token1} onClose={() => setShowTxModal(false)} />
       <LeftIcon
         style={{
-          cursor: "pointer",
-          position: "absolute",
+          cursor: 'pointer',
+          position: 'absolute',
           width: 20,
           height: 30,
           top: 14,
-          left: 14,
+          left: 14
         }}
         onClick={() => props.closeLiquidity()}
       />
@@ -92,7 +66,7 @@ const RemoveLiquidityContainer = (props) => {
             setAmount(limitDecimalPlaces(e.target.value, 2));
           }
         }}
-        label={{ basic: true, content: "%" }}
+        label={{ basic: true, content: '%' }}
         labelPosition="right"
         placeholder="Enter Amount to Remove"
       />
@@ -115,7 +89,7 @@ const RemoveLiquidityContainer = (props) => {
         loading={loading}
         disabled={isNaN(amount) || reduceBalance(amount) === 0}
         onClick={async () => {
-          if (pact.signing.method !== "sign") {
+          if (pact.signing.method !== 'sign') {
             const res = await pact.removeLiquidityLocal(
               pact.tokenData[token0].code,
               pact.tokenData[token1].code,
@@ -123,9 +97,7 @@ const RemoveLiquidityContainer = (props) => {
             );
             if (res === -1) {
               setLoading(false);
-              alert(
-                "Incorrect password. If forgotten, you can reset it with your private key"
-              );
+              alert('Incorrect password. If forgotten, you can reset it with your private key');
               return;
             } else {
               setShowTxModal(true);

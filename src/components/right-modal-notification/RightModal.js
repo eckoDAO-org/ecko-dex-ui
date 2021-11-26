@@ -14,24 +14,21 @@ const Container = styled(Modal)`
   right: 0;
   top: 0;
   margin: 0px !important;
-  background-color: ${({ theme: { backgroundRightModal } }) =>
-    backgroundRightModal} !important;
+  background-color: ${({ theme: { backgroundRightModal } }) => backgroundRightModal} !important;
   opacity: 1;
   /* -webkit-backdrop-filter: blur(2em);
   backdrop-filter: blur(2em); */
 
   font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
   border-radius: 0px !important;
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel - 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel - 1}px`}) {
     max-width: 100% !important;
     width: 100% !important;
   }
 `;
 
 const ContentContainer = styled.div`
-  height: ${({ theme: { header, breadcrumbHeight = 0, footer } }) =>
-    `calc(100% - ${header.height + breadcrumbHeight + footer.modalFooter}px)`};
+  height: ${({ theme: { header, breadcrumbHeight = 0, footer } }) => `calc(100% - ${header.height + breadcrumbHeight + footer.modalFooter}px)`};
   overflow: auto;
   z-index: 1;
   overflow-x: hidden;
@@ -106,7 +103,7 @@ const RightModal = ({
   disableBackdrop,
   headerStyle,
   showHeader,
-  footerButton,
+  footerButton
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
@@ -116,19 +113,14 @@ const RightModal = ({
   }, [open]);
 
   return (
-    <CustomTransition
-      animation='slide left'
-      duration={duration}
-      visible={isVisible}
-      unmountOnHide
-    >
+    <CustomTransition animation="slide left" duration={duration} visible={isVisible} unmountOnHide>
       <Container
         mountNode={mountNode}
         open={open}
         width={width}
-        id='right_modal'
+        id="right_modal"
         onUnmount={onClose}
-        dimmer='blurring'
+        dimmer=""
         style={containerStyle}
         onClose={() => {
           if (!disableBackdrop) {
@@ -140,15 +132,12 @@ const RightModal = ({
           <Header style={headerStyle}>
             <Title style={titleStyle}>{title}</Title>
             <IconContainer onClick={() => setIsVisible(false)}>
-              {!removeIcon &&
-                (customIcon || <CloseIcon style={{ height: 10, width: 10 }} />)}
+              {!removeIcon && (customIcon || <CloseIcon style={{ height: 10, width: 10 }} />)}
             </IconContainer>
           </Header>
         )}
 
-        <ContentContainer style={contentStyle}>
-          {children || content}
-        </ContentContainer>
+        <ContentContainer style={contentStyle}>{children || content}</ContentContainer>
         <FooterContainer>{footerButton}</FooterContainer>
       </Container>
     </CustomTransition>
@@ -163,7 +152,7 @@ RightModal.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   duration: PropTypes.number,
   disableBackdrop: PropTypes.bool,
-  width: PropTypes.string,
+  width: PropTypes.string
 };
 
 RightModal.defaultProps = {
@@ -171,5 +160,5 @@ RightModal.defaultProps = {
   title: null,
   duration: 300,
   disableBackdrop: false,
-  width: null,
+  width: null
 };

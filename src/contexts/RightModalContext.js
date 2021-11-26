@@ -7,13 +7,12 @@ const initialState = {
   open: false,
   title: '',
   content: null,
-  footer: null,
+  footer: null
 };
 
 export const RightModalProvider = (props) => {
   const [state, setState] = useState(initialState);
-  const { notificationList, setNotificationList } =
-    useContext(NotificationContext);
+  const { notificationList, setNotificationList } = useContext(NotificationContext);
 
   const openModal = (settings) => {
     setState((prev) => ({ ...prev, ...settings, open: true }));
@@ -28,7 +27,7 @@ export const RightModalProvider = (props) => {
     // se in the notification list if the nofications are readed
     const newNotificationList = notificationList.map((notif) => ({
       ...notif,
-      isReaded: true,
+      isReaded: true
     }));
     setNotificationList(newNotificationList);
   };
@@ -39,7 +38,7 @@ export const RightModalProvider = (props) => {
         ...state,
         setModalLoading,
         openModal,
-        closeModal,
+        closeModal
       }}
     >
       {props.children}
@@ -50,10 +49,4 @@ export const RightModalProvider = (props) => {
 export const RightModalConsumer = RightModalContext.Consumer;
 
 export const withRightModalContext = (Component) => (props) =>
-  (
-    <RightModalConsumer>
-      {(providerProps) => (
-        <Component {...props} modalContextProps={providerProps} />
-      )}
-    </RightModalConsumer>
-  );
+  <RightModalConsumer>{(providerProps) => <Component {...props} modalContextProps={providerProps} />}</RightModalConsumer>;

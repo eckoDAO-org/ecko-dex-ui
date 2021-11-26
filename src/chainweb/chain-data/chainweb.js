@@ -7,9 +7,9 @@
 /* Dependencies */
 
 /* External */
-const base64url = require("base64-url");
-const fetch = require("node-fetch");
-const EventSource = require('eventsource')
+const base64url = require('base64-url');
+const fetch = require('node-fetch');
+const EventSource = require('eventsource');
 const pRetry = require('p-retry');
 
 /* Internal */
@@ -23,7 +23,7 @@ const HeaderBuffer = require('./HeaderBuffer');
  *
  * @param {string} txt - base64url encoded json text
  */
-const base64json = txt => JSON.parse(base64url.decode(txt));
+const base64json = (txt) => JSON.parse(base64url.decode(txt));
 
 /**
  * Retry a fetch callback
@@ -33,57 +33,66 @@ const base64json = txt => JSON.parse(base64url.decode(txt));
  * @return {Promise} Promise object that represents the response of the fetch action.
  */
 const retryFetch = async (retryOptions, fetchAction) => {
+  let retry404 = false;
+  if (retryOptions) {
+    retry404 = retryOptions.retry404 ?? false;
+  } else {
+    retryOptions = {
+      onFailedAttempt: (x) => console.log(x),
+      retries: 2,
+      minTimeout: 500,
+      randomize: true
+    };
+  }
 
-    let retry404 = false;
-    if (retryOptions) {
-        retry404 = retryOptions.retry404 ?? false;
+  const run = async () => {
+    const response = await fetchAction();
+    if (response.status == 200) {
+      return response;
+
+      // retry 404 if requested
+    } else if (response.status == 404 && retry404) {
+      // not found
+      throw response;
+
+      // retry potentially ephemeral failure conditions
+    } else if (response.status == 408) {
+      // response timeout
+      throw response;
+    } else if (response.status == 423) {
+      // locked
+      throw response;
+    } else if (response.status == 425) {
+      // too early
+      throw response;
+    } else if (response.status == 429) {
+      // too many requests
+      throw response;
+    } else if (response.status == 500) {
+      // internal server error
+      throw response;
+    } else if (response.status == 502) {
+      // bad gateway
+      throw response;
+    } else if (response.status == 503) {
+      // service unavailable
+      throw response;
+    } else if (response.status == 504) {
+      // gateway timeout
+      throw response;
+
+      // don't retry on anything else
+    } else if (response.status == 204) {
+      // no content
+      return pRetry.AbortError(response);
     } else {
-        retryOptions = {
-            onFailedAttempt: x => console.log(x),
-            retries: 2,
-            minTimeout: 500,
-            randomize: true
-        };
+      return pRetry.AbortError(response);
     }
+  };
 
-    const run = async () => {
-        const response = await fetchAction();
-        if (response.status == 200) {
-            return response;
-
-        // retry 404 if requested
-        } else if (response.status == 404 && retry404) { // not found
-            throw response
-
-        // retry potentially ephemeral failure conditions
-        } else if (response.status == 408) { // response timeout
-            throw response
-        } else if (response.status == 423) { // locked
-            throw response
-        } else if (response.status == 425) { // too early
-            throw response
-        } else if (response.status == 429) { // too many requests
-            throw response
-        } else if (response.status == 500) { // internal server error
-            throw response
-        } else if (response.status == 502) { // bad gateway
-            throw response
-        } else if (response.status == 503) { // service unavailable
-            throw response
-        } else if (response.status == 504) { // gateway timeout
-            throw response
-
-        // don't retry on anything else
-        } else if (response.status == 204) { // no content
-            return pRetry.AbortError(response);
-        } else {
-            return pRetry.AbortError(response);
-        }
-    }
-
-    const res = await pRetry(run, retryOptions);
-    return res;
-}
+  const res = await pRetry(run, retryOptions);
+  return res;
+};
 
 /**
  * Create URL for the Chainweb API
@@ -93,9 +102,9 @@ const retryFetch = async (retryOptions, fetchAction) => {
  * @param {string} pathSuffix - suffix of the path that is appended to the path of the base URL
  * @return {Object} URL
  */
-const baseUrl = (network = "mainnet01", host = "https://api.chainweb.com", pathSuffix) => {
-    return new URL(`${host}/chainweb/0.0/${network}/${pathSuffix}`);
-}
+const baseUrl = (network = 'mainnet01', host = 'https://api.chainweb.com', pathSuffix) => {
+  return new URL(`${host}/chainweb/0.0/${network}/${pathSuffix}`);
+};
 
 /**
  * Create URL for a chain endpoint of the Chainweb API
@@ -107,11 +116,11 @@ const baseUrl = (network = "mainnet01", host = "https://api.chainweb.com", pathS
  * @return {Object} URL
  */
 const chainUrl = (chainId, network, host, pathSuffix) => {
-    if (chainId == null) {
-        throw "missing chainId parameter";
-    }
-    return baseUrl(network, host, `chain/${chainId}/${pathSuffix}`);
-}
+  if (chainId == null) {
+    throw 'missing chainId parameter';
+  }
+  return baseUrl(network, host, `chain/${chainId}/${pathSuffix}`);
+};
 
 /* ************************************************************************** */
 /* Chainweb API Requests */
@@ -126,12 +135,9 @@ const chainUrl = (chainId, network, host, pathSuffix) => {
  * @return {Object} cut hashes object
  */
 const currentCut = async (network, host, retryOptions) => {
-    const response = await retryFetch(
-        retryOptions,
-        () => fetch(baseUrl(network, host, "cut"))
-    );
-    return response.json();
-}
+  const response = await retryFetch(retryOptions, () => fetch(baseUrl(network, host, 'cut')));
+  return response.json();
+};
 
 /**
  * P2P peers of the cut network
@@ -145,12 +151,9 @@ const currentCut = async (network, host, retryOptions) => {
  * TODO: support paging
  */
 const cutPeers = async (network, host, retryOptions) => {
-    const response = await retryFetch(
-        retryOptions,
-        () => fetch(baseUrl(network, host, "cut/peer"))
-    );
-    return response.json();
-}
+  const response = await retryFetch(retryOptions, () => fetch(baseUrl(network, host, 'cut/peer')));
+  return response.json();
+};
 
 /**
  * Return block headers from chain in decending order
@@ -169,35 +172,33 @@ const cutPeers = async (network, host, retryOptions) => {
  * TODO: support paging
  */
 const branch = async (chainId, upper, lower, minHeight, maxHeight, network, host, retryOptions) => {
+  /* URL */
+  let url = chainUrl(chainId, network, host, 'header/branch');
+  if (minHeight) {
+    url.searchParams.append('minheight', minHeight);
+  }
+  if (maxHeight) {
+    url.searchParams.append('maxheight', maxHeight);
+  }
 
-    /* URL */
-    let url = chainUrl(chainId, network, host, "header/branch");
-    if (minHeight) {
-        url.searchParams.append("minheight", minHeight);
-    }
-    if (maxHeight) {
-        url.searchParams.append("maxheight", maxHeight);
-    }
+  /* Body */
+  const body = {
+    upper: upper,
+    lower: lower
+  };
 
-    /* Body */
-    const body = {
-        upper: upper,
-        lower: lower
-    };
-
-    const response = await retryFetch(
-        retryOptions,
-        () => fetch(url, {
-            method: 'post',
-            body: JSON.stringify(body),
-            headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json;blockheader-encoding=object'
-            }
-        })
-    );
-    return response.json();
-}
+  const response = await retryFetch(retryOptions, () =>
+    fetch(url, {
+      method: 'post',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json;blockheader-encoding=object'
+      }
+    })
+  );
+  return response.json();
+};
 
 /**
  * Payloads with outputs
@@ -213,38 +214,36 @@ const branch = async (chainId, upper, lower, minHeight, maxHeight, network, host
  * TODO: support paging
  */
 const payloads = async (chainId, hashes, network, host, retryOptions) => {
+  const url = chainUrl(chainId, network, host, `payload/outputs/batch`);
 
-    const url = chainUrl(chainId, network, host, `payload/outputs/batch`);
+  const response = await retryFetch(retryOptions, () =>
+    fetch(url, {
+      method: 'post',
+      body: JSON.stringify(hashes),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+  );
 
-    const response = await retryFetch(
-        retryOptions,
-        () => fetch(url, {
-            method: 'post',
-            body: JSON.stringify(hashes),
-            headers: {
-            'Content-Type': 'application/json'
-            }
-        })
-    );
+  let res = await response.json();
 
-    let res = await response.json();
-
-    return res.map(x => {
-        const txs = x.transactions;
-        x.minerData = base64json(x.minerData);
-        x.coinbase = base64json(x.coinbase);
-        x.transactions = txs.map(y => {
-            const tx = base64json(y[0]);
-            const out = base64json(y[1]);
-            tx.cmd = JSON.parse(tx.cmd);
-            return {
-                transaction: tx,
-                output: out
-            };
-        });
-        return x;
+  return res.map((x) => {
+    const txs = x.transactions;
+    x.minerData = base64json(x.minerData);
+    x.coinbase = base64json(x.coinbase);
+    x.transactions = txs.map((y) => {
+      const tx = base64json(y[0]);
+      const out = base64json(y[1]);
+      tx.cmd = JSON.parse(tx.cmd);
+      return {
+        transaction: tx,
+        output: out
+      };
     });
-}
+    return x;
+  });
+};
 
 /**
  * Callback for processing individual items of an updates stream
@@ -259,12 +258,14 @@ const payloads = async (chainId, hashes, network, host, retryOptions) => {
  * @param {string} [host="https://api.chainweb.com"] - chainweb api host
  */
 const headerUpdates = (callback, network, host) => {
-    const url = baseUrl(network, host, "header/updates");
-    const es = new EventSource(`${url}`);
-    es.onerror = (err) => { throw err; };
-    es.addEventListener('BlockHeader', m => callback(JSON.parse(m.data)));
-    return es;
-}
+  const url = baseUrl(network, host, 'header/updates');
+  const es = new EventSource(`${url}`);
+  es.onerror = (err) => {
+    throw err;
+  };
+  es.addEventListener('BlockHeader', (m) => callback(JSON.parse(m.data)));
+  return es;
+};
 
 /**
  * Apply callback to new updates.
@@ -280,14 +281,10 @@ const headerUpdates = (callback, network, host) => {
  * @returns the event source object the backs the stream
  */
 const chainUpdates = (depth, chainIds, callback, network, host) => {
-    let bs = {};
-    chainIds.forEach(x => bs[x] = new HeaderBuffer(depth, callback));
-    return headerUpdates(
-        hdr => bs[hdr.header.chainId]?.add(hdr),
-        network,
-        host
-    );
-}
+  let bs = {};
+  chainIds.forEach((x) => (bs[x] = new HeaderBuffer(depth, callback)));
+  return headerUpdates((hdr) => bs[hdr.header.chainId]?.add(hdr), network, host);
+};
 
 /* ************************************************************************** */
 /* Headers */
@@ -305,18 +302,9 @@ const chainUpdates = (depth, chainIds, callback, network, host) => {
  * TODO: support paging
  */
 const headers = async (chainId, start, end, network, host) => {
-    const cut = await currentCut(network, host);
-    return branch(
-            chainId,
-            [cut.hashes[`${chainId}`].hash],
-            [],
-            start,
-            end,
-            network,
-            host
-        )
-        .then(x => x.items);
-}
+  const cut = await currentCut(network, host);
+  return branch(chainId, [cut.hashes[`${chainId}`].hash], [], start, end, network, host).then((x) => x.items);
+};
 
 /**
  * Recent Headers
@@ -331,18 +319,17 @@ const headers = async (chainId, start, end, network, host) => {
  * TODO: support paging
  */
 const recentHeaders = async (chainId, depth = 0, n = 1, network, host) => {
-    const cut = await currentCut(network, host);
-    return branch(
-            chainId,
-            [cut.hashes[`${chainId}`].hash],
-            [],
-            cut.hashes['0'].height - depth - n + 1,
-            cut.hashes['0'].height - depth,
-            network,
-            host
-        )
-        .then(x => x.items);
-}
+  const cut = await currentCut(network, host);
+  return branch(
+    chainId,
+    [cut.hashes[`${chainId}`].hash],
+    [],
+    cut.hashes['0'].height - depth - n + 1,
+    cut.hashes['0'].height - depth,
+    network,
+    host
+  ).then((x) => x.items);
+};
 
 /**
  * Callback for processing individual items of a header stream
@@ -362,8 +349,8 @@ const recentHeaders = async (chainId, depth = 0, n = 1, network, host) => {
  * @returns the event source object the backs the stream
  */
 const headerStream = (depth, chainIds, callback, network, host) => {
-    return chainUpdates(depth, chainIds, u => callback(u.header), network, host);
-}
+  return chainUpdates(depth, chainIds, (u) => callback(u.header), network, host);
+};
 
 /* ************************************************************************** */
 /* Blocks */
@@ -376,37 +363,38 @@ const headerStream = (depth, chainIds, callback, network, host) => {
  * blocks from different chains.
  */
 const headers2blocks = async (hdrs, network, host, retryOptions) => {
-    if (hdrs.length === 0) {
-        return [];
-    }
+  if (hdrs.length === 0) {
+    return [];
+  }
 
-    const chainId = hdrs[0].chainId;
-    const pays = await payloads(
-        chainId,
-        hdrs.map(x => x.payloadHash),
-        network,
-        host,
-        retryOptions
-    );
+  const chainId = hdrs[0].chainId;
+  const pays = await payloads(
+    chainId,
+    hdrs.map((x) => x.payloadHash),
+    network,
+    host,
+    retryOptions
+  );
 
-    if (hdrs.length !== pays.length) {
-        throw `failed to get payload for some blocks. Requested ${hdrs.length} payloads but got only ${pays.length}`
-    }
+  if (hdrs.length !== pays.length) {
+    throw `failed to get payload for some blocks. Requested ${hdrs.length} payloads but got only ${pays.length}`;
+  }
 
-    let result = [];
-    for (let i = 0; i < hdrs.length; ++i) {
-        const hdr = hdrs[i], pay = pays[i];
-        if (pays[i].payloadHash == hdrs[i].payloadHash) {
-            result.push({
-                header: hdr,
-                payload: pay
-            });
-        } else {
-            throw `failed to get payload for block hash ${hdr.hash} at height ${hdr.height}`
-        }
+  let result = [];
+  for (let i = 0; i < hdrs.length; ++i) {
+    const hdr = hdrs[i],
+      pay = pays[i];
+    if (pays[i].payloadHash == hdrs[i].payloadHash) {
+      result.push({
+        header: hdr,
+        payload: pay
+      });
+    } else {
+      throw `failed to get payload for block hash ${hdr.hash} at height ${hdr.height}`;
     }
-    return result;
-}
+  }
+  return result;
+};
 
 /**
  * Blocks from a range of block heights
@@ -421,9 +409,9 @@ const headers2blocks = async (hdrs, network, host, retryOptions) => {
  * TODO: support paging
  */
 const blocks = async (chainId, start, end, network, host) => {
-    let hdrs = await headers(chainId, start, end, network, host);
-    return headers2blocks(hdrs, network, host);
-}
+  let hdrs = await headers(chainId, start, end, network, host);
+  return headers2blocks(hdrs, network, host);
+};
 
 /**
  * Recent Blocks
@@ -438,13 +426,13 @@ const blocks = async (chainId, start, end, network, host) => {
  * TODO: support paging
  */
 const recentBlocks = async (chainId, depth = 0, n = 1, network, host) => {
-    let hdrs = await recentHeaders(chainId, depth, n, network, host);
-    let ro = {}
-    if (depth <= 1) {
-        ro = { retry404: true, minTimeout: 1000 };
-    }
-    return headers2blocks(hdrs, network, host, ro);
-}
+  let hdrs = await recentHeaders(chainId, depth, n, network, host);
+  let ro = {};
+  if (depth <= 1) {
+    ro = { retry404: true, minTimeout: 1000 };
+  }
+  return headers2blocks(hdrs, network, host, ro);
+};
 
 /**
  * Callback for processing individual items of a block stream
@@ -464,14 +452,14 @@ const recentBlocks = async (chainId, depth = 0, n = 1, network, host) => {
  * @returns the event source object the backs the stream
  */
 const blockStream = (depth, chainIds, callback, network, host) => {
-    const ro = depth > 1 ? {} : { retry404: true, minTimeout: 1000 };
-    const cb = hdr => {
-        headers2blocks([hdr], network, host, ro)
-        .then(blocks => callback(blocks[0]))
-        .catch(err => console.log(err));
-    };
-    return headerStream(depth, chainIds, cb, network, host);
-}
+  const ro = depth > 1 ? {} : { retry404: true, minTimeout: 1000 };
+  const cb = (hdr) => {
+    headers2blocks([hdr], network, host, ro)
+      .then((blocks) => callback(blocks[0]))
+      .catch((err) => console.log(err));
+  };
+  return headerStream(depth, chainIds, cb, network, host);
+};
 
 /* ************************************************************************** */
 /* Transactions */
@@ -480,14 +468,14 @@ const blockStream = (depth, chainIds, callback, network, host) => {
  * Utility function to filter the transactions from an array of blocks
  */
 const filterTxs = (blocks) => {
-    return blocks
-        .filter(x => x.payload.transactions.length > 0)
-        .flatMap(x => {
-            let txs = x.payload.transactions;
-            txs.forEach(tx => tx.height = x.header.height);
-            return txs;
-        });
-}
+  return blocks
+    .filter((x) => x.payload.transactions.length > 0)
+    .flatMap((x) => {
+      let txs = x.payload.transactions;
+      txs.forEach((tx) => (tx.height = x.header.height));
+      return txs;
+    });
+};
 
 /**
  * Transactions from a range of block heights
@@ -502,8 +490,8 @@ const filterTxs = (blocks) => {
  * TODO: support paging
  */
 const txs = async (chainId, start, end, network, host) => {
-    return blocks(chainId, start, end, network, host).then(filterTxs);
-}
+  return blocks(chainId, start, end, network, host).then(filterTxs);
+};
 
 /**
  * Recent Transactions
@@ -518,8 +506,8 @@ const txs = async (chainId, start, end, network, host) => {
  * TODO: support paging
  */
 const recentTxs = async (chainId, depth = 0, n = 1, network, host) => {
-    return recentBlocks(chainId, depth, n, network, host).then(filterTxs);
-}
+  return recentBlocks(chainId, depth, n, network, host).then(filterTxs);
+};
 
 /**
  * Callback for processing individual items of a transaction stream
@@ -539,16 +527,16 @@ const recentTxs = async (chainId, depth = 0, n = 1, network, host) => {
  * @returns the event source object the backs the stream
  */
 const txStream = (depth, chainIds, callback, network, host) => {
-    const ro = depth > 1 ? {} : { retry404: true, minTimeout: 1000 };
-    const cb = u => {
-        if (u.txCount > 0) {
-            headers2blocks([u.header], network, host, ro)
-            .then(blocks => filterTxs(blocks).forEach(callback))
-            .catch(err => console.log(err));
-        }
-    };
-    return chainUpdates(depth, chainIds, cb, network, host);
-}
+  const ro = depth > 1 ? {} : { retry404: true, minTimeout: 1000 };
+  const cb = (u) => {
+    if (u.txCount > 0) {
+      headers2blocks([u.header], network, host, ro)
+        .then((blocks) => filterTxs(blocks).forEach(callback))
+        .catch((err) => console.log(err));
+    }
+  };
+  return chainUpdates(depth, chainIds, cb, network, host);
+};
 
 /* ************************************************************************** */
 /* Events */
@@ -557,18 +545,20 @@ const txStream = (depth, chainIds, callback, network, host) => {
  * Utility function to filter the events from an array of blocks
  */
 const filterEvents = (blocks) => {
-    return blocks
-        .filter(x => x.payload.transactions.length > 0)
-        .flatMap(x => x.payload.transactions.flatMap(y => {
-            let es = y.output.events ?? [];
-            es.forEach(e => e.height = x.header.height);
-            return es;
-        }));
-}
+  return blocks
+    .filter((x) => x.payload.transactions.length > 0)
+    .flatMap((x) =>
+      x.payload.transactions.flatMap((y) => {
+        let es = y.output.events ?? [];
+        es.forEach((e) => (e.height = x.header.height));
+        return es;
+      })
+    );
+};
 
 const events = async (chainId, start, end, network, host) => {
-    return blocks(chainId, start, end, network, host).then(filterEvents);
-}
+  return blocks(chainId, start, end, network, host).then(filterEvents);
+};
 
 /**
  * Recent Events
@@ -583,8 +573,8 @@ const events = async (chainId, start, end, network, host) => {
  * TODO: support paging
  */
 const recentEvents = async (chainId, depth = 0, n = 1, network, host) => {
-    return recentBlocks(chainId, depth, n, network, host).then(filterEvents);
-}
+  return recentBlocks(chainId, depth, n, network, host).then(filterEvents);
+};
 
 /**
  * Callback for processing individual items of an event stream
@@ -604,46 +594,46 @@ const recentEvents = async (chainId, depth = 0, n = 1, network, host) => {
  * @returns the event source object the backs the stream
  */
 const eventStream = (depth, chainIds, callback, network, host) => {
-    const ro = depth > 1 ? {} : { retry404: true, minTimeout: 1000 };
-    const cb = u => {
-        if (u.txCount > 0) {
-            headers2blocks([u.header], network, host, ro)
-            .then(blocks => filterEvents(blocks).forEach(callback))
-            .catch(err => console.log(err));
-        }
-    };
-    return chainUpdates(depth, chainIds, cb, network, host);
-}
+  const ro = depth > 1 ? {} : { retry404: true, minTimeout: 1000 };
+  const cb = (u) => {
+    if (u.txCount > 0) {
+      headers2blocks([u.header], network, host, ro)
+        .then((blocks) => filterEvents(blocks).forEach(callback))
+        .catch((err) => console.log(err));
+    }
+  };
+  return chainUpdates(depth, chainIds, cb, network, host);
+};
 
 /* ************************************************************************** */
 /* Module Exports */
 
 module.exports = {
-    cut: {
-        current: currentCut,
-        peers: cutPeers
-    },
-    branch: branch,
-    payloads: payloads,
+  cut: {
+    current: currentCut,
+    peers: cutPeers
+  },
+  branch: branch,
+  payloads: payloads,
 
-    headers: {
-        range: headers,
-        recent: recentHeaders,
-        stream: headerStream
-    },
-    blocks: {
-        range: blocks,
-        recent: recentBlocks,
-        stream: blockStream
-    },
-    events: {
-        range: events,
-        recent: recentEvents,
-        stream: eventStream
-    },
-    transactions: {
-        range: txs,
-        recent: recentTxs,
-        stream: txStream
-    },
+  headers: {
+    range: headers,
+    recent: recentHeaders,
+    stream: headerStream
+  },
+  blocks: {
+    range: blocks,
+    recent: recentBlocks,
+    stream: blockStream
+  },
+  events: {
+    range: events,
+    recent: recentEvents,
+    stream: eventStream
+  },
+  transactions: {
+    range: txs,
+    recent: recentTxs,
+    stream: txStream
+  }
 };

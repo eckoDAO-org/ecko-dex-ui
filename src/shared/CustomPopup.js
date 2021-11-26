@@ -16,8 +16,7 @@ const PopupContainer = styled.div`
 
   width: 100%;
   border-radius: 10px;
-  /* border: ${({ gameEditionView }) =>
-    gameEditionView ? `none` : ` 1px solid transparent`}; */
+  /* border: ${({ gameEditionView }) => (gameEditionView ? `none` : ` 1px solid transparent`)}; */
 
   backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
   opacity: 1;
@@ -28,16 +27,7 @@ const PopupContainer = styled.div`
   }
 `;
 
-const CustomPopup = ({
-  popupStyle,
-  position,
-  trigger,
-  on,
-  offset,
-  children,
-  containerStyle,
-  ...props
-}) => {
+const CustomPopup = ({ popupStyle, position, trigger, on, offset, children, containerStyle, ...props }) => {
   return (
     <Popup
       basic
@@ -48,7 +38,7 @@ const CustomPopup = ({
       style={{
         padding: 0,
         // background: `${theme.colors.purple} 0% 0% no-repeat padding-box`,
-        ...popupStyle,
+        ...popupStyle
       }}
       {...props}
     >

@@ -20,8 +20,7 @@ const Container = styled.div`
       fill: ${({ theme: { colors } }) => colors.white};
     }
   }
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobileSmallPixel}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
     button {
       padding: 12px 4px !important;
     }
@@ -43,15 +42,12 @@ const ElementsContainer = styled.div`
     font-size: 16px;
     margin-right: 13px;
     font: ${({ gameEditionView, theme: { fontFamily } }) => {
-      if (gameEditionView)
-        return `normal normal normal 14px/17px ${fontFamily.pressStartRegular}`;
+      if (gameEditionView) return `normal normal normal 14px/17px ${fontFamily.pressStartRegular}`;
     }};
-    color: ${({ gameEditionView, theme: { colors } }) =>
-      gameEditionView ? colors.black : colors.white};
+    color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.black : colors.white)};
   }
 
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobileSmallPixel}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
     img {
       margin-right: 4px !important;
     }
@@ -74,11 +70,11 @@ const InputToken = ({ icon, code, onClick, onClickButton, disabledButton }) => {
       <CustomButton
         buttonStyle={{
           padding: '12px 8px',
-          textTransform: gameEditionView ? 'capitalize' : 'uppercase',
+          textTransform: gameEditionView ? 'capitalize' : 'uppercase'
         }}
-        border='none'
+        border="none"
         color={!gameEditionView && theme(themeMode).colors.white}
-        background='transparent'
+        background="transparent"
         fontSize={gameEditionView ? '13px' : '13px'}
         onClick={onClickButton}
         disabled={disabledButton}
@@ -97,12 +93,12 @@ const InputToken = ({ icon, code, onClick, onClickButton, disabledButton }) => {
 
 InputToken.propTypes = {
   icon: PropTypes.element,
-  code: PropTypes.string,
+  code: PropTypes.string
 };
 
 InputToken.defaultProps = {
   icon: null,
-  code: '',
+  code: ''
 };
 
 export default InputToken;

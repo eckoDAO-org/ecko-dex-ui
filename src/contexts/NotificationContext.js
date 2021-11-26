@@ -10,15 +10,13 @@ export const STATUSES = {
   WARNING: toast.TYPE.WARNING,
   DARK: toast.TYPE.DARK,
   ERROR: toast.TYPE.ERROR,
-  INFO: toast.TYPE.INFO,
+  INFO: toast.TYPE.INFO
 };
 
 const getStoredNotification = JSON.parse(localStorage.getItem('Notification'));
 
 export const NotificationProvider = ({ children }) => {
-  const [notificationList, setNotificationList] = useState(
-    getStoredNotification || []
-  );
+  const [notificationList, setNotificationList] = useState(getStoredNotification || []);
 
   const showNotification = ({
     title = '',
@@ -36,29 +34,26 @@ export const NotificationProvider = ({ children }) => {
     closeButton = undefined,
     onClick = undefined,
     onOpen = undefined,
-    onClose = undefined,
+    onClose = undefined
   }) => {
-    return toast(
-      <NotificationContainer message={message} type={type} title={title} />,
-      {
-        title,
-        message,
-        autoClose,
-        position,
-        style,
-        type,
-        progressStyle,
-        hideProgressBar,
-        pauseOnHover,
-        pauseOnFocusLoss,
-        draggable,
-        delay,
-        closeButton,
-        onClick,
-        onOpen,
-        onClose,
-      }
-    );
+    return toast(<NotificationContainer message={message} type={type} title={title} />, {
+      title,
+      message,
+      autoClose,
+      position,
+      style,
+      type,
+      progressStyle,
+      hideProgressBar,
+      pauseOnHover,
+      pauseOnFocusLoss,
+      draggable,
+      delay,
+      closeButton,
+      onClick,
+      onOpen,
+      onClose
+    });
   };
 
   useEffect(() => {
@@ -66,32 +61,24 @@ export const NotificationProvider = ({ children }) => {
   }, [notificationList]);
 
   useEffect(() => {
-    if (!getStoredNotification)
-      localStorage.setItem(`Notification`, JSON.stringify([]));
+    if (!getStoredNotification) localStorage.setItem(`Notification`, JSON.stringify([]));
   }, []);
 
   const storeNotification = (notification) => {
-    const notificationListByStorage = JSON.parse(
-      localStorage.getItem('Notification')
-    );
+    const notificationListByStorage = JSON.parse(localStorage.getItem('Notification'));
     if (!notificationListByStorage) {
       //first saving notification in localstorage
       localStorage.setItem(`Notification`, JSON.stringify([notification]));
       setNotificationList(notification);
     } else {
       notificationListByStorage.push(notification);
-      localStorage.setItem(
-        `Notification`,
-        JSON.stringify(notificationListByStorage)
-      );
+      localStorage.setItem(`Notification`, JSON.stringify(notificationListByStorage));
       setNotificationList(notificationListByStorage);
     }
   };
 
   const removeItem = (indexToRemove) => {
-    const notifWithoutRemoved = notificationList.filter(
-      (notif, index) => index !== indexToRemove
-    );
+    const notifWithoutRemoved = notificationList.filter((notif, index) => index !== indexToRemove);
     setNotificationList(notifWithoutRemoved);
   };
 
@@ -107,7 +94,7 @@ export const NotificationProvider = ({ children }) => {
         setNotificationList,
         storeNotification,
         removeItem,
-        removeAllItem,
+        removeAllItem
       }}
     >
       {children}
