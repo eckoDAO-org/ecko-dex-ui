@@ -32,6 +32,7 @@ const ActionContainer = styled.div`
   flex-direction: column;
   justify-content: flex-end;
   height: 100%;
+  margin-top: ${({ gameEditionView }) => !gameEditionView && '16px'};
 `;
 
 const ZelcoreModalContent = styled.div`
@@ -167,7 +168,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
                   accounts.map((item, index) => ({
                     key: index,
                     text: reduceToken(item),
-                    value: item
+                    value: item,
                   }))
                 }
                 onChange={handleDropdownChange}
@@ -185,7 +186,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
                 accounts.map((item, index) => ({
                   key: index,
                   text: reduceToken(item),
-                  value: item
+                  value: item,
                 }))
               }
               onChange={handleDropdownChange}

@@ -143,7 +143,7 @@ const SwapContainer = () => {
     balance: account.account.balance || '',
     coin: 'KDA',
     address: 'coin',
-    precision: 12
+    precision: 12,
   });
 
   const [toValues, setToValues] = useState({
@@ -151,7 +151,7 @@ const SwapContainer = () => {
     balance: '',
     coin: '',
     address: '',
-    precision: 0
+    precision: 0,
   });
 
   const [inputSide, setInputSide] = useState('');
@@ -187,7 +187,7 @@ const SwapContainer = () => {
                   // fromValues.amount / pact.ratio,
                   pact.computeOut(fromValues.amount),
                   toValues.precision
-                )
+                ),
               })
             );
           } else {
@@ -199,7 +199,7 @@ const SwapContainer = () => {
                   // fromValues.amount / pact.ratio,
                   pact.computeOut(fromValues.amount),
                   toValues.precision
-                ).toFixed(toValues.precision)
+                ).toFixed(toValues.precision),
               })
             );
           }
@@ -226,7 +226,7 @@ const SwapContainer = () => {
                   // toValues.amount * pact.ratio,
                   pact.computeIn(toValues.amount),
                   fromValues.precision
-                )
+                ),
               })
             );
             throttle(500, safeSetFrom(), fromValues.precision);
@@ -239,7 +239,7 @@ const SwapContainer = () => {
                   // toValues.amount * pact.ratio,
                   pact.computeIn(toValues.amount),
                   fromValues.precision
-                ).toFixed(fromValues.precision)
+                ).toFixed(fromValues.precision),
               })
             );
             debounce(500, safeSetFrom(), fromValues.precision);
@@ -256,19 +256,19 @@ const SwapContainer = () => {
       if (fromValues.amount !== '' && toValues.amount === '') {
         setToValues({
           ...toValues,
-          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision)
+          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision),
         });
       }
       if (fromValues.amount === '' && toValues.amount !== '') {
         setFromValues({
           ...fromValues,
-          amount: reduceBalance(pact.computeIn(toValues.amount), fromValues.precision)
+          amount: reduceBalance(pact.computeIn(toValues.amount), fromValues.precision),
         });
       }
       if (fromValues.amount !== '' && toValues.amount !== '') {
         setToValues({
           ...toValues,
-          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision)
+          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision),
         });
       }
     }
@@ -289,14 +289,14 @@ const SwapContainer = () => {
           let balanceFrom = getCorrectBalance(acctOfFromValues.balance);
           setFromValues((prev) => ({
             ...prev,
-            balance: balanceFrom
+            balance: balanceFrom,
           }));
         }
         if (acctOfToValues) {
           let balanceTo = getCorrectBalance(acctOfToValues.balance);
           setToValues((prev) => ({
             ...prev,
-            balance: balanceTo
+            balance: balanceTo,
           }));
         }
       }
@@ -345,12 +345,12 @@ const SwapContainer = () => {
       setNoLiquidity(true);
       setFromValues({
         ...fromValues,
-        amount: 0
+        amount: 0,
       });
     } else {
       setFromValues({
         ...fromValues,
-        amount: reduceBalance(pact.computeIn(toValues.amount), fromValues.precision)
+        amount: reduceBalance(pact.computeIn(toValues.amount), fromValues.precision),
       });
     }
   };
@@ -372,7 +372,7 @@ const SwapContainer = () => {
         balance: balance,
         coin: crypto.name,
         address: crypto.code,
-        precision: crypto.precision
+        precision: crypto.precision,
       }));
     }
     if (tokenSelectorType === 'to') {
@@ -381,7 +381,7 @@ const SwapContainer = () => {
         balance: balance,
         coin: crypto.name,
         address: crypto.code,
-        precision: crypto.precision
+        precision: crypto.precision,
       }));
     }
   };
@@ -394,7 +394,7 @@ const SwapContainer = () => {
           balance: '',
           coin: '',
           address: '',
-          precision: 0
+          precision: 0,
         });
       }
     }
@@ -405,7 +405,7 @@ const SwapContainer = () => {
           balance: '',
           coin: '',
           address: '',
-          precision: 0
+          precision: 0,
         });
       }
     }
@@ -450,7 +450,7 @@ const SwapContainer = () => {
               toToken={toValues.coin}
             />
           </GameEditionTokenSelectorContainer>
-        )
+        ),
       });
     } else {
       modalContext.openModal({
@@ -458,11 +458,7 @@ const SwapContainer = () => {
         description: '',
         containerStyle: {
           //height: "100%",
-          width: '75%'
-        },
-        onBack: () => {
-          modalContext.onBackModal();
-          setTokenSelectorType(null);
+          width: '75%',
         },
         onClose: () => {
           setTokenSelectorType(null);
@@ -479,7 +475,7 @@ const SwapContainer = () => {
             fromToken={fromValues.coin}
             toToken={toValues.coin}
           />
-        )
+        ),
       });
     }
   };
