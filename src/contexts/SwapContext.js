@@ -1,12 +1,10 @@
-import React, { useState, createContext, useContext } from 'react';
+import React, { useState, createContext } from 'react';
 import Pact from 'pact-lang-api';
 import tokenData from '../constants/cryptoCurrencies';
 import pwPrompt from '../components/alerts/pwPrompt';
-import { AccountContext } from './AccountContext';
-import { WalletContext } from './WalletContext';
 import { reduceBalance } from '../utils/reduceBalance';
-import { PactContext } from './PactContext';
 import { decryptKey } from '../utils/keyUtils';
+import { useKadenaWalletContext, useWalletContext, useAccountContext, usePactContext, useNotificationContext } from '.';
 import {
   chainId,
   creationTime,
@@ -17,16 +15,16 @@ import {
   getCurrentDate,
   getCurrentTime
 } from '../constants/contextConstants';
-import { NotificationContext } from './NotificationContext';
 
 export const SwapContext = createContext();
 
 export const SwapProvider = (props) => {
-  const pact = useContext(PactContext);
-  const notificationContext = useContext(NotificationContext);
-  const { account, localRes, setLocalRes } = useContext(AccountContext);
+  const pact = usePactContext();
+  const notificationContext = useNotificationContext();
+  const { account, localRes, setLocalRes } = useAccountContext();
+  const { isConnected: isKadenaWalletConnected, requestSign: kadenaRequestSign } = useKadenaWalletContext();
 
-  const wallet = useContext(WalletContext);
+  const wallet = useWalletContext();
   const [pairAccount, setPairAccount] = useState('');
   const [cmd, setCmd] = useState(null);
 
@@ -189,11 +187,11 @@ export const SwapProvider = (props) => {
           clist: [
             ...(ENABLE_GAS_STATION
               ? [
-                  {
-                    name: 'kswap.gas-station.GAS_PAYER',
-                    args: ['free-gas', { int: 1 }, 1.0]
-                  }
-                ]
+                {
+                  name: 'kswap.gas-station.GAS_PAYER',
+                  args: ['free-gas', { int: 1 }, 1.0]
+                }
+              ]
               : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap]),
             {
               name: `${token0.address}.TRANSFER`,
@@ -277,15 +275,20 @@ export const SwapProvider = (props) => {
       //alert to sign tx
       /* walletLoading(); */
       wallet.setIsWaitingForWalletAuth(true);
-      const cmd = await Pact.wallet.sign(signCmd);
-      console.log('cmd: ', cmd);
+      let command = null;
+      if (isKadenaWalletConnected) {
+        const res = await kadenaRequestSign(signCmd);
+        command = res.signedCmd
+      } else {
+        command = await Pact.wallet.sign(signCmd);
+      }
       //close alert programmatically
       /* swal.close(); */
       wallet.setIsWaitingForWalletAuth(false);
       wallet.setWalletSuccess(true);
       //set signedtx
-      setCmd(cmd);
-      let data = await fetch(`${network}/api/v1/local`, mkReq(cmd));
+      setCmd(command);
+      let data = await fetch(`${network}/api/v1/local`, mkReq(command));
       data = await parseRes(data);
       setLocalRes(data);
       return data;

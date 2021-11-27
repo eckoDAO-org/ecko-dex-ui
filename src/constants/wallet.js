@@ -1,5 +1,5 @@
 import React from 'react';
-import { LockLogo, ZelcoreLogo, TorusLogo } from '../assets';
+import { LockLogo, ZelcoreLogo, TorusLogo, KaddexLogoWhite } from '../assets';
 
 export const WALLET = {
   ZELCORE: {
@@ -20,7 +20,7 @@ export const WALLET = {
     signMethod: 'sign_required'
   },
   KADENA_WALLET: {
-    name: 'Kadena Wallet',
-    logo: null
+    name: 'X Wallet by Kaddex',
+    logo: <KaddexLogoWhite style={{ width: 45 }} />
   }
 };

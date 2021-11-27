@@ -1,23 +1,21 @@
-import React, { useState, useContext, createContext } from 'react';
+import React, { useState, createContext } from 'react';
 import pairTokens from '../constants/pairs.json';
 import Pact from 'pact-lang-api';
-import { PactContext } from './PactContext';
 import { chainId, creationTime, GAS_PRICE, network, NETWORKID, PRECISION, ENABLE_GAS_STATION } from '../constants/contextConstants';
-import { AccountContext } from './AccountContext';
-import { WalletContext } from './WalletContext';
+import { useKadenaWalletContext, useSwapContext, usePactContext, useWalletContext, useAccountContext } from '.';
 import { reduceBalance } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
-import { SwapContext } from './SwapContext';
 import pwPrompt from '../components/alerts/pwPrompt';
 import { decryptKey } from '../utils/keyUtils';
 
 export const LiquidityContext = createContext(null);
 
 export const LiquidityProvider = (props) => {
-  const pact = useContext(PactContext);
-  const { account, setLocalRes } = useContext(AccountContext);
-  const wallet = useContext(WalletContext);
-  const swap = useContext(SwapContext);
+  const pact = usePactContext();
+  const { account, setLocalRes } = useAccountContext();
+  const { isConnected: isKadenaWalletConnected, requestSign: kadenaRequestSign } = useKadenaWalletContext();
+  const wallet = useWalletContext();
+  const swap = useSwapContext();
   const [liquidityProviderFee, setLiquidityProviderFee] = useState(0.003);
   const [pairListAccount, setPairListAccount] = useState(pairTokens);
 
@@ -135,11 +133,11 @@ export const LiquidityProvider = (props) => {
               },
               ...(ENABLE_GAS_STATION
                 ? [
-                    {
-                      name: 'kswap.gas-station.GAS_PAYER',
-                      args: ['free-gas', { int: 1 }, 1.0]
-                    }
-                  ]
+                  {
+                    name: 'kswap.gas-station.GAS_PAYER',
+                    args: ['free-gas', { int: 1 }, 1.0]
+                  }
+                ]
                 : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap])
             ]
           },
@@ -204,11 +202,11 @@ export const LiquidityProvider = (props) => {
             },
             ...(ENABLE_GAS_STATION
               ? [
-                  {
-                    name: 'kswap.gas-station.GAS_PAYER',
-                    args: ['free-gas', { int: 1 }, 1.0]
-                  }
-                ]
+                {
+                  name: 'kswap.gas-station.GAS_PAYER',
+                  args: ['free-gas', { int: 1 }, 1.0]
+                }
+              ]
               : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap])
           ]
         },
@@ -280,14 +278,20 @@ export const LiquidityProvider = (props) => {
       //alert to sign tx
       /* walletLoading(); */
       wallet.setIsWaitingForWalletAuth(true);
-      const cmd = await Pact.wallet.sign(signCmd);
+      let command = null;
+      if (isKadenaWalletConnected) {
+        const res = await kadenaRequestSign(signCmd);
+        command = res.signedCmd
+      } else {
+        command = await Pact.wallet.sign(signCmd);
+      }
       //close alert programmatically
       /* swal.close(); */
       wallet.setIsWaitingForWalletAuth(false);
       wallet.setWalletSuccess(true);
       //set signedtx
-      swap.setCmd(cmd);
-      let data = await fetch(`${network}/api/v1/local`, swap.mkReq(cmd));
+      swap.setCmd(command);
+      let data = await fetch(`${network}/api/v1/local`, swap.mkReq(command));
       data = await swap.parseRes(data);
       setLocalRes(data);
       return data;
@@ -349,11 +353,11 @@ export const LiquidityProvider = (props) => {
             },
             ...(ENABLE_GAS_STATION
               ? [
-                  {
-                    name: 'kswap.gas-station.GAS_PAYER',
-                    args: ['free-gas', { int: 1 }, 1.0]
-                  }
-                ]
+                {
+                  name: 'kswap.gas-station.GAS_PAYER',
+                  args: ['free-gas', { int: 1 }, 1.0]
+                }
+              ]
               : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap])
           ]
         },

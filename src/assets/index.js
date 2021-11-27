@@ -1,5 +1,6 @@
 export { ReactComponent as KDALogo } from './images/header/kadena-logo.svg';
 export { ReactComponent as KaddexLogo } from './images/header/kaddex_logo.svg';
+export { ReactComponent as KaddexLogoWhite } from './images/header/KADDEX-logo.svg';
 export { ReactComponent as KaddexLightModeLogo } from './images/header/kaddex_logo_light_mode.svg';
 export { ReactComponent as PowerIcon } from './images/header/power.svg';
 export { ReactComponent as CogIcon } from './images/header/cog.svg';
