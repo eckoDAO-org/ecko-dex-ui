@@ -18,4 +18,4 @@ export const network = `https://api.chainweb.com/chainweb/0.0/${NETWORKID}/chain
 export const creationTime = () => Math.round(new Date().getTime() / 1000) - 10;
 export const GAS_PRICE = 0.0000001;
 //Enable or disable gas station
-export const ENABLE_GAS_STATION = true;
+export const ENABLE_GAS_STATION = false;
