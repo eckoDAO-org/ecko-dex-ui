@@ -52,4 +52,4 @@ export const getDate = (date) => {
 
 export const GAS_PRICE = 0.0000001;
 //Enable or disable gas station
-export const ENABLE_GAS_STATION = true;
+export const ENABLE_GAS_STATION = false;
