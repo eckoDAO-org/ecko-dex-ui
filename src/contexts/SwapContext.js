@@ -4,7 +4,7 @@ import tokenData from '../constants/cryptoCurrencies';
 import pwPrompt from '../components/alerts/pwPrompt';
 import { reduceBalance } from '../utils/reduceBalance';
 import { decryptKey } from '../utils/keyUtils';
-import { useKadenaWalletContext, useWalletContext, useAccountContext, usePactContext, useNotificationContext } from '.';
+import { useKaddexWalletContext, useWalletContext, useAccountContext, usePactContext, useNotificationContext } from '.';
 import {
   chainId,
   creationTime,
@@ -13,7 +13,7 @@ import {
   NETWORKID,
   ENABLE_GAS_STATION,
   getCurrentDate,
-  getCurrentTime
+  getCurrentTime,
 } from '../constants/contextConstants';
 
 export const SwapContext = createContext();
@@ -22,7 +22,7 @@ export const SwapProvider = (props) => {
   const pact = usePactContext();
   const notificationContext = useNotificationContext();
   const { account, localRes, setLocalRes } = useAccountContext();
-  const { isConnected: isKadenaWalletConnected, requestSign: kadenaRequestSign } = useKadenaWalletContext();
+  const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
 
   const wallet = useWalletContext();
   const [pairAccount, setPairAccount] = useState('');
@@ -31,10 +31,10 @@ export const SwapProvider = (props) => {
   const mkReq = function (cmd) {
     return {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       method: 'POST',
-      body: JSON.stringify(cmd)
+      body: JSON.stringify(cmd),
     };
   };
 
@@ -55,7 +55,7 @@ export const SwapProvider = (props) => {
       let data = await Pact.fetch.local(
         {
           pactCode: `(at 'account (kswap.exchange.get-pair ${token0} ${token1}))`,
-          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 3000, creationTime(), 600)
+          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 3000, creationTime(), 600),
         },
         network
       );
@@ -101,21 +101,21 @@ export const SwapProvider = (props) => {
                 pair,
                 isSwapIn
                   ? reduceBalance(token0.amount, tokenData[token0.coin].precision)
-                  : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision)
-              ]
-            }
-          ]
+                  : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision),
+              ],
+            },
+          ],
         },
         envData: {
           'user-ks': account.guard,
           token0Amount: reduceBalance(token0.amount, tokenData[token0.coin].precision),
           token1Amount: reduceBalance(token1.amount, tokenData[token1.coin].precision),
           token1AmountWithSlippage: reduceBalance(token1.amount * (1 - parseFloat(pact.slippage)), tokenData[token1.coin].precision),
-          token0AmountWithSlippage: reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision)
+          token0AmountWithSlippage: reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision),
         },
         meta: Pact.lang.mkMeta('', '', 0, 0, 0, 0),
         networkId: NETWORKID,
-        meta: Pact.lang.mkMeta(account.account, chainId, GAS_PRICE, 3000, creationTime(), 600)
+        meta: Pact.lang.mkMeta(account.account, chainId, GAS_PRICE, 3000, creationTime(), 600),
       };
       setCmd(cmd);
       let data = await Pact.fetch.send(cmd, network);
@@ -140,14 +140,14 @@ export const SwapProvider = (props) => {
         date: getCurrentDate(),
         title: 'Transaction Pending',
         description: data.requestKeys[0],
-        isReaded: false
+        isReaded: false,
       });
 
       await pact.listen(data.requestKeys[0]);
       pact.setPolling(false);
     } catch (e) {
       pact.setPolling(false);
-      console.log(e);
+      console.log('errrrrooooooorrrr', e);
     }
   };
 
@@ -187,11 +187,11 @@ export const SwapProvider = (props) => {
           clist: [
             ...(ENABLE_GAS_STATION
               ? [
-                {
-                  name: 'kswap.gas-station.GAS_PAYER',
-                  args: ['free-gas', { int: 1 }, 1.0]
-                }
-              ]
+                  {
+                    name: 'kswap.gas-station.GAS_PAYER',
+                    args: ['free-gas', { int: 1 }, 1.0],
+                  },
+                ]
               : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap]),
             {
               name: `${token0.address}.TRANSFER`,
@@ -200,20 +200,20 @@ export const SwapProvider = (props) => {
                 pair,
                 isSwapIn
                   ? reduceBalance(token0.amount, tokenData[token0.coin].precision)
-                  : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision)
-              ]
-            }
-          ]
+                  : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision),
+              ],
+            },
+          ],
         },
         envData: {
           'user-ks': account.guard,
           token0Amount: reduceBalance(token0.amount, tokenData[token0.coin].precision),
           token1Amount: reduceBalance(token1.amount, tokenData[token1.coin].precision),
           token1AmountWithSlippage: reduceBalance(token1.amount * (1 - parseFloat(pact.slippage)), tokenData[token1.coin].precision),
-          token0AmountWithSlippage: reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision)
+          token0AmountWithSlippage: reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision),
         },
         networkId: NETWORKID,
-        meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account, chainId, GAS_PRICE, 3000, ct, 600)
+        meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account, chainId, GAS_PRICE, 3000, ct, 600),
       };
       setCmd(cmd);
       let data = await Pact.fetch.local(cmd, network);
@@ -253,9 +253,9 @@ export const SwapProvider = (props) => {
             pact.pair.account,
             isSwapIn
               ? reduceBalance(token0.amount, tokenData[token0.coin].precision)
-              : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision)
+              : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision),
           ]),
-          ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : [])
+          ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : []),
         ],
         sender: ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account,
         gasLimit: 3000,
@@ -267,18 +267,18 @@ export const SwapProvider = (props) => {
           token0Amount: reduceBalance(token0.amount, tokenData[token0.coin].precision),
           token1Amount: reduceBalance(token1.amount, tokenData[token1.coin].precision),
           token0AmountWithSlippage: reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision),
-          token1AmountWithSlippage: reduceBalance(token1.amount * (1 - parseFloat(pact.slippage)), tokenData[token1.coin].precision)
+          token1AmountWithSlippage: reduceBalance(token1.amount * (1 - parseFloat(pact.slippage)), tokenData[token1.coin].precision),
         },
         signingPubKey: account.guard.keys[0],
-        networkId: NETWORKID
+        networkId: NETWORKID,
       };
       //alert to sign tx
       /* walletLoading(); */
       wallet.setIsWaitingForWalletAuth(true);
       let command = null;
-      if (isKadenaWalletConnected) {
-        const res = await kadenaRequestSign(signCmd);
-        command = res.signedCmd
+      if (isKaddexWalletConnected) {
+        const res = await kaddexWalletRequestSign(signCmd);
+        command = res.signedCmd;
       } else {
         command = await Pact.wallet.sign(signCmd);
       }
@@ -299,7 +299,7 @@ export const SwapProvider = (props) => {
         wallet.setWalletError({
           error: true,
           title: 'No Wallet',
-          content: 'Please make sure you open and login to your wallet.'
+          content: 'Please make sure you open and login to your wallet.',
         });
       //walletError();
       else
@@ -307,7 +307,7 @@ export const SwapProvider = (props) => {
           error: true,
           title: 'Wallet Signing Failure',
           content:
-            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kaddex.'
+            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kaddex.',
         }); //walletSigError();
       console.log(e);
     }
@@ -326,7 +326,7 @@ export const SwapProvider = (props) => {
         cmd,
         setCmd,
         mkReq,
-        parseRes
+        parseRes,
       }}
     >
       {props.children}

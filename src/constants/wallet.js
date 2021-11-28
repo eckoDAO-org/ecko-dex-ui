@@ -6,21 +6,21 @@ export const WALLET = {
     name: 'Zelcore',
     logo: <ZelcoreLogo />,
     signMethod: 'wallet',
-    getAccountsUrl: 'http://127.0.0.1:9467/v1/accounts'
+    getAccountsUrl: 'http://127.0.0.1:9467/v1/accounts',
   },
   CHAINWEAVER: {
     name: 'Chainweaver',
     logo: <LockLogo />,
     signMethod: 'wallet',
-    getAccountsUrl: 'http://127.0.0.1:9467/v1/accounts'
+    getAccountsUrl: 'http://127.0.0.1:9467/v1/accounts',
   },
   TORUS: {
     name: 'Torus',
     logo: <TorusLogo />,
-    signMethod: 'sign_required'
+    signMethod: 'sign_required',
   },
-  KADENA_WALLET: {
+  KADDEX_WALLET: {
     name: 'X Wallet by Kaddex',
-    logo: <KaddexLogoWhite style={{ width: 45 }} />
-  }
+    logo: <KaddexLogoWhite style={{ width: 45 }} />,
+  },
 };

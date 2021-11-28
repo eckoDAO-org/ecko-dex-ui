@@ -2,7 +2,7 @@ import React, { useState, createContext } from 'react';
 import pairTokens from '../constants/pairs.json';
 import Pact from 'pact-lang-api';
 import { chainId, creationTime, GAS_PRICE, network, NETWORKID, PRECISION, ENABLE_GAS_STATION } from '../constants/contextConstants';
-import { useKadenaWalletContext, useSwapContext, usePactContext, useWalletContext, useAccountContext } from '.';
+import { useKaddexWalletContext, useSwapContext, usePactContext, useWalletContext, useAccountContext } from '.';
 import { reduceBalance } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
 import pwPrompt from '../components/alerts/pwPrompt';
@@ -13,7 +13,7 @@ export const LiquidityContext = createContext(null);
 export const LiquidityProvider = (props) => {
   const pact = usePactContext();
   const { account, setLocalRes } = useAccountContext();
-  const { isConnected: isKadenaWalletConnected, requestSign: kadenaRequestSign } = useKadenaWalletContext();
+  const { isConnected: isKadenaWalletConnected, requestSign: kadenaRequestSign } = useKaddexWalletContext();
   const wallet = useWalletContext();
   const swap = useSwapContext();
   const [liquidityProviderFee, setLiquidityProviderFee] = useState(0.003);
@@ -59,7 +59,7 @@ export const LiquidityProvider = (props) => {
             )
             (map (kswap-read.pair-info) [${tokenPairList}])
              `,
-          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 3000, creationTime(), 600)
+          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 3000, creationTime(), 600),
         },
         network
       );
@@ -69,14 +69,14 @@ export const LiquidityProvider = (props) => {
             balance: data[4],
             supply: data[3],
             reserves: [data[1], data[2]],
-            pooledAmount: [data[5], data[6]]
+            pooledAmount: [data[5], data[6]],
           };
           return accum;
         }, {});
         const pairList = Object.values(pairTokens).map((pair) => {
           return {
             ...pair,
-            ...dataList[pair.name]
+            ...dataList[pair.name],
           };
         });
         setPairListAccount(pairList);
@@ -96,7 +96,7 @@ export const LiquidityProvider = (props) => {
               ""
             )`,
           meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 5000, creationTime(), 28800),
-          networkId: NETWORKID
+          networkId: NETWORKID,
         },
         network
       );
@@ -125,31 +125,31 @@ export const LiquidityProvider = (props) => {
             clist: [
               {
                 name: `${token0.code}.TRANSFER`,
-                args: [account.account, pair, Number(amountDesired0)]
+                args: [account.account, pair, Number(amountDesired0)],
               },
               {
                 name: `${token1.code}.TRANSFER`,
-                args: [account.account, pair, Number(amountDesired1)]
+                args: [account.account, pair, Number(amountDesired1)],
               },
               ...(ENABLE_GAS_STATION
                 ? [
-                  {
-                    name: 'kswap.gas-station.GAS_PAYER',
-                    args: ['free-gas', { int: 1 }, 1.0]
-                  }
-                ]
-                : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap])
-            ]
+                    {
+                      name: 'kswap.gas-station.GAS_PAYER',
+                      args: ['free-gas', { int: 1 }, 1.0],
+                    },
+                  ]
+                : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap]),
+            ],
           },
           envData: {
             'user-ks': [wallet.keyPair.publicKey],
             amountDesired0: reduceBalance(amountDesired0, tokenData[token0.name].precision),
             amountDesired1: reduceBalance(amountDesired1, tokenData[token1.name].precision),
             amountMinimum0: reduceBalance(amountDesired0 * (1 - parseFloat(pact.slippage)), tokenData[token0.name].precision),
-            amountMinimum1: reduceBalance(amountDesired1 * (1 - parseFloat(pact.slippage)), tokenData[token1.name].precision)
+            amountMinimum1: reduceBalance(amountDesired1 * (1 - parseFloat(pact.slippage)), tokenData[token1.name].precision),
           },
           meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account, chainId, GAS_PRICE, 5000, creationTime(), 600),
-          networkId: NETWORKID
+          networkId: NETWORKID,
         };
         let data = await Pact.fetch.local(cmd, network);
         swap.setCmd(cmd);
@@ -194,31 +194,31 @@ export const LiquidityProvider = (props) => {
           clist: [
             {
               name: `${token0.code}.TRANSFER`,
-              args: [account.account, pair, Number(amountDesired0)]
+              args: [account.account, pair, Number(amountDesired0)],
             },
             {
               name: `${token1.code}.TRANSFER`,
-              args: [account.account, pair, Number(amountDesired1)]
+              args: [account.account, pair, Number(amountDesired1)],
             },
             ...(ENABLE_GAS_STATION
               ? [
-                {
-                  name: 'kswap.gas-station.GAS_PAYER',
-                  args: ['free-gas', { int: 1 }, 1.0]
-                }
-              ]
-              : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap])
-          ]
+                  {
+                    name: 'kswap.gas-station.GAS_PAYER',
+                    args: ['free-gas', { int: 1 }, 1.0],
+                  },
+                ]
+              : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap]),
+          ],
         },
         envData: {
           'user-ks': account.guard,
           amountDesired0: reduceBalance(amountDesired0, tokenData[token0.name].precision),
           amountDesired1: reduceBalance(amountDesired1, tokenData[token1.name].precision),
           amountMinimum0: reduceBalance(amountDesired0 * (1 - parseFloat(pact.slippage)), tokenData[token0.name].precision),
-          amountMinimum1: reduceBalance(amountDesired1 * (1 - parseFloat(pact.slippage)), tokenData[token1.name].precision)
+          amountMinimum1: reduceBalance(amountDesired1 * (1 - parseFloat(pact.slippage)), tokenData[token1.name].precision),
         },
         meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account, chainId, GAS_PRICE, 3000, creationTime(), 600),
-        networkId: NETWORKID
+        networkId: NETWORKID,
       };
       let data = await Pact.fetch.local(cmd, network);
       swap.setCmd(cmd);
@@ -251,14 +251,14 @@ export const LiquidityProvider = (props) => {
           Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${token0.code}.TRANSFER`, [
             account.account,
             pair,
-            Number(amountDesired0)
+            Number(amountDesired0),
           ]),
           Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${token1.code}.TRANSFER`, [
             account.account,
             pair,
-            Number(amountDesired1)
+            Number(amountDesired1),
           ]),
-          ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : [])
+          ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : []),
         ],
         sender: ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account,
         gasLimit: 3000,
@@ -270,10 +270,10 @@ export const LiquidityProvider = (props) => {
           amountDesired0: reduceBalance(amountDesired0, tokenData[token0.name].precision),
           amountDesired1: reduceBalance(amountDesired1, tokenData[token1.name].precision),
           amountMinimum0: reduceBalance(amountDesired0 * (1 - parseFloat(pact.slippage)), tokenData[token0.name].precision),
-          amountMinimum1: reduceBalance(amountDesired1 * (1 - parseFloat(pact.slippage)), tokenData[token1.name].precision)
+          amountMinimum1: reduceBalance(amountDesired1 * (1 - parseFloat(pact.slippage)), tokenData[token1.name].precision),
         },
         signingPubKey: account.guard.keys[0],
-        networkId: NETWORKID
+        networkId: NETWORKID,
       };
       //alert to sign tx
       /* walletLoading(); */
@@ -281,7 +281,7 @@ export const LiquidityProvider = (props) => {
       let command = null;
       if (isKadenaWalletConnected) {
         const res = await kadenaRequestSign(signCmd);
-        command = res.signedCmd
+        command = res.signedCmd;
       } else {
         command = await Pact.wallet.sign(signCmd);
       }
@@ -301,7 +301,7 @@ export const LiquidityProvider = (props) => {
         wallet.setWalletError({
           error: true,
           title: 'No Wallet',
-          content: 'Please make sure you open and login to your wallet.'
+          content: 'Please make sure you open and login to your wallet.',
         });
       //walletError();
       else
@@ -309,7 +309,7 @@ export const LiquidityProvider = (props) => {
           error: true,
           title: 'Wallet Signing Failure',
           content:
-            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kadenaswap.'
+            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kadenaswap.',
         }); //walletSigError();
       console.log(e);
     }
@@ -345,27 +345,27 @@ export const LiquidityProvider = (props) => {
           clist: [
             {
               name: `kswap.tokens.TRANSFER`,
-              args: [pairKey, account.account, pair, Number(liquidity)]
+              args: [pairKey, account.account, pair, Number(liquidity)],
             },
             {
               name: `kswap.tokens.TRANSFER`,
-              args: [pairKey, account.account, pair, Number(liquidity)]
+              args: [pairKey, account.account, pair, Number(liquidity)],
             },
             ...(ENABLE_GAS_STATION
               ? [
-                {
-                  name: 'kswap.gas-station.GAS_PAYER',
-                  args: ['free-gas', { int: 1 }, 1.0]
-                }
-              ]
-              : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap])
-          ]
+                  {
+                    name: 'kswap.gas-station.GAS_PAYER',
+                    args: ['free-gas', { int: 1 }, 1.0],
+                  },
+                ]
+              : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap]),
+          ],
         },
         envData: {
           'user-ks': account.guard,
-          liquidity: reduceBalance(liquidity, PRECISION)
+          liquidity: reduceBalance(liquidity, PRECISION),
         },
-        meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account, chainId, GAS_PRICE, 3000, creationTime(), 600)
+        meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account, chainId, GAS_PRICE, 3000, creationTime(), 600),
       };
       swap.setCmd(cmd);
       let data = await Pact.fetch.local(cmd, network);
@@ -400,15 +400,15 @@ export const LiquidityProvider = (props) => {
             pairKey,
             account.account,
             pair,
-            Number(liquidity)
+            Number(liquidity),
           ]),
           Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `kswap.tokens.TRANSFER`, [
             pairKey,
             account.account,
             pair,
-            Number(liquidity)
+            Number(liquidity),
           ]),
-          ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : [])
+          ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : []),
         ],
         sender: ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account,
         gasLimit: 3000,
@@ -417,10 +417,10 @@ export const LiquidityProvider = (props) => {
         ttl: 600,
         envData: {
           'user-ks': account.guard,
-          liquidity: reduceBalance(liquidity, PRECISION)
+          liquidity: reduceBalance(liquidity, PRECISION),
         },
         signingPubKey: account.guard.keys[0],
-        networkId: NETWORKID
+        networkId: NETWORKID,
       };
       //alert to sign tx
       /* walletLoading(); */
@@ -442,7 +442,7 @@ export const LiquidityProvider = (props) => {
         wallet.setWalletError({
           error: true,
           title: 'No Wallet',
-          content: 'Please make sure you open and login to your wallet.'
+          content: 'Please make sure you open and login to your wallet.',
         });
       //walletError();
       else
@@ -450,7 +450,7 @@ export const LiquidityProvider = (props) => {
           error: true,
           title: 'Wallet Signing Failure',
           content:
-            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kadenaswap.'
+            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kadenaswap.',
         }); //walletSigError();
       console.log(e);
     }
@@ -466,7 +466,7 @@ export const LiquidityProvider = (props) => {
     addLiquidityLocal,
     addLiquidityWallet,
     removeLiquidityLocal,
-    removeLiquidityWallet
+    removeLiquidityWallet,
   };
 
   return <LiquidityContext.Provider value={contextValue}>{props.children}</LiquidityContext.Provider>;

@@ -50,11 +50,15 @@ const GameEditionStartAnimation = () => {
 
   useEffect(() => {
     if (fade === 'out') {
-      setTimeout(() => {
+      let goToSwapTimeout = setTimeout(() => {
         history.push(ROUTE_GAME_EDITION_MENU);
       }, [2500]);
+      return () => {
+        clearTimeout(goToSwapTimeout);
+      };
     }
   }, [fade]);
+
   return (
     <Container>
       <AnimatedDiv>

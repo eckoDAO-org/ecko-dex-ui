@@ -13,7 +13,7 @@ import { SwapProvider } from './contexts/SwapContext';
 import { LiquidityProvider } from './contexts/LiquidityContext';
 import { GameEditionProvider } from './contexts/GameEditionContext';
 import { LightModeContext, LightModeProvider, useLightMode } from './contexts/LightModeContext';
-import { KadenaWalletProvider } from './contexts/KadenaWalletContext';
+import { KaddexWalletProvider } from './contexts/KaddexWalletContext';
 
 function App() {
   const { themeMode } = useContext(LightModeContext);
@@ -26,7 +26,7 @@ function App() {
           <AccountProvider>
             <WalletProvider>
               <PactProvider>
-                <KadenaWalletProvider>
+                <KaddexWalletProvider>
                   <SwapProvider>
                     <LiquidityProvider>
                       <RightModalRender>
@@ -36,7 +36,7 @@ function App() {
                       </RightModalRender>
                     </LiquidityProvider>
                   </SwapProvider>
-                </KadenaWalletProvider>
+                </KaddexWalletProvider>
               </PactProvider>
             </WalletProvider>
           </AccountProvider>

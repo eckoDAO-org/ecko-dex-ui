@@ -1,7 +1,7 @@
 import React from 'react';
 import CustomButton from '../../../shared/CustomButton';
 import { WALLET } from '../../../constants/wallet';
-import { useKadenaWalletContext, useNotificationContext, useModalContext, useLightModeContext, useGameEditionContext } from '../../../contexts';
+import { useKaddexWalletContext, useNotificationContext, useModalContext, useLightModeContext, useGameEditionContext } from '../../../contexts';
 import ConnectWalletZelcoreModal from './ConnectWalletZelcoreModal';
 import ConnecWalletTorusModal from './ConnectWalletTorusModal';
 import ConnectWalletChainweaverModal from './ConnectWalletChainweaverModal';
@@ -10,7 +10,7 @@ import { theme } from '../../../styles/theme';
 const ConnectWalletModal = () => {
   const modalContext = useModalContext();
   const { STATUSES, showNotification } = useNotificationContext();
-  const { initializeKDAWallet, isInstalled } = useKadenaWalletContext();
+  const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
   const { gameEditionView, openModal } = useGameEditionContext();
   const { themeMode } = useLightModeContext();
 
@@ -23,7 +23,7 @@ const ConnectWalletModal = () => {
           return openModal({
             title: 'connect wallet',
             description: 'Zelcore Signing (Safest)',
-            content: <ConnectWalletZelcoreModal onClose={modalContext.closeModal()} onBack={() => modalContext.onBackModal()} />
+            content: <ConnectWalletZelcoreModal onClose={modalContext.closeModal()} onBack={() => modalContext.onBackModal()} />,
           });
         } else {
           return modalContext.openModal({
@@ -31,7 +31,7 @@ const ConnectWalletModal = () => {
             title: 'connect wallet',
             description: 'Zelcore Signing (Safest)',
             onBack: () => modalContext.onBackModal(),
-            content: <ConnectWalletZelcoreModal onClose={modalContext.closeModal()} onBack={() => modalContext.onBackModal()} />
+            content: <ConnectWalletZelcoreModal onClose={modalContext.closeModal()} onBack={() => modalContext.onBackModal()} />,
           });
         }
       case WALLET.TORUS.name:
@@ -39,7 +39,7 @@ const ConnectWalletModal = () => {
           return openModal({
             title: 'connect wallet',
             description: 'Torus Signing',
-            content: <ConnecWalletTorusModal onClose={() => modalContext.closeModal()} onBack={() => modalContext.onBackModal()} />
+            content: <ConnecWalletTorusModal onClose={() => modalContext.closeModal()} onBack={() => modalContext.onBackModal()} />,
           });
         } else {
           return modalContext.openModal({
@@ -47,7 +47,7 @@ const ConnectWalletModal = () => {
             title: 'connect wallet',
             description: 'Torus Signing',
             onBack: () => modalContext.onBackModal(),
-            content: <ConnecWalletTorusModal onClose={() => modalContext.closeModal()} onBack={() => modalContext.onBackModal()} />
+            content: <ConnecWalletTorusModal onClose={() => modalContext.closeModal()} onBack={() => modalContext.onBackModal()} />,
           });
         }
       case WALLET.CHAINWEAVER.name:
@@ -55,7 +55,7 @@ const ConnectWalletModal = () => {
           return openModal({
             title: 'connect wallet',
             description: 'Chainweaver',
-            content: <ConnectWalletChainweaverModal onClose={() => modalContext.closeModal()} onBack={() => modalContext.onBackModal()} />
+            content: <ConnectWalletChainweaverModal onClose={() => modalContext.closeModal()} onBack={() => modalContext.onBackModal()} />,
           });
         } else {
           return modalContext.openModal({
@@ -63,18 +63,18 @@ const ConnectWalletModal = () => {
             title: 'connect wallet',
             description: 'Chainweaver',
             onBack: () => modalContext.onBackModal(),
-            content: <ConnectWalletChainweaverModal onClose={() => modalContext.closeModal()} onBack={() => modalContext.onBackModal()} />
+            content: <ConnectWalletChainweaverModal onClose={() => modalContext.closeModal()} onBack={() => modalContext.onBackModal()} />,
           });
         }
-      case WALLET.KADENA_WALLET.name:
+      case WALLET.KADDEX_WALLET.name:
         if (!isInstalled) {
           showNotification({
             title: 'Wallet not found',
-            message: `Please install ${WALLET.KADENA_WALLET.name}`,
+            message: `Please install ${WALLET.KADDEX_WALLET.name}`,
             type: STATUSES.WARNING,
           });
         } else {
-          initializeKDAWallet();
+          initializeKaddexWallet();
           modalContext.onBackModal();
         }
         break;
