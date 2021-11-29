@@ -89,8 +89,9 @@ export const NotificationProvider = ({ children }) => {
   return (
     <NotificationContext.Provider
       value={{
-        showNotification,
+        STATUSES,
         notificationList,
+        showNotification,
         setNotificationList,
         storeNotification,
         removeItem,

@@ -1,22 +1,18 @@
-import React, { useContext } from 'react';
-
+import React from 'react';
 import CustomButton from '../../../shared/CustomButton';
-
 import { WALLET } from '../../../constants/wallet';
-import { ModalContext } from '../../../contexts/ModalContext';
+import { useKadenaWalletContext, useNotificationContext, useModalContext, useLightModeContext, useGameEditionContext } from '../../../contexts';
 import ConnectWalletZelcoreModal from './ConnectWalletZelcoreModal';
 import ConnecWalletTorusModal from './ConnectWalletTorusModal';
 import ConnectWalletChainweaverModal from './ConnectWalletChainweaverModal';
-import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { theme } from '../../../styles/theme';
-import { LightModeContext } from '../../../contexts/LightModeContext';
-import { useKadenaWalletContext } from '../../../contexts';
 
 const ConnectWalletModal = () => {
-  const modalContext = useContext(ModalContext);
+  const modalContext = useModalContext();
+  const { STATUSES, showNotification } = useNotificationContext();
   const { initializeKDAWallet, isInstalled } = useKadenaWalletContext();
-  const { gameEditionView, openModal } = useContext(GameEditionContext);
-  const { themeMode } = useContext(LightModeContext);
+  const { gameEditionView, openModal } = useGameEditionContext();
+  const { themeMode } = useLightModeContext();
 
   const openWalletModal = (walletName) => {
     switch (walletName) {
@@ -72,7 +68,11 @@ const ConnectWalletModal = () => {
         }
       case WALLET.KADENA_WALLET.name:
         if (!isInstalled) {
-          alert('Please install Kda Wallet extension');
+          showNotification({
+            title: 'Wallet not found',
+            message: `Please install ${WALLET.KADENA_WALLET.name}`,
+            type: STATUSES.WARNING,
+          });
         } else {
           initializeKDAWallet();
           modalContext.onBackModal();

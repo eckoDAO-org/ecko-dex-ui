@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { Transition } from 'react-spring/renderprops';
 import ModalContainer from '../../../shared/ModalContainer';
 import { reduceBalance } from '../../../utils/reduceBalance';
@@ -12,17 +12,22 @@ import GameEditionModalsContainer from '../../game-edition/GameEditionModalsCont
 import tokenData from '../../../constants/cryptoCurrencies';
 
 const Container = styled.div`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
   display: flex;
   flex-flow: column;
   justify-content: center;
   align-items: center;
   margin-left: auto;
   margin-right: auto;
+  ${({ gameEditionView }) =>
+    !gameEditionView &&
+    css`
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    `}
+
   max-width: 550px;
   width: 100%;
   z-index: 5;
@@ -38,9 +43,9 @@ const Content = styled.div`
       fill: ${({ theme: { colors } }) => colors.white};
     }
   }
-  width: ${({ gameEditionView }) => (gameEditionView ? '97%' : '100%')};
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  bottom: ${({ gameEditionView }) => gameEditionView && '138px'};
+  width: 100%;
+  height: ${({ gameEditionView }) => gameEditionView && '100% '};
+  justify-content: ${({ gameEditionView }) => gameEditionView && 'space-between '};
 `;
 
 const Title = styled.div`
@@ -119,8 +124,8 @@ const ReviewTxModal = ({ show, onClose, fromValues, toValues, loading, supply, l
           <FlexStartRow>
             <SubTitle
               style={{
-                margin: '16px 0',
-                justifyContent: 'center',
+                marginBottom: '16px',
+                justifyContent: 'center'
               }}
               gameEditionView={gameEditionView}
             >
@@ -185,9 +190,7 @@ const ReviewTxModal = ({ show, onClose, fromValues, toValues, loading, supply, l
           {ContentView()}
           <CustomButton
             buttonStyle={{
-              width: '100%',
-              position: 'absolute',
-              bottom: '-130px',
+              width: '100%'
             }}
             loading={loading}
             onClick={supply}

@@ -18,6 +18,7 @@ import BellNotification from '../../right-modal-notification/BellNotification';
 import { RightModalContext } from '../../../contexts/RightModalContext';
 import { NotificationContext } from '../../../contexts/NotificationContext';
 import CopyPopup from '../../../shared/CopyPopup';
+import AccountModal from '../../modals/kdaModals/AccountModal';
 import { NotificationModalContext } from '../../../contexts/NotificationModalContext';
 
 const RightContainerHeader = styled.div`
@@ -49,15 +50,14 @@ const RightContainerHeader = styled.div`
 
 const FadeContainer = styled.div``;
 
-const AccountIdContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: ${({ gameEditionView, theme: { fontFamily } }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  & > span:first-child {
-    font-family: ${({ gameEditionView, theme: { fontFamily } }) => !gameEditionView && fontFamily.bold};
-  }
-`;
+// const Label = styled.span`
+//   font-size: 13px;
+//   font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+//   text-transform: capitalize;
+//   padding: 10px 16px;
+//   color: white;
+//   font-size: 16;
+// `;
 
 const RightHeaderItems = () => {
   const { account, logout } = useContext(AccountContext);
@@ -75,33 +75,13 @@ const RightHeaderItems = () => {
               if (gameEditionView) {
                 return openModal({
                   isVisible: true,
-                  title: account?.account ? 'wallet connected' : 'connect wallet',
-                  description: account?.account ? (
-                    <AccountIdContainer gameEditionView={gameEditionView}>
-                      <span>Account ID:</span>
-                      <span>
-                        {reduceToken(account.account)} <CopyPopup textToCopy={account.account} />
-                      </span>
-                    </AccountIdContainer>
-                  ) : (
-                    'Connect a wallet using one of the methods below'
-                  ),
-                  content: <ConnectWalletModal />,
+                  title: 'Account',
+                  content: <AccountModal />,
                 });
               } else {
                 modalContext.openModal({
-                  title: account?.account ? 'wallet connected' : 'connect wallet',
-                  description: account?.account ? (
-                    <AccountIdContainer>
-                      <span>Account ID:</span>
-                      <span>
-                        {reduceToken(account.account)} <CopyPopup textToCopy={account.account} />
-                      </span>
-                    </AccountIdContainer>
-                  ) : (
-                    'Connect a wallet using one of the methods below'
-                  ),
-                  content: <ConnectWalletModal />,
+                  title: 'Account',
+                  content: <AccountModal />,
                 });
               }
             }}

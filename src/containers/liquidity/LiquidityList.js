@@ -14,6 +14,7 @@ import { ModalContext } from '../../contexts/ModalContext';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import GradientBorder from '../../shared/GradientBorder';
 import { LightModeContext } from '../../contexts/LightModeContext';
+import FormContainer from '../../shared/FormContainer';
 
 const Container = styled.div`
   display: flex;
@@ -78,26 +79,6 @@ const LiquidityCardContainer = styled.div`
     padding: 0;
   }
 `;
-
-/* const FormContainerStyled = styled(FormContainer)`
-  display: table;
-  padding: ${({ gameEditionView }) => (gameEditionView ? '10px' : '20px')};
-  margin-bottom: 15px;
-  border: ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView
-      ? `2px dashed ${colors.black} !important`
-      : '1px solid transparent'};
-
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: column;
-    display: table;
-  }
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobileSmallPixel}px`}) {
-    padding: 0;
-  }
-`; */
 
 const TopContainer = styled.div``;
 
@@ -213,7 +194,7 @@ const LiquidityList = (props) => {
             </TopContainer>
             {account.account !== null ? (
               liquidity.pairListAccount[0] ? (
-                <LiquidityCardContainer gameEditionView={gameEditionView}>
+                <FormContainer gameEditionView={gameEditionView}>
                   {!gameEditionView && <GradientBorder />}
                   {Object.values(liquidity.pairListAccount).map((pair, index) => {
                     return pair && pair.balance ? (
@@ -256,9 +237,10 @@ const LiquidityList = (props) => {
                       <></>
                     );
                   })}
-                </LiquidityCardContainer>
+                </FormContainer>
               ) : (
-                <LiquidityCardContainer gameEditionView={gameEditionView}>
+                <FormContainer gameEditionView={gameEditionView}>
+                  {!gameEditionView && <GradientBorder />}
                   <Loader
                     active
                     inline="centered"
@@ -269,7 +251,7 @@ const LiquidityList = (props) => {
                   >
                     Loading..
                   </Loader>
-                </LiquidityCardContainer>
+                </FormContainer>
               )
             ) : (
               <></>

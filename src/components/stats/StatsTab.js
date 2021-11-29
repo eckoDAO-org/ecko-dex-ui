@@ -52,17 +52,9 @@ export const CardContainer = styled.div`
   margin-right: auto;
   border-radius: 10px;
 
-  background-clip: ${({ gameEditionView }) => !gameEditionView && `padding-box`};
-
   opacity: 1;
-  background: ${({ gameEditionView }) => (gameEditionView ? `transparent` : `transparent`)}; // or add new style
-
-  /* &:before {
-    border-radius: inherit;
-
-  /* & > *:not(:last-child) {
-    margin-right: 32px;
-  } */
+  background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? `transparent` : backgroundContainer)}; // or add new style
+  backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
