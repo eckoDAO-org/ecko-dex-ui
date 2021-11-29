@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { Transition } from 'react-spring/renderprops';
 import ModalContainer from '../../../shared/ModalContainer';
 import { reduceBalance } from '../../../utils/reduceBalance';
@@ -12,17 +12,22 @@ import GameEditionModalsContainer from '../../game-edition/GameEditionModalsCont
 import tokenData from '../../../constants/cryptoCurrencies';
 
 const Container = styled.div`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
   display: flex;
   flex-flow: column;
   justify-content: center;
   align-items: center;
   margin-left: auto;
   margin-right: auto;
+  ${({ gameEditionView }) =>
+    !gameEditionView &&
+    css`
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    `}
+
   max-width: 550px;
   width: 100%;
   z-index: 5;
@@ -38,9 +43,9 @@ const Content = styled.div`
       fill: ${({ theme: { colors } }) => colors.white};
     }
   }
-  width: ${({ gameEditionView }) => (gameEditionView ? '97%' : '100%')};
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  bottom: ${({ gameEditionView }) => gameEditionView && '138px'};
+  width: 100%;
+  height: ${({ gameEditionView }) => gameEditionView && '100% '};
+  justify-content: ${({ gameEditionView }) => gameEditionView && 'space-between '};
 `;
 
 const Title = styled.div`
@@ -82,11 +87,9 @@ const SubTitleContainer = styled.div`
 `;
 
 const SubTitle = styled.div`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '14px' : '13px')};
-  color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : colors.white};
+  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
   text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
   width: ${({ gameEditionView }) => (gameEditionView ? '100%' : 'auto')};
   align-items: center;
@@ -95,30 +98,18 @@ const SubTitle = styled.div`
 `;
 
 const Label = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
-  color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : colors.white};
+  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
 `;
 
 const Value = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
   font-size: 10px;
-  color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : `${colors.white}99`};
+  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : `${colors.white}99`)};
 `;
 
-const ReviewTxModal = ({
-  show,
-  onClose,
-  fromValues,
-  toValues,
-  loading,
-  supply,
-  liquidityView,
-}) => {
+const ReviewTxModal = ({ show, onClose, fromValues, toValues, loading, supply, liquidityView }) => {
   const pact = useContext(PactContext);
   const { gameEditionView } = useContext(GameEditionContext);
 
@@ -139,8 +130,8 @@ const ReviewTxModal = ({
           <FlexStartRow>
             <SubTitle
               style={{
-                margin: '16px 0',
-                justifyContent: 'center',
+                marginBottom: '16px',
+                justifyContent: 'center'
               }}
               gameEditionView={gameEditionView}
             >
@@ -152,17 +143,13 @@ const ReviewTxModal = ({
           <SpaceBetweenRow>
             <FlexStartRow>
               {getTokenIcon(fromValues.coin)}
-              <Label gameEditionView={gameEditionView}>
-                {fromValues.amount}
-              </Label>
+              <Label gameEditionView={gameEditionView}>{fromValues.amount}</Label>
             </FlexStartRow>
             <Label gameEditionView={gameEditionView}>{fromValues.coin}</Label>
           </SpaceBetweenRow>
           {/* FIRST RATE */}
           <FlexEndRow style={{ padding: '8px 0px 16px 0px' }}>
-            <Value gameEditionView={gameEditionView}>{`1 ${
-              fromValues?.coin
-            } =  ${reduceBalance(1 / pact.ratio)} ${toValues?.coin}`}</Value>
+            <Value gameEditionView={gameEditionView}>{`1 ${fromValues?.coin} =  ${reduceBalance(1 / pact.ratio)} ${toValues?.coin}`}</Value>
           </FlexEndRow>
           {/* SECOND COIN */}
           <SpaceBetweenRow>
@@ -174,15 +161,11 @@ const ReviewTxModal = ({
           </SpaceBetweenRow>
           {/* SECOND RATE */}
           <FlexEndRow style={{ padding: '8px 0px' }}>
-            <Value gameEditionView={gameEditionView}>{`1 ${
-              toValues?.coin
-            } =  ${reduceBalance(1 / pact.ratio)} ${fromValues?.coin}`}</Value>
+            <Value gameEditionView={gameEditionView}>{`1 ${toValues?.coin} =  ${reduceBalance(1 / pact.ratio)} ${fromValues?.coin}`}</Value>
           </FlexEndRow>
           <SpaceBetweenRow>
             <Value gameEditionView={gameEditionView}>Share of Pool:</Value>
-            <Value gameEditionView={gameEditionView}>
-              {reduceBalance(pact.share(fromValues?.amount) * 100)}%
-            </Value>
+            <Value gameEditionView={gameEditionView}>{reduceBalance(pact.share(fromValues?.amount) * 100)}%</Value>
           </SpaceBetweenRow>
         </TransactionsDetails>
       );
@@ -191,19 +174,11 @@ const ReviewTxModal = ({
         <TransactionsDetails>
           <SpaceBetweenRow>
             <Label>{`1 ${fromValues?.coin}`}</Label>
-            <Value>
-              {`${reduceBalance(toValues.amount / fromValues.amount)} ${
-                toValues.coin
-              }`}
-            </Value>
+            <Value>{`${reduceBalance(toValues.amount / fromValues.amount)} ${toValues.coin}`}</Value>
           </SpaceBetweenRow>
           <SpaceBetweenRow style={{ padding: '16px 0px' }}>
             <Label>{`1 ${toValues?.coin} `}</Label>
-            <Value>
-              {`${reduceBalance(fromValues.amount / toValues.amount)} ${
-                fromValues.coin
-              }`}
-            </Value>
+            <Value>{`${reduceBalance(fromValues.amount / toValues.amount)} ${fromValues.coin}`}</Value>
           </SpaceBetweenRow>
         </TransactionsDetails>
       );
@@ -213,7 +188,7 @@ const ReviewTxModal = ({
   return gameEditionView && show ? (
     <GameEditionModalsContainer
       modalStyle={{ zIndex: 1 }}
-      title='Preview Successful!'
+      title="Preview Successful!"
       onClose={onClose}
       content={
         <Content gameEditionView={gameEditionView}>
@@ -221,9 +196,7 @@ const ReviewTxModal = ({
           {ContentView()}
           <CustomButton
             buttonStyle={{
-              width: '100%',
-              position: 'absolute',
-              bottom: '-130px',
+              width: '100%'
             }}
             loading={loading}
             onClick={supply}
@@ -234,29 +207,18 @@ const ReviewTxModal = ({
       }
     />
   ) : (
-    <Transition
-      items={show}
-      from={{ opacity: 1 }}
-      enter={{ opacity: 1 }}
-      leave={{ opacity: 0 }}
-    >
+    <Transition items={show} from={{ opacity: 1 }} enter={{ opacity: 1 }} leave={{ opacity: 0 }}>
       {(show) =>
         show &&
         ((props) => (
           <Container style={props}>
             <Backdrop onClose={onClose} />
-            <ModalContainer title='Transaction Details' onClose={onClose}>
+            <ModalContainer title="Transaction Details" onClose={onClose}>
               <Content>
-                <Title style={{ padding: '16px 0px', fontSize: 16 }}>
-                  Preview Succesful
-                </Title>
+                <Title style={{ padding: '16px 0px', fontSize: 16 }}>Preview Succesful</Title>
                 <SuccessfullIcon />
                 {ContentView()}
-                <CustomButton
-                  buttonStyle={{ width: '100%' }}
-                  loading={loading}
-                  onClick={supply}
-                >
+                <CustomButton buttonStyle={{ width: '100%' }} loading={loading} onClick={supply}>
                   Confirm
                 </CustomButton>
               </Content>

@@ -35,9 +35,8 @@ const Content = styled.div`
   svg {
     display: ${({ gameEditionView }) => gameEditionView && 'none '};
   }
-  width: 97%;
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  bottom: ${({ gameEditionView }) => gameEditionView && '285px'};
+  width: 100%;
+  justify-content: space-between;
 `;
 
 const LoaderContainer = styled.div`
@@ -47,16 +46,22 @@ const LoaderContainer = styled.div`
   margin-top: 15px;
 `;
 
+const ContentContainer = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
 const SubTitle = styled.div`
   /* font-size: normal normal normal 12px/18px Montserrat; */
 
   width: ${({ gameEditionView }) => (gameEditionView ? '100%' : 'auto')};
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '12px' : '18px')};
-  color: ${({ theme: { colors }, gameEditionView }) =>
-    gameEditionView ? colors.black : colors.primary};
-  text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
+  margin: ${({ gameEditionView }) => !gameEditionView && '16px 0px'};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '12px' : '14px')};
+  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.primary)};
+  text-align: left;
 `;
 
 const WalletRequestView = ({ show, onClose, error }) => {
@@ -78,17 +83,12 @@ const WalletRequestView = ({ show, onClose, error }) => {
       onClose={onClose}
       content={
         error?.error ? (
-          <>
-            <Content
-              gameEditionView={gameEditionView}
-              style={{ marginBottom: '30px' }}
-            >
+          <ContentContainer>
+            <Content gameEditionView={gameEditionView} style={{ marginBottom: '30px' }}>
               <SubTitle
                 gameEditionView={gameEditionView}
                 style={{
-                  color: gameEditionView
-                    ? theme(themeMode).colors.black
-                    : theme(themeMode).colors.white,
+                  color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
                 }}
               >
                 {error.content}
@@ -99,30 +99,25 @@ const WalletRequestView = ({ show, onClose, error }) => {
                 onClose();
               }}
             >
-              <Icon name='checkmark' /> Got it
+              <Icon name="checkmark" /> Got it
             </CustomButton>{' '}
-          </>
+          </ContentContainer>
         ) : (
           <Content gameEditionView={gameEditionView}>
             <SubTitle
               gameEditionView={gameEditionView}
               style={{
-                color: gameEditionView
-                  ? theme(themeMode).colors.black
-                  : theme(themeMode).colors.white,
+                color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
               }}
             >
-              Follow instructions in the wallet to preview and sign your
-              transaction.
+              Follow instructions in the wallet to preview and sign your transaction.
             </SubTitle>
             <LoaderContainer>
               <Loader
                 active
-                inline='centered'
+                inline="centered"
                 style={{
-                  color: gameEditionView
-                    ? theme(themeMode).colors.black
-                    : theme(themeMode).colors.white,
+                  color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
                 }}
               ></Loader>
             </LoaderContainer>
@@ -131,12 +126,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
       }
     />
   ) : (
-    <Transition
-      items={show}
-      from={{ opacity: 0 }}
-      enter={{ opacity: 1 }}
-      leave={{ opacity: 0 }}
-    >
+    <Transition items={show} from={{ opacity: 0 }} enter={{ opacity: 1 }} leave={{ opacity: 0 }}>
       {(show) =>
         show &&
         ((props) => (
@@ -151,22 +141,20 @@ const WalletRequestView = ({ show, onClose, error }) => {
                 onClose={onClose}
               >
                 <Content style={{ marginBottom: '30px' }}>
-                  <SubTitle style={{ color: theme(themeMode).colors.white }}>
-                    {error.content}
-                  </SubTitle>
+                  <SubTitle style={{ color: theme(themeMode).colors.white }}>{error.content}</SubTitle>
                 </Content>
                 <CustomButton
                   onClick={() => {
                     onClose();
                   }}
                 >
-                  <Icon name='checkmark' /> Got it
+                  <Icon name="checkmark" /> Got it
                 </CustomButton>
               </ModalContainer>
             ) : (
               /* <Backdrop onClose={onClose} /> */
               <ModalContainer
-                title='Please Sign'
+                title="Please Sign"
                 containerStyle={{
                   maxHeight: '80vh',
                   maxWidth: '90vw',
@@ -174,15 +162,10 @@ const WalletRequestView = ({ show, onClose, error }) => {
               >
                 <Content>
                   <SubTitle style={{ color: theme(themeMode).colors.white }}>
-                    Follow instructions in the wallet to preview and sign your
-                    transaction.
+                    Follow instructions in the wallet to preview and sign your transaction.
                   </SubTitle>
                   <LoaderContainer>
-                    <Loader
-                      active
-                      inline='centered'
-                      style={{ color: theme(themeMode).colors.white }}
-                    ></Loader>
+                    <Loader active inline="centered" style={{ color: theme(themeMode).colors.white }}></Loader>
                   </LoaderContainer>
                 </Content>
               </ModalContainer>

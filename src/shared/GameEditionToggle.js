@@ -12,8 +12,7 @@ const ToggleContainer = styled.div`
   justify-content: center;
   flex-direction: row;
   border-radius: 20px;
-  font-family: ${({ theme: { fontFamily } }) =>
-    `${fontFamily.pressStartRegular}`};
+  font-family: ${({ theme: { fontFamily } }) => `${fontFamily.pressStartRegular}`};
 
   .ui.checkbox {
     margin-bottom: 4px;
@@ -23,8 +22,7 @@ const ToggleContainer = styled.div`
   .ui.toggle.checkbox label:before,
   .ui.toggle.checkbox input:checked ~ .box:before,
   .ui.toggle.checkbox input:checked ~ label:before {
-    background: transparent linear-gradient(112deg, #5c4499 0%, #271259 100%) 0%
-      0% no-repeat padding-box;
+    background: transparent linear-gradient(112deg, #5c4499 0%, #271259 100%) 0% 0% no-repeat padding-box;
     width: 4rem;
     height: 1.8em;
   }
@@ -46,8 +44,7 @@ const ToggleContainer = styled.div`
     left: 2.3rem;
   }
 
-  transform: ${({ animation }) =>
-    !animation ? 'translateX(0px)' : 'translateX(-180px)'};
+  transform: ${({ animation }) => (!animation ? 'translateX(0px)' : 'translateX(-180px)')};
   transition: transform 1s ease-in-out;
 `;
 
@@ -55,14 +52,12 @@ const GameLabel = styled.div`
   width: 100%;
   white-space: nowrap;
 
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobileSmallPixel}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
     width: min-content;
     font-size: 10px;
   }
 
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {
     white-space: normal;
   }
 

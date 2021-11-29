@@ -13,8 +13,7 @@ const Container = styled.div`
   display: flex;
   flex-flow: column;
   width: 100%;
-  /* position: ${({ gameEditionView }) =>
-    gameEditionView && 'absolute !important'};
+  /* position: ${({ gameEditionView }) => gameEditionView && 'absolute !important'};
   bottom: ${({ gameEditionView }) => gameEditionView && '50px !important'}; */
   svg {
     path {
@@ -23,17 +22,7 @@ const Container = styled.div`
   }
 `;
 
-const SwapForm = ({
-  fromValues,
-  setFromValues,
-  toValues,
-  setToValues,
-  fromNote,
-  toNote,
-  setTokenSelectorType,
-  setInputSide,
-  swapValues,
-}) => {
+const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, toNote, setTokenSelectorType, setInputSide, swapValues }) => {
   const { gameEditionView } = useContext(GameEditionContext);
   return (
     <Container>
@@ -41,9 +30,9 @@ const SwapForm = ({
         error={isNaN(fromValues.amount)}
         topLeftLabel={fromNote ? `from ${fromNote}` : `from`}
         topRightLabel={`balance: ${reduceBalance(fromValues.balance) ?? '-'}`}
-        placeholder='enter amount'
-        maxLength='15'
-        size='large'
+        placeholder="enter amount"
+        maxLength="15"
+        size="large"
         inputRightComponent={
           fromValues.coin ? (
             <InputToken
@@ -56,7 +45,7 @@ const SwapForm = ({
                 setInputSide('from');
                 setFromValues((prev) => ({
                   ...prev,
-                  amount: reduceBalance(fromValues.balance),
+                  amount: reduceBalance(fromValues.balance)
                 }));
               }}
               disabledButton={toValues.amount === toValues.balance}
@@ -73,7 +62,7 @@ const SwapForm = ({
           setInputSide('from');
           setFromValues((prev) => ({
             ...prev,
-            amount: limitDecimalPlaces(value, fromValues.precision),
+            amount: limitDecimalPlaces(value, fromValues.precision)
           }));
         }}
       />
@@ -86,9 +75,9 @@ const SwapForm = ({
         error={isNaN(toValues.amount)}
         topLeftLabel={toNote ? `to ${toNote}` : `to`}
         topRightLabel={`balance: ${reduceBalance(toValues.balance) ?? '-'}`}
-        placeholder='enter amount'
-        size='large'
-        maxLength='15'
+        placeholder="enter amount"
+        size="large"
+        maxLength="15"
         inputRightComponent={
           toValues.coin ? (
             <InputToken
@@ -99,7 +88,7 @@ const SwapForm = ({
                 setInputSide('to');
                 setToValues((prev) => ({
                   ...prev,
-                  amount: toValues.balance,
+                  amount: toValues.balance
                 }));
               }}
               disabledButton={fromValues.amount === fromValues.balance}
@@ -116,7 +105,7 @@ const SwapForm = ({
           setInputSide('to');
           setToValues((prev) => ({
             ...prev,
-            amount: limitDecimalPlaces(value, toValues.precision),
+            amount: limitDecimalPlaces(value, toValues.precision)
           }));
         }}
       />

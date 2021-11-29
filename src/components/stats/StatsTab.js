@@ -10,11 +10,7 @@ import GradientBorder from '../../shared/GradientBorder';
 import ModalContainer from '../../shared/ModalContainer';
 import { theme } from '../../styles/theme';
 import { extractDecimal, reduceBalance } from '../../utils/reduceBalance';
-import {
-  PartialScrollableScrollSection,
-  Title,
-  TitleContainer,
-} from '../layout/Containers';
+import { PartialScrollableScrollSection, Title, TitleContainer } from '../layout/Containers';
 import StatsCard from './StatsCard';
 
 const CustomGrid = styled.div`
@@ -48,30 +44,18 @@ export const CardContainer = styled.div`
   display: flex;
   flex-flow: column;
   align-items: center;
-  padding: ${({ gameEditionView }) =>
-    gameEditionView ? `10px 10px` : `32px 32px`};
+  padding: ${({ gameEditionView }) => (gameEditionView ? `10px 10px` : `32px 32px`)};
   width: 100%;
   max-width: 1110px;
   margin-left: auto;
   margin-right: auto;
   border-radius: 10px;
 
-  background-clip: ${({ gameEditionView }) =>
-    !gameEditionView && `padding-box`};
-
   opacity: 1;
-  background: ${({ gameEditionView }) =>
-    gameEditionView ? `transparent` : `transparent`}; // or add new style
+  background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? `transparent` : backgroundContainer)}; // or add new style
+  backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
 
-  /* &:before {
-    border-radius: inherit;
-
-  /* & > *:not(:last-child) {
-    margin-right: 32px;
-  } */
-
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
     gap: 0px;
   }
@@ -107,7 +91,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
 
   return gameEditionView ? (
     <ModalContainer
-      title='stats'
+      title="stats"
       // {
       //   <TitleTabs>
       //     <Tabs>Stats</Tabs>
@@ -126,9 +110,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
               <CustomGrid>
                 <CustomLabel bold>Name</CustomLabel>
                 {gameEditionView ? (
-                  <CustomLabel
-                    start
-                  >{`${pair.token0}/${pair.token1}`}</CustomLabel>
+                  <CustomLabel start>{`${pair.token0}/${pair.token1}`}</CustomLabel>
                 ) : (
                   <IconsContainer>
                     {tokenData[pair.token0].icon}
@@ -137,18 +119,13 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
                   </IconsContainer>
                 )}
                 <CustomLabel bold>token0</CustomLabel>
-                <CustomLabel start>
-                  {reduceBalance(pair.reserves[0])}
-                </CustomLabel>
+                <CustomLabel start>{reduceBalance(pair.reserves[0])}</CustomLabel>
                 <CustomLabel bold>token1</CustomLabel>
-                <CustomLabel start>
-                  {reduceBalance(pair.reserves[1])}
-                </CustomLabel>
+                <CustomLabel start>{reduceBalance(pair.reserves[1])}</CustomLabel>
                 <CustomLabel bold>Rate</CustomLabel>
-                <CustomLabel start>{`${reduceBalance(
-                  extractDecimal(pair.reserves[0]) /
-                    extractDecimal(pair.reserves[1])
-                )} ${pair.token0}/${pair.token1}`}</CustomLabel>
+                <CustomLabel start>{`${reduceBalance(extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1]))} ${pair.token0}/${
+                  pair.token1
+                }`}</CustomLabel>
               </CustomGrid>
             ) : (
               ''
@@ -157,12 +134,8 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
         ) : (
           <Loader
             style={{
-              color: gameEditionView
-                ? theme(themeMode).colors.black
-                : theme(themeMode).colors.white,
-              fontFamily: gameEditionView
-                ? theme(themeMode).fontFamily.pressStartRegular
-                : theme(themeMode).fontFamily.regular,
+              color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
+              fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
             }}
           >
             Loading..
@@ -198,11 +171,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
           >
             Stats
           </Tabs>
-          <Tabs
-            gameEditionView={gameEditionView}
-            active={activeTabs === 'HISTORY'}
-            onClick={setActiveTabs}
-          >
+          <Tabs gameEditionView={gameEditionView} active={activeTabs === 'HISTORY'} onClick={setActiveTabs}>
             History
           </Tabs>
         </TitleContainer>
@@ -221,9 +190,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
                     style={{
                       width: '100%',
                       margin: '32px 0px',
-                      borderTop: gameEditionView
-                        ? `1px dashed ${theme(themeMode).colors.black}`
-                        : `1px solid  ${theme(themeMode).colors.white}`,
+                      borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`,
                     }}
                   />
                   {/*  )} */}
@@ -238,12 +205,8 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
               <Loader
                 active
                 style={{
-                  color: gameEditionView
-                    ? theme(themeMode).colors.black
-                    : theme(themeMode).colors.white,
-                  fontFamily: gameEditionView
-                    ? theme(themeMode).fontFamily.pressStartRegular
-                    : theme(themeMode).fontFamily.regular,
+                  color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
+                  fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
                 }}
               >
                 Loading..

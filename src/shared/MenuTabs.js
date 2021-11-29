@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components/macro";
-import { Menu } from "semantic-ui-react";
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components/macro';
+import { Menu } from 'semantic-ui-react';
 
 const Container = styled.div`
   .ui.menu .active.item {
@@ -29,11 +29,7 @@ const MenuTabs = ({ activeItem, items, containerStyle, onItemClick }) => {
     <Container style={containerStyle}>
       <Menu widths={items.length} style={{ border: `2px solid #FFFFFF` }}>
         {items.map((item, index) => (
-          <Menu.Item
-            key={index}
-            active={activeItem === index}
-            onClick={() => onItemClick(index)}
-          >
+          <Menu.Item key={index} active={activeItem === index} onClick={() => onItemClick(index)}>
             {item}
           </Menu.Item>
         ))}
@@ -43,11 +39,11 @@ const MenuTabs = ({ activeItem, items, containerStyle, onItemClick }) => {
 };
 
 MenuTabs.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.string),
+  items: PropTypes.arrayOf(PropTypes.string)
 };
 
 MenuTabs.defaultProps = {
-  items: [],
+  items: []
 };
 
 export default MenuTabs;

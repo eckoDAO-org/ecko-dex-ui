@@ -9,11 +9,9 @@ import { ColumnContainer, Container, Label, Value } from '../layout/Containers';
 
 const HistoryCardContainer = styled(Container)`
   width: 100%;
-  flex-direction: ${({ gameEditionView }) =>
-    !gameEditionView ? 'row' : 'column'};
+  flex-direction: ${({ gameEditionView }) => (!gameEditionView ? 'row' : 'column')};
   justify-content: space-between;
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     & > *:not(:last-child) {
       margin-bottom: 16px;
     }
@@ -42,9 +40,7 @@ const HistoryCard = ({ tx }) => {
     let cryptoCode = tx?.params[coinPositionArray]?.refName?.namespace
       ? `${tx?.params[coinPositionArray]?.refName?.namespace}.${tx?.params[coinPositionArray]?.refName?.name}`
       : tx?.params[coinPositionArray]?.refName?.name;
-    const crypto = Object.values(tokenData).find(
-      ({ code }) => code === cryptoCode
-    );
+    const crypto = Object.values(tokenData).find(({ code }) => code === cryptoCode);
     return crypto;
   };
 
@@ -54,55 +50,32 @@ const HistoryCard = ({ tx }) => {
       <IconsContainer style={{ marginRight: '16px' }}>
         {getInfoCoin(3)?.icon}
         {getInfoCoin(5)?.icon}
-        <CustomLabel bold>{`${getInfoCoin(3)?.name}-${
-          getInfoCoin(5)?.name
-        }`}</CustomLabel>
+        <CustomLabel bold>{`${getInfoCoin(3)?.name}-${getInfoCoin(5)?.name}`}</CustomLabel>
       </IconsContainer>
-      <ColumnContainer
-        gameEditionView={gameEditionView}
-        style={{ marginRight: '16px' }}
-      >
-        <Label gameEditionView={gameEditionView} withShade='99'>
+      <ColumnContainer gameEditionView={gameEditionView} style={{ marginRight: '16px' }}>
+        <Label gameEditionView={gameEditionView} withShade="99">
           Date
         </Label>
-        <Value gameEditionView={gameEditionView}>{`${getDate(
-          tx?.blockTime
-        )}`}</Value>
+        <Value gameEditionView={gameEditionView}>{`${getDate(tx?.blockTime)}`}</Value>
       </ColumnContainer>
       <ColumnContainer
         gameEditionView={gameEditionView}
         style={{ marginRight: '16px', cursor: 'pointer' }}
         onClick={() => {
-          window.open(
-            `https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${tx?.requestKey}`,
-            '_blank',
-            'noopener,noreferrer'
-          );
+          window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${tx?.requestKey}`, '_blank', 'noopener,noreferrer');
         }}
       >
-        <Label gameEditionView={gameEditionView} withShade='99'>
+        <Label gameEditionView={gameEditionView} withShade="99">
           Request Key
         </Label>
-        <Value gameEditionView={gameEditionView}>
-          {reduceToken(tx?.requestKey)}
-        </Value>
+        <Value gameEditionView={gameEditionView}>{reduceToken(tx?.requestKey)}</Value>
       </ColumnContainer>
       {/* TR TOKEN 1 */}
-      <ColumnContainer
-        gameEditionView={gameEditionView}
-        style={{ marginRight: '16px' }}
-      >
-        <Label
-          gameEditionView={gameEditionView}
-          withShade='99'
-          style={{ textAlign: 'end' }}
-        >
+      <ColumnContainer gameEditionView={gameEditionView} style={{ marginRight: '16px' }}>
+        <Label gameEditionView={gameEditionView} withShade="99" style={{ textAlign: 'end' }}>
           Amount
         </Label>
-        <Value
-          gameEditionView={gameEditionView}
-          style={{ textAlign: 'end' }}
-        >{`${tx?.params[2]} ${getInfoCoin(3)?.name}`}</Value>
+        <Value gameEditionView={gameEditionView} style={{ textAlign: 'end' }}>{`${tx?.params[2]} ${getInfoCoin(3)?.name}`}</Value>
       </ColumnContainer>
     </HistoryCardContainer>
   );

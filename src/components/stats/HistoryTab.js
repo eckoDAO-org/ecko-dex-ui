@@ -10,11 +10,7 @@ import GradientBorder from '../../shared/GradientBorder';
 import ModalContainer from '../../shared/ModalContainer';
 import { theme } from '../../styles/theme';
 import { extractDecimal, reduceBalance } from '../../utils/reduceBalance';
-import {
-  PartialScrollableScrollSection,
-  Title,
-  TitleContainer,
-} from '../layout/Containers';
+import { PartialScrollableScrollSection, Title, TitleContainer } from '../layout/Containers';
 import HistoryCard from './HistoryCard';
 import StatsCard from './StatsCard';
 
@@ -49,20 +45,16 @@ export const CardContainer = styled.div`
   display: flex;
   flex-flow: column;
   align-items: center;
-  padding: ${({ gameEditionView }) =>
-    gameEditionView ? `10px 10px` : `32px 32px`};
+  padding: ${({ gameEditionView }) => (gameEditionView ? `10px 10px` : `32px 32px`)};
   width: 100%;
   max-width: 1110px;
   margin-left: auto;
   margin-right: auto;
   border-radius: 10px;
 
-  background-clip: ${({ gameEditionView }) =>
-    !gameEditionView && `padding-box`};
-
   opacity: 1;
-  background: ${({ gameEditionView }) =>
-    gameEditionView ? `transparent` : `transparent`}; // or add new style
+  background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? `transparent` : backgroundContainer)}; // or add new style
+  backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
 
   /* &:before {
     border-radius: inherit;
@@ -71,8 +63,7 @@ export const CardContainer = styled.div`
     margin-right: 32px;
   } */
 
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
     gap: 0px;
   }
@@ -153,7 +144,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
 
   return gameEditionView ? (
     <ModalContainer
-      title='stats'
+      title="stats"
       // {
       //   <TitleTabs>
       //     <Tabs>Stats</Tabs>
@@ -239,22 +230,15 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
             justifyContent: 'space-between',
           }}
         >
-          <Tabs
-            gameEditionView={gameEditionView}
-            active={activeTabs === 'POOL_STATS'}
-            onClick={setActiveTabs}
-          >
+          <Tabs gameEditionView={gameEditionView} active={activeTabs === 'POOL_STATS'} onClick={setActiveTabs}>
             Stats
           </Tabs>
-          <Tabs
-            gameEditionView={gameEditionView}
-            active={activeTabs === 'HISTORY'}
-          >
+          <Tabs gameEditionView={gameEditionView} active={activeTabs === 'HISTORY'}>
             History
           </Tabs>
         </TitleContainer>
       )}
-      <PartialScrollableScrollSection className='scrollbar-none'>
+      <PartialScrollableScrollSection className="scrollbar-none">
         <CardContainer gameEditionView={gameEditionView}>
           {!gameEditionView && <GradientBorder />}
 
@@ -268,9 +252,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
                       style={{
                         width: '100%',
                         margin: '32px 0px',
-                        borderTop: gameEditionView
-                          ? `1px dashed ${theme(themeMode).colors.black}`
-                          : `1px solid  ${theme(themeMode).colors.white}`,
+                        borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`,
                       }}
                     />
                   )}

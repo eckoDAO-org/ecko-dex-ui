@@ -62,24 +62,14 @@ const DesktopHeader = ({ className, gameEditionView }) => {
     <Container className={className}>
       <LeftContainer>
         {themeMode === 'dark' ? (
-          <KaddexLogo
-            style={{ cursor: 'pointer' }}
-            onClick={() => history.push(ROUTE_INDEX)}
-          />
+          <KaddexLogo style={{ cursor: 'pointer' }} onClick={() => history.push(ROUTE_INDEX)} />
         ) : (
-          <KaddexLightModeLogo
-            style={{ cursor: 'pointer' }}
-            onClick={() => history.push(ROUTE_INDEX)}
-          />
+          <KaddexLightModeLogo style={{ cursor: 'pointer' }} onClick={() => history.push(ROUTE_INDEX)} />
         )}
 
         <AnimatedDiv className={gameEditionView ? 'fadeOut' : 'fadeIn'}>
           {menuItems.map((item, index) => (
-            <HeaderItem
-              key={index}
-              className={item.className}
-              route={item.route}
-            >
+            <HeaderItem key={index} className={item.className} route={item.route}>
               {item.label}
             </HeaderItem>
           ))}

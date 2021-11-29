@@ -31,62 +31,44 @@ const SwapHistoryTab = () => {
   const { gameEditionView } = useContext(GameEditionContext);
 
   const getIconCoin = (cryptoCode) => {
-    const crypto = Object.values(tokenData).find(
-      ({ code }) => code === cryptoCode
-    );
+    const crypto = Object.values(tokenData).find(({ code }) => code === cryptoCode);
     return crypto?.icon;
   };
 
   return (
     <ModalContainer
-      title='Swap History'
+      title="Swap History"
       containerStyle={{
         maxHeight: '60vh',
         maxWidth: 650,
       }}
     >
       <Grid style={{ width: '100%', marginLeft: 0 }}>
-        <Grid.Row columns='3'>
-          <ColumnContainer gameEditionView={gameEditionView}>
-            Height
-          </ColumnContainer>
-          <ColumnContainer gameEditionView={gameEditionView}>
-            Pair
-          </ColumnContainer>
-          <ColumnContainer gameEditionView={gameEditionView}>
-            Amount
-          </ColumnContainer>
+        <Grid.Row columns="3">
+          <ColumnContainer gameEditionView={gameEditionView}>Height</ColumnContainer>
+          <ColumnContainer gameEditionView={gameEditionView}>Pair</ColumnContainer>
+          <ColumnContainer gameEditionView={gameEditionView}>Amount</ColumnContainer>
         </Grid.Row>
       </Grid>
       <PartialScrollableScrollSection>
         <Grid style={{ width: '100%', minHeight: '40px', margin: '16px 0' }}>
           {pact.swapList === 'NO_SWAP_FOUND' ? (
             <Grid.Row>
-              <ColumnContainer gameEditionView={gameEditionView}>
-                No Swap found
-              </ColumnContainer>
+              <ColumnContainer gameEditionView={gameEditionView}>No Swap found</ColumnContainer>
             </Grid.Row>
           ) : (
             Object.values(pact.swapList)
               ?.sort((a, b) => a?.height - b?.height)
               ?.map((swap, index) => (
                 <Grid.Row
-                  columns='3'
+                  columns="3"
                   key={index}
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
-                    window.open(
-                      `https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${swap?.moduleHash}`,
-                      '_blank',
-                      'noopener,noreferrer'
-                    );
+                    window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${swap?.moduleHash}`, '_blank', 'noopener,noreferrer');
                   }}
                 >
-                  <ColumnContainer
-                    regular
-                    gameEditionView={gameEditionView}
-                    fontSize='12px'
-                  >
+                  <ColumnContainer regular gameEditionView={gameEditionView} fontSize="12px">
                     {swap?.height}
                   </ColumnContainer>
                   <IconColumn>
@@ -101,11 +83,7 @@ const SwapHistoryTab = () => {
                         : swap?.params[5]?.refName?.name
                     )}
                   </IconColumn>
-                  <ColumnContainer
-                    regular
-                    gameEditionView={gameEditionView}
-                    fontSize='12px'
-                  >{`${swap?.params[2]}`}</ColumnContainer>
+                  <ColumnContainer regular gameEditionView={gameEditionView} fontSize="12px">{`${swap?.params[2]}`}</ColumnContainer>
                 </Grid.Row>
               ))
           )}
