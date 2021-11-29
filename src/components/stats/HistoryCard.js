@@ -9,16 +9,20 @@ import { ColumnContainer, Container, Label, Value } from '../layout/Containers';
 
 const HistoryCardContainer = styled(Container)`
   width: 100%;
+  --auto-grid-min-size: ${({ gameEditionView }) => (gameEditionView ? '180px' : '260px')};
+  @media only screen and (min-device-width: 1024px) and (max-device-width: 1180px) and (-webkit-min-device-pixel-ratio: 2) {
+    --auto-grid-min-size: 180px;
+  }
+  grid-gap: ${({ gameEditionView }) => gameEditionView && '0.5em'};
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--auto-grid-min-size), 1fr));
   flex-direction: ${({ gameEditionView }) => (!gameEditionView ? 'row' : 'column')};
   justify-content: space-between;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     & > *:not(:last-child) {
       margin-bottom: 16px;
     }
-    /* flex-direction: column; */
   }
-
-  flex-flow: wrap;
 `;
 
 const IconsContainer = styled.div`
@@ -47,12 +51,12 @@ const HistoryCard = ({ tx }) => {
   return (
     <HistoryCardContainer gameEditionView={gameEditionView}>
       {/* ICONS */}
-      <IconsContainer style={{ marginRight: '16px' }}>
+      <IconsContainer>
         {getInfoCoin(3)?.icon}
         {getInfoCoin(5)?.icon}
         <CustomLabel bold>{`${getInfoCoin(3)?.name}-${getInfoCoin(5)?.name}`}</CustomLabel>
       </IconsContainer>
-      <ColumnContainer gameEditionView={gameEditionView} style={{ marginRight: '16px' }}>
+      <ColumnContainer gameEditionView={gameEditionView}>
         <Label gameEditionView={gameEditionView} withShade="99">
           Date
         </Label>
@@ -60,7 +64,7 @@ const HistoryCard = ({ tx }) => {
       </ColumnContainer>
       <ColumnContainer
         gameEditionView={gameEditionView}
-        style={{ marginRight: '16px', cursor: 'pointer' }}
+        style={{ cursor: 'pointer' }}
         onClick={() => {
           window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${tx?.requestKey}`, '_blank', 'noopener,noreferrer');
         }}
@@ -71,11 +75,11 @@ const HistoryCard = ({ tx }) => {
         <Value gameEditionView={gameEditionView}>{reduceToken(tx?.requestKey)}</Value>
       </ColumnContainer>
       {/* TR TOKEN 1 */}
-      <ColumnContainer gameEditionView={gameEditionView} style={{ marginRight: '16px' }}>
-        <Label gameEditionView={gameEditionView} withShade="99" style={{ textAlign: 'end' }}>
+      <ColumnContainer gameEditionView={gameEditionView}>
+        <Label gameEditionView={gameEditionView} withShade="99" style={{ textAlign: 'left' }}>
           Amount
         </Label>
-        <Value gameEditionView={gameEditionView} style={{ textAlign: 'end' }}>{`${tx?.params[2]} ${getInfoCoin(3)?.name}`}</Value>
+        <Value gameEditionView={gameEditionView} style={{ textAlign: 'left' }}>{`${tx?.params[2]} ${getInfoCoin(3)?.name}`}</Value>
       </ColumnContainer>
     </HistoryCardContainer>
   );

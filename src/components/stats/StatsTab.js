@@ -1,50 +1,21 @@
 import React, { useContext, useEffect } from 'react';
-import { Dimmer, Divider, Input, Loader } from 'semantic-ui-react';
+import { Divider, Loader } from 'semantic-ui-react';
 import styled from 'styled-components';
-import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { LightModeContext } from '../../contexts/LightModeContext';
 import { PactContext } from '../../contexts/PactContext';
-import CustomLabel from '../../shared/CustomLabel';
 import GradientBorder from '../../shared/GradientBorder';
 import ModalContainer from '../../shared/ModalContainer';
 import { theme } from '../../styles/theme';
-import { extractDecimal, reduceBalance } from '../../utils/reduceBalance';
 import { PartialScrollableScrollSection, Title, TitleContainer } from '../layout/Containers';
 import StatsCard from './StatsCard';
-
-const CustomGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
-  gap: 4px 0px;
-  /* 
-  .ui.input {
-    margin: 24px;
-    color: white;
-    box-shadow: -3em 0em red, -2em -1em red, -2em 1em red, 0em 1em red,
-      2em 1em red, 2em 0em red, 3em 0em red, 0em -1em red, -1em 0em white,
-      0em -1em white, 1em 0em white, 0em -2em white, 2em -1em red, 0em 2em red;
-  } */
-`;
-const IconsContainer = styled.div`
-  display: flex;
-  justify-content: flex-start;
-
-  svg:first-child {
-    z-index: 2;
-  }
-  div:last-child {
-    margin-right: 5px;
-  }
-`;
 
 export const CardContainer = styled.div`
   position: ${({ gameEditionView }) => !gameEditionView && `relative`};
   display: flex;
   flex-flow: column;
   align-items: center;
-  padding: ${({ gameEditionView }) => (gameEditionView ? `10px 10px` : `32px 32px`)};
+  padding: ${({ gameEditionView }) => (gameEditionView ? `32px` : `32px 32px`)};
   width: 100%;
   max-width: 1110px;
   margin-left: auto;
@@ -59,20 +30,6 @@ export const CardContainer = styled.div`
     flex-flow: column;
     gap: 0px;
   }
-  /* 
-  .ui.input {
-    margin: 24px;
-    color: white;
-    box-shadow: -3em 0em red, -2em -1em red, -2em 1em red, 0em 1em red,
-      2em 1em red, 2em 0em red, 3em 0em red, 0em -1em red, -1em 0em white,
-      0em -1em white, 1em 0em white, 0em -2em white, 2em -1em red, 0em 2em red;
-  } */
-`;
-
-const TitleTabs = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 `;
 
 const Tabs = styled(Title)`
@@ -89,93 +46,36 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
     await pact.getPairList();
   }, []);
 
-  return gameEditionView ? (
+  return (
     <ModalContainer
-      title="stats"
-      // {
-      //   <TitleTabs>
-      //     <Tabs>Stats</Tabs>
-      //     <Tabs>History</Tabs>
-      //   </TitleTabs>
-      // }
-      containerStyle={{
-        maxHeight: '80vh',
-        maxWidth: 650,
-      }}
-    >
-      <PartialScrollableScrollSection>
-        {pact.pairList[0] ? (
-          Object.values(pact.pairList).map((pair) =>
-            pair && pair.reserves ? (
-              <CustomGrid>
-                <CustomLabel bold>Name</CustomLabel>
-                {gameEditionView ? (
-                  <CustomLabel start>{`${pair.token0}/${pair.token1}`}</CustomLabel>
-                ) : (
-                  <IconsContainer>
-                    {tokenData[pair.token0].icon}
-                    {tokenData[pair.token1].icon}
-                    <CustomLabel>{`${pair.token0}/${pair.token1}`}</CustomLabel>
-                  </IconsContainer>
-                )}
-                <CustomLabel bold>token0</CustomLabel>
-                <CustomLabel start>{reduceBalance(pair.reserves[0])}</CustomLabel>
-                <CustomLabel bold>token1</CustomLabel>
-                <CustomLabel start>{reduceBalance(pair.reserves[1])}</CustomLabel>
-                <CustomLabel bold>Rate</CustomLabel>
-                <CustomLabel start>{`${reduceBalance(extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1]))} ${pair.token0}/${
-                  pair.token1
-                }`}</CustomLabel>
-              </CustomGrid>
-            ) : (
-              ''
-            )
-          )
-        ) : (
-          <Loader
-            style={{
-              color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
-              fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
-            }}
-          >
-            Loading..
-          </Loader>
-        )}
-      </PartialScrollableScrollSection>
-    </ModalContainer>
-  ) : (
-    //DESKTOP
-    <ModalContainer
-      title={gameEditionView && 'Stats'}
       withoutRainbowBackground
       backgroundNotChangebleWithTheme
       containerStyle={{
         maxHeight: '80vh',
-        padding: 0,
+        padding: gameEditionView ? 24 : 0,
+        border: gameEditionView && '1px solid transparent',
       }}
     >
-      {!gameEditionView && (
-        <TitleContainer
+      <TitleContainer
+        gameEditionView={gameEditionView}
+        style={{
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          maxWidth: '1110px',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Tabs
           gameEditionView={gameEditionView}
-          style={{
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            maxWidth: '1110px',
-            justifyContent: 'space-between',
-          }}
+          active={activeTabs === 'POOL_STATS'}
+          // onClick={setActiveTabs('POOL_STATS')}
         >
-          <Tabs
-            gameEditionView={gameEditionView}
-            active={activeTabs === 'POOL_STATS'}
-            // onClick={setActiveTabs('POOL_STATS')}
-          >
-            Stats
-          </Tabs>
-          <Tabs gameEditionView={gameEditionView} active={activeTabs === 'HISTORY'} onClick={setActiveTabs}>
-            History
-          </Tabs>
-        </TitleContainer>
-      )}
+          Stats
+        </Tabs>
+        <Tabs gameEditionView={gameEditionView} active={activeTabs === 'HISTORY'} onClick={setActiveTabs}>
+          History
+        </Tabs>
+      </TitleContainer>
       <PartialScrollableScrollSection>
         <CardContainer gameEditionView={gameEditionView}>
           {!gameEditionView && <GradientBorder />}
@@ -185,16 +85,15 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
               pair && pair.reserves ? (
                 <>
                   <StatsCard pair={pair} />
-                  {/* {!Object.values(pact.pairList).length -1 !== index && ( */}
-                  <Divider
-                    style={{
-                      width: '100%',
-                      margin: '32px 0px',
-                      borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`,
-                    }}
-                  />
-                  {/*  )} */}
-                  <StatsCard pair={pair} />
+                  {Object.values(pact.pairList).length - 1 !== index && (
+                    <Divider
+                      style={{
+                        width: '100%',
+                        margin: '32px 0px',
+                        borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`,
+                      }}
+                    />
+                  )}
                 </>
               ) : (
                 ''

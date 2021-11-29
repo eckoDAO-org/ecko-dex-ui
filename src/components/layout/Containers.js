@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const PartialScrollableScrollSection = styled.div`
   flex: 1;
   overflow: auto;
-  margin-bottom: -10px;
+  /* margin-bottom: -10px; */
 
   ::-webkit-scrollbar {
     display: block;
@@ -72,8 +72,6 @@ export const TitleContainer = styled.div`
   justify-content: space-between;
   margin-bottom: 24px;
   width: 100%;
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
-  top: ${({ gameEditionView }) => gameEditionView && '10px'};
 `;
 
 export const Title = styled.span`
