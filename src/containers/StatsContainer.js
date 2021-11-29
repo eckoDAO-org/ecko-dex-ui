@@ -1,22 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components/macro';
 import { PactContext } from '../contexts/PactContext';
-import CustomButton from '../shared/CustomButton';
 import StatsTab from '../components/stats/StatsTab';
-import SwapHistoryTab from '../components/stats/SwapHistoryTab';
 import HistoryTab from '../components/stats/HistoryTab';
-
-const Container = styled.div`
-  display: flex;
-  width: 100%;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-flow: row;
-  justify-content: space-between;
-  margin-bottom: 24px;
-`;
 
 const StatsContainer = () => {
   const pact = useContext(PactContext);

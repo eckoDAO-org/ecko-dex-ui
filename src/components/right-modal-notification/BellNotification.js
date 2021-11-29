@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-// import OutsideClickHandler from 'react-outside-click-handler';
+import React from 'react';
 import styled from 'styled-components/macro';
 import { NotificationIcon } from '../../assets';
 
@@ -14,6 +13,7 @@ const Container = styled.div`
 
 const NotificationContainer = styled.div`
   position: relative;
+  display: flex;
 `;
 
 const NotificationSignal = styled.div`
@@ -27,25 +27,13 @@ const NotificationSignal = styled.div`
   left: -3px;
 `;
 
-const Notification = ({ hasNotification, containerStyle, items, color, onClick }) => {
-  const [showFloatingMenu, setShowFloatingMenu] = useState(false);
-
-  const onContainerClick = () => {
-    setShowFloatingMenu((prev) => !prev);
-  };
-
+const Notification = ({ hasNotification, containerStyle, color, onClick }) => {
   return (
     <Container onClick={onClick} style={containerStyle} color={color}>
-      {/* <OutsideClickHandler
-        onOutsideClick={() => {
-          setShowFloatingMenu(false);
-        }}
-      > */}
       <NotificationContainer>
         {hasNotification && <NotificationSignal />}
         <NotificationIcon />
       </NotificationContainer>
-      {/* </OutsideClickHandler> */}
     </Container>
   );
 };

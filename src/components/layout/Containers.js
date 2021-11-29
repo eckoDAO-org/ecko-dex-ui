@@ -46,6 +46,14 @@ export const Label = styled.span`
   text-transform: capitalize;
 `;
 
+export const BoldLabel = styled.span`
+  font-family: ${({ gameEditionView, theme: { fontFamily } }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
+  color: ${({ gameEditionView, withShade, theme: { colors } }) => (gameEditionView ? colors.black : `${colors.white} !important`)};
+  font-size: 13px;
+  text-align: ${({ gameEditionView }) => gameEditionView && 'left'};
+  text-transform: capitalize;
+`;
+
 export const Value = styled.span`
   font-family: ${({ gameEditionView, theme: { fontFamily } }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '16px')};

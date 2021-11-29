@@ -97,7 +97,7 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
       {/* {error && error.message ? <Text>{error.message}</Text> : null} */}
       <CustomButton
         buttonStyle={{
-          border: '1px solid #424242'
+          border: '1px solid #424242',
         }}
         color={gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white}
         background="transparent"
@@ -106,7 +106,7 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
             openModal({
               title: 'get zelcore accounts',
               description: 'Select Accounts',
-              content: <GetZelcoreAccountModal onClose={() => modalContext.closeModal()} />
+              content: <GetZelcoreAccountModal onClose={() => modalContext.closeModal()} />,
             });
           } else {
             setOpenGetZelcoreAccountModal(true);
@@ -115,7 +115,7 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
               title: 'get zelcore accounts',
               description: 'Select Accounts',
               open: openGetZelcoreAccountModal,
-              content: <GetZelcoreAccountModal onClose={() => modalContext.closeModal()} />
+              content: <GetZelcoreAccountModal onClose={() => modalContext.closeModal()} />,
             });
           }
         }}

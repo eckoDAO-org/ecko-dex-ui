@@ -4,7 +4,7 @@ import HeaderItem from '../../../shared/HeaderItem';
 import AccountInfo from './AccountInfo';
 import Button from '../../../shared/CustomButton';
 import CustomPopup from '../../../shared/CustomPopup';
-import { PowerIcon, CogIcon, AboutBigIcon, ThreeDotsIcon } from '../../../assets';
+import { PowerIcon, CogIcon, ThreeDotsIcon } from '../../../assets';
 import headerLinks from '../../headerLinks';
 import PopupContentList from './PopupContentList';
 import { AccountContext } from '../../../contexts/AccountContext';
@@ -16,9 +16,10 @@ import ConnectWalletModal from '../../modals/kdaModals/ConnectWalletModal';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import BellNotification from '../../right-modal-notification/BellNotification';
 import { RightModalContext } from '../../../contexts/RightModalContext';
-import RightModalContent from '../../right-modal-notification/RightModalContent';
 import { NotificationContext } from '../../../contexts/NotificationContext';
 import CopyPopup from '../../../shared/CopyPopup';
+import AccountModal from '../../modals/kdaModals/AccountModal';
+import { NotificationModalContext } from '../../../contexts/NotificationModalContext';
 
 const RightContainerHeader = styled.div`
   display: flex;
@@ -49,16 +50,6 @@ const RightContainerHeader = styled.div`
 
 const FadeContainer = styled.div``;
 
-const AccountIdContainer = styled.div`
-  display: flex;
-  align-items: center;
-  font-family: ${({ gameEditionView, theme: { fontFamily } }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  & > span:first-child {
-    font-family: ${({ gameEditionView, theme: { fontFamily } }) => !gameEditionView && fontFamily.bold};
-    margin-right: 10px;
-  }
-`;
-
 // const Label = styled.span`
 //   font-size: 13px;
 //   font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
@@ -72,8 +63,8 @@ const RightHeaderItems = () => {
   const { account, logout } = useContext(AccountContext);
   const modalContext = useContext(ModalContext);
   const { gameEditionView, openModal } = useContext(GameEditionContext);
+  const notificationModalContext = useContext(NotificationModalContext);
   const notification = useContext(NotificationContext);
-  const rightModal = useContext(RightModalContext);
 
   return (
     <RightContainerHeader>
@@ -84,33 +75,13 @@ const RightHeaderItems = () => {
               if (gameEditionView) {
                 return openModal({
                   isVisible: true,
-                  title: account?.account ? 'wallet connected' : 'connect wallet',
-                  description: account?.account ? (
-                    <AccountIdContainer gameEditionView={gameEditionView}>
-                      <span>Account ID:</span>
-                      <span>
-                        {reduceToken(account.account)} <CopyPopup textToCopy={account.account} />
-                      </span>
-                    </AccountIdContainer>
-                  ) : (
-                    'Connect a wallet using one of the methods below'
-                  ),
-                  content: <ConnectWalletModal />,
+                  title: 'Account',
+                  content: <AccountModal />,
                 });
               } else {
                 modalContext.openModal({
-                  title: account?.account ? 'wallet connected' : 'connect wallet',
-                  description: account?.account ? (
-                    <AccountIdContainer>
-                      <span>Account ID:</span>
-                      <span>
-                        {reduceToken(account.account)} <CopyPopup textToCopy={account.account} />
-                      </span>
-                    </AccountIdContainer>
-                  ) : (
-                    'Connect a wallet using one of the methods below'
-                  ),
-                  content: <ConnectWalletModal />,
+                  title: 'Account',
+                  content: <AccountModal />,
                 });
               }
             }}
@@ -159,9 +130,7 @@ const RightHeaderItems = () => {
         <BellNotification
           hasNotification={notification.notificationList?.some((notif) => notif.isReaded === false)}
           onClick={() => {
-            rightModal.openModal({
-              title: 'Notifications',
-              content: <RightModalContent />,
+            notificationModalContext.openModal({
               footer: (
                 <Button
                   onClick={() => {
@@ -185,8 +154,18 @@ const RightHeaderItems = () => {
         </HeaderItem>
       )}
 
-      <HeaderItem>
-        <CustomPopup basic trigger={<ThreeDotsIcon style={{ marginBottom: '4px' }} />} on="click" offset={[0, 10]} position="bottom right">
+      <HeaderItem headerItemStyle={{ height: '100%' }}>
+        <CustomPopup
+          basic
+          trigger={
+            <div style={{ height: '100%' }}>
+              <ThreeDotsIcon style={{ height: '100%' }} />
+            </div>
+          }
+          on="click"
+          offset={[0, -14]}
+          position="bottom right"
+        >
           <PopupContentList items={headerLinks} viewOtherComponents />
         </CustomPopup>
       </HeaderItem>

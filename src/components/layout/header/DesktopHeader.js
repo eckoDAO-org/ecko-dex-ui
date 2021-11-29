@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { KaddexLightModeLogo, KaddexLogo } from '../../../assets';
@@ -56,6 +56,8 @@ const AnimatedDiv = styled.div`
 
 const DesktopHeader = ({ className, gameEditionView }) => {
   const history = useHistory();
+  const [buttonHover, setButtonHover] = useState(null);
+
   const { themeMode } = useContext(LightModeContext);
 
   return (
@@ -69,7 +71,14 @@ const DesktopHeader = ({ className, gameEditionView }) => {
 
         <AnimatedDiv className={gameEditionView ? 'fadeOut' : 'fadeIn'}>
           {menuItems.map((item, index) => (
-            <HeaderItem key={index} className={item.className} route={item.route}>
+            <HeaderItem
+              key={index}
+              className={item.className}
+              route={item.route}
+              onMouseOver={() => setButtonHover(item.id)}
+              onMouseLeave={() => setButtonHover(null)}
+              isHover={buttonHover === item.id}
+            >
               {item.label}
             </HeaderItem>
           ))}

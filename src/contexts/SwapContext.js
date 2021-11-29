@@ -118,7 +118,7 @@ export const SwapProvider = (props) => {
         meta: Pact.lang.mkMeta(account.account, chainId, GAS_PRICE, 3000, creationTime(), 600),
       };
       setCmd(cmd);
-      let data = await Pact.fetch.send(cmd, network);
+      await Pact.fetch.send(cmd, network);
     } catch (e) {
       console.log(e);
     }

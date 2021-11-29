@@ -46,8 +46,8 @@ const verifierMap = {
     name: 'Google',
     typeOfLogin: 'google',
     verifier: process.env.REACT_APP_TORUS_VERIFIER,
-    clientId: process.env.REACT_APP_TORUS_GOOGLE_CLIENT_ID
-  }
+    clientId: process.env.REACT_APP_TORUS_GOOGLE_CLIENT_ID,
+  },
 };
 
 console.log('🚀 ~ file: ConnectWalletTorusModal.js ~ line 61 ~  process.env.REACT_APP_TORUS_VERIFIER', process.env.REACT_APP_TORUS_VERIFIER);
@@ -78,7 +78,7 @@ function Login({ onClose, onBack }) {
           baseUrl: `${window.location.origin}/serviceworker`,
           enableLogging: true,
           redirectToOpener: true,
-          network: process.env.REACT_APP_TORUS_NETWORK // details for test net
+          network: process.env.REACT_APP_TORUS_NETWORK, // details for test net
         });
 
         await torusdirectsdk.init({ skipSw: true });
@@ -103,7 +103,7 @@ function Login({ onClose, onBack }) {
       const loginDetails = await torusdirectsdk.triggerLogin({
         typeOfLogin,
         verifier,
-        clientId
+        clientId,
       });
       setConsoleText(typeof loginDetails === 'object' ? JSON.stringify(loginDetails) : loginDetails);
 

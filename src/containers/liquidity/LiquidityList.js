@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useContext, useState } from 'react';
 import styled from 'styled-components/macro';
 import { Loader, Button, Header, Divider } from 'semantic-ui-react';

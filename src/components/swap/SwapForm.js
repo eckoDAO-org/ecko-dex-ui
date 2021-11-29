@@ -1,9 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
-import ButtonDivider from '../../shared/ButtonDivider';
 import Input from '../../shared/Input';
 import InputToken from '../../shared/InputToken';
-import { SwapArrowsIcon, SwapIcon } from '../../assets';
+import { SwapIcon } from '../../assets';
 import { limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
 import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
@@ -13,8 +12,7 @@ const Container = styled.div`
   display: flex;
   flex-flow: column;
   width: 100%;
-  /* position: ${({ gameEditionView }) => gameEditionView && 'absolute !important'};
-  bottom: ${({ gameEditionView }) => gameEditionView && '50px !important'}; */
+
   svg {
     path {
       fill: ${({ theme: { colors } }) => colors.white};
@@ -24,13 +22,15 @@ const Container = styled.div`
 
 const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, toNote, setTokenSelectorType, setInputSide, swapValues }) => {
   const { gameEditionView } = useContext(GameEditionContext);
+  const [rotation, setRotation] = useState(0);
+
   return (
     <Container>
       <Input
         error={isNaN(fromValues.amount)}
         topLeftLabel={fromNote ? `from ${fromNote}` : `from`}
         topRightLabel={`balance: ${reduceBalance(fromValues.balance) ?? '-'}`}
-        placeholder="enter amount"
+        placeholder="0.0"
         maxLength="15"
         size="large"
         inputRightComponent={
@@ -68,14 +68,21 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
       />
       {gameEditionView ? null : (
         <Divider horizontal style={{ zIndex: 1 }}>
-          <SwapIcon style={{ cursor: 'pointer' }} onClick={swapValues} />
+          <SwapIcon
+            id="swap-button"
+            style={{ cursor: 'pointer', transform: `rotate(${rotation}deg)`, transition: 'width 0.3s, transform 0.3s' }}
+            onClick={() => {
+              swapValues();
+              setRotation((prev) => prev + 180);
+            }}
+          />
         </Divider>
       )}
       <Input
         error={isNaN(toValues.amount)}
         topLeftLabel={toNote ? `to ${toNote}` : `to`}
         topRightLabel={`balance: ${reduceBalance(toValues.balance) ?? '-'}`}
-        placeholder="enter amount"
+        placeholder="0.0"
         size="large"
         maxLength="15"
         inputRightComponent={
