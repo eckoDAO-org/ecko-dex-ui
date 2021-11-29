@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, createContext, useEffect, useCallback } from 'react';
 import { useAccountContext, useWalletContext, useNotificationContext } from '.';
 import { network, NETWORKID } from '../constants/contextConstants';
@@ -8,7 +9,7 @@ export const KadenaWalletContext = createContext();
 const initialKadenaWalletState = {
   isConnected: false,
   isInstalled: false,
-  network
+  network,
 };
 
 export const KadenaWalletProvider = (props) => {
@@ -24,20 +25,20 @@ export const KadenaWalletProvider = (props) => {
     setKadenaExt(kadena);
     setKadenaWalletState({
       ...kadenaWalletState,
-      isInstalled: Boolean(kadena?.isKadena)
+      isInstalled: Boolean(kadena?.isKadena),
     });
   }, [kadenaWalletState]);
 
   const getNetworkInfo = async () => {
     return await kadenaExt.request({
-      method: 'kda_getNetwork'
+      method: 'kda_getNetwork',
     });
   };
 
   const getAccountInfo = async () => {
     return await kadenaExt.request({
       method: 'kda_requestAccount',
-      networkId: NETWORKID
+      networkId: NETWORKID,
     });
   };
 
@@ -101,7 +102,7 @@ export const KadenaWalletProvider = (props) => {
       } else {
         await kadenaExt.request({
           method: 'kda_connect',
-          networkId: NETWORKID
+          networkId: NETWORKID,
         });
         await setAccountData();
       }

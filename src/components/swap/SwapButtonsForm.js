@@ -29,13 +29,13 @@ const SwapButtonsForm = ({
   fromNote,
   noLiquidity,
   ratio,
-  setShowTxModal
+  setShowTxModal,
 }) => {
   const modalContext = useContext(ModalContext);
   const { account } = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const swap = useContext(SwapContext);
-  const { gameEditionView, openModal, closeModal } = useContext(GameEditionContext);
+  const { gameEditionView, openModal } = useContext(GameEditionContext);
 
   const getButtonLabel = () => {
     if (!account.account) return 'Connect wallet';
@@ -62,13 +62,13 @@ const SwapButtonsForm = ({
                   isVisible: true,
                   title: account?.account ? 'wallet connected' : 'connect wallet',
                   description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
-                  content: <ConnectWalletModal />
+                  content: <ConnectWalletModal />,
                 });
               } else {
                 return modalContext.openModal({
                   title: account?.account ? 'wallet connected' : 'connect wallet',
                   description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
-                  content: <ConnectWalletModal />
+                  content: <ConnectWalletModal />,
                 });
               }
             }
@@ -78,12 +78,12 @@ const SwapButtonsForm = ({
                 {
                   amount: fromValues.amount,
                   address: fromValues.address,
-                  coin: fromValues.coin
+                  coin: fromValues.coin,
                 },
                 {
                   amount: toValues.amount,
                   address: toValues.address,
-                  coin: toValues.coin
+                  coin: toValues.coin,
                 },
                 fromNote === '(estimated)' ? false : true
               );
@@ -98,11 +98,11 @@ const SwapButtonsForm = ({
                 if (res?.result?.status === 'success') {
                   setFromValues((prev) => ({
                     ...prev,
-                    amount: ''
+                    amount: '',
                   }));
                   setToValues((prev) => ({
                     ...prev,
-                    amount: ''
+                    amount: '',
                   }));
                 }
                 setLoading(false);
@@ -112,12 +112,12 @@ const SwapButtonsForm = ({
                 {
                   amount: fromValues.amount,
                   address: fromValues.address,
-                  coin: fromValues.coin
+                  coin: fromValues.coin,
                 },
                 {
                   amount: toValues.amount,
                   address: toValues.address,
-                  coin: toValues.coin
+                  coin: toValues.coin,
                 },
                 fromNote === '(estimated)' ? false : true
               );
@@ -131,11 +131,11 @@ const SwapButtonsForm = ({
               if (res?.result?.status === 'success') {
                 setFromValues((prev) => ({
                   ...prev,
-                  amount: ''
+                  amount: '',
                 }));
                 setToValues((prev) => ({
                   ...prev,
-                  amount: ''
+                  amount: '',
                 }));
               }
               setLoading(false);

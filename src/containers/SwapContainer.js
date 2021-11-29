@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { throttle, debounce } from 'throttle-debounce';
@@ -457,7 +458,7 @@ const SwapContainer = () => {
         title: 'select a token',
         description: '',
         containerStyle: {
-          //height: "100%",
+          minWidth: '0px',
           width: '75%',
         },
         onClose: () => {

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
 import swal from '@sweetalert/with-react';
@@ -24,12 +25,12 @@ export const AccountProvider = (props) => {
   const [tokenFromAccount, setTokenFromAccount] = useState({
     account: null,
     guard: null,
-    balance: 0
+    balance: 0,
   });
   const [tokenToAccount, setTokenToAccount] = useState({
     account: null,
     guard: null,
-    balance: 0
+    balance: 0,
   });
   useEffect(() => {
     if (account.account) setVerifiedAccount(account.account);
@@ -47,7 +48,7 @@ export const AccountProvider = (props) => {
         date: getCurrentDate(),
         title: 'Transaction Error',
         description: localRes,
-        isReaded: false
+        isReaded: false,
       });
     }
   }, [localRes]);
@@ -63,7 +64,7 @@ export const AccountProvider = (props) => {
       let data = await Pact.fetch.local(
         {
           pactCode: `(coin.details ${JSON.stringify(accountName)})`,
-          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 3000, creationTime(), 600)
+          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 3000, creationTime(), 600),
         },
         network
       );
@@ -71,13 +72,13 @@ export const AccountProvider = (props) => {
         await localStorage.setItem('acct', JSON.stringify(data.result.data));
         setAccount({
           ...data.result.data,
-          balance: getCorrectBalance(data.result.data.balance)
+          balance: getCorrectBalance(data.result.data.balance),
         });
         await localStorage.setItem('acct', JSON.stringify(data.result.data));
       } else {
         await swal({
           text: `Please make sure the account ${accountName} exist on kadena blockchain`,
-          title: 'No Account'
+          title: 'No Account',
         });
 
         setAccount({ account: null, guard: null, balance: 0 });
@@ -93,7 +94,7 @@ export const AccountProvider = (props) => {
         {
           pactCode: `(${token}.details ${JSON.stringify(account)})`,
           keyPairs: Pact.crypto.genKeyPair(),
-          meta: Pact.lang.mkMeta('', chainId, 0.01, 100000000, 28800, creationTime())
+          meta: Pact.lang.mkMeta('', chainId, 0.01, 100000000, 28800, creationTime()),
         },
         network
       );
@@ -133,7 +134,7 @@ export const AccountProvider = (props) => {
     getTokenAccount,
     tokenToAccount,
     tokenFromAccount,
-    logout
+    logout,
   };
   return <AccountContext.Provider value={contextValues}>{props.children}</AccountContext.Provider>;
 };

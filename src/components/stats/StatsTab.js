@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
-import { Dimmer, Divider, Input, Loader } from 'semantic-ui-react';
+import { Divider, Loader } from 'semantic-ui-react';
 import styled from 'styled-components';
 import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
@@ -67,12 +68,6 @@ export const CardContainer = styled.div`
       2em 1em red, 2em 0em red, 3em 0em red, 0em -1em red, -1em 0em white,
       0em -1em white, 1em 0em white, 0em -2em white, 2em -1em red, 0em 2em red;
   } */
-`;
-
-const TitleTabs = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 `;
 
 const Tabs = styled(Title)`

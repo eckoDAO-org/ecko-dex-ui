@@ -1,7 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import Wrapper from '../../shared/Wrapper';
-import CustomParticles from './CustomParticles';
 import DesktopHeader from './header/DesktopHeader';
 import MobileHeader from './header/MobileHeader';
 import { ReactComponent as Stripes } from '../../assets/images/shared/stripes.svg';
@@ -9,7 +9,6 @@ import GameEditionContainer from '../game-edition/GameEditionContainer';
 import { useHistory } from 'react-router';
 import { ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from '../../router/routes';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
-import { FadeIn } from '../shared/animations';
 
 const MainContainer = styled.div`
   display: flex;
@@ -40,12 +39,6 @@ const StripesContainer = styled.div`
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     display: none;
   }
-`;
-
-const FadeInContainer = styled(FadeIn)`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 `;
 
 const Layout = ({ children }) => {
