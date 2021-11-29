@@ -19,6 +19,7 @@ import { RightModalContext } from '../../../contexts/RightModalContext';
 import RightModalContent from '../../right-modal-notification/RightModalContent';
 import { NotificationContext } from '../../../contexts/NotificationContext';
 import CopyPopup from '../../../shared/CopyPopup';
+import AccountModal from '../../modals/kdaModals/AccountModal';
 
 const RightContainerHeader = styled.div`
   display: flex;
@@ -49,16 +50,6 @@ const RightContainerHeader = styled.div`
 
 const FadeContainer = styled.div``;
 
-const AccountIdContainer = styled.div`
-  display: flex;
-  align-items: center;
-  font-family: ${({ gameEditionView, theme: { fontFamily } }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  & > span:first-child {
-    font-family: ${({ gameEditionView, theme: { fontFamily } }) => !gameEditionView && fontFamily.bold};
-    margin-right: 10px;
-  }
-`;
-
 // const Label = styled.span`
 //   font-size: 13px;
 //   font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
@@ -84,33 +75,13 @@ const RightHeaderItems = () => {
               if (gameEditionView) {
                 return openModal({
                   isVisible: true,
-                  title: account?.account ? 'wallet connected' : 'connect wallet',
-                  description: account?.account ? (
-                    <AccountIdContainer gameEditionView={gameEditionView}>
-                      <span>Account ID:</span>
-                      <span>
-                        {reduceToken(account.account)} <CopyPopup textToCopy={account.account} />
-                      </span>
-                    </AccountIdContainer>
-                  ) : (
-                    'Connect a wallet using one of the methods below'
-                  ),
-                  content: <ConnectWalletModal />,
+                  title: 'Account',
+                  content: <AccountModal />,
                 });
               } else {
                 modalContext.openModal({
-                  title: account?.account ? 'wallet connected' : 'connect wallet',
-                  description: account?.account ? (
-                    <AccountIdContainer>
-                      <span>Account ID:</span>
-                      <span>
-                        {reduceToken(account.account)} <CopyPopup textToCopy={account.account} />
-                      </span>
-                    </AccountIdContainer>
-                  ) : (
-                    'Connect a wallet using one of the methods below'
-                  ),
-                  content: <ConnectWalletModal />,
+                  title: 'Account',
+                  content: <AccountModal />,
                 });
               }
             }}
