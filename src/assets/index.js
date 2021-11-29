@@ -31,3 +31,4 @@ export { ReactComponent as SwapIcon } from './images/shared/swap-icon.svg';
 export { ReactComponent as Logo } from './images/shared/Logo.svg';
 export { ReactComponent as CopyIcon } from './images/shared/copy.svg';
 export { ReactComponent as ThreeDotsIcon } from './images/header/three_dots.svg';
+export { ReactComponent as ExplorerIcon } from './images/shared/ic_explorer.svg';
