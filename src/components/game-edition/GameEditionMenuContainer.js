@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { MenuGEIcon } from '../../assets';
+import useWindowSize from '../../hooks/useWindowSize';
 import HeaderItem from '../../shared/HeaderItem';
 import theme from '../../styles/theme';
 import headerLinks from '../headerLinks';
@@ -23,6 +24,12 @@ const TopListContainer = styled.div`
   & > *:not(:last-child) {
     margin-bottom: 25px;
   }
+
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
+    & > a {
+      font-size: 24px !important;
+    }
+  }
 `;
 
 const BottomListContainer = styled.div`
@@ -43,6 +50,12 @@ const RowMenuContainer = styled.div`
 
 const GameEditionMenuContainer = () => {
   const [arrowVisible, setArrowVisible] = useState('');
+  const [width] = useWindowSize();
+
+  const getMenuItemStyle = () => {
+    if (width < theme.mediaQueries.desktopPixel) return '24px ';
+    else return '14px';
+  };
   return (
     <Container>
       <TopListContainer>
@@ -50,7 +63,7 @@ const GameEditionMenuContainer = () => {
           <RowMenuContainer key={index}>
             <MenuGEIcon
               style={{
-                display: arrowVisible === item.label ? 'block' : 'none'
+                display: arrowVisible === item.label ? 'block' : 'none',
               }}
             />
             <HeaderItem
@@ -59,7 +72,8 @@ const GameEditionMenuContainer = () => {
               headerItemStyle={{
                 fontFamily: theme.fontFamily.pressStartRegular,
                 color: 'black',
-                margin: '0px 8px'
+                margin: '0px 8px',
+                fontSize: getMenuItemStyle(),
               }}
               onMouseOver={() => setArrowVisible(item.label)}
             >
@@ -68,7 +82,7 @@ const GameEditionMenuContainer = () => {
             <MenuGEIcon
               style={{
                 transform: 'rotate(180deg)',
-                display: arrowVisible === item.label ? 'block' : 'none'
+                display: arrowVisible === item.label ? 'block' : 'none',
               }}
             />
           </RowMenuContainer>
@@ -79,7 +93,7 @@ const GameEditionMenuContainer = () => {
           <RowMenuContainer key={index}>
             <MenuGEIcon
               style={{
-                display: arrowVisible === item.label ? 'block' : 'none'
+                display: arrowVisible === item.label ? 'block' : 'none',
               }}
             />
             <HeaderItem
@@ -90,7 +104,8 @@ const GameEditionMenuContainer = () => {
               headerItemStyle={{
                 fontFamily: theme.fontFamily.pressStartRegular,
                 color: 'black',
-                margin: '0px 8px'
+                margin: '0px 8px',
+                fontSize: getMenuItemStyle(),
               }}
               onMouseOver={() => setArrowVisible(item.label)}
             >
@@ -99,7 +114,7 @@ const GameEditionMenuContainer = () => {
             <MenuGEIcon
               style={{
                 transform: 'rotate(180deg)',
-                display: arrowVisible === item.label ? 'block' : 'none'
+                display: arrowVisible === item.label ? 'block' : 'none',
               }}
             />
           </RowMenuContainer>
