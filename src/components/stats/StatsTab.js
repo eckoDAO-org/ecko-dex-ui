@@ -16,7 +16,7 @@ export const CardContainer = styled.div`
   display: flex;
   flex-flow: column;
   align-items: center;
-  padding: ${({ gameEditionView }) => (gameEditionView ? `24px` : `32px `)};
+  padding: ${({ gameEditionView }) => (gameEditionView ? `0` : `32px `)};
   width: 100%;
   max-width: 1110px;
   margin-left: auto;
@@ -55,9 +55,10 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
       withoutRainbowBackground
       backgroundNotChangebleWithTheme
       containerStyle={{
-        maxHeight: '80vh',
+        maxHeight: !gameEditionView && '80vh',
         padding: gameEditionView ? 24 : 0,
         border: gameEditionView && '1px solid transparent',
+        height: gameEditionView && '100%',
       }}
     >
       <TitleContainer

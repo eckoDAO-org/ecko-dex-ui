@@ -27,15 +27,15 @@ export const CardContainer = styled.div`
   opacity: 1;
   background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? `transparent` : backgroundContainer)};
   backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
-
+  overflow: auto;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
-    max-height: 450px;
+    max-height: ${({ gameEditionView }) => (gameEditionView ? '90vh' : '450px')};
     gap: 0px;
   }
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel + 1}px`}) {
-    max-height: 400px;
+    max-height: ${({ gameEditionView }) => (gameEditionView ? '90vh' : '400px')};
   }
 `;
 

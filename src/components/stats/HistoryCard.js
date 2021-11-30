@@ -58,7 +58,7 @@ const HistoryCard = ({ tx }) => {
   return (
     <HistoryCardContainer gameEditionView={gameEditionView}>
       {/* ICONS */}
-      {width >= theme.mediaQueries.mobilePixel ? (
+      {width >= theme.mediaQueries.mobilePixel && !gameEditionView ? (
         <>
           <IconsContainer style={{ flex: 1 }}>
             {getInfoCoin(3)?.icon}
@@ -78,7 +78,7 @@ const HistoryCard = ({ tx }) => {
           <ColumnContent label="Amount" value={`${tx?.params[2]} ${getInfoCoin(3)?.name}`} containerStyle={{ flex: '0.5' }} />
         </>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, width: '100%' }}>
           <MobileRowContainer>
             <IconsContainer style={{ flex: 1 }}>
               {getInfoCoin(3)?.icon}
