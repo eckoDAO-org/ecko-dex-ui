@@ -18,7 +18,7 @@ export const CardContainer = styled.div`
   padding: ${({ gameEditionView }) => (gameEditionView ? `24px ` : `32px `)};
   width: 100%;
   max-width: 1110px;
-  max-height: ${({ gameEditionView }) => (gameEditionView ? `40vh` : `550px`)};
+  max-height: ${({ gameEditionView }) => (gameEditionView ? `40vh` : `500px`)};
   margin-left: auto;
   margin-right: auto;
   border-radius: 10px;
@@ -30,7 +30,7 @@ export const CardContainer = styled.div`
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
-    max-height: 500px;
+    max-height: 450px;
     gap: 0px;
   }
 

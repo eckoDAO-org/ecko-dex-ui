@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { KadenaWalletContext } from './KadenaWalletContext';
+import { KaddexWalletContext } from './KaddexWalletContext';
 import { PactContext } from './PactContext';
 import { SwapContext } from './SwapContext';
 import { AccountContext } from './AccountContext';
@@ -9,8 +9,8 @@ import { NotificationContext } from './NotificationContext';
 import { LightModeContext } from './LightModeContext';
 import { GameEditionContext } from './GameEditionContext';
 
-export function useKadenaWalletContext() {
-  return useContext(KadenaWalletContext);
+export function useKaddexWalletContext() {
+  return useContext(KaddexWalletContext);
 }
 export function useSwapContext() {
   return useContext(SwapContext);

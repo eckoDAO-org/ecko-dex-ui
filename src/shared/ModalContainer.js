@@ -11,6 +11,7 @@ const Container = styled.div`
   flex-flow: column;
   padding: ${({ gameEditionView }) => (gameEditionView ? '20px' : '32px')};
   width: 100%;
+  min-width: 550px;
   border-radius: 10px;
   border: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `2px dashed ${colors.black}`};
   background-clip: ${({ gameEditionView }) => !gameEditionView && `padding-box`};
@@ -19,6 +20,10 @@ const Container = styled.div`
     backgroundNotChangebleWithTheme || gameEditionView ? 'transparent' : backgroundContainer};
   backdrop-filter: ${({ gameEditionView, withoutRainbowBackground }) => !gameEditionView && !withoutRainbowBackground && `blur(50px)`};
   color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.black : colors.white)};
+
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    min-width: 50px;
+  }
 
   ::-webkit-scrollbar {
     display: none;
@@ -57,9 +62,7 @@ const Title = styled.span`
 const Description = styled.span`
   font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
   font-size: 16px;
-  margin-bottom: 24px;
-
-  margin-top: 12px;
+  margin: 24px 0px;
 `;
 
 const ModalContainer = ({

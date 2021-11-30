@@ -23,7 +23,7 @@ import {
   ROUTE_KPY_RES,
   ROUTE_KPY_RED,
   ROUTE_GAME_START_ANIMATION,
-  ROUTE_GAME_EDITION_MENU
+  ROUTE_GAME_EDITION_MENU,
 } from './routes';
 
 const Container = styled.div`

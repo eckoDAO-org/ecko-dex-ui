@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
 import { Divider, Loader } from 'semantic-ui-react';
 import styled from 'styled-components';

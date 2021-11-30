@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 import { Search as SUISearch } from 'semantic-ui-react';
-import theme from '../styles/theme';
 import { GameEditionContext } from '../contexts/GameEditionContext';
 import { SearchGEIcon } from '../assets';
 

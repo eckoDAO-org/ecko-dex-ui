@@ -1,21 +1,22 @@
-import React, { useContext } from "react";
-import styled from "styled-components";
-import { useHistory } from "react-router";
-import { ROUTE_GAME_EDITION_MENU } from "../../router/routes";
-import { GameEditionWrapper } from "./GameEditionWrapper";
-import { GameEditionContext } from "../../contexts/GameEditionContext";
-import GameEditionModalsContainer from "./GameEditionModalsContainer";
-import { FadeIn } from "../shared/animations";
-import theme from "../../styles/theme";
-import GameEditionMobileWrapper from "./GameEditionMobileWrapper";
-import menuItems from "../menuItems";
-import useWindowSize from "../../hooks/useWindowSize";
+import React, { useContext } from 'react';
+import styled from 'styled-components';
+import { useHistory } from 'react-router';
+import { ROUTE_GAME_EDITION_MENU } from '../../router/routes';
+import { GameEditionWrapper } from './GameEditionWrapper';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
+import GameEditionModalsContainer from './GameEditionModalsContainer';
+import { FadeIn } from '../shared/animations';
+import theme from '../../styles/theme';
+import GameEditionMobileWrapper from './GameEditionMobileWrapper';
+import menuItems from '../menuItems';
+import useWindowSize from '../../hooks/useWindowSize';
 
 const MainContainer = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
   height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
+  align-items: center;
 `;
 
 const ContentContainer = styled.div`
@@ -38,12 +39,12 @@ const GameEditionContainer = ({ children }) => {
 
   const switchAppSection = (direction) => {
     let cur = history.location.pathname;
-    if (direction === "left") {
+    if (direction === 'left') {
       let prevPage = menuItems.findIndex((path) => path.route === cur) - 1;
       if (prevPage < 0) history.push(menuItems[menuItems.length - 1].route);
       else return history.push(menuItems[prevPage].route);
     }
-    if (direction === "right") {
+    if (direction === 'right') {
       let nextPage = menuItems.findIndex((path) => path.route === cur) + 1;
       if (nextPage > menuItems.length - 1) history.push(menuItems[0]?.route);
       else return history.push(menuItems[nextPage].route);
@@ -101,11 +102,11 @@ const GameEditionContainer = ({ children }) => {
             closeModal();
           }}
           buttonLOnClick={() => {
-            switchAppSection("left");
+            switchAppSection('left');
             closeModal();
           }}
           buttonROnClick={() => {
-            switchAppSection("right");
+            switchAppSection('right');
             closeModal();
           }}
         >

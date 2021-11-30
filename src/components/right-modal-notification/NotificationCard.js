@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Divider } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { CloseIcon, NotificationCautionBlueIcon, NotificationErrorIcon, NotificationSuccessIcon, NotificationWarningIcon } from '../../assets';
 
@@ -29,13 +28,6 @@ const NotificationContainer = styled.div`
   color: ${({ theme: { colors } }) => colors.white};
   padding: 16px 0px;
   border-top: 1px solid #707070;
-`;
-
-const CustomDivider = styled(Divider)`
-  background-color: #707070;
-  width: 80%;
-  margin: 0px !important;
-  border-bottom: 0px !important;
 `;
 
 const CloseIconColumn = styled.div`
@@ -132,7 +124,6 @@ const NotificationCard = ({ index, time, date, title, description, type, removeI
       animation={animation}
       style={{ cursor: link && 'pointer' }}
     >
-      {/* <CustomDivider /> */}
       <NotificationContainer>
         <Content>
           <IconColumn>{getIconByTypeNotification(type)}</IconColumn>

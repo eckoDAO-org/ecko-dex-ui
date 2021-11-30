@@ -80,12 +80,6 @@ const FlexEndRow = styled.div`
   justify-content: flex-end;
 `;
 
-const SubTitleContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
 const SubTitle = styled.div`
   font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '14px' : '13px')};

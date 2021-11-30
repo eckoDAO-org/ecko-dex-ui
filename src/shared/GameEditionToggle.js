@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { Checkbox } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { GameEditionContext } from '../contexts/GameEditionContext';
-import { LightModeContext } from '../contexts/LightModeContext';
 
 const ToggleContainer = styled.div`
   display: flex;

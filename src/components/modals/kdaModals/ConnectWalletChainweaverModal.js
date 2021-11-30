@@ -96,7 +96,7 @@ const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
         <Button.Group fluid>
           <CustomButton
             border="none"
-            color={`${theme(themeMode).colors.white} !important`}
+            color={theme(themeMode).colors.white}
             background="transparent"
             onClick={() => {
               resetValues();
