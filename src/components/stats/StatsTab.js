@@ -84,7 +84,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
             Object.values(pact.pairList).map((pair, index) =>
               pair && pair.reserves ? (
                 <>
-                  <StatsCard pair={pair} />
+                  <StatsCard pair={pair} key={index} />
                   {Object.values(pact.pairList).length - 1 !== index && (
                     <Divider
                       style={{

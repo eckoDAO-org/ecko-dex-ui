@@ -31,11 +31,8 @@ export const PactProvider = (props) => {
   const [ratio, setRatio] = useState(NaN);
   const [pairList, setPairList] = useState(pairTokens);
   const [swapList, setSwapList] = useState([]);
-  const [offsetSwapList, setOffsetSwapList] = useState(100);
-  console.log(
-    '🚀 ~ file: PactContext.js ~ line 44 ~ PactProvider ~ swapList',
-    swapList
-  );
+  const [offsetSwapList, setOffsetSwapList] = useState(0);
+  const [moreSwap, setMoreSwap] = useState(true);
 
   //TO FIX, not working when multiple toasts are there
   const toastId = React.useRef(null);
@@ -79,28 +76,23 @@ export const PactProvider = (props) => {
     }
   };
 
-  const getEventsSwapList = async (offset = 0) => {
+  const getEventsSwapList = async () => {
     setSwapList([]);
-    const limit = 100;
+    const limit = 20;
 
     try {
       if (account.account.account) {
-        let response = await axios.get(
-          'https://estats.chainweb.com/txs/events',
-          {
-            params: {
-              search: account.account.account,
-              offset: offset,
-              limit: limit,
-            },
-          }
-        );
+        let response = await axios.get('https://estats.chainweb.com/txs/events', {
+          params: {
+            search: account.account.account,
+            name: 'kswap.exchange.SWAP',
+            offset: offsetSwapList,
+            limit: limit,
+          },
+        });
         console.log(response);
         if (Object.values(response?.data).length !== 0) {
-          let swap = Object.values(response?.data)?.filter(
-            (swapTx) => swapTx?.name === 'kswap.exchange.SWAP'
-          );
-          // .filter((s) => s?.params[1] === account.account.account);
+          let swap = Object.values(response?.data);
           if (swap.length !== 0) setSwapList(swap);
           else setSwapList({ error: 'No swaps found' });
         } else {
@@ -114,31 +106,31 @@ export const PactProvider = (props) => {
     }
   };
 
-  const getMoreEventsSwapList = async (offset = 0) => {
+  const getMoreEventsSwapList = async () => {
     const limit = 20;
-    //IN PROGRESS
+    let offset = offsetSwapList + limit;
 
     try {
       if (account.account.account) {
-        let response = await axios.get(
-          'https://estats.chainweb.com/txs/events',
-          {
-            params: {
-              search: account.account.account,
-              offset: offset,
-              limit: limit,
-            },
-          }
-        );
+        let response = await axios.get('https://estats.chainweb.com/txs/events', {
+          params: {
+            search: account.account.account,
+            name: 'kswap.exchange.SWAP',
+            offset: offset,
+            limit: limit,
+          },
+        });
         console.log(response);
-        let swap = Object.values(response?.data)?.filter(
-          (swapTx) => swapTx?.name === 'kswap.exchange.SWAP'
-        );
-        // .filter((s) => s?.params[1] === account.account.account);
-        if (swap.length !== 0) setSwapList([...swapList, swap]);
+        let swap = Object.values(response?.data);
+        if (swap.length !== 0) {
+          setSwapList(swapList.concat(swap));
+        } else {
+          setMoreSwap(false);
+        }
       } else {
         setSwapList({ error: 'Connect your wallet to view the swap history' });
       }
+      setOffsetSwapList(offset);
     } catch (error) {
       console.log(error);
     }
@@ -556,6 +548,8 @@ export const PactProvider = (props) => {
     swapList,
     totalSupply,
     getTotalTokenSupply,
+    getMoreEventsSwapList,
+    moreSwap,
     listen,
     polling,
     setPolling,
