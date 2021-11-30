@@ -13,7 +13,7 @@ import { SwapProvider } from './contexts/SwapContext';
 import { LiquidityProvider } from './contexts/LiquidityContext';
 import { GameEditionProvider } from './contexts/GameEditionContext';
 import { LightModeContext, LightModeProvider, useLightMode } from './contexts/LightModeContext';
-import { KadenaWalletProvider } from './contexts/KadenaWalletContext';
+import { KaddexWalletProvider } from './contexts/KaddexWalletContext';
 import { NotificationProvider } from './contexts/NotificationContext';
 import { NotificationModalProvider } from './contexts/NotificationModalContext';
 import NotificationModalRender from './components/right-modal-notification/NotificationModalRender';
@@ -29,7 +29,7 @@ function App() {
           <AccountProvider>
             <WalletProvider>
               <PactProvider>
-                <KadenaWalletProvider>
+                <KaddexWalletProvider>
                   <SwapProvider>
                     <LiquidityProvider>
                       <NotificationModalRender>
@@ -41,7 +41,7 @@ function App() {
                       </NotificationModalRender>
                     </LiquidityProvider>
                   </SwapProvider>
-                </KadenaWalletProvider>
+                </KaddexWalletProvider>
               </PactProvider>
             </WalletProvider>
           </AccountProvider>

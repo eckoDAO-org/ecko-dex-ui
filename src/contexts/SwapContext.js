@@ -4,7 +4,7 @@ import tokenData from '../constants/cryptoCurrencies';
 import pwPrompt from '../components/alerts/pwPrompt';
 import { reduceBalance } from '../utils/reduceBalance';
 import { decryptKey } from '../utils/keyUtils';
-import { useKadenaWalletContext, useWalletContext, useAccountContext, usePactContext, useNotificationContext } from '.';
+import { useKaddexWalletContext, useWalletContext, useAccountContext, usePactContext, useNotificationContext } from '.';
 import {
   chainId,
   creationTime,
@@ -22,7 +22,7 @@ export const SwapProvider = (props) => {
   const pact = usePactContext();
   const notificationContext = useNotificationContext();
   const { account, localRes, setLocalRes } = useAccountContext();
-  const { isConnected: isKadenaWalletConnected, requestSign: kadenaRequestSign } = useKadenaWalletContext();
+  const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
 
   const wallet = useWalletContext();
   const [pairAccount, setPairAccount] = useState('');
@@ -147,7 +147,7 @@ export const SwapProvider = (props) => {
       pact.setPolling(false);
     } catch (e) {
       pact.setPolling(false);
-      console.log(e);
+      console.log('errrrrooooooorrrr', e);
     }
   };
 
@@ -187,11 +187,11 @@ export const SwapProvider = (props) => {
           clist: [
             ...(ENABLE_GAS_STATION
               ? [
-                {
-                  name: 'kswap.gas-station.GAS_PAYER',
-                  args: ['free-gas', { int: 1 }, 1.0]
-                }
-              ]
+                  {
+                    name: 'kswap.gas-station.GAS_PAYER',
+                    args: ['free-gas', { int: 1 }, 1.0],
+                  },
+                ]
               : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap]),
             {
               name: `${token0.address}.TRANSFER`,
@@ -276,9 +276,9 @@ export const SwapProvider = (props) => {
       /* walletLoading(); */
       wallet.setIsWaitingForWalletAuth(true);
       let command = null;
-      if (isKadenaWalletConnected) {
-        const res = await kadenaRequestSign(signCmd);
-        command = res.signedCmd
+      if (isKaddexWalletConnected) {
+        const res = await kaddexWalletRequestSign(signCmd);
+        command = res.signedCmd;
       } else {
         command = await Pact.wallet.sign(signCmd);
       }

@@ -1,20 +1,19 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, createContext, useEffect, useCallback } from 'react';
 import { useAccountContext, useWalletContext, useNotificationContext } from '.';
 import { network, NETWORKID } from '../constants/contextConstants';
 import { WALLET } from '../constants/wallet';
 
-export const KadenaWalletContext = createContext();
+export const KaddexWalletContext = createContext();
 
-const initialKadenaWalletState = {
+const initialKaddexWalletState = {
   isConnected: false,
   isInstalled: false,
   network,
 };
 
-export const KadenaWalletProvider = (props) => {
+export const KaddexWalletProvider = (props) => {
   const [kadenaExt, setKadenaExt] = useState(null);
-  const [kadenaWalletState, setKadenaWalletState] = useState(initialKadenaWalletState);
+  const [kaddexWalletState, setKaddexWalletState] = useState(initialKaddexWalletState);
 
   const accountContextData = useAccountContext();
   const { wallet, setSelectedWallet, signingWallet } = useWalletContext();
@@ -23,11 +22,11 @@ export const KadenaWalletProvider = (props) => {
   const initialize = useCallback(() => {
     const { kadena } = window;
     setKadenaExt(kadena);
-    setKadenaWalletState({
-      ...kadenaWalletState,
+    setKaddexWalletState({
+      ...kaddexWalletState,
       isInstalled: Boolean(kadena?.isKadena),
     });
-  }, [kadenaWalletState]);
+  }, [kaddexWalletState]);
 
   const getNetworkInfo = async () => {
     return await kadenaExt.request({
@@ -50,17 +49,17 @@ export const KadenaWalletProvider = (props) => {
         signingCmd,
       },
     });
-  }
+  };
 
   const setAccountData = async () => {
     const acc = await getAccountInfo();
     if (acc.wallet) {
       await accountContextData.setVerifiedAccount(acc.wallet.account);
       await signingWallet();
-      await setSelectedWallet(WALLET.KADENA_WALLET);
-      setKadenaWalletState({
-        ...kadenaWalletState,
-        isConnected: true
+      await setSelectedWallet(WALLET.KADDEX_WALLET);
+      setKaddexWalletState({
+        ...kaddexWalletState,
+        isConnected: true,
       });
     }
   };
@@ -69,28 +68,31 @@ export const KadenaWalletProvider = (props) => {
     window.addEventListener('load', initialize);
   }, [initialize]);
 
-  useEffect(async () => {
-    if (kadenaExt) {
-      kadenaExt.on('res_accountChange', async (response) => {
-        console.log('!!!res_accountChange', response);
-        await setAccountData();
-      });
-      kadenaExt.on('res_checkStatus', (response) => {
-        console.log('!!!res_checkStatus', response);
-      });
-      kadenaExt.on('res_sendKadena', (response) => {
-        console.log('!!!res_sendKadena ', response);
-      });
-      if (wallet?.name === WALLET.KADENA_WALLET.name) {
-        setKadenaWalletState({
-          ...kadenaWalletState,
-          isConnected: true
+  useEffect(() => {
+    const registerEvents = async () => {
+      if (kadenaExt) {
+        kadenaExt.on('res_accountChange', async (response) => {
+          console.log('!!!res_accountChange', response);
+          await setAccountData();
         });
+        kadenaExt.on('res_checkStatus', (response) => {
+          console.log('!!!res_checkStatus', response);
+        });
+        kadenaExt.on('res_sendKadena', (response) => {
+          console.log('!!!res_sendKadena ', response);
+        });
+        if (wallet?.name === WALLET.KADDEX_WALLET.name) {
+          setKaddexWalletState({
+            ...kaddexWalletState,
+            isConnected: true,
+          });
+        }
       }
-    }
+    };
+    registerEvents();
   }, [kadenaExt]);
 
-  const initializeKDAWallet = async () => {
+  const initializeKaddexWallet = async () => {
     try {
       const networkInfo = await getNetworkInfo();
       if (networkInfo.networkId !== NETWORKID) {
@@ -109,23 +111,23 @@ export const KadenaWalletProvider = (props) => {
     } catch (err) {
       showNotification({
         title: 'Wallet error',
-        message: `Please check ${WALLET.KADENA_WALLET.name}`,
+        message: `Please check ${WALLET.KADDEX_WALLET.name}`,
         type: STATUSES.ERROR,
       });
     }
   };
 
   return (
-    <KadenaWalletContext.Provider
+    <KaddexWalletContext.Provider
       value={{
-        ...kadenaWalletState,
-        initializeKDAWallet,
+        ...kaddexWalletState,
+        initializeKaddexWallet,
         requestSign,
       }}
     >
       {props.children}
-    </KadenaWalletContext.Provider>
+    </KaddexWalletContext.Provider>
   );
 };
 
-export const KadenaWalletCunsomer = KadenaWalletContext.Consumer;
+export const KaddexWalletCunsomer = KaddexWalletContext.Consumer;
