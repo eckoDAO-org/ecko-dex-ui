@@ -1,13 +1,11 @@
 import React, { useContext } from 'react';
 import { Grid } from 'semantic-ui-react';
 import styled from 'styled-components/macro';
-import { KDALogo, ZelcoreLogo } from '../../assets';
 import { NETWORK_TYPE } from '../../constants/contextConstants';
 import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { PactContext } from '../../contexts/PactContext';
 import ModalContainer from '../../shared/ModalContainer';
-import theme from '../../styles/theme';
 import { PartialScrollableScrollSection } from '../layout/Containers';
 
 const IconColumn = styled(Grid.Column)`
