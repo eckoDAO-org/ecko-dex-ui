@@ -15,7 +15,7 @@ export const CardContainer = styled.div`
   display: flex;
   flex-flow: column;
   align-items: center;
-  padding: ${({ gameEditionView }) => (gameEditionView ? `32px` : `32px 32px`)};
+  padding: ${({ gameEditionView }) => (gameEditionView ? `24px` : `32px `)};
   width: 100%;
   max-width: 1110px;
   margin-left: auto;
@@ -35,6 +35,9 @@ export const CardContainer = styled.div`
 const Tabs = styled(Title)`
   opacity: ${({ active }) => (active ? '1' : '0.4')};
   cursor: pointer;
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel + 1}px`}) {
+    font-size: 24px;
+  }
 `;
 
 const StatsTab = ({ activeTabs, setActiveTabs }) => {
@@ -65,21 +68,16 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
           justifyContent: 'space-between',
         }}
       >
-        <Tabs
-          gameEditionView={gameEditionView}
-          active={activeTabs === 'POOL_STATS'}
-          // onClick={setActiveTabs('POOL_STATS')}
-        >
+        <Tabs gameEditionView={gameEditionView} active={activeTabs === 'POOL_STATS'}>
           Stats
         </Tabs>
         <Tabs gameEditionView={gameEditionView} active={activeTabs === 'HISTORY'} onClick={setActiveTabs}>
           History
         </Tabs>
       </TitleContainer>
-      <PartialScrollableScrollSection>
-        <CardContainer gameEditionView={gameEditionView}>
-          {!gameEditionView && <GradientBorder />}
-
+      <CardContainer gameEditionView={gameEditionView}>
+        {!gameEditionView && <GradientBorder />}
+        <PartialScrollableScrollSection style={{ width: '100%' }}>
           {pact.pairList[0] ? (
             Object.values(pact.pairList).map((pair, index) =>
               pair && pair.reserves ? (
@@ -112,8 +110,8 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
               </Loader>
             </div>
           )}
-        </CardContainer>
-      </PartialScrollableScrollSection>
+        </PartialScrollableScrollSection>
+      </CardContainer>
     </ModalContainer>
   );
 };

@@ -25,18 +25,26 @@ export const CardContainer = styled.div`
   border: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `1px dashed ${colors.black}`};
 
   opacity: 1;
-  background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? `transparent` : backgroundContainer)}; // or add new style
+  background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? `transparent` : backgroundContainer)};
   backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
+    max-height: 500px;
     gap: 0px;
+  }
+
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel + 1}px`}) {
+    max-height: 400px;
   }
 `;
 
 const Tabs = styled(Title)`
   opacity: ${({ active }) => (active ? '1' : '0.4')};
   cursor: pointer;
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel + 1}px`}) {
+    font-size: 24px;
+  }
 `;
 
 const HistoryTab = ({ activeTabs, setActiveTabs }) => {
@@ -75,8 +83,10 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
           History
         </Tabs>
       </TitleContainer>
+
       <CardContainer gameEditionView={gameEditionView}>
         {!gameEditionView && <GradientBorder />}
+
         <PartialScrollableScrollSection className="scrollbar-none" style={{ width: '100%' }}>
           {!pact.swapList?.error ? (
             pact.swapList[0] ? (
@@ -117,41 +127,3 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
 };
 
 export default HistoryTab;
-
-//LOADER
-
-{
-  /* <div style={{ padding: '16px' }}>
-<Loader
-  active
-  style={{
-    color: gameEditionView
-      ? theme(themeMode).colors.black
-      : theme(themeMode).colors.white,
-    fontFamily: gameEditionView
-      ? theme(themeMode).fontFamily.pressStartRegular
-      : theme(themeMode).fontFamily.regular,
-  }}
->
-  Loading..
-</Loader>
-</div> */
-}
-
-// MAP
-// pact.swapList?.map((tx, index) => (
-//   <>
-//     <HistoryCard tx={tx} />
-//     {pact.swapList?.length - 1 !== index && (
-//       <Divider
-//         style={{
-//           width: '100%',
-//           margin: '32px 0px',
-//           borderTop: gameEditionView
-//             ? `1px dashed ${theme(themeMode).colors.black}`
-//             : `1px solid  ${theme(themeMode).colors.white}`,
-//         }}
-//       />
-//     )}
-//   </>
-// ))

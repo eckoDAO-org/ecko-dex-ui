@@ -3,21 +3,19 @@ import styled from 'styled-components';
 import { getDate, NETWORK_TYPE } from '../../constants/contextConstants';
 import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
+import useWindowSize from '../../hooks/useWindowSize';
+import ColumnContent from '../../shared/ColumnContent';
 import CustomLabel from '../../shared/CustomLabel';
+import theme from '../../styles/theme';
 import reduceToken from '../../utils/reduceToken';
-import { ColumnContainer, Container, Label, Value } from '../layout/Containers';
+import { Container } from '../layout/Containers';
 
 const HistoryCardContainer = styled(Container)`
   width: 100%;
-  --auto-grid-min-size: ${({ gameEditionView }) => (gameEditionView ? '180px' : '260px')};
-  @media only screen and (min-device-width: 1024px) and (max-device-width: 1180px) and (-webkit-min-device-pixel-ratio: 2) {
-    --auto-grid-min-size: 180px;
-  }
-  grid-gap: ${({ gameEditionView }) => gameEditionView && '0.5em'};
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--auto-grid-min-size), 1fr));
-  flex-direction: ${({ gameEditionView }) => (!gameEditionView ? 'row' : 'column')};
+  display: flex;
+  align-items: center;
   justify-content: space-between;
+  flex-direction: ${({ gameEditionView }) => (!gameEditionView ? 'row' : 'column')};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     & > *:not(:last-child) {
       margin-bottom: 16px;
@@ -28,6 +26,7 @@ const HistoryCardContainer = styled(Container)`
 const IconsContainer = styled.div`
   display: flex;
   justify-content: flex-start;
+  align-items: center;
 
   img:first-child {
     z-index: 2;
@@ -35,6 +34,12 @@ const IconsContainer = styled.div`
   img:not(:first-child):not(:last-child) {
     margin-left: -15px;
   }
+`;
+
+const MobileRowContainer = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
 `;
 
 const HistoryCard = ({ tx }) => {
@@ -48,39 +53,55 @@ const HistoryCard = ({ tx }) => {
     return crypto;
   };
 
+  const [width] = useWindowSize();
+
   return (
     <HistoryCardContainer gameEditionView={gameEditionView}>
       {/* ICONS */}
-      <IconsContainer>
-        {getInfoCoin(3)?.icon}
-        {getInfoCoin(5)?.icon}
-        <CustomLabel bold>{`${getInfoCoin(3)?.name}-${getInfoCoin(5)?.name}`}</CustomLabel>
-      </IconsContainer>
-      <ColumnContainer gameEditionView={gameEditionView}>
-        <Label gameEditionView={gameEditionView} withShade="99">
-          Date
-        </Label>
-        <Value gameEditionView={gameEditionView}>{`${getDate(tx?.blockTime)}`}</Value>
-      </ColumnContainer>
-      <ColumnContainer
-        gameEditionView={gameEditionView}
-        style={{ cursor: 'pointer' }}
-        onClick={() => {
-          window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${tx?.requestKey}`, '_blank', 'noopener,noreferrer');
-        }}
-      >
-        <Label gameEditionView={gameEditionView} withShade="99">
-          Request Key
-        </Label>
-        <Value gameEditionView={gameEditionView}>{reduceToken(tx?.requestKey)}</Value>
-      </ColumnContainer>
-      {/* TR TOKEN 1 */}
-      <ColumnContainer gameEditionView={gameEditionView}>
-        <Label gameEditionView={gameEditionView} withShade="99" style={{ textAlign: 'left' }}>
-          Amount
-        </Label>
-        <Value gameEditionView={gameEditionView} style={{ textAlign: 'left' }}>{`${tx?.params[2]} ${getInfoCoin(3)?.name}`}</Value>
-      </ColumnContainer>
+      {width >= theme.mediaQueries.mobilePixel ? (
+        <>
+          <IconsContainer style={{ flex: 1 }}>
+            {getInfoCoin(3)?.icon}
+            {getInfoCoin(5)?.icon}
+            <CustomLabel bold>{`${getInfoCoin(3)?.name}-${getInfoCoin(5)?.name}`}</CustomLabel>
+          </IconsContainer>
+          <ColumnContent label="Date" value={`${getDate(tx?.blockTime)}`} />
+
+          <ColumnContent
+            label="Request Key"
+            value={reduceToken(tx?.requestKey)}
+            onClick={() => {
+              window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${tx?.requestKey}`, '_blank', 'noopener,noreferrer');
+            }}
+          />
+
+          <ColumnContent label="Amount" value={`${tx?.params[2]} ${getInfoCoin(3)?.name}`} containerStyle={{ flex: '0.5' }} />
+        </>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+          <MobileRowContainer>
+            <IconsContainer style={{ flex: 1 }}>
+              {getInfoCoin(3)?.icon}
+              {getInfoCoin(5)?.icon}
+              <CustomLabel bold>{`${getInfoCoin(3)?.name}-${getInfoCoin(5)?.name}`}</CustomLabel>
+            </IconsContainer>
+            <ColumnContent
+              label="Request Key"
+              value={reduceToken(tx?.requestKey)}
+              containerStyle={{ flex: 'unset', width: 130 }}
+              onClick={() => {
+                window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${tx?.requestKey}`, '_blank', 'noopener,noreferrer');
+              }}
+            />
+          </MobileRowContainer>
+
+          <MobileRowContainer>
+            <ColumnContent label="Date" value={`${getDate(tx?.blockTime)}`} />
+
+            <ColumnContent label="Amount" value={`${tx?.params[2]} ${getInfoCoin(3)?.name}`} containerStyle={{ flex: 'unset', width: 130 }} />
+          </MobileRowContainer>
+        </div>
+      )}
     </HistoryCardContainer>
   );
 };

@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
+import useWindowSize from '../../hooks/useWindowSize';
 import CustomLabel from '../../shared/CustomLabel';
 import { extractDecimal, reduceBalance } from '../../utils/reduceBalance';
 import { ColumnContainer, Container, Label, Value } from '../layout/Containers';
@@ -34,6 +35,9 @@ const IconsContainer = styled.div`
 
 const StatsCard = ({ pair }) => {
   const { gameEditionView } = useContext(GameEditionContext);
+
+  const [width] = useWindowSize();
+
   return (
     <StatsCardContainer gameEditionView={gameEditionView}>
       {/* ICONS */}

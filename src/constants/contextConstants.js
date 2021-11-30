@@ -39,6 +39,10 @@ export const getCurrentTime = () => {
   return `${hours}:${minutes}:${seconds}`;
 };
 
+const get2numMoment = (moment) => {
+  return moment < 10 ? `0${moment}` : moment;
+};
+
 export const getDate = (date) => {
   const d = new Date(date);
   let day = d.getDate();
@@ -47,7 +51,9 @@ export const getDate = (date) => {
   let hours = d.getHours();
   let minutes = d.getMinutes();
   let seconds = d.getSeconds();
-  return `${day}/${month}/${year} - ${hours}:${minutes}:${seconds}`;
+  return `${get2numMoment(day)}/${get2numMoment(month)}/${get2numMoment(year)} - ${get2numMoment(hours)}:${get2numMoment(minutes)}:${get2numMoment(
+    seconds
+  )}`;
 };
 
 export const GAS_PRICE = 0.0000001;
