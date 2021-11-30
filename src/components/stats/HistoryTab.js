@@ -97,7 +97,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
                     <Divider
                       style={{
                         width: '100%',
-                        margin: '32px 0px',
+                        margin: gameEditionView ? '24px 0px' : '32px 0px',
                         borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`,
                       }}
                     />

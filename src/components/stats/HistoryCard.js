@@ -10,6 +10,13 @@ import theme from '../../styles/theme';
 import reduceToken from '../../utils/reduceToken';
 import { Container } from '../layout/Containers';
 
+const CustomGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  gap: 4px 0px;
+`;
+
 const HistoryCardContainer = styled(Container)`
   width: 100%;
   display: flex;
@@ -55,7 +62,18 @@ const HistoryCard = ({ tx }) => {
 
   const [width] = useWindowSize();
 
-  return (
+  return gameEditionView ? (
+    <CustomGrid>
+      <CustomLabel bold>Name</CustomLabel>
+      <CustomLabel start>{`${getInfoCoin(3)?.name}-${getInfoCoin(5)?.name}`}</CustomLabel>
+      <CustomLabel bold>Date</CustomLabel>
+      <CustomLabel start>{`${getDate(tx?.blockTime)}`}</CustomLabel>
+      <CustomLabel bold>Request Key</CustomLabel>
+      <CustomLabel start>{reduceToken(tx?.requestKey)}</CustomLabel>
+      <CustomLabel bold>Amount</CustomLabel>
+      <CustomLabel start>{`${tx?.params[2]} ${getInfoCoin(3)?.name}`}</CustomLabel>
+    </CustomGrid>
+  ) : (
     <HistoryCardContainer gameEditionView={gameEditionView}>
       {/* ICONS */}
       {width >= theme.mediaQueries.mobilePixel && !gameEditionView ? (

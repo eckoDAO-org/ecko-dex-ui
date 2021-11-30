@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
-import useWindowSize from '../../hooks/useWindowSize';
 import CustomLabel from '../../shared/CustomLabel';
 import { extractDecimal, reduceBalance } from '../../utils/reduceBalance';
 import { ColumnContainer, Container, Label, Value } from '../layout/Containers';
@@ -33,12 +32,30 @@ const IconsContainer = styled.div`
   }
 `;
 
+const CustomGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  gap: 4px 0px;
+`;
+
 const StatsCard = ({ pair }) => {
   const { gameEditionView } = useContext(GameEditionContext);
 
-  const [width] = useWindowSize();
-
-  return (
+  return gameEditionView ? (
+    <CustomGrid>
+      <CustomLabel bold>Name</CustomLabel>
+      <CustomLabel start>{`${pair.token0}/${pair.token1}`}</CustomLabel>
+      <CustomLabel bold>token0</CustomLabel>
+      <CustomLabel start>{reduceBalance(pair.reserves[0])}</CustomLabel>
+      <CustomLabel bold>token1</CustomLabel>
+      <CustomLabel start>{reduceBalance(pair.reserves[1])}</CustomLabel>
+      <CustomLabel bold>Rate</CustomLabel>
+      <CustomLabel start>{`${reduceBalance(extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1]))} ${pair.token0}/${
+        pair.token1
+      }`}</CustomLabel>
+    </CustomGrid>
+  ) : (
     <StatsCardContainer gameEditionView={gameEditionView}>
       {/* ICONS */}
       <IconsContainer style={{ marginRight: '16px' }}>

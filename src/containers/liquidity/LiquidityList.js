@@ -115,6 +115,7 @@ const LiquidityList = (props) => {
         containerStyle={{
           maxHeight: gameEditionView ? '60vh' : '80vh',
           maxWidth: 900,
+          minWidth: 0,
           overflow: 'auto',
           border: 'none',
           boxShadow: 'none',
