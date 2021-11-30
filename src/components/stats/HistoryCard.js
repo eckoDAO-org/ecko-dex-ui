@@ -15,6 +15,8 @@ const CustomGrid = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
   gap: 4px 0px;
+
+  cursor: pointer;
 `;
 
 const HistoryCardContainer = styled(Container)`
@@ -22,6 +24,7 @@ const HistoryCardContainer = styled(Container)`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  cursor: pointer;
   flex-direction: ${({ gameEditionView }) => (!gameEditionView ? 'row' : 'column')};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     & > *:not(:last-child) {
@@ -63,7 +66,11 @@ const HistoryCard = ({ tx }) => {
   const [width] = useWindowSize();
 
   return gameEditionView ? (
-    <CustomGrid>
+    <CustomGrid
+      onClick={() => {
+        window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${tx?.requestKey}`, '_blank', 'noopener,noreferrer');
+      }}
+    >
       <CustomLabel bold>Name</CustomLabel>
       <CustomLabel start>{`${getInfoCoin(3)?.name}-${getInfoCoin(5)?.name}`}</CustomLabel>
       <CustomLabel bold>Date</CustomLabel>
@@ -74,7 +81,12 @@ const HistoryCard = ({ tx }) => {
       <CustomLabel start>{`${tx?.params[2]} ${getInfoCoin(3)?.name}`}</CustomLabel>
     </CustomGrid>
   ) : (
-    <HistoryCardContainer gameEditionView={gameEditionView}>
+    <HistoryCardContainer
+      gameEditionView={gameEditionView}
+      onClick={() => {
+        window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${tx?.requestKey}`, '_blank', 'noopener,noreferrer');
+      }}
+    >
       {/* ICONS */}
       {width >= theme.mediaQueries.mobilePixel && !gameEditionView ? (
         <>
@@ -85,13 +97,7 @@ const HistoryCard = ({ tx }) => {
           </IconsContainer>
           <ColumnContent label="Date" value={`${getDate(tx?.blockTime)}`} />
 
-          <ColumnContent
-            label="Request Key"
-            value={reduceToken(tx?.requestKey)}
-            onClick={() => {
-              window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${tx?.requestKey}`, '_blank', 'noopener,noreferrer');
-            }}
-          />
+          <ColumnContent label="Request Key" value={reduceToken(tx?.requestKey)} />
 
           <ColumnContent label="Amount" value={`${tx?.params[2]} ${getInfoCoin(3)?.name}`} containerStyle={{ flex: '0.5' }} />
         </>

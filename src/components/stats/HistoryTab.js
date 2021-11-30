@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { Divider, Loader } from 'semantic-ui-react';
 import styled from 'styled-components';
+import InfiniteScroll from 'react-infinite-scroller';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { LightModeContext } from '../../contexts/LightModeContext';
 import { PactContext } from '../../contexts/PactContext';
@@ -56,6 +57,22 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
     await pact.getPairList();
   }, []);
 
+  const CustomLoader = ({ text, inline, loaderStyle }) => {
+    return (
+      <Loader
+        active
+        inline={inline}
+        style={{
+          color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
+          fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
+          ...loaderStyle,
+        }}
+      >
+        {text}{' '}
+      </Loader>
+    );
+  };
+
   return (
     <ModalContainer
       withoutRainbowBackground
@@ -90,31 +107,34 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
         <PartialScrollableScrollSection className="scrollbar-none" style={{ width: '100%' }}>
           {!pact.swapList?.error ? (
             pact.swapList[0] ? (
-              pact.swapList?.map((tx, index) => (
-                <>
-                  <HistoryCard tx={tx} />
-                  {pact.swapList?.length - 1 !== index && (
-                    <Divider
-                      style={{
-                        width: '100%',
-                        margin: gameEditionView ? '24px 0px' : '32px 0px',
-                        borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`,
-                      }}
-                    />
-                  )}
-                </>
-              ))
+              <InfiniteScroll
+                pageStart={1}
+                loadMore={() => {
+                  pact.getMoreEventsSwapList();
+                }}
+                hasMore={pact.moreSwap}
+                loader={<CustomLoader key="infinite-scroll-loader" inline="centered" loaderStyle={{ marginTop: 24 }} />}
+                useWindow={false}
+                initialLoad={false}
+              >
+                {pact.swapList?.map((tx, index) => (
+                  <>
+                    <HistoryCard tx={tx} key={index} />
+                    {pact.swapList?.length - 1 !== index && (
+                      <Divider
+                        style={{
+                          width: '100%',
+                          margin: gameEditionView ? '24px 0px' : '32px 0px',
+                          borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`,
+                        }}
+                      />
+                    )}
+                  </>
+                ))}
+              </InfiniteScroll>
             ) : (
               <div style={{ padding: '16px' }}>
-                <Loader
-                  active
-                  style={{
-                    color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
-                    fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
-                  }}
-                >
-                  Loading..
-                </Loader>
+                <CustomLoader text="Loading.." />
               </div>
             )
           ) : (
