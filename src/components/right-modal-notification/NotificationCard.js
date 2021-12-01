@@ -10,7 +10,6 @@ const Container = styled.div`
   background: ${({ isHighlight, typeColor }) =>
     isHighlight ? `transparent linear-gradient(90deg, ${typeColor}1A 0%, #80621800 100%) 0% 0% no-repeat padding-box;` : 'none'};
   width: 100%;
-  height: 100%;
   padding: 0px 26px;
 
   /* 

@@ -10,6 +10,7 @@ import ModalContainer from '../../shared/ModalContainer';
 import { theme } from '../../styles/theme';
 import { Label, PartialScrollableScrollSection, Title, TitleContainer } from '../layout/Containers';
 import HistoryCard from './HistoryCard';
+import { AccountContext } from '../../contexts/AccountContext';
 
 export const CardContainer = styled.div`
   position: ${({ gameEditionView }) => !gameEditionView && `relative`};
@@ -50,12 +51,11 @@ const Tabs = styled(Title)`
 
 const HistoryTab = ({ activeTabs, setActiveTabs }) => {
   const pact = useContext(PactContext);
+  const account = useContext(AccountContext);
   const { gameEditionView } = useContext(GameEditionContext);
   const { themeMode } = useContext(LightModeContext);
 
-  useEffect(async () => {
-    await pact.getPairList();
-  }, []);
+  useEffect(() => {}, [account.sendRes]);
 
   const CustomLoader = ({ text, inline, loaderStyle }) => {
     return (

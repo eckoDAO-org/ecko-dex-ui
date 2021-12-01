@@ -7,7 +7,7 @@ const initialState = {
   open: false,
   title: '',
   content: null,
-  footer: null
+  footer: null,
 };
 
 export const RightModalProvider = (props) => {
@@ -24,10 +24,10 @@ export const RightModalProvider = (props) => {
 
   const closeModal = () => {
     setState(initialState);
-    // se in the notification list if the nofications are readed
+    // if in the notification list the nofications are readed
     const newNotificationList = notificationList.map((notif) => ({
       ...notif,
-      isReaded: true
+      isReaded: true,
     }));
     setNotificationList(newNotificationList);
   };
@@ -38,7 +38,7 @@ export const RightModalProvider = (props) => {
         ...state,
         setModalLoading,
         openModal,
-        closeModal
+        closeModal,
       }}
     >
       {props.children}
