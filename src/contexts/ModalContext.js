@@ -1,4 +1,4 @@
-import React, { useState, createContext } from 'react';
+import React, { useState, createContext, useEffect } from 'react';
 
 export const ModalContext = createContext();
 
@@ -7,7 +7,7 @@ const initialState = {
   open: false,
   title: '',
   content: null,
-  containerStyle: null
+  containerStyle: null,
 };
 
 export const ModalProvider = (props) => {
@@ -15,13 +15,22 @@ export const ModalProvider = (props) => {
 
   const [prevModal, setPrevModal] = useState(state);
 
+  useEffect(async () => {
+    if (state.id === prevModal.id) {
+      await setPrevModal(state);
+    }
+  }, [state]);
+
   const onBackModal = () => {
     setState(prevModal);
   };
 
-  const openModal = (settings) => {
-    setState((prev) => ({ ...prev, ...settings, open: true }));
-    if (state.id === prevModal.id) setPrevModal(state);
+  const openModal = async (settings) => {
+    try {
+      await setState((prev) => ({ ...prev, ...settings, open: true }));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const setModalLoading = (isLoading) => {
@@ -39,7 +48,7 @@ export const ModalProvider = (props) => {
         onBackModal,
         openModal,
         setModalLoading,
-        closeModal
+        closeModal,
       }}
     >
       {props.children}

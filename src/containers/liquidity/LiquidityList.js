@@ -115,6 +115,7 @@ const LiquidityList = (props) => {
         containerStyle={{
           maxHeight: gameEditionView ? '60vh' : '80vh',
           maxWidth: 900,
+          minWidth: 0,
           overflow: 'auto',
           border: 'none',
           boxShadow: 'none',
@@ -210,28 +211,17 @@ const LiquidityList = (props) => {
                           index={index}
                           setActiveIndex={setActiveIndex}
                         />{' '}
-                        {/* {!Object.values(liquidity.pairListAccount).length ===
-                            index && ( */}
-                        <Divider
-                          style={{
-                            width: '100%',
-                            margin: '32px 0px',
-                            borderTop: gameEditionView
-                              ? `1px dashed ${theme(themeMode).colors.black}`
-                              : `1px solid  ${theme(themeMode).colors.white}99`,
-                          }}
-                        />
-                        {/* )} */}
-                        <TokenPair
-                          key={pair.name}
-                          pair={pair}
-                          selectAddLiquidity={props.selectAddLiquidity}
-                          selectRemoveLiquidity={props.selectRemoveLiquidity}
-                          setTokenPair={props.setTokenPair}
-                          activeIndex={activeIndex}
-                          index={2}
-                          setActiveIndex={setActiveIndex}
-                        />{' '}
+                        {Object.values(liquidity.pairListAccount).length - 1 !== index && (
+                          <Divider
+                            style={{
+                              width: '100%',
+                              margin: '32px 0px',
+                              borderTop: gameEditionView
+                                ? `1px dashed ${theme(themeMode).colors.black}`
+                                : `1px solid  ${theme(themeMode).colors.white}99`,
+                            }}
+                          />
+                        )}
                       </>
                     ) : (
                       <></>

@@ -49,9 +49,6 @@ const verifierMap = {
     clientId: process.env.REACT_APP_TORUS_GOOGLE_CLIENT_ID,
   },
 };
-
-console.log('🚀 ~ file: ConnectWalletTorusModal.js ~ line 61 ~  process.env.REACT_APP_TORUS_VERIFIER', process.env.REACT_APP_TORUS_VERIFIER);
-
 /* const createAPIHost = (network, chainId) => `https://${network}.testnet.chainweb.com/chainweb/0.0/testnet02/chain/${chainId}/pact` */
 
 function Login({ onClose, onBack }) {
