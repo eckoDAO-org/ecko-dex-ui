@@ -114,8 +114,9 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
               id: 'ZELCORE_ACCOUNT',
               title: 'get zelcore accounts',
               description: 'Select Accounts',
-              open: openGetZelcoreAccountModal,
-              content: <GetZelcoreAccountModal onClose={() => modalContext.closeModal()} />,
+
+              onBack: () => modalContext.onBackModal(),
+              content: <GetZelcoreAccountModal onClose={() => modalContext.closeModal()} onBack={() => modalContext.onBackModal()} />,
             });
           }
         }}
