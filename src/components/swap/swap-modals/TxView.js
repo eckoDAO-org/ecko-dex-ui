@@ -164,7 +164,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
             style={{
               width: '100%',
               marginTop: 0,
-              borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid ${theme(themeMode).colors.white}`,
+              borderTop: gameEditionView ? `2px dashed ${theme(themeMode).colors.black}` : `1px solid ${theme(themeMode).colors.white}`,
             }}
           />
 

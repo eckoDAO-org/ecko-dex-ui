@@ -13,12 +13,13 @@ const Container = styled(FadeIn)`
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+  width: 100%;
 `;
 
 const TopListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 20%;
+  margin-top: 5%;
   align-items: center;
   justify-content: center;
   & > *:not(:last-child) {
@@ -37,7 +38,7 @@ const BottomListContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20%;
+  margin-bottom: 5%;
   & > *:not(:last-child) {
     margin-bottom: 25px;
   }
@@ -56,16 +57,25 @@ const GameEditionMenuContainer = () => {
     if (width < theme.mediaQueries.desktopPixel) return '24px ';
     else return '14px';
   };
+
+  const SelectGEIcon = ({ label, rotate }) => {
+    return (
+      <MenuGEIcon
+        style={{
+          display: arrowVisible === label ? 'block' : 'none',
+          height: getMenuItemStyle(),
+          transform: rotate && 'rotate(180deg)',
+        }}
+      />
+    );
+  };
+
   return (
     <Container>
       <TopListContainer>
         {menuItems.map((item, index) => (
           <RowMenuContainer key={index}>
-            <MenuGEIcon
-              style={{
-                display: arrowVisible === item.label ? 'block' : 'none',
-              }}
-            />
+            <SelectGEIcon label={item.label} />
             <HeaderItem
               className={item.className}
               route={item.route}
@@ -79,23 +89,14 @@ const GameEditionMenuContainer = () => {
             >
               {item.label}
             </HeaderItem>
-            <MenuGEIcon
-              style={{
-                transform: 'rotate(180deg)',
-                display: arrowVisible === item.label ? 'block' : 'none',
-              }}
-            />
+            <SelectGEIcon label={item.label} rotate />
           </RowMenuContainer>
         ))}
       </TopListContainer>
       <BottomListContainer>
         {headerLinks.map((item, index) => (
           <RowMenuContainer key={index}>
-            <MenuGEIcon
-              style={{
-                display: arrowVisible === item.label ? 'block' : 'none',
-              }}
-            />
+            <SelectGEIcon label={item.label} />
             <HeaderItem
               className={item?.className}
               route={item?.route}
@@ -111,12 +112,7 @@ const GameEditionMenuContainer = () => {
             >
               {item.label}
             </HeaderItem>
-            <MenuGEIcon
-              style={{
-                transform: 'rotate(180deg)',
-                display: arrowVisible === item.label ? 'block' : 'none',
-              }}
-            />
+            <SelectGEIcon label={item.label} rotate />
           </RowMenuContainer>
         ))}
       </BottomListContainer>

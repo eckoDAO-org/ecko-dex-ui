@@ -71,14 +71,22 @@ const HistoryCard = ({ tx }) => {
         window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${tx?.requestKey}`, '_blank', 'noopener,noreferrer');
       }}
     >
-      <CustomLabel bold>Name</CustomLabel>
-      <CustomLabel start>{`${getInfoCoin(3)?.name}-${getInfoCoin(5)?.name}`}</CustomLabel>
-      <CustomLabel bold>Date</CustomLabel>
-      <CustomLabel start>{`${getDate(tx?.blockTime)}`}</CustomLabel>
-      <CustomLabel bold>Request Key</CustomLabel>
-      <CustomLabel start>{reduceToken(tx?.requestKey)}</CustomLabel>
-      <CustomLabel bold>Amount</CustomLabel>
-      <CustomLabel start>{`${tx?.params[2]} ${getInfoCoin(3)?.name}`}</CustomLabel>
+      <CustomLabel bold textAlign={gameEditionView && 'start'}>
+        Name
+      </CustomLabel>
+      <CustomLabel textAlign={gameEditionView ? 'end' : 'start'}>{`${getInfoCoin(3)?.name}-${getInfoCoin(5)?.name}`}</CustomLabel>
+      <CustomLabel bold textAlign={gameEditionView && 'start'}>
+        Date
+      </CustomLabel>
+      <CustomLabel textAlign={gameEditionView ? 'end' : 'start'}>{`${getDate(tx?.blockTime)}`}</CustomLabel>
+      <CustomLabel bold textAlign={gameEditionView && 'start'}>
+        Request Key
+      </CustomLabel>
+      <CustomLabel textAlign={gameEditionView ? 'end' : 'start'}>{reduceToken(tx?.requestKey)}</CustomLabel>
+      <CustomLabel bold textAlign={gameEditionView && 'start'}>
+        Amount
+      </CustomLabel>
+      <CustomLabel textAlign={gameEditionView ? 'end' : 'start'}>{`${tx?.params[2]} ${getInfoCoin(3)?.name}`}</CustomLabel>
     </CustomGrid>
   ) : (
     <HistoryCardContainer

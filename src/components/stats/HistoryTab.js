@@ -24,7 +24,7 @@ export const CardContainer = styled.div`
   margin-left: auto;
   margin-right: auto;
   border-radius: 10px;
-  border: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `1px dashed ${colors.black}`};
+  border: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `2px dashed ${colors.black}`};
 
   opacity: 1;
   background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? `transparent` : backgroundContainer)};
@@ -32,12 +32,16 @@ export const CardContainer = styled.div`
   overflow: auto;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
-    max-height: ${({ gameEditionView }) => (gameEditionView ? '90vh' : '450px')};
+    max-height: ${({ gameEditionView }) => (gameEditionView ? 'unset' : '450px')};
     gap: 0px;
   }
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel + 1}px`}) {
-    max-height: ${({ gameEditionView }) => (gameEditionView ? '90vh' : '400px')};
+    max-height: ${({ gameEditionView }) => (gameEditionView ? 'unset' : '400px')};
+  }
+
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
+    max-height: ${({ gameEditionView }) => gameEditionView && 'unset'};
   }
 `;
 
@@ -125,7 +129,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
                         style={{
                           width: '100%',
                           margin: gameEditionView ? '24px 0px' : '32px 0px',
-                          borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`,
+                          borderTop: gameEditionView ? `2px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`,
                         }}
                       />
                     )}
@@ -134,7 +138,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
               </InfiniteScroll>
             ) : (
               <div style={{ padding: '16px' }}>
-                <CustomLoader text="Loading.." />
+                <CustomLoader text="Loading.." inline={gameEditionView && 'centered'} />
               </div>
             )
           ) : (
