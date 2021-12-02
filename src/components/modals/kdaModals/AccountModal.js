@@ -8,6 +8,7 @@ import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 import { ModalContext } from '../../../contexts/ModalContext';
 import { WalletContext } from '../../../contexts/WalletContext';
+import { KaddexWalletContext } from '../../../contexts/KaddexWalletContext';
 import CopyPopup from '../../../shared/CopyPopup';
 import CustomButton from '../../../shared/CustomButton';
 import { theme } from '../../../styles/theme';
@@ -112,6 +113,8 @@ const AccountModal = () => {
   const { gameEditionView, openModal } = useContext(GameEditionContext);
   const { themeMode } = useContext(LightModeContext);
   const { wallet } = useContext(WalletContext);
+  const { disconnectWallet } = useContext(KaddexWalletContext);
+
   return (
     <AccountModalContainer>
       <SubTitle gameEditionView={gameEditionView}>Connected with {wallet?.name}</SubTitle>
@@ -174,6 +177,7 @@ const AccountModal = () => {
             color={gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white}
             background="transparent"
             onClick={() => {
+              disconnectWallet();
               logout();
             }}
           >
