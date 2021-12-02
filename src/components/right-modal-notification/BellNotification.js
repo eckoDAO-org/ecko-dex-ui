@@ -4,7 +4,10 @@ import { NotificationIcon } from '../../assets';
 
 const Container = styled.div`
   cursor: pointer;
+
   svg {
+    width: 24px;
+    height: 24px;
     path {
       fill: ${({ color }) => color};
     }

@@ -86,12 +86,12 @@ const FormContainer = ({ containerStyle, title, titleStyle, children, footer }) 
 
 FormContainer.propTypes = {
   title: PropTypes.string,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
 };
 
 FormContainer.defaultProps = {
   title: '',
-  onClose: null
+  onClose: null,
 };
 
 export default FormContainer;
