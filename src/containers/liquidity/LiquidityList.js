@@ -85,7 +85,7 @@ const TopContainer = styled.div``;
 const TitleContainer = styled.div`
   display: flex;
   justify-content: ${({ gameEditionView }) => (gameEditionView ? `center` : ` space-between`)};
-  margin-bottom: ${({ gameEditionView }) => (gameEditionView ? `20px` : ` 24px`)};
+  margin-bottom: ${({ gameEditionView }) => (gameEditionView ? `16px` : ` 24px`)};
 `;
 const Title = styled.span`
   font: ${({ gameEditionView, theme: { fontFamily } }) =>
@@ -195,7 +195,7 @@ const LiquidityList = (props) => {
             </TopContainer>
             {account.account !== null ? (
               liquidity.pairListAccount[0] ? (
-                <FormContainer gameEditionView={gameEditionView}>
+                <FormContainer gameEditionView={gameEditionView} containerStyle={{ padding: gameEditionView ? 16 : 32 }} withGameEditionBorder>
                   {!gameEditionView && <GradientBorder />}
                   {Object.values(liquidity.pairListAccount).map((pair, index) => {
                     return pair && pair.balance ? (
@@ -215,9 +215,9 @@ const LiquidityList = (props) => {
                           <Divider
                             style={{
                               width: '100%',
-                              margin: '32px 0px',
+                              margin: gameEditionView ? '16px 0px' : '32px 0px',
                               borderTop: gameEditionView
-                                ? `1px dashed ${theme(themeMode).colors.black}`
+                                ? `2px dashed ${theme(themeMode).colors.black}`
                                 : `1px solid  ${theme(themeMode).colors.white}99`,
                             }}
                           />

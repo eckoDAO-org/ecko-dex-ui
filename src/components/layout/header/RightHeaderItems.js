@@ -4,7 +4,7 @@ import HeaderItem from '../../../shared/HeaderItem';
 import AccountInfo from './AccountInfo';
 import Button from '../../../shared/CustomButton';
 import CustomPopup from '../../../shared/CustomPopup';
-import { PowerIcon, CogIcon, ThreeDotsIcon } from '../../../assets';
+import { OnOffIcon, CogIcon, ThreeDotsIcon } from '../../../assets';
 import headerLinks from '../../headerLinks';
 import PopupContentList from './PopupContentList';
 import { AccountContext } from '../../../contexts/AccountContext';
@@ -18,7 +18,7 @@ import BellNotification from '../../right-modal-notification/BellNotification';
 import { NotificationContext } from '../../../contexts/NotificationContext';
 import AccountModal from '../../modals/kdaModals/AccountModal';
 import { NotificationModalContext } from '../../../contexts/NotificationModalContext';
-import { KaddexWalletContext } from '../../../contexts/KaddexWalletContext';
+import PowerIconWrapper from './PowerIconWrapper';
 
 const RightContainerHeader = styled.div`
   display: flex;
@@ -59,12 +59,11 @@ const FadeContainer = styled.div``;
 // `;
 
 const RightHeaderItems = () => {
-  const { account, logout } = useContext(AccountContext);
+  const { account } = useContext(AccountContext);
   const modalContext = useContext(ModalContext);
-  const { gameEditionView, openModal } = useContext(GameEditionContext);
+  const { gameEditionView, openModal, setGameEditionView, closeModal } = useContext(GameEditionContext);
   const notificationModalContext = useContext(NotificationModalContext);
   const notification = useContext(NotificationContext);
-  const { disconnectWallet } = useContext(KaddexWalletContext);
 
   return (
     <RightContainerHeader>
@@ -122,11 +121,11 @@ const RightHeaderItems = () => {
         </FadeContainer>
       )}
       {account.account && (
-        <HeaderItem>
-          <PowerIcon
+        <HeaderItem disableHover>
+          <PowerIconWrapper
             onClick={() => {
-              disconnectWallet();
-              logout();
+              setGameEditionView(!gameEditionView);
+              closeModal();
             }}
           />
         </HeaderItem>
@@ -152,7 +151,7 @@ const RightHeaderItems = () => {
         />
       </HeaderItem>
       {gameEditionView && (
-        <HeaderItem>
+        <HeaderItem headerItemStyle={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '4px' }}>
           <CustomPopup trigger={<CogIcon />} on="click" offset={[30, 10]} position="bottom right">
             <SlippagePopupContent />
           </CustomPopup>

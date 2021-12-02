@@ -44,16 +44,24 @@ const StatsCard = ({ pair }) => {
 
   return gameEditionView ? (
     <CustomGrid>
-      <CustomLabel bold>Name</CustomLabel>
-      <CustomLabel start>{`${pair.token0}/${pair.token1}`}</CustomLabel>
-      <CustomLabel bold>token0</CustomLabel>
-      <CustomLabel start>{reduceBalance(pair.reserves[0])}</CustomLabel>
-      <CustomLabel bold>token1</CustomLabel>
-      <CustomLabel start>{reduceBalance(pair.reserves[1])}</CustomLabel>
-      <CustomLabel bold>Rate</CustomLabel>
-      <CustomLabel start>{`${reduceBalance(extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1]))} ${pair.token0}/${
-        pair.token1
-      }`}</CustomLabel>
+      <CustomLabel bold textAlign={gameEditionView && 'start'}>
+        Name
+      </CustomLabel>
+      <CustomLabel textAlign={gameEditionView ? 'end' : 'start'}>{`${pair.token0}/${pair.token1}`}</CustomLabel>
+      <CustomLabel bold textAlign={gameEditionView && 'start'}>
+        token0
+      </CustomLabel>
+      <CustomLabel textAlign={gameEditionView ? 'end' : 'start'}>{reduceBalance(pair.reserves[0])}</CustomLabel>
+      <CustomLabel bold textAlign={gameEditionView && 'start'}>
+        token1
+      </CustomLabel>
+      <CustomLabel textAlign={gameEditionView ? 'end' : 'start'}>{reduceBalance(pair.reserves[1])}</CustomLabel>
+      <CustomLabel bold textAlign={gameEditionView && 'start'}>
+        Rate
+      </CustomLabel>
+      <CustomLabel textAlign={gameEditionView ? 'end' : 'start'}>{`${reduceBalance(
+        extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1])
+      )} ${pair.token0}/${pair.token1}`}</CustomLabel>
     </CustomGrid>
   ) : (
     <StatsCardContainer gameEditionView={gameEditionView}>

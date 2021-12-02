@@ -12,5 +12,5 @@ export const FadeIn = styled.div`
   }
 `;
 export default {
-  FadeIn
+  FadeIn,
 };

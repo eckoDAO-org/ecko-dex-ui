@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
 import { CloseIcon } from '../../assets';
 
-const CustomTransition = styled(Transition)``;
+const CustomTransition = styled(Transition)`
+  transition-duration: ${({ duration }) => (duration ? `${duration}ms` : '500ms')};
+`;
 
 const Container = styled(Modal)`
   height: 100%;
@@ -103,7 +105,7 @@ const RightModal = ({
   disableBackdrop,
   headerStyle,
   showHeader,
-  footerButton
+  footerButton,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
@@ -152,7 +154,7 @@ RightModal.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   duration: PropTypes.number,
   disableBackdrop: PropTypes.bool,
-  width: PropTypes.string
+  width: PropTypes.string,
 };
 
 RightModal.defaultProps = {
@@ -160,5 +162,5 @@ RightModal.defaultProps = {
   title: null,
   duration: 300,
   disableBackdrop: false,
-  width: null
+  width: null,
 };

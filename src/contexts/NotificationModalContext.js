@@ -1,5 +1,6 @@
 import { initial } from 'lodash-es';
-import React, { useState, createContext } from 'react';
+import React, { useState, createContext, useContext } from 'react';
+import { NotificationContext } from './NotificationContext';
 
 export const NotificationModalContext = createContext();
 const initialState = {
@@ -9,6 +10,7 @@ const initialState = {
   footer: null,
 };
 export const NotificationModalProvider = (props) => {
+  const { notificationList, setNotificationList } = useContext(NotificationContext);
   const [state, setState] = useState(initialState);
 
   const openModal = (settings) => {
@@ -17,6 +19,12 @@ export const NotificationModalProvider = (props) => {
 
   const closeModal = () => {
     setState({ ...initial });
+    // if in the notification list the nofications are readed
+    const newNotificationList = notificationList.map((notif) => ({
+      ...notif,
+      isReaded: true,
+    }));
+    setNotificationList(newNotificationList);
   };
 
   return (
@@ -25,6 +33,7 @@ export const NotificationModalProvider = (props) => {
         ...state,
         openModal,
         closeModal,
+        setNotificationList,
       }}
     >
       {props.children}

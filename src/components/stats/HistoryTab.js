@@ -10,6 +10,7 @@ import ModalContainer from '../../shared/ModalContainer';
 import { theme } from '../../styles/theme';
 import { Label, PartialScrollableScrollSection, Title, TitleContainer } from '../layout/Containers';
 import HistoryCard from './HistoryCard';
+import { AccountContext } from '../../contexts/AccountContext';
 
 export const CardContainer = styled.div`
   position: ${({ gameEditionView }) => !gameEditionView && `relative`};
@@ -19,11 +20,11 @@ export const CardContainer = styled.div`
   padding: ${({ gameEditionView }) => (gameEditionView ? `24px ` : `32px `)};
   width: 100%;
   max-width: 1110px;
-  max-height: ${({ gameEditionView }) => (gameEditionView ? `40vh` : `500px`)};
+  max-height: ${({ gameEditionView }) => (gameEditionView ? `50vh` : `500px`)};
   margin-left: auto;
   margin-right: auto;
   border-radius: 10px;
-  border: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `1px dashed ${colors.black}`};
+  border: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `2px dashed ${colors.black}`};
 
   opacity: 1;
   background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? `transparent` : backgroundContainer)};
@@ -31,12 +32,16 @@ export const CardContainer = styled.div`
   overflow: auto;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
-    max-height: ${({ gameEditionView }) => (gameEditionView ? '90vh' : '450px')};
+    max-height: ${({ gameEditionView }) => (gameEditionView ? 'unset' : '450px')};
     gap: 0px;
   }
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel + 1}px`}) {
-    max-height: ${({ gameEditionView }) => (gameEditionView ? '90vh' : '400px')};
+    max-height: ${({ gameEditionView }) => (gameEditionView ? 'unset' : '400px')};
+  }
+
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
+    max-height: ${({ gameEditionView }) => gameEditionView && 'unset'};
   }
 `;
 
@@ -50,12 +55,11 @@ const Tabs = styled(Title)`
 
 const HistoryTab = ({ activeTabs, setActiveTabs }) => {
   const pact = useContext(PactContext);
+  const account = useContext(AccountContext);
   const { gameEditionView } = useContext(GameEditionContext);
   const { themeMode } = useContext(LightModeContext);
 
-  useEffect(async () => {
-    await pact.getPairList();
-  }, []);
+  useEffect(() => {}, [account.sendRes]);
 
   const CustomLoader = ({ text, inline, loaderStyle }) => {
     return (
@@ -80,7 +84,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
       containerStyle={{
         maxHeight: !gameEditionView && '80vh',
         height: gameEditionView && '100%',
-        padding: gameEditionView ? 24 : 0,
+        padding: gameEditionView ? '16px 24px' : 0,
         border: gameEditionView && '1px solid transparent',
       }}
     >
@@ -125,7 +129,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
                         style={{
                           width: '100%',
                           margin: gameEditionView ? '24px 0px' : '32px 0px',
-                          borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`,
+                          borderTop: gameEditionView ? `2px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`,
                         }}
                       />
                     )}
@@ -134,7 +138,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
               </InfiniteScroll>
             ) : (
               <div style={{ padding: '16px' }}>
-                <CustomLoader text="Loading.." />
+                <CustomLoader text="Loading.." inline={gameEditionView && 'centered'} />
               </div>
             )
           ) : (

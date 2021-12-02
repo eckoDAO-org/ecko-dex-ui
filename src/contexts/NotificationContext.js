@@ -10,7 +10,7 @@ export const STATUSES = {
   WARNING: toast.TYPE.WARNING,
   DARK: toast.TYPE.DARK,
   ERROR: toast.TYPE.ERROR,
-  INFO: toast.TYPE.INFO
+  INFO: toast.TYPE.INFO,
 };
 
 const getStoredNotification = JSON.parse(localStorage.getItem('Notification'));
@@ -34,7 +34,7 @@ export const NotificationProvider = ({ children }) => {
     closeButton = undefined,
     onClick = undefined,
     onOpen = undefined,
-    onClose = undefined
+    onClose = undefined,
   }) => {
     return toast(<NotificationContainer message={message} type={type} title={title} />, {
       title,
@@ -52,7 +52,7 @@ export const NotificationProvider = ({ children }) => {
       closeButton,
       onClick,
       onOpen,
-      onClose
+      onClose,
     });
   };
 
@@ -78,7 +78,8 @@ export const NotificationProvider = ({ children }) => {
   };
 
   const removeItem = (indexToRemove) => {
-    const notifWithoutRemoved = notificationList.filter((notif, index) => index !== indexToRemove);
+    // remember that notification list i view reversed
+    const notifWithoutRemoved = [...notificationList].reverse().filter((notif, index) => index !== indexToRemove);
     setNotificationList(notifWithoutRemoved);
   };
 
@@ -95,7 +96,7 @@ export const NotificationProvider = ({ children }) => {
         setNotificationList,
         storeNotification,
         removeItem,
-        removeAllItem
+        removeAllItem,
       }}
     >
       {children}
