@@ -18,9 +18,12 @@ export const LiquidityProvider = (props) => {
   const swap = useSwapContext();
   const [liquidityProviderFee, setLiquidityProviderFee] = useState(0.003);
   const [pairListAccount, setPairListAccount] = useState(pairTokens);
+  console.log('🚀 ~ file: LiquidityContext.js ~ line 21 ~ LiquidityProvider ~ pairListAccount', pairListAccount);
 
   const getPairListAccountBalance = async (account) => {
     try {
+      console.log("🚀 ~  I'm in getPairListAccountBalance (0)");
+
       const tokenPairList = Object.keys(pact.pairList).reduce((accum, pair) => {
         accum += `[${pair.split(':').join(' ')}] `;
         return accum;
@@ -63,6 +66,7 @@ export const LiquidityProvider = (props) => {
         },
         network
       );
+      console.log('🚀 ~  data (1)', data);
       if (data.result.status === 'success') {
         let dataList = data.result.data.reduce((accum, data) => {
           accum[data[0]] = {
@@ -73,6 +77,8 @@ export const LiquidityProvider = (props) => {
           };
           return accum;
         }, {});
+        console.log('🚀 ~  dataList (2)', dataList);
+
         const pairList = Object.values(pairTokens).map((pair) => {
           return {
             ...pair,
@@ -80,6 +86,8 @@ export const LiquidityProvider = (props) => {
           };
         });
         setPairListAccount(pairList);
+      } else {
+        setPairListAccount({ error: data.result.status });
       }
     } catch (e) {
       console.log(e);
