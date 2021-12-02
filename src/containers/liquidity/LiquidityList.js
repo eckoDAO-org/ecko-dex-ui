@@ -195,7 +195,7 @@ const LiquidityList = (props) => {
             </TopContainer>
             {account.account !== null ? (
               liquidity.pairListAccount[0] ? (
-                <FormContainer gameEditionView={gameEditionView}>
+                <FormContainer gameEditionView={gameEditionView} withGameEditionBorder>
                   {!gameEditionView && <GradientBorder />}
                   {Object.values(liquidity.pairListAccount).map((pair, index) => {
                     return pair && pair.balance ? (
