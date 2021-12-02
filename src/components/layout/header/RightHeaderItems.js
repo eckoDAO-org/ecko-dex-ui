@@ -15,9 +15,7 @@ import { ModalContext } from '../../../contexts/ModalContext';
 import ConnectWalletModal from '../../modals/kdaModals/ConnectWalletModal';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import BellNotification from '../../right-modal-notification/BellNotification';
-import { RightModalContext } from '../../../contexts/RightModalContext';
 import { NotificationContext } from '../../../contexts/NotificationContext';
-import CopyPopup from '../../../shared/CopyPopup';
 import AccountModal from '../../modals/kdaModals/AccountModal';
 import { NotificationModalContext } from '../../../contexts/NotificationModalContext';
 
@@ -49,15 +47,6 @@ const RightContainerHeader = styled.div`
 `;
 
 const FadeContainer = styled.div``;
-
-// const Label = styled.span`
-//   font-size: 13px;
-//   font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
-//   text-transform: capitalize;
-//   padding: 10px 16px;
-//   color: white;
-//   font-size: 16;
-// `;
 
 const RightHeaderItems = () => {
   const { account, logout } = useContext(AccountContext);

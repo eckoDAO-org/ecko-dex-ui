@@ -76,6 +76,7 @@ const GameEditionMenuContainer = () => {
                 fontSize: getMenuItemStyle(),
               }}
               onMouseOver={() => setArrowVisible(item.label)}
+              notChangebleFontOnHover
             >
               {item.label}
             </HeaderItem>
@@ -108,6 +109,7 @@ const GameEditionMenuContainer = () => {
                 fontSize: getMenuItemStyle(),
               }}
               onMouseOver={() => setArrowVisible(item.label)}
+              notChangebleFontOnHover
             >
               {item.label}
             </HeaderItem>

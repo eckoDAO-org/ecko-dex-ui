@@ -41,6 +41,7 @@ const PopupContentList = ({ items, viewOtherComponents }) => {
             alignItems: 'center',
             fontSize: 16,
             fontFamily: theme.fontFamily.regular,
+            width: 42,
           }}
         >
           {item.label}
