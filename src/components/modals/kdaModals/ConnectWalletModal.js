@@ -75,7 +75,7 @@ const ConnectWalletModal = () => {
           });
         } else {
           initializeKaddexWallet();
-          modalContext.onBackModal();
+          modalContext.closeModal();
         }
         break;
     }
