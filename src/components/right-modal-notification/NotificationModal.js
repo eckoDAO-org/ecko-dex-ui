@@ -5,12 +5,12 @@ import { NotificationContext } from '../../contexts/NotificationContext';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import NotificationCard from './NotificationCard';
 const Container = styled.div`
+  width: 335px;
   position: fixed;
   background: ${({ theme: { colors } }) => colors.primary};
   box-shadow: -10px 0px 40px #0f054c3d;
   top: 0;
   right: 0;
-  width: 0;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -23,9 +23,6 @@ const Container = styled.div`
   ::-webkit-scrollbar {
     width: 0px;
   }
-
-  width: ${({ open, theme }) => (open ? '335' : '0')}px;
-  transform: translateX(0);
 `;
 
 const Title = styled.div`
@@ -87,7 +84,6 @@ const Content = styled.div`
   height: 100%;
   color: ${({ theme: colors }) => colors.white};
   overflow: auto;
-  overflow-y: hidden;
   flex: 1;
 `;
 
@@ -95,7 +91,7 @@ const NotificationModal = ({ open, onClose, titleStyle, customIcon, removeIcon, 
   const notification = useContext(NotificationContext);
 
   const ref = useRef();
-  useOnClickOutside(ref, () => onClose());
+  useOnClickOutside(ref, () => open && onClose());
 
   return (
     <Container ref={ref} open={open} right={window.innerWidth}>

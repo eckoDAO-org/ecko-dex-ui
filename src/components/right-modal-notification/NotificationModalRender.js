@@ -8,7 +8,6 @@ const NotificationModalRender = ({ children }) => {
       {children}
       <NotificationModalConsumer>
         {(value) => {
-          console.log('value', value);
           return (
             <NotificationModal
               open={value.open || false}

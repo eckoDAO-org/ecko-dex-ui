@@ -12,10 +12,8 @@ import RightModalRender from './components/right-modal-notification/RightModalRe
 import { SwapProvider } from './contexts/SwapContext';
 import { LiquidityProvider } from './contexts/LiquidityContext';
 import { GameEditionProvider } from './contexts/GameEditionContext';
-import { LightModeContext, LightModeProvider, useLightMode } from './contexts/LightModeContext';
+import { LightModeContext } from './contexts/LightModeContext';
 import { KaddexWalletProvider } from './contexts/KaddexWalletContext';
-import { NotificationProvider } from './contexts/NotificationContext';
-import { NotificationModalProvider } from './contexts/NotificationModalContext';
 import NotificationModalRender from './components/right-modal-notification/NotificationModalRender';
 
 function App() {

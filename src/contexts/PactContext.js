@@ -27,6 +27,8 @@ export const PactProvider = (props) => {
   const [precision, setPrecision] = useState(false);
   const [balances, setBalances] = useState(false);
   const [polling, setPolling] = useState(false);
+  const [notificationNotCompletedChecked, setNotificationNotCompletedChecked] = useState(false);
+
   const [totalSupply, setTotalSupply] = useState('');
   const [ratio, setRatio] = useState(NaN);
   const [pairList, setPairList] = useState(pairTokens);
@@ -37,6 +39,16 @@ export const PactProvider = (props) => {
   //TO FIX, not working when multiple toasts are there
   const toastId = React.useRef(null);
   // const [toastIds, setToastIds] = useState({})
+
+  useEffect(() => {
+    if (!notificationNotCompletedChecked) {
+      console.log("I'm here");
+      const pendingNotification = notificationContext.notificationList.filter((notif) => notif.type === 'info' && notif.isCompleted === false);
+      pendingNotification.map((pendingNotif) => listen(pendingNotif.description));
+
+      setNotificationNotCompletedChecked(true);
+    }
+  }, []);
 
   useEffect(() => {
     pairReserve ? setRatio(pairReserve['token0'] / pairReserve['token1']) : setRatio(NaN);
@@ -280,6 +292,17 @@ export const PactProvider = (props) => {
     });
   };
 
+  const setIsCompletedNotification = (reqKey) => {
+    const getStoredNotification = JSON.parse(localStorage.getItem('Notification'));
+    const newNotificationList = getStoredNotification.map((notif) => {
+      if (notif.type === 'info' && notif.description === reqKey) {
+        notif.isCompleted = true;
+      }
+      return notif;
+    });
+    localStorage.setItem(`Notification`, JSON.stringify(newNotificationList));
+  };
+
   const listen = async (reqKey) => {
     //check kadena tx status every 10 seconds until we get a response (success or fail)
     var time = 240;
@@ -303,8 +326,19 @@ export const PactProvider = (props) => {
     console.log(pollRes[reqKey].result);
     if (pollRes[reqKey].result.status === 'success') {
       // setting reqKey for calling History Transaction
-      setReqKeysLocalStorage(reqKey);
+      // setReqKeysLocalStorage(reqKey);
+      setIsCompletedNotification(reqKey);
 
+      // store in local storage the success notification for the right modal
+      notificationContext.storeNotification({
+        type: 'success',
+        time: getCurrentTime(),
+        date: getCurrentDate(),
+        title: 'Transaction Success!',
+        description: 'Check it out in the block explorer',
+        link: `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
+        isReaded: false,
+      });
       // open the toast SUCCESS message
       notificationContext.showNotification({
         title: 'Transaction Success!',
@@ -318,21 +352,10 @@ export const PactProvider = (props) => {
           await toast.dismiss(toastId);
           await window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`, '_blank', 'noopener,noreferrer');
         },
-        onOpen: async (value) => {
-          await toast.dismiss(toastId.current);
-        },
-      });
-      // store in local storage the success notification for the right modal
-      notificationContext.storeNotification({
-        type: 'success',
-        time: getCurrentTime(),
-        date: getCurrentDate(),
-        title: 'Transaction Success!',
-        description: 'Check it out in the block explorer',
-        link: `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
-        isReaded: false,
+        autoClose: 10000,
       });
     } else {
+      setIsCompletedNotification(reqKey);
       // store in local storage the error notification for the right modal
       notificationContext.storeNotification({
         type: 'error',
@@ -356,9 +379,7 @@ export const PactProvider = (props) => {
           await toast.dismiss(toastId);
           await window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`, '_blank', 'noopener,noreferrer');
         },
-        onOpen: async (value) => {
-          await toast.dismiss(toastId.current);
-        },
+        autoClose: 10000,
       });
     }
   };

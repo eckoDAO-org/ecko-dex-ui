@@ -141,13 +141,14 @@ export const SwapProvider = (props) => {
         title: 'Transaction Pending',
         description: data.requestKeys[0],
         isReaded: false,
+        isCompleted: false,
       });
 
       await pact.listen(data.requestKeys[0]);
       pact.setPolling(false);
     } catch (e) {
       pact.setPolling(false);
-      console.log('errrrrooooooorrrr', e);
+      console.log('error', e);
     }
   };
 
