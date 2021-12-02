@@ -9,7 +9,7 @@ const Container = styled.div`
   position: relative;
   display: flex;
   flex-flow: column;
-  padding: ${({ gameEditionView }) => (gameEditionView ? '20px' : '32px')};
+  padding: ${({ gameEditionView }) => (gameEditionView ? '16px' : '32px')};
   width: 100%;
   min-width: 550px;
   border-radius: 10px;

@@ -16,7 +16,7 @@ export const CardContainer = styled.div`
   display: flex;
   flex-flow: column;
   align-items: center;
-  padding: ${({ gameEditionView }) => (gameEditionView ? `0` : `32px `)};
+  padding: ${({ gameEditionView }) => (gameEditionView ? `24px` : `32px `)};
   width: 100%;
   max-width: 1110px;
   margin-left: auto;
@@ -26,6 +26,7 @@ export const CardContainer = styled.div`
   opacity: 1;
   background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? `transparent` : backgroundContainer)}; // or add new style
   backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
+  border: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `2px dashed ${colors.black}`};
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
@@ -56,7 +57,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
       backgroundNotChangebleWithTheme
       containerStyle={{
         maxHeight: !gameEditionView && '80vh',
-        padding: gameEditionView ? 24 : 0,
+        padding: gameEditionView ? '16px 24px' : 0,
         border: gameEditionView && '1px solid transparent',
         height: gameEditionView && '100%',
       }}
@@ -90,7 +91,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
                       style={{
                         width: '100%',
                         margin: '32px 0px',
-                        borderTop: gameEditionView ? `1px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`,
+                        borderTop: gameEditionView ? `2px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`,
                       }}
                     />
                   )}
@@ -103,6 +104,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
             <div style={{ padding: '16px' }}>
               <Loader
                 active
+                inline={gameEditionView && 'centered'}
                 style={{
                   color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
                   fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
