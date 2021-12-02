@@ -85,7 +85,7 @@ const TopContainer = styled.div``;
 const TitleContainer = styled.div`
   display: flex;
   justify-content: ${({ gameEditionView }) => (gameEditionView ? `center` : ` space-between`)};
-  margin-bottom: ${({ gameEditionView }) => (gameEditionView ? `20px` : ` 24px`)};
+  margin-bottom: ${({ gameEditionView }) => (gameEditionView ? `16px` : ` 24px`)};
 `;
 const Title = styled.span`
   font: ${({ gameEditionView, theme: { fontFamily } }) =>

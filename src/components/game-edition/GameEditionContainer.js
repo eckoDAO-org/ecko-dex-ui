@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router';
-import { ROUTE_GAME_EDITION_MENU } from '../../router/routes';
+import { ROUTE_GAME_EDITION_MENU, ROUTE_SWAP } from '../../router/routes';
 import { GameEditionWrapper } from './GameEditionWrapper';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
@@ -70,7 +70,9 @@ const GameEditionContainer = ({ children }) => {
           }}
           startLabel="SWAP"
           startOnClick={() => {
-            setIsSwapping(true);
+            history.push(ROUTE_SWAP);
+            // it is used if you want to set the button to swap in Swap and Add Liquidity sections
+            // setIsSwapping(true);
             closeModal();
           }}
         >
@@ -98,7 +100,9 @@ const GameEditionContainer = ({ children }) => {
           }}
           startLabel="SWAP"
           startOnClick={() => {
-            setIsSwapping(true);
+            history.push(ROUTE_SWAP);
+            // it is used if you want to set the button to swap in Swap and Add Liquidity sections
+            // setIsSwapping(true);
             closeModal();
           }}
           buttonLOnClick={() => {

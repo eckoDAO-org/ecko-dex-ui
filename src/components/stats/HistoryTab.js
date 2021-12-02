@@ -20,7 +20,7 @@ export const CardContainer = styled.div`
   padding: ${({ gameEditionView }) => (gameEditionView ? `24px ` : `32px `)};
   width: 100%;
   max-width: 1110px;
-  max-height: ${({ gameEditionView }) => (gameEditionView ? `40vh` : `500px`)};
+  max-height: ${({ gameEditionView }) => (gameEditionView ? `50vh` : `500px`)};
   margin-left: auto;
   margin-right: auto;
   border-radius: 10px;
@@ -84,7 +84,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
       containerStyle={{
         maxHeight: !gameEditionView && '80vh',
         height: gameEditionView && '100%',
-        padding: gameEditionView ? 24 : 0,
+        padding: gameEditionView ? '16px 24px' : 0,
         border: gameEditionView && '1px solid transparent',
       }}
     >

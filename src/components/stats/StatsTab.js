@@ -57,7 +57,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
       backgroundNotChangebleWithTheme
       containerStyle={{
         maxHeight: !gameEditionView && '80vh',
-        padding: gameEditionView ? 24 : 0,
+        padding: gameEditionView ? '16px 24px' : 0,
         border: gameEditionView && '1px solid transparent',
         height: gameEditionView && '100%',
       }}
