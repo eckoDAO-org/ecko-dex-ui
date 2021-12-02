@@ -195,7 +195,7 @@ const LiquidityList = (props) => {
             </TopContainer>
             {account.account !== null ? (
               liquidity.pairListAccount[0] ? (
-                <FormContainer gameEditionView={gameEditionView} withGameEditionBorder>
+                <FormContainer gameEditionView={gameEditionView} containerStyle={{ padding: gameEditionView ? 16 : 32 }} withGameEditionBorder>
                   {!gameEditionView && <GradientBorder />}
                   {Object.values(liquidity.pairListAccount).map((pair, index) => {
                     return pair && pair.balance ? (
@@ -215,7 +215,7 @@ const LiquidityList = (props) => {
                           <Divider
                             style={{
                               width: '100%',
-                              margin: '32px 0px',
+                              margin: gameEditionView ? '16px 0px' : '32px 0px',
                               borderTop: gameEditionView
                                 ? `2px dashed ${theme(themeMode).colors.black}`
                                 : `1px solid  ${theme(themeMode).colors.white}99`,
