@@ -24,6 +24,7 @@ const Container = styled.div`
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     min-width: 50px;
   }
+  scrollbar-width: none;
 
   ::-webkit-scrollbar {
     display: none;

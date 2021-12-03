@@ -28,6 +28,7 @@ import { LightModeContext } from '../../contexts/LightModeContext';
 import HeaderItem from '../../shared/HeaderItem';
 import CustomPopup from '../../shared/CustomPopup';
 import SlippagePopupContent from '../../components/layout/header/SlippagePopupContent';
+import browserDetection from '../../utils/browserDetection';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -80,6 +81,17 @@ const LogoContainer = styled(FadeIn)`
   margin-left: auto;
   margin-right: auto;
   transform: translate(-50%, 0);
+
+  ${() => {
+    if (browserDetection() === 'FIREFOX') {
+      return css`
+        -webkit-filter: blur(50px);
+        -moz-filter: blur(50px);
+        -ms-filter: blur(50px);
+        -o-filter: blur(50px);
+      `;
+    }
+  }}
 `;
 
 const ButtonContainer = styled.div`
