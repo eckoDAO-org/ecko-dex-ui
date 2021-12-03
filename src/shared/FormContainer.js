@@ -5,6 +5,7 @@ import { GameEditionContext } from '../contexts/GameEditionContext';
 import theme from '../styles/theme';
 
 const Container = styled.div`
+  position: relative;
   display: flex;
   flex-flow: column;
   justify-content: space-between;
