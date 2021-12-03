@@ -15,9 +15,7 @@ import { ModalContext } from '../../../contexts/ModalContext';
 import ConnectWalletModal from '../../modals/kdaModals/ConnectWalletModal';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import BellNotification from '../../right-modal-notification/BellNotification';
-import { RightModalContext } from '../../../contexts/RightModalContext';
 import { NotificationContext } from '../../../contexts/NotificationContext';
-import CopyPopup from '../../../shared/CopyPopup';
 import AccountModal from '../../modals/kdaModals/AccountModal';
 import { NotificationModalContext } from '../../../contexts/NotificationModalContext';
 import PowerIconWrapper from './PowerIconWrapper';
@@ -61,7 +59,7 @@ const FadeContainer = styled.div``;
 // `;
 
 const RightHeaderItems = () => {
-  const { account, logout } = useContext(AccountContext);
+  const { account } = useContext(AccountContext);
   const modalContext = useContext(ModalContext);
   const { gameEditionView, openModal, setGameEditionView, closeModal } = useContext(GameEditionContext);
   const notificationModalContext = useContext(NotificationModalContext);
@@ -88,7 +86,7 @@ const RightHeaderItems = () => {
             }}
             account={account.account ? `${reduceToken(account.account)}` : 'KDA'}
             balance={account.account ? `${reduceBalance(account.balance)} KDA` : ''}
-          ></AccountInfo>
+          />
         </HeaderItem>
       ) : (
         <></>

@@ -15,7 +15,7 @@ export const KaddexWalletProvider = (props) => {
   const [kadenaExt, setKadenaExt] = useState(null);
   const [kaddexWalletState, setKaddexWalletState] = useState(initialKaddexWalletState);
 
-  const accountContextData = useAccountContext();
+  const { setVerifiedAccount, logout } = useAccountContext();
   const { wallet, setSelectedWallet, signingWallet } = useWalletContext();
   const { showNotification, STATUSES } = useNotificationContext();
 
@@ -28,9 +28,39 @@ export const KaddexWalletProvider = (props) => {
     });
   }, [kaddexWalletState]);
 
+  const connectWallet = async () => {
+    await kadenaExt.request({
+      method: 'kda_connect',
+      networkId: NETWORKID,
+    });
+  };
+
+  const disconnectWallet = async () => {
+    if (kadenaExt) {
+      await kadenaExt.request({
+        method: 'kda_disconnect',
+        networkId: NETWORKID,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (kaddexWalletState.isConnected && !wallet) {
+      console.log('!!!DISCONNECTING');
+      disconnectWallet();
+    }
+  }, [wallet, kaddexWalletState]);
+
   const getNetworkInfo = async () => {
     return await kadenaExt.request({
       method: 'kda_getNetwork',
+    });
+  };
+
+  const checkStatus = async () => {
+    await kadenaExt?.request({
+      method: 'kda_checkStatus',
+      networkId: NETWORKID,
     });
   };
 
@@ -42,19 +72,25 @@ export const KaddexWalletProvider = (props) => {
   };
 
   const requestSign = async (signingCmd) => {
-    return await kadenaExt.request({
-      method: 'kda_requestSign',
-      data: {
-        networkId: NETWORKID,
-        signingCmd,
-      },
-    });
+    const account = await getAccountInfo();
+    console.log('!!!account', account);
+    if (account.status === 'fail') {
+      alertDisconnect();
+    } else {
+      return await kadenaExt.request({
+        method: 'kda_requestSign',
+        data: {
+          networkId: NETWORKID,
+          signingCmd,
+        },
+      });
+    }
   };
 
   const setAccountData = async () => {
     const acc = await getAccountInfo();
     if (acc.wallet) {
-      await accountContextData.setVerifiedAccount(acc.wallet.account);
+      await setVerifiedAccount(acc.wallet.account);
       await signingWallet();
       await setSelectedWallet(WALLET.KADDEX_WALLET);
       setKaddexWalletState({
@@ -68,52 +104,58 @@ export const KaddexWalletProvider = (props) => {
     window.addEventListener('load', initialize);
   }, [initialize]);
 
+  const alertDisconnect = () => {
+    showNotification({
+      title: 'X Wallet error',
+      message: 'Wallet not connected',
+      type: STATUSES.ERROR,
+    });
+    logout();
+  };
+
   useEffect(() => {
     const registerEvents = async () => {
       if (kadenaExt) {
         kadenaExt.on('res_accountChange', async (response) => {
           console.log('!!!res_accountChange', response);
-          await setAccountData();
+          await checkStatus();
         });
         kadenaExt.on('res_checkStatus', (response) => {
-          console.log('!!!res_checkStatus', response);
+          if (response?.result?.status === 'success' && !kaddexWalletState.isConnected) {
+            setAccountData();
+          }
+          getNetworkInfo().then((networkRes) => {
+            if (response?.result?.status === 'fail' && networkRes?.networkId === NETWORKID && wallet?.name === WALLET.KADDEX_WALLET.name) {
+              alertDisconnect();
+            } else if (response?.result?.status === 'fail' && response?.result?.message === 'Invalid network') {
+              showNetworkError();
+            }
+          });
         });
         kadenaExt.on('res_sendKadena', (response) => {
           console.log('!!!res_sendKadena ', response);
         });
-        if (wallet?.name === WALLET.KADDEX_WALLET.name) {
-          setKaddexWalletState({
-            ...kaddexWalletState,
-            isConnected: true,
-          });
-        }
       }
     };
     registerEvents();
+    checkStatus();
   }, [kadenaExt]);
 
+  const showNetworkError = () => {
+    showNotification({
+      title: 'Wallet error',
+      message: `Please set the correct network: ${NETWORKID}`,
+      type: STATUSES.ERROR,
+    });
+  };
+
   const initializeKaddexWallet = async () => {
-    try {
-      const networkInfo = await getNetworkInfo();
-      if (networkInfo.networkId !== NETWORKID) {
-        showNotification({
-          title: 'Wallet not found',
-          message: `Please set the correct network: ${NETWORKID}`,
-          type: STATUSES.WARNING,
-        });
-      } else {
-        await kadenaExt.request({
-          method: 'kda_connect',
-          networkId: NETWORKID,
-        });
-        await setAccountData();
-      }
-    } catch (err) {
-      showNotification({
-        title: 'Wallet error',
-        message: `Please check ${WALLET.KADDEX_WALLET.name}`,
-        type: STATUSES.ERROR,
-      });
+    const networkInfo = await getNetworkInfo();
+    if (networkInfo.networkId !== NETWORKID) {
+      showNetworkError();
+    } else {
+      console.log('!!!Im connecting....');
+      await connectWallet();
     }
   };
 
@@ -122,6 +164,7 @@ export const KaddexWalletProvider = (props) => {
       value={{
         ...kaddexWalletState,
         initializeKaddexWallet,
+        disconnectWallet,
         requestSign,
       }}
     >

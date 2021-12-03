@@ -8,6 +8,7 @@ import theme from '../../../styles/theme';
 const ListContainer = styled.div`
   border-radius: 10px;
   padding: 32px;
+  min-width: 170px;
   z-index: 1;
   background: transparent;
   & > *:not(:last-child) {

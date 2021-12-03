@@ -20,7 +20,7 @@ export const WALLET = {
     signMethod: 'sign_required',
   },
   KADDEX_WALLET: {
-    name: 'X Wallet by Kaddex',
+    name: 'X Wallet',
     logo: <KaddexLogoWhite style={{ width: 45 }} />,
   },
 };
