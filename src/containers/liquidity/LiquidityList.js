@@ -58,28 +58,6 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const LiquidityCardContainer = styled.div`
-  position: ${({ gameEditionView }) => !gameEditionView && `relative`};
-  display: table;
-  flex-flow: column;
-  padding: ${({ gameEditionView }) => (gameEditionView ? '32px' : '32px')};
-  margin-bottom: 15px;
-  width: 100%;
-  border-radius: 10px;
-  border: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `2px dashed ${colors.black} !important` : '1px solid transparent')};
-
-  opacity: 1;
-  background: transparent;
-
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: column;
-    display: table;
-  }
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
-    padding: 0;
-  }
-`;
-
 const TopContainer = styled.div``;
 
 const TitleContainer = styled.div`
@@ -103,7 +81,7 @@ const LiquidityList = (props) => {
   const { themeMode } = useContext(LightModeContext);
   const [activeIndex, setActiveIndex] = useState(null);
 
-  useEffect(async () => {
+  useEffect(() => {
     liquidity.getPairListAccountBalance(account.account);
   }, [account.account]);
 
@@ -195,52 +173,68 @@ const LiquidityList = (props) => {
             </TopContainer>
             {account.account !== null ? (
               liquidity.pairListAccount[0] ? (
-                <FormContainer gameEditionView={gameEditionView} containerStyle={{ padding: gameEditionView ? 16 : 32 }} withGameEditionBorder>
-                  {!gameEditionView && <GradientBorder />}
-                  {Object.values(liquidity.pairListAccount).map((pair, index) => {
-                    return pair && pair.balance ? (
-                      <>
-                        {' '}
-                        <TokenPair
-                          key={pair.name}
-                          pair={pair}
-                          selectAddLiquidity={props.selectAddLiquidity}
-                          selectRemoveLiquidity={props.selectRemoveLiquidity}
-                          setTokenPair={props.setTokenPair}
-                          activeIndex={activeIndex}
-                          index={index}
-                          setActiveIndex={setActiveIndex}
-                        />{' '}
-                        {Object.values(liquidity.pairListAccount).length - 1 !== index && (
-                          <Divider
-                            style={{
-                              width: '100%',
-                              margin: gameEditionView ? '16px 0px' : '32px 0px',
-                              borderTop: gameEditionView
-                                ? `2px dashed ${theme(themeMode).colors.black}`
-                                : `1px solid  ${theme(themeMode).colors.white}99`,
-                            }}
-                          />
-                        )}
-                      </>
-                    ) : (
-                      <></>
-                    );
-                  })}
-                </FormContainer>
+                liquidity.pairListAccount[0]?.balance ? (
+                  <FormContainer gameEditionView={gameEditionView} containerStyle={{ padding: gameEditionView && 16 }} withGameEditionBorder>
+                    {!gameEditionView && <GradientBorder />}
+                    {Object.values(liquidity.pairListAccount).map((pair, index) => {
+                      return pair && pair.balance ? (
+                        <>
+                          {' '}
+                          <TokenPair
+                            key={pair.name}
+                            pair={pair}
+                            selectAddLiquidity={props.selectAddLiquidity}
+                            selectRemoveLiquidity={props.selectRemoveLiquidity}
+                            setTokenPair={props.setTokenPair}
+                            activeIndex={activeIndex}
+                            index={index}
+                            setActiveIndex={setActiveIndex}
+                          />{' '}
+                          {Object.values(liquidity.pairListAccount).length - 1 !== index && (
+                            <Divider
+                              style={{
+                                width: '100%',
+                                margin: '32px 0px',
+                                borderTop: gameEditionView
+                                  ? `1px dashed ${theme(themeMode).colors.black}`
+                                  : `1px solid  ${theme(themeMode).colors.white}99`,
+                              }}
+                            />
+                          )}
+                        </>
+                      ) : (
+                        <></>
+                      );
+                    })}
+                  </FormContainer>
+                ) : (
+                  <></>
+                )
               ) : (
                 <FormContainer gameEditionView={gameEditionView}>
                   {!gameEditionView && <GradientBorder />}
-                  <Loader
-                    active
-                    inline="centered"
-                    style={{
-                      color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
-                      fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
-                    }}
-                  >
-                    Loading..
-                  </Loader>
+                  {liquidity.pairListAccount?.error ? (
+                    <p
+                      style={{
+                        fontSize: gameEditionView ? 12 : 16,
+                        fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
+                        textAlign: 'center',
+                      }}
+                    >
+                      An error was encountered. Please reload the page
+                    </p>
+                  ) : (
+                    <Loader
+                      active
+                      inline="centered"
+                      style={{
+                        color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
+                        fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
+                      }}
+                    >
+                      Loading..
+                    </Loader>
+                  )}
                 </FormContainer>
               )
             ) : (

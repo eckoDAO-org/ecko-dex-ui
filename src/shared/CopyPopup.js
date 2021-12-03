@@ -15,7 +15,12 @@ const CopyPopup = ({ textToCopy, title, containerStyle }) => {
       position="bottom right"
       pinned
       trigger={
-        <div style={{ cursor: 'pointer', ...containerStyle }}>
+        <div
+          style={{ cursor: 'pointer', ...containerStyle }}
+          onClick={() => {
+            navigator.clipboard.writeText(textToCopy);
+          }}
+        >
           <Icon
             name="copy"
             style={{ marginLeft: '8px' }}

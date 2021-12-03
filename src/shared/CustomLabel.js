@@ -8,7 +8,7 @@ const Label = styled.span`
   color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.black : colors.white)};
   font-family: ${({ gameEditionView, bold, theme: { fontFamily } }) =>
     gameEditionView ? fontFamily.pressStartRegular : bold ? fontFamily.bold : fontFamily.regular};
-  font-size: ${({ gameEditionView, fontSize }) => (gameEditionView ? '10px' : fontSize ? fontSize : '13px')};
+  font-size: ${({ gameEditionView, fontSize }) => (fontSize ? (gameEditionView ? '10px' : fontSize) : '13px')};
 `;
 
 const CustomLabel = ({ children, bold, fontSize, labelStyle, textAlign }) => {

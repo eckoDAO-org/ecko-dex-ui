@@ -21,7 +21,8 @@ export const LiquidityProvider = (props) => {
 
   const getPairListAccountBalance = async (account) => {
     try {
-      const tokenPairList = Object.keys(pact.pairList).reduce((accum, pair) => {
+      let currentPair = pact.pairList.length ? pairTokens : pact.pairList;
+      const tokenPairList = Object.keys(currentPair).reduce((accum, pair) => {
         accum += `[${pair.split(':').join(' ')}] `;
         return accum;
       }, '');
@@ -73,6 +74,7 @@ export const LiquidityProvider = (props) => {
           };
           return accum;
         }, {});
+
         const pairList = Object.values(pairTokens).map((pair) => {
           return {
             ...pair,
@@ -80,6 +82,8 @@ export const LiquidityProvider = (props) => {
           };
         });
         setPairListAccount(pairList);
+      } else {
+        setPairListAccount({ error: data.result.status });
       }
     } catch (e) {
       console.log(e);

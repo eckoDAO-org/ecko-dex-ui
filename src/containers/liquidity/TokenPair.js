@@ -131,7 +131,7 @@ const TokenPair = (props) => {
                 buttonStyle={{
                   marginRight: '30px',
                   width: '48%',
-                  height: '40px'
+                  height: '40px',
                 }}
                 background="transparent"
                 color={gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white}
@@ -147,7 +147,7 @@ const TokenPair = (props) => {
                 buttonStyle={{
                   marginLeft: '-20px',
                   width: '48%',
-                  height: '40px'
+                  height: '40px',
                 }}
                 onClick={() => {
                   props.selectAddLiquidity();

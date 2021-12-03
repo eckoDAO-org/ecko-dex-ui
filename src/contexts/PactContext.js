@@ -77,16 +77,16 @@ export const PactProvider = (props) => {
     await localStorage.setItem('slippage', slippage);
   };
 
-  const setReqKeysLocalStorage = (key) => {
-    const swapReqKeysLS = JSON.parse(localStorage.getItem('swapReqKeys'));
-    if (!swapReqKeysLS) {
-      //first saving swapReqKeys in localstorage
-      localStorage.setItem(`swapReqKeys`, JSON.stringify([key]));
-    } else {
-      swapReqKeysLS.push(key);
-      localStorage.setItem(`swapReqKeys`, JSON.stringify(swapReqKeysLS));
-    }
-  };
+  // const setReqKeysLocalStorage = (key) => {
+  //   const swapReqKeysLS = JSON.parse(localStorage.getItem('swapReqKeys'));
+  //   if (!swapReqKeysLS) {
+  //     //first saving swapReqKeys in localstorage
+  //     localStorage.setItem(`swapReqKeys`, JSON.stringify([key]));
+  //   } else {
+  //     swapReqKeysLS.push(key);
+  //     localStorage.setItem(`swapReqKeys`, JSON.stringify(swapReqKeysLS));
+  //   }
+  // };
 
   const getEventsSwapList = async () => {
     setSwapList([]);
