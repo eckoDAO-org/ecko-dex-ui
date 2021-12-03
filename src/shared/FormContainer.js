@@ -12,7 +12,7 @@ const Container = styled.div`
   height: ${({ gameEditionView }) => gameEditionView && `100%`};
   border-radius: 10px;
   border: ${({ gameEditionView, withGameEditionBorder, theme: { colors } }) =>
-    gameEditionView && withGameEditionBorder ? `2px dashed ${colors.black}` : `1px solid transparent`};
+    gameEditionView && withGameEditionBorder && `2px dashed ${colors.black}`};
 
   opacity: 1;
   background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? 'transparent' : backgroundContainer)};

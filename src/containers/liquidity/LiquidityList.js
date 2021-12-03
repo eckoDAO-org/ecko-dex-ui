@@ -81,7 +81,7 @@ const LiquidityList = (props) => {
   const { themeMode } = useContext(LightModeContext);
   const [activeIndex, setActiveIndex] = useState(null);
 
-  useEffect(async () => {
+  useEffect(() => {
     liquidity.getPairListAccountBalance(account.account);
   }, [account.account]);
 

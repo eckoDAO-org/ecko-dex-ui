@@ -34,6 +34,7 @@ const Container = styled(FadeIn)`
   margin-left: auto;
   margin-right: auto;
   overflow: auto;
+  position: relative;
 
   ${({ gameEditionView }) => {
     if (gameEditionView) {
@@ -581,14 +582,6 @@ const LiquidityContainer = (props) => {
 
   return (
     <Container gameEditionView={gameEditionView} onAnimationEnd={() => setIsLogoVisible(true)} className="scrollbar-none">
-      {/* <TokenSelectorModal
-                show={tokenSelectorType !== null}
-                selectedToken={selectedToken}
-                onTokenClick={onTokenClick}
-                fromToken={fromValues.coin}
-                toToken={toValues.coin}
-                onClose={() => setTokenSelectorType(null)}
-            /> */}
       <TxView
         view={selectedView}
         show={showTxModal}
@@ -675,15 +668,15 @@ const LiquidityContainer = (props) => {
           <>
             <ResultContainer gameEditionView={gameEditionView}>
               <InnerRowContainer gameEditionView={gameEditionView}>
-                <CustomLabel>{`${toValues.coin} per ${fromValues.coin}`}</CustomLabel>
+                <CustomLabel fontSize="13px">{`${toValues.coin} per ${fromValues.coin}`}</CustomLabel>
                 <Value gameEditionView={gameEditionView}>{reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}</Value>
               </InnerRowContainer>
               <InnerRowContainer gameEditionView={gameEditionView}>
-                <CustomLabel>{`${fromValues.coin} per ${toValues.coin}`}</CustomLabel>
+                <CustomLabel fontSize="13px">{`${fromValues.coin} per ${toValues.coin}`}</CustomLabel>
                 <Value gameEditionView={gameEditionView}>{reduceBalance(pact.getRatio1(toValues.coin, fromValues.coin)) ?? '-'}</Value>
               </InnerRowContainer>
               <InnerRowContainer gameEditionView={gameEditionView}>
-                <CustomLabel>Share of Pool</CustomLabel>
+                <CustomLabel fontSize="13px">Share of Pool</CustomLabel>
                 <Value gameEditionView={gameEditionView}>
                   {!pact.share(fromValues.amount) ? 0 : reduceBalance(pact.share(fromValues.amount) * 100)}%
                 </Value>

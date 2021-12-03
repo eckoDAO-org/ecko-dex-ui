@@ -29,6 +29,11 @@ import GradientBorder from '../shared/GradientBorder';
 const Container = styled(FadeIn)`
   width: 100%;
   margin-top: 0px;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: auto;
+
   ${({ gameEditionView }) => {
     if (gameEditionView) {
       return css`
@@ -42,9 +47,6 @@ const Container = styled(FadeIn)`
       `;
     }
   }}
-  margin-left: auto;
-  margin-right: auto;
-  overflow: auto;
 `;
 
 const TitleContainer = styled.div`
