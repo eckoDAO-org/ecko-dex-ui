@@ -12,7 +12,7 @@ const Label = styled.div`
 `;
 
 const Divider = styled.div`
-  border-top: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? `1px dashed ${colors.black}` : `1px solid ${colors.white}99 `)};
+  border-top: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? `2px dashed ${colors.black}` : `1px solid ${colors.white}99 `)};
   margin: 16px 0px;
   width: 100%;
 `;
@@ -73,7 +73,7 @@ const TokenSelectorModalContent = ({ show, tokenSelectorType, onTokenClick, onCl
                 key={crypto.name}
                 selected={fromToken === crypto.name || toToken === crypto.name}
                 style={{
-                  cursor: fromToken === crypto.name || toToken === crypto.name ? 'default' : 'pointer'
+                  cursor: fromToken === crypto.name || toToken === crypto.name ? 'default' : 'pointer',
                 }}
                 onClick={() => {
                   if (tokenSelectorType === 'from' && fromToken === crypto.name) return;

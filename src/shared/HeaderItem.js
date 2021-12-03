@@ -36,7 +36,7 @@ const Item = styled(NavLink)`
     cursor: pointer;
     & svg {
       & path {
-        fill: ${({ theme: { colors } }) => colors.white};
+        fill: ${({ disableHover, theme: { colors } }) => !disableHover && colors.white};
       }
     }
   }
@@ -54,6 +54,7 @@ const HeaderItem = ({
   onMouseLeave,
   isHover,
   headerItemStyle,
+  disableHover,
   notChangebleFontOnHover,
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
@@ -76,6 +77,7 @@ const HeaderItem = ({
       onMouseLeave={onMouseLeave}
       gameEditionView={gameEditionView}
       isHover={isHover}
+      disableHover={disableHover}
       notChangebleFontOnHover={notChangebleFontOnHover}
     >
       {icon}

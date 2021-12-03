@@ -11,7 +11,8 @@ const Container = styled.div`
   width: 100%;
   height: ${({ gameEditionView }) => gameEditionView && `100%`};
   border-radius: 10px;
-  /* border: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `none` : `1px solid transparent`)}; */
+  border: ${({ gameEditionView, withGameEditionBorder, theme: { colors } }) =>
+    gameEditionView && withGameEditionBorder ? `2px dashed ${colors.black}` : `1px solid transparent`};
 
   opacity: 1;
   background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? 'transparent' : backgroundContainer)};
@@ -66,11 +67,11 @@ const Title = styled.span`
   color: ${theme.colors.white};
 `;
 
-const FormContainer = ({ containerStyle, title, titleStyle, children, footer }) => {
+const FormContainer = ({ containerStyle, title, titleStyle, children, footer, withGameEditionBorder }) => {
   const { gameEditionView } = useContext(GameEditionContext);
 
   return (
-    <Container gameEditionView={gameEditionView} style={containerStyle}>
+    <Container gameEditionView={gameEditionView} style={containerStyle} withGameEditionBorder={withGameEditionBorder}>
       <>
         {title && (
           <HeaderContainer>
@@ -86,12 +87,12 @@ const FormContainer = ({ containerStyle, title, titleStyle, children, footer }) 
 
 FormContainer.propTypes = {
   title: PropTypes.string,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
 };
 
 FormContainer.defaultProps = {
   title: '',
-  onClose: null
+  onClose: null,
 };
 
 export default FormContainer;

@@ -100,8 +100,8 @@ const ActionContainer = styled.div`
 `;
 
 const ButtonGroup = styled(Button.Group)`
-  flex-direction: ${({ gameEditionView }) => (gameEditionView ? 'column !important' : 'row ')};
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+  flex-direction: ${({ gameEditionView }) => (gameEditionView ? 'column !important' : 'row')};
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
     flex-direction: column !important;
   }
 `;
@@ -145,7 +145,7 @@ const AccountModal = () => {
         <BoldLabel gameEditionView={gameEditionView}>{account.balance}</BoldLabel>
       </RowContainer>
       <ActionContainer gameEditionView={gameEditionView}>
-        <ButtonGroup fluid>
+        <ButtonGroup gameEditionView={gameEditionView} fluid>
           <CustomButton
             border="none"
             color={gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white}

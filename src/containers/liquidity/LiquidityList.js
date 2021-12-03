@@ -58,34 +58,12 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const LiquidityCardContainer = styled.div`
-  position: ${({ gameEditionView }) => !gameEditionView && `relative`};
-  display: table;
-  flex-flow: column;
-  padding: ${({ gameEditionView }) => (gameEditionView ? '32px' : '32px')};
-  margin-bottom: 15px;
-  width: 100%;
-  border-radius: 10px;
-  border: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `2px dashed ${colors.black} !important` : '1px solid transparent')};
-
-  opacity: 1;
-  background: transparent;
-
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: column;
-    display: table;
-  }
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
-    padding: 0;
-  }
-`;
-
 const TopContainer = styled.div``;
 
 const TitleContainer = styled.div`
   display: flex;
   justify-content: ${({ gameEditionView }) => (gameEditionView ? `center` : ` space-between`)};
-  margin-bottom: ${({ gameEditionView }) => (gameEditionView ? `20px` : ` 24px`)};
+  margin-bottom: ${({ gameEditionView }) => (gameEditionView ? `16px` : ` 24px`)};
 `;
 const Title = styled.span`
   font: ${({ gameEditionView, theme: { fontFamily } }) =>
@@ -196,7 +174,7 @@ const LiquidityList = (props) => {
             {account.account !== null ? (
               liquidity.pairListAccount[0] ? (
                 liquidity.pairListAccount[0]?.balance ? (
-                  <FormContainer gameEditionView={gameEditionView}>
+                  <FormContainer gameEditionView={gameEditionView} containerStyle={{ padding: gameEditionView && 16 }} withGameEditionBorder>
                     {!gameEditionView && <GradientBorder />}
                     {Object.values(liquidity.pairListAccount).map((pair, index) => {
                       return pair && pair.balance ? (
@@ -240,6 +218,7 @@ const LiquidityList = (props) => {
                       style={{
                         fontSize: gameEditionView ? 12 : 16,
                         fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
+                        textAlign: 'center',
                       }}
                     >
                       An error was encountered. Please reload the page

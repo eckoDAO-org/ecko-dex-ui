@@ -84,8 +84,6 @@ const DesktopHeader = ({ className, gameEditionView }) => {
             </HeaderItem>
           ))}
         </AnimatedDiv>
-
-        <GameEditionToggle animation={gameEditionView} />
       </LeftContainer>
       <RightContainer>
         <RightHeaderItems />
