@@ -10,7 +10,7 @@ import { LightModeContext } from '../contexts/LightModeContext';
 const Container = styled.div`
   position: absolute;
   cursor: pointer;
-  top: ${({ gameEditionView }) => gameEditionView && '4px'};
+  top: ${({ $gameEditionView }) => $gameEditionView && '4px'};
   right: 4px;
   display: flex;
   justify-content: space-between;
@@ -42,10 +42,10 @@ const ElementsContainer = styled.div`
   span {
     font-size: 16px;
     margin-right: 13px;
-    font: ${({ gameEditionView, theme: { fontFamily } }) => {
-      if (gameEditionView) return `normal normal normal 14px/17px ${fontFamily.pressStartRegular}`;
+    font: ${({ $gameEditionView, theme: { fontFamily } }) => {
+      if ($gameEditionView) return `normal normal normal 14px/17px ${fontFamily.pressStartRegular}`;
     }};
-    color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.black : colors.white)};
+    color: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? colors.black : colors.white)};
   }
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
@@ -67,7 +67,7 @@ const InputToken = ({ icon, code, onClick, onClickButton, disabledButton }) => {
   const { themeMode } = useContext(LightModeContext);
 
   return (
-    <Container gameEditionView={gameEditionView}>
+    <Container $gameEditionView={gameEditionView}>
       <CustomButton
         buttonStyle={{
           padding: '12px 8px',
@@ -82,7 +82,7 @@ const InputToken = ({ icon, code, onClick, onClickButton, disabledButton }) => {
       >
         Max
       </CustomButton>
-      <ElementsContainer gameEditionView={gameEditionView} onClick={onClick}>
+      <ElementsContainer $gameEditionView={gameEditionView} onClick={onClick}>
         {!gameEditionView && <>{icon}</>}
 
         <span>{code}</span>
