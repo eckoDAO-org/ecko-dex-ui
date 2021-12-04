@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { GameEditionContext } from '../contexts/GameEditionContext';
@@ -28,8 +28,9 @@ const Item = styled(NavLink)`
   }
 
   &:hover {
-    font-family: ${({ theme: { fontFamily }, gameEditionView }) => !gameEditionView && `${fontFamily.bold} !important`};
-    color: ${({ theme: { colors }, gameEditionView }) => !gameEditionView && colors.white};
+    font-family: ${({ theme: { fontFamily }, gameEditionView, notChangebleFontOnHover }) =>
+      !notChangebleFontOnHover && `${fontFamily.bold} !important`};
+    color: ${({ theme: { colors }, gameEditionView }) => colors.white};
 
     /* text-shadow: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? 'none' : `0 0 5px ${colors.white}`)}; */
     cursor: pointer;
@@ -41,7 +42,21 @@ const Item = styled(NavLink)`
   }
 `;
 
-const HeaderItem = ({ id, className, route, children, icon, link, onClick, onMouseOver, onMouseLeave, isHover, headerItemStyle, disableHover }) => {
+const HeaderItem = ({
+  id,
+  className,
+  route,
+  children,
+  icon,
+  link,
+  onClick,
+  onMouseOver,
+  onMouseLeave,
+  isHover,
+  headerItemStyle,
+  disableHover,
+  notChangebleFontOnHover,
+}) => {
   const { gameEditionView } = useContext(GameEditionContext);
 
   const getTo = () => {
@@ -63,6 +78,7 @@ const HeaderItem = ({ id, className, route, children, icon, link, onClick, onMou
       gameEditionView={gameEditionView}
       isHover={isHover}
       disableHover={disableHover}
+      notChangebleFontOnHover={notChangebleFontOnHover}
     >
       {icon}
       {children}

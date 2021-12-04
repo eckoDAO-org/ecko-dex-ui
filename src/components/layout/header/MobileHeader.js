@@ -47,7 +47,7 @@ const MobileHeader = ({ className }) => {
           </CustomPopup>
         </HeaderItem>
 
-        <GameEditionToggle />
+        {/* <GameEditionToggle /> */}
       </LeftContainer>
       <RightContainer>
         <RightHeaderItems />

@@ -74,6 +74,7 @@ const DesktopHeader = ({ className, gameEditionView }) => {
             <HeaderItem
               key={index}
               className={item.className}
+              headerItemStyle={{ width: 36 }}
               route={item.route}
               onMouseOver={() => setButtonHover(item.id)}
               onMouseLeave={() => setButtonHover(null)}

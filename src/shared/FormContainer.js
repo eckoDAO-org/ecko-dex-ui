@@ -5,6 +5,7 @@ import { GameEditionContext } from '../contexts/GameEditionContext';
 import theme from '../styles/theme';
 
 const Container = styled.div`
+  position: relative;
   display: flex;
   flex-flow: column;
   justify-content: space-between;
@@ -12,7 +13,7 @@ const Container = styled.div`
   height: ${({ gameEditionView }) => gameEditionView && `100%`};
   border-radius: 10px;
   border: ${({ gameEditionView, withGameEditionBorder, theme: { colors } }) =>
-    gameEditionView && withGameEditionBorder ? `2px dashed ${colors.black}` : `1px solid transparent`};
+    gameEditionView && withGameEditionBorder && `2px dashed ${colors.black}`};
 
   opacity: 1;
   background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? 'transparent' : backgroundContainer)};

@@ -49,15 +49,6 @@ const RightContainerHeader = styled.div`
 
 const FadeContainer = styled.div``;
 
-// const Label = styled.span`
-//   font-size: 13px;
-//   font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
-//   text-transform: capitalize;
-//   padding: 10px 16px;
-//   color: white;
-//   font-size: 16;
-// `;
-
 const RightHeaderItems = () => {
   const { account } = useContext(AccountContext);
   const modalContext = useContext(ModalContext);
@@ -120,16 +111,14 @@ const RightHeaderItems = () => {
           </HeaderItem>
         </FadeContainer>
       )}
-      {account.account && (
-        <HeaderItem disableHover>
-          <PowerIconWrapper
-            onClick={() => {
-              setGameEditionView(!gameEditionView);
-              closeModal();
-            }}
-          />
-        </HeaderItem>
-      )}
+      <HeaderItem disableHover>
+        <PowerIconWrapper
+          onClick={() => {
+            setGameEditionView(!gameEditionView);
+            closeModal();
+          }}
+        />
+      </HeaderItem>
       <HeaderItem>
         <BellNotification
           hasNotification={notification.notificationList?.some((notif) => notif.isReaded === false)}
