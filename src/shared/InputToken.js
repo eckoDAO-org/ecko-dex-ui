@@ -9,6 +9,7 @@ import { LightModeContext } from '../contexts/LightModeContext';
 
 const Container = styled.div`
   position: absolute;
+  cursor: pointer;
   top: ${({ gameEditionView }) => gameEditionView && '4px'};
   right: 4px;
   display: flex;
@@ -70,7 +71,7 @@ const InputToken = ({ icon, code, onClick, onClickButton, disabledButton }) => {
       <CustomButton
         buttonStyle={{
           padding: '12px 8px',
-          textTransform: gameEditionView ? 'capitalize' : 'uppercase'
+          textTransform: gameEditionView ? 'capitalize' : 'uppercase',
         }}
         border="none"
         color={!gameEditionView && theme(themeMode).colors.white}
@@ -93,12 +94,12 @@ const InputToken = ({ icon, code, onClick, onClickButton, disabledButton }) => {
 
 InputToken.propTypes = {
   icon: PropTypes.element,
-  code: PropTypes.string
+  code: PropTypes.string,
 };
 
 InputToken.defaultProps = {
   icon: null,
-  code: ''
+  code: '',
 };
 
 export default InputToken;

@@ -121,6 +121,7 @@ export const KaddexWalletProvider = (props) => {
           await checkStatus();
         });
         kadenaExt.on('res_checkStatus', (response) => {
+          console.log('!!!res_checkStatus', response);
           if (response?.result?.status === 'success' && !kaddexWalletState.isConnected) {
             setAccountData();
           }
@@ -154,7 +155,6 @@ export const KaddexWalletProvider = (props) => {
     if (networkInfo.networkId !== NETWORKID) {
       showNetworkError();
     } else {
-      console.log('!!!Im connecting....');
       await connectWallet();
     }
   };

@@ -313,7 +313,7 @@ export const GameEditionWrapper = ({ startLabel, startOnClick, selectLabel, sele
                 fontWeight="500"
                 style={{
                   mixBlendMode: 'multiply',
-                  isolation: 'isolate'
+                  isolation: 'isolate',
                 }}
               >
                 <tspan x="0" y="0">
@@ -368,7 +368,7 @@ export const GameEditionWrapper = ({ startLabel, startOnClick, selectLabel, sele
                 opacity="0.198"
                 style={{
                   mixBlendMode: 'normal',
-                  isolation: 'isolate'
+                  isolation: 'isolate',
                 }}
               />
               <text
@@ -381,7 +381,7 @@ export const GameEditionWrapper = ({ startLabel, startOnClick, selectLabel, sele
                 fontWeight="500"
                 style={{
                   mixBlendMode: 'multiply',
-                  isolation: 'isolate'
+                  isolation: 'isolate',
                 }}
               >
                 <tspan x="0" y="0">
@@ -437,7 +437,7 @@ export const GameEditionWrapper = ({ startLabel, startOnClick, selectLabel, sele
                 fill="url(#linear-gradient-11)"
                 style={{
                   mixBlendMode: 'multiply',
-                  isolation: 'isolate'
+                  isolation: 'isolate',
                 }}
               />
               <g
@@ -445,7 +445,7 @@ export const GameEditionWrapper = ({ startLabel, startOnClick, selectLabel, sele
                 filter="url(#Rectangle_41)"
                 style={{
                   mixBlendMode: 'multiply',
-                  isolation: 'isolate'
+                  isolation: 'isolate',
                 }}
               >
                 <path
@@ -483,7 +483,7 @@ export const GameEditionWrapper = ({ startLabel, startOnClick, selectLabel, sele
                   strokeWidth="1"
                   style={{
                     mixBlendMode: 'overlay',
-                    isolation: 'isolate'
+                    isolation: 'isolate',
                   }}
                 />
               </g>
@@ -512,7 +512,7 @@ export const GameEditionWrapper = ({ startLabel, startOnClick, selectLabel, sele
                 fill="url(#linear-gradient-11)"
                 style={{
                   mixBlendMode: 'multiply',
-                  isolation: 'isolate'
+                  isolation: 'isolate',
                 }}
               />
               <g
@@ -520,7 +520,7 @@ export const GameEditionWrapper = ({ startLabel, startOnClick, selectLabel, sele
                 filter="url(#Rectangle_4937)"
                 style={{
                   mixBlendMode: 'multiply',
-                  isolation: 'isolate'
+                  isolation: 'isolate',
                 }}
               >
                 <path

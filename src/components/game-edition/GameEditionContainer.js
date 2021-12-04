@@ -17,6 +17,7 @@ const MainContainer = styled.div`
   justify-content: center;
   height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
   align-items: center;
+  overflow: hidden;
 `;
 
 const ContentContainer = styled.div`
