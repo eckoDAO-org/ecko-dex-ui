@@ -17,6 +17,7 @@ import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import GradientBorder from '../../shared/GradientBorder';
 import { LightModeContext } from '../../contexts/LightModeContext';
+import { ModalContext } from '../../contexts/ModalContext';
 
 const Container = styled.div`
   display: flex;
@@ -118,7 +119,8 @@ const RemoveLiqContainer = (props) => {
   const wallet = useContext(WalletContext);
   const liquidity = useContext(LiquidityContext);
   const { themeMode } = useContext(LightModeContext);
-  const { gameEditionView } = useContext(GameEditionContext);
+  const modalContext = useContext(ModalContext);
+  const { gameEditionView, openModal, closeModal } = useContext(GameEditionContext);
   const { token0, token1, balance, pooledAmount } = props.pair;
 
   const [amount, setAmount] = useState(100);
@@ -150,9 +152,57 @@ const RemoveLiqContainer = (props) => {
     wallet.setWalletError(null);
   };
 
+  useEffect(() => {
+    if (showTxModal) {
+      if (gameEditionView) {
+        openModal({
+          title: 'transaction details',
+          closeModal: () => {
+            setShowTxModal(false);
+            closeModal();
+          },
+          content: (
+            <TxView
+              view="Remove Liquidity"
+              token0={token0}
+              onClose={() => {
+                setShowTxModal(false);
+                closeModal();
+              }}
+              token1={token1}
+            />
+          ),
+        });
+      } else {
+        modalContext.openModal({
+          title: 'transaction details',
+          description: '',
+          containerStyle: {
+            minWidth: '550px',
+            width: '75%',
+          },
+          onClose: () => {
+            setShowTxModal(false);
+            modalContext.closeModal();
+          },
+          content: (
+            <TxView
+              view="Remove Liquidity"
+              token0={token0}
+              onClose={() => {
+                setShowTxModal(false);
+                modalContext.closeModal();
+              }}
+              token1={token1}
+            />
+          ),
+        });
+      }
+    }
+  }, [showTxModal]);
+
   return (
     <Container gameEditionView={gameEditionView}>
-      <TxView view="Remove Liquidity" show={showTxModal} token0={token0} token1={token1} onClose={() => setShowTxModal(false)} />
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
       <TitleContainer gameEditionView={gameEditionView}>
         <Title gameEditionView={gameEditionView}>
@@ -162,7 +212,7 @@ const RemoveLiqContainer = (props) => {
                 cursor: 'pointer',
                 color: theme(themeMode).colors.white,
                 marginRight: '15px',
-                justifyContent: 'center'
+                justifyContent: 'center',
               }}
               onClick={() => props.closeLiquidity()}
             />
@@ -193,7 +243,7 @@ const RemoveLiqContainer = (props) => {
             <Button.Group fluid>
               <CustomButton
                 buttonStyle={{
-                  width: '20%'
+                  width: '20%',
                 }}
                 background={
                   amount === 25 ? (gameEditionView ? `${theme(themeMode).colors.black}` : `${theme(themeMode).colors.white}`) : 'transparent'
@@ -217,7 +267,7 @@ const RemoveLiqContainer = (props) => {
               <MyButtonDivider />
               <CustomButton
                 buttonStyle={{
-                  width: '20%'
+                  width: '20%',
                 }}
                 border={!gameEditionView && `1px solid ${theme(themeMode).colors.white}99`}
                 background={
@@ -241,7 +291,7 @@ const RemoveLiqContainer = (props) => {
               <MyButtonDivider />
               <CustomButton
                 buttonStyle={{
-                  width: '20%'
+                  width: '20%',
                 }}
                 border={!gameEditionView && `1px solid ${theme(themeMode).colors.white}99`}
                 background={
@@ -265,7 +315,7 @@ const RemoveLiqContainer = (props) => {
               <MyButtonDivider />
               <CustomButton
                 buttonStyle={{
-                  width: '20%'
+                  width: '20%',
                 }}
                 border={!gameEditionView && `1px solid ${theme(themeMode).colors.white}99`}
                 background={
@@ -314,6 +364,7 @@ const RemoveLiqContainer = (props) => {
               disabled={isNaN(amount) || reduceBalance(amount) === 0}
               onClick={async () => {
                 if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
+                  setLoading(true);
                   const res = await liquidity.removeLiquidityLocal(tokenData[token0].code, tokenData[token1].code, reduceBalance(pooled, PRECISION));
                   if (res === -1) {
                     setLoading(false);

@@ -1,16 +1,12 @@
 import React, { useContext, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
-import { Transition } from 'react-spring/renderprops';
 import { Message, Icon, Divider } from 'semantic-ui-react';
 import { ErrorIcon, SuccessfullIcon } from '../../../assets';
 import { extractDecimal, gasUnit, reduceBalance } from '../../../utils/reduceBalance';
 import CustomButton from '../../../shared/CustomButton';
-import Backdrop from '../../../shared/Backdrop';
-import ModalContainer from '../../../shared/ModalContainer';
 import { SwapContext } from '../../../contexts/SwapContext';
 import { ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import GameEditionModalsContainer from '../../game-edition/GameEditionModalsContainer';
 import reduceToken from '../../../utils/reduceToken';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { PactContext } from '../../../contexts/PactContext';
@@ -119,7 +115,7 @@ const Label = styled.span`
   color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : `${colors.white}`)};
 `;
 
-const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
+const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
   const swap = useContext(SwapContext);
   const { gameEditionView } = useContext(GameEditionContext);
   const { account } = useContext(AccountContext);
@@ -432,36 +428,7 @@ const TxView = ({ show, view, onClose, token0, token1, createTokenPair }) => {
     } else return failView();
   };
   // console.log(pact)
-  return gameEditionView && show ? (
-    <GameEditionModalsContainer
-      modalStyle={{ zIndex: 1 }}
-      title="transaction details"
-      onClose={onClose}
-      content={typeof swap.localRes === 'string' ? localError() : renderSwitch()}
-    />
-  ) : (
-    <Transition items={show} from={{ opacity: 1 }} enter={{ opacity: 1 }} leave={{ opacity: 0 }}>
-      {(show) =>
-        show &&
-        ((props) => (
-          <Container style={props}>
-            <Backdrop onClose={onClose} />
-            <ModalContainer
-              className="withRainbow"
-              title="transaction details"
-              containerStyle={{
-                maxHeight: '90vh',
-                maxWidth: '90vw',
-              }}
-              onClose={onClose}
-            >
-              {typeof swap.localRes === 'string' ? localError() : renderSwitch()}
-            </ModalContainer>
-          </Container>
-        ))
-      }
-    </Transition>
-  );
+  return typeof swap.localRes === 'string' ? localError() : renderSwitch();
 };
 
 export default TxView;

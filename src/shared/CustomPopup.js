@@ -6,8 +6,7 @@ import browserDetection from '../utils/browserDetection';
 import GradientBorder from './GradientBorder';
 
 const Popup = styled(SUIPopup)`
-  & .ui.visible.popup {
-  }
+  max-width: unset !important;
 `;
 
 const PopupContainer = styled.div`
@@ -15,7 +14,6 @@ const PopupContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-
   width: 100%;
   border-radius: 10px;
   background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
