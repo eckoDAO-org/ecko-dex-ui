@@ -28,6 +28,7 @@ import { LightModeContext } from '../../contexts/LightModeContext';
 import HeaderItem from '../../shared/HeaderItem';
 import CustomPopup from '../../shared/CustomPopup';
 import SlippagePopupContent from '../../components/layout/header/SlippagePopupContent';
+import browserDetection from '../../utils/browserDetection';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -35,6 +36,10 @@ const Container = styled(FadeIn)`
   margin-right: auto;
   overflow: auto;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
 
   ${({ gameEditionView }) => {
     if (gameEditionView) {
@@ -45,7 +50,7 @@ const Container = styled(FadeIn)`
       `;
     } else {
       return css`
-        max-width: 500px;
+        max-width: 550px;
       `;
     }
   }}
@@ -80,6 +85,17 @@ const LogoContainer = styled(FadeIn)`
   margin-left: auto;
   margin-right: auto;
   transform: translate(-50%, 0);
+
+  ${() => {
+    if (browserDetection() === 'FIREFOX') {
+      return css`
+        -webkit-filter: blur(50px);
+        -moz-filter: blur(50px);
+        -ms-filter: blur(50px);
+        -o-filter: blur(50px);
+      `;
+    }
+  }}
 `;
 
 const ButtonContainer = styled.div`
@@ -557,7 +573,7 @@ const LiquidityContainer = (props) => {
         title: 'select a token',
         description: '',
         containerStyle: {
-          //height: "100%",
+          minWidth: '0px',
           width: '75%',
         },
         onClose: () => {
