@@ -35,7 +35,8 @@ const Container = styled.div`
     if (browserDetection() === 'FIREFOX' && !withoutRainbowBackground) {
       return css`
         margin: auto;
-        background: #4c125a;
+        background: ${({ theme: { colors } }) => colors.primary};
+        color: ${({ theme: { colors } }) => colors.white};
         box-sizing: border-box;
         background-clip: padding-box; /* !importanté */
         border: 1px solid transparent; /* !importanté */
