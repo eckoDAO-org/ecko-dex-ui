@@ -499,9 +499,52 @@ const SwapContainer = () => {
       });
     }
   };
+
+  useEffect(() => {
+    if (showTxModal) {
+      if (gameEditionView) {
+        openModal({
+          title: 'transaction details',
+          closeModal: () => {
+            setShowTxModal(false);
+            closeModal();
+          },
+          content: (
+            <TxView
+              onClose={() => {
+                setShowTxModal(false);
+                closeModal();
+              }}
+            />
+          ),
+        });
+      } else {
+        modalContext.openModal({
+          title: 'transaction details',
+          description: '',
+          containerStyle: {
+            minWidth: '550px',
+            width: '75%',
+          },
+          onClose: () => {
+            setShowTxModal(false);
+            modalContext.closeModal();
+          },
+          content: (
+            <TxView
+              onClose={() => {
+                setShowTxModal(false);
+                modalContext.closeModal();
+              }}
+            />
+          ),
+        });
+      }
+    }
+  }, [showTxModal]);
+
   return (
     <Container gameEditionView={gameEditionView} onAnimationEnd={() => setIsLogoVisible(true)} className="scrollbar-none">
-      <TxView show={showTxModal} selectedToken={selectedToken} onTokenClick={onTokenClick} onClose={() => setShowTxModal(false)} />
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
       {!gameEditionView && isLogoVisible && (
         <LogoContainer time={0.2}>

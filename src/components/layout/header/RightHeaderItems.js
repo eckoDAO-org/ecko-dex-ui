@@ -151,7 +151,7 @@ const RightHeaderItems = () => {
         <CustomPopup
           basic
           trigger={
-            <div style={{ height: '100%' }}>
+            <div style={{ height: '100%', display: 'flex' }}>
               <ThreeDotsIcon style={{ height: '100%' }} />
             </div>
           }
