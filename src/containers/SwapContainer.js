@@ -34,6 +34,10 @@ const Container = styled(FadeIn)`
   margin-left: auto;
   margin-right: auto;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
 
   ${({ gameEditionView }) => {
     if (gameEditionView) {
@@ -44,7 +48,7 @@ const Container = styled(FadeIn)`
       `;
     } else {
       return css`
-        max-width: 500px;
+        max-width: 550px;
       `;
     }
   }}
