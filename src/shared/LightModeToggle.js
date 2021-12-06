@@ -47,10 +47,10 @@ const ToggleContainer = styled.div`
 const GameLabel = styled.div`
   white-space: nowrap;
   text-transform: capitalize;
+  font-size: 16px;
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
     width: min-content;
-    font-size: 10px;
   }
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {

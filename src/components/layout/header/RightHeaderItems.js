@@ -147,11 +147,11 @@ const RightHeaderItems = () => {
         </HeaderItem>
       )}
 
-      <HeaderItem headerItemStyle={{ height: '100%' }}>
+      <HeaderItem headerItemStyle={{ height: '100%', display: 'flex' }}>
         <CustomPopup
           basic
           trigger={
-            <div style={{ height: '100%' }}>
+            <div style={{ height: '100%', display: 'flex' }}>
               <ThreeDotsIcon style={{ height: '100%' }} />
             </div>
           }
@@ -159,7 +159,7 @@ const RightHeaderItems = () => {
           offset={[0, -14]}
           position="bottom right"
         >
-          <PopupContentList items={headerLinks} viewOtherComponents />
+          <PopupContentList items={headerLinks} viewOtherComponents withLogout PopupContentListStyle={{ minWidth: 170 }} />
         </CustomPopup>
       </HeaderItem>
     </RightContainerHeader>

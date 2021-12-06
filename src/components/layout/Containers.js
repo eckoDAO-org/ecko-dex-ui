@@ -5,8 +5,11 @@ export const PartialScrollableScrollSection = styled.div`
   overflow: auto;
   /* margin-bottom: -10px; */
 
+  * {
+    -ms-overflow-style: none;
+  }
   ::-webkit-scrollbar {
-    display: block;
+    display: none;
   }
 `;
 
