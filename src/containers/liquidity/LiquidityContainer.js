@@ -28,6 +28,7 @@ import { LightModeContext } from '../../contexts/LightModeContext';
 import HeaderItem from '../../shared/HeaderItem';
 import CustomPopup from '../../shared/CustomPopup';
 import SlippagePopupContent from '../../components/layout/header/SlippagePopupContent';
+import browserDetection from '../../utils/browserDetection';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -35,6 +36,10 @@ const Container = styled(FadeIn)`
   margin-right: auto;
   overflow: auto;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
 
   ${({ gameEditionView }) => {
     if (gameEditionView) {
@@ -45,7 +50,7 @@ const Container = styled(FadeIn)`
       `;
     } else {
       return css`
-        max-width: 500px;
+        max-width: 550px;
       `;
     }
   }}
@@ -80,6 +85,17 @@ const LogoContainer = styled(FadeIn)`
   margin-left: auto;
   margin-right: auto;
   transform: translate(-50%, 0);
+
+  ${() => {
+    if (browserDetection() === 'FIREFOX') {
+      return css`
+        -webkit-filter: blur(50px);
+        -moz-filter: blur(50px);
+        -ms-filter: blur(50px);
+        -o-filter: blur(50px);
+      `;
+    }
+  }}
 `;
 
 const ButtonContainer = styled.div`
@@ -557,7 +573,7 @@ const LiquidityContainer = (props) => {
         title: 'select a token',
         description: '',
         containerStyle: {
-          //height: "100%",
+          minWidth: '0px',
           width: '75%',
         },
         onClose: () => {
@@ -580,30 +596,93 @@ const LiquidityContainer = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (showTxModal) {
+      if (gameEditionView) {
+        openModal({
+          title: 'transaction details',
+          closeModal: () => {
+            setShowTxModal(false);
+            closeModal();
+          },
+          content: (
+            <TxView
+              onClose={() => {
+                setShowTxModal(false);
+                closeModal();
+              }}
+              view={selectedView}
+              token0={fromValues.coin}
+              token1={toValues.coin}
+              createTokenPair={() =>
+                liquidity.createTokenPairLocal(tokenData[fromValues.coin].name, tokenData[toValues.coin].name, fromValues.amount, toValues.amount)
+              }
+            />
+          ),
+        });
+      } else {
+        modalContext.openModal({
+          title: 'transaction details',
+          description: '',
+          containerStyle: {
+            minWidth: '550px',
+            width: '75%',
+          },
+          onClose: () => {
+            setShowTxModal(false);
+            modalContext.closeModal();
+          },
+          content: (
+            <TxView
+              onClose={() => {
+                setShowTxModal(false);
+                modalContext.closeModal();
+              }}
+              view={selectedView}
+              token0={fromValues.coin}
+              token1={toValues.coin}
+              createTokenPair={() =>
+                liquidity.createTokenPairLocal(tokenData[fromValues.coin].name, tokenData[toValues.coin].name, fromValues.amount, toValues.amount)
+              }
+            />
+          ),
+        });
+      }
+    }
+  }, [showTxModal]);
+
+  useEffect(() => {
+    if (showReview) {
+      if (gameEditionView) {
+        openModal({
+          title: 'transaction details',
+          closeModal: () => {
+            setShowReview(false);
+            closeModal();
+          },
+          content: <ReviewTxModal fromValues={fromValues} toValues={toValues} supply={supply} liquidityView={selectedView} />,
+        });
+      } else {
+        modalContext.openModal({
+          title: 'transaction details',
+          description: '',
+          containerStyle: {
+            minWidth: '550px',
+            width: '75%',
+          },
+          onClose: () => {
+            setShowReview(false);
+            modalContext.closeModal();
+          },
+          content: <ReviewTxModal fromValues={fromValues} toValues={toValues} supply={supply} liquidityView={selectedView} />,
+        });
+      }
+    }
+  }, [showReview]);
+
   return (
     <Container gameEditionView={gameEditionView} onAnimationEnd={() => setIsLogoVisible(true)} className="scrollbar-none">
-      <TxView
-        view={selectedView}
-        show={showTxModal}
-        token0={fromValues.coin}
-        token1={toValues.coin}
-        fromToken={fromValues.coin}
-        toToken={toValues.coin}
-        createTokenPair={() =>
-          liquidity.createTokenPairLocal(tokenData[fromValues.coin].name, tokenData[toValues.coin].name, fromValues.amount, toValues.amount)
-        }
-        onClose={() => setShowTxModal(false)}
-      />
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
-      <ReviewTxModal
-        onClose={() => setShowReview(false)}
-        fromValues={fromValues}
-        toValues={toValues}
-        supply={supply}
-        loading={loading}
-        show={showReview}
-        liquidityView={selectedView}
-      />
 
       {!gameEditionView && isLogoVisible && (
         <LogoContainer time={0.2}>

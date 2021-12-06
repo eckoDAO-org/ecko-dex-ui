@@ -1,9 +1,11 @@
 import React, { useState, createContext } from 'react';
 import Pact from 'pact-lang-api';
 import tokenData from '../constants/cryptoCurrencies';
+import { toast } from 'react-toastify';
 import pwPrompt from '../components/alerts/pwPrompt';
 import { reduceBalance } from '../utils/reduceBalance';
 import { decryptKey } from '../utils/keyUtils';
+import { STATUSES } from './NotificationContext';
 import { useKaddexWalletContext, useWalletContext, useAccountContext, usePactContext, useNotificationContext } from '.';
 import {
   chainId,
@@ -27,6 +29,8 @@ export const SwapProvider = (props) => {
   const wallet = useWalletContext();
   const [pairAccount, setPairAccount] = useState('');
   const [cmd, setCmd] = useState(null);
+
+  const toastId = React.useRef(null);
 
   const mkReq = function (cmd) {
     return {
@@ -148,6 +152,20 @@ export const SwapProvider = (props) => {
       pact.setPolling(false);
     } catch (e) {
       pact.setPolling(false);
+      toastId.current = notificationContext.showNotification({
+        title: 'Transaction Error',
+        type: STATUSES.ERROR,
+        autoClose: 5000,
+        hideProgressBar: true,
+      });
+      notificationContext.storeNotification({
+        type: 'error',
+        time: getCurrentTime(),
+        date: getCurrentDate(),
+        title: 'Transaction Error',
+        isReaded: false,
+        isCompleted: false,
+      });
       console.log('error', e);
     }
   };

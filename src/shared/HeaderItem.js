@@ -42,6 +42,12 @@ const Item = styled(NavLink)`
   }
 `;
 
+const HeaderItemContent = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const HeaderItem = ({
   id,
   className,
@@ -80,8 +86,10 @@ const HeaderItem = ({
       $disableHover={disableHover}
       $notChangebleFontOnHover={notChangebleFontOnHover}
     >
-      {icon}
-      {children}
+      <HeaderItemContent>
+        {icon}
+        {children}
+      </HeaderItemContent>
       <div className="underline"></div>
     </Item>
   );

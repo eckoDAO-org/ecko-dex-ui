@@ -91,7 +91,7 @@ const LiquidityList = (props) => {
         withoutRainbowBackground
         gameEditionView={gameEditionView}
         containerStyle={{
-          maxHeight: gameEditionView ? '60vh' : '80vh',
+          maxHeight: !gameEditionView && '80vh',
           maxWidth: 900,
           minWidth: 0,
           overflow: 'auto',

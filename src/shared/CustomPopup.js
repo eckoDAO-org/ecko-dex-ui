@@ -1,11 +1,12 @@
 import React from 'react';
 import { Popup as SUIPopup } from 'semantic-ui-react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { useGameEditionContext, useLightModeContext } from '../contexts';
+import browserDetection from '../utils/browserDetection';
 import GradientBorder from './GradientBorder';
 
 const Popup = styled(SUIPopup)`
-  & .ui.visible.popup {
-  }
+  max-width: unset !important;
 `;
 
 const PopupContainer = styled.div`
@@ -13,14 +14,46 @@ const PopupContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-
   width: 100%;
   border-radius: 10px;
-  /* border: ${({ gameEditionView }) => (gameEditionView ? `none` : ` 1px solid transparent`)}; */
-
-  backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
-  opacity: 1;
   background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
+
+  backdrop-filter: blur(50px);
+  opacity: 1;
+
+  ${() => {
+    if (browserDetection() === 'FIREFOX') {
+      return css`
+        margin: auto;
+        background: ${({ theme: { colors } }) => colors.primary};
+        color: ${({ theme: { colors } }) => colors.white};
+        box-sizing: border-box;
+        background-clip: padding-box; /* !importanté */
+        border: 1px solid transparent; /* !importanté */
+
+        &:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          z-index: -1;
+          margin: -1px;
+          border-radius: 10px;
+          background: linear-gradient(to right, #ed1cb5, #ffa900, #39fffc);
+        }
+      `;
+    }
+  }}
+
+  ${({ themeMode, gameEditionView }) => {
+    if (browserDetection() === 'BRAVE' && themeMode === 'dark' && gameEditionView) {
+      return css`
+        background: #4c125a;
+      `;
+    }
+  }}
 
   i.inverted.icon {
     color: none;
@@ -28,6 +61,9 @@ const PopupContainer = styled.div`
 `;
 
 const CustomPopup = ({ popupStyle, position, trigger, on, offset, children, containerStyle, ...props }) => {
+  const { themeMode } = useLightModeContext();
+  const { gameEditionView } = useGameEditionContext();
+
   return (
     <Popup
       basic
@@ -38,11 +74,11 @@ const CustomPopup = ({ popupStyle, position, trigger, on, offset, children, cont
       style={{
         padding: 0,
         // background: `${theme.colors.purple} 0% 0% no-repeat padding-box`,
-        ...popupStyle
+        ...popupStyle,
       }}
       {...props}
     >
-      <PopupContainer style={containerStyle}>
+      <PopupContainer style={containerStyle} themeMode={themeMode} gameEditionView={gameEditionView}>
         <GradientBorder />
         {children}
       </PopupContainer>

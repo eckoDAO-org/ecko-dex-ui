@@ -1,6 +1,8 @@
 import React from 'react';
 import { Divider } from 'semantic-ui-react';
 import styled from 'styled-components';
+import { PowerIcon } from '../../../assets';
+import { useAccountContext } from '../../../contexts';
 import HeaderItem from '../../../shared/HeaderItem';
 import LightModeToggle from '../../../shared/LightModeToggle';
 import theme from '../../../styles/theme';
@@ -8,7 +10,6 @@ import theme from '../../../styles/theme';
 const ListContainer = styled.div`
   border-radius: 10px;
   padding: 32px;
-  min-width: 170px;
   z-index: 1;
   background: transparent;
   & > *:not(:last-child) {
@@ -17,6 +18,8 @@ const ListContainer = styled.div`
 
   & svg {
     margin-right: 10px;
+    width: 20px;
+    height: 20px;
   }
 `;
 
@@ -26,9 +29,16 @@ const CustomDivider = styled(Divider)`
   border-bottom: 0px !important;
 `;
 
-const PopupContentList = ({ items, viewOtherComponents }) => {
+const HeaderItemContent = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContentListStyle }) => {
+  const { account, logout } = useAccountContext();
   return (
-    <ListContainer>
+    <ListContainer style={PopupContentListStyle}>
       {items.map((item, index) => (
         <HeaderItem
           className={item?.className}
@@ -53,6 +63,22 @@ const PopupContentList = ({ items, viewOtherComponents }) => {
           <CustomDivider />
           <LightModeToggle />
         </>
+      )}
+      {account.account && withLogout && (
+        <HeaderItem
+          headerItemStyle={{
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: 16,
+            fontFamily: theme.fontFamily.regular,
+            width: 42,
+            marginTop: 16,
+          }}
+        >
+          <HeaderItemContent onClick={() => logout()}>
+            <PowerIcon /> Logout
+          </HeaderItemContent>
+        </HeaderItem>
       )}
     </ListContainer>
   );

@@ -84,12 +84,13 @@ export default createGlobalStyle`
       }
     }
 
-    .scrollbar-none::-webkit-scrollbar {
-      display: none;
-    }
     .scrollbar-none{
       -ms-overflow-style: none;  /* IE and Edge */
       scrollbar-width: none;  /* Firefox */
+
+      ::-webkit-scrollbar {
+      display: none;
+    }
     }
 
 `;

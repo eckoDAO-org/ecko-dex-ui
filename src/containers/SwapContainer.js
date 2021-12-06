@@ -25,6 +25,7 @@ import SlippagePopupContent from '../components/layout/header/SlippagePopupConte
 import { Logo } from '../assets';
 import FormContainer from '../shared/FormContainer';
 import GradientBorder from '../shared/GradientBorder';
+import browserDetection from '../utils/browserDetection';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -33,6 +34,10 @@ const Container = styled(FadeIn)`
   margin-left: auto;
   margin-right: auto;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
 
   ${({ gameEditionView }) => {
     if (gameEditionView) {
@@ -43,7 +48,7 @@ const Container = styled(FadeIn)`
       `;
     } else {
       return css`
-        max-width: 500px;
+        max-width: 550px;
       `;
     }
   }}
@@ -105,7 +110,19 @@ const LogoContainer = styled(FadeIn)`
   top: 45%;
   margin-left: auto;
   margin-right: auto;
+
   transform: translate(-50%, 0);
+
+  ${() => {
+    if (browserDetection() === 'FIREFOX') {
+      return css`
+        -webkit-filter: blur(50px);
+        -moz-filter: blur(50px);
+        -ms-filter: blur(50px);
+        -o-filter: blur(50px);
+      `;
+    }
+  }}
 `;
 const RowContainer = styled.div`
   display: flex;
@@ -482,9 +499,52 @@ const SwapContainer = () => {
       });
     }
   };
+
+  useEffect(() => {
+    if (showTxModal) {
+      if (gameEditionView) {
+        openModal({
+          title: 'transaction details',
+          closeModal: () => {
+            setShowTxModal(false);
+            closeModal();
+          },
+          content: (
+            <TxView
+              onClose={() => {
+                setShowTxModal(false);
+                closeModal();
+              }}
+            />
+          ),
+        });
+      } else {
+        modalContext.openModal({
+          title: 'transaction details',
+          description: '',
+          containerStyle: {
+            minWidth: '550px',
+            width: '75%',
+          },
+          onClose: () => {
+            setShowTxModal(false);
+            modalContext.closeModal();
+          },
+          content: (
+            <TxView
+              onClose={() => {
+                setShowTxModal(false);
+                modalContext.closeModal();
+              }}
+            />
+          ),
+        });
+      }
+    }
+  }, [showTxModal]);
+
   return (
     <Container gameEditionView={gameEditionView} onAnimationEnd={() => setIsLogoVisible(true)} className="scrollbar-none">
-      <TxView show={showTxModal} selectedToken={selectedToken} onTokenClick={onTokenClick} onClose={() => setShowTxModal(false)} />
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
       {!gameEditionView && isLogoVisible && (
         <LogoContainer time={0.2}>
