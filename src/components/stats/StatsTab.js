@@ -80,7 +80,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
       </TitleContainer>
       <CardContainer gameEditionView={gameEditionView}>
         {!gameEditionView && <GradientBorder />}
-        <PartialScrollableScrollSection style={{ width: '100%' }}>
+        <PartialScrollableScrollSection style={{ width: '100%' }} className="scrollbar-none">
           {pact.pairList[0] ? (
             Object.values(pact.pairList).map((pair, index) =>
               pair && pair.reserves ? (
