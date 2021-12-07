@@ -30,6 +30,7 @@ import HeaderItem from '../../shared/HeaderItem';
 import CustomPopup from '../../shared/CustomPopup';
 import SlippagePopupContent from '../../components/layout/header/SlippagePopupContent';
 import BackgroundLogo from '../../shared/BackgroundLogo';
+import browserDetection from '../../utils/browserDetection';
 
 const Container = styled(FadeIn)`
   width: 100%;
