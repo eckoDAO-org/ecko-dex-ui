@@ -15,6 +15,7 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 import GradientBorder from '../../shared/GradientBorder';
 import { LightModeContext } from '../../contexts/LightModeContext';
 import FormContainer from '../../shared/FormContainer';
+import browserDetection from '../../utils/browserDetection';
 
 const Container = styled.div`
   display: flex;
@@ -43,6 +44,7 @@ const BottomContainer = styled.div`
   align-items: left;
   justify-content: flex-start;
   width: 100%;
+  margin-top: ${({ gameEditionView }) => gameEditionView && browserDetection() === 'SAFARI' && '60px'};
 `;
 
 const ButtonContainer = styled.div`
@@ -80,10 +82,18 @@ const LiquidityList = (props) => {
   const { gameEditionView, openModal } = useContext(GameEditionContext);
   const { themeMode } = useContext(LightModeContext);
   const [activeIndex, setActiveIndex] = useState(null);
+  const [accordionHeight, setAccordionHeight] = useState(null);
 
   useEffect(() => {
     liquidity.getPairListAccountBalance(account.account);
   }, [account.account]);
+
+  useEffect(() => {
+    if (browserDetection() === 'SAFARI') {
+      const elem = document.getElementById(`form-container-content`)?.getBoundingClientRect();
+      setAccordionHeight(elem?.height + (gameEditionView ? 32 : 64));
+    }
+  }, [activeIndex]);
 
   return (
     <Container gameEditionView={gameEditionView}>
@@ -133,7 +143,7 @@ const LiquidityList = (props) => {
           </p>
         </TextContainer>
         {account.account !== null ? (
-          <BottomContainer>
+          <BottomContainer gameEditionView={gameEditionView}>
             <TopContainer>
               <Header
                 style={{
@@ -171,44 +181,46 @@ const LiquidityList = (props) => {
                 </Button.Group>
               </ButtonContainer>
             </TopContainer>
-            {account.account !== null ? (
-              liquidity.pairListAccount[0] ? (
-                liquidity.pairListAccount[0]?.balance ? (
-                  <FormContainer gameEditionView={gameEditionView} containerStyle={{ padding: gameEditionView && 16 }} withGameEditionBorder>
+            {account.account !== null &&
+              (liquidity.pairListAccount[0] ? (
+                liquidity.pairListAccount[0]?.balance && (
+                  <FormContainer
+                    gameEditionView={gameEditionView}
+                    containerStyle={{ padding: gameEditionView && 16, minHeight: accordionHeight }}
+                    withGameEditionBorder
+                  >
                     {!gameEditionView && <GradientBorder />}
                     {Object.values(liquidity.pairListAccount).map((pair, index) => {
-                      return pair && pair.balance ? (
-                        <>
-                          {' '}
-                          <TokenPair
-                            key={pair.name}
-                            pair={pair}
-                            selectAddLiquidity={props.selectAddLiquidity}
-                            selectRemoveLiquidity={props.selectRemoveLiquidity}
-                            setTokenPair={props.setTokenPair}
-                            activeIndex={activeIndex}
-                            index={index}
-                            setActiveIndex={setActiveIndex}
-                          />{' '}
-                          {Object.values(liquidity.pairListAccount).length - 1 !== index && (
-                            <Divider
-                              style={{
-                                width: '100%',
-                                margin: '32px 0px',
-                                borderTop: gameEditionView
-                                  ? `1px dashed ${theme(themeMode).colors.black}`
-                                  : `1px solid  ${theme(themeMode).colors.white}99`,
-                              }}
+                      return (
+                        pair &&
+                        pair.balance && (
+                          <div id={`token-pair-${index}`}>
+                            <TokenPair
+                              key={pair.name}
+                              pair={pair}
+                              selectAddLiquidity={props.selectAddLiquidity}
+                              selectRemoveLiquidity={props.selectRemoveLiquidity}
+                              setTokenPair={props.setTokenPair}
+                              activeIndex={activeIndex}
+                              index={index}
+                              setActiveIndex={setActiveIndex}
                             />
-                          )}
-                        </>
-                      ) : (
-                        <></>
+                            {Object.values(liquidity.pairListAccount).length - 1 !== index && (
+                              <Divider
+                                style={{
+                                  width: '100%',
+                                  margin: '32px 0px',
+                                  borderTop: gameEditionView
+                                    ? `1px dashed ${theme(themeMode).colors.black}`
+                                    : `1px solid  ${theme(themeMode).colors.white}99`,
+                                }}
+                              />
+                            )}
+                          </div>
+                        )
                       );
                     })}
                   </FormContainer>
-                ) : (
-                  <></>
                 )
               ) : (
                 <FormContainer gameEditionView={gameEditionView}>
@@ -236,10 +248,7 @@ const LiquidityList = (props) => {
                     </Loader>
                   )}
                 </FormContainer>
-              )
-            ) : (
-              <></>
-            )}
+              ))}
           </BottomContainer>
         ) : (
           <ButtonContainer

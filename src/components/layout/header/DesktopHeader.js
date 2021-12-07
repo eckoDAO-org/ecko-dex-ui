@@ -14,6 +14,7 @@ const Container = styled.div`
   flex-flow: row;
   justify-content: space-between;
   min-height: ${({ theme: { header } }) => `${header.height}px`};
+  padding: 0 7.5em;
 `;
 
 const LeftContainer = styled.div`

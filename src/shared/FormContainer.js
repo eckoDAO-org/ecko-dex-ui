@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
 import { GameEditionContext } from '../contexts/GameEditionContext';
 import theme from '../styles/theme';
+import browserDetection from '../utils/browserDetection';
 
 const Container = styled.div`
   position: relative;
@@ -56,9 +57,9 @@ const HeaderContainer = styled.div`
 const FooterContainer = styled.div`
   display: flex;
   width: 100%;
-  flex: 1;
+  flex: ${browserDetection() !== 'SAFARI' && 1};
   display: flex;
-  align-items: end;
+  align-items: ${browserDetection() !== 'SAFARI' && 'end'};
 `;
 
 const Title = styled.span`
@@ -68,7 +69,7 @@ const Title = styled.span`
   color: ${theme.colors.white};
 `;
 
-const FormContainer = ({ containerStyle, title, titleStyle, children, footer, withGameEditionBorder }) => {
+const FormContainer = ({ id, containerStyle, title, titleStyle, children, footer, withGameEditionBorder }) => {
   const { gameEditionView } = useContext(GameEditionContext);
 
   return (
@@ -79,7 +80,7 @@ const FormContainer = ({ containerStyle, title, titleStyle, children, footer, wi
             <Title style={titleStyle}>{title}</Title>
           </HeaderContainer>
         )}
-        <Content>{children}</Content>
+        <Content id="form-container-content">{children}</Content>
       </>
       {footer && <FooterContainer>{footer}</FooterContainer>}
     </Container>
