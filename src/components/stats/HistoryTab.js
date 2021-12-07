@@ -142,7 +142,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
               </div>
             )
           ) : (
-            <Label>{pact.swapList?.error} </Label>
+            <Label gameEditionView={gameEditionView}>{pact.swapList?.error}</Label>
           )}
         </PartialScrollableScrollSection>
       </CardContainer>

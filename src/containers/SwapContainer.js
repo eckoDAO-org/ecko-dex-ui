@@ -15,17 +15,16 @@ import { ModalContext } from '../contexts/ModalContext';
 import { PactContext } from '../contexts/PactContext';
 import { SwapContext } from '../contexts/SwapContext';
 import { WalletContext } from '../contexts/WalletContext';
-import theme from '../styles/theme';
 import { getCorrectBalance, reduceBalance } from '../utils/reduceBalance';
 import TokenSelectorModalContent from '../components/swap/swap-modals/TokenSelectorModalContent';
 import HeaderItem from '../shared/HeaderItem';
 import CustomPopup from '../shared/CustomPopup';
 import { CogIcon } from '../assets';
 import SlippagePopupContent from '../components/layout/header/SlippagePopupContent';
-import { Logo } from '../assets';
 import FormContainer from '../shared/FormContainer';
 import GradientBorder from '../shared/GradientBorder';
-import browserDetection from '../utils/browserDetection';
+import { Title } from '../components/layout/Containers';
+import BackgroundLogo from '../shared/BackgroundLogo';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -54,7 +53,7 @@ const Container = styled(FadeIn)`
   }}
 `;
 
-const TitleContainer = styled.div`
+const SwapTitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
   ${({ gameEditionView }) => {
@@ -73,15 +72,6 @@ const TitleContainer = styled.div`
     }
   }}
   width: 100%;
-`;
-const Title = styled.span`
-  font: ${({ gameEditionView }) =>
-    gameEditionView
-      ? `normal normal normal 16px/19px  ${theme.fontFamily.pressStartRegular}`
-      : ` normal normal bold 32px/57px ${theme.fontFamily.bold}`};
-  letter-spacing: 0px;
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
-  text-transform: ${({ gameEditionView }) => (gameEditionView ? `uppercase` : ` capitalize`)};
 `;
 
 const GameEditionTokenSelectorContainer = styled.div`
@@ -104,26 +94,6 @@ const ResultContainer = styled.div`
   }
 `;
 
-const LogoContainer = styled(FadeIn)`
-  position: absolute;
-  left: 50%;
-  top: 45%;
-  margin-left: auto;
-  margin-right: auto;
-
-  transform: translate(-50%, 0);
-
-  ${() => {
-    if (browserDetection() === 'FIREFOX') {
-      return css`
-        -webkit-filter: blur(50px);
-        -moz-filter: blur(50px);
-        -ms-filter: blur(50px);
-        -o-filter: blur(50px);
-      `;
-    }
-  }}
-`;
 const RowContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -542,13 +512,9 @@ const SwapContainer = () => {
   return (
     <Container gameEditionView={gameEditionView} onAnimationEnd={() => setIsLogoVisible(true)} className="scrollbar-none">
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
-      {!gameEditionView && isLogoVisible && (
-        <LogoContainer time={0.2}>
-          <Logo />
-        </LogoContainer>
-      )}
+      {!gameEditionView && isLogoVisible && <BackgroundLogo />}
 
-      <TitleContainer gameEditionView={gameEditionView}>
+      <SwapTitleContainer gameEditionView={gameEditionView}>
         <Title gameEditionView={gameEditionView}>Swap</Title>
         {!gameEditionView && (
           <HeaderItem headerItemStyle={{ alignItems: 'center', display: 'flex' }}>
@@ -557,7 +523,7 @@ const SwapContainer = () => {
             </CustomPopup>
           </HeaderItem>
         )}
-      </TitleContainer>
+      </SwapTitleContainer>
       <FormContainer
         gameEditionView={gameEditionView}
         footer={

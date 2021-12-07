@@ -3,8 +3,6 @@ import styled from 'styled-components';
 export const PartialScrollableScrollSection = styled.div`
   flex: 1;
   overflow: auto;
-  /* margin-bottom: -10px; */
-
   * {
     -ms-overflow-style: none;
   }
@@ -82,5 +80,5 @@ export const Title = styled.span`
     gameEditionView ? `normal normal normal 16px/19px ${fontFamily.pressStartRegular}` : `normal normal bold 32px/57px ${fontFamily.bold}`};
   letter-spacing: 0px;
   color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.black : colors.white)};
-  text-transform: capitalize;
+  text-transform: ${({ gameEditionView }) => (gameEditionView ? `uppercase` : ` capitalize`)};
 `;

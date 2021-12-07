@@ -21,7 +21,7 @@ import tokenData from '../../constants/cryptoCurrencies';
 import SwapForm from '../../components/swap/SwapForm';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import TokenSelectorModalContent from '../../components/swap/swap-modals/TokenSelectorModalContent';
-import { CogIcon, Logo } from '../../assets';
+import { CogIcon } from '../../assets';
 import { FadeIn } from '../../components/shared/animations';
 import FormContainer from '../../shared/FormContainer';
 import GradientBorder from '../../shared/GradientBorder';
@@ -29,7 +29,7 @@ import { LightModeContext } from '../../contexts/LightModeContext';
 import HeaderItem from '../../shared/HeaderItem';
 import CustomPopup from '../../shared/CustomPopup';
 import SlippagePopupContent from '../../components/layout/header/SlippagePopupContent';
-import browserDetection from '../../utils/browserDetection';
+import BackgroundLogo from '../../shared/BackgroundLogo';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -77,26 +77,6 @@ const Title = styled.span`
       fill: ${({ theme: { colors } }) => colors.white};
     }
   }
-`;
-
-const LogoContainer = styled(FadeIn)`
-  position: absolute;
-  left: 50%;
-  top: 45%;
-  margin-left: auto;
-  margin-right: auto;
-  transform: translate(-50%, 0);
-
-  ${() => {
-    if (browserDetection() === 'FIREFOX') {
-      return css`
-        -webkit-filter: blur(50px);
-        -moz-filter: blur(50px);
-        -ms-filter: blur(50px);
-        -o-filter: blur(50px);
-      `;
-    }
-  }}
 `;
 
 const ButtonContainer = styled.div`
@@ -668,11 +648,7 @@ const LiquidityContainer = (props) => {
     <Container gameEditionView={gameEditionView} onAnimationEnd={() => setIsLogoVisible(true)} className="scrollbar-none">
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
 
-      {!gameEditionView && isLogoVisible && (
-        <LogoContainer time={0.2}>
-          <Logo />
-        </LogoContainer>
-      )}
+      {!gameEditionView && isLogoVisible && <BackgroundLogo />}
 
       <TitleContainer gameEditionView={gameEditionView}>
         <Title
