@@ -19,8 +19,7 @@ const MainContainer = styled.div`
 
 const WrapperContainer = styled(Wrapper)`
   height: 100%;
-  padding: 0 7.5em;
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
     padding: 0 1.5em;
   }
 `;

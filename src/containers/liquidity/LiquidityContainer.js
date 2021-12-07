@@ -82,7 +82,7 @@ const Title = styled.span`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 16px;
+  margin-top: ${({ gameEditionView }) => (gameEditionView && browserDetection() === 'SAFARI' ? '0px' : '16px')};
   width: 100%;
 `;
 

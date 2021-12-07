@@ -125,7 +125,7 @@ const TokenPair = (props) => {
             </ResultContainer>
           )}
 
-          <ButtonContainer>
+          <ButtonContainer id="token-pair-button-container">
             <Button.Group fluid>
               <CustomButton
                 buttonStyle={{
