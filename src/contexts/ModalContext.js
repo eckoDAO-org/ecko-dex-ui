@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, createContext, useEffect } from 'react';
 
 export const ModalContext = createContext();
@@ -15,9 +16,9 @@ export const ModalProvider = (props) => {
 
   const [prevModal, setPrevModal] = useState(state);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (state.id === prevModal.id) {
-      await setPrevModal(state);
+      setPrevModal(state);
     }
   }, [state]);
 
@@ -25,9 +26,9 @@ export const ModalProvider = (props) => {
     setState(prevModal);
   };
 
-  const openModal = async (settings) => {
+  const openModal = (settings) => {
     try {
-      await setState((prev) => ({ ...prev, ...settings, open: true }));
+      setState((prev) => ({ ...prev, ...settings, open: true }));
     } catch (err) {
       console.log(err);
     }

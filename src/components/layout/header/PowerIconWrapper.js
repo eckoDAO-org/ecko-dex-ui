@@ -2,7 +2,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import theme from '../../../styles/theme';
 
 const IconWrapper = styled.div`
   display: flex;

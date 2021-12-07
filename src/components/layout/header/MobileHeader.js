@@ -5,9 +5,7 @@ import PopupContentList from './PopupContentList';
 import HeaderItem from '../../../shared/HeaderItem';
 import CustomPopup from '../../../shared/CustomPopup';
 import { HamburgerIcon } from '../../../assets';
-import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
 import menuItems from '../../menuItems';
-import GameEditionToggle from '../../../shared/GameEditionToggle';
 
 const Container = styled.div`
   display: flex;

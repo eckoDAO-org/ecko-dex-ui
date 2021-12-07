@@ -1,5 +1,3 @@
-import React from 'react';
-
 const browserDetection = () => {
   if (navigator.brave) {
     return 'BRAVE';

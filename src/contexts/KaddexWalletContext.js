@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, createContext, useEffect, useCallback } from 'react';
 import { useAccountContext, useWalletContext, useNotificationContext } from '.';
 import { network, NETWORKID } from '../constants/contextConstants';

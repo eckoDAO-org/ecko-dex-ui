@@ -522,10 +522,6 @@ const SwapContainer = () => {
         modalContext.openModal({
           title: 'transaction details',
           description: '',
-          containerStyle: {
-            minWidth: '550px',
-            width: '75%',
-          },
           onClose: () => {
             setShowTxModal(false);
             modalContext.closeModal();

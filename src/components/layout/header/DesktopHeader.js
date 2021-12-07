@@ -6,7 +6,6 @@ import { ROUTE_INDEX } from '../../../router/routes';
 import menuItems from '../../menuItems';
 import RightHeaderItems from './RightHeaderItems';
 import HeaderItem from '../../../shared/HeaderItem';
-import GameEditionToggle from '../../../shared/GameEditionToggle';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 
 const Container = styled.div`

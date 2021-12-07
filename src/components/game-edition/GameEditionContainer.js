@@ -35,7 +35,7 @@ const ContentContainer = styled.div`
 `;
 
 const GameEditionContainer = ({ children }) => {
-  const { modalState, closeModal, setIsSwapping } = useContext(GameEditionContext);
+  const { modalState, closeModal } = useContext(GameEditionContext);
   const history = useHistory();
 
   const switchAppSection = (direction) => {

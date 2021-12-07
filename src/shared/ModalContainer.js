@@ -12,7 +12,7 @@ const Container = styled.div`
   flex-flow: column;
   padding: ${({ gameEditionView }) => (gameEditionView ? '16px' : '32px')};
   width: 100%;
-  min-width: 550px;
+  /* min-width: 550px; */
   border-radius: 10px;
   border: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `2px dashed ${colors.black}`};
   background-clip: ${({ gameEditionView }) => !gameEditionView && `padding-box`};

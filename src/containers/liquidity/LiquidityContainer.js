@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useContext } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { throttle, debounce } from 'throttle-debounce';
@@ -181,7 +182,6 @@ const LiquidityContainer = (props) => {
   const [pairExist, setPairExist] = useState(false);
   const [showTxModal, setShowTxModal] = useState(false);
   const [showReview, setShowReview] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [isLogoVisible, setIsLogoVisible] = useState(false);
 
   useEffect(() => {
@@ -367,7 +367,6 @@ const LiquidityContainer = (props) => {
 
   useEffect(() => {
     if (wallet.walletSuccess) {
-      setLoading(false);
       setFromValues({
         coin: '',
         account: null,
@@ -445,35 +444,28 @@ const LiquidityContainer = (props) => {
   const supply = async () => {
     if (selectedView === 'Create A Pair') {
       if (wallet.signing.method !== 'sign') {
-        setLoading(true);
         const res = await liquidity.createTokenPairLocal(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
         if (res === -1) {
-          setLoading(false);
           alert('Incorrect password. If forgotten, you can reset it with your private key');
           return;
         } else {
           setShowReview(false);
           setShowTxModal(true);
-          setLoading(false);
         }
       } else {
         console.log('not signed');
       }
     } else {
       if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
-        setLoading(true);
         const res = await liquidity.addLiquidityLocal(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
         if (res === -1) {
-          setLoading(false);
           alert('Incorrect password. If forgotten, you can reset it with your private key');
           return;
         } else {
           setShowReview(false);
           setShowTxModal(true);
-          setLoading(false);
         }
       } else {
-        setLoading(true);
         setShowReview(false);
         console.log('param,', tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
         const res = await liquidity.addLiquidityWallet(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
@@ -487,7 +479,6 @@ const LiquidityContainer = (props) => {
           setShowTxModal(true);
         }
         /* setShowTxModal(true) */
-        setLoading(false);
         setFromValues({
           account: null,
           guard: null,
@@ -624,10 +615,7 @@ const LiquidityContainer = (props) => {
         modalContext.openModal({
           title: 'transaction details',
           description: '',
-          containerStyle: {
-            minWidth: '550px',
-            width: '75%',
-          },
+
           onClose: () => {
             setShowTxModal(false);
             modalContext.closeModal();
@@ -666,10 +654,6 @@ const LiquidityContainer = (props) => {
         modalContext.openModal({
           title: 'transaction details',
           description: '',
-          containerStyle: {
-            minWidth: '550px',
-            width: '75%',
-          },
           onClose: () => {
             setShowReview(false);
             modalContext.closeModal();

@@ -1,4 +1,3 @@
-import React from 'react';
 import CryptoJS from 'crypto-js';
 
 export const decryptKey = async (pw) => {
