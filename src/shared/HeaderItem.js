@@ -21,22 +21,22 @@ const Item = styled(NavLink)`
   }
 
   .underline {
-    width: ${({ isHover }) => (isHover ? '100%' : 0)};
+    width: ${({ $isHover }) => ($isHover ? '100%' : 0)};
     transition: width 0.3s;
     background: ${({ theme: { colors } }) => colors.white};
     height: 3px;
   }
 
   &:hover {
-    font-family: ${({ theme: { fontFamily }, gameEditionView, notChangebleFontOnHover }) =>
-      !notChangebleFontOnHover && `${fontFamily.bold} !important`};
-    color: ${({ theme: { colors }, gameEditionView }) => colors.white};
+    font-family: ${({ theme: { fontFamily }, $gameEditionView, $notChangebleFontOnHover }) =>
+      !$notChangebleFontOnHover && `${fontFamily.bold} !important`};
+    color: ${({ theme: { colors }, $gameEditionView }) => colors.white};
 
-    /* text-shadow: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? 'none' : `0 0 5px ${colors.white}`)}; */
+    /* text-shadow: ${({ theme: { colors }, $gameEditionView }) => ($gameEditionView ? 'none' : `0 0 5px ${colors.white}`)}; */
     cursor: pointer;
     & svg {
       & path {
-        fill: ${({ disableHover, theme: { colors } }) => !disableHover && colors.white};
+        fill: ${({ $disableHover, theme: { colors } }) => !$disableHover && colors.white};
       }
     }
   }
@@ -81,10 +81,10 @@ const HeaderItem = ({
       style={headerItemStyle}
       onMouseOver={onMouseOver}
       onMouseLeave={onMouseLeave}
-      gameEditionView={gameEditionView}
-      isHover={isHover}
-      disableHover={disableHover}
-      notChangebleFontOnHover={notChangebleFontOnHover}
+      $gameEditionView={gameEditionView}
+      $isHover={isHover}
+      $disableHover={disableHover}
+      $notChangebleFontOnHover={notChangebleFontOnHover}
     >
       <HeaderItemContent>
         {icon}

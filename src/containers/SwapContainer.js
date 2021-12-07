@@ -302,7 +302,7 @@ const SwapContainer = () => {
   }, [fromValues.coin, toValues.coin, fromValues.amount, toValues.amount, pact.ratio]);
   useEffect(() => {
     const getBalance = async () => {
-      if (account.account && toValues.coin !== '' && fromValues.coin !== '') {
+      if (account.account) {
         let acctOfFromValues = await account.getTokenAccount(tokenData[fromValues.coin]?.code, account.account.account, tokenSelectorType === 'from');
         let acctOfToValues = await account.getTokenAccount(tokenData[toValues.coin]?.code, account.account.account, tokenSelectorType === 'to');
         if (acctOfFromValues) {
@@ -322,7 +322,7 @@ const SwapContainer = () => {
       }
     };
     getBalance();
-  }, [toValues.amount, fromValues.amount]);
+  }, [toValues.amount, fromValues.amount, account.account?.account]);
 
   useEffect(() => {
     const getReserves = async () => {
