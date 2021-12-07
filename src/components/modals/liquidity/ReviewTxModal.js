@@ -1,37 +1,11 @@
 import React, { useContext, useState } from 'react';
-import styled, { css } from 'styled-components/macro';
-import { Transition } from 'react-spring/renderprops';
-import ModalContainer from '../../../shared/ModalContainer';
+import styled from 'styled-components/macro';
 import { reduceBalance } from '../../../utils/reduceBalance';
-import Backdrop from '../../../shared/Backdrop';
 import CustomButton from '../../../shared/CustomButton';
 import { SuccessfullIcon } from '../../../assets';
 import { PactContext } from '../../../contexts/PactContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import GameEditionModalsContainer from '../../game-edition/GameEditionModalsContainer';
 import tokenData from '../../../constants/cryptoCurrencies';
-
-const Container = styled.div`
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-  align-items: center;
-  margin-left: auto;
-  margin-right: auto;
-  ${({ gameEditionView }) =>
-    !gameEditionView &&
-    css`
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-    `}
-
-  max-width: 550px;
-  width: 100%;
-  z-index: 5;
-`;
 
 const Content = styled.div`
   display: flex;

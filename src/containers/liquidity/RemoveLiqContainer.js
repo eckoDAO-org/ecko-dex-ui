@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useContext } from 'react';
 import { Button } from 'semantic-ui-react';
 import styled from 'styled-components/macro';
@@ -177,10 +178,6 @@ const RemoveLiqContainer = (props) => {
         modalContext.openModal({
           title: 'transaction details',
           description: '',
-          containerStyle: {
-            minWidth: '550px',
-            width: '75%',
-          },
           onClose: () => {
             setShowTxModal(false);
             modalContext.closeModal();

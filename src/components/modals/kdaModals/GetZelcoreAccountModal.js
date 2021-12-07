@@ -86,7 +86,6 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
   const [accounts, setAccounts] = useState(null);
   const [selectedAccount, setSelectedAccount] = useState(null);
   const [approved, setApproved] = useState(false);
-  const [walletConnected, setWalletConnected] = useState(false);
 
   const getAccountsFromWallet = async () => {
     setLoading(true);
@@ -95,10 +94,8 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
     console.log(getAccountsResponse);
     if (getAccountsResponse.status === 'success') {
       setApproved(true);
-      setWalletConnected(true);
       setAccounts(getAccountsResponse.data);
     } else {
-      setWalletConnected(false);
       /* walletError(); */
     }
     setLoading(false);

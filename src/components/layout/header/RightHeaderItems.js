@@ -4,7 +4,7 @@ import HeaderItem from '../../../shared/HeaderItem';
 import AccountInfo from './AccountInfo';
 import Button from '../../../shared/CustomButton';
 import CustomPopup from '../../../shared/CustomPopup';
-import { OnOffIcon, CogIcon, ThreeDotsIcon } from '../../../assets';
+import { CogIcon, ThreeDotsIcon } from '../../../assets';
 import headerLinks from '../../headerLinks';
 import PopupContentList from './PopupContentList';
 import { AccountContext } from '../../../contexts/AccountContext';

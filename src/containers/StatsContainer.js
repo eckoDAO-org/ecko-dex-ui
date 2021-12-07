@@ -12,30 +12,10 @@ const StatsContainer = () => {
     await pact.getPairList();
   }, []);
 
-  return (
-    //MOBILE
-    // <Container>
-    //   <ButtonContainer>
-    //     <CustomButton
-    //       onClick={() => {
-    //         setactiveTabs("POOL_STATS");
-    //       }}
-    //     >
-    //       Pool Stats
-    //     </CustomButton>
-    //     <CustomButton
-    //       onClick={() => {
-    //         setactiveTabs("SWAP_HISTORY");
-    //       }}
-    //     >
-    //       Swap History
-    //     </CustomButton>
-    //   </ButtonContainer>
-    activeTabs === 'POOL_STATS' ? (
-      <StatsTab activeTabs={activeTabs} setActiveTabs={() => setActiveTabs('HISTORY')} />
-    ) : (
-      <HistoryTab activeTabs={activeTabs} setActiveTabs={() => setActiveTabs('POOL_STATS')} />
-    )
+  return activeTabs === 'POOL_STATS' ? (
+    <StatsTab activeTabs={activeTabs} setActiveTabs={() => setActiveTabs('HISTORY')} />
+  ) : (
+    <HistoryTab activeTabs={activeTabs} setActiveTabs={() => setActiveTabs('POOL_STATS')} />
   );
 };
 

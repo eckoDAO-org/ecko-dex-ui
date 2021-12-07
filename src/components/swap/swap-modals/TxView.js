@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import styled, { css } from 'styled-components/macro';
+import styled from 'styled-components/macro';
 import { Message, Icon, Divider } from 'semantic-ui-react';
 import { ErrorIcon, SuccessfullIcon } from '../../../assets';
 import { extractDecimal, gasUnit, reduceBalance } from '../../../utils/reduceBalance';
@@ -14,27 +14,6 @@ import tokenData from '../../../constants/cryptoCurrencies';
 import PopupTxView from './PopupTxView';
 import { theme } from '../../../styles/theme';
 import { LightModeContext } from '../../../contexts/LightModeContext';
-
-const Container = styled.div`
-  margin-left: auto;
-  margin-right: auto;
-  ${({ gameEditionView }) =>
-    !gameEditionView &&
-    css`
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-    `}
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  max-width: 550px;
-  width: 100%;
-  z-index: 5;
-`;
 
 const RowContainer = styled.div`
   display: flex;
@@ -427,7 +406,6 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
       }
     } else return failView();
   };
-  // console.log(pact)
   return typeof swap.localRes === 'string' ? localError() : renderSwitch();
 };
 

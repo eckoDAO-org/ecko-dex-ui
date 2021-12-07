@@ -1,7 +1,6 @@
 import React, { useState, createContext } from 'react';
 import Pact from 'pact-lang-api';
 import tokenData from '../constants/cryptoCurrencies';
-import { toast } from 'react-toastify';
 import pwPrompt from '../components/alerts/pwPrompt';
 import { reduceBalance } from '../utils/reduceBalance';
 import { decryptKey } from '../utils/keyUtils';
@@ -117,7 +116,7 @@ export const SwapProvider = (props) => {
           token1AmountWithSlippage: reduceBalance(token1.amount * (1 - parseFloat(pact.slippage)), tokenData[token1.coin].precision),
           token0AmountWithSlippage: reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision),
         },
-        meta: Pact.lang.mkMeta('', '', 0, 0, 0, 0),
+        // meta: Pact.lang.mkMeta('', '', 0, 0, 0, 0),
         networkId: NETWORKID,
         meta: Pact.lang.mkMeta(account.account, chainId, GAS_PRICE, 3000, creationTime(), 600),
       };

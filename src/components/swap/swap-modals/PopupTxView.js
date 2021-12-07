@@ -1,4 +1,3 @@
-import { findLastIndex } from 'lodash';
 import React, { useContext } from 'react';
 import { Icon, Popup } from 'semantic-ui-react';
 import { AccountContext } from '../../../contexts/AccountContext';
