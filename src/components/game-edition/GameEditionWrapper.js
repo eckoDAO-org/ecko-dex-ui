@@ -1,24 +1,9 @@
 /* eslint-disable react/react-in-jsx-scope */
-import React, { useEffect } from 'react';
+import React from 'react';
+import useAbsoluteContent from '../../hooks/useAbsoluteContent';
 
 export const GameEditionWrapper = ({ startLabel, startOnClick, selectLabel, selectOnClick, buttonLOnClick, buttonROnClick, children }) => {
-  const setSvgContentWidth = () => {
-    const svgContent = document.getElementById('svgContent');
-    const svgContainer = document.getElementById('screen');
-    if (svgContent && svgContainer) {
-      const containerRect = svgContainer.getBoundingClientRect();
-      svgContent.style.left = `${containerRect.left}px`;
-      svgContent.style.top = `${containerRect.top}px`;
-      svgContent.style.width = `${containerRect.width}px`;
-      svgContent.style.height = `${containerRect.height}px`;
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('resize', setSvgContentWidth);
-    setSvgContentWidth();
-  }, []);
-
+  useAbsoluteContent('svgContent', 'screen');
   return (
     <div>
       <div id="svgContent" style={{ position: 'absolute' }}>

@@ -23,7 +23,7 @@ const MainContainer = styled.div`
 const ContentContainer = styled.div`
   width: 100%;
   height: 100%;
-  border-radius: 24px;
+  border-radius: ${({ $radius }) => $radius || 'none'};
   background: rgb(254, 251, 102);
   background: linear-gradient(180deg, rgba(254, 251, 102, 1) 35%, rgba(255, 54, 208, 1) 100%);
   display: flex;
@@ -115,7 +115,7 @@ const GameEditionContainer = ({ children }) => {
             closeModal();
           }}
         >
-          <ContentContainer>
+          <ContentContainer $radius="24px">
             {children}
             {modalState.open && (
               <FadeIn>
