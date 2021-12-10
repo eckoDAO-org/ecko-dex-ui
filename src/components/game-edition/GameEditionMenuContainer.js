@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { MenuGEIcon } from '../../assets';
-import useWindowSize from '../../hooks/useWindowSize';
 import HeaderItem from '../../shared/HeaderItem';
 import theme from '../../styles/theme';
 import headerLinks from '../headerLinks';
@@ -51,19 +50,13 @@ const RowMenuContainer = styled.div`
 
 const GameEditionMenuContainer = () => {
   const [arrowVisible, setArrowVisible] = useState('');
-  const [width] = useWindowSize();
-
-  const getMenuItemStyle = () => {
-    if (width < theme.mediaQueries.desktopPixel) return '24px ';
-    else return '14px';
-  };
 
   const SelectGEIcon = ({ label, rotate }) => {
     return (
       <MenuGEIcon
         style={{
           display: arrowVisible === label ? 'block' : 'none',
-          height: getMenuItemStyle(),
+          height: 14,
           transform: rotate && 'rotate(180deg)',
         }}
       />
@@ -83,7 +76,7 @@ const GameEditionMenuContainer = () => {
                 fontFamily: theme.fontFamily.pressStartRegular,
                 color: 'black',
                 margin: '0px 8px',
-                fontSize: getMenuItemStyle(),
+                fontSize: 14,
               }}
               onMouseOver={() => setArrowVisible(item.label)}
               notChangebleFontOnHover
@@ -107,7 +100,7 @@ const GameEditionMenuContainer = () => {
                 fontFamily: theme.fontFamily.pressStartRegular,
                 color: 'black',
                 margin: '0px 8px',
-                fontSize: getMenuItemStyle(),
+                fontSize: 14,
               }}
               onMouseOver={() => setArrowVisible(item.label)}
               notChangebleFontOnHover

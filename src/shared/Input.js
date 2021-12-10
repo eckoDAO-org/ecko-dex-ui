@@ -70,6 +70,9 @@ const TopLabelsContainer = styled.div`
     letter-spacing: 0px;
     color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `${colors.black}` : `${colors.white}`)};
     text-transform: capitalize;
+    @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
+      font-size: ${({ gameEditionView }) => (gameEditionView ? `10px` : ``)};
+    }
   }
 `;
 

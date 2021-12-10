@@ -5,7 +5,7 @@ import useAbsoluteContent from '../../hooks/useAbsoluteContent';
 const GameEditionMobileWrapper = ({ startLabel, startOnClick, selectLabel, selectOnClick, children }) => {
   useAbsoluteContent('svgContent', 'Rectangle_38');
   return (
-    <div>
+    <div style={{ width: '95%' }}>
       <div id="svgContent" style={{ position: 'absolute' }}>
         {children}
       </div>

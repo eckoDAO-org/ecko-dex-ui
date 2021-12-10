@@ -31,7 +31,6 @@ const ContentContainer = styled.div`
   flex-direction: column;
   text-align: center;
   font-weight: 500;
-  font-size: larger;
 `;
 
 const GameEditionContainer = ({ children }) => {
