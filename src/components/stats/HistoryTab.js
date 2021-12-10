@@ -89,7 +89,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
       }}
     >
       <TitleContainer
-        gameEditionView={gameEditionView}
+        $gameEditionView={gameEditionView}
         style={{
           marginLeft: 'auto',
           marginRight: 'auto',
@@ -97,10 +97,10 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
           justifyContent: 'space-between',
         }}
       >
-        <Tabs gameEditionView={gameEditionView} active={activeTabs === 'POOL_STATS'} onClick={setActiveTabs}>
+        <Tabs $gameEditionView={gameEditionView} active={activeTabs === 'POOL_STATS'} onClick={setActiveTabs}>
           Stats
         </Tabs>
-        <Tabs gameEditionView={gameEditionView} active={activeTabs === 'HISTORY'}>
+        <Tabs $gameEditionView={gameEditionView} active={activeTabs === 'HISTORY'}>
           History
         </Tabs>
       </TitleContainer>
@@ -122,7 +122,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
                 initialLoad={false}
               >
                 {pact.swapList?.map((tx, index) => (
-                  <>
+                  <div key={index}>
                     <HistoryCard tx={tx} key={index} />
                     {pact.swapList?.length - 1 !== index && (
                       <Divider
@@ -133,7 +133,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
                         }}
                       />
                     )}
-                  </>
+                  </div>
                 ))}
               </InfiniteScroll>
             ) : (
@@ -142,7 +142,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
               </div>
             )
           ) : (
-            <Label>{pact.swapList?.error} </Label>
+            <Label gameEditionView={gameEditionView}>{pact.swapList?.error}</Label>
           )}
         </PartialScrollableScrollSection>
       </CardContainer>

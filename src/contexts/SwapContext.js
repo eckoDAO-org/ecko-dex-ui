@@ -4,6 +4,7 @@ import tokenData from '../constants/cryptoCurrencies';
 import pwPrompt from '../components/alerts/pwPrompt';
 import { reduceBalance } from '../utils/reduceBalance';
 import { decryptKey } from '../utils/keyUtils';
+import { STATUSES } from './NotificationContext';
 import { useKaddexWalletContext, useWalletContext, useAccountContext, usePactContext, useNotificationContext } from '.';
 import {
   chainId,
@@ -27,6 +28,8 @@ export const SwapProvider = (props) => {
   const wallet = useWalletContext();
   const [pairAccount, setPairAccount] = useState('');
   const [cmd, setCmd] = useState(null);
+
+  const toastId = React.useRef(null);
 
   const mkReq = function (cmd) {
     return {
@@ -113,7 +116,7 @@ export const SwapProvider = (props) => {
           token1AmountWithSlippage: reduceBalance(token1.amount * (1 - parseFloat(pact.slippage)), tokenData[token1.coin].precision),
           token0AmountWithSlippage: reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision),
         },
-        meta: Pact.lang.mkMeta('', '', 0, 0, 0, 0),
+        // meta: Pact.lang.mkMeta('', '', 0, 0, 0, 0),
         networkId: NETWORKID,
         meta: Pact.lang.mkMeta(account.account, chainId, GAS_PRICE, 3000, creationTime(), 600),
       };
@@ -148,6 +151,22 @@ export const SwapProvider = (props) => {
       pact.setPolling(false);
     } catch (e) {
       pact.setPolling(false);
+      toastId.current = notificationContext.showNotification({
+        title: 'Transaction Error',
+        message: 'Insufficient funds - attempt to buy gas failed.',
+        type: STATUSES.ERROR,
+        autoClose: 5000,
+        hideProgressBar: true,
+      });
+      notificationContext.storeNotification({
+        type: 'error',
+        time: getCurrentTime(),
+        date: getCurrentDate(),
+        title: 'Transaction Error',
+        description: 'Insufficient funds - attempt to buy gas failed.',
+        isReaded: false,
+        isCompleted: false,
+      });
       console.log('error', e);
     }
   };

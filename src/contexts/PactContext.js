@@ -42,7 +42,6 @@ export const PactProvider = (props) => {
 
   useEffect(() => {
     if (!notificationNotCompletedChecked) {
-      console.log("I'm here");
       const pendingNotification = notificationContext.notificationList.filter((notif) => notif.type === 'info' && notif.isCompleted === false);
       pendingNotification.map((pendingNotif) => listen(pendingNotif.description));
 
@@ -102,7 +101,7 @@ export const PactProvider = (props) => {
             limit: limit,
           },
         });
-        console.log(response);
+        // console.log('get events list response: ',response);
         if (Object.values(response?.data).length !== 0) {
           let swap = Object.values(response?.data);
           if (swap.length !== 0) setSwapList(swap);
@@ -132,7 +131,7 @@ export const PactProvider = (props) => {
             limit: limit,
           },
         });
-        console.log(response);
+        // console.log('get more events list response: ',response);
         let swap = Object.values(response?.data);
         if (swap.length !== 0) {
           setSwapList(swapList.concat(swap));

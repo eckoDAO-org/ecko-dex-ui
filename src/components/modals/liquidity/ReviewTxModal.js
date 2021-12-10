@@ -1,37 +1,11 @@
-import React, { useContext } from 'react';
-import styled, { css } from 'styled-components/macro';
-import { Transition } from 'react-spring/renderprops';
-import ModalContainer from '../../../shared/ModalContainer';
+import React, { useContext, useState } from 'react';
+import styled from 'styled-components/macro';
 import { reduceBalance } from '../../../utils/reduceBalance';
-import Backdrop from '../../../shared/Backdrop';
 import CustomButton from '../../../shared/CustomButton';
 import { SuccessfullIcon } from '../../../assets';
 import { PactContext } from '../../../contexts/PactContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import GameEditionModalsContainer from '../../game-edition/GameEditionModalsContainer';
 import tokenData from '../../../constants/cryptoCurrencies';
-
-const Container = styled.div`
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-  align-items: center;
-  margin-left: auto;
-  margin-right: auto;
-  ${({ gameEditionView }) =>
-    !gameEditionView &&
-    css`
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-    `}
-
-  max-width: 550px;
-  width: 100%;
-  z-index: 5;
-`;
 
 const Content = styled.div`
   display: flex;
@@ -103,9 +77,11 @@ const Value = styled.span`
   color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : `${colors.white}99`)};
 `;
 
-const ReviewTxModal = ({ show, onClose, fromValues, toValues, loading, supply, liquidityView }) => {
+const ReviewTxModal = ({ fromValues, toValues, supply, liquidityView }) => {
   const pact = useContext(PactContext);
   const { gameEditionView } = useContext(GameEditionContext);
+
+  const [loading, setLoading] = useState(false);
 
   const showTicker = (ticker) => {
     if (ticker === 'coin') return 'KDA';
@@ -125,7 +101,7 @@ const ReviewTxModal = ({ show, onClose, fromValues, toValues, loading, supply, l
             <SubTitle
               style={{
                 marginBottom: '16px',
-                justifyContent: 'center'
+                justifyContent: 'center',
               }}
               gameEditionView={gameEditionView}
             >
@@ -179,48 +155,22 @@ const ReviewTxModal = ({ show, onClose, fromValues, toValues, loading, supply, l
     }
   };
 
-  return gameEditionView && show ? (
-    <GameEditionModalsContainer
-      modalStyle={{ zIndex: 1 }}
-      title="Preview Successful!"
-      onClose={onClose}
-      content={
-        <Content gameEditionView={gameEditionView}>
-          <SuccessfullIcon />
-          {ContentView()}
-          <CustomButton
-            buttonStyle={{
-              width: '100%'
-            }}
-            loading={loading}
-            onClick={supply}
-          >
-            Confirm
-          </CustomButton>
-        </Content>
-      }
-    />
-  ) : (
-    <Transition items={show} from={{ opacity: 1 }} enter={{ opacity: 1 }} leave={{ opacity: 0 }}>
-      {(show) =>
-        show &&
-        ((props) => (
-          <Container style={props}>
-            <Backdrop onClose={onClose} />
-            <ModalContainer title="Transaction Details" onClose={onClose}>
-              <Content>
-                <Title style={{ padding: '16px 0px', fontSize: 16 }}>Preview Succesful</Title>
-                <SuccessfullIcon />
-                {ContentView()}
-                <CustomButton buttonStyle={{ width: '100%' }} loading={loading} onClick={supply}>
-                  Confirm
-                </CustomButton>
-              </Content>
-            </ModalContainer>
-          </Container>
-        ))
-      }
-    </Transition>
+  return (
+    <Content gameEditionView={gameEditionView}>
+      {!gameEditionView && <Title style={{ padding: '16px 0px', fontSize: 16 }}>Preview Succesful</Title>}
+      <SuccessfullIcon />
+      {ContentView()}
+      <CustomButton
+        buttonStyle={{ width: '100%' }}
+        loading={loading}
+        onClick={() => {
+          setLoading(true);
+          supply();
+        }}
+      >
+        Confirm
+      </CustomButton>
+    </Content>
   );
 };
 

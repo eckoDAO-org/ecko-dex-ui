@@ -9,6 +9,7 @@ import GameEditionContainer from '../game-edition/GameEditionContainer';
 import { useHistory } from 'react-router';
 import { ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from '../../router/routes';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
+import browserDetection from '../../utils/browserDetection';
 
 const MainContainer = styled.div`
   display: flex;
@@ -18,22 +19,18 @@ const MainContainer = styled.div`
 
 const WrapperContainer = styled(Wrapper)`
   height: 100%;
-  padding: 0 7.5em;
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
     padding: 0 1.5em;
   }
 `;
 
 const MainContent = styled.div`
   height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
-  & > div:first-child {
-    height: ${({ theme: { header } }) => `90%`};
-  }
 `;
 
 const StripesContainer = styled.div`
   position: absolute;
-  bottom: 0px;
+  bottom: ${browserDetection() === 'SAFARI' ? '4px' : '0px'};
   left: 0;
   line-height: 0;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {

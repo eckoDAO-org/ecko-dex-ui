@@ -10,7 +10,6 @@ export const AccountContext = createContext();
 
 const savedAcct = localStorage.getItem('acct');
 const savedPrivKey = localStorage.getItem('pk');
-const savedSigning = localStorage.getItem('signing');
 
 export const AccountProvider = (props) => {
   const [sendRes, setSendRes] = useState(null);

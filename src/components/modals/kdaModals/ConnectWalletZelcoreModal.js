@@ -31,7 +31,6 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
   const { themeMode } = useContext(LightModeContext);
   const { gameEditionView, openModal } = useContext(GameEditionContext);
   const [accountId, setAccountId] = useState('');
-  const [openGetZelcoreAccountModal, setOpenGetZelcoreAccountModal] = useState(false);
 
   const is_hexadecimal = (str) => {
     const regexp = /^[0-9a-fA-F]+$/;
@@ -85,16 +84,6 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
     <>
       <Text gameEditionView={gameEditionView}>Please make sure the KDA account provided is controlled by your Zelcore wallet</Text>
       <Text gameEditionView={gameEditionView}>When submitting a transaction, Zelcore will show you a preview within the wallet before signing</Text>
-      {/* <Input
-                    topLeftLabel={"Account"}
-                    placeholder="Insert your Account ID"
-                    value={accountId}
-                    error={accountId !== "" ? !checkKey(accountId) : false}
-                    onChange={async (e, { value }) => {
-                      setAccountId(value);
-                    }}
-                  /> */}
-      {/* {error && error.message ? <Text>{error.message}</Text> : null} */}
       <CustomButton
         buttonStyle={{
           border: '1px solid #424242',
@@ -109,7 +98,6 @@ const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
               content: <GetZelcoreAccountModal onClose={() => modalContext.closeModal()} />,
             });
           } else {
-            setOpenGetZelcoreAccountModal(true);
             modalContext.openModal({
               id: 'ZELCORE_ACCOUNT',
               title: 'get zelcore accounts',

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
 import { GameEditionContext } from '../contexts/GameEditionContext';
 import theme from '../styles/theme';
+import browserDetection from '../utils/browserDetection';
 
 const Container = styled.div`
   position: relative;
@@ -10,15 +11,15 @@ const Container = styled.div`
   flex-flow: column;
   justify-content: space-between;
   width: 100%;
-  height: ${({ gameEditionView }) => gameEditionView && `100%`};
+  height: ${({ $gameEditionView }) => $gameEditionView && `100%`};
   border-radius: 10px;
-  border: ${({ gameEditionView, withGameEditionBorder, theme: { colors } }) =>
-    gameEditionView && withGameEditionBorder && `2px dashed ${colors.black}`};
+  border: ${({ $gameEditionView, withGameEditionBorder, theme: { colors } }) =>
+    $gameEditionView && withGameEditionBorder && `2px dashed ${colors.black}`};
 
   opacity: 1;
-  background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? 'transparent' : backgroundContainer)};
-  backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
-  padding: ${({ gameEditionView }) => (gameEditionView ? `10px 10px` : `32px 32px`)};
+  background: ${({ $gameEditionView, theme: { backgroundContainer } }) => ($gameEditionView ? 'transparent' : backgroundContainer)};
+  backdrop-filter: ${({ $gameEditionView }) => !$gameEditionView && `blur(50px)`};
+  padding: ${({ $gameEditionView }) => ($gameEditionView ? `10px 10px` : `32px 32px`)};
   /* & > *:not(:last-child) {
     margin-bottom: 32px;
   }
@@ -56,9 +57,9 @@ const HeaderContainer = styled.div`
 const FooterContainer = styled.div`
   display: flex;
   width: 100%;
-  flex: 1;
+  flex: ${browserDetection() !== 'SAFARI' && 1};
   display: flex;
-  align-items: end;
+  align-items: ${browserDetection() !== 'SAFARI' && 'end'};
 `;
 
 const Title = styled.span`
@@ -68,18 +69,18 @@ const Title = styled.span`
   color: ${theme.colors.white};
 `;
 
-const FormContainer = ({ containerStyle, title, titleStyle, children, footer, withGameEditionBorder }) => {
+const FormContainer = ({ id, containerStyle, title, titleStyle, children, footer, withGameEditionBorder }) => {
   const { gameEditionView } = useContext(GameEditionContext);
 
   return (
-    <Container gameEditionView={gameEditionView} style={containerStyle} withGameEditionBorder={withGameEditionBorder}>
+    <Container $gameEditionView={gameEditionView} style={containerStyle} withGameEditionBorder={withGameEditionBorder}>
       <>
         {title && (
           <HeaderContainer>
             <Title style={titleStyle}>{title}</Title>
           </HeaderContainer>
         )}
-        <Content>{children}</Content>
+        <Content id="form-container-content">{children}</Content>
       </>
       {footer && <FooterContainer>{footer}</FooterContainer>}
     </Container>

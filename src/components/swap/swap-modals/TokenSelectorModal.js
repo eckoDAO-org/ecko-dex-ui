@@ -1,14 +1,10 @@
-import React, { useState, useContext, Children, useEffect } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 import { Transition } from 'react-spring/renderprops';
-import Search from '../../../shared/Search';
 import Backdrop from '../../../shared/Backdrop';
 import ModalContainer from '../../../shared/ModalContainer';
-import { SwapContext } from '../../../contexts/SwapContext';
-import { reduceBalance } from '../../../utils/reduceBalance';
 import TokenSelectorModalContent from './TokenSelectorModalContent';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import GameEditionModalsContainer from '../../game-edition/GameEditionModalsContainer';
 
 const Container = styled.div`
   position: absolute;
@@ -28,25 +24,6 @@ const Container = styled.div`
 
 const TokenSelectorModal = ({ show, selectedToken, onTokenClick, onClose, fromToken, toToken }) => {
   const game = useContext(GameEditionContext);
-  const [searchValue, setSearchValue] = useState('');
-
-  /*  useEffect(() => {
-    if (show && game.gameEditionView) {
-      game.openModal({
-        title: 'select a token',
-        description: '',
-        content: (
-          <TokenSelectorModalContent
-            selectedToken={selectedToken}
-            onTokenClick={onTokenClick}
-            onClose={onClose}
-            fromToken={fromToken}
-            toToken={toToken}
-          />
-        ),
-      });
-    }
-  }, [show]); */
 
   return (
     <>
@@ -58,19 +35,12 @@ const TokenSelectorModal = ({ show, selectedToken, onTokenClick, onClose, fromTo
               <Container style={props}>
                 <Backdrop
                   onClose={() => {
-                    setSearchValue('');
                     onClose();
                   }}
                 />
                 <ModalContainer
                   title="select a token"
-                  containerStyle={{
-                    //height: "100%",
-                    maxHeight: '80vh',
-                    maxWidth: '90vw'
-                  }}
                   onClose={() => {
-                    setSearchValue('');
                     onClose();
                   }}
                 >

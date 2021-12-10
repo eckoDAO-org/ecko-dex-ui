@@ -4,7 +4,7 @@ import HeaderItem from '../../../shared/HeaderItem';
 import AccountInfo from './AccountInfo';
 import Button from '../../../shared/CustomButton';
 import CustomPopup from '../../../shared/CustomPopup';
-import { OnOffIcon, CogIcon, ThreeDotsIcon } from '../../../assets';
+import { CogIcon, ThreeDotsIcon } from '../../../assets';
 import headerLinks from '../../headerLinks';
 import PopupContentList from './PopupContentList';
 import { AccountContext } from '../../../contexts/AccountContext';
@@ -83,7 +83,7 @@ const RightHeaderItems = () => {
         <></>
       )}
       {!account.account && (
-        <FadeContainer className={gameEditionView ? 'fadeOut' : 'fadeIn'}>
+        <FadeContainer style={{ display: gameEditionView && 'none' }}>
           <HeaderItem className="mobile-none">
             <Button
               hover={true}
@@ -147,11 +147,11 @@ const RightHeaderItems = () => {
         </HeaderItem>
       )}
 
-      <HeaderItem headerItemStyle={{ height: '100%' }}>
+      <HeaderItem headerItemStyle={{ height: '100%', display: 'flex' }}>
         <CustomPopup
           basic
           trigger={
-            <div style={{ height: '100%' }}>
+            <div style={{ height: '100%', display: 'flex' }}>
               <ThreeDotsIcon style={{ height: '100%' }} />
             </div>
           }
@@ -159,7 +159,7 @@ const RightHeaderItems = () => {
           offset={[0, -14]}
           position="bottom right"
         >
-          <PopupContentList items={headerLinks} viewOtherComponents />
+          <PopupContentList items={headerLinks} viewOtherComponents withLogout PopupContentListStyle={{ minWidth: 170 }} />
         </CustomPopup>
       </HeaderItem>
     </RightContainerHeader>

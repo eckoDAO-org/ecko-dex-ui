@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { ArrowBack, CloseIcon } from '../assets';
 import { GameEditionContext } from '../contexts/GameEditionContext';
 import GradientBorder from './GradientBorder';
+import browserDetection from '../utils/browserDetection';
 
 const Container = styled.div`
   position: relative;
@@ -11,7 +12,7 @@ const Container = styled.div`
   flex-flow: column;
   padding: ${({ gameEditionView }) => (gameEditionView ? '16px' : '32px')};
   width: 100%;
-  min-width: 550px;
+  /* min-width: 550px; */
   border-radius: 10px;
   border: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `2px dashed ${colors.black}`};
   background-clip: ${({ gameEditionView }) => !gameEditionView && `padding-box`};
@@ -24,10 +25,37 @@ const Container = styled.div`
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     min-width: 50px;
   }
+  scrollbar-width: none;
 
   ::-webkit-scrollbar {
     display: none;
   }
+
+  ${({ withoutRainbowBackground }) => {
+    if (browserDetection() === 'FIREFOX' && !withoutRainbowBackground) {
+      return css`
+        margin: auto;
+        background: ${({ theme: { colors } }) => colors.primary};
+        color: ${({ theme: { colors } }) => colors.white};
+        box-sizing: border-box;
+        background-clip: padding-box; /* !importanté */
+        border: 1px solid transparent; /* !importanté */
+
+        &:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          z-index: -1;
+          margin: -1px;
+          border-radius: 10px;
+          background: linear-gradient(to right, #ed1cb5, #ffa900, #39fffc);
+        }
+      `;
+    }
+  }}
 `;
 
 const HeaderContainer = styled.div`

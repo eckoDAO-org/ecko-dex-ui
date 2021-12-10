@@ -80,8 +80,7 @@ const Description = styled.span`
 `;
 
 const NotificationCard = ({ index, time, date, title, description, type, removeItem, link, isHighlight }) => {
-  console.log(`Notification ${type} - ${index}`, isHighlight);
-  const [animation, setAnimation] = useState(false);
+  const [animation] = useState(false);
 
   const getIconByTypeNotification = (type) => {
     switch (type) {

@@ -6,7 +6,6 @@ import { ROUTE_INDEX } from '../../../router/routes';
 import menuItems from '../../menuItems';
 import RightHeaderItems from './RightHeaderItems';
 import HeaderItem from '../../../shared/HeaderItem';
-import GameEditionToggle from '../../../shared/GameEditionToggle';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 
 const Container = styled.div`
@@ -14,6 +13,7 @@ const Container = styled.div`
   flex-flow: row;
   justify-content: space-between;
   min-height: ${({ theme: { header } }) => `${header.height}px`};
+  padding: 0 7.5em;
 `;
 
 const LeftContainer = styled.div`

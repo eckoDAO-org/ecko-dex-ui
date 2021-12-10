@@ -17,6 +17,7 @@ const MainContainer = styled.div`
   justify-content: center;
   height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
   align-items: center;
+  overflow: hidden;
 `;
 
 const ContentContainer = styled.div`
@@ -34,7 +35,7 @@ const ContentContainer = styled.div`
 `;
 
 const GameEditionContainer = ({ children }) => {
-  const { modalState, closeModal, setIsSwapping } = useContext(GameEditionContext);
+  const { modalState, closeModal } = useContext(GameEditionContext);
   const history = useHistory();
 
   const switchAppSection = (direction) => {

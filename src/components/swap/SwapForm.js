@@ -48,7 +48,7 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
                   amount: reduceBalance(fromValues.balance),
                 }));
               }}
-              disabledButton={toValues.amount === toValues.balance}
+              disabledButton={!fromValues.balance}
             />
           ) : null
         }

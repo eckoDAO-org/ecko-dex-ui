@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useContext } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { throttle, debounce } from 'throttle-debounce';
@@ -20,7 +21,7 @@ import tokenData from '../../constants/cryptoCurrencies';
 import SwapForm from '../../components/swap/SwapForm';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import TokenSelectorModalContent from '../../components/swap/swap-modals/TokenSelectorModalContent';
-import { CogIcon, Logo } from '../../assets';
+import { CogIcon } from '../../assets';
 import { FadeIn } from '../../components/shared/animations';
 import FormContainer from '../../shared/FormContainer';
 import GradientBorder from '../../shared/GradientBorder';
@@ -28,6 +29,8 @@ import { LightModeContext } from '../../contexts/LightModeContext';
 import HeaderItem from '../../shared/HeaderItem';
 import CustomPopup from '../../shared/CustomPopup';
 import SlippagePopupContent from '../../components/layout/header/SlippagePopupContent';
+import BackgroundLogo from '../../shared/BackgroundLogo';
+import browserDetection from '../../utils/browserDetection';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -35,6 +38,10 @@ const Container = styled(FadeIn)`
   margin-right: auto;
   overflow: auto;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
 
   ${({ gameEditionView }) => {
     if (gameEditionView) {
@@ -45,7 +52,7 @@ const Container = styled(FadeIn)`
       `;
     } else {
       return css`
-        max-width: 500px;
+        max-width: 550px;
       `;
     }
   }}
@@ -73,19 +80,10 @@ const Title = styled.span`
   }
 `;
 
-const LogoContainer = styled(FadeIn)`
-  position: absolute;
-  left: 50%;
-  top: 45%;
-  margin-left: auto;
-  margin-right: auto;
-  transform: translate(-50%, 0);
-`;
-
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 16px;
+  margin-top: ${({ gameEditionView }) => (gameEditionView && browserDetection() === 'SAFARI' ? '0px' : '16px')};
   width: 100%;
 `;
 
@@ -165,7 +163,6 @@ const LiquidityContainer = (props) => {
   const [pairExist, setPairExist] = useState(false);
   const [showTxModal, setShowTxModal] = useState(false);
   const [showReview, setShowReview] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [isLogoVisible, setIsLogoVisible] = useState(false);
 
   useEffect(() => {
@@ -351,7 +348,6 @@ const LiquidityContainer = (props) => {
 
   useEffect(() => {
     if (wallet.walletSuccess) {
-      setLoading(false);
       setFromValues({
         coin: '',
         account: null,
@@ -429,35 +425,28 @@ const LiquidityContainer = (props) => {
   const supply = async () => {
     if (selectedView === 'Create A Pair') {
       if (wallet.signing.method !== 'sign') {
-        setLoading(true);
         const res = await liquidity.createTokenPairLocal(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
         if (res === -1) {
-          setLoading(false);
           alert('Incorrect password. If forgotten, you can reset it with your private key');
           return;
         } else {
           setShowReview(false);
           setShowTxModal(true);
-          setLoading(false);
         }
       } else {
         console.log('not signed');
       }
     } else {
       if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
-        setLoading(true);
         const res = await liquidity.addLiquidityLocal(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
         if (res === -1) {
-          setLoading(false);
           alert('Incorrect password. If forgotten, you can reset it with your private key');
           return;
         } else {
           setShowReview(false);
           setShowTxModal(true);
-          setLoading(false);
         }
       } else {
-        setLoading(true);
         setShowReview(false);
         console.log('param,', tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
         const res = await liquidity.addLiquidityWallet(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
@@ -471,7 +460,6 @@ const LiquidityContainer = (props) => {
           setShowTxModal(true);
         }
         /* setShowTxModal(true) */
-        setLoading(false);
         setFromValues({
           account: null,
           guard: null,
@@ -557,7 +545,7 @@ const LiquidityContainer = (props) => {
         title: 'select a token',
         description: '',
         containerStyle: {
-          //height: "100%",
+          minWidth: '0px',
           width: '75%',
         },
         onClose: () => {
@@ -580,36 +568,88 @@ const LiquidityContainer = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (showTxModal) {
+      if (gameEditionView) {
+        openModal({
+          title: 'transaction details',
+          closeModal: () => {
+            setShowTxModal(false);
+            closeModal();
+          },
+          content: (
+            <TxView
+              onClose={() => {
+                setShowTxModal(false);
+                closeModal();
+              }}
+              view={selectedView}
+              token0={fromValues.coin}
+              token1={toValues.coin}
+              createTokenPair={() =>
+                liquidity.createTokenPairLocal(tokenData[fromValues.coin].name, tokenData[toValues.coin].name, fromValues.amount, toValues.amount)
+              }
+            />
+          ),
+        });
+      } else {
+        modalContext.openModal({
+          title: 'transaction details',
+          description: '',
+
+          onClose: () => {
+            setShowTxModal(false);
+            modalContext.closeModal();
+          },
+          content: (
+            <TxView
+              onClose={() => {
+                setShowTxModal(false);
+                modalContext.closeModal();
+              }}
+              view={selectedView}
+              token0={fromValues.coin}
+              token1={toValues.coin}
+              createTokenPair={() =>
+                liquidity.createTokenPairLocal(tokenData[fromValues.coin].name, tokenData[toValues.coin].name, fromValues.amount, toValues.amount)
+              }
+            />
+          ),
+        });
+      }
+    }
+  }, [showTxModal]);
+
+  useEffect(() => {
+    if (showReview) {
+      if (gameEditionView) {
+        openModal({
+          title: 'transaction details',
+          closeModal: () => {
+            setShowReview(false);
+            closeModal();
+          },
+          content: <ReviewTxModal fromValues={fromValues} toValues={toValues} supply={supply} liquidityView={selectedView} />,
+        });
+      } else {
+        modalContext.openModal({
+          title: 'transaction details',
+          description: '',
+          onClose: () => {
+            setShowReview(false);
+            modalContext.closeModal();
+          },
+          content: <ReviewTxModal fromValues={fromValues} toValues={toValues} supply={supply} liquidityView={selectedView} />,
+        });
+      }
+    }
+  }, [showReview]);
+
   return (
     <Container gameEditionView={gameEditionView} onAnimationEnd={() => setIsLogoVisible(true)} className="scrollbar-none">
-      <TxView
-        view={selectedView}
-        show={showTxModal}
-        token0={fromValues.coin}
-        token1={toValues.coin}
-        fromToken={fromValues.coin}
-        toToken={toValues.coin}
-        createTokenPair={() =>
-          liquidity.createTokenPairLocal(tokenData[fromValues.coin].name, tokenData[toValues.coin].name, fromValues.amount, toValues.amount)
-        }
-        onClose={() => setShowTxModal(false)}
-      />
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
-      <ReviewTxModal
-        onClose={() => setShowReview(false)}
-        fromValues={fromValues}
-        toValues={toValues}
-        supply={supply}
-        loading={loading}
-        show={showReview}
-        liquidityView={selectedView}
-      />
 
-      {!gameEditionView && isLogoVisible && (
-        <LogoContainer time={0.2}>
-          <Logo />
-        </LogoContainer>
-      )}
+      {!gameEditionView && isLogoVisible && <BackgroundLogo />}
 
       <TitleContainer gameEditionView={gameEditionView}>
         <Title

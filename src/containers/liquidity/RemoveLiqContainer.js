@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useContext } from 'react';
 import { Button } from 'semantic-ui-react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { ArrowBack } from '../../assets';
 import TxView from '../../components/swap/swap-modals/TxView';
 import WalletRequestView from '../../components/swap/swap-modals/WalletRequestView';
@@ -17,6 +18,7 @@ import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import GradientBorder from '../../shared/GradientBorder';
 import { LightModeContext } from '../../contexts/LightModeContext';
+import { ModalContext } from '../../contexts/ModalContext';
 
 const Container = styled.div`
   display: flex;
@@ -24,10 +26,26 @@ const Container = styled.div`
   align-items: center;
   flex-flow: column;
   width: 100%;
-  max-width: ${({ gameEditionView }) => !gameEditionView && `500px`};
+  max-width: ${({ gameEditionView }) => !gameEditionView && `550px`};
   margin-left: auto;
   margin-right: auto;
   padding: ${({ gameEditionView }) => gameEditionView && `10px 10px`};
+  margin-top: 0px;
+  position: relative;
+
+  ${({ gameEditionView }) => {
+    if (gameEditionView) {
+      return css`
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      `;
+    } else {
+      return css`
+        max-width: 550px;
+      `;
+    }
+  }}
 `;
 
 const SubContainer = styled.div`
@@ -118,7 +136,8 @@ const RemoveLiqContainer = (props) => {
   const wallet = useContext(WalletContext);
   const liquidity = useContext(LiquidityContext);
   const { themeMode } = useContext(LightModeContext);
-  const { gameEditionView } = useContext(GameEditionContext);
+  const modalContext = useContext(ModalContext);
+  const { gameEditionView, openModal, closeModal } = useContext(GameEditionContext);
   const { token0, token1, balance, pooledAmount } = props.pair;
 
   const [amount, setAmount] = useState(100);
@@ -150,9 +169,53 @@ const RemoveLiqContainer = (props) => {
     wallet.setWalletError(null);
   };
 
+  useEffect(() => {
+    if (showTxModal) {
+      if (gameEditionView) {
+        openModal({
+          title: 'transaction details',
+          closeModal: () => {
+            setShowTxModal(false);
+            closeModal();
+          },
+          content: (
+            <TxView
+              view="Remove Liquidity"
+              token0={token0}
+              onClose={() => {
+                setShowTxModal(false);
+                closeModal();
+              }}
+              token1={token1}
+            />
+          ),
+        });
+      } else {
+        modalContext.openModal({
+          title: 'transaction details',
+          description: '',
+          onClose: () => {
+            setShowTxModal(false);
+            modalContext.closeModal();
+          },
+          content: (
+            <TxView
+              view="Remove Liquidity"
+              token0={token0}
+              onClose={() => {
+                setShowTxModal(false);
+                modalContext.closeModal();
+              }}
+              token1={token1}
+            />
+          ),
+        });
+      }
+    }
+  }, [showTxModal]);
+
   return (
     <Container gameEditionView={gameEditionView}>
-      <TxView view="Remove Liquidity" show={showTxModal} token0={token0} token1={token1} onClose={() => setShowTxModal(false)} />
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
       <TitleContainer gameEditionView={gameEditionView}>
         <Title gameEditionView={gameEditionView}>
@@ -162,7 +225,7 @@ const RemoveLiqContainer = (props) => {
                 cursor: 'pointer',
                 color: theme(themeMode).colors.white,
                 marginRight: '15px',
-                justifyContent: 'center'
+                justifyContent: 'center',
               }}
               onClick={() => props.closeLiquidity()}
             />
@@ -172,7 +235,56 @@ const RemoveLiqContainer = (props) => {
         {gameEditionView && <CloseGE onClick={() => props.closeLiquidity()} />}
       </TitleContainer>
 
-      <FormContainer containerStyle={gameEditionView ? { border: 'none', padding: 0 } : {}}>
+      <FormContainer
+        containerStyle={gameEditionView ? { border: 'none', padding: 0 } : {}}
+        footer={
+          <ButtonContainer gameEditionView={gameEditionView}>
+            <Button.Group fluid style={{ padding: 0 }}>
+              <CustomButton
+                loading={loading}
+                disabled={isNaN(amount) || reduceBalance(amount) === 0}
+                onClick={async () => {
+                  if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
+                    setLoading(true);
+                    const res = await liquidity.removeLiquidityLocal(
+                      tokenData[token0].code,
+                      tokenData[token1].code,
+                      reduceBalance(pooled, PRECISION)
+                    );
+                    if (res === -1) {
+                      setLoading(false);
+                      alert('Incorrect password. If forgotten, you can reset it with your private key');
+                      return;
+                    } else {
+                      setShowTxModal(true);
+                      setLoading(false);
+                    }
+                  } else {
+                    setLoading(true);
+                    const res = await liquidity.removeLiquidityWallet(
+                      tokenData[token0].code,
+                      tokenData[token1].code,
+                      reduceBalance(pooled, PRECISION)
+                    );
+                    if (!res) {
+                      wallet.setIsWaitingForWalletAuth(true);
+                      setLoading(false);
+                      /* pact.setWalletError(true); */
+                      /* walletError(); */
+                    } else {
+                      wallet.setWalletError(null);
+                      setShowTxModal(true);
+                      setLoading(false);
+                    }
+                  }
+                }}
+              >
+                Remove Liquidity
+              </CustomButton>
+            </Button.Group>
+          </ButtonContainer>
+        }
+      >
         {!gameEditionView && <GradientBorder />}
         <SubContainer gameEditionView={gameEditionView}>
           <Input
@@ -193,7 +305,7 @@ const RemoveLiqContainer = (props) => {
             <Button.Group fluid>
               <CustomButton
                 buttonStyle={{
-                  width: '20%'
+                  width: '20%',
                 }}
                 background={
                   amount === 25 ? (gameEditionView ? `${theme(themeMode).colors.black}` : `${theme(themeMode).colors.white}`) : 'transparent'
@@ -217,7 +329,7 @@ const RemoveLiqContainer = (props) => {
               <MyButtonDivider />
               <CustomButton
                 buttonStyle={{
-                  width: '20%'
+                  width: '20%',
                 }}
                 border={!gameEditionView && `1px solid ${theme(themeMode).colors.white}99`}
                 background={
@@ -241,7 +353,7 @@ const RemoveLiqContainer = (props) => {
               <MyButtonDivider />
               <CustomButton
                 buttonStyle={{
-                  width: '20%'
+                  width: '20%',
                 }}
                 border={!gameEditionView && `1px solid ${theme(themeMode).colors.white}99`}
                 background={
@@ -265,7 +377,7 @@ const RemoveLiqContainer = (props) => {
               <MyButtonDivider />
               <CustomButton
                 buttonStyle={{
-                  width: '20%'
+                  width: '20%',
                 }}
                 border={!gameEditionView && `1px solid ${theme(themeMode).colors.white}99`}
                 background={
@@ -306,43 +418,6 @@ const RemoveLiqContainer = (props) => {
             <Value gameEditionView={gameEditionView}>{pairUnit(extractDecimal(pooledToken1))}</Value>
           </InnerRowContainer>
         </ResultContainer>
-
-        <ButtonContainer gameEditionView={gameEditionView}>
-          <Button.Group fluid style={{ padding: 0 }}>
-            <CustomButton
-              loading={loading}
-              disabled={isNaN(amount) || reduceBalance(amount) === 0}
-              onClick={async () => {
-                if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
-                  const res = await liquidity.removeLiquidityLocal(tokenData[token0].code, tokenData[token1].code, reduceBalance(pooled, PRECISION));
-                  if (res === -1) {
-                    setLoading(false);
-                    alert('Incorrect password. If forgotten, you can reset it with your private key');
-                    return;
-                  } else {
-                    setShowTxModal(true);
-                    setLoading(false);
-                  }
-                } else {
-                  setLoading(true);
-                  const res = await liquidity.removeLiquidityWallet(tokenData[token0].code, tokenData[token1].code, reduceBalance(pooled, PRECISION));
-                  if (!res) {
-                    wallet.setIsWaitingForWalletAuth(true);
-                    setLoading(false);
-                    /* pact.setWalletError(true); */
-                    /* walletError(); */
-                  } else {
-                    wallet.setWalletError(null);
-                    setShowTxModal(true);
-                    setLoading(false);
-                  }
-                }
-              }}
-            >
-              Remove Liquidity
-            </CustomButton>
-          </Button.Group>
-        </ButtonContainer>
       </FormContainer>
     </Container>
   );

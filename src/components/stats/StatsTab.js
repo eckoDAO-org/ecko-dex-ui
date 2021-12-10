@@ -63,7 +63,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
       }}
     >
       <TitleContainer
-        gameEditionView={gameEditionView}
+        $gameEditionView={gameEditionView}
         style={{
           marginLeft: 'auto',
           marginRight: 'auto',
@@ -71,20 +71,20 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
           justifyContent: 'space-between',
         }}
       >
-        <Tabs gameEditionView={gameEditionView} active={activeTabs === 'POOL_STATS'}>
+        <Tabs $gameEditionView={gameEditionView} active={activeTabs === 'POOL_STATS'}>
           Stats
         </Tabs>
-        <Tabs gameEditionView={gameEditionView} active={activeTabs === 'HISTORY'} onClick={setActiveTabs}>
+        <Tabs $gameEditionView={gameEditionView} active={activeTabs === 'HISTORY'} onClick={setActiveTabs}>
           History
         </Tabs>
       </TitleContainer>
       <CardContainer gameEditionView={gameEditionView}>
         {!gameEditionView && <GradientBorder />}
-        <PartialScrollableScrollSection style={{ width: '100%' }}>
+        <PartialScrollableScrollSection style={{ width: '100%' }} className="scrollbar-none">
           {pact.pairList[0] ? (
             Object.values(pact.pairList).map((pair, index) =>
               pair && pair.reserves ? (
-                <>
+                <div key={index}>
                   <StatsCard pair={pair} key={index} />
                   {Object.values(pact.pairList).length - 1 !== index && (
                     <Divider
@@ -95,7 +95,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
                       }}
                     />
                   )}
-                </>
+                </div>
               ) : (
                 ''
               )
