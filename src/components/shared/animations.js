@@ -11,6 +11,19 @@ export const FadeIn = styled.div`
     }
   }
 `;
+
+export const FadeOut = styled.div`
+  animation: ${({ time = 0.5 }) => `fade-out ${time}s linear`};
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+`;
 export default {
   FadeIn,
+  FadeOut,
 };

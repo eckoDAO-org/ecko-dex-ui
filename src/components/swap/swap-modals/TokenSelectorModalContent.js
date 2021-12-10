@@ -3,6 +3,9 @@ import styled from 'styled-components/macro';
 import Search from '../../../shared/Search';
 import { SwapContext } from '../../../contexts/SwapContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
+import { PartialScrollableScrollSection } from '../../layout/Containers';
+import useWindowSize from '../../../hooks/useWindowSize';
+import theme from '../../../styles/theme';
 
 const Label = styled.div`
   font-size: 13px;
@@ -50,6 +53,7 @@ const TokenSelectorModalContent = ({ show, tokenSelectorType, onTokenClick, onCl
   const swap = useContext(SwapContext);
   const { gameEditionView } = useContext(GameEditionContext);
 
+  const [width] = useWindowSize();
   return (
     <Content>
       <Label gameEditionView={gameEditionView} style={{ marginTop: 12, marginBottom: 8 }}>
@@ -60,44 +64,49 @@ const TokenSelectorModalContent = ({ show, tokenSelectorType, onTokenClick, onCl
         token
       </Label>
       <Divider gameEditionView={gameEditionView} />
-      <TokensContainer>
-        {Object.values(swap.tokenData)
-          .filter((c) => {
-            const code = c.code !== 'coin' ? c.code.split('.')[1] : c.code;
-            return code.toLocaleLowerCase().includes(searchValue?.toLocaleLowerCase()) || c.name.toLowerCase().includes(searchValue?.toLowerCase());
-          })
-          .map((crypto) => {
-            return (
-              <TokenItem
-                gameEditionView={gameEditionView}
-                key={crypto.name}
-                selected={fromToken === crypto.name || toToken === crypto.name}
-                style={{
-                  cursor: fromToken === crypto.name || toToken === crypto.name ? 'default' : 'pointer',
-                }}
-                onClick={() => {
-                  if (tokenSelectorType === 'from' && fromToken === crypto.name) return;
-                  if (tokenSelectorType === 'to' && toToken === crypto.name) return;
-                  if ((tokenSelectorType === 'from' && fromToken !== crypto.name) || (tokenSelectorType === 'to' && toToken !== crypto.name)) {
-                    onTokenClick({ crypto });
-                    setSearchValue('');
-                    onClose();
-                  }
-                }}
-              >
-                {crypto.icon}
-                {crypto.name}
-                {(tokenSelectorType === 'from' && fromToken === crypto.name) || (tokenSelectorType === 'to' && toToken === crypto.name) ? (
-                  <Label gameEditionView={gameEditionView} style={{ marginLeft: 5 }}>
-                    (Selected)
-                  </Label>
-                ) : (
-                  <></>
-                )}
-              </TokenItem>
-            );
-          })}
-      </TokensContainer>
+      <PartialScrollableScrollSection
+        className="scrollbar-none"
+        style={{ width: '100%', maxHeight: gameEditionView && width < theme.mediaQueries.desktopPixel ? '534px' : '170px' }}
+      >
+        <TokensContainer>
+          {Object.values(swap.tokenData)
+            .filter((c) => {
+              const code = c.code !== 'coin' ? c.code.split('.')[1] : c.code;
+              return code.toLocaleLowerCase().includes(searchValue?.toLocaleLowerCase()) || c.name.toLowerCase().includes(searchValue?.toLowerCase());
+            })
+            .map((crypto) => {
+              return (
+                <TokenItem
+                  gameEditionView={gameEditionView}
+                  key={crypto.name}
+                  selected={fromToken === crypto.name || toToken === crypto.name}
+                  style={{
+                    cursor: fromToken === crypto.name || toToken === crypto.name ? 'default' : 'pointer',
+                  }}
+                  onClick={() => {
+                    if (tokenSelectorType === 'from' && fromToken === crypto.name) return;
+                    if (tokenSelectorType === 'to' && toToken === crypto.name) return;
+                    if ((tokenSelectorType === 'from' && fromToken !== crypto.name) || (tokenSelectorType === 'to' && toToken !== crypto.name)) {
+                      onTokenClick({ crypto });
+                      setSearchValue('');
+                      onClose();
+                    }
+                  }}
+                >
+                  {crypto.icon}
+                  {crypto.name}
+                  {(tokenSelectorType === 'from' && fromToken === crypto.name) || (tokenSelectorType === 'to' && toToken === crypto.name) ? (
+                    <Label gameEditionView={gameEditionView} style={{ marginLeft: 5 }}>
+                      (Selected)
+                    </Label>
+                  ) : (
+                    <></>
+                  )}
+                </TokenItem>
+              );
+            })}
+        </TokensContainer>
+      </PartialScrollableScrollSection>
     </Content>
   );
 };

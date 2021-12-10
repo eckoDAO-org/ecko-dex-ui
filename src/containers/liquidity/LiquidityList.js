@@ -179,8 +179,8 @@ const LiquidityList = (props) => {
                 </Button.Group>
               </ButtonContainer>
             </TopContainer>
-            {account.account !== null &&
-              (liquidity.pairListAccount[0] ? (
+            {account.account !== null ? (
+              liquidity.pairListAccount[0] ? (
                 liquidity.pairListAccount[0]?.balance && (
                   <FormContainer
                     $gameEditionView={gameEditionView}
@@ -246,7 +246,10 @@ const LiquidityList = (props) => {
                     </Loader>
                   )}
                 </FormContainer>
-              ))}
+              )
+            ) : (
+              <></>
+            )}
           </BottomContainer>
         ) : (
           <ButtonContainer
