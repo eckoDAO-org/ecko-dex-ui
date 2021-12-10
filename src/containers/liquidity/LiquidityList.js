@@ -181,7 +181,7 @@ const LiquidityList = (props) => {
             </TopContainer>
             {account.account !== null ? (
               liquidity.pairListAccount[0] ? (
-                liquidity.pairListAccount[0]?.balance && (
+                liquidity.pairListAccount[0]?.balance ? (
                   <FormContainer
                     $gameEditionView={gameEditionView}
                     containerStyle={{ padding: gameEditionView && 16, minHeight: accordionHeight }}
@@ -189,39 +189,41 @@ const LiquidityList = (props) => {
                   >
                     {!gameEditionView && <GradientBorder />}
                     {Object.values(liquidity.pairListAccount).map((pair, index) => {
-                      return (
-                        pair &&
-                        pair.balance && (
-                          <div id={`token-pair-${index}`} key={`token-pair-${index}`}>
-                            <TokenPair
-                              key={pair.name}
-                              pair={pair}
-                              selectAddLiquidity={props.selectAddLiquidity}
-                              selectRemoveLiquidity={props.selectRemoveLiquidity}
-                              setTokenPair={props.setTokenPair}
-                              activeIndex={activeIndex}
-                              index={index}
-                              setActiveIndex={setActiveIndex}
+                      return pair && pair.balance ? (
+                        <div id={`token-pair-${index}`}>
+                          {' '}
+                          <TokenPair
+                            key={pair.name}
+                            pair={pair}
+                            selectAddLiquidity={props.selectAddLiquidity}
+                            selectRemoveLiquidity={props.selectRemoveLiquidity}
+                            setTokenPair={props.setTokenPair}
+                            activeIndex={activeIndex}
+                            index={index}
+                            setActiveIndex={setActiveIndex}
+                          />{' '}
+                          {Object.values(liquidity.pairListAccount).length - 1 !== index && (
+                            <Divider
+                              style={{
+                                width: '100%',
+                                margin: '32px 0px',
+                                borderTop: gameEditionView
+                                  ? `1px dashed ${theme(themeMode).colors.black}`
+                                  : `1px solid  ${theme(themeMode).colors.white}99`,
+                              }}
                             />
-                            {Object.values(liquidity.pairListAccount).length - 1 !== index && (
-                              <Divider
-                                style={{
-                                  width: '100%',
-                                  margin: '32px 0px',
-                                  borderTop: gameEditionView
-                                    ? `1px dashed ${theme(themeMode).colors.black}`
-                                    : `1px solid  ${theme(themeMode).colors.white}99`,
-                                }}
-                              />
-                            )}
-                          </div>
-                        )
+                          )}
+                        </div>
+                      ) : (
+                        <></>
                       );
                     })}
                   </FormContainer>
+                ) : (
+                  <></>
                 )
               ) : (
-                <FormContainer>
+                <FormContainer gameEditionView={gameEditionView}>
                   {!gameEditionView && <GradientBorder />}
                   {liquidity.pairListAccount?.error ? (
                     <p
