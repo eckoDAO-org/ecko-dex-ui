@@ -32,6 +32,7 @@ const TextContainer = styled.div`
   justify-content: flex-start;
   width: 100%;
   color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? `${colors.black} !important` : colors.white)};
+  min-height: ${({ gameEditionView }) => gameEditionView && browserDetection() === 'SAFARI' && '136px'};
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     display: table;
@@ -44,7 +45,6 @@ const BottomContainer = styled.div`
   align-items: left;
   justify-content: flex-start;
   width: 100%;
-  margin-top: ${({ gameEditionView }) => gameEditionView && browserDetection() === 'SAFARI' && '60px'};
 `;
 
 const ButtonContainer = styled.div`
@@ -53,7 +53,6 @@ const ButtonContainer = styled.div`
   justify-content: center;
   margin-right: 2px;
   width: 100%;
-  position: ${({ gameEditionView }) => gameEditionView && 'absolute'};
   bottom: ${({ gameEditionView }) => gameEditionView && '10px'};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
@@ -66,6 +65,7 @@ const TitleContainer = styled.div`
   display: flex;
   justify-content: ${({ gameEditionView }) => (gameEditionView ? `center` : ` space-between`)};
   margin-bottom: ${({ gameEditionView }) => (gameEditionView ? `16px` : ` 24px`)};
+  min-height: ${({ gameEditionView }) => gameEditionView && browserDetection() === 'SAFARI' && '20px'};
 `;
 const Title = styled.span`
   font: ${({ gameEditionView, theme: { fontFamily } }) =>

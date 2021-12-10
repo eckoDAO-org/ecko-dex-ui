@@ -83,7 +83,7 @@ const RightHeaderItems = () => {
         <></>
       )}
       {!account.account && (
-        <FadeContainer className={gameEditionView ? 'fadeOut' : 'fadeIn'}>
+        <FadeContainer style={{ display: gameEditionView && 'none' }}>
           <HeaderItem className="mobile-none">
             <Button
               hover={true}

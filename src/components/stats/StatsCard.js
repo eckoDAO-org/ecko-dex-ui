@@ -88,7 +88,7 @@ const StatsCard = ({ pair }) => {
       {/* RATE */}
       <ColumnContainer gameEditionView={gameEditionView} style={{ marginRight: '16px' }}>
         <Label gameEditionView={gameEditionView} withShade="99">
-          Total Reserve - Token1
+          Rate
         </Label>
         <Value gameEditionView={gameEditionView}>{`${reduceBalance(extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1]))} ${
           pair.token0
