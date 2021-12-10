@@ -19,10 +19,10 @@ import browserDetection from '../../utils/browserDetection';
 
 const Container = styled.div`
   display: flex;
-  margin-top: ${({ gameEditionView }) => (gameEditionView ? '0px' : '24px')};
+  margin-top: ${({ $gameEditionView }) => ($gameEditionView ? '0px' : '24px')};
   margin-left: auto;
   margin-right: auto;
-  height: ${({ gameEditionView }) => gameEditionView && '100%'};
+  height: ${({ $gameEditionView }) => $gameEditionView && '100%'};
 `;
 
 const TextContainer = styled.div`
@@ -31,8 +31,8 @@ const TextContainer = styled.div`
   text-align: left;
   justify-content: flex-start;
   width: 100%;
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? `${colors.black} !important` : colors.white)};
-  min-height: ${({ gameEditionView }) => gameEditionView && browserDetection() === 'SAFARI' && '136px'};
+  min-height: ${({ $gameEditionView }) => $gameEditionView && browserDetection() === 'SAFARI' && '136px'};
+  color: ${({ theme: { colors }, $gameEditionView }) => ($gameEditionView ? `${colors.black} !important` : colors.white)};
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     display: table;
@@ -53,7 +53,6 @@ const ButtonContainer = styled.div`
   justify-content: center;
   margin-right: 2px;
   width: 100%;
-  bottom: ${({ gameEditionView }) => gameEditionView && '10px'};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
   }
@@ -63,16 +62,16 @@ const TopContainer = styled.div``;
 
 const TitleContainer = styled.div`
   display: flex;
-  justify-content: ${({ gameEditionView }) => (gameEditionView ? `center` : ` space-between`)};
-  margin-bottom: ${({ gameEditionView }) => (gameEditionView ? `16px` : ` 24px`)};
-  min-height: ${({ gameEditionView }) => gameEditionView && browserDetection() === 'SAFARI' && '20px'};
+  min-height: ${({ $gameEditionView }) => $gameEditionView && browserDetection() === 'SAFARI' && '20px'};
+  justify-content: ${({ $gameEditionView }) => ($gameEditionView ? `center` : ` space-between`)};
+  margin-bottom: ${({ $gameEditionView }) => ($gameEditionView ? `16px` : ` 24px`)};
 `;
 const Title = styled.span`
-  font: ${({ gameEditionView, theme: { fontFamily } }) =>
-    gameEditionView ? `normal normal normal 16px/19px  ${fontFamily.pressStartRegular}` : ` normal normal bold 32px/57px ${fontFamily.bold}`};
+  font: ${({ $gameEditionView, theme: { fontFamily } }) =>
+    $gameEditionView ? `normal normal normal 16px/19px  ${fontFamily.pressStartRegular}` : ` normal normal bold 32px/57px ${fontFamily.bold}`};
   letter-spacing: 0px;
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
-  text-transform: ${({ gameEditionView }) => (gameEditionView ? `uppercase` : ` capitalize`)}; ;
+  color: ${({ theme: { colors }, $gameEditionView }) => ($gameEditionView ? colors.black : colors.white)};
+  text-transform: ${({ $gameEditionView }) => ($gameEditionView ? `uppercase` : ` capitalize`)}; ;
 `;
 
 const LiquidityList = (props) => {
@@ -96,10 +95,9 @@ const LiquidityList = (props) => {
   }, [activeIndex]);
 
   return (
-    <Container gameEditionView={gameEditionView}>
+    <Container $gameEditionView={gameEditionView}>
       <ModalContainer
         withoutRainbowBackground
-        gameEditionView={gameEditionView}
         containerStyle={{
           maxHeight: !gameEditionView && '80vh',
           maxWidth: 900,
@@ -111,12 +109,12 @@ const LiquidityList = (props) => {
         }}
       >
         {gameEditionView && (
-          <TitleContainer gameEditionView={gameEditionView}>
-            <Title gameEditionView={gameEditionView}>Pool</Title>
+          <TitleContainer $gameEditionView={gameEditionView}>
+            <Title $gameEditionView={gameEditionView}>Pool</Title>
           </TitleContainer>
         )}
         <TextContainer
-          gameEditionView={gameEditionView}
+          $gameEditionView={gameEditionView}
           style={{
             marginBottom: gameEditionView ? 15 : 30,
             background: 'transparent',
@@ -143,7 +141,7 @@ const LiquidityList = (props) => {
           </p>
         </TextContainer>
         {account.account !== null ? (
-          <BottomContainer gameEditionView={gameEditionView}>
+          <BottomContainer $gameEditionView={gameEditionView}>
             <TopContainer>
               <Header
                 style={{
@@ -185,7 +183,7 @@ const LiquidityList = (props) => {
               (liquidity.pairListAccount[0] ? (
                 liquidity.pairListAccount[0]?.balance && (
                   <FormContainer
-                    gameEditionView={gameEditionView}
+                    $gameEditionView={gameEditionView}
                     containerStyle={{ padding: gameEditionView && 16, minHeight: accordionHeight }}
                     withGameEditionBorder
                   >
@@ -194,7 +192,7 @@ const LiquidityList = (props) => {
                       return (
                         pair &&
                         pair.balance && (
-                          <div id={`token-pair-${index}`}>
+                          <div id={`token-pair-${index}`} key={`token-pair-${index}`}>
                             <TokenPair
                               key={pair.name}
                               pair={pair}
@@ -223,7 +221,7 @@ const LiquidityList = (props) => {
                   </FormContainer>
                 )
               ) : (
-                <FormContainer gameEditionView={gameEditionView}>
+                <FormContainer>
                   {!gameEditionView && <GradientBorder />}
                   {liquidity.pairListAccount?.error ? (
                     <p
@@ -252,7 +250,7 @@ const LiquidityList = (props) => {
           </BottomContainer>
         ) : (
           <ButtonContainer
-            gameEditionView={gameEditionView}
+            $gameEditionView={gameEditionView}
             style={{
               width: gameEditionView && '93%',
               justifyContent: !gameEditionView && 'start',
