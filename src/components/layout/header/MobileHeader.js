@@ -44,12 +44,12 @@ const MobileHeader = ({ className }) => {
   return (
     <Container className={className}>
       <LeftContainer>
-        <KaddexLetterLogo onClick={() => history.push(ROUTE_SWAP)} />
-        <HeaderItem>
-          <CustomPopup basic trigger={<HamburgerIcon />} on="click" offset={[0, 16]} position="bottom left">
+        <HeaderItem headerItemStyle={{ marginTop: '4px' }}>
+          <CustomPopup basic trigger={<HamburgerIcon />} on="click" offset={[0, 14]} position="bottom left">
             <PopupContentList items={menuItems} />
           </CustomPopup>
         </HeaderItem>
+        <KaddexLetterLogo onClick={() => history.push(ROUTE_SWAP)} />
 
         {/* <GameEditionToggle /> */}
       </LeftContainer>
