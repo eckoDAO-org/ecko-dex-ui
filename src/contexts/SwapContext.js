@@ -153,6 +153,7 @@ export const SwapProvider = (props) => {
       pact.setPolling(false);
       toastId.current = notificationContext.showNotification({
         title: 'Transaction Error',
+        message: 'Insufficient funds - attempt to buy gas failed.',
         type: STATUSES.ERROR,
         autoClose: 5000,
         hideProgressBar: true,
@@ -162,6 +163,7 @@ export const SwapProvider = (props) => {
         time: getCurrentTime(),
         date: getCurrentDate(),
         title: 'Transaction Error',
+        description: 'Insufficient funds - attempt to buy gas failed.',
         isReaded: false,
         isCompleted: false,
       });

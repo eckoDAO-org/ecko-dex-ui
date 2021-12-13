@@ -515,7 +515,7 @@ const SwapContainer = () => {
       {!gameEditionView && isLogoVisible && <BackgroundLogo />}
 
       <SwapTitleContainer gameEditionView={gameEditionView}>
-        <Title gameEditionView={gameEditionView}>Swap</Title>
+        <Title $gameEditionView={gameEditionView}>Swap</Title>
         {!gameEditionView && (
           <HeaderItem headerItemStyle={{ alignItems: 'center', display: 'flex' }}>
             <CustomPopup trigger={<CogIcon />} on="click" offset={[2, 10]} position="bottom right">

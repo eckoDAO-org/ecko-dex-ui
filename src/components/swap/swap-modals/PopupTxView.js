@@ -15,7 +15,7 @@ const PopupTxView = ({ isAccountPopup }) => {
 
   return isAccountPopup ? (
     <CustomPopup
-      trigger={<Icon name=" info circle" style={{ margin: ' 0px 0px 0px 4px' }} />}
+      trigger={<Icon name="info circle" style={{ margin: ' 0px 0px 0px 4px' }} />}
       position="top right"
       on="click"
       containerStyle={{

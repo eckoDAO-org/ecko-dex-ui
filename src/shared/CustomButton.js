@@ -18,8 +18,8 @@ const StyledButton = styled(SUIButton)`
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
     font-size: 13px !important;
   }
-  color: ${({ theme: { colors }, disabled, color, $gameEditionView, $outGameEditionView }) => {
-    if (color) return color + ' !important';
+  color: ${({ theme: { colors }, disabled, $color, $gameEditionView, $outGameEditionView }) => {
+    if ($color) return $color + ' !important';
     if ($outGameEditionView) return `${colors.primary} !important`;
     if ($gameEditionView) return `${colors.black} !important`;
     if (disabled) return `${colors.white} !important`;
@@ -34,9 +34,9 @@ const StyledButton = styled(SUIButton)`
   }};
   border-radius: 10px !important;
   opacity: 1 !important;
-  border: ${({ theme: { colors }, border, $gameEditionView, $outGameEditionView }) => {
+  border: ${({ theme: { colors }, $border, $gameEditionView, $outGameEditionView }) => {
     if ($outGameEditionView) return `1px solid ${colors.white} !important`;
-    if (border) return border + ' !important';
+    if ($border) return $border + ' !important';
     if ($gameEditionView) return `2px dashed ${colors.black} !important`;
     else return `1px solid ${colors.white} !important`;
   }};
@@ -47,16 +47,6 @@ const StyledButton = styled(SUIButton)`
       fill: ${({ theme: { colors } }) => colors.white};
     }
   }
-  /* box-shadow: ${({ $boxShadow, $gameEditionView }) => {
-    if ($boxShadow) return $boxShadow + ' !important';
-    else if ($gameEditionView) return `none !important`;
-    else return '0 0 4px #FFFFFF !important';
-  }}; */
-
-  /* box-shadow: 0 0 4px #FFFFFF !important; */
-  /* :hover {
-    opacity: ${({ hover }) => (hover ? 0.7 : 1.0) + ' !important'};
-  } */
 `;
 
 const CustomButton = ({
@@ -72,7 +62,6 @@ const CustomButton = ({
   children,
   onClick,
   loading,
-  hover,
   outGameEditionView: $outGameEditionView,
 }) => {
   const { gameEditionView: $gameEditionView } = useContext(GameEditionContext);
@@ -83,14 +72,13 @@ const CustomButton = ({
       $outGameEditionView={$outGameEditionView}
       disabled={disabled}
       background={background}
-      color={color}
+      $color={color}
       fontSize={fontSize}
       style={buttonStyle}
       onClick={onClick}
       loading={loading}
-      border={border}
+      $border={border}
       $boxShadow={$boxShadow}
-      hover={hover}
     >
       {children || label}
     </StyledButton>

@@ -29,11 +29,11 @@ const AccountIdContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  border: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `2px dashed ${colors.black}` : `1px solid ${colors.white}99`)};
+  border: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? `2px dashed ${colors.black}` : `1px solid ${colors.white}99`)};
   padding: 14px 10px;
   align-items: center;
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '13px' : '16px')};
-  font-family: ${({ gameEditionView, theme: { fontFamily } }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
+  font-size: ${({ $gameEditionView }) => ($gameEditionView ? '13px' : '16px')};
+  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
   & > *:not(:last-child) {
     margin-bottom: 16px;
   }
@@ -48,8 +48,8 @@ const RowContainer = styled.div`
 
 const SubTitle = styled.span`
   width: 100%;
-  font-family: ${({ gameEditionView, theme: { fontFamily } }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.black : colors.white)};
+  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
+  color: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? colors.black : colors.white)};
   font-size: ${({ fontSize }) => (fontSize ? fontSize : '16px')};
   text-align: left;
 `;
@@ -59,9 +59,9 @@ const RightContainer = styled.div`
   align-items: center;
   justify-content: flex-end;
   width: 100%;
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '13px' : '16px')};
+  font-size: ${({ $gameEditionView }) => ($gameEditionView ? '13px' : '16px')};
 
-  font-family: ${({ gameEditionView, theme: { fontFamily } }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
+  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
   & > *:not(:last-child) {
     margin-right: 8px;
   }
@@ -78,7 +78,7 @@ const RightContainer = styled.div`
     height: 24px;
     height: 24px;
     path {
-      fill: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.black : colors.white)};
+      fill: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? colors.black : colors.white)};
     }
   }
 `;
@@ -86,9 +86,9 @@ const RightContainer = styled.div`
 const ActionContainer = styled.div`
   display: flex;
   flex-flow: row;
-  align-items: ${({ gameEditionView }) => (gameEditionView ? 'flex-end !important' : 'center')};
+  align-items: ${({ $gameEditionView }) => ($gameEditionView ? 'flex-end !important' : 'center')};
   width: 100%;
-  justify-content: ${({ gameEditionView }) => (gameEditionView ? 'flex-end' : 'space-between')};
+  justify-content: ${({ $gameEditionView }) => ($gameEditionView ? 'flex-end' : 'space-between')};
   width: 100%;
   height: 100%;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
@@ -101,7 +101,7 @@ const ActionContainer = styled.div`
 `;
 
 const ButtonGroup = styled(Button.Group)`
-  flex-direction: ${({ gameEditionView }) => (gameEditionView ? 'column !important' : 'row')};
+  flex-direction: ${({ $gameEditionView }) => ($gameEditionView ? 'column !important' : 'row')};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
     flex-direction: column !important;
   }
@@ -117,14 +117,14 @@ const AccountModal = () => {
 
   return (
     <AccountModalContainer>
-      <SubTitle gameEditionView={gameEditionView}>Connected with {wallet?.name}</SubTitle>
+      <SubTitle $gameEditionView={gameEditionView}>Connected with {wallet?.name}</SubTitle>
 
       {account?.account && (
-        <AccountIdContainer gameEditionView={gameEditionView}>
+        <AccountIdContainer $gameEditionView={gameEditionView}>
           <RowContainer>
             <span>Account</span>
             <RightContainer
-              gameEditionView={gameEditionView}
+              $gameEditionView={gameEditionView}
               onClick={() =>
                 window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/eventsearch?q=${account.account}`, '_blank', 'noopener,noreferrer')
               }
@@ -142,13 +142,13 @@ const AccountModal = () => {
         </AccountIdContainer>
       )}
       <RowContainer>
-        <SubTitle gameEditionView={gameEditionView} fontSize="13px">
+        <SubTitle $gameEditionView={gameEditionView} fontSize="13px">
           Balance
         </SubTitle>
-        <BoldLabel gameEditionView={gameEditionView}>{account.balance}</BoldLabel>
+        <BoldLabel $gameEditionView={gameEditionView}>{account.balance}</BoldLabel>
       </RowContainer>
-      <ActionContainer gameEditionView={gameEditionView}>
-        <ButtonGroup gameEditionView={gameEditionView} fluid>
+      <ActionContainer $gameEditionView={gameEditionView}>
+        <ButtonGroup $gameEditionView={gameEditionView} fluid>
           <CustomButton
             border="none"
             color={gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white}

@@ -119,7 +119,7 @@ const SlippagePopupContent = () => {
               boxShadow: 'none !important',
               padding: '0px',
             }}
-            placeholder={slp}
+            placeholder={`${slp}`}
             numberOnly
             value={slp}
             onChange={(e, { value }) => {
@@ -143,7 +143,7 @@ const SlippagePopupContent = () => {
               boxShadow: 'none !important',
               padding: '0px',
             }}
-            placeholder={tl}
+            placeholder={`${tl}`}
             numberOnly
             value={tl}
             onChange={(e, { value }) => {
