@@ -5,7 +5,7 @@ import useAbsoluteContent from '../../hooks/useAbsoluteContent';
 export const GameEditionWrapper = ({ startLabel, startOnClick, selectLabel, selectOnClick, buttonLOnClick, buttonROnClick, children }) => {
   useAbsoluteContent('svgContent', 'screen');
   return (
-    <div>
+    <div style={{ width: '60%' }}>
       <div id="svgContent" style={{ position: 'absolute' }}>
         {children}
       </div>
@@ -15,6 +15,7 @@ export const GameEditionWrapper = ({ startLabel, startOnClick, selectLabel, sele
         width="1000.552"
         viewBox="0 0 1110.552 631.954"
         id="gameEdition"
+        style={{ width: '100%' }}
       >
         <defs>
           <linearGradient id="linear-gradient" x1="0.107" y1="-0.401" x2="0.98" y2="1.196" gradientUnits="objectBoundingBox">
