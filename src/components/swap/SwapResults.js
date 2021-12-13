@@ -44,6 +44,9 @@ const Value = styled.span`
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   line-height: 20px;
   color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    text-align: right;
+  }
 `;
 
 const SwapResults = ({ priceImpact, fromValues, toValues }) => {
