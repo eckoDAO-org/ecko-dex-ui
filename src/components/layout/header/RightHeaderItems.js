@@ -59,7 +59,7 @@ const RightHeaderItems = () => {
   return (
     <RightContainerHeader>
       {account?.account ? (
-        <HeaderItem className="mobile-none">
+        <HeaderItem>
           <AccountInfo
             onClick={() => {
               if (gameEditionView) {
