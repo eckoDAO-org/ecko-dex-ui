@@ -39,7 +39,7 @@ export const ModalProvider = (props) => {
   };
 
   const closeModal = () => {
-    setState({ ...state, open: false });
+    setState({ ...initialState, open: false });
   };
 
   return (
