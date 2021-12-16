@@ -11,6 +11,7 @@ import { theme } from '../../styles/theme';
 import { Label, PartialScrollableScrollSection, Title, TitleContainer } from '../layout/Containers';
 import HistoryCard from './HistoryCard';
 import { AccountContext } from '../../contexts/AccountContext';
+import LogoLoader from '../../shared/LogoLoader';
 
 export const CardContainer = styled.div`
   position: ${({ gameEditionView }) => !gameEditionView && `relative`};
@@ -137,9 +138,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
                 ))}
               </InfiniteScroll>
             ) : (
-              <div style={{ padding: '16px' }}>
-                <CustomLoader text="Loading.." inline={gameEditionView && 'centered'} />
-              </div>
+              <LogoLoader />
             )
           ) : (
             <Label gameEditionView={gameEditionView}>{pact.swapList?.error}</Label>
