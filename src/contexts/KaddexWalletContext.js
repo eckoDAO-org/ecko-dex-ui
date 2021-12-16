@@ -16,7 +16,7 @@ export const KaddexWalletProvider = (props) => {
   const [kadenaExt, setKadenaExt] = useState(null);
   const [kaddexWalletState, setKaddexWalletState] = useState(initialKaddexWalletState);
 
-  const { setVerifiedAccount, logout } = useAccountContext();
+  const { setVerifiedAccount, logout, account } = useAccountContext();
   const { wallet, setSelectedWallet, signingWallet } = useWalletContext();
   const { showNotification, STATUSES } = useNotificationContext();
 
@@ -42,15 +42,16 @@ export const KaddexWalletProvider = (props) => {
         method: 'kda_disconnect',
         networkId: NETWORKID,
       });
+      logout();
     }
   };
 
   useEffect(() => {
-    if (kaddexWalletState.isConnected && !wallet) {
+    if (kaddexWalletState.isConnected && (!wallet || !account?.account)) {
       console.log('!!!DISCONNECTING');
       disconnectWallet();
     }
-  }, [wallet, kaddexWalletState]);
+  }, [wallet, kaddexWalletState, account]);
 
   const getNetworkInfo = async () => {
     return await kadenaExt.request({
