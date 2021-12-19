@@ -173,6 +173,8 @@ export const KaddexWalletProvider = (props) => {
       title: 'Wallet error',
       message: `Please set the correct network: ${NETWORKID}`,
       type: STATUSES.ERROR,
+      autoClose: 5000,
+      hideProgressBar: false,
     });
   };
 
@@ -181,6 +183,8 @@ export const KaddexWalletProvider = (props) => {
       title: 'Wallet error',
       message: `Please set chain ${chainId} ${selectedChain ? `(chain ${selectedChain} selected)` : ''}`,
       type: STATUSES.WARNING,
+      autoClose: 5000,
+      hideProgressBar: false,
     });
   };
 
