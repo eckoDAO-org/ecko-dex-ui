@@ -5,27 +5,36 @@ import { KaddexLetterLogo } from '../assets';
 const LogoLoaderContainer = styled.div`
    {
     .rotate {
-      animation: rotation 3s infinite linear;
+      -webkit-animation-name: rotation;
+      -webkit-animation-duration: 2s;
+      -webkit-animation-iteration-count: infinite;
+      -webkit-animation-timing-function: linear;
+
+      /* -webkit-animation: rotation 2s infinite linear; */
       display: flex;
       justify-content: center;
       align-items: center;
       width: 100%;
+      margin-top: ${({ withTopMargin }) => withTopMargin && '24px'};
     }
 
     @keyframes rotation {
-      from {
-        transform: rotate(0deg);
+      0% {
+        -webkit-transform: rotateY(0deg);
       }
-      to {
-        transform: rotateY(359deg);
+      50% {
+        -webkit-transform: rotateY(179deg);
+      }
+      100% {
+        -webkit-transform: rotateY(359deg);
       }
     }
   }
 `;
 
-const LogoLoader = () => {
+const LogoLoader = ({ withTopMargin }) => {
   return (
-    <LogoLoaderContainer>
+    <LogoLoaderContainer withTopMargin={withTopMargin}>
       <KaddexLetterLogo class="rotate" />
     </LogoLoaderContainer>
   );

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useContext, useState } from 'react';
 import styled from 'styled-components/macro';
-import { Button, Header, Divider } from 'semantic-ui-react';
+import { Loader, Button, Header, Divider } from 'semantic-ui-react';
 import CustomButton from '../../shared/CustomButton';
 import TokenPair from './TokenPair';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
@@ -237,7 +237,20 @@ const LiquidityList = (props) => {
                       An error was encountered. Please reload the page
                     </p>
                   ) : (
-                    <LogoLoader />
+                    <>
+                      {browserDetection() === 'SAFARI' ? (
+                        <Loader
+                          active
+                          inline="centered"
+                          style={{
+                            color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
+                            fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
+                          }}
+                        />
+                      ) : (
+                        <LogoLoader />
+                      )}
+                    </>
                   )}
                 </FormContainer>
               )

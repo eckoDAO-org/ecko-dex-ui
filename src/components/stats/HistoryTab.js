@@ -118,7 +118,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
                   pact.getMoreEventsSwapList();
                 }}
                 hasMore={pact.moreSwap}
-                loader={<CustomLoader key="infinite-scroll-loader" inline="centered" loaderStyle={{ marginTop: 24 }} />}
+                loader={<LogoLoader withTopMargin />}
                 useWindow={false}
                 initialLoad={false}
               >
