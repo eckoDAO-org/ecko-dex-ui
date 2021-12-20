@@ -62,22 +62,6 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
 
   useEffect(() => {}, [account.sendRes]);
 
-  const CustomLoader = ({ text, inline, loaderStyle }) => {
-    return (
-      <Loader
-        active
-        inline={inline}
-        style={{
-          color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
-          fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
-          ...loaderStyle,
-        }}
-      >
-        {text}{' '}
-      </Loader>
-    );
-  };
-
   return (
     <ModalContainer
       withoutRainbowBackground

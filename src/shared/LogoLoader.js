@@ -35,7 +35,7 @@ const LogoLoaderContainer = styled.div`
 const LogoLoader = ({ withTopMargin }) => {
   return (
     <LogoLoaderContainer withTopMargin={withTopMargin}>
-      <KaddexLetterLogo class="rotate" />
+      <KaddexLetterLogo className="rotate" />
     </LogoLoaderContainer>
   );
 };

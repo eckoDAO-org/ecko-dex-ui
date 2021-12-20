@@ -32,6 +32,8 @@ export const lightTheme = {
   ...commonTheme,
   backgroundBody:
     'radial-gradient(at 90% 10%, hsla(298,34%,85%,1) 0, transparent 37%),radial-gradient(at 18% 73%, hsla(179,100%,94%,1) 0, transparent 71%),radial-gradient(at 81% 69%, hsla(40,100%,93%,1) 0, transparent 79%);',
+  backgroundBodySafari:
+    'radial-gradient(at 90% 10%, hsla(298,34%,85%,1) 0, transparent 100%),radial-gradient(at 18% 73%, hsla(179,100%,94%,1) 0, transparent 100%),radial-gradient(at 81% 69%, hsla(40,100%,93%,1) 0, transparent 100%);',
   colors: {
     primary: '#FFFFFF',
     border: '#240B2F',
@@ -52,6 +54,7 @@ export const lightTheme = {
 export const darkTheme = {
   ...commonTheme,
   backgroundBody: 'transparent linear-gradient(122deg, #070610 0%, #4C125A 100%) 0% 0% no-repeat padding-box',
+  backgroundBodySafari: 'transparent linear-gradient(122deg, #070610 0%, #4C125A 100%) 0% 0% no-repeat padding-box',
   colors: {
     primary: '#4C125A',
     border: '#ECEBEC',

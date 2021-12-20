@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import browserDetection from '../utils/browserDetection';
 
 export default createGlobalStyle`
     *, *:before, *:after {
@@ -26,7 +27,8 @@ export default createGlobalStyle`
       min-width: 0;
       font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
       color: ${({ theme: { colors } }) => colors.primary};
-      background: ${({ theme: { backgroundBody } }) => backgroundBody};
+      background: ${({ theme: { backgroundBody, backgroundBodySafari } }) =>
+        browserDetection() === 'SAFARI' ? backgroundBodySafari : backgroundBody};
       opacity: 1;
       background-size: cover;
       background-repeat: no-repeat;
