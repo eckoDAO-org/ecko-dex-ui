@@ -38,12 +38,16 @@ const AccountContainer = styled.div`
   color: ${({ theme: { colors } }) => colors.primary};
   border-radius: 10px;
   z-index: 2;
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    padding: 6px 6px;
+    font-size: 12px;
+  }
 `;
 
 const AccountInfo = ({ account, balance, onClick }) => {
   return (
     <Container onClick={onClick}>
-      <BalanceContainer>{balance}</BalanceContainer>
+      <BalanceContainer className="mobile-none">{balance}</BalanceContainer>
       <AccountContainer>{account}</AccountContainer>
     </Container>
   );

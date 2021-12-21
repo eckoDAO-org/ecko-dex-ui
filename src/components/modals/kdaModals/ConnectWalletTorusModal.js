@@ -3,7 +3,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import TorusSdk from '@toruslabs/torus-direct-web-sdk';
 import Pact from 'pact-lang-api';
 import styled from 'styled-components/macro';
-import { Loader } from 'semantic-ui-react';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { WalletContext } from '../../../contexts/WalletContext';
 import CustomButton from '../../../shared/CustomButton';
@@ -12,19 +11,13 @@ import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { WALLET } from '../../../constants/wallet';
 import { theme } from '../../../styles/theme';
 import { LightModeContext } from '../../../contexts/LightModeContext';
+import LogoLoader from '../../../shared/LogoLoader';
 
 const ButtonContainer = styled.div`
   display: flex;
   flex-flow: column;
   gap: 24px;
   margin-top: 30px;
-`;
-
-const LoaderContainer = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  margin-top: 15px;
 `;
 
 const TopText = styled.span`
@@ -153,11 +146,7 @@ function Login({ onClose, onBack }) {
           </CustomButton>
         </ButtonContainer>
       )}
-      {loading && (
-        <LoaderContainer gameEditionView={gameEditionView}>
-          <Loader active inline="centered" style={{ color: '#e0e0e0' }}></Loader>
-        </LoaderContainer>
-      )}
+      {loading && <LogoLoader />}
     </>
   );
 }

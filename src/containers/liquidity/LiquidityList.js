@@ -16,6 +16,7 @@ import GradientBorder from '../../shared/GradientBorder';
 import { LightModeContext } from '../../contexts/LightModeContext';
 import FormContainer from '../../shared/FormContainer';
 import browserDetection from '../../utils/browserDetection';
+import LogoLoader from '../../shared/LogoLoader';
 
 const Container = styled.div`
   display: flex;
@@ -236,16 +237,20 @@ const LiquidityList = (props) => {
                       An error was encountered. Please reload the page
                     </p>
                   ) : (
-                    <Loader
-                      active
-                      inline="centered"
-                      style={{
-                        color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
-                        fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
-                      }}
-                    >
-                      Loading..
-                    </Loader>
+                    <>
+                      {browserDetection() === 'SAFARI' ? (
+                        <Loader
+                          active
+                          inline="centered"
+                          style={{
+                            color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
+                            fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
+                          }}
+                        />
+                      ) : (
+                        <LogoLoader />
+                      )}
+                    </>
                   )}
                 </FormContainer>
               )

@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import CustomButton from '../../../shared/CustomButton';
-import { Dropdown, Loader } from 'semantic-ui-react';
+import { Dropdown } from 'semantic-ui-react';
 import { Button } from 'semantic-ui-react';
 import reduceToken from '../../../utils/reduceToken';
 import { AccountContext } from '../../../contexts/AccountContext';
@@ -12,6 +12,7 @@ import { getAccounts, openZelcore } from '../../../utils/zelcore';
 import { WalletContext } from '../../../contexts/WalletContext';
 import { WALLET } from '../../../constants/wallet';
 import { LightModeContext } from '../../../contexts/LightModeContext';
+import LogoLoader from '../../../shared/LogoLoader';
 
 const TopText = styled.span`
   font-size: 13px;
@@ -137,7 +138,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
           <TopText gameEditionView={gameEditionView}>Follow instructions in the wallet to share your accounts</TopText>
           <ActionContainer gameEditionView={gameEditionView}>
             {loading ? (
-              <Loader active inline="centered" style={{ color: theme(themeMode).colors.white }}></Loader>
+              <LogoLoader />
             ) : (
               <CustomButton
                 buttonStyle={{ width: gameEditionView && '100%' }}
