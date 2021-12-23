@@ -1,11 +1,21 @@
 /* eslint-disable react/react-in-jsx-scope */
 import React from 'react';
+import styled from 'styled-components';
 import useAbsoluteContent from '../../hooks/useAbsoluteContent';
+
+const GameEditionMobileConatiner = styled.div`
+  width: 95%;
+  @media only screen and (min-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) and (max-width: ${({
+      theme: { mediaQueries },
+    }) => `${mediaQueries.desktopPixel - 1}px`}) {
+    width: 80%;
+  }
+`;
 
 const GameEditionMobileWrapper = ({ startLabel, startOnClick, selectLabel, selectOnClick, children }) => {
   useAbsoluteContent('svgContent', 'Rectangle_38');
   return (
-    <div style={{ width: '95%' }}>
+    <GameEditionMobileConatiner>
       <div id="svgContent" style={{ position: 'absolute' }}>
         {children}
       </div>
@@ -430,7 +440,7 @@ const GameEditionMobileWrapper = ({ startLabel, startOnClick, selectLabel, selec
           />
         </g>
       </svg>
-    </div>
+    </GameEditionMobileConatiner>
   );
 };
 

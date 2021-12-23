@@ -1,11 +1,19 @@
 /* eslint-disable react/react-in-jsx-scope */
 import React from 'react';
+import styled from 'styled-components';
 import useAbsoluteContent from '../../hooks/useAbsoluteContent';
+
+const GameEditionConatiner = styled.div`
+  width: 65%;
+  @media (max-width: 1366px) {
+    width: 90%;
+  }
+`;
 
 export const GameEditionWrapper = ({ startLabel, startOnClick, selectLabel, selectOnClick, buttonLOnClick, buttonROnClick, children }) => {
   useAbsoluteContent('svgContent', 'screen');
   return (
-    <div style={{ width: '60%' }}>
+    <GameEditionConatiner>
       <div id="svgContent" style={{ position: 'absolute' }}>
         {children}
       </div>
@@ -669,6 +677,6 @@ export const GameEditionWrapper = ({ startLabel, startOnClick, selectLabel, sele
           </g>
         </g>
       </svg>
-    </div>
+    </GameEditionConatiner>
   );
 };
