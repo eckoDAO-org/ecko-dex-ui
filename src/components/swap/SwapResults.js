@@ -15,8 +15,8 @@ const ResultContainer = styled.div`
   /* position: ${({ gameEditionView }) => gameEditionView && 'absolute'}; */
   margin-top: ${({ gameEditionView }) => gameEditionView && '20px'};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    margin: ${({ gameEditionView }) => (gameEditionView ? `5px 0px` : ` 10px 0px`)};
     flex-flow: column;
-    margin-bottom: 0px;
   }
   & > *:not(:last-child) {
     margin-bottom: ${({ gameEditionView }) => !gameEditionView && `10px`};
@@ -28,7 +28,7 @@ const RowContainer = styled.div`
   justify-content: space-between;
   flex-flow: row;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: row;
+    flex-flow: ${({ gameEditionView }) => (gameEditionView ? 'column' : 'row')};
   }
 `;
 
@@ -37,6 +37,11 @@ const Label = styled.span`
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
   text-transform: capitalize;
+  display: flex;
+  align-items: center;
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    text-align: left;
+  }
 `;
 
 const Value = styled.span`
@@ -44,6 +49,10 @@ const Value = styled.span`
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   line-height: 20px;
   color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'right')};
+    margin-bottom: ${({ gameEditionView }) => gameEditionView && '5px'};
+  }
 `;
 
 const SwapResults = ({ priceImpact, fromValues, toValues }) => {

@@ -11,6 +11,7 @@ import { theme } from '../../styles/theme';
 import { Label, PartialScrollableScrollSection, Title, TitleContainer } from '../layout/Containers';
 import HistoryCard from './HistoryCard';
 import { AccountContext } from '../../contexts/AccountContext';
+import useWindowSize from '../../hooks/useWindowSize';
 
 export const CardContainer = styled.div`
   position: ${({ gameEditionView }) => !gameEditionView && `relative`};
@@ -31,6 +32,7 @@ export const CardContainer = styled.div`
   backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
   overflow: auto;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    padding: ${({ gameEditionView }) => gameEditionView && `12px`};
     flex-flow: column;
     max-height: ${({ gameEditionView }) => (gameEditionView ? 'unset' : '450px')};
     gap: 0px;
@@ -61,6 +63,8 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
 
   useEffect(() => {}, [account.sendRes]);
 
+  const [width] = useWindowSize();
+
   const CustomLoader = ({ text, inline, loaderStyle }) => {
     return (
       <Loader
@@ -84,7 +88,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
       containerStyle={{
         maxHeight: !gameEditionView && '80vh',
         height: gameEditionView && '100%',
-        padding: gameEditionView ? '16px 24px' : 0,
+        padding: gameEditionView ? (width <= theme().mediaQueries.mobilePixel ? '16px 8px' : '16px 24px') : 0,
         border: gameEditionView && '1px solid transparent',
       }}
     >

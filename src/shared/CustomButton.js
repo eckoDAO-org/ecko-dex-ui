@@ -16,7 +16,7 @@ const StyledButton = styled(SUIButton)`
   }};
   font-size: ${({ fontSize }) => (fontSize ? fontSize + ' !important' : '16px !important')};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
-    font-size: 13px !important;
+    font-size: ${({ $gameEditionView }) => ($gameEditionView ? '11px !important' : '13px !important')};
   }
   color: ${({ theme: { colors }, disabled, $color, $gameEditionView, $outGameEditionView }) => {
     if ($color) return $color + ' !important';

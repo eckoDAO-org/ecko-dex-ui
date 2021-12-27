@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { LightModeContext } from '../../contexts/LightModeContext';
 import { PactContext } from '../../contexts/PactContext';
+import useWindowSize from '../../hooks/useWindowSize';
 import GradientBorder from '../../shared/GradientBorder';
 import ModalContainer from '../../shared/ModalContainer';
 import { theme } from '../../styles/theme';
@@ -29,6 +30,7 @@ export const CardContainer = styled.div`
   border: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `2px dashed ${colors.black}`};
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    padding: ${({ gameEditionView }) => gameEditionView && `12px`};
     flex-flow: column;
     gap: 0px;
   }
@@ -51,13 +53,15 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
     await pact.getPairList();
   }, []);
 
+  const [width] = useWindowSize();
+
   return (
     <ModalContainer
       withoutRainbowBackground
       backgroundNotChangebleWithTheme
       containerStyle={{
         maxHeight: !gameEditionView && '80vh',
-        padding: gameEditionView ? '16px 24px' : 0,
+        padding: gameEditionView ? (width <= theme().mediaQueries.mobilePixel ? '16px 8px' : '16px 24px') : 0,
         border: gameEditionView && '1px solid transparent',
         height: gameEditionView && '100%',
       }}

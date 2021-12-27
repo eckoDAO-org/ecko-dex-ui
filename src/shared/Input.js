@@ -111,7 +111,9 @@ const Button = styled.button`
     color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `${colors.black}` : `${colors.white}`)};
     text-transform: capitalize;
 
-    @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
+      font: ${({ gameEditionView, theme: { fontFamily } }) =>
+        gameEditionView ? `normal normal normal 13px ${fontFamily.pressStartRegular}` : `normal normal bold 14px/18px ${fontFamily.bold}`};
     }
   }
 

@@ -47,6 +47,9 @@ const TokenItem = styled.div`
     width: 24px;
     height: 24px;
   }
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    font-size: ${({ gameEditionView }) => gameEditionView && '13px'};
+  }
 `;
 const TokenSelectorModalContent = ({ show, tokenSelectorType, onTokenClick, onClose, fromToken, toToken }) => {
   const [searchValue, setSearchValue] = useState('');

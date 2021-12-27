@@ -9,6 +9,9 @@ const Label = styled.span`
   font-family: ${({ gameEditionView, bold, theme: { fontFamily } }) =>
     gameEditionView ? fontFamily.pressStartRegular : bold ? fontFamily.bold : fontFamily.regular};
   font-size: ${({ gameEditionView, fontSize }) => (fontSize ? (gameEditionView ? '10px' : fontSize) : '13px')};
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    font-size: ${({ gameEditionView }) => gameEditionView && '10px'};
+  }
 `;
 
 const CustomLabel = ({ children, bold, fontSize, labelStyle, textAlign }) => {
