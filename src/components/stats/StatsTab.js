@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
-import { Divider, Loader } from 'semantic-ui-react';
+import { Divider } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { LightModeContext } from '../../contexts/LightModeContext';
 import { PactContext } from '../../contexts/PactContext';
 import useWindowSize from '../../hooks/useWindowSize';
 import GradientBorder from '../../shared/GradientBorder';
+import LogoLoader from '../../shared/LogoLoader';
 import ModalContainer from '../../shared/ModalContainer';
 import { theme } from '../../styles/theme';
 import { PartialScrollableScrollSection, Title, TitleContainer } from '../layout/Containers';
@@ -105,18 +106,7 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
               )
             )
           ) : (
-            <div style={{ padding: '16px' }}>
-              <Loader
-                active
-                inline={gameEditionView && 'centered'}
-                style={{
-                  color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
-                  fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
-                }}
-              >
-                Loading..
-              </Loader>
-            </div>
+            <LogoLoader />
           )}
         </PartialScrollableScrollSection>
       </CardContainer>

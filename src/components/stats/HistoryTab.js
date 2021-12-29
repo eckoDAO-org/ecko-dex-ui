@@ -12,6 +12,7 @@ import { Label, PartialScrollableScrollSection, Title, TitleContainer } from '..
 import HistoryCard from './HistoryCard';
 import { AccountContext } from '../../contexts/AccountContext';
 import useWindowSize from '../../hooks/useWindowSize';
+import LogoLoader from '../../shared/LogoLoader';
 
 export const CardContainer = styled.div`
   position: ${({ gameEditionView }) => !gameEditionView && `relative`};
@@ -64,23 +65,6 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
   useEffect(() => {}, [account.sendRes]);
 
   const [width] = useWindowSize();
-
-  const CustomLoader = ({ text, inline, loaderStyle }) => {
-    return (
-      <Loader
-        active
-        inline={inline}
-        style={{
-          color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
-          fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
-          ...loaderStyle,
-        }}
-      >
-        {text}{' '}
-      </Loader>
-    );
-  };
-
   return (
     <ModalContainer
       withoutRainbowBackground
@@ -121,7 +105,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
                   pact.getMoreEventsSwapList();
                 }}
                 hasMore={pact.moreSwap}
-                loader={<CustomLoader key="infinite-scroll-loader" inline="centered" loaderStyle={{ marginTop: 24 }} />}
+                loader={<LogoLoader withTopMargin />}
                 useWindow={false}
                 initialLoad={false}
               >
@@ -141,9 +125,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
                 ))}
               </InfiniteScroll>
             ) : (
-              <div style={{ padding: '16px' }}>
-                <CustomLoader text="Loading.." inline={gameEditionView && 'centered'} />
-              </div>
+              <LogoLoader />
             )
           ) : (
             <Label gameEditionView={gameEditionView}>{pact.swapList?.error}</Label>
