@@ -48,6 +48,17 @@ const ElementsContainer = styled.div`
     color: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? colors.black : colors.white)};
   }
 
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
+    span {
+      font-size: 16px;
+      margin-right: 13px;
+      font: ${({ $gameEditionView, theme: { fontFamily } }) => {
+        if ($gameEditionView) return `normal normal normal 13px ${fontFamily.pressStartRegular}`;
+      }};
+      color: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? colors.black : colors.white)};
+    }
+  }
+
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
     img {
       margin-right: 4px !important;

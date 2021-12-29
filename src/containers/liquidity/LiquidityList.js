@@ -16,6 +16,7 @@ import GradientBorder from '../../shared/GradientBorder';
 import { LightModeContext } from '../../contexts/LightModeContext';
 import FormContainer from '../../shared/FormContainer';
 import browserDetection from '../../utils/browserDetection';
+import useWindowSize from '../../hooks/useWindowSize';
 import LogoLoader from '../../shared/LogoLoader';
 
 const Container = styled.div`
@@ -95,6 +96,8 @@ const LiquidityList = (props) => {
     }
   }, [activeIndex]);
 
+  const [width] = useWindowSize();
+
   return (
     <Container $gameEditionView={gameEditionView}>
       <ModalContainer
@@ -124,7 +127,7 @@ const LiquidityList = (props) => {
         >
           <h1
             style={{
-              fontSize: gameEditionView ? 16 : 24,
+              fontSize: gameEditionView ? (width <= theme().mediaQueries.mobilePixel ? 13 : 16) : 24,
               fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.bold,
             }}
           >
@@ -132,7 +135,7 @@ const LiquidityList = (props) => {
           </h1>
           <p
             style={{
-              fontSize: gameEditionView ? 12 : 16,
+              fontSize: gameEditionView ? (width <= theme().mediaQueries.mobilePixel ? 10 : 12) : 16,
               fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
             }}
           >
@@ -155,13 +158,14 @@ const LiquidityList = (props) => {
                 Your Liquidity
               </Header>
               <ButtonContainer style={{ marginBottom: gameEditionView ? 15 : 30 }}>
-                <Button.Group fluid>
+                <Button.Group fluid style={{ flexDirection: gameEditionView && width <= theme().mediaQueries.mobilePixel ? 'column' : 'row' }}>
                   <CustomButton
                     disabled
                     buttonStyle={{
-                      marginRight: '15px',
+                      marginRight: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '15px',
                       borderRadius: '20px',
-                      width: '48%',
+                      width: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '100%' : '48%',
+                      marginBottom: gameEditionView && width <= theme().mediaQueries.mobilePixel && '10px',
                     }}
                     onClick={() => props.selectCreatePair()}
                   >
@@ -169,9 +173,9 @@ const LiquidityList = (props) => {
                   </CustomButton>
                   <CustomButton
                     buttonStyle={{
-                      marginLeft: '-5px',
+                      marginLeft: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '-5px',
                       borderRadius: '20px',
-                      width: '48%',
+                      width: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '100%' : '48%',
                     }}
                     onClick={() => props.selectAddLiquidity()}
                   >

@@ -100,7 +100,7 @@ const RowContainer = styled.div`
   flex-flow: row;
   margin: 16px 0px;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: row;
+    flex-flow: ${({ gameEditionView }) => (gameEditionView ? `column` : ` row`)};
   }
 `;
 
@@ -109,6 +109,9 @@ const Label = styled.span`
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
   text-transform: capitalize;
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    text-align: left;
+  }
 `;
 
 const Value = styled.span`
@@ -116,6 +119,9 @@ const Value = styled.span`
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   line-height: 20px;
   color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'right')};
+  }
 `;
 
 const SwapContainer = () => {

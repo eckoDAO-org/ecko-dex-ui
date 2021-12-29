@@ -96,6 +96,7 @@ const ResultContainer = styled.div`
   padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : 0)};
   margin-top: ${({ gameEditionView }) => gameEditionView && '30px'};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    margin: ${({ gameEditionView }) => gameEditionView && `10px 0px 5px 0px`};
     flex-flow: column;
   }
 
@@ -109,7 +110,7 @@ const InnerRowContainer = styled.div`
   justify-content: space-between;
   flex-flow: row;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: row;
+    flex-flow: ${({ gameEditionView }) => (gameEditionView ? 'column' : `row`)};
   }
 `;
 
@@ -118,6 +119,10 @@ const Value = styled.span`
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   line-height: 20px;
   color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    text-align: ${({ gameEditionView }) => gameEditionView && 'left'};
+    margin-bottom: ${({ gameEditionView }) => gameEditionView && '5px'};
+  }
 `;
 
 const initialStateValue = {
@@ -708,15 +713,17 @@ const LiquidityContainer = (props) => {
           <>
             <ResultContainer gameEditionView={gameEditionView}>
               <InnerRowContainer gameEditionView={gameEditionView}>
-                <CustomLabel fontSize="13px">{`${toValues.coin} per ${fromValues.coin}`}</CustomLabel>
+                <CustomLabel textAlign={gameEditionView && 'start'} fontSize="13px">{`${toValues.coin} per ${fromValues.coin}`}</CustomLabel>
                 <Value gameEditionView={gameEditionView}>{reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}</Value>
               </InnerRowContainer>
               <InnerRowContainer gameEditionView={gameEditionView}>
-                <CustomLabel fontSize="13px">{`${fromValues.coin} per ${toValues.coin}`}</CustomLabel>
+                <CustomLabel textAlign={gameEditionView && 'start'} fontSize="13px">{`${fromValues.coin} per ${toValues.coin}`}</CustomLabel>
                 <Value gameEditionView={gameEditionView}>{reduceBalance(pact.getRatio1(toValues.coin, fromValues.coin)) ?? '-'}</Value>
               </InnerRowContainer>
               <InnerRowContainer gameEditionView={gameEditionView}>
-                <CustomLabel fontSize="13px">Share of Pool</CustomLabel>
+                <CustomLabel textAlign={gameEditionView && 'start'} fontSize="13px">
+                  Share of Pool
+                </CustomLabel>
                 <Value gameEditionView={gameEditionView}>
                   {!pact.share(fromValues.amount) ? 0 : reduceBalance(pact.share(fromValues.amount) * 100)}%
                 </Value>

@@ -43,6 +43,9 @@ const AnimatedDiv = styled.div`
     letter-spacing: 0.64px;
     color: #000000;
     opacity: 1;
+    @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
+      font-size: 36px !important;
+    }
   }
 `;
 const GameEditionStartAnimation = () => {

@@ -1,26 +1,19 @@
 /* eslint-disable react/react-in-jsx-scope */
-import React, { useEffect } from 'react';
+import React from 'react';
+import styled from 'styled-components';
+import useAbsoluteContent from '../../hooks/useAbsoluteContent';
+
+const GameEditionConatiner = styled.div`
+  width: 65%;
+  @media (max-width: 1366px) {
+    width: 90%;
+  }
+`;
 
 export const GameEditionWrapper = ({ startLabel, startOnClick, selectLabel, selectOnClick, buttonLOnClick, buttonROnClick, children }) => {
-  const setSvgContentWidth = () => {
-    const svgContent = document.getElementById('svgContent');
-    const svgContainer = document.getElementById('screen');
-    if (svgContent && svgContainer) {
-      const containerRect = svgContainer.getBoundingClientRect();
-      svgContent.style.left = `${containerRect.left}px`;
-      svgContent.style.top = `${containerRect.top}px`;
-      svgContent.style.width = `${containerRect.width}px`;
-      svgContent.style.height = `${containerRect.height}px`;
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('resize', setSvgContentWidth);
-    setSvgContentWidth();
-  }, []);
-
+  useAbsoluteContent('svgContent', 'screen');
   return (
-    <div>
+    <GameEditionConatiner>
       <div id="svgContent" style={{ position: 'absolute' }}>
         {children}
       </div>
@@ -30,6 +23,7 @@ export const GameEditionWrapper = ({ startLabel, startOnClick, selectLabel, sele
         width="1000.552"
         viewBox="0 0 1110.552 631.954"
         id="gameEdition"
+        style={{ width: '100%' }}
       >
         <defs>
           <linearGradient id="linear-gradient" x1="0.107" y1="-0.401" x2="0.98" y2="1.196" gradientUnits="objectBoundingBox">
@@ -683,6 +677,6 @@ export const GameEditionWrapper = ({ startLabel, startOnClick, selectLabel, sele
           </g>
         </g>
       </svg>
-    </div>
+    </GameEditionConatiner>
   );
 };
