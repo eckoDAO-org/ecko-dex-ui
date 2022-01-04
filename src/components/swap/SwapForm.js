@@ -9,6 +9,7 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { Divider } from 'semantic-ui-react';
 import useWindowSize from '../../hooks/useWindowSize';
 import { theme } from '../../styles/theme';
+import noExponents from '../../utils/noExponents';
 
 const Container = styled.div`
   display: flex;
@@ -58,7 +59,7 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
         }
         withSelectButton
         numberOnly
-        value={fromValues.amount}
+        value={noExponents(fromValues.amount)}
         onSelectButtonClick={() => {
           setTokenSelectorType('from');
         }}
@@ -99,7 +100,7 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
                 setInputSide('to');
                 setToValues((prev) => ({
                   ...prev,
-                  amount: toValues.balance,
+                  amount: reduceBalance(toValues.balance),
                 }));
               }}
               disabledButton={fromValues.amount === fromValues.balance}
@@ -108,7 +109,7 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
         }
         withSelectButton
         numberOnly
-        value={toValues.amount}
+        value={noExponents(toValues.amount)}
         onSelectButtonClick={() => {
           setTokenSelectorType('to');
         }}
