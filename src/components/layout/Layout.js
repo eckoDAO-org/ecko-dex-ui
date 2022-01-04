@@ -22,6 +22,11 @@ const WrapperContainer = styled(Wrapper)`
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
     padding: 0 1.5em;
   }
+  .mainnet-chain-2 {
+    font-size: 16px;
+    font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+    color: ${({ theme: { colors } }) => colors.white};
+  }
 `;
 
 const MainContent = styled.div`
@@ -51,6 +56,7 @@ const Layout = ({ children }) => {
       {/* <CustomParticles /> */}
       <WrapperContainer>
         <MobileHeader className="desktop-none" />
+        <span className="mainnet-chain-2 desktop-none">Mainnet Chain 2</span>
         <DesktopHeader className="mobile-none" gameEditionView={game.gameEditionView} />
         {game.gameEditionView ? <GameEditionContainer>{children}</GameEditionContainer> : <MainContent>{children}</MainContent>}
       </WrapperContainer>

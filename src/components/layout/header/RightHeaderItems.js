@@ -45,6 +45,12 @@ const RightContainerHeader = styled.div`
     opacity: 1;
     transition: opacity 1s linear;
   }
+
+  .mainnet-chain-2 {
+    font-size: 16px;
+    font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+    color: ${({ theme: { colors } }) => colors.white};
+  }
 `;
 
 const FadeContainer = styled.div``;
@@ -58,6 +64,7 @@ const RightHeaderItems = () => {
 
   return (
     <RightContainerHeader>
+      <span className="mainnet-chain-2 mobile-none">Mainnet Chain 2</span>
       {account?.account ? (
         <HeaderItem>
           <AccountInfo
@@ -82,6 +89,7 @@ const RightHeaderItems = () => {
       ) : (
         <></>
       )}
+
       {!account.account && (
         <FadeContainer style={{ display: gameEditionView && 'none' }}>
           <HeaderItem className="mobile-none">
