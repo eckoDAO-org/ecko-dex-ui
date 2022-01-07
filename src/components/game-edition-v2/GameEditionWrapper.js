@@ -33,12 +33,15 @@ const GameEditionContent = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  & > *:first-child {
+    border-radius: 19px;
+  }
 `;
 
 export const GameEditionWrapper = ({ startLabel, startOnClick, selectLabel, selectOnClick, buttonLOnClick, buttonROnClick, children }) => {
   return (
     <GameEditionConatiner style={{ backgroundImage: `url(${gameboy})` }}>
-      <GameEditionContent>{children}</GameEditionContent>{' '}
+      <GameEditionContent>{children}</GameEditionContent>
       <div className="kaddex-logo">
         <KaddexLogo />
       </div>

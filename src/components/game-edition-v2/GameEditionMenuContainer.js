@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { MenuGEIcon } from '../../assets';
+import { ItemMenuArrow } from '../../assets';
 import HeaderItem from '../../components/shared/HeaderItem';
 import theme from '../../styles/theme';
 import headerLinks from '../headerLinks';
 import menuItems from '../menuItems';
-import { FadeIn } from '../components/shared/animations';
+import { FadeIn } from '../shared/animations';
+import menuBackground from '../../assets/images/game-edition/menu-background.png';
 
 const Container = styled(FadeIn)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   height: 100%;
   width: 100%;
+  padding: 24px;
+  span {
+    font-family: ${({ theme: { fontFamily } }) => fontFamily.pressStartRegular};
+    color: #ffffff;
+  }
 `;
 
 const TopListContainer = styled.div`
@@ -32,17 +39,6 @@ const TopListContainer = styled.div`
   }
 `;
 
-const BottomListContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 5%;
-  & > *:not(:last-child) {
-    margin-bottom: 25px;
-  }
-`;
-
 const RowMenuContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -51,66 +47,53 @@ const RowMenuContainer = styled.div`
 const GameEditionMenuContainer = () => {
   const [arrowVisible, setArrowVisible] = useState('');
 
-  const SelectGEIcon = ({ label, rotate }) => {
-    return (
-      <MenuGEIcon
-        style={{
-          display: arrowVisible === label ? 'block' : 'none',
-          height: 14,
-          transform: rotate && 'rotate(180deg)',
-        }}
-      />
-    );
-  };
-
   return (
-    <Container>
-      <TopListContainer>
-        {menuItems.map((item, index) => (
-          <RowMenuContainer key={index}>
-            <SelectGEIcon label={item.label} />
-            <HeaderItem
-              className={item.className}
-              route={item.route}
-              headerItemStyle={{
-                fontFamily: theme.fontFamily.pressStartRegular,
-                color: 'black',
-                margin: '0px 8px',
-                fontSize: 14,
-              }}
-              onMouseOver={() => setArrowVisible(item.label)}
-              notChangebleFontOnHover
-            >
-              {item.label}
-            </HeaderItem>
-            <SelectGEIcon label={item.label} rotate />
-          </RowMenuContainer>
-        ))}
-      </TopListContainer>
-      <BottomListContainer>
+    <Container style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(${menuBackground})` }}>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <span style={{ fontSize: 24, marginBottom: 30 }}>MENU</span>
+        <TopListContainer>
+          {menuItems.map((item, index) => (
+            <RowMenuContainer key={index}>
+              {arrowVisible === item.label && <ItemMenuArrow label={item.label} />}
+              <HeaderItem
+                className={item.className}
+                route={item.route}
+                headerItemStyle={{
+                  fontFamily: theme.fontFamily.pressStartRegular,
+                  color: arrowVisible === item.label ? '#FFC107' : '#ffffff',
+                  margin: '0px 8px',
+                  fontSize: 14,
+                }}
+                onMouseOver={() => setArrowVisible(item.label)}
+                notChangebleFontOnHover
+              >
+                {item.label}
+              </HeaderItem>
+            </RowMenuContainer>
+          ))}
+        </TopListContainer>
+      </div>
+      <RowMenuContainer>
         {headerLinks.map((item, index) => (
-          <RowMenuContainer key={index}>
-            <SelectGEIcon label={item.label} />
-            <HeaderItem
-              className={item?.className}
-              route={item?.route}
-              onClick={item?.onClick}
-              link={item?.link}
-              headerItemStyle={{
-                fontFamily: theme.fontFamily.pressStartRegular,
-                color: 'black',
-                margin: '0px 8px',
-                fontSize: 14,
-              }}
-              onMouseOver={() => setArrowVisible(item.label)}
-              notChangebleFontOnHover
-            >
-              {item.label}
-            </HeaderItem>
-            <SelectGEIcon label={item.label} rotate />
-          </RowMenuContainer>
+          <HeaderItem
+            key={index}
+            className={item?.className}
+            route={item?.route}
+            onClick={item?.onClick}
+            link={item?.link}
+            headerItemStyle={{
+              fontFamily: theme.fontFamily.pressStartRegular,
+              color: '#6D99E4',
+              margin: '0px 8px',
+              fontSize: 14,
+              textTransform: 'uppercase',
+            }}
+            notChangebleFontOnHover
+          >
+            {item.label}
+          </HeaderItem>
         ))}
-      </BottomListContainer>
+      </RowMenuContainer>
     </Container>
   );
 };
