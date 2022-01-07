@@ -1,15 +1,12 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router';
-import { ROUTE_GAME_EDITION_MENU, ROUTE_SWAP } from '../../router/routes';
-import { GameEditionWrapper } from './GameEditionWrapper';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
-import GameEditionModalsContainer from './GameEditionModalsContainer';
-import { FadeIn } from '../shared/animations';
-import theme from '../../styles/theme';
-import GameEditionMobileWrapper from './GameEditionMobileWrapper';
 import menuItems from '../menuItems';
 import useWindowSize from '../../hooks/useWindowSize';
+import { KaddexLogo } from '../../assets';
+import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.png';
+import gameboyMobile from '../../assets/images/game-edition/gameboy-mobile.png';
 
 const MainContainer = styled.div`
   display: flex;
@@ -20,17 +17,60 @@ const MainContainer = styled.div`
   overflow: hidden;
 `;
 
-const ContentContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  border-radius: ${({ $radius }) => $radius || 'none'};
-  background: rgb(254, 251, 102);
-  background: linear-gradient(180deg, rgba(254, 251, 102, 1) 35%, rgba(255, 54, 208, 1) 100%);
+const GameEditionConatiner = styled.div`
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 540px;
+  width: 930px;
   display: flex;
-  justify-content: center;
+  align-items: center;
   flex-direction: column;
-  text-align: center;
-  font-weight: 500;
+  .kaddex-logo {
+    margin-top: 20px;
+    margin-left: 24px;
+    svg {
+      height: 14.5px;
+    }
+    @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
+      margin-top: 8px;
+      svg {
+        height: 6px;
+      }
+    }
+  }
+  background-image: ${`url(${gameboyDesktop})`};
+
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
+    background-image: ${`url(${gameboyMobile})`};
+  }
+`;
+
+const GameEditionContent = styled.div`
+  width: 440px;
+  margin-left: 25px;
+  margin-top: 100px;
+  height: 329px;
+  background: rgba(0, 0, 0, 0.02);
+  box-shadow: inset 0px 0px 20px rgba(0, 0, 0, 0.75);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 19px;
+  & > *:first-child {
+    border-radius: 19px;
+  }
+
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
+    width: 205px;
+    height: 255px;
+    margin-left: 8px;
+    margin-top: 93px;
+    border-radius: 6px;
+    & > *:first-child {
+      border-radius: 6px;
+    }
+  }
 `;
 
 const GameEditionContainer = ({ children }) => {
@@ -51,16 +91,16 @@ const GameEditionContainer = ({ children }) => {
     }
   };
 
-  // d3.select("#start_button").style("cursor","pointer").on("click",()=>setmessage("I'm swap Button"))
-  // d3.select("#select_button").style("cursor","pointer").on("click",()=>setmessage("I'm Menu Button"))
-  // d3.select("#left_button").style("cursor","pointer").on("click",()=>setmessage("I'm Left Button"))
-  // d3.select("#right_button").style("cursor","pointer").on("click",()=>setmessage("I'm Right Button"))
-  // d3.select("#power_button").style("cursor","pointer").on("click",()=>setmessage("I'm Power Button"))
-  // d3.select("#a_button").style("cursor","pointer").on("click",()=>setmessage("I'm A Button"))
-  // d3.select("#b_button").style("cursor","pointer").on("click",()=>setmessage("I'm B Button"))
   const [width] = useWindowSize();
   return (
     <MainContainer>
+      <GameEditionConatiner>
+        <GameEditionContent>{children}</GameEditionContent>
+        <div className="kaddex-logo">
+          <KaddexLogo />
+        </div>
+      </GameEditionConatiner>
+      {/*     
       {width < theme.mediaQueries.desktopPixel ? (
         <GameEditionMobileWrapper
           selectLabel="MENU"
@@ -76,19 +116,17 @@ const GameEditionContainer = ({ children }) => {
             closeModal();
           }}
         >
-          <ContentContainer>
-            {children}
-            {modalState.open && (
-              <FadeIn>
-                <GameEditionModalsContainer
-                  title={modalState.title}
-                  description={modalState.description}
-                  content={modalState.content}
-                  onClose={modalState.closeModal}
-                />
-              </FadeIn>
-            )}
-          </ContentContainer>
+          {children}
+          {modalState.open && (
+            <FadeIn>
+              <GameEditionModalsContainer
+                title={modalState.title}
+                description={modalState.description}
+                content={modalState.content}
+                onClose={modalState.closeModal}
+              />
+            </FadeIn>
+          )}
         </GameEditionMobileWrapper>
       ) : (
         <GameEditionWrapper
@@ -128,7 +166,7 @@ const GameEditionContainer = ({ children }) => {
             )}
           </>
         </GameEditionWrapper>
-      )}
+      )} */}
     </MainContainer>
   );
 };

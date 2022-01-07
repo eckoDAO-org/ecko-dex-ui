@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { KaddexLogo } from '../../assets';
-import gameboy from '../../assets/images/game-edition/gameboy.png';
+import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.png';
 
 const GameEditionConatiner = styled.div`
   background-repeat: no-repeat;
@@ -40,7 +40,7 @@ const GameEditionContent = styled.div`
 
 export const GameEditionWrapper = ({ startLabel, startOnClick, selectLabel, selectOnClick, buttonLOnClick, buttonROnClick, children }) => {
   return (
-    <GameEditionConatiner style={{ backgroundImage: `url(${gameboy})` }}>
+    <GameEditionConatiner style={{ backgroundImage: `url(${gameboyDesktop})` }}>
       <GameEditionContent>{children}</GameEditionContent>
       <div className="kaddex-logo">
         <KaddexLogo />
