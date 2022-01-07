@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useHistory } from 'react-router';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import menuItems from '../menuItems';
@@ -25,6 +25,8 @@ const GameEditionConatiner = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  transition: all 1s ease-in-out;
+  transition-delay: 1s;
   .kaddex-logo {
     margin-top: 20px;
     margin-left: 24px;
@@ -43,6 +45,12 @@ const GameEditionConatiner = styled.div`
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
     background-image: ${`url(${gameboyMobile})`};
     background-size: contain;
+    transform: ${({ isLoadingCompleted }) => (isLoadingCompleted ? 'scale(1.5)' : 'scale(1)')};
+    /* ${({ isLoadingCompleted }) =>
+      isLoadingCompleted &&
+      css`
+        transform: scale(1.5);
+      `} */
   }
 `;
 
@@ -75,9 +83,9 @@ const GameEditionContent = styled.div`
 `;
 
 const GameEditionContainer = ({ children }) => {
-  const { modalState, closeModal } = useContext(GameEditionContext);
+  const { isLoadingCompleted } = useContext(GameEditionContext);
   const history = useHistory();
-
+  console.log('isLoadingCompleted', isLoadingCompleted);
   const switchAppSection = (direction) => {
     let cur = history.location.pathname;
     if (direction === 'left') {
@@ -95,7 +103,7 @@ const GameEditionContainer = ({ children }) => {
   const [width] = useWindowSize();
   return (
     <MainContainer>
-      <GameEditionConatiner>
+      <GameEditionConatiner isLoadingCompleted={isLoadingCompleted}>
         <GameEditionContent>{children}</GameEditionContent>
         <div className="kaddex-logo">
           <KaddexLogo />

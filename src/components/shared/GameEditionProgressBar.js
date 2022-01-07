@@ -47,7 +47,7 @@ const VerticalBorder = styled.div`
 
 const Filler = styled.div`
   height: 9px;
-  width: ${({ completed }) => completed}%;
+  width: ${({ loadingValue }) => loadingValue}%;
   background-color: #74c04b;
   transition: width 1s ease-in-out;
   padding: 3px;
@@ -56,13 +56,13 @@ const Filler = styled.div`
   top: 6px;
 `;
 
-const GameEditionProgressBar = ({ completed }) => {
+const GameEditionProgressBar = ({ loadingValue }) => {
   return (
     <Container>
       <HorizontalBorder className="progress-bar-top-border" />
       <Row>
         <VerticalBorder className="progress-bar-left-border" />
-        <Filler completed={completed} />
+        <Filler loadingValue={loadingValue} />
         <VerticalBorder className="progress-bar-right-border" />
       </Row>
       <HorizontalBorder className="progress-bar-bottom-border" />

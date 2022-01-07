@@ -16,13 +16,17 @@ export const GameEditionProvider = (props) => {
   const [modalState, setModalState] = useState(initialModalState);
   const [isSwapping, setIsSwapping] = useState(false);
 
-  const [completed, setCompleted] = useState(1);
+  const [loadingValue, setLoadingValue] = useState(1);
 
   useEffect(() => {
+    let interval = null;
     if (gameEditionView) {
-      console.log('if');
-      setInterval(() => setCompleted(PROGRESS_BAR_MAX_VALUE), 1000);
-    } else return () => setCompleted(1);
+      interval = setInterval(() => setLoadingValue(PROGRESS_BAR_MAX_VALUE), 1000);
+    }
+    return () => {
+      clearInterval(interval);
+      setLoadingValue(1);
+    };
   }, [gameEditionView]);
 
   const openModal = (settings) => {
@@ -44,7 +48,8 @@ export const GameEditionProvider = (props) => {
         closeModal,
         isSwapping,
         setIsSwapping,
-        completed,
+        loadingValue,
+        isLoadingCompleted: loadingValue === PROGRESS_BAR_MAX_VALUE,
       }}
     >
       {props.children}

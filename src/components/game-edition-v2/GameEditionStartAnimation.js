@@ -19,20 +19,20 @@ const Container = styled.div`
 
 const GameEditionStartAnimation = () => {
   const history = useHistory();
-  const { completed } = useGameEditionContext();
+  const { loadingValue } = useGameEditionContext();
 
   useEffect(() => {
-    if (completed === PROGRESS_BAR_MAX_VALUE) {
+    if (loadingValue === PROGRESS_BAR_MAX_VALUE) {
       setTimeout(() => {
         history.push(ROUTE_GAME_EDITION_MENU);
       }, 2000);
     }
-  }, [completed]);
+  }, [loadingValue]);
 
   return (
     <Container>
       <KaddexLoading />
-      <GameEditionProgressBar completed={completed} />
+      <GameEditionProgressBar loadingValue={loadingValue} />
       <span style={{ fontFamily: theme.fontFamily.pressStartRegular, color: '#ffff', marginTop: 50, fontSize: 14 }}>V 1.0.0</span>
     </Container>
   );
