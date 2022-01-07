@@ -21,6 +21,10 @@ const Container = styled.div`
       fill: ${({ theme: { colors } }) => colors.white};
     }
   }
+
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
+    top: ${({ $gameEditionView }) => $gameEditionView && '0px'};
+  }
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
     button {
       padding: 12px 4px !important;

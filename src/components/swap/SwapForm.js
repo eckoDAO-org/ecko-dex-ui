@@ -7,6 +7,9 @@ import { limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
 import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { Divider } from 'semantic-ui-react';
+import useWindowSize from '../../hooks/useWindowSize';
+import { theme } from '../../styles/theme';
+import noExponents from '../../utils/noExponents';
 
 const Container = styled.div`
   display: flex;
@@ -24,6 +27,8 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
   const { gameEditionView } = useContext(GameEditionContext);
   const [rotation, setRotation] = useState(0);
 
+  const [width] = useWindowSize();
+
   return (
     <Container>
       <Input
@@ -32,7 +37,7 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
         topRightLabel={`balance: ${reduceBalance(fromValues.balance) ?? '-'}`}
         placeholder="0.0"
         maxLength="15"
-        size="large"
+        size={width <= theme().mediaQueries.mobilePixel && gameEditionView ? 'medium' : 'large'}
         inputRightComponent={
           fromValues.coin ? (
             <InputToken
@@ -54,7 +59,7 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
         }
         withSelectButton
         numberOnly
-        value={fromValues.amount}
+        value={noExponents(fromValues.amount)}
         onSelectButtonClick={() => {
           setTokenSelectorType('from');
         }}
@@ -83,7 +88,7 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
         topLeftLabel={toNote ? `to ${toNote}` : `to`}
         topRightLabel={`balance: ${reduceBalance(toValues.balance) ?? '-'}`}
         placeholder="0.0"
-        size="large"
+        size={width <= theme().mediaQueries.mobilePixel && gameEditionView ? 'medium' : 'large'}
         maxLength="15"
         inputRightComponent={
           toValues.coin ? (
@@ -95,7 +100,7 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
                 setInputSide('to');
                 setToValues((prev) => ({
                   ...prev,
-                  amount: toValues.balance,
+                  amount: reduceBalance(toValues.balance),
                 }));
               }}
               disabledButton={fromValues.amount === fromValues.balance}
@@ -104,7 +109,7 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
         }
         withSelectButton
         numberOnly
-        value={toValues.amount}
+        value={noExponents(toValues.amount)}
         onSelectButtonClick={() => {
           setTokenSelectorType('to');
         }}

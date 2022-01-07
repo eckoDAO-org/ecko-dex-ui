@@ -64,7 +64,7 @@ const RightHeaderItems = () => {
 
   return (
     <RightContainerHeader>
-      <span className="mainnet-chain-2">Mainnet Chain 2</span>
+      <span className="mainnet-chain-2 mobile-none">Mainnet Chain 2</span>
       {account?.account ? (
         <HeaderItem>
           <AccountInfo
