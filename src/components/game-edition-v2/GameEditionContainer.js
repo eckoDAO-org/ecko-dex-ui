@@ -42,6 +42,7 @@ const GameEditionConatiner = styled.div`
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
     background-image: ${`url(${gameboyMobile})`};
+    background-size: contain;
   }
 `;
 
@@ -62,10 +63,10 @@ const GameEditionContent = styled.div`
   }
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
-    width: 205px;
-    height: 255px;
-    margin-left: 8px;
-    margin-top: 93px;
+    width: 253px;
+    height: 310px;
+    margin-left: 5px;
+    margin-top: 53px;
     border-radius: 6px;
     & > *:first-child {
       border-radius: 6px;

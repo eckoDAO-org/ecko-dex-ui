@@ -19,9 +19,7 @@ const MainContainer = styled.div`
 
 const WrapperContainer = styled(Wrapper)`
   height: 100%;
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
-    padding: 0 1.5em;
-  }
+
   .mainnet-chain-2 {
     font-size: 16px;
     font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
@@ -31,6 +29,9 @@ const WrapperContainer = styled(Wrapper)`
 
 const MainContent = styled.div`
   height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
+    padding: 0 1.5em;
+  }
 `;
 
 const StripesContainer = styled.div`
@@ -55,9 +56,11 @@ const Layout = ({ children }) => {
     <MainContainer>
       {/* <CustomParticles /> */}
       <WrapperContainer>
-        <MobileHeader className="desktop-none" />
-        <span className="mainnet-chain-2 desktop-none">Mainnet Chain 2</span>
-        <DesktopHeader className="mobile-none" gameEditionView={game.gameEditionView} />
+        <div style={{ padding: '0 1.5em' }}>
+          <MobileHeader className="desktop-none" />
+          <span className="mainnet-chain-2 desktop-none">Mainnet Chain 2</span>
+          <DesktopHeader className="mobile-none" gameEditionView={game.gameEditionView} />
+        </div>
         {game.gameEditionView ? <GameEditionContainer>{children}</GameEditionContainer> : <MainContent>{children}</MainContent>}
       </WrapperContainer>
       <StripesContainer>

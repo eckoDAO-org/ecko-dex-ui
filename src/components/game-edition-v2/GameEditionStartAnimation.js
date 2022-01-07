@@ -6,6 +6,8 @@ import theme from '../../styles/theme';
 import { ROUTE_GAME_EDITION_MENU } from '../../router/routes';
 import { KaddexLoading } from '../../assets';
 import GameEditionProgressBar from '../shared/GameEditionProgressBar';
+import { useGameEditionContext } from '../../contexts';
+import { PROGRESS_BAR_MAX_VALUE } from '../../contexts/GameEditionContext';
 
 const Container = styled.div`
   display: flex;
@@ -15,15 +17,9 @@ const Container = styled.div`
   padding-top: 100px;
 `;
 
-const PROGRESS_BAR_MAX_VALUE = 89;
-
 const GameEditionStartAnimation = () => {
   const history = useHistory();
-  const [completed, setCompleted] = useState(1);
-
-  useEffect(() => {
-    setInterval(() => setCompleted(PROGRESS_BAR_MAX_VALUE), 1000);
-  }, []);
+  const { completed } = useGameEditionContext();
 
   useEffect(() => {
     if (completed === PROGRESS_BAR_MAX_VALUE) {
