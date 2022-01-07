@@ -1,8 +1,8 @@
 import React from 'react';
 import { Popup as SUIPopup } from 'semantic-ui-react';
 import styled, { css } from 'styled-components';
-import { useGameEditionContext, useLightModeContext } from '../contexts';
-import browserDetection from '../utils/browserDetection';
+import { useGameEditionContext, useLightModeContext } from '../../contexts';
+import browserDetection from '../../utils/browserDetection';
 import GradientBorder from './GradientBorder';
 
 const Popup = styled(SUIPopup)`

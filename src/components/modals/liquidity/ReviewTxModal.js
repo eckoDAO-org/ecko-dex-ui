@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components/macro';
 import { reduceBalance } from '../../../utils/reduceBalance';
-import CustomButton from '../../../shared/CustomButton';
+import CustomButton from '../../../components/shared/CustomButton';
 import { SuccessfullIcon } from '../../../assets';
 import { PactContext } from '../../../contexts/PactContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';

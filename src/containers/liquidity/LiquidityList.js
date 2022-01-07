@@ -2,22 +2,22 @@
 import React, { useEffect, useContext, useState } from 'react';
 import styled from 'styled-components/macro';
 import { Loader, Button, Header, Divider } from 'semantic-ui-react';
-import CustomButton from '../../shared/CustomButton';
+import CustomButton from '../../components/shared/CustomButton';
 import TokenPair from './TokenPair';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { AccountContext } from '../../contexts/AccountContext';
 import { theme } from '../../styles/theme';
-import ModalContainer from '../../shared/ModalContainer';
+import ModalContainer from '../../components/shared/ModalContainer';
 import reduceToken from '../../utils/reduceToken';
 import ConnectWalletModal from '../../components/modals/kdaModals/ConnectWalletModal';
 import { ModalContext } from '../../contexts/ModalContext';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
-import GradientBorder from '../../shared/GradientBorder';
+import GradientBorder from '../../components/shared/GradientBorder';
 import { LightModeContext } from '../../contexts/LightModeContext';
-import FormContainer from '../../shared/FormContainer';
+import FormContainer from '../../components/shared/FormContainer';
 import browserDetection from '../../utils/browserDetection';
 import useWindowSize from '../../hooks/useWindowSize';
-import LogoLoader from '../../shared/LogoLoader';
+import LogoLoader from '../../components/shared/LogoLoader';
 
 const Container = styled.div`
   display: flex;

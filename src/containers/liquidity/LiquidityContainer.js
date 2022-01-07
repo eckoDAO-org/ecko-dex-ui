@@ -8,8 +8,8 @@ import WalletRequestView from '../../components/swap/swap-modals/WalletRequestVi
 import { ReactComponent as ArrowBack } from '../../assets/images/shared/arrow-back.svg';
 import { ReactComponent as CloseGE } from '../../assets/images/shared/close-ge.svg';
 import { Button } from 'semantic-ui-react';
-import CustomLabel from '../../shared/CustomLabel';
-import CustomButton from '../../shared/CustomButton';
+import CustomLabel from '../../components/shared/CustomLabel';
+import CustomButton from '../../components/shared/CustomButton';
 import ReviewTxModal from '../../components/modals/liquidity/ReviewTxModal';
 import TxView from '../../components/swap/swap-modals/TxView';
 import { ModalContext } from '../../contexts/ModalContext';
@@ -23,13 +23,13 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 import TokenSelectorModalContent from '../../components/swap/swap-modals/TokenSelectorModalContent';
 import { CogIcon } from '../../assets';
 import { FadeIn } from '../../components/shared/animations';
-import FormContainer from '../../shared/FormContainer';
-import GradientBorder from '../../shared/GradientBorder';
+import FormContainer from '../../components/shared/FormContainer';
+import GradientBorder from '../../components/shared/GradientBorder';
 import { LightModeContext } from '../../contexts/LightModeContext';
-import HeaderItem from '../../shared/HeaderItem';
-import CustomPopup from '../../shared/CustomPopup';
+import HeaderItem from '../../components/shared/HeaderItem';
+import CustomPopup from '../../components/shared/CustomPopup';
 import SlippagePopupContent from '../../components/layout/header/SlippagePopupContent';
-import BackgroundLogo from '../../shared/BackgroundLogo';
+import BackgroundLogo from '../../components/shared/BackgroundLogo';
 import browserDetection from '../../utils/browserDetection';
 
 const Container = styled(FadeIn)`

@@ -2,9 +2,9 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { Transition } from 'react-spring/renderprops';
-import ModalContainer from '../../../shared/ModalContainer';
+import ModalContainer from '../../../components/shared/ModalContainer';
 import { Loader, Icon } from 'semantic-ui-react';
-import CustomButton from '../../../shared/CustomButton';
+import CustomButton from '../../../components/shared/CustomButton';
 import GameEditionModalsContainer from '../../game-edition/GameEditionModalsContainer';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { WalletContext } from '../../../contexts/WalletContext';

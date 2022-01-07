@@ -1,8 +1,8 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { Logo } from '../assets';
-import { FadeIn } from '../components/shared/animations';
-import browserDetection from '../utils/browserDetection';
+import { Logo } from '../../assets';
+import { FadeIn } from './animations';
+import browserDetection from '../../utils/browserDetection';
 
 const LogoContainer = styled(FadeIn)`
   position: absolute;

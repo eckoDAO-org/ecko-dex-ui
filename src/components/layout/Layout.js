@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
-import Wrapper from '../../shared/Wrapper';
+import Wrapper from '../../components/shared/Wrapper';
 import DesktopHeader from './header/DesktopHeader';
 import MobileHeader from './header/MobileHeader';
 import { ReactComponent as Stripes } from '../../assets/images/shared/stripes.svg';
-import GameEditionContainer from '../game-edition/GameEditionContainer';
+import GameEditionContainer from '../game-edition-v2/GameEditionContainer';
 import { useHistory } from 'react-router';
 import { ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from '../../router/routes';
 import { GameEditionContext } from '../../contexts/GameEditionContext';

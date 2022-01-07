@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
-import CustomButton from '../../../shared/CustomButton';
+import CustomButton from '../../../components/shared/CustomButton';
 import { Dropdown } from 'semantic-ui-react';
 import { Button } from 'semantic-ui-react';
 import reduceToken from '../../../utils/reduceToken';
@@ -12,7 +12,7 @@ import { getAccounts, openZelcore } from '../../../utils/zelcore';
 import { WalletContext } from '../../../contexts/WalletContext';
 import { WALLET } from '../../../constants/wallet';
 import { LightModeContext } from '../../../contexts/LightModeContext';
-import LogoLoader from '../../../shared/LogoLoader';
+import LogoLoader from '../../../components/shared/LogoLoader';
 
 const TopText = styled.span`
   font-size: 13px;

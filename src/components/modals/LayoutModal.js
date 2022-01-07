@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 import { Transition } from 'react-spring/renderprops';
-import Backdrop from '../../shared/Backdrop';
-import ModalContainer from '../../shared/ModalContainer';
+import Backdrop from '../../components/shared/Backdrop';
+import ModalContainer from '../../components/shared/ModalContainer';
 
 const Container = styled.div`
   position: absolute;

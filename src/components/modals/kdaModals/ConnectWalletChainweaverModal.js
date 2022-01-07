@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components/macro';
-import CustomButton from '../../../shared/CustomButton';
-import Input from '../../../shared/Input';
+import CustomButton from '../../../components/shared/CustomButton';
+import Input from '../../../components/shared/Input';
 import { Button } from 'semantic-ui-react';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { WalletContext } from '../../../contexts/WalletContext';

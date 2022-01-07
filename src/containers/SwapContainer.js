@@ -17,14 +17,14 @@ import { SwapContext } from '../contexts/SwapContext';
 import { WalletContext } from '../contexts/WalletContext';
 import { getCorrectBalance, reduceBalance } from '../utils/reduceBalance';
 import TokenSelectorModalContent from '../components/swap/swap-modals/TokenSelectorModalContent';
-import HeaderItem from '../shared/HeaderItem';
-import CustomPopup from '../shared/CustomPopup';
+import HeaderItem from '../components/shared/HeaderItem';
+import CustomPopup from '../components/shared/CustomPopup';
 import { CogIcon } from '../assets';
 import SlippagePopupContent from '../components/layout/header/SlippagePopupContent';
-import FormContainer from '../shared/FormContainer';
-import GradientBorder from '../shared/GradientBorder';
+import FormContainer from '../components/shared/FormContainer';
+import GradientBorder from '../components/shared/GradientBorder';
 import { Title } from '../components/layout/Containers';
-import BackgroundLogo from '../shared/BackgroundLogo';
+import BackgroundLogo from '../components/shared/BackgroundLogo';
 
 const Container = styled(FadeIn)`
   width: 100%;

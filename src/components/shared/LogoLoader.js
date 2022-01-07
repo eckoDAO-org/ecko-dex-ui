@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-import { KaddexLetterLogo } from '../assets';
+import { KaddexLetterLogo } from '../../assets';
 
 const LogoLoaderContainer = styled.div`
    {

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 import { Transition } from 'react-spring/renderprops';
-import { ErrorIcon } from '../assets';
+import { ErrorIcon } from '../../assets';
 import CustomButton from './CustomButton';
 import Backdrop from './Backdrop';
 import ModalContainer from './ModalContainer';
@@ -53,7 +53,7 @@ const FailedLoginView = ({ onClose, show, accountName }) => {
               title="transaction details"
               containerStyle={{
                 maxHeight: '80vh',
-                maxWidth: '90vw'
+                maxWidth: '90vw',
               }}
               onClose={onClose}
             >

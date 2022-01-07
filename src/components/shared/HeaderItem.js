@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { GameEditionContext } from '../contexts/GameEditionContext';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
 
 const Item = styled(NavLink)`
   color: ${({ theme: { colors } }) => colors.white};

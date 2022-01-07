@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
-import { ArrowDown, DropdownGe } from '../assets';
+import { ArrowDown, DropdownGe } from '../../assets';
 import CustomButton from './CustomButton';
-import { GameEditionContext } from '../contexts/GameEditionContext';
-import { theme } from '../styles/theme';
-import { LightModeContext } from '../contexts/LightModeContext';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { theme } from '../../styles/theme';
+import { LightModeContext } from '../../contexts/LightModeContext';
 
 const Container = styled.div`
   position: absolute;

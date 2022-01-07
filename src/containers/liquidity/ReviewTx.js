@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Header, Modal } from 'semantic-ui-react';
 import { Statistic, List, Divider } from 'semantic-ui-react';
 import { reduceBalance } from '../../utils/reduceBalance';
-import CustomButton from '../../shared/CustomButton';
+import CustomButton from '../../components/shared/CustomButton';
 import { PactContext } from '../../contexts/PactContext';
 
 function ReviewTx(props) {
@@ -15,7 +15,7 @@ function ReviewTx(props) {
       onOpen={() => setOpen(true)}
       open={open}
       style={{
-        width: 327
+        width: 327,
       }}
       trigger={
         <CustomButton disabled={!buttonStatus().status || pact.isWaitingForWalletAuth} buttonStyle={{ marginTop: 24, marginRight: 0 }}>

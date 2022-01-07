@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 import { Transition } from 'react-spring/renderprops';
-import Backdrop from '../../../shared/Backdrop';
-import ModalContainer from '../../../shared/ModalContainer';
+import Backdrop from '../../../components/shared/Backdrop';
+import ModalContainer from '../../../components/shared/ModalContainer';
 import TokenSelectorModalContent from './TokenSelectorModalContent';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Modal, Header, Icon } from 'semantic-ui-react';
-import ModalContainer from '../shared/ModalContainer';
-import CustomButton from '../shared/CustomButton';
+import ModalContainer from '../components/shared/ModalContainer';
+import CustomButton from '../components/shared/CustomButton';
 
-import Input from '../shared/Input';
-import InputToken from '../shared/InputToken';
-import MenuTabs from '../shared/MenuTabs';
+import Input from '../components/shared/Input';
+import InputToken from '../components/shared/InputToken';
+import MenuTabs from '../components/shared/MenuTabs';
 import cryptoCurrencies from '../constants/tokens';
 
 import { ROUTE_INDEX } from '../router/routes';

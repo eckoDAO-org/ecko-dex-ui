@@ -1,5 +1,5 @@
 import React from 'react';
-import CustomButton from '../../../shared/CustomButton';
+import CustomButton from '../../../components/shared/CustomButton';
 import { WALLET } from '../../../constants/wallet';
 import { useKaddexWalletContext, useNotificationContext, useModalContext, useLightModeContext, useGameEditionContext } from '../../../contexts';
 import ConnectWalletZelcoreModal from './ConnectWalletZelcoreModal';

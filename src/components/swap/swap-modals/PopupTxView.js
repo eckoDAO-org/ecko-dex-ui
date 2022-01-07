@@ -3,8 +3,8 @@ import { Icon, Popup } from 'semantic-ui-react';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { LightModeContext } from '../../../contexts/LightModeContext';
-import CopyPopup from '../../../shared/CopyPopup';
-import CustomPopup from '../../../shared/CustomPopup';
+import CopyPopup from '../../../components/shared/CopyPopup';
+import CustomPopup from '../../../components/shared/CustomPopup';
 import { theme } from '../../../styles/theme';
 import browserDetection from '../../../utils/browserDetection';
 

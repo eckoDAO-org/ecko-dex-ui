@@ -9,7 +9,7 @@ import StaticContainer from '../containers/StaticContainer';
 import KpennyContainer from '../containers/KpennyContainer';
 import KpennyRedeemContainer from '../containers/KpennyRedeemContainer';
 import GameEditionMenuContainer from '../components/game-edition/GameEditionMenuContainer';
-import GameEditionStartAnimation from '../components/game-edition/GameEditionStartAnimation';
+import GameEditionStartAnimation from '../components/game-edition-v2/GameEditionStartAnimation';
 
 // import RedeemGuide from "../modals/RedeemGuide";
 import styled from 'styled-components/macro';

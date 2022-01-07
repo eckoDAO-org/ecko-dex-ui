@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Button } from 'semantic-ui-react';
 import styled from 'styled-components';
 import pwError from '../alerts/pwError';
-import CustomButton from '../../shared/CustomButton';
+import CustomButton from '../../components/shared/CustomButton';
 import { AccountContext } from '../../contexts/AccountContext';
 import reduceToken from '../../utils/reduceToken';
 import ConnectWalletModal from '../modals/kdaModals/ConnectWalletModal';

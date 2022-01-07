@@ -14,6 +14,7 @@ export { ReactComponent as ExplorerIcon } from './images/shared/ic_explorer.svg'
 export { ReactComponent as HamburgerIcon } from './images/header/hamburger.svg';
 export { ReactComponent as KaddexLightModeLogo } from './images/header/kaddex_logo_light_mode.svg';
 export { ReactComponent as KaddexLetterLogo } from './images/header/Kaddex_A_logo.svg';
+export { ReactComponent as KaddexLoading } from './images/game-edition/kaddex-loading.svg';
 export { ReactComponent as KaddexLogo } from './images/header/kaddex_logo.svg';
 export { ReactComponent as KaddexLogoWhite } from './images/header/KADDEX-logo.svg';
 export { ReactComponent as KDALogo } from './images/header/kadena-logo.svg';

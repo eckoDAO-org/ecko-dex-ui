@@ -5,7 +5,7 @@ import { ROUTE_GAME_EDITION_MENU, ROUTE_SWAP } from '../../router/routes';
 import { GameEditionWrapper } from './GameEditionWrapper';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
-import { FadeIn } from '../components/shared/animations';
+import { FadeIn } from '../shared/animations';
 import theme from '../../styles/theme';
 import GameEditionMobileWrapper from './GameEditionMobileWrapper';
 import menuItems from '../menuItems';
@@ -114,7 +114,7 @@ const GameEditionContainer = ({ children }) => {
             closeModal();
           }}
         >
-          <ContentContainer $radius="24px">
+          <>
             {children}
             {modalState.open && (
               <FadeIn>
@@ -126,7 +126,7 @@ const GameEditionContainer = ({ children }) => {
                 />
               </FadeIn>
             )}
-          </ContentContainer>
+          </>
         </GameEditionWrapper>
       )}
     </MainContainer>

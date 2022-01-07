@@ -5,7 +5,7 @@ import { NETWORK_TYPE } from '../../constants/contextConstants';
 import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { PactContext } from '../../contexts/PactContext';
-import ModalContainer from '../../shared/ModalContainer';
+import ModalContainer from '../../components/shared/ModalContainer';
 import { PartialScrollableScrollSection } from '../layout/Containers';
 
 const IconColumn = styled(Grid.Column)`

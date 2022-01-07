@@ -5,13 +5,13 @@ import Pact from 'pact-lang-api';
 import styled from 'styled-components/macro';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { WalletContext } from '../../../contexts/WalletContext';
-import CustomButton from '../../../shared/CustomButton';
+import CustomButton from '../../../components/shared/CustomButton';
 import { ModalContext } from '../../../contexts/ModalContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { WALLET } from '../../../constants/wallet';
 import { theme } from '../../../styles/theme';
 import { LightModeContext } from '../../../contexts/LightModeContext';
-import LogoLoader from '../../../shared/LogoLoader';
+import LogoLoader from '../../../components/shared/LogoLoader';
 
 const ButtonContainer = styled.div`
   display: flex;

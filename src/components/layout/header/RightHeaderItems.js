@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import HeaderItem from '../../../shared/HeaderItem';
+import HeaderItem from '../../../components/shared/HeaderItem';
 import AccountInfo from './AccountInfo';
-import Button from '../../../shared/CustomButton';
-import CustomPopup from '../../../shared/CustomPopup';
+import Button from '../../../components/shared/CustomButton';
+import CustomPopup from '../../../components/shared/CustomPopup';
 import { CogIcon, ThreeDotsIcon } from '../../../assets';
 import headerLinks from '../../headerLinks';
 import PopupContentList from './PopupContentList';
@@ -45,6 +45,12 @@ const RightContainerHeader = styled.div`
     opacity: 1;
     transition: opacity 1s linear;
   }
+
+  .mainnet-chain-2 {
+    font-size: 16px;
+    font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+    color: ${({ theme: { colors } }) => colors.white};
+  }
 `;
 
 const FadeContainer = styled.div``;
@@ -58,6 +64,7 @@ const RightHeaderItems = () => {
 
   return (
     <RightContainerHeader>
+      <span className="mainnet-chain-2">Mainnet Chain 2</span>
       {account?.account ? (
         <HeaderItem>
           <AccountInfo
@@ -82,6 +89,7 @@ const RightHeaderItems = () => {
       ) : (
         <></>
       )}
+
       {!account.account && (
         <FadeContainer style={{ display: gameEditionView && 'none' }}>
           <HeaderItem className="mobile-none">

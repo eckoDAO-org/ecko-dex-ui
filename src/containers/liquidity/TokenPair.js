@@ -3,7 +3,7 @@ import styled from 'styled-components/macro';
 import { Accordion, Button } from 'semantic-ui-react';
 
 import { reduceBalance, extractDecimal, pairUnit } from '../../utils/reduceBalance';
-import CustomButton from '../../shared/CustomButton';
+import CustomButton from '../../components/shared/CustomButton';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { theme } from '../../styles/theme';
 import { ButtonContainer, ColumnContainer, Container, Label, RowContainer, Value } from '../../components/layout/Containers';

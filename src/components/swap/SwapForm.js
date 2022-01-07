@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
-import Input from '../../shared/Input';
-import InputToken from '../../shared/InputToken';
+import Input from '../../components/shared/Input';
+import InputToken from '../../components/shared/InputToken';
 import { SwapIcon } from '../../assets';
 import { limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
 import tokenData from '../../constants/cryptoCurrencies';

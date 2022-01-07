@@ -2,11 +2,11 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { PactContext } from '../../../contexts/PactContext';
-import Input from '../../../shared/Input';
+import Input from '../../../components/shared/Input';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 import { theme } from '../../../styles/theme';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import LightModeToggle from '../../../shared/LightModeToggle';
+import LightModeToggle from '../../../components/shared/LightModeToggle';
 
 const Container = styled.div`
   display: flex;

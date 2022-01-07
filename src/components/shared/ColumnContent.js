@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { ColumnContainer, Label, Value } from '../components/layout/Containers';
-import { GameEditionContext } from '../contexts/GameEditionContext';
+import { ColumnContainer, Label, Value } from '../../components/layout/Containers';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
 
 const ColumnContent = ({ label, value, containerStyle, onClick }) => {
   const { gameEditionView } = useContext(GameEditionContext);

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { GameEditionContext } from '../contexts/GameEditionContext';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
 
 const Label = styled.span`
   text-transform: capitalize;

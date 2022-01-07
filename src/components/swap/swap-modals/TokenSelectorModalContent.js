@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components/macro';
-import Search from '../../../shared/Search';
+import Search from '../../../components/shared/Search';
 import { SwapContext } from '../../../contexts/SwapContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { PartialScrollableScrollSection } from '../../layout/Containers';

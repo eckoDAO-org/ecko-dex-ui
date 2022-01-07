@@ -2,7 +2,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 import { Button as SUIButton } from 'semantic-ui-react';
-import { GameEditionContext } from '../contexts/GameEditionContext';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
 
 const StyledButton = styled(SUIButton)`
   cursor: pointer;

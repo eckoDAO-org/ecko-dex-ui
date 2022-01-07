@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { SwapArrowsIcon } from '../assets';
+import { SwapArrowsIcon } from '../../assets';
 
 const Container = styled.div`
   .divider {

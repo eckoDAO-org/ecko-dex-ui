@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 import { Search as SUISearch } from 'semantic-ui-react';
-import { GameEditionContext } from '../contexts/GameEditionContext';
-import { SearchGEIcon } from '../assets';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { SearchGEIcon } from '../../assets';
 
 const Container = styled.div.attrs({ icon: 'search' })`
   margin-bottom: 15px;

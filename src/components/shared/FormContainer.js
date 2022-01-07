@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
-import { GameEditionContext } from '../contexts/GameEditionContext';
-import theme from '../styles/theme';
-import browserDetection from '../utils/browserDetection';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
+import theme from '../../styles/theme';
+import browserDetection from '../../utils/browserDetection';
 
 const Container = styled.div`
   position: relative;

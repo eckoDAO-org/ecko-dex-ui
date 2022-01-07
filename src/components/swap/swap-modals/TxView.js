@@ -3,7 +3,7 @@ import styled from 'styled-components/macro';
 import { Message, Icon, Divider } from 'semantic-ui-react';
 import { ErrorIcon, SuccessfullIcon } from '../../../assets';
 import { extractDecimal, gasUnit, reduceBalance } from '../../../utils/reduceBalance';
-import CustomButton from '../../../shared/CustomButton';
+import CustomButton from '../../../components/shared/CustomButton';
 import { SwapContext } from '../../../contexts/SwapContext';
 import { ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';

@@ -1,18 +1,18 @@
 import React, { useContext, useEffect } from 'react';
-import { Divider, Loader } from 'semantic-ui-react';
+import { Divider } from 'semantic-ui-react';
 import styled from 'styled-components';
 import InfiniteScroll from 'react-infinite-scroller';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { LightModeContext } from '../../contexts/LightModeContext';
 import { PactContext } from '../../contexts/PactContext';
-import GradientBorder from '../../shared/GradientBorder';
-import ModalContainer from '../../shared/ModalContainer';
+import GradientBorder from '../../components/shared/GradientBorder';
+import ModalContainer from '../../components/shared/ModalContainer';
 import { theme } from '../../styles/theme';
 import { Label, PartialScrollableScrollSection, Title, TitleContainer } from '../layout/Containers';
 import HistoryCard from './HistoryCard';
 import { AccountContext } from '../../contexts/AccountContext';
 import useWindowSize from '../../hooks/useWindowSize';
-import LogoLoader from '../../shared/LogoLoader';
+import LogoLoader from '../../components/shared/LogoLoader';
 
 export const CardContainer = styled.div`
   position: ${({ gameEditionView }) => !gameEditionView && `relative`};

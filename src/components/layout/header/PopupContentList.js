@@ -3,8 +3,8 @@ import { Divider } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { PowerIcon } from '../../../assets';
 import { useAccountContext } from '../../../contexts';
-import HeaderItem from '../../../shared/HeaderItem';
-import LightModeToggle from '../../../shared/LightModeToggle';
+import HeaderItem from '../../../components/shared/HeaderItem';
+import LightModeToggle from '../../../components/shared/LightModeToggle';
 import theme from '../../../styles/theme';
 
 const ListContainer = styled.div`
