@@ -1,4 +1,4 @@
-const commonTheme = {
+export const commonTheme = {
   layout: {
     desktopWidth: '80%',
     mobileWidth: '95%',
@@ -16,6 +16,7 @@ const commonTheme = {
     bold: 'montserrat-bold',
     boldItalic: 'montserrat-bold-italic',
     pressStartRegular: 'press-start-regular',
+    pixeboy: 'pixeboy',
   },
   mediaQueries: {
     mobileBreakpoint: '48rem',

@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
-import styled from 'styled-components';
-import theme from '../../styles/theme';
-import { ROUTE_GAME_EDITION_MENU } from '../../router/routes';
-import { KaddexLoading } from '../../assets';
-import GameEditionProgressBar from '../shared/GameEditionProgressBar';
+import styled from 'styled-components/macro';
 import { useGameEditionContext } from '../../contexts';
 import { PROGRESS_BAR_MAX_VALUE } from '../../contexts/GameEditionContext';
+import { ROUTE_GAME_EDITION_MENU } from '../../router/routes';
+import { KaddexLoadingIcon } from '../../assets';
+import GameEditionProgressBar from '../shared/GameEditionProgressBar';
+import loadingBackground from '../../assets/images/game-edition/loading-background.png';
+import theme from '../../styles/theme';
 
 const Container = styled.div`
   display: flex;
@@ -15,6 +16,11 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   padding-top: 100px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
 `;
 
 const GameEditionStartAnimation = () => {
@@ -30,10 +36,10 @@ const GameEditionStartAnimation = () => {
   }, [loadingValue]);
 
   return (
-    <Container>
-      <KaddexLoading />
+    <Container style={{ backgroundImage: `url(${loadingBackground})` }}>
+      <KaddexLoadingIcon />
       <GameEditionProgressBar loadingValue={loadingValue} />
-      <span style={{ fontFamily: theme.fontFamily.pressStartRegular, color: '#ffff', marginTop: 50, fontSize: 14 }}>V 1.0.0</span>
+      <span style={{ fontFamily: theme.fontFamily.pixeboy, color: '#ffff', marginTop: 50, fontSize: 14 }}>V 1.0.0</span>
     </Container>
   );
 };

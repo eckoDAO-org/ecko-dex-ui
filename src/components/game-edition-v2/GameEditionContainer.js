@@ -1,23 +1,26 @@
 import React, { useContext } from 'react';
-import styled, { css } from 'styled-components';
+import styled, { css } from 'styled-components/macro';
 import { useHistory } from 'react-router';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import menuItems from '../menuItems';
 import useWindowSize from '../../hooks/useWindowSize';
-import { KaddexLogo } from '../../assets';
+import { ConnectWalletIcon, KaddexLogo, WireConnectionIcon } from '../../assets';
 import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.png';
 import gameboyMobile from '../../assets/images/game-edition/gameboy-mobile.png';
+import { useAccountContext } from '../../contexts';
+import theme from '../../styles/theme';
 
 const MainContainer = styled.div`
   display: flex;
+  flex-direction: column;
   width: 100%;
-  justify-content: center;
+
   height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
   align-items: center;
   overflow: hidden;
 `;
 
-const GameEditionConatiner = styled.div`
+const GameboyDesktopContainer = styled.div`
   background-repeat: no-repeat;
   background-position: center;
   height: 540px;
@@ -33,28 +36,36 @@ const GameEditionConatiner = styled.div`
     svg {
       height: 14.5px;
     }
-    @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
-      margin-top: 8px;
-      svg {
-        height: 6px;
-      }
-    }
   }
   background-image: ${`url(${gameboyDesktop})`};
-
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
-    background-image: ${`url(${gameboyMobile})`};
-    background-size: contain;
-    transform: ${({ isLoadingCompleted }) => (isLoadingCompleted ? 'scale(1.5)' : 'scale(1)')};
-    /* ${({ isLoadingCompleted }) =>
-      isLoadingCompleted &&
-      css`
-        transform: scale(1.5);
-      `} */
+`;
+const GameboyMobileContainer = styled.div`
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 540px;
+  width: 930px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  transition: all 1s ease-in-out;
+  transition-delay: 1s;
+  .kaddex-logo {
+    margin-top: 8px;
+    svg {
+      height: 6px;
+    }
+    margin-left: 24px;
+    margin-top: 8px;
+    svg {
+      height: 6px;
+    }
   }
+  background-image: ${`url(${gameboyMobile})`};
+  background-size: contain;
+  /* transform: ${({ isLoadingCompleted }) => (isLoadingCompleted ? 'scale(1.5)' : 'scale(1)')}; */
 `;
 
-const GameEditionContent = styled.div`
+const DisplayContent = styled.div`
   width: 440px;
   margin-left: 25px;
   margin-top: 100px;
@@ -82,100 +93,64 @@ const GameEditionContent = styled.div`
   }
 `;
 
+const WireConnectionContainer = styled.div`
+  margin-top: 8px;
+  position: relative;
+`;
+
+const ConnectWalletContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+`;
+
 const GameEditionContainer = ({ children }) => {
-  const { isLoadingCompleted } = useContext(GameEditionContext);
   const history = useHistory();
-  console.log('isLoadingCompleted', isLoadingCompleted);
-  const switchAppSection = (direction) => {
-    let cur = history.location.pathname;
-    if (direction === 'left') {
-      let prevPage = menuItems.findIndex((path) => path.route === cur) - 1;
-      if (prevPage < 0) history.push(menuItems[menuItems.length - 1].route);
-      else return history.push(menuItems[prevPage].route);
-    }
-    if (direction === 'right') {
-      let nextPage = menuItems.findIndex((path) => path.route === cur) + 1;
-      if (nextPage > menuItems.length - 1) history.push(menuItems[0]?.route);
-      else return history.push(menuItems[nextPage].route);
-    }
-  };
+  const { isLoadingCompleted } = useContext(GameEditionContext);
+  const { account } = useAccountContext();
+
+  // const switchAppSection = (direction) => {
+  //   let cur = history.location.pathname;
+  //   if (direction === 'left') {
+  //     let prevPage = menuItems.findIndex((path) => path.route === cur) - 1;
+  //     if (prevPage < 0) history.push(menuItems[menuItems.length - 1].route);
+  //     else return history.push(menuItems[prevPage].route);
+  //   }
+  //   if (direction === 'right') {
+  //     let nextPage = menuItems.findIndex((path) => path.route === cur) + 1;
+  //     if (nextPage > menuItems.length - 1) history.push(menuItems[0]?.route);
+  //     else return history.push(menuItems[nextPage].route);
+  //   }
+  // };
 
   const [width] = useWindowSize();
-  return (
+  return width < theme.mediaQueries.desktopPixel ? (
     <MainContainer>
-      <GameEditionConatiner isLoadingCompleted={isLoadingCompleted}>
-        <GameEditionContent>{children}</GameEditionContent>
+      <GameboyMobileContainer isLoadingCompleted={isLoadingCompleted}>
+        <DisplayContent>{children}</DisplayContent>
         <div className="kaddex-logo">
           <KaddexLogo />
         </div>
-      </GameEditionConatiner>
-      {/*     
-      {width < theme.mediaQueries.desktopPixel ? (
-        <GameEditionMobileWrapper
-          selectLabel="MENU"
-          selectOnClick={() => {
-            history.push(ROUTE_GAME_EDITION_MENU);
-            closeModal();
-          }}
-          startLabel="SWAP"
-          startOnClick={() => {
-            history.push(ROUTE_SWAP);
-            // it is used if you want to set the button to swap in Swap and Add Liquidity sections
-            // setIsSwapping(true);
-            closeModal();
-          }}
-        >
-          {children}
-          {modalState.open && (
-            <FadeIn>
-              <GameEditionModalsContainer
-                title={modalState.title}
-                description={modalState.description}
-                content={modalState.content}
-                onClose={modalState.closeModal}
-              />
-            </FadeIn>
-          )}
-        </GameEditionMobileWrapper>
-      ) : (
-        <GameEditionWrapper
-          style={{ height: 'auto !important' }}
-          selectLabel="MENU"
-          selectOnClick={() => {
-            history.push(ROUTE_GAME_EDITION_MENU);
-            closeModal();
-          }}
-          startLabel="SWAP"
-          startOnClick={() => {
-            history.push(ROUTE_SWAP);
-            // it is used if you want to set the button to swap in Swap and Add Liquidity sections
-            // setIsSwapping(true);
-            closeModal();
-          }}
-          buttonLOnClick={() => {
-            switchAppSection('left');
-            closeModal();
-          }}
-          buttonROnClick={() => {
-            switchAppSection('right');
-            closeModal();
-          }}
-        >
-          <>
-            {children}
-            {modalState.open && (
-              <FadeIn>
-                <GameEditionModalsContainer
-                  title={modalState.title}
-                  description={modalState.description}
-                  content={modalState.content}
-                  onClose={modalState.closeModal}
-                />
-              </FadeIn>
-            )}
-          </>
-        </GameEditionWrapper>
-      )} */}
+      </GameboyMobileContainer>
+    </MainContainer>
+  ) : (
+    <MainContainer style={{ justifyContent: 'flex-end' }}>
+      <GameboyDesktopContainer isLoadingCompleted={isLoadingCompleted}>
+        <DisplayContent>{children}</DisplayContent>
+        <div className="kaddex-logo">
+          <KaddexLogo />
+        </div>
+      </GameboyDesktopContainer>
+      {!account?.account && (
+        <WireConnectionContainer>
+          <WireConnectionIcon />
+          <ConnectWalletContainer>
+            <ConnectWalletIcon />
+          </ConnectWalletContainer>
+        </WireConnectionContainer>
+      )}
     </MainContainer>
   );
 };

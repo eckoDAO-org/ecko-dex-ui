@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import { ItemMenuArrow } from '../../assets';
+import styled from 'styled-components/macro';
+import { ItemMenuArrowIcon } from '../../assets';
 import HeaderItem from '../../components/shared/HeaderItem';
 import theme from '../../styles/theme';
 import headerLinks from '../headerLinks';
@@ -16,6 +16,9 @@ const Container = styled(FadeIn)`
   height: 100%;
   width: 100%;
   padding: 24px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
   span {
     font-family: ${({ theme: { fontFamily } }) => fontFamily.pressStartRegular};
     color: #ffffff;
@@ -48,13 +51,13 @@ const GameEditionMenuContainer = () => {
   const [arrowVisible, setArrowVisible] = useState('');
 
   return (
-    <Container style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(${menuBackground})` }}>
+    <Container style={{ backgroundImage: `url(${menuBackground})` }}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <span style={{ fontSize: 24, marginBottom: 30 }}>MENU</span>
         <TopListContainer>
           {menuItems.map((item, index) => (
             <RowMenuContainer key={index}>
-              {arrowVisible === item.label && <ItemMenuArrow label={item.label} />}
+              {arrowVisible === item.label && <ItemMenuArrowIcon label={item.label} />}
               <HeaderItem
                 className={item.className}
                 route={item.route}

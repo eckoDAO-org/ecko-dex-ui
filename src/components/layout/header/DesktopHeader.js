@@ -69,7 +69,7 @@ const DesktopHeader = ({ className, gameEditionView }) => {
           <KaddexLightModeLogo style={{ cursor: 'pointer' }} onClick={() => history.push(ROUTE_INDEX)} />
         )}
 
-        <AnimatedDiv className={gameEditionView ? 'fadeOut' : 'fadeIn'}>
+        {/* <AnimatedDiv className={gameEditionView ? 'fadeOut' : 'fadeIn'}>
           {menuItems.map((item, index) => (
             <HeaderItem
               key={index}
@@ -83,7 +83,7 @@ const DesktopHeader = ({ className, gameEditionView }) => {
               {item.label}
             </HeaderItem>
           ))}
-        </AnimatedDiv>
+        </AnimatedDiv> */}
       </LeftContainer>
       <RightContainer>
         <RightHeaderItems />
