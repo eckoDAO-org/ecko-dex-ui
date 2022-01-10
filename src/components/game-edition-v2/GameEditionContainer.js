@@ -1,14 +1,16 @@
 import React, { useContext } from 'react';
 import styled, { css } from 'styled-components/macro';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
-import menuItems from '../menuItems';
+import { useAccountContext } from '../../contexts';
 import useWindowSize from '../../hooks/useWindowSize';
-import { ConnectWalletIcon, KaddexLogo, WireConnectionIcon } from '../../assets';
+import { ConnectWalletIcon, KaddexLogo, WireConnectionIcon, HideWiresIcon } from '../../assets';
 import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.png';
 import gameboyMobile from '../../assets/images/game-edition/gameboy-mobile.png';
-import { useAccountContext } from '../../contexts';
 import theme from '../../styles/theme';
+import { FadeIn } from '../shared/animations';
+import { ROUTE_GAME_EDITION_MENU } from '../../router/routes';
+import { WALLET } from '../../constants/wallet';
 
 const MainContainer = styled.div`
   display: flex;
@@ -23,7 +25,7 @@ const MainContainer = styled.div`
 const GameboyDesktopContainer = styled.div`
   background-repeat: no-repeat;
   background-position: center;
-  height: 540px;
+  min-height: 540px;
   width: 930px;
   display: flex;
   align-items: center;
@@ -93,9 +95,14 @@ const DisplayContent = styled.div`
   }
 `;
 
-const WireConnectionContainer = styled.div`
+const WireConnectionContainer = styled(FadeIn)`
   margin-top: 8px;
   position: relative;
+  /* height: 161px; */
+
+  transition: transform 0.3s;
+  height: 161px;
+  transform: ${({ showWires }) => (showWires ? 'translateY(+1000%)' : 'translateY(0%)')};
 `;
 
 const ConnectWalletContainer = styled.div`
@@ -106,9 +113,34 @@ const ConnectWalletContainer = styled.div`
   cursor: pointer;
 `;
 
+const HideWiresContainer = styled.div`
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  bottom: 30px;
+  transform: translate(-50%, 0);
+  cursor: pointer;
+`;
+
+const WiresContainer = styled.div`
+  display: flex;
+  position: relative;
+  transition: height 0.3s, transform 0.3s;
+  height: ${({ showWires }) => (showWires ? 600 : 0)}px;
+`;
+
+const WireImg = styled.img`
+  transition: transform 0.2s;
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.2);
+  }
+`;
+
 const GameEditionContainer = ({ children }) => {
   const history = useHistory();
-  const { isLoadingCompleted } = useContext(GameEditionContext);
+  const location = useLocation();
+  const { showWires, setShowWires } = useContext(GameEditionContext);
   const { account } = useAccountContext();
 
   // const switchAppSection = (direction) => {
@@ -128,7 +160,7 @@ const GameEditionContainer = ({ children }) => {
   const [width] = useWindowSize();
   return width < theme.mediaQueries.desktopPixel ? (
     <MainContainer>
-      <GameboyMobileContainer isLoadingCompleted={isLoadingCompleted}>
+      <GameboyMobileContainer>
         <DisplayContent>{children}</DisplayContent>
         <div className="kaddex-logo">
           <KaddexLogo />
@@ -137,20 +169,35 @@ const GameEditionContainer = ({ children }) => {
     </MainContainer>
   ) : (
     <MainContainer style={{ justifyContent: 'flex-end' }}>
-      <GameboyDesktopContainer isLoadingCompleted={isLoadingCompleted}>
+      <GameboyDesktopContainer>
         <DisplayContent>{children}</DisplayContent>
         <div className="kaddex-logo">
           <KaddexLogo />
         </div>
       </GameboyDesktopContainer>
       {!account?.account && (
-        <WireConnectionContainer>
-          <WireConnectionIcon />
-          <ConnectWalletContainer>
-            <ConnectWalletIcon />
-          </ConnectWalletContainer>
+        <WireConnectionContainer showWires={showWires} onClick={() => setShowWires(true)}>
+          {location?.pathname === ROUTE_GAME_EDITION_MENU && (
+            <>
+              <WireConnectionIcon />
+              <ConnectWalletContainer>
+                <ConnectWalletIcon />
+              </ConnectWalletContainer>
+            </>
+          )}
         </WireConnectionContainer>
       )}
+
+      <WiresContainer showWires={showWires}>
+        {showWires && (
+          <HideWiresContainer onClick={() => setShowWires(false)}>
+            <HideWiresIcon />
+          </HideWiresContainer>
+        )}
+        {Object.keys(WALLET).map((walletKey, i) => (
+          <WireImg key={i} src={WALLET[walletKey].wire} />
+        ))}
+      </WiresContainer>
     </MainContainer>
   );
 };
