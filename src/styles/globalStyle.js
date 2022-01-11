@@ -32,6 +32,7 @@ export default createGlobalStyle`
       opacity: 1;
       background-size: cover;
       background-repeat: no-repeat;
+      overflow: hidden;
     };
 
     #root {
