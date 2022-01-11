@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 import { useLocation } from 'react-router-dom';
 import { ROUTE_GAME_EDITION_MENU } from '../../../router/routes';
 import { FadeIn } from '../../shared/animations';
 import { ConnectWalletIcon, WireConnectionIcon } from '../../../assets';
+import { GameEditionContext } from '../../../contexts/GameEditionContext';
 
 const WireConnectionContainer = styled(FadeIn)`
   margin-top: 8px;
   position: relative;
   transition: transform 0.5s;
-
   transform: ${({ showWires }) => (showWires ? 'translateY(1000%)' : 'translateY(0)')};
   min-height: 161px;
 `;
@@ -22,8 +22,9 @@ const ConnectWalletContainer = styled.div`
   cursor: pointer;
 `;
 
-const ConnectWalletWire = ({ showWires, onClick }) => {
+const ConnectWalletWire = ({ onClick }) => {
   const location = useLocation();
+  const { showWires } = useContext(GameEditionContext);
 
   return (
     <WireConnectionContainer showWires={showWires} onClick={onClick}>

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { useAccountContext } from '../../contexts';
 import useWindowSize from '../../hooks/useWindowSize';
@@ -8,7 +8,7 @@ import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.png
 import gameboyMobile from '../../assets/images/game-edition/gameboy-mobile.png';
 import theme from '../../styles/theme';
 
-import WalletWires from './wires/WalletWires';
+import WalletWires, { ConnectionWire } from './wires/WalletWires';
 import ConnectWalletWire from './wires/ConnectWalletWire';
 
 const MainContainer = styled.div`
@@ -18,8 +18,13 @@ const MainContainer = styled.div`
   height: calc(100% - 56px);
   align-items: center;
   transition: transform 0.5s;
-
-  transform: ${({ showWires }) => (showWires ? 'translateY(0)' : 'translateY(512px)')};
+  /* transform: ${({ showWires }) => (showWires ? 'translateY(0)' : 'translateY(512px)')}; */
+  transform: ${({ showWires, selectedWire }) => {
+    if (selectedWire) {
+      return 'translateY(318px)';
+    }
+    return showWires ? 'translateY(0)' : 'translateY(512px)';
+  }};
 `;
 
 const GameboyDesktopContainer = styled.div`
@@ -30,6 +35,7 @@ const GameboyDesktopContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  z-index: 2;
   .kaddex-logo {
     margin-top: 20px;
     margin-left: 24px;
@@ -93,7 +99,8 @@ const DisplayContent = styled.div`
 `;
 
 const GameEditionContainer = ({ children }) => {
-  const { showWires, setShowWires } = useContext(GameEditionContext);
+  const [width] = useWindowSize();
+  const { showWires, setShowWires, selectedWire } = useContext(GameEditionContext);
   const { account } = useAccountContext();
 
   // const switchAppSection = (direction) => {
@@ -110,7 +117,6 @@ const GameEditionContainer = ({ children }) => {
   //   }
   // };
 
-  const [width] = useWindowSize();
   return width < theme.mediaQueries.desktopPixel ? (
     <MainContainer>
       <GameboyMobileContainer style={{ backgroundImage: `url(${gameboyMobile})` }}>
@@ -121,16 +127,16 @@ const GameEditionContainer = ({ children }) => {
       </GameboyMobileContainer>
     </MainContainer>
   ) : (
-    <MainContainer showWires={showWires} style={{ justifyContent: 'flex-end' }}>
+    <MainContainer showWires={showWires} selectedWire={selectedWire} style={{ justifyContent: 'flex-end' }}>
       <GameboyDesktopContainer showWires={showWires} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
         <DisplayContent>{children}</DisplayContent>
         <div className="kaddex-logo">
           <KaddexLogo />
         </div>
       </GameboyDesktopContainer>
-      {!account?.account && <ConnectWalletWire showWires={showWires} onClick={() => setShowWires(true)} />}
-
-      <WalletWires showWires={showWires} setShowWires={setShowWires} />
+      {!account?.account && !selectedWire && <ConnectWalletWire onClick={() => setShowWires(true)} />}
+      {/* {selectedWire && <ConnectionWire img={selectedWire.wire} label={selectedWire.id} style={{ height: 170, width: 56 }} />} */}
+      <WalletWires />
     </MainContainer>
   );
 };

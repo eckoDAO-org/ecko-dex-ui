@@ -18,6 +18,7 @@ export const GameEditionProvider = (props) => {
 
   const [loadingValue, setLoadingValue] = useState(1);
   const [showWires, setShowWires] = useState(false);
+  const [selectedWire, setSelectedWire] = useState(false);
 
   useEffect(() => {
     let interval = null;
@@ -38,6 +39,11 @@ export const GameEditionProvider = (props) => {
     setModalState(initialModalState);
   };
 
+  const onWireSelect = (wire) => {
+    setShowWires(false);
+    setSelectedWire(wire);
+  };
+
   return (
     <GameEditionContext.Provider
       value={{
@@ -52,6 +58,8 @@ export const GameEditionProvider = (props) => {
         loadingValue,
         showWires,
         setShowWires,
+        selectedWire,
+        onWireSelect,
       }}
     >
       {props.children}

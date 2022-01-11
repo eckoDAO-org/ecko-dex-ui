@@ -7,6 +7,7 @@ import WireXwallet from '../assets/images/game-edition/wire-x-wallet.png';
 
 export const WALLET = {
   ZELCORE: {
+    id: 'ZELCORE',
     name: 'Zelcore',
     logo: <ZelcoreLogo />,
     signMethod: 'wallet',
@@ -14,21 +15,13 @@ export const WALLET = {
     wire: WireZelcore,
   },
   CHAINWEAVER: {
+    id: 'CHAINWEAVER',
     name: 'Chainweaver',
     logo: <LockLogo />,
     signMethod: 'wallet',
     getAccountsUrl: 'http://127.0.0.1:9467/v1/accounts',
     wire: WireChainweaver,
   },
-  TORUS: {
-    name: 'Torus',
-    logo: <TorusLogo />,
-    signMethod: 'sign_required',
-    wire: WireTorus,
-  },
-  KADDEX_WALLET: {
-    name: 'X Wallet',
-    logo: <KaddexLogoWhite style={{ width: 45 }} />,
-    wire: WireXwallet,
-  },
+  TORUS: { id: 'TORUS', name: 'Torus', logo: <TorusLogo />, signMethod: 'sign_required', wire: WireTorus },
+  KADDEX_WALLET: { id: 'KADDEX_WALLET', name: 'X Wallet', logo: <KaddexLogoWhite style={{ width: 45 }} />, wire: WireXwallet },
 };
