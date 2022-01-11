@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Button } from 'semantic-ui-react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { ExplorerIcon } from '../../../assets';
 import { NETWORK_TYPE } from '../../../constants/contextConstants';
 import { AccountContext } from '../../../contexts/AccountContext';

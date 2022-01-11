@@ -20,8 +20,14 @@ const Container = styled(FadeIn)`
   background-position: center;
   background-size: cover;
   span {
-    font-family: ${({ theme: { fontFamily } }) => fontFamily.pressStartRegular};
+    font-family: ${({ theme: { fontFamily } }) => fontFamily.pixeboy};
     color: #ffffff;
+    font-size: 52px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 53px;
+    letter-spacing: 0em;
+    text-align: center;
   }
 `;
 
@@ -31,9 +37,9 @@ const TopListContainer = styled.div`
   margin-top: 5%;
   align-items: center;
   justify-content: center;
-  & > *:not(:last-child) {
+  /* & > *:not(:last-child) {
     margin-bottom: 25px;
-  }
+  } */
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
     & > a {
@@ -44,7 +50,7 @@ const TopListContainer = styled.div`
 
 const RowMenuContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  align-items: center;
 `;
 
 const GameEditionMenuContainer = () => {
@@ -53,19 +59,20 @@ const GameEditionMenuContainer = () => {
   return (
     <Container style={{ backgroundImage: `url(${menuBackground})` }}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <span style={{ fontSize: 24, marginBottom: 30 }}>MENU</span>
+        <span style={{ marginBottom: 30 }}>MENU</span>
         <TopListContainer>
           {menuItems.map((item, index) => (
             <RowMenuContainer key={index}>
-              {arrowVisible === item.label && <ItemMenuArrowIcon label={item.label} />}
+              {arrowVisible === item.label && <ItemMenuArrowIcon label={item.label} style={{ marginRight: 5.5 }} />}
               <HeaderItem
                 className={item.className}
                 route={item.route}
                 headerItemStyle={{
-                  fontFamily: theme.fontFamily.pressStartRegular,
+                  fontFamily: theme.fontFamily.pixeboy,
                   color: arrowVisible === item.label ? '#FFC107' : '#ffffff',
-                  margin: '0px 8px',
-                  fontSize: 14,
+                  fontSize: 32,
+                  fontWeight: 400,
+                  textTransform: 'uppercase',
                 }}
                 onMouseOver={() => setArrowVisible(item.label)}
                 notChangebleFontOnHover
@@ -85,10 +92,11 @@ const GameEditionMenuContainer = () => {
             onClick={item?.onClick}
             link={item?.link}
             headerItemStyle={{
-              fontFamily: theme.fontFamily.pressStartRegular,
+              fontFamily: theme.fontFamily.pixeboy,
               color: '#6D99E4',
               margin: '0px 8px',
-              fontSize: 14,
+              fontSize: 20,
+              fontWeight: 400,
               textTransform: 'uppercase',
             }}
             notChangebleFontOnHover

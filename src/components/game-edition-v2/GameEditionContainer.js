@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
-import { useLocation } from 'react-router';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { useAccountContext } from '../../contexts';
 import useWindowSize from '../../hooks/useWindowSize';
@@ -16,12 +15,11 @@ const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: auto;
+  height: calc(100% - 56px);
   align-items: center;
-  overflow: hidden;
-  transition: transform 1s;
+  transition: transform 0.5s;
 
-  transform: ${({ showWires }) => (showWires ? 'translateY(-355px)' : 'translateY(166px)')};
+  transform: ${({ showWires }) => (showWires ? 'translateY(0)' : 'translateY(512px)')};
 `;
 
 const GameboyDesktopContainer = styled.div`
@@ -32,8 +30,6 @@ const GameboyDesktopContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  transition: all 1s ease-in-out;
-  transition-delay: 1s;
   .kaddex-logo {
     margin-top: 20px;
     margin-left: 24px;
@@ -41,6 +37,7 @@ const GameboyDesktopContainer = styled.div`
       height: 14.5px;
     }
   }
+  opacity: ${({ showWires }) => (showWires ? 0.5 : 1)};
 `;
 const GameboyMobileContainer = styled.div`
   background-repeat: no-repeat;
@@ -65,7 +62,6 @@ const GameboyMobileContainer = styled.div`
   }
 
   background-size: contain;
-  /* transform: ${({ isLoadingCompleted }) => (isLoadingCompleted ? 'scale(1.5)' : 'scale(1)')}; */
 `;
 
 const DisplayContent = styled.div`
@@ -97,7 +93,6 @@ const DisplayContent = styled.div`
 `;
 
 const GameEditionContainer = ({ children }) => {
-  const location = useLocation();
   const { showWires, setShowWires } = useContext(GameEditionContext);
   const { account } = useAccountContext();
 
@@ -127,13 +122,13 @@ const GameEditionContainer = ({ children }) => {
     </MainContainer>
   ) : (
     <MainContainer showWires={showWires} style={{ justifyContent: 'flex-end' }}>
-      <GameboyDesktopContainer style={{ backgroundImage: `url(${gameboyDesktop})` }}>
+      <GameboyDesktopContainer showWires={showWires} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
         <DisplayContent>{children}</DisplayContent>
         <div className="kaddex-logo">
           <KaddexLogo />
         </div>
       </GameboyDesktopContainer>
-      {!account?.account && <ConnectWalletWire showWires={showWires} setShowWires={setShowWires} />}
+      {!account?.account && <ConnectWalletWire showWires={showWires} onClick={() => setShowWires(true)} />}
 
       <WalletWires showWires={showWires} setShowWires={setShowWires} />
     </MainContainer>

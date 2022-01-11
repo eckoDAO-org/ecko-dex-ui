@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled, { css } from 'styled-components/macro';
 import { Logo } from '../../assets';
 import { FadeIn } from './animations';
 import browserDetection from '../../utils/browserDetection';

@@ -56,7 +56,7 @@ const Layout = ({ children }) => {
     <MainContainer>
       {/* <CustomParticles /> */}
       <WrapperContainer>
-        <div style={{ padding: '0 1.5em' }}>
+        <div>
           <MobileHeader className="desktop-none" />
           <span className="mainnet-chain-2 desktop-none">Mainnet Chain 2</span>
           <DesktopHeader className="mobile-none" gameEditionView={game.gameEditionView} />

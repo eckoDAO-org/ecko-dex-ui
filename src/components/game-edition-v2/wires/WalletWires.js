@@ -7,9 +7,6 @@ const WiresContainer = styled.div`
   display: flex;
   align-items: flex-end;
   position: relative;
-  transition: height 1s, transform 1s;
-  transform: ${({ showWires }) => (showWires ? 'translateY(0)' : 'translateY(2000px)')};
-  /* height: ${({ showWires }) => (showWires ? 840 : 0)}px; */
 `;
 
 const HideWiresContainer = styled.div`

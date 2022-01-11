@@ -8,10 +8,10 @@ import { ConnectWalletIcon, WireConnectionIcon } from '../../../assets';
 const WireConnectionContainer = styled(FadeIn)`
   margin-top: 8px;
   position: relative;
-  transition: transform 1s;
+  transition: transform 0.5s;
 
   transform: ${({ showWires }) => (showWires ? 'translateY(1000%)' : 'translateY(0)')};
-  height: 161px;
+  min-height: 161px;
 `;
 
 const ConnectWalletContainer = styled.div`
@@ -22,11 +22,11 @@ const ConnectWalletContainer = styled.div`
   cursor: pointer;
 `;
 
-const ConnectWalletWire = ({ showWires, setShowWires }) => {
+const ConnectWalletWire = ({ showWires, onClick }) => {
   const location = useLocation();
 
   return (
-    <WireConnectionContainer showWires={showWires} onClick={() => setShowWires(true)}>
+    <WireConnectionContainer showWires={showWires} onClick={onClick}>
       {location?.pathname === ROUTE_GAME_EDITION_MENU && (
         <>
           <WireConnectionIcon />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Divider } from 'semantic-ui-react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { PowerIcon } from '../../../assets';
 import { useAccountContext } from '../../../contexts';
 import HeaderItem from '../../../components/shared/HeaderItem';

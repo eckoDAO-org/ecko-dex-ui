@@ -11,9 +11,6 @@ import KpennyRedeemContainer from '../containers/KpennyRedeemContainer';
 import GameEditionMenuContainer from '../components/game-edition-v2/GameEditionMenuContainer';
 import GameEditionStartAnimation from '../components/game-edition-v2/GameEditionStartAnimation';
 
-// import RedeemGuide from "../modals/RedeemGuide";
-import styled from 'styled-components/macro';
-
 import {
   ROUTE_INDEX,
   ROUTE_POOL,
@@ -25,14 +22,6 @@ import {
   ROUTE_GAME_START_ANIMATION,
   ROUTE_GAME_EDITION_MENU,
 } from './routes';
-
-const Container = styled.div`
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-  flex-flow: column;
-`;
 
 export default () => {
   if (window.location.pathname.includes('serviceworker')) {
