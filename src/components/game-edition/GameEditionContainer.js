@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { useHistory } from 'react-router';
 import { ROUTE_GAME_EDITION_MENU, ROUTE_SWAP } from '../../router/routes';
 import { GameEditionWrapper } from './GameEditionWrapper';

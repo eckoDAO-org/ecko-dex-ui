@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 const Button = styled.button`
   background: ${({ theme: { colors } }) => colors.white};
   border: 2px solid ${({ theme: { colors } }) => colors.primary};

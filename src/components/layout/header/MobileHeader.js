@@ -15,6 +15,7 @@ const Container = styled.div`
   justify-content: space-between;
   min-height: ${({ theme: { header } }) => `${header.height}px`};
   width: 100%;
+  padding: 0 1.5em;
 `;
 
 const LeftContainer = styled.div`

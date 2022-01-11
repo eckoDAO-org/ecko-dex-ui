@@ -1,5 +1,6 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from 'styled-components/macro';
 import browserDetection from '../utils/browserDetection';
+import appBackground from '../assets/images/shared/app-background.png';
 
 export default createGlobalStyle`
     *, *:before, *:after {
@@ -16,6 +17,7 @@ export default createGlobalStyle`
       width: 100%;
       height: 100%;
       box-sizing: border-box;
+
     };
 
     body {
@@ -27,11 +29,13 @@ export default createGlobalStyle`
       min-width: 0;
       font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
       color: ${({ theme: { colors } }) => colors.primary};
-      background: ${({ theme: { backgroundBody, backgroundBodySafari } }) =>
-        browserDetection() === 'SAFARI' ? backgroundBodySafari : backgroundBody};
+      background-image: url(${appBackground});
+      /* background: ${({ theme: { backgroundBody, backgroundBodySafari } }) =>
+        browserDetection() === 'SAFARI' ? backgroundBodySafari : backgroundBody}; */
       opacity: 1;
       background-size: cover;
       background-repeat: no-repeat;
+      overflow: hidden;
     };
 
     #root {

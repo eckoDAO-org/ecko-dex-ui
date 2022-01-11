@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { SwapArrowsIcon } from '../../assets';
 
 const Container = styled.div`

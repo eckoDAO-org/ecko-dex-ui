@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { PactContext } from '../../../contexts/PactContext';
 import Input from '../../../components/shared/Input';
 import { LightModeContext } from '../../../contexts/LightModeContext';

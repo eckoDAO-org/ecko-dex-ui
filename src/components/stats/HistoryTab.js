@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Divider } from 'semantic-ui-react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import InfiniteScroll from 'react-infinite-scroller';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { LightModeContext } from '../../contexts/LightModeContext';

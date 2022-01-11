@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 
 const Label = styled.span`

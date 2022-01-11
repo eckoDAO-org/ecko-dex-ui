@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { KaddexLogo } from '../../assets';
 import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.png';
 

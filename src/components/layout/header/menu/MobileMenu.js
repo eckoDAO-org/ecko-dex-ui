@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import HeaderItem from '../../../../components/shared/HeaderItem';
 import menuItems from '../../../menuItems';
 

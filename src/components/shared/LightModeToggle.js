@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Checkbox } from 'semantic-ui-react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { LightModeContext } from '../../contexts/LightModeContext';
 

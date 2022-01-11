@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { MenuGEIcon } from '../../assets';
 import theme from '../../styles/theme';
 import headerLinks from '../headerLinks';

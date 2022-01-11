@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { PactContext } from '../contexts/PactContext';
 import StatsTab from '../components/stats/StatsTab';
 import HistoryTab from '../components/stats/HistoryTab';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { GameEditionContext } from '../contexts/GameEditionContext';
 
 const Container = styled.div`

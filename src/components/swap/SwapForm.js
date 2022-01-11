@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import Input from '../../components/shared/Input';
 import InputToken from '../../components/shared/InputToken';
 import { SwapIcon } from '../../assets';

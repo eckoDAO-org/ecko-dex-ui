@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Button } from 'semantic-ui-react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import pwError from '../alerts/pwError';
 import CustomButton from '../../components/shared/CustomButton';
 import { AccountContext } from '../../contexts/AccountContext';
