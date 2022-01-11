@@ -5,7 +5,6 @@ import { WALLET } from '../../../constants/wallet';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 
 const WIRE_CONTAINER_WIDTH = 930;
-const WIRE_WIDTH = 56;
 const WiresContainer = styled.div`
   display: flex;
   align-items: flex-end;
@@ -30,7 +29,10 @@ const Container = styled.div`
   cursor: ${({ onClick }) => (onClick ? 'pointer' : 'default')};
   flex-direction: column;
   align-items: center;
+  transition: transform 1s;
   span {
+    transition: opacity 1s;
+
     font-size: 20px;
     font-style: normal;
     font-weight: 700;
@@ -38,34 +40,32 @@ const Container = styled.div`
     letter-spacing: 0em;
     text-align: left;
     color: ${({ theme: { colors } }) => colors.white};
+
+    ${({ selectedWire }) => {
+      if (selectedWire) {
+        return css`
+          opacity: 0;
+        `;
+      }
+    }}
   }
-  transition: transform 1s, opacity 0.5s ease-in-out;
-  ${({ isSelected, selectedWire, translateX }) => {
+
+  ${({ isSelected, translateX }) => {
     if (isSelected) {
       return css`
-        /* transition: height 1s, width 0.5s ease-in-out; */
-        transform: translate(${translateX}px, -132px);
+        transform: translate(${translateX}px, -300px);
 
-        /* width: 56px !important; */
         img {
-          /* height: 402px !important; */
+          transition: width 0.5s ease-in-out;
           width: 56px !important;
         }
-      `;
-    }
-    if (!isSelected && selectedWire) {
-      return css`
-        opacity: 0;
       `;
     }
   }}
 `;
 
 const WireImg = styled.img`
- 
   margin-top: ${({ selectedWire }) => !selectedWire && 20}px;
-  transition: transform 1, height 1s, width: 1s;
-  
 `;
 
 export const ConnectionWire = ({ wire, style, containerStyle, onClick }) => {
@@ -75,9 +75,7 @@ export const ConnectionWire = ({ wire, style, containerStyle, onClick }) => {
   useEffect(() => {
     if (selectedWire) {
       const wireElement = document.getElementById(selectedWire.id);
-      console.log('wireEelement', wireElement.offsetLeft);
-
-      setTranslateX((WIRE_CONTAINER_WIDTH - 50) / 2 - wireElement.offsetLeft - 3);
+      setTranslateX((WIRE_CONTAINER_WIDTH - 50) / 2 - wireElement.offsetLeft - 11);
     }
   }, [selectedWire]);
   return (
@@ -89,7 +87,7 @@ export const ConnectionWire = ({ wire, style, containerStyle, onClick }) => {
       isSelected={selectedWire?.id === wire.id}
       selectedWire={selectedWire}
     >
-      {!selectedWire && <span>{wire.name}</span>}
+      <span>{wire.name}</span>
       <WireImg src={wire.wire} style={style} />
     </Container>
   );
@@ -97,7 +95,6 @@ export const ConnectionWire = ({ wire, style, containerStyle, onClick }) => {
 
 const WalletWires = () => {
   const { showWires, setShowWires, selectedWire, onWireSelect } = useContext(GameEditionContext);
-  console.log('selectedWire', selectedWire);
   return (
     <WiresContainer showWires={showWires}>
       {showWires && (
@@ -105,8 +102,9 @@ const WalletWires = () => {
           <HideWiresIcon />
         </HideWiresContainer>
       )}
+
       {!showWires && selectedWire && (
-        <HideWiresContainer style={{ top: 80 }} onClick={() => onWireSelect(null)}>
+        <HideWiresContainer style={{ top: -80, zIndex: 10 }} onClick={() => onWireSelect(null)}>
           <HideWiresIcon />
         </HideWiresContainer>
       )}

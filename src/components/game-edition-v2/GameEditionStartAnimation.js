@@ -25,15 +25,18 @@ const Container = styled.div`
 
 const GameEditionStartAnimation = () => {
   const history = useHistory();
-  const { loadingValue } = useGameEditionContext();
+  const { loadingValue, gameEditionView } = useGameEditionContext();
 
   useEffect(() => {
     if (loadingValue === PROGRESS_BAR_MAX_VALUE) {
-      setTimeout(() => {
+      let goToSwapTimeout = setTimeout(() => {
         history.push(ROUTE_GAME_EDITION_MENU);
-      }, 2000);
+      }, [2000]);
+      return () => {
+        clearTimeout(goToSwapTimeout);
+      };
     }
-  }, [loadingValue]);
+  }, [loadingValue, gameEditionView]);
 
   return (
     <Container style={{ backgroundImage: `url(${loadingBackground})` }}>

@@ -1,30 +1,34 @@
 import React, { useContext } from 'react';
-import styled, { css } from 'styled-components/macro';
+import styled from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { useAccountContext } from '../../contexts';
 import useWindowSize from '../../hooks/useWindowSize';
-import { KaddexLogo } from '../../assets';
+import WalletWires from './wires/WalletWires';
+import ConnectWalletWire from './wires/ConnectWalletWire';
 import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.png';
 import gameboyMobile from '../../assets/images/game-edition/gameboy-mobile.png';
+import { KaddexLogo } from '../../assets';
 import theme from '../../styles/theme';
 
-import WalletWires, { ConnectionWire } from './wires/WalletWires';
-import ConnectWalletWire from './wires/ConnectWalletWire';
-
-const MainContainer = styled.div`
+const DesktopMainContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: calc(100% - 56px);
+  height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
   align-items: center;
   transition: transform 0.5s;
-  /* transform: ${({ showWires }) => (showWires ? 'translateY(0)' : 'translateY(512px)')}; */
   transform: ${({ showWires, selectedWire }) => {
-    if (selectedWire) {
-      return 'translateY(318px)';
-    }
-    return showWires ? 'translateY(0)' : 'translateY(512px)';
+    return showWires && !selectedWire ? 'translateY(0)' : 'translateY(520px)';
   }};
+`;
+
+const MobileMainContainer = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
+  align-items: center;
+  overflow: hidden;
 `;
 
 const GameboyDesktopContainer = styled.div`
@@ -118,26 +122,25 @@ const GameEditionContainer = ({ children }) => {
   // };
 
   return width < theme.mediaQueries.desktopPixel ? (
-    <MainContainer>
+    <MobileMainContainer>
       <GameboyMobileContainer style={{ backgroundImage: `url(${gameboyMobile})` }}>
         <DisplayContent>{children}</DisplayContent>
         <div className="kaddex-logo">
           <KaddexLogo />
         </div>
       </GameboyMobileContainer>
-    </MainContainer>
+    </MobileMainContainer>
   ) : (
-    <MainContainer showWires={showWires} selectedWire={selectedWire} style={{ justifyContent: 'flex-end' }}>
+    <DesktopMainContainer showWires={showWires} selectedWire={selectedWire} style={{ justifyContent: 'flex-end' }}>
       <GameboyDesktopContainer showWires={showWires} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
         <DisplayContent>{children}</DisplayContent>
         <div className="kaddex-logo">
           <KaddexLogo />
         </div>
       </GameboyDesktopContainer>
-      {!account?.account && !selectedWire && <ConnectWalletWire onClick={() => setShowWires(true)} />}
-      {/* {selectedWire && <ConnectionWire img={selectedWire.wire} label={selectedWire.id} style={{ height: 170, width: 56 }} />} */}
+      {!account?.account && <ConnectWalletWire onClick={() => setShowWires(true)} />}
       <WalletWires />
-    </MainContainer>
+    </DesktopMainContainer>
   );
 };
 

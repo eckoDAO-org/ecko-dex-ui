@@ -6,12 +6,13 @@ import { FadeIn } from '../../shared/animations';
 import { ConnectWalletIcon, WireConnectionIcon } from '../../../assets';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 
-const WireConnectionContainer = styled(FadeIn)`
+const WireConnectionContainer = styled.div`
   margin-top: 8px;
   position: relative;
   transition: transform 0.5s;
-  transform: ${({ showWires }) => (showWires ? 'translateY(1000%)' : 'translateY(0)')};
+  transform: ${({ showWires }) => (showWires ? 'translateY(700px)' : 'translateY(0)')};
   min-height: 161px;
+  cursor: ${({ onClick }) => (onClick ? 'pointer' : 'default')};
 `;
 
 const ConnectWalletContainer = styled.div`
@@ -19,22 +20,21 @@ const ConnectWalletContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  cursor: pointer;
 `;
 
 const ConnectWalletWire = ({ onClick }) => {
   const location = useLocation();
-  const { showWires } = useContext(GameEditionContext);
+  const { showWires, selectedWire } = useContext(GameEditionContext);
 
   return (
-    <WireConnectionContainer showWires={showWires} onClick={onClick}>
-      {location?.pathname === ROUTE_GAME_EDITION_MENU && (
-        <>
+    <WireConnectionContainer showWires={showWires} onClick={selectedWire ? null : () => onClick()}>
+      {location?.pathname === ROUTE_GAME_EDITION_MENU && !selectedWire && (
+        <FadeIn>
           <WireConnectionIcon />
           <ConnectWalletContainer>
             <ConnectWalletIcon />
           </ConnectWalletContainer>
-        </>
+        </FadeIn>
       )}
     </WireConnectionContainer>
   );

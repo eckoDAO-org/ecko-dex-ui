@@ -1,9 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { KaddexLightModeLogo, KaddexLogo } from '../../../assets';
 import { ROUTE_INDEX } from '../../../router/routes';
+import menuItems from '../../menuItems';
 import RightHeaderItems from './RightHeaderItems';
+import HeaderItem from '../../../components/shared/HeaderItem';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 
 const Container = styled.div`
@@ -43,8 +45,18 @@ const RightContainer = styled.div`
   display: flex;
 `;
 
+const AnimatedDiv = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 25px;
+  & > *:not(:last-child) {
+    margin-right: 25px;
+  }
+`;
+
 const DesktopHeader = ({ className, gameEditionView }) => {
   const history = useHistory();
+  const [buttonHover, setButtonHover] = useState(null);
 
   const { themeMode } = useContext(LightModeContext);
 
@@ -56,6 +68,22 @@ const DesktopHeader = ({ className, gameEditionView }) => {
         ) : (
           <KaddexLightModeLogo style={{ cursor: 'pointer' }} onClick={() => history.push(ROUTE_INDEX)} />
         )}
+
+        <AnimatedDiv className={gameEditionView ? 'fadeOut' : 'fadeIn'}>
+          {menuItems.map((item, index) => (
+            <HeaderItem
+              key={index}
+              className={item.className}
+              headerItemStyle={{ width: 36 }}
+              route={item.route}
+              onMouseOver={() => setButtonHover(item.id)}
+              onMouseLeave={() => setButtonHover(null)}
+              isHover={buttonHover === item.id}
+            >
+              {item.label}
+            </HeaderItem>
+          ))}
+        </AnimatedDiv>
       </LeftContainer>
       <RightContainer>
         <RightHeaderItems />

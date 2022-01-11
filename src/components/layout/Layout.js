@@ -24,6 +24,7 @@ const WrapperContainer = styled(Wrapper)`
     font-size: 16px;
     font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
     color: ${({ theme: { colors } }) => colors.white};
+    padding: 0 1.5em;
   }
 `;
 

@@ -1,13 +1,22 @@
 import React, { useState } from 'react';
+import styled from 'styled-components/macro';
 import LiquidityContainer from './liquidity/LiquidityContainer';
 import LiquidityList from './liquidity/LiquidityList';
 import RemoveLiqContainer from './liquidity/RemoveLiqContainer';
+
+const Container = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+
+  align-items: center;
+`;
 
 const PoolContainer = () => {
   const [selectedView, setSelectedView] = useState(false);
   const [pair, setPair] = useState(null);
   return (
-    <>
+    <Container>
       {selectedView === 'Remove Liquidity' ? (
         <RemoveLiqContainer
           closeLiquidity={() => {
@@ -36,7 +45,7 @@ const PoolContainer = () => {
           setTokenPair={(pair) => setPair(pair)}
         />
       )}
-    </>
+    </Container>
   );
 };
 
