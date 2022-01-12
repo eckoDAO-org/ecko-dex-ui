@@ -2,9 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { HideWiresIcon } from '../../../assets';
 import { WALLET } from '../../../constants/wallet';
-import { GameEditionContext } from '../../../contexts/GameEditionContext';
+import { GameEditionContext, WIRE_CONTAINER_WIDTH } from '../../../contexts/GameEditionContext';
 
-const WIRE_CONTAINER_WIDTH = 930;
 const WiresContainer = styled.div`
   display: flex;
   align-items: flex-end;
@@ -23,13 +22,26 @@ const HideWiresContainer = styled.div`
   cursor: pointer;
 `;
 
-const Container = styled.div`
+const DisconnectButton = styled(HideWiresContainer)`
+  background-color: #000000;
+  border-radius: 40px;
+  padding: 10px 50px;
+  span {
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+  }
+`;
+
+const ConnectionWireContainer = styled.div`
   display: flex;
   z-index: 1;
   cursor: ${({ onClick }) => (onClick ? 'pointer' : 'default')};
   flex-direction: column;
   align-items: center;
-  transition: transform 1s;
+  svg {
+    margin-top: 20px;
+  }
   span {
     transition: opacity 1s;
 
@@ -53,33 +65,33 @@ const Container = styled.div`
   ${({ isSelected, translateX }) => {
     if (isSelected) {
       return css`
-        transform: translate(${translateX}px, -300px);
-
-        img {
-          transition: width 0.5s ease-in-out;
-          width: 56px !important;
+        transition: transform 0.5s;
+        transform: translate(${translateX}px, -260px);
+      `;
+    } else {
+      return css`
+        transition: transform 0.3s;
+        :hover {
+          transform: scale(1.3);
         }
       `;
     }
   }}
 `;
 
-const WireImg = styled.img`
-  margin-top: ${({ selectedWire }) => !selectedWire && 20}px;
-`;
-
-export const ConnectionWire = ({ wire, style, containerStyle, onClick }) => {
+export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
   const { selectedWire } = useContext(GameEditionContext);
 
   const [translateX, setTranslateX] = useState(0);
   useEffect(() => {
     if (selectedWire) {
       const wireElement = document.getElementById(selectedWire.id);
-      setTranslateX((WIRE_CONTAINER_WIDTH - 50) / 2 - wireElement.offsetLeft - 11);
+
+      setTranslateX((WIRE_CONTAINER_WIDTH - 50) / 2 - wireElement.offsetLeft - wireElement.offsetWidth / 2 + 20);
     }
   }, [selectedWire]);
   return (
-    <Container
+    <ConnectionWireContainer
       id={wire.id}
       style={containerStyle}
       translateX={translateX}
@@ -88,8 +100,8 @@ export const ConnectionWire = ({ wire, style, containerStyle, onClick }) => {
       selectedWire={selectedWire}
     >
       <span>{wire.name}</span>
-      <WireImg src={wire.wire} style={style} />
-    </Container>
+      {wire.wireIcon}
+    </ConnectionWireContainer>
   );
 };
 
@@ -104,17 +116,12 @@ const WalletWires = () => {
       )}
 
       {!showWires && selectedWire && (
-        <HideWiresContainer style={{ top: -80, zIndex: 10 }} onClick={() => onWireSelect(null)}>
-          <HideWiresIcon />
-        </HideWiresContainer>
+        <DisconnectButton style={{ top: -155 }} onClick={() => onWireSelect(null)}>
+          <span>Disconnect</span>
+        </DisconnectButton>
       )}
       {[WALLET.KADDEX_WALLET, WALLET.ZELCORE, WALLET.CHAINWEAVER, WALLET.TORUS].map((wire, i) => (
-        <ConnectionWire
-          key={i}
-          wire={wire}
-          style={wire.id === WALLET.KADDEX_WALLET.id ? { height: 475, width: 85 } : { height: 402, width: 60 }}
-          onClick={selectedWire ? null : () => onWireSelect(wire)}
-        />
+        <ConnectionWire key={i} wire={wire} onClick={selectedWire ? null : () => onWireSelect(wire)} />
       ))}
     </WiresContainer>
   );

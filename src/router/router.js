@@ -10,7 +10,6 @@ import KpennyContainer from '../containers/KpennyContainer';
 import KpennyRedeemContainer from '../containers/KpennyRedeemContainer';
 import GameEditionMenuContainer from '../components/game-edition-v2/GameEditionMenuContainer';
 import GameEditionStartAnimation from '../components/game-edition-v2/GameEditionStartAnimation';
-import styled from 'styled-components/macro';
 import {
   ROUTE_INDEX,
   ROUTE_POOL,
@@ -23,14 +22,6 @@ import {
   ROUTE_GAME_EDITION_MENU,
 } from './routes';
 
-const Container = styled.div`
-  /* display: flex;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-  flex-flow: column; */
-`;
-
 export default () => {
   if (window.location.pathname.includes('serviceworker')) {
     return <></>;
@@ -38,7 +29,6 @@ export default () => {
     return (
       <Router>
         <Layout>
-          {/* <Container> */}
           <Switch>
             <Route exact path={ROUTE_INDEX} component={SwapContainer} />
             <Route exact path={ROUTE_GAME_START_ANIMATION} component={GameEditionStartAnimation} />
@@ -50,7 +40,6 @@ export default () => {
             <Route exact path={ROUTE_KPY_RES} component={KpennyContainer} />
             <Route exact path={ROUTE_KPY_RED} component={KpennyRedeemContainer} />
           </Switch>
-          {/* </Container> */}
         </Layout>
       </Router>
     );

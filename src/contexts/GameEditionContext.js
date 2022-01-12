@@ -10,7 +10,7 @@ const initialModalState = {
 };
 
 export const PROGRESS_BAR_MAX_VALUE = 89;
-
+export const WIRE_CONTAINER_WIDTH = 930;
 export const GameEditionProvider = (props) => {
   const [gameEditionView, setGameEditionView] = useState(true);
   const [modalState, setModalState] = useState(initialModalState);

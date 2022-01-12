@@ -18,7 +18,7 @@ const DesktopMainContainer = styled.div`
   align-items: center;
   transition: transform 0.5s;
   transform: ${({ showWires, selectedWire }) => {
-    return showWires && !selectedWire ? 'translateY(0)' : 'translateY(520px)';
+    return showWires && !selectedWire ? 'translateY(0)' : 'translateY(442px)';
   }};
 `;
 
