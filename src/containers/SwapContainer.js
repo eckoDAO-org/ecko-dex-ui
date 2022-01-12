@@ -8,6 +8,7 @@ import WalletRequestView from '../components/swap/swap-modals/WalletRequestView'
 import SwapButtonsForm from '../components/swap/SwapButtonsForm';
 import SwapForm from '../components/swap/SwapForm';
 import SwapResults from '../components/swap/SwapResults';
+import SwapResultsGEv2 from '../components/swap/SwapResultsGEv2';
 import tokenData from '../constants/cryptoCurrencies';
 import { AccountContext } from '../contexts/AccountContext';
 import { GameEditionContext } from '../contexts/GameEditionContext';
@@ -538,25 +539,19 @@ const SwapContainer = () => {
       <FormContainer
         gameEditionView={gameEditionView}
         footer={
-          gameEditionView ? (
-            <Label gameEditionView={gameEditionView} style={{ justifyContent: 'center', alignItems: 'center', display: 'flex', width: '100%' }}>
-              Press B to swap
-            </Label>
-          ) : (
-            <SwapButtonsForm
-              setLoading={setLoading}
-              fetchingPair={fetchingPair}
-              fromValues={fromValues}
-              setFromValues={setFromValues}
-              toValues={toValues}
-              setToValues={setToValues}
-              fromNote={fromNote}
-              ratio={pact.ratio}
-              loading={loading}
-              noLiquidity={noLiquidity}
-              setShowTxModal={setShowTxModal}
-            />
-          )
+          <SwapButtonsForm
+            setLoading={setLoading}
+            fetchingPair={fetchingPair}
+            fromValues={fromValues}
+            setFromValues={setFromValues}
+            toValues={toValues}
+            setToValues={setToValues}
+            fromNote={fromNote}
+            ratio={pact.ratio}
+            loading={loading}
+            noLiquidity={noLiquidity}
+            setShowTxModal={setShowTxModal}
+          />
         }
       >
         {!gameEditionView && <GradientBorder />}
@@ -574,7 +569,11 @@ const SwapContainer = () => {
           /* handleTokenSelectorType={handleTokenSelectorType} */
         />
         {!isNaN(pact.ratio) && fromValues.amount && fromValues.coin && toValues.amount && toValues.coin ? (
-          <SwapResults priceImpact={priceImpact} fromValues={fromValues} toValues={toValues} />
+          gameEditionView ? (
+            <SwapResultsGEv2 priceImpact={priceImpact} fromValues={fromValues} toValues={toValues} />
+          ) : (
+            <SwapResults priceImpact={priceImpact} fromValues={fromValues} toValues={toValues} />
+          )
         ) : (
           <ResultContainer gameEditionView={gameEditionView}>
             <RowContainer gameEditionView={gameEditionView}>

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 import { useLocation } from 'react-router-dom';
-import { ROUTE_GAME_EDITION_MENU } from '../../../router/routes';
+import { ROUTE_GAME_START_ANIMATION } from '../../../router/routes';
 import { FadeIn } from '../../shared/animations';
 import { ConnectWalletIcon, WireConnectionIcon } from '../../../assets';
 import { GameEditionContext, WIRE_CONTAINER_WIDTH } from '../../../contexts/GameEditionContext';
@@ -32,7 +32,7 @@ const ConnectWalletWire = ({ onClick }) => {
 
   return (
     <WireConnectionContainer showWires={showWires} onClick={selectedWire ? null : () => onClick()}>
-      {location?.pathname === ROUTE_GAME_EDITION_MENU && !selectedWire && (
+      {location?.pathname !== ROUTE_GAME_START_ANIMATION && !selectedWire && (
         <FadeIn>
           <WireConnectionIcon />
           <ConnectWalletContainer>

@@ -7,3 +7,4 @@ export { ReactComponent as WireChainweaverIcon } from './wire-chainweaver.svg';
 export { ReactComponent as WireTorusIcon } from './wire-torus.svg';
 export { ReactComponent as WireXwalletIcon } from './wire-x-wallet.svg';
 export { ReactComponent as WireZelcoreIcon } from './wire-zelcore.svg';
+export { ReactComponent as PixeledCircleArrowIcon } from './input-circle-ge.svg';

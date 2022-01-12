@@ -12,18 +12,22 @@ import { theme } from '../../styles/theme';
 import noExponents from '../../utils/noExponents';
 import FirstInput from '../../assets/images/game-edition/first-input-background.png';
 import SecondInput from '../../assets/images/game-edition/second-input-background.png';
-import GameEditionDivider from '../../assets/images/game-edition/input-circle-ge.png';
+import { PixeledCircleArrowIcon } from '../../assets';
 
 const Container = styled.div`
+  position: relative;
   display: flex;
   flex-flow: column;
   width: 100%;
-
-  svg {
-    path {
-      fill: ${({ theme: { colors } }) => colors.white};
-    }
-  }
+  ${({ gameEditionView }) =>
+    !gameEditionView &&
+    css`
+      svg {
+        path {
+          fill: ${({ theme: { colors } }) => colors.white};
+        }
+      }
+    `}
 `;
 const FirstInputContainer = styled.div`
   ${({ gameEditionView }) => {
@@ -53,6 +57,13 @@ const SecondInputContainer = styled.div`
   }}
 `;
 
+const PixeledCircleArrowContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
 const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, toNote, setTokenSelectorType, setInputSide, swapValues }) => {
   const { gameEditionView } = useContext(GameEditionContext);
   const [rotation, setRotation] = useState(0);
@@ -60,7 +71,7 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
   const [width] = useWindowSize();
 
   return (
-    <Container>
+    <Container gameEditionView={gameEditionView}>
       <FirstInputContainer gameEditionView={gameEditionView}>
         <Input
           error={isNaN(fromValues.amount)}
@@ -104,7 +115,11 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
           }}
         />
       </FirstInputContainer>
-      {gameEditionView ? null : (
+      {gameEditionView ? (
+        <PixeledCircleArrowContainer>
+          <PixeledCircleArrowIcon />
+        </PixeledCircleArrowContainer>
+      ) : (
         <Divider horizontal style={{ zIndex: 1 }}>
           <SwapIcon
             id="swap-button"
