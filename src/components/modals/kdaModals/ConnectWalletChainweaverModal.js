@@ -24,7 +24,7 @@ const ActionContainer = styled.div`
   margin-top: 0;
 `;
 
-const ConnectWalletChainweaverModal = ({ show, onClose, onBack }) => {
+const ConnectWalletChainweaverModal = ({ onClose }) => {
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const { gameEditionView } = useContext(GameEditionContext);

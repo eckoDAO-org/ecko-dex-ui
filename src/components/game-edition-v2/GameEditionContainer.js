@@ -1,10 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { useAccountContext } from '../../contexts';
 import useWindowSize from '../../hooks/useWindowSize';
 import WalletWires from './wires/WalletWires';
 import ConnectWalletWire from './wires/ConnectWalletWire';
+import reduceToken from '../../utils/reduceToken';
+import ConnectWalletModal from '../modals/kdaModals/ConnectWalletModal';
+import GameEditionModalsContainer from './GameEditionModalsContainer';
 import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.png';
 import gameboyMobile from '../../assets/images/game-edition/gameboy-mobile.png';
 import { KaddexLogo } from '../../assets';
@@ -50,6 +53,7 @@ const GameboyDesktopContainer = styled.div`
   opacity: ${({ showWires }) => (showWires ? 0.5 : 1)};
 `;
 const GameboyMobileContainer = styled.div`
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   height: 540px;
@@ -70,8 +74,6 @@ const GameboyMobileContainer = styled.div`
       height: 6px;
     }
   }
-
-  background-size: contain;
 `;
 
 const DisplayContent = styled.div`
@@ -82,6 +84,7 @@ const DisplayContent = styled.div`
   background: rgba(0, 0, 0, 0.02);
   box-shadow: inset 0px 0px 20px rgba(0, 0, 0, 0.75);
   display: flex;
+  position: relative;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -104,7 +107,7 @@ const DisplayContent = styled.div`
 
 const GameEditionContainer = ({ children }) => {
   const [width] = useWindowSize();
-  const { showWires, setShowWires, selectedWire } = useContext(GameEditionContext);
+  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect } = useContext(GameEditionContext);
   const { account } = useAccountContext();
 
   // const switchAppSection = (direction) => {
@@ -121,6 +124,22 @@ const GameEditionContainer = ({ children }) => {
   //   }
   // };
 
+  useEffect(() => {
+    if (selectedWire) {
+      setTimeout(() => {
+        return openModal({
+          title: account?.account ? 'wallet connected' : 'connect wallet',
+          description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
+
+          content: <ConnectWalletModal />,
+        });
+      }, 500);
+    } else {
+      closeModal();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedWire]);
+
   return width < theme.mediaQueries.desktopPixel ? (
     <MobileMainContainer>
       <GameboyMobileContainer style={{ backgroundImage: `url(${gameboyMobile})` }}>
@@ -133,7 +152,20 @@ const GameEditionContainer = ({ children }) => {
   ) : (
     <DesktopMainContainer showWires={showWires} selectedWire={selectedWire} style={{ justifyContent: 'flex-end' }}>
       <GameboyDesktopContainer showWires={showWires} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
-        <DisplayContent>{children}</DisplayContent>
+        <DisplayContent>
+          {children}
+          {modalState.open && (
+            <GameEditionModalsContainer
+              title={modalState.title}
+              description={modalState.description}
+              content={modalState.content}
+              onClose={() => {
+                closeModal();
+                onWireSelect(null);
+              }}
+            />
+          )}
+        </DisplayContent>
         <div className="kaddex-logo">
           <KaddexLogo />
         </div>

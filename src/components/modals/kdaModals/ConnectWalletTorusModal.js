@@ -44,7 +44,7 @@ const verifierMap = {
 };
 /* const createAPIHost = (network, chainId) => `https://${network}.testnet.chainweb.com/chainweb/0.0/testnet02/chain/${chainId}/pact` */
 
-function Login({ onClose, onBack }) {
+function ConnectWalletTorusModal({ onClose }) {
   const modalContext = useContext(ModalContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
@@ -151,4 +151,4 @@ function Login({ onClose, onBack }) {
   );
 }
 
-export default Login;
+export default ConnectWalletTorusModal;
