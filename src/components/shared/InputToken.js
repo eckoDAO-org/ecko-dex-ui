@@ -9,8 +9,9 @@ import { LightModeContext } from '../../contexts/LightModeContext';
 
 const Container = styled.div`
   position: absolute;
+  z-index: 1000;
   cursor: pointer;
-  top: ${({ $gameEditionView }) => $gameEditionView && '4px'};
+  /* top: ${({ $gameEditionView }) => $gameEditionView && '4px'}; */
   right: 4px;
   display: flex;
   justify-content: space-between;

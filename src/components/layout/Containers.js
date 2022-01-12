@@ -79,6 +79,6 @@ export const Title = styled.span`
   font: ${({ theme: { fontFamily }, $gameEditionView }) =>
     $gameEditionView ? `normal normal normal 16px/19px ${fontFamily.pressStartRegular}` : `normal normal bold 32px/57px ${fontFamily.bold}`};
   letter-spacing: 0px;
-  color: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? colors.black : colors.white)};
+  color: ${({ $gameEditionView, theme: { colors } }) => colors.white};
   text-transform: ${({ $gameEditionView }) => ($gameEditionView ? `uppercase` : ` capitalize`)};
 `;

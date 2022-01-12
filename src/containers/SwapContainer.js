@@ -25,6 +25,7 @@ import FormContainer from '../components/shared/FormContainer';
 import GradientBorder from '../components/shared/GradientBorder';
 import { Title } from '../components/layout/Containers';
 import BackgroundLogo from '../components/shared/BackgroundLogo';
+import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -44,6 +45,10 @@ const Container = styled(FadeIn)`
         height: 100%;
         display: flex;
         flex-direction: column;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        background-image: ${`url(${ArcadeBackground})`};
       `;
     } else {
       return css`
@@ -105,9 +110,9 @@ const RowContainer = styled.div`
 `;
 
 const Label = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.regular)};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '13px' : '13px')};
+  color: ${({ theme: { colors }, gameEditionView }) => colors.white};
   text-transform: capitalize;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     text-align: left;
@@ -115,10 +120,10 @@ const Label = styled.span`
 `;
 
 const Value = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.bold)};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '13px' : '13px')};
   line-height: 20px;
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
+  color: ${({ theme: { colors }, gameEditionView }) => colors.white};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'right')};
   }
@@ -533,19 +538,25 @@ const SwapContainer = () => {
       <FormContainer
         gameEditionView={gameEditionView}
         footer={
-          <SwapButtonsForm
-            setLoading={setLoading}
-            fetchingPair={fetchingPair}
-            fromValues={fromValues}
-            setFromValues={setFromValues}
-            toValues={toValues}
-            setToValues={setToValues}
-            fromNote={fromNote}
-            ratio={pact.ratio}
-            loading={loading}
-            noLiquidity={noLiquidity}
-            setShowTxModal={setShowTxModal}
-          />
+          gameEditionView ? (
+            <Label gameEditionView={gameEditionView} style={{ justifyContent: 'center', alignItems: 'center', display: 'flex', width: '100%' }}>
+              Press B to swap
+            </Label>
+          ) : (
+            <SwapButtonsForm
+              setLoading={setLoading}
+              fetchingPair={fetchingPair}
+              fromValues={fromValues}
+              setFromValues={setFromValues}
+              toValues={toValues}
+              setToValues={setToValues}
+              fromNote={fromNote}
+              ratio={pact.ratio}
+              loading={loading}
+              noLiquidity={noLiquidity}
+              setShowTxModal={setShowTxModal}
+            />
+          )
         }
       >
         {!gameEditionView && <GradientBorder />}
