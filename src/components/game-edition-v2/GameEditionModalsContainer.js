@@ -4,6 +4,7 @@ import { CloseGe } from '../../assets';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { FadeIn } from '../shared/animations';
 import modalBackground from '../../assets/images/game-edition/modal-background.png';
+import GameEditionLabel from './shared/GameEditionLabel';
 
 const GEModalContainer = styled(FadeIn)`
   top: 0;
@@ -22,26 +23,13 @@ const GEModalContainer = styled(FadeIn)`
 `;
 
 const TitleContainer = styled.div`
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.pressStartRegular};
-  font-size: '16px';
   display: flex;
-  justify-content: space-between;
-
+  position: relative;
   width: 100%;
-  padding: 10px;
+  padding-top: 24px;
   text-transform: capitalize;
 `;
 
-const DescriptionContainer = styled.div`
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.pressStartRegular};
-  font-size: '16px';
-  display: flex;
-  justify-content: flex-start;
-  text-align: left;
-  margin-bottom: 10px;
-  width: 100%;
-  padding: 10px;
-`;
 const ContentModalContainer = styled.div`
   display: flex;
   @media (min-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
@@ -63,9 +51,11 @@ const GameEditionModalsContainer = ({ title, description, content, onClose, moda
   return (
     <GEModalContainer style={modalStyle}>
       <TitleContainer>
-        {title}
+        <GameEditionLabel fontSize={52} style={{ textAlign: 'center', flex: 1, display: 'block' }}>
+          {title}
+        </GameEditionLabel>
         <CloseGe
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', position: 'absolute', right: 20, top: 20 }}
           onClick={() => {
             if (onClose) {
               onClose();
@@ -75,7 +65,7 @@ const GameEditionModalsContainer = ({ title, description, content, onClose, moda
           }}
         />
       </TitleContainer>
-      {description && <DescriptionContainer>{description}</DescriptionContainer>}
+      {description && <GameEditionLabel fontSize={20}>{description}</GameEditionLabel>}
       <ContentModalContainer>{content}</ContentModalContainer>
     </GEModalContainer>
   );

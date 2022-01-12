@@ -59,7 +59,6 @@ const SwapButtonsForm = ({
             if (!account.account) {
               if (gameEditionView) {
                 return openModal({
-                  isVisible: true,
                   title: account?.account ? 'wallet connected' : 'connect wallet',
                   description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
                   content: <ConnectWalletModal />,

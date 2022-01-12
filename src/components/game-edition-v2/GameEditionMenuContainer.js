@@ -6,6 +6,7 @@ import theme from '../../styles/theme';
 import headerLinks from '../headerLinks';
 import menuItems from '../menuItems';
 import { FadeIn } from '../shared/animations';
+import GameEditionLabel from './shared/GameEditionLabel';
 import menuBackground from '../../assets/images/game-edition/menu-background.png';
 
 const Container = styled(FadeIn)`
@@ -19,16 +20,6 @@ const Container = styled(FadeIn)`
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  span {
-    font-family: ${({ theme: { fontFamily } }) => fontFamily.pixeboy};
-    color: #ffffff;
-    font-size: 52px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 53px;
-    letter-spacing: 0em;
-    text-align: center;
-  }
 `;
 
 const TopListContainer = styled.div`
@@ -59,7 +50,9 @@ const GameEditionMenuContainer = () => {
   return (
     <Container style={{ backgroundImage: `url(${menuBackground})` }}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <span style={{ marginBottom: 30 }}>MENU</span>
+        <GameEditionLabel fontSize={52} fontWeight={400} style={{ marginBottom: 30 }}>
+          MENU
+        </GameEditionLabel>
         <TopListContainer>
           {menuItems.map((item, index) => (
             <RowMenuContainer key={index}>

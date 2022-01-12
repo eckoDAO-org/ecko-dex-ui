@@ -10,6 +10,7 @@ import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { WALLET } from '../../../constants/wallet';
 import { theme } from '../../../styles/theme';
 import { LightModeContext } from '../../../contexts/LightModeContext';
+import Label from '../../shared/Label';
 
 const Text = styled.span`
   font-size: 13px;
@@ -79,11 +80,14 @@ const ConnectWalletZelcoreModal = () => {
 
     handleModalClose();
   };
-
   return (
     <>
-      <Text gameEditionView={gameEditionView}>Please make sure the KDA account provided is controlled by your Zelcore wallet</Text>
-      <Text gameEditionView={gameEditionView}>When submitting a transaction, Zelcore will show you a preview within the wallet before signing</Text>
+      <Label fontSize={13} geFontSize={20} geColor="yellow" geLabelStyle={{ textAlign: 'center' }}>
+        Please make sure the KDA account provided is controlled by your Zelcore wallet
+      </Label>
+      <Label fontSize={13} geFontSize={16} geColor="blue" geLabelStyle={{ textAlign: 'center' }}>
+        When submitting a transaction, Zelcore will show you a preview within the wallet before signing
+      </Label>
       <CustomButton
         buttonStyle={{
           border: '1px solid #424242',

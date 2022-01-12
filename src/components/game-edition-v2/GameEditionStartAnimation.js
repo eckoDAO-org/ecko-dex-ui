@@ -8,7 +8,7 @@ import { ROUTE_GAME_EDITION_MENU } from '../../router/routes';
 import { KaddexLoadingIcon } from '../../assets';
 import GameEditionProgressBar from '../shared/GameEditionProgressBar';
 import loadingBackground from '../../assets/images/game-edition/loading-background.png';
-import theme from '../../styles/theme';
+import GameEditionLabel from './shared/GameEditionLabel';
 
 const Container = styled.div`
   display: flex;
@@ -42,7 +42,7 @@ const GameEditionStartAnimation = () => {
     <Container style={{ backgroundImage: `url(${loadingBackground})` }}>
       <KaddexLoadingIcon />
       <GameEditionProgressBar loadingValue={loadingValue} />
-      <span style={{ fontFamily: theme.fontFamily.pixeboy, color: '#ffff', marginTop: 50, fontSize: 14 }}>V 1.0.0</span>
+      <GameEditionLabel style={{ marginTop: 50 }}>V 1.0.0</GameEditionLabel>
     </Container>
   );
 };

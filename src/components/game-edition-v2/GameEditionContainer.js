@@ -5,13 +5,15 @@ import { useAccountContext } from '../../contexts';
 import useWindowSize from '../../hooks/useWindowSize';
 import WalletWires from './wires/WalletWires';
 import ConnectWalletWire from './wires/ConnectWalletWire';
-import reduceToken from '../../utils/reduceToken';
-import ConnectWalletModal from '../modals/kdaModals/ConnectWalletModal';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
 import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.png';
 import gameboyMobile from '../../assets/images/game-edition/gameboy-mobile.png';
 import { KaddexLogo } from '../../assets';
 import theme from '../../styles/theme';
+import { WALLET } from '../../constants/wallet';
+import ConnectWalletZelcoreModal from '../modals/kdaModals/ConnectWalletZelcoreModal';
+import ConnectWalletTorusModal from '../modals/kdaModals/ConnectWalletTorusModal';
+import ConnectWalletChainweaverModal from '../modals/kdaModals/ConnectWalletChainweaverModal';
 
 const DesktopMainContainer = styled.div`
   display: flex;
@@ -124,14 +126,45 @@ const GameEditionContainer = ({ children }) => {
   //   }
   // };
 
+  const getWalletModal = (walletName) => {
+    switch (walletName) {
+      default:
+        return <div />;
+      case WALLET.ZELCORE.name:
+        return openModal({
+          title: 'ZELCORE',
+          content: <ConnectWalletZelcoreModal />,
+        });
+
+      case WALLET.TORUS.name:
+        return openModal({
+          title: 'connect wallet',
+          description: 'Torus Signing',
+          content: <ConnectWalletTorusModal onClose={closeModal} />,
+        });
+
+      case WALLET.CHAINWEAVER.name:
+        return openModal({
+          title: 'connect wallet',
+          description: 'Chainweaver',
+          content: <ConnectWalletChainweaverModal onClose={closeModal} />,
+        });
+
+      // case WALLET.KADDEX_WALLET.name:
+      //   if (!isInstalled) {
+      //     showNotification({
+      //       title: 'Wallet not found',
+      //       message: `Please install ${WALLET.KADDEX_WALLET.name}`,
+      //       type: STATUSES.WARNING,
+      //     });
+      //   }
+      //   break;
+    }
+  };
+
   useEffect(() => {
     if (selectedWire) {
-      openModal({
-        title: account?.account ? 'wallet connected' : 'connect wallet',
-        description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
-
-        content: <ConnectWalletModal />,
-      });
+      getWalletModal(selectedWire.name);
     } else {
       closeModal();
     }

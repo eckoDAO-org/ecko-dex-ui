@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components/macro';
 import { useGameEditionContext } from '../../contexts';
 import { commonTheme } from '../../styles/theme';
+import GameEditionLabel from '../game-edition-v2/shared/GameEditionLabel';
 
 const STYText = styled.span`
   display: flex;
@@ -17,18 +18,35 @@ const STYText = styled.span`
   font-size:${({ fontSize }) => fontSize}px;
 `;
 
-const Label = ({ className, children, label, labelColor, fontFamily = 'regular', fontSize = 16, labelStyle, inverted, onClick }) => {
-  const { gameEdition } = useGameEditionContext();
-  return (
+const Label = ({
+  className,
+  children,
+  labelColor,
+  fontFamily = 'regular',
+  fontSize = 16,
+  labelStyle,
+  geFontSize,
+  geFontWeight,
+  geLabelStyle,
+  geColor,
+  inverted,
+  onClick,
+}) => {
+  const { gameEditionView } = useGameEditionContext();
+  return gameEditionView ? (
+    <GameEditionLabel fontSize={geFontSize} fontWeight={geFontWeight} color={geColor} style={geLabelStyle} onClick={onClick}>
+      {children}
+    </GameEditionLabel>
+  ) : (
     <STYText
       className={className}
       labelColor={labelColor}
       inverted={inverted}
       fontSize={fontSize}
       onClick={onClick}
-      style={{ fontFamily: gameEdition ? commonTheme.fontFamily.pixeboy : commonTheme.fontFamily[fontFamily], ...labelStyle }}
+      style={{ fontFamily: commonTheme.fontFamily[fontFamily], ...labelStyle }}
     >
-      {children || label || '-'}
+      {children}
     </STYText>
   );
 };
