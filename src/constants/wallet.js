@@ -1,9 +1,5 @@
 import React from 'react';
-import { LockLogo, ZelcoreLogo, TorusLogo, KaddexLogoWhite } from '../assets';
-import WireZelcore from '../assets/images/game-edition/wire-zelcore.png';
-import WireChainweaver from '../assets/images/game-edition/wire-chainweaver.png';
-import WireTorus from '../assets/images/game-edition/wire-torus.png';
-import WireXwallet from '../assets/images/game-edition/wire-x-wallet.png';
+import { LockLogo, ZelcoreLogo, TorusLogo, KaddexLogoWhite, WireChainweaverIcon, WireTorusIcon, WireXwalletIcon, WireZelcoreIcon } from '../assets';
 
 export const WALLET = {
   ZELCORE: {
@@ -12,7 +8,7 @@ export const WALLET = {
     logo: <ZelcoreLogo />,
     signMethod: 'wallet',
     getAccountsUrl: 'http://127.0.0.1:9467/v1/accounts',
-    wire: WireZelcore,
+    wireIcon: <WireZelcoreIcon />,
   },
   CHAINWEAVER: {
     id: 'CHAINWEAVER',
@@ -20,8 +16,8 @@ export const WALLET = {
     logo: <LockLogo />,
     signMethod: 'wallet',
     getAccountsUrl: 'http://127.0.0.1:9467/v1/accounts',
-    wire: WireChainweaver,
+    wireIcon: <WireChainweaverIcon />,
   },
-  TORUS: { id: 'TORUS', name: 'Torus', logo: <TorusLogo />, signMethod: 'sign_required', wire: WireTorus },
-  KADDEX_WALLET: { id: 'KADDEX_WALLET', name: 'X Wallet', logo: <KaddexLogoWhite style={{ width: 45 }} />, wire: WireXwallet },
+  TORUS: { id: 'TORUS', name: 'Torus', logo: <TorusLogo />, signMethod: 'sign_required', wireIcon: <WireTorusIcon /> },
+  KADDEX_WALLET: { id: 'KADDEX_WALLET', name: 'X Wallet', logo: <KaddexLogoWhite style={{ width: 45 }} />, wireIcon: <WireXwalletIcon /> },
 };

@@ -24,7 +24,7 @@ const ActionContainer = styled.div`
   justify-content: space-around;
 `;
 
-const ConnectWalletZelcoreModal = ({ onClose, onBack }) => {
+const ConnectWalletZelcoreModal = () => {
   const modalContext = useContext(ModalContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);

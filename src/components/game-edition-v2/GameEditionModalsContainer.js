@@ -2,17 +2,23 @@ import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 import { CloseGe } from '../../assets';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { FadeIn } from '../shared/animations';
+import modalBackground from '../../assets/images/game-edition/modal-background.png';
 
-const GEModalContainer = styled.div`
+const GEModalContainer = styled(FadeIn)`
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(180deg, rgba(254, 251, 102, 1) 35%, rgba(255, 54, 208, 1) 100%);
+  border-radius: 19px;
+  background-image: url(${modalBackground});
   position: absolute;
-  border-radius: 20px;
   display: flex;
   flex-flow: column;
-  color: ${({ theme: { colors } }) => colors.black};
+  color: ${({ theme: { colors } }) => colors.white};
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 `;
 
 const TitleContainer = styled.div`
