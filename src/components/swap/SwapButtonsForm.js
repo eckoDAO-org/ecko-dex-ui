@@ -15,7 +15,7 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  z-index: ${({ gameEditionView }) => !gameEditionView && '1'};
+  z-index: ${({ gameEditionView }) => (gameEditionView ? '0' : '1')};
 `;
 
 const LabelContainer = styled.div`

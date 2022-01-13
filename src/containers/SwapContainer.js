@@ -65,7 +65,7 @@ const SwapTitleContainer = styled.div`
   ${({ gameEditionView }) => {
     if (gameEditionView) {
       return css`
-        margin-top: 16px;
+        margin-top: 8px;
         margin-bottom: 0px;
         justify-content: center;
       `;

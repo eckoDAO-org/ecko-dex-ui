@@ -24,6 +24,7 @@ const ResultContainer = styled.div`
 `;
 
 const InfoContainer = styled.div`
+  margin-right: 15px;
   display: flex;
   flex-flow: column;
   background-repeat: no-repeat;
@@ -33,9 +34,9 @@ const InfoContainer = styled.div`
 `;
 
 const Label = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.regular)};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '20px' : '13px')};
+  color: ${({ theme: { colors }, gameEditionView }) => colors.lightBlue};
   text-transform: capitalize;
   display: flex;
   align-items: center;
@@ -45,10 +46,10 @@ const Label = styled.span`
 `;
 
 const Value = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.bold)};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '16px' : '13px')};
   line-height: 20px;
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
+  color: ${({ theme: { colors }, gameEditionView }) => colors.white};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'right')};
     margin-bottom: ${({ gameEditionView }) => gameEditionView && '5px'};

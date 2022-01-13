@@ -47,7 +47,7 @@ const SecondInputContainer = styled.div`
   ${({ gameEditionView }) => {
     if (gameEditionView) {
       return css`
-        height: 70px;
+        margin-top: 12px;
         background-repeat: no-repeat;
         background-position: center;
         background-size: contain;
@@ -61,7 +61,7 @@ const PixeledCircleArrowContainer = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -41%);
 `;
 
 const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, toNote, setTokenSelectorType, setInputSide, swapValues }) => {

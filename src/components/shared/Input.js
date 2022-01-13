@@ -22,6 +22,8 @@ const Container = styled.div`
   padding: ${({ gameEditionView }) => (!gameEditionView ? '10px 10px 0px 10px' : '8px 14px 0px 30px')};
 
   .ui.input > input {
+    margin-top: ${({ gameEditionView }) => gameEditionView && '5px'};
+    height: ${({ gameEditionView }) => gameEditionView && '22px'};
     padding: ${({ gameEditionView }) => (!gameEditionView ? '10px 2px' : '0px')};
     font-family: ${({ gameEditionView, outGameEditionView, theme: { fontFamily } }) => {
       if (outGameEditionView) return fontFamily.regular + '!important';
@@ -33,13 +35,13 @@ const Container = styled.div`
       if (gameEditionView) return colors.black + '!important';
       else return colors.white + '!important';
     }};
-    font-size: ${({ gameEditionView }) => gameEditionView && '24px'};
+    font-size: ${({ gameEditionView }) => gameEditionView && '34px'};
   }
   & input::placeholder {
     color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `${colors.black}70 !important` : ``)};
     text-transform: capitalize;
     font-family: 14px;
-    font-size: ${({ gameEditionView }) => gameEditionView && '24px'};
+    font-size: ${({ gameEditionView }) => gameEditionView && '34px'};
   }
   .ui.icon.input > input {
     padding-right: ${({ inputRightComponent, inputComponentWidth }) => (inputRightComponent ? `${inputComponentWidth + 70}px !important` : 0)};
@@ -100,8 +102,8 @@ const Button = styled.button`
   justify-content: space-between;
   align-items: center;
   position: absolute;
-  top: 25%;
-  right: ${({ gameEditionView }) => (gameEditionView ? '10px' : '0px')};
+  top: ${({ gameEditionView }) => (gameEditionView ? '48%' : '25%')};
+  right: ${({ gameEditionView }) => (gameEditionView ? '-2px' : '0px')};
   height: 22px;
   padding-left: 8px !important;
   /* padding-right: 8px !important; */
