@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { HideWiresIcon } from '../../../assets';
 import { WALLET } from '../../../constants/wallet';
+import { useAccountContext } from '../../../contexts';
 import { GameEditionContext, WIRE_CONTAINER_WIDTH } from '../../../contexts/GameEditionContext';
 
 const WiresContainer = styled.div`
@@ -109,6 +110,8 @@ export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
 
 const WalletWires = () => {
   const { showWires, setShowWires, selectedWire, onWireSelect } = useContext(GameEditionContext);
+  const { logout } = useAccountContext();
+
   return (
     <WiresContainer showWires={showWires}>
       {showWires && (
@@ -117,7 +120,15 @@ const WalletWires = () => {
         </HideWiresContainer>
       )}
 
-      <DisconnectButton showWires={showWires} selectedWire={selectedWire} style={{ top: -155 }} onClick={() => onWireSelect(null)}>
+      <DisconnectButton
+        showWires={showWires}
+        selectedWire={selectedWire}
+        style={{ top: -155 }}
+        onClick={() => {
+          logout({ notReload: true });
+          onWireSelect(null);
+        }}
+      >
         <span>Disconnect</span>
       </DisconnectButton>
 

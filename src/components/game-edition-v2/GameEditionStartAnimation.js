@@ -2,13 +2,14 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components/macro';
-import { useGameEditionContext } from '../../contexts';
+import { useGameEditionContext, useWalletContext } from '../../contexts';
 import { PROGRESS_BAR_MAX_VALUE } from '../../contexts/GameEditionContext';
 import { ROUTE_GAME_EDITION_MENU } from '../../router/routes';
 import { KaddexLoadingIcon } from '../../assets';
 import GameEditionProgressBar from '../shared/GameEditionProgressBar';
 import loadingBackground from '../../assets/images/game-edition/loading-background.png';
 import GameEditionLabel from './shared/GameEditionLabel';
+import { WALLET } from '../../constants/wallet';
 
 const Container = styled.div`
   display: flex;
@@ -25,7 +26,8 @@ const Container = styled.div`
 
 const GameEditionStartAnimation = () => {
   const history = useHistory();
-  const { loadingValue, gameEditionView } = useGameEditionContext();
+  const { loadingValue, gameEditionView, onWireSelect } = useGameEditionContext();
+  const { wallet } = useWalletContext();
 
   useEffect(() => {
     if (loadingValue === PROGRESS_BAR_MAX_VALUE) {
@@ -37,6 +39,12 @@ const GameEditionStartAnimation = () => {
       };
     }
   }, [loadingValue, gameEditionView]);
+
+  useEffect(() => {
+    if (wallet) {
+      onWireSelect(WALLET[wallet.id]);
+    }
+  }, [wallet]);
 
   return (
     <Container style={{ backgroundImage: `url(${loadingBackground})` }}>

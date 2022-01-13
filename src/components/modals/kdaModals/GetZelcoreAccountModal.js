@@ -77,7 +77,7 @@ const DropdownContainer = styled.div`
 const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
   const modalContext = useContext(ModalContext);
   const account = useContext(AccountContext);
-  const { gameEditionView, closeModal } = useContext(GameEditionContext);
+  const { gameEditionView, closeModal, onWireSelect } = useContext(GameEditionContext);
   const { themeMode } = useContext(LightModeContext);
 
   const wallet = useContext(WalletContext);
@@ -112,7 +112,9 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
   };
 
   const handleModalClose = () => {
-    onClose();
+    if (onClose) {
+      onClose();
+    }
     closeModal();
     setApproved(false);
   };
@@ -126,7 +128,11 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
 
   const handleCancel = () => {
     setSelectedAccount(null);
-    modalContext.onBackModal();
+    if (gameEditionView) {
+      onWireSelect(null);
+    } else {
+      modalContext.onBackModal();
+    }
   };
 
   return (

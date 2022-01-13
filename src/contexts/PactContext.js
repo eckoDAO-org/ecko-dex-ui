@@ -59,7 +59,7 @@ export const PactProvider = (props) => {
 
   useEffect(() => {
     fetchAllBalances();
-  }, [balances, account.account.account, account.sendRes]);
+  }, [balances, account.account, account.sendRes]);
 
   const pollingNotif = (reqKey) => {
     return (toastId.current = notificationContext.showNotification({

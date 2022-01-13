@@ -162,7 +162,7 @@ const GameEditionContainer = ({ children }) => {
   };
 
   useEffect(() => {
-    if (selectedWire) {
+    if (selectedWire && !account.account) {
       getWalletModal(selectedWire.name);
     } else {
       closeModal();
@@ -201,7 +201,7 @@ const GameEditionContainer = ({ children }) => {
           <KaddexLogo />
         </div>
       </GameboyDesktopContainer>
-      {!account?.account && <ConnectWalletWire onClick={() => setShowWires(true)} />}
+      <ConnectWalletWire onClick={() => setShowWires(true)} />
       <WalletWires />
     </DesktopMainContainer>
   );
