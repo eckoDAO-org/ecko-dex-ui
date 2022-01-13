@@ -6,14 +6,14 @@ import reduceToken from '../../../utils/reduceToken';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { ModalContext } from '../../../contexts/ModalContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import { theme } from '../../../styles/theme';
+import { commonTheme, theme } from '../../../styles/theme';
 import { getAccounts, openZelcore } from '../../../utils/zelcore';
 import { WalletContext } from '../../../contexts/WalletContext';
 import { WALLET } from '../../../constants/wallet';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 import LogoLoader from '../../../components/shared/LogoLoader';
 import Label from '../../shared/Label';
-import { GeArrowIcon, GeCancelButtonIcon, GeConfirmButtonIcon } from '../../../assets';
+import { GeArrowIcon, GeCancelButtonIcon, GeConfirmButtonIcon, GeRetryButtonIcon } from '../../../assets';
 
 const ActionContainer = styled.div`
   display: flex;
@@ -37,17 +37,17 @@ const DropdownContainer = styled.div`
     }
   }
   .ui.selection.dropdown {
-    background: transparent;
     display: flex;
     justify-content: space-between;
     padding: 12px;
     border: 2px dashed ${({ theme: { colors } }) => colors.white};
     color: #ffffff;
+    background-color: #000000e6;
   }
 
   .ui.selection.dropdown .menu {
     margin-top: 10px !important;
-    background: transparent;
+    background-color: #000000e6;
     border: 2px dashed ${({ theme: { colors } }) => colors.white};
     max-height: fit-content;
     @media (min-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
@@ -57,11 +57,15 @@ const DropdownContainer = styled.div`
 
   .ui.selection.visible.dropdown .menu {
     border: 2px dashed ${({ theme: { colors } }) => colors.white};
+    max-height: 100px;
   }
 
   .ui.selection.dropdown .menu > .item {
     border: none;
     color: #ffffff;
+    font-family: ${({ theme: { fontFamily } }) => fontFamily.pixeboy};
+    font-size: 30px;
+    padding: 10px !important;
   }
 
   .ui.selection.active.dropdown:hover {
@@ -76,7 +80,7 @@ const DropdownContainer = styled.div`
 
 const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
   const modalContext = useContext(ModalContext);
-  const account = useContext(AccountContext);
+  const { account, setVerifiedAccount } = useContext(AccountContext);
   const { gameEditionView, closeModal, onWireSelect } = useContext(GameEditionContext);
   const { themeMode } = useContext(LightModeContext);
 
@@ -111,19 +115,21 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
     setSelectedAccount(value);
   };
 
-  const handleModalClose = () => {
+  const handleModalClose = async () => {
     if (onClose) {
       onClose();
     }
-    closeModal();
+    if (account?.account) {
+      await closeModal();
+    }
     setApproved(false);
   };
 
   const handleConnect = async () => {
-    await account.setVerifiedAccount(selectedAccount);
+    await setVerifiedAccount(selectedAccount);
     await wallet.signingWallet();
     await wallet.setSelectedWallet(WALLET.ZELCORE);
-    handleModalClose();
+    await handleModalClose();
   };
 
   const handleCancel = () => {
@@ -139,8 +145,8 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
     <>
       {!approved ? (
         <>
-          <Label fontSize={13} geFontSize={20} geColor="yellow" geLabelStyle={{ textAlign: 'center' }}>
-            Follow instructions in the wallet to share your accounts
+          <Label fontSize={13} geFontSize={20} geColor="yellow" geLabelStyle={{ textAlign: 'center', padding: '0 14px' }}>
+            Follow instructions in the wallet to share your zelcore accounts
           </Label>
 
           <ActionContainer gameEditionView={gameEditionView} style={{ justifyContent: 'center' }}>
@@ -149,11 +155,12 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
             ) : (
               <CustomButton
                 buttonStyle={{ width: gameEditionView && '100%' }}
+                disableGameEditionPadding
                 onClick={() => {
                   getAccountsFromWallet();
                 }}
               >
-                Retry
+                {gameEditionView ? <GeRetryButtonIcon /> : 'Retry'}
               </CustomButton>
             )}
           </ActionContainer>
@@ -176,6 +183,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
                 fluid
                 selection
                 closeOnChange
+                style={{ fontFamily: commonTheme.fontFamily.pixeboy, fontSize: 30 }}
                 icon={<GeArrowIcon />}
                 options={
                   accounts &&
@@ -209,6 +217,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
           )}
           <ActionContainer gameEditionView={gameEditionView}>
             <CustomButton
+              disableGameEditionPadding
               fluid={!gameEditionView}
               border="none"
               boxShadow="none"
@@ -219,7 +228,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
               {gameEditionView ? <GeCancelButtonIcon /> : 'Cancel'}
             </CustomButton>
 
-            <CustomButton fluid={!gameEditionView} disabled={!selectedAccount} onClick={() => handleConnect()}>
+            <CustomButton disableGameEditionPadding fluid={!gameEditionView} disabled={!selectedAccount} onClick={async () => await handleConnect()}>
               {gameEditionView ? <GeConfirmButtonIcon /> : 'Cancel'}
             </CustomButton>
           </ActionContainer>

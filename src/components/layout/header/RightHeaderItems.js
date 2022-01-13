@@ -71,7 +71,6 @@ const RightHeaderItems = () => {
             onClick={() => {
               if (gameEditionView) {
                 return openModal({
-                  isVisible: true,
                   title: 'Account',
                   content: <AccountModal />,
                 });

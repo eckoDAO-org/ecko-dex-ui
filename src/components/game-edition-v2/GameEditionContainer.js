@@ -79,8 +79,8 @@ const GameboyMobileContainer = styled.div`
 `;
 
 const DisplayContent = styled.div`
-  width: 440px;
-  margin-left: 25px;
+  width: 446px;
+  margin-left: 14px;
   margin-top: 100px;
   height: 329px;
   background: rgba(0, 0, 0, 0.02);
@@ -109,7 +109,7 @@ const DisplayContent = styled.div`
 
 const GameEditionContainer = ({ children }) => {
   const [width] = useWindowSize();
-  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect } = useContext(GameEditionContext);
+  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal } = useContext(GameEditionContext);
   const { account } = useAccountContext();
 
   // const switchAppSection = (direction) => {
@@ -132,20 +132,19 @@ const GameEditionContainer = ({ children }) => {
         return <div />;
       case WALLET.ZELCORE.name:
         return openModal({
-          title: 'ZELCORE',
+          title: WALLET.ZELCORE.name.toUpperCase(),
           content: <ConnectWalletZelcoreModal />,
         });
 
       case WALLET.TORUS.name:
         return openModal({
-          title: 'TORUS',
+          title: WALLET.TORUS.name.toUpperCase(),
           content: <ConnectWalletTorusModal onClose={closeModal} />,
         });
 
       case WALLET.CHAINWEAVER.name:
         return openModal({
-          title: 'connect wallet',
-          description: 'Chainweaver',
+          title: WALLET.CHAINWEAVER.name.toUpperCase(),
           content: <ConnectWalletChainweaverModal onClose={closeModal} />,
         });
 
@@ -190,10 +189,7 @@ const GameEditionContainer = ({ children }) => {
               title={modalState.title}
               description={modalState.description}
               content={modalState.content}
-              onClose={() => {
-                closeModal();
-                onWireSelect(null);
-              }}
+              s
             />
           )}
         </DisplayContent>

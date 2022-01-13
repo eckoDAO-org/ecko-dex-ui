@@ -51,6 +51,14 @@ export default createGlobalStyle`
     .ui.dimmer {
       background-color: rgba(0,0,0,.40) !important;
     } */
+    .game-edition-input.ui.input>input{
+      font-weight: 400;
+      text-align: center;
+      font-family:${({ theme: { fontFamily } }) => fontFamily.pixeboy};
+      color: #000000 !important;
+      background: transparent;
+      border: unset;
+    }
 
     .ui.input>input {
       background: transparent 0% 0% no-repeat padding-box;
@@ -61,6 +69,7 @@ export default createGlobalStyle`
     .ui.input>input:active, .ui.input>input:focus {
       background: transparent 0% 0% no-repeat padding-box;
       color: #fff;
+      border: unset;
     }
 
     .ui.disabled.button {

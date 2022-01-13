@@ -90,7 +90,7 @@ const GameEditionMenuContainer = () => {
             headerItemStyle={{
               fontFamily: theme.fontFamily.pixeboy,
               color: commonColors.gameEditionBlue,
-              margin: '0px 8px',
+              margin: '0px 22px',
               fontSize: 20,
               fontWeight: 400,
               textTransform: 'uppercase',

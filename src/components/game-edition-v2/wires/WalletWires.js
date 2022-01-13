@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
-import { HideWiresIcon } from '../../../assets';
-import { WALLET } from '../../../constants/wallet';
 import { useAccountContext } from '../../../contexts';
 import { GameEditionContext, WIRE_CONTAINER_WIDTH } from '../../../contexts/GameEditionContext';
+import { FadeIn } from '../../shared/animations';
+import { HideWiresIcon } from '../../../assets';
+import { WALLET } from '../../../constants/wallet';
 
 const WiresContainer = styled.div`
   display: flex;
@@ -38,6 +39,7 @@ const DisconnectButton = styled(HideWiresContainer)`
 
 const ConnectionWireContainer = styled.div`
   display: flex;
+  position: relative;
   z-index: 1;
   cursor: ${({ onClick }) => (onClick ? 'pointer' : 'default')};
   flex-direction: column;
@@ -82,8 +84,15 @@ const ConnectionWireContainer = styled.div`
   }}
 `;
 
+const BlurWire = styled(FadeIn)`
+  position: absolute;
+  filter: blur(10px);
+  z-index: -1;
+`;
+
 export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
-  const { selectedWire } = useContext(GameEditionContext);
+  const { selectedWire, showWires } = useContext(GameEditionContext);
+  const { account } = useAccountContext();
 
   const [translateX, setTranslateX] = useState(0);
   useEffect(() => {
@@ -104,6 +113,7 @@ export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
     >
       <span>{wire.name}</span>
       {wire.wireIcon}
+      {account?.account && !showWires && <BlurWire>{wire.wireIcon}</BlurWire>}
     </ConnectionWireContainer>
   );
 };

@@ -66,17 +66,16 @@ export const AccountProvider = (props) => {
         network
       );
       if (data.result.status === 'success') {
-        setAccount({
+        await setAccount({
           ...data.result.data,
           balance: getCorrectBalance(data.result.data.balance),
         });
       } else {
+        await setAccount({ account: null, guard: null, balance: 0 });
         await swal({
           text: `Please make sure the account ${accountName} exist on kadena blockchain`,
           title: 'No Account',
         });
-
-        setAccount({ account: null, guard: null, balance: 0 });
       }
     } catch (e) {
       console.log(e);
