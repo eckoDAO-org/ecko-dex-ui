@@ -105,7 +105,7 @@ export const AccountProvider = (props) => {
     }
   };
 
-  const logout = ({ notReload }) => {
+  const logout = (notReload) => {
     removeAccount();
     localStorage.removeItem('signing', null);
     removePrivKey();

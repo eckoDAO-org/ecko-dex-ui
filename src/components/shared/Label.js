@@ -21,7 +21,6 @@ const STYText = styled.span`
 const Label = ({
   className,
   children,
-  labelColor,
   fontFamily = 'regular',
   fontSize = 16,
   labelStyle,
@@ -40,7 +39,6 @@ const Label = ({
   ) : (
     <STYText
       className={className}
-      labelColor={labelColor}
       inverted={inverted}
       fontSize={fontSize}
       onClick={onClick}

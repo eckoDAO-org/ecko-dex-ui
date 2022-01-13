@@ -40,8 +40,9 @@ const StyledButton = styled(SUIButton)`
     if ($gameEditionView) return `unset`;
     else return `1px solid ${colors.white} !important`;
   }};
-  ${({ disableGameEditionPadding }) =>
+  ${({ disableGameEditionPadding, gameEditionView }) =>
     disableGameEditionPadding &&
+    gameEditionView &&
     css`
       padding: 0px !important;
     `};

@@ -57,14 +57,14 @@ const DropdownContainer = styled.div`
 
   .ui.selection.visible.dropdown .menu {
     border: 2px dashed ${({ theme: { colors } }) => colors.white};
-    max-height: 100px;
+    max-height: 120px;
   }
 
   .ui.selection.dropdown .menu > .item {
     border: none;
     color: #ffffff;
     font-family: ${({ theme: { fontFamily } }) => fontFamily.pixeboy};
-    font-size: 30px;
+    font-size: 20px;
     padding: 10px !important;
   }
 
@@ -135,7 +135,11 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
   const handleCancel = () => {
     setSelectedAccount(null);
     if (gameEditionView) {
-      onWireSelect(null);
+      if (!account.account) {
+        onWireSelect(null);
+      } else {
+        closeModal();
+      }
     } else {
       modalContext.onBackModal();
     }
@@ -183,7 +187,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
                 fluid
                 selection
                 closeOnChange
-                style={{ fontFamily: commonTheme.fontFamily.pixeboy, fontSize: 30 }}
+                style={{ fontFamily: commonTheme.fontFamily.pixeboy, fontSize: 20, alignItems: 'center' }}
                 icon={<GeArrowIcon />}
                 options={
                   accounts &&
@@ -229,7 +233,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
             </CustomButton>
 
             <CustomButton disableGameEditionPadding fluid={!gameEditionView} disabled={!selectedAccount} onClick={async () => await handleConnect()}>
-              {gameEditionView ? <GeConfirmButtonIcon /> : 'Cancel'}
+              {gameEditionView ? <GeConfirmButtonIcon /> : 'Connect'}
             </CustomButton>
           </ActionContainer>
         </ZelcoreModalContent>

@@ -86,7 +86,7 @@ const ConnectionWireContainer = styled.div`
 
 const BlurWire = styled(FadeIn)`
   position: absolute;
-  filter: blur(10px);
+  filter: blur(16px);
   z-index: -1;
 `;
 
@@ -133,9 +133,9 @@ const WalletWires = () => {
       <DisconnectButton
         showWires={showWires}
         selectedWire={selectedWire}
-        style={{ top: -155 }}
+        style={{ top: -77 }}
         onClick={() => {
-          logout({ notReload: true });
+          logout(true);
           onWireSelect(null);
         }}
       >

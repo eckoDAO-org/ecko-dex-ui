@@ -21,6 +21,7 @@ const GEModalContainer = styled(FadeIn)`
   background-repeat: no-repeat;
   background-position: center;
   padding: 24px;
+  padding-top: 12px;
 `;
 
 const TitleContainer = styled.div`

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
-import { useAccountContext } from '../../contexts';
+import { useAccountContext, useKaddexWalletContext, useNotificationContext } from '../../contexts';
 import useWindowSize from '../../hooks/useWindowSize';
 import WalletWires from './wires/WalletWires';
 import ConnectWalletWire from './wires/ConnectWalletWire';
@@ -14,6 +14,7 @@ import { WALLET } from '../../constants/wallet';
 import ConnectWalletZelcoreModal from '../modals/kdaModals/ConnectWalletZelcoreModal';
 import ConnectWalletTorusModal from '../modals/kdaModals/ConnectWalletTorusModal';
 import ConnectWalletChainweaverModal from '../modals/kdaModals/ConnectWalletChainweaverModal';
+import { STATUSES } from '../../contexts/NotificationContext';
 
 const DesktopMainContainer = styled.div`
   display: flex;
@@ -109,6 +110,9 @@ const DisplayContent = styled.div`
 
 const GameEditionContainer = ({ children }) => {
   const [width] = useWindowSize();
+  const { showNotification } = useNotificationContext();
+  const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
+
   const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal } = useContext(GameEditionContext);
   const { account } = useAccountContext();
 
@@ -148,15 +152,18 @@ const GameEditionContainer = ({ children }) => {
           content: <ConnectWalletChainweaverModal onClose={closeModal} />,
         });
 
-      // case WALLET.KADDEX_WALLET.name:
-      //   if (!isInstalled) {
-      //     showNotification({
-      //       title: 'Wallet not found',
-      //       message: `Please install ${WALLET.KADDEX_WALLET.name}`,
-      //       type: STATUSES.WARNING,
-      //     });
-      //   }
-      //   break;
+      case WALLET.KADDEX_WALLET.name:
+        if (!isInstalled) {
+          showNotification({
+            title: 'Wallet not found',
+            message: `Please install ${WALLET.KADDEX_WALLET.name}`,
+            type: STATUSES.WARNING,
+          });
+        } else {
+          initializeKaddexWallet();
+          closeModal();
+        }
+        break;
     }
   };
 
@@ -197,7 +204,7 @@ const GameEditionContainer = ({ children }) => {
           <KaddexLogo />
         </div>
       </GameboyDesktopContainer>
-      <ConnectWalletWire onClick={() => setShowWires(true)} />
+      <ConnectWalletWire onClick={selectedWire ? null : () => setShowWires(true)} />
       <WalletWires />
     </DesktopMainContainer>
   );
