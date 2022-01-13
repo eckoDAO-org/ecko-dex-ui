@@ -65,7 +65,8 @@ const Layout = ({ children }) => {
         </div>
         {game.gameEditionView ? (
           <>
-            <img src={centerBackground} style={{ position: 'absolute' }} /> <GameEditionContainer>{children}</GameEditionContainer>
+            <img src={centerBackground} style={{ position: 'absolute', width: '100%', top: 0, zIndex: -1 }} alt="" />
+            <GameEditionContainer>{children}</GameEditionContainer>
           </>
         ) : (
           <MainContent>{children}</MainContent>

@@ -37,15 +37,15 @@ const StyledButton = styled(SUIButton)`
   border: ${({ theme: { colors }, $border, $gameEditionView, $outGameEditionView }) => {
     if ($outGameEditionView) return `1px solid ${colors.white} !important`;
     if ($border) return $border + ' !important';
-    if ($gameEditionView) return `2px dashed ${colors.black} !important`;
+    if ($gameEditionView) return `unset`;
     else return `1px solid ${colors.white} !important`;
   }};
 
   svg {
     margin-right: 4px;
-    path {
+    /* path {
       fill: ${({ theme: { colors } }) => colors.white};
-    }
+    } */
   }
 `;
 
@@ -62,12 +62,14 @@ const CustomButton = ({
   children,
   onClick,
   loading,
+  fluid,
   outGameEditionView: $outGameEditionView,
 }) => {
   const { gameEditionView: $gameEditionView } = useContext(GameEditionContext);
   return (
     <StyledButton
       {...props}
+      fluid={fluid}
       $gameEditionView={$gameEditionView}
       $outGameEditionView={$outGameEditionView}
       disabled={disabled}

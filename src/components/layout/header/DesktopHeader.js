@@ -33,12 +33,6 @@ const LeftContainer = styled.div`
     opacity: 1;
     transition: opacity 1s linear;
   }
-
-  /* svg {
-    path {
-      fill: ${({ theme: { colors } }) => colors.white};
-    }
-  } */
 `;
 
 const RightContainer = styled.div`

@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import CustomButton from '../../../components/shared/CustomButton';
 import { Dropdown } from 'semantic-ui-react';
-import { Button } from 'semantic-ui-react';
 import reduceToken from '../../../utils/reduceToken';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { ModalContext } from '../../../contexts/ModalContext';
@@ -13,25 +12,13 @@ import { WalletContext } from '../../../contexts/WalletContext';
 import { WALLET } from '../../../constants/wallet';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 import LogoLoader from '../../../components/shared/LogoLoader';
-
-const TopText = styled.span`
-  font-size: 13px;
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  text-align: left;
-`;
-
-const BottomText = styled.span`
-  font-size: 13px;
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  text-align: left;
-  margin-bottom: 16px;
-`;
+import Label from '../../shared/Label';
+import { GeArrowIcon, GeCancelButtonIcon, GeConfirmButtonIcon } from '../../../assets';
 
 const ActionContainer = styled.div`
   display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: flex-end;
+  align-items: end;
+  justify-content: space-between;
   height: 100%;
   margin-top: ${({ gameEditionView }) => !gameEditionView && '16px'};
 `;
@@ -43,15 +30,25 @@ const ZelcoreModalContent = styled.div`
 `;
 
 const DropdownContainer = styled.div`
+  svg {
+    transform: rotate(90deg);
+    path {
+      fill: #ffffff;
+    }
+  }
   .ui.selection.dropdown {
     background: transparent;
-    border: 2px dashed ${({ theme: { colors } }) => colors.black};
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    border: 2px dashed ${({ theme: { colors } }) => colors.white};
+    color: #ffffff;
   }
 
   .ui.selection.dropdown .menu {
     margin-top: 10px !important;
     background: transparent;
-    border: 2px dashed ${({ theme: { colors } }) => colors.black};
+    border: 2px dashed ${({ theme: { colors } }) => colors.white};
     max-height: fit-content;
     @media (min-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
       max-height: 8em;
@@ -59,20 +56,21 @@ const DropdownContainer = styled.div`
   }
 
   .ui.selection.visible.dropdown .menu {
-    border: 2px dashed ${({ theme: { colors } }) => colors.black};
+    border: 2px dashed ${({ theme: { colors } }) => colors.white};
   }
 
   .ui.selection.dropdown .menu > .item {
     border: none;
+    color: #ffffff;
   }
 
   .ui.selection.active.dropdown:hover {
-    border: 2px dashed ${({ theme: { colors } }) => colors.black};
+    border: 2px dashed ${({ theme: { colors } }) => colors.white};
   }
 
   .ui.default.dropdown:not(.button) > .text,
   .ui.dropdown:not(.button) > .default.text {
-    color: ${({ theme: { colors } }) => colors.black};
+    color: ${({ theme: { colors } }) => colors.white};
   }
 `;
 
@@ -135,8 +133,11 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
     <>
       {!approved ? (
         <>
-          <TopText gameEditionView={gameEditionView}>Follow instructions in the wallet to share your accounts</TopText>
-          <ActionContainer gameEditionView={gameEditionView}>
+          <Label fontSize={13} geFontSize={20} geColor="yellow" geLabelStyle={{ textAlign: 'center' }}>
+            Follow instructions in the wallet to share your accounts
+          </Label>
+
+          <ActionContainer gameEditionView={gameEditionView} style={{ justifyContent: 'center' }}>
             {loading ? (
               <LogoLoader />
             ) : (
@@ -153,7 +154,15 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
         </>
       ) : (
         <ZelcoreModalContent>
-          <BottomText gameEditionView={gameEditionView}>Choose Public Key you intend to use</BottomText>
+          <Label
+            fontSize={13}
+            labelStyle={{ marginBottom: 16 }}
+            geFontSize={20}
+            geColor="yellow"
+            geLabelStyle={{ textAlign: 'center', display: 'block', marginBottom: 16 }}
+          >
+            Choose Public Key you intend to use
+          </Label>
           {gameEditionView ? (
             <DropdownContainer>
               <Dropdown
@@ -161,6 +170,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
                 fluid
                 selection
                 closeOnChange
+                icon={<GeArrowIcon />}
                 options={
                   accounts &&
                   accounts.map((item, index) => ({
@@ -192,23 +202,20 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
             />
           )}
           <ActionContainer gameEditionView={gameEditionView}>
-            <Button.Group fluid>
-              {!gameEditionView && (
-                <CustomButton
-                  border="none"
-                  boxShadow="none"
-                  color={theme(themeMode).colors.white}
-                  background="transparent"
-                  onClick={() => handleCancel()}
-                >
-                  Cancel
-                </CustomButton>
-              )}
+            <CustomButton
+              fluid={!gameEditionView}
+              border="none"
+              boxShadow="none"
+              color={theme(themeMode).colors.white}
+              background="transparent"
+              onClick={() => handleCancel()}
+            >
+              {gameEditionView ? <GeCancelButtonIcon /> : 'Cancel'}
+            </CustomButton>
 
-              <CustomButton disabled={!selectedAccount} onClick={() => handleConnect()}>
-                Connect
-              </CustomButton>
-            </Button.Group>
+            <CustomButton fluid={!gameEditionView} disabled={!selectedAccount} onClick={() => handleConnect()}>
+              {gameEditionView ? <GeConfirmButtonIcon /> : 'Cancel'}
+            </CustomButton>
           </ActionContainer>
         </ZelcoreModalContent>
       )}

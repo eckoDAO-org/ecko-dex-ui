@@ -138,8 +138,7 @@ const GameEditionContainer = ({ children }) => {
 
       case WALLET.TORUS.name:
         return openModal({
-          title: 'connect wallet',
-          description: 'Torus Signing',
+          title: 'TORUS',
           content: <ConnectWalletTorusModal onClose={closeModal} />,
         });
 
@@ -187,6 +186,7 @@ const GameEditionContainer = ({ children }) => {
           {children}
           {modalState.open && (
             <GameEditionModalsContainer
+              hideOnClose={modalState.hideOnClose}
               title={modalState.title}
               description={modalState.description}
               content={modalState.content}

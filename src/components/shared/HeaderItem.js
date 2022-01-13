@@ -28,8 +28,7 @@ const Item = styled(NavLink)`
   }
 
   &:hover {
-    font-family: ${({ theme: { fontFamily }, $gameEditionView, $notChangebleFontOnHover }) =>
-      !$notChangebleFontOnHover && `${fontFamily.bold} !important`};
+    font-family: ${({ theme: { fontFamily }, $notChangebleFontOnHover }) => !$notChangebleFontOnHover && `${fontFamily.bold} !important`};
     color: ${({ theme: { colors }, $gameEditionView }) => colors.white};
 
     /* text-shadow: ${({ theme: { colors }, $gameEditionView }) => ($gameEditionView ? 'none' : `0 0 5px ${colors.white}`)}; */

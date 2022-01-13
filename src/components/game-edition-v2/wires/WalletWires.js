@@ -17,8 +17,7 @@ const HideWiresContainer = styled.div`
   position: absolute;
   z-index: 10;
   left: 50%;
-
-  transform: translate(-50%, 0);
+  transform: translate(-50%, 0px);
   cursor: pointer;
 `;
 
@@ -26,6 +25,9 @@ const DisconnectButton = styled(HideWiresContainer)`
   background-color: #000000;
   border-radius: 40px;
   padding: 10px 50px;
+  transition: transform 0.5s;
+  transform: ${({ showWires, selectedWire }) => (!showWires && selectedWire ? 'translate(-50%, 0px)' : 'translate(-50%, 700px)')};
+
   span {
     color: #ffffff;
     font-size: 13px;
@@ -115,11 +117,10 @@ const WalletWires = () => {
         </HideWiresContainer>
       )}
 
-      {!showWires && selectedWire && (
-        <DisconnectButton style={{ top: -155 }} onClick={() => onWireSelect(null)}>
-          <span>Disconnect</span>
-        </DisconnectButton>
-      )}
+      <DisconnectButton showWires={showWires} selectedWire={selectedWire} style={{ top: -155 }} onClick={() => onWireSelect(null)}>
+        <span>Disconnect</span>
+      </DisconnectButton>
+
       {[WALLET.KADDEX_WALLET, WALLET.ZELCORE, WALLET.CHAINWEAVER, WALLET.TORUS].map((wire, i) => (
         <ConnectionWire key={i} wire={wire} onClick={selectedWire ? null : () => onWireSelect(wire)} />
       ))}

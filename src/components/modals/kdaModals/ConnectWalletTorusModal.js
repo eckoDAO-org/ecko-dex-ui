@@ -12,24 +12,27 @@ import { WALLET } from '../../../constants/wallet';
 import { theme } from '../../../styles/theme';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 import LogoLoader from '../../../components/shared/LogoLoader';
+import GameEditionLabel from '../../game-edition-v2/shared/GameEditionLabel';
+import pixeledPinkBox from '../../../assets/images/game-edition/pixeled-pink-box.svg';
+import Label from '../../shared/Label';
+
+const GEGetZelcoreAccount = styled.div`
+  background-image: ${`url(${pixeledPinkBox})`};
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`;
 
 const ButtonContainer = styled.div`
   display: flex;
   flex-flow: column;
   gap: 24px;
   margin-top: 30px;
-`;
-
-const TopText = styled.span`
-  font-size: 13px;
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  text-align: left;
-`;
-
-const BottomText = styled.span`
-  font-size: 13px;
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  text-align: left;
 `;
 
 const GOOGLE = 'google';
@@ -51,7 +54,6 @@ function ConnectWalletTorusModal({ onClose }) {
   const { themeMode } = useContext(LightModeContext);
 
   const { gameEditionView, closeModal } = useContext(GameEditionContext);
-  const [selectedVerifier] = useState(GOOGLE);
   const [torusdirectsdk, setTorusdirectsdk] = useState(null);
   const [, setConsoleText] = useState('');
   const [, setPublicKey] = useState('');
@@ -89,7 +91,7 @@ function ConnectWalletTorusModal({ onClose }) {
     const { selectedVerifier, torusdirectsdk } = state; */
 
     try {
-      const { typeOfLogin, clientId, verifier } = verifierMap[selectedVerifier];
+      const { typeOfLogin, clientId, verifier } = verifierMap[GOOGLE];
       const loginDetails = await torusdirectsdk.triggerLogin({
         typeOfLogin,
         verifier,
@@ -124,13 +126,23 @@ function ConnectWalletTorusModal({ onClose }) {
 
   return (
     <>
-      <TopText gameEditionView={gameEditionView}>Please press 'Connect with Torus' in order to access your wallet with Torus.</TopText>
-      <BottomText gameEditionView={gameEditionView}>When submitting a transaction, you will sign it through Torus.</BottomText>
-      <ButtonContainer gameEditionView={gameEditionView}>
-        <CustomButton disabled={loading} onClick={login}>
-          Connect with Torus
-        </CustomButton>
-      </ButtonContainer>
+      <Label fontSize={13} geFontSize={20} geColor="yellow" geLabelStyle={{ textAlign: 'center' }}>
+        Please press 'Connect with Torus' in order to access your wallet with Torus.
+      </Label>
+      <Label fontSize={13} geFontSize={16} geColor="blue" geLabelStyle={{ textAlign: 'center', marginBottom: 30, padding: '0 16px' }}>
+        When submitting a transaction, you will sign it through Torus.
+      </Label>
+      {gameEditionView ? (
+        <GEGetZelcoreAccount>
+          <GameEditionLabel fontSize={40}>CONNECT WITH TORUS</GameEditionLabel>
+        </GEGetZelcoreAccount>
+      ) : (
+        <ButtonContainer gameEditionView={gameEditionView}>
+          <CustomButton disabled={loading} onClick={login}>
+            Connect with Torus
+          </CustomButton>
+        </ButtonContainer>
+      )}
       {!gameEditionView && (
         <ButtonContainer style={{ marginTop: '10px' }}>
           <CustomButton
