@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
+import { useAccountContext } from '../../../contexts';
+import { GameEditionContext, WIRE_CONTAINER_WIDTH } from '../../../contexts/GameEditionContext';
+import { FadeIn } from '../../shared/animations';
 import { HideWiresIcon } from '../../../assets';
 import { WALLET } from '../../../constants/wallet';
-import { GameEditionContext, WIRE_CONTAINER_WIDTH } from '../../../contexts/GameEditionContext';
 
 const WiresContainer = styled.div`
   display: flex;
@@ -17,8 +19,7 @@ const HideWiresContainer = styled.div`
   position: absolute;
   z-index: 10;
   left: 50%;
-
-  transform: translate(-50%, 0);
+  transform: translate(-50%, 0px);
   cursor: pointer;
 `;
 
@@ -26,6 +27,9 @@ const DisconnectButton = styled(HideWiresContainer)`
   background-color: #000000;
   border-radius: 40px;
   padding: 10px 50px;
+  transition: transform 0.5s;
+  transform: ${({ showWires, selectedWire }) => (!showWires && selectedWire ? 'translate(-50%, 0px)' : 'translate(-50%, 700px)')};
+
   span {
     color: #ffffff;
     font-size: 13px;
@@ -35,6 +39,7 @@ const DisconnectButton = styled(HideWiresContainer)`
 
 const ConnectionWireContainer = styled.div`
   display: flex;
+  position: relative;
   z-index: 1;
   cursor: ${({ onClick }) => (onClick ? 'pointer' : 'default')};
   flex-direction: column;
@@ -79,8 +84,15 @@ const ConnectionWireContainer = styled.div`
   }}
 `;
 
+const BlurWire = styled(FadeIn)`
+  position: absolute;
+  filter: blur(16px);
+  z-index: -1;
+`;
+
 export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
-  const { selectedWire } = useContext(GameEditionContext);
+  const { selectedWire, showWires } = useContext(GameEditionContext);
+  const { account } = useAccountContext();
 
   const [translateX, setTranslateX] = useState(0);
   useEffect(() => {
@@ -101,12 +113,15 @@ export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
     >
       <span>{wire.name}</span>
       {wire.wireIcon}
+      {account?.account && !showWires && <BlurWire>{wire.wireIcon}</BlurWire>}
     </ConnectionWireContainer>
   );
 };
 
 const WalletWires = () => {
   const { showWires, setShowWires, selectedWire, onWireSelect } = useContext(GameEditionContext);
+  const { logout } = useAccountContext();
+
   return (
     <WiresContainer showWires={showWires}>
       {showWires && (
@@ -115,11 +130,18 @@ const WalletWires = () => {
         </HideWiresContainer>
       )}
 
-      {!showWires && selectedWire && (
-        <DisconnectButton style={{ top: -155 }} onClick={() => onWireSelect(null)}>
-          <span>Disconnect</span>
-        </DisconnectButton>
-      )}
+      <DisconnectButton
+        showWires={showWires}
+        selectedWire={selectedWire}
+        style={{ top: -77 }}
+        onClick={() => {
+          logout(true);
+          onWireSelect(null);
+        }}
+      >
+        <span>Disconnect</span>
+      </DisconnectButton>
+
       {[WALLET.KADDEX_WALLET, WALLET.ZELCORE, WALLET.CHAINWEAVER, WALLET.TORUS].map((wire, i) => (
         <ConnectionWire key={i} wire={wire} onClick={selectedWire ? null : () => onWireSelect(wire)} />
       ))}

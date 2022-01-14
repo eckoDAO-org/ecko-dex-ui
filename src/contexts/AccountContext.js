@@ -5,19 +5,17 @@ import swal from '@sweetalert/with-react';
 import { getCorrectBalance } from '../utils/reduceBalance';
 import { chainId, creationTime, GAS_PRICE, getCurrentDate, getCurrentTime, network } from '../constants/contextConstants';
 import { NotificationContext } from './NotificationContext';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 export const AccountContext = createContext();
-
-const savedAcct = localStorage.getItem('acct');
-const savedPrivKey = localStorage.getItem('pk');
 
 export const AccountProvider = (props) => {
   const [sendRes, setSendRes] = useState(null);
   const [localRes, setLocalRes] = useState(null);
   const notificationContext = useContext(NotificationContext);
 
-  const [account, setAccount] = useState(savedAcct ? JSON.parse(savedAcct) : { account: null, guard: null, balance: 0 });
-  const [privKey, setPrivKey] = useState(savedPrivKey ? savedPrivKey : '');
+  const [account, setAccount, removeAccount] = useLocalStorage('acct', { account: null, guard: null, balance: 0 });
+  const [privKey, setPrivKey, removePrivKey] = useLocalStorage('pk', '');
 
   const [registered, setRegistered] = useState(false);
 
@@ -68,19 +66,16 @@ export const AccountProvider = (props) => {
         network
       );
       if (data.result.status === 'success') {
-        await localStorage.setItem('acct', JSON.stringify(data.result.data));
-        setAccount({
+        await setAccount({
           ...data.result.data,
           balance: getCorrectBalance(data.result.data.balance),
         });
-        await localStorage.setItem('acct', JSON.stringify(data.result.data));
       } else {
+        await setAccount({ account: null, guard: null, balance: 0 });
         await swal({
           text: `Please make sure the account ${accountName} exist on kadena blockchain`,
           title: 'No Account',
         });
-
-        setAccount({ account: null, guard: null, balance: 0 });
       }
     } catch (e) {
       console.log(e);
@@ -110,12 +105,14 @@ export const AccountProvider = (props) => {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem('acct', null);
+  const logout = (notReload) => {
+    removeAccount();
     localStorage.removeItem('signing', null);
-    localStorage.removeItem('pk');
+    removePrivKey();
     localStorage.removeItem('wallet');
-    window.location.reload();
+    if (!notReload) {
+      window.location.reload();
+    }
   };
 
   const contextValues = {

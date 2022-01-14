@@ -1,13 +1,12 @@
 import React, { useContext } from 'react';
 import { Icon, Popup } from 'semantic-ui-react';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { LightModeContext } from '../../contexts/LightModeContext';
 import { theme } from '../../styles/theme';
 import CustomPopup from './CustomPopup';
+import Label from './Label';
 
 const CopyPopup = ({ textToCopy, title, containerStyle }) => {
   const { themeMode } = useContext(LightModeContext);
-  const { gameEditionView } = useContext(GameEditionContext);
 
   return (
     <CustomPopup
@@ -16,7 +15,7 @@ const CopyPopup = ({ textToCopy, title, containerStyle }) => {
       pinned
       trigger={
         <div
-          style={{ cursor: 'pointer', ...containerStyle }}
+          style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', ...containerStyle }}
           onClick={() => {
             navigator.clipboard.writeText(textToCopy);
           }}
@@ -28,17 +27,19 @@ const CopyPopup = ({ textToCopy, title, containerStyle }) => {
               navigator.clipboard.writeText(textToCopy);
             }}
           />
-          {title ? title : null}
+          {title && <Label geFontSize={20}>{title}</Label>}
         </div>
       }
     >
       <Popup.Content
         style={{
           padding: '8px',
-          color: gameEditionView ? `${theme(themeMode).colors.black}` : `${theme(themeMode).colors.white}`,
+          color: theme(themeMode).colors.white,
         }}
       >
-        Copied!
+        <Label fontSize={14} geFontSize={18}>
+          Copied!
+        </Label>
       </Popup.Content>
     </CustomPopup>
   );

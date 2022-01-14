@@ -1,17 +1,20 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
-import { useAccountContext } from '../../contexts';
+import { useAccountContext, useKaddexWalletContext, useNotificationContext } from '../../contexts';
 import useWindowSize from '../../hooks/useWindowSize';
 import WalletWires from './wires/WalletWires';
 import ConnectWalletWire from './wires/ConnectWalletWire';
-import reduceToken from '../../utils/reduceToken';
-import ConnectWalletModal from '../modals/kdaModals/ConnectWalletModal';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
 import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.png';
 import gameboyMobile from '../../assets/images/game-edition/gameboy-mobile.png';
 import { KaddexLogo } from '../../assets';
 import theme from '../../styles/theme';
+import { WALLET } from '../../constants/wallet';
+import ConnectWalletZelcoreModal from '../modals/kdaModals/ConnectWalletZelcoreModal';
+import ConnectWalletTorusModal from '../modals/kdaModals/ConnectWalletTorusModal';
+import ConnectWalletChainweaverModal from '../modals/kdaModals/ConnectWalletChainweaverModal';
+import { STATUSES } from '../../contexts/NotificationContext';
 
 const DesktopMainContainer = styled.div`
   display: flex;
@@ -77,8 +80,8 @@ const GameboyMobileContainer = styled.div`
 `;
 
 const DisplayContent = styled.div`
-  width: 440px;
-  margin-left: 25px;
+  width: 446px;
+  margin-left: 14px;
   margin-top: 100px;
   height: 329px;
   background: rgba(0, 0, 0, 0.02);
@@ -107,7 +110,10 @@ const DisplayContent = styled.div`
 
 const GameEditionContainer = ({ children }) => {
   const [width] = useWindowSize();
-  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect } = useContext(GameEditionContext);
+  const { showNotification } = useNotificationContext();
+  const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
+
+  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal } = useContext(GameEditionContext);
   const { account } = useAccountContext();
 
   // const switchAppSection = (direction) => {
@@ -124,14 +130,46 @@ const GameEditionContainer = ({ children }) => {
   //   }
   // };
 
-  useEffect(() => {
-    if (selectedWire) {
-      openModal({
-        title: account?.account ? 'wallet connected' : 'connect wallet',
-        description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
+  const getWalletModal = (walletName) => {
+    switch (walletName) {
+      default:
+        return <div />;
+      case WALLET.ZELCORE.name:
+        return openModal({
+          title: WALLET.ZELCORE.name.toUpperCase(),
+          content: <ConnectWalletZelcoreModal />,
+        });
 
-        content: <ConnectWalletModal />,
-      });
+      case WALLET.TORUS.name:
+        return openModal({
+          title: WALLET.TORUS.name.toUpperCase(),
+          content: <ConnectWalletTorusModal onClose={closeModal} />,
+        });
+
+      case WALLET.CHAINWEAVER.name:
+        return openModal({
+          title: WALLET.CHAINWEAVER.name.toUpperCase(),
+          content: <ConnectWalletChainweaverModal onClose={closeModal} />,
+        });
+
+      case WALLET.KADDEX_WALLET.name:
+        if (!isInstalled) {
+          showNotification({
+            title: 'Wallet not found',
+            message: `Please install ${WALLET.KADDEX_WALLET.name}`,
+            type: STATUSES.WARNING,
+          });
+        } else {
+          initializeKaddexWallet();
+          closeModal();
+        }
+        break;
+    }
+  };
+
+  useEffect(() => {
+    if (selectedWire && !account.account) {
+      getWalletModal(selectedWire.name);
     } else {
       closeModal();
     }
@@ -154,13 +192,11 @@ const GameEditionContainer = ({ children }) => {
           {children}
           {modalState.open && (
             <GameEditionModalsContainer
+              hideOnClose={modalState.hideOnClose}
               title={modalState.title}
               description={modalState.description}
               content={modalState.content}
-              onClose={() => {
-                closeModal();
-                onWireSelect(null);
-              }}
+              s
             />
           )}
         </DisplayContent>
@@ -168,7 +204,7 @@ const GameEditionContainer = ({ children }) => {
           <KaddexLogo />
         </div>
       </GameboyDesktopContainer>
-      {!account?.account && <ConnectWalletWire onClick={() => setShowWires(true)} />}
+      <ConnectWalletWire onClick={selectedWire ? null : () => setShowWires(true)} />
       <WalletWires />
     </DesktopMainContainer>
   );

@@ -13,13 +13,13 @@ import CopyPopup from '../../../components/shared/CopyPopup';
 import CustomButton from '../../../components/shared/CustomButton';
 import { theme } from '../../../styles/theme';
 import reduceToken from '../../../utils/reduceToken';
-import { BoldLabel, Container } from '../../layout/Containers';
+import { Container } from '../../layout/Containers';
 import ConnectWalletModal from './ConnectWalletModal';
+import Label from '../../shared/Label';
 
 const AccountModalContainer = styled(Container)`
-  margin-top: 24px;
   & > *:not(:last-child) {
-    margin-bottom: 24px;
+    margin-bottom: 16px;
   }
   height: 100%;
 `;
@@ -29,13 +29,13 @@ const AccountIdContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  border: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? `2px dashed ${colors.black}` : `1px solid ${colors.white}99`)};
+  border: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? `2px dashed ${colors.white}` : `1px solid ${colors.white}99`)};
   padding: 14px 10px;
   align-items: center;
   font-size: ${({ $gameEditionView }) => ($gameEditionView ? '13px' : '16px')};
   font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
   & > *:not(:last-child) {
-    margin-bottom: 16px;
+    margin-bottom: ${({ $gameEditionView }) => ($gameEditionView ? '8px' : '16px')};
   }
 `;
 
@@ -44,14 +44,6 @@ const RowContainer = styled.div`
   justify-content: space-between;
   width: 100%;
   flex-flow: row;
-`;
-
-const SubTitle = styled.span`
-  width: 100%;
-  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  color: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? colors.black : colors.white)};
-  font-size: ${({ fontSize }) => (fontSize ? fontSize : '16px')};
-  text-align: left;
 `;
 
 const RightContainer = styled.div`
@@ -77,9 +69,6 @@ const RightContainer = styled.div`
   svg {
     height: 24px;
     height: 24px;
-    path {
-      fill: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? colors.black : colors.white)};
-    }
   }
 `;
 
@@ -117,12 +106,15 @@ const AccountModal = () => {
 
   return (
     <AccountModalContainer>
-      <SubTitle $gameEditionView={gameEditionView}>Connected with {wallet?.name}</SubTitle>
+      <Label geFontSize={20} geColor="yellow" geLabelStyle={{ textAlign: 'center' }}>
+        Connected with {wallet?.name}
+      </Label>
 
       {account?.account && (
         <AccountIdContainer $gameEditionView={gameEditionView}>
           <RowContainer>
-            <span>Account</span>
+            <Label geFontSize={20}>Account</Label>
+
             <RightContainer
               $gameEditionView={gameEditionView}
               onClick={() =>
@@ -130,33 +122,35 @@ const AccountModal = () => {
               }
             >
               <ExplorerIcon />
-              <span>View in Explorer</span>
+              <Label geFontSize={20}>View in Explorer</Label>
             </RightContainer>
           </RowContainer>
           <RowContainer>
-            <span>{reduceToken(account.account)}</span>
-            <span>
-              <CopyPopup textToCopy={account.account} title="Copy Address" containerStyle={{ textAlign: 'right' }} />
-            </span>
+            <Label geFontSize={20}>{reduceToken(account.account)}</Label>
+
+            <CopyPopup textToCopy={account.account} title="Copy Address" containerStyle={{ textAlign: 'right' }} />
           </RowContainer>
         </AccountIdContainer>
       )}
       <RowContainer>
-        <SubTitle $gameEditionView={gameEditionView} fontSize="13px">
+        <Label fontSize={13} geFontSize={24}>
           Balance
-        </SubTitle>
-        <BoldLabel $gameEditionView={gameEditionView}>{account.balance}</BoldLabel>
+        </Label>
+        <Label fontSize={13} geFontSize={24}>
+          {account.balance}
+        </Label>
       </RowContainer>
       <ActionContainer $gameEditionView={gameEditionView}>
         <ButtonGroup $gameEditionView={gameEditionView} fluid>
           <CustomButton
-            border="none"
-            color={gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white}
+            border={gameEditionView ? `2px dashed ${theme(themeMode).colors.white}` : `none`}
+            buttonStyle={gameEditionView ? { padding: 10 } : {}}
+            borderRadius={gameEditionView && '0'}
+            color={theme(themeMode).colors.white}
             background="transparent"
             onClick={() => {
               if (gameEditionView) {
                 return openModal({
-                  isVisible: true,
                   title: account?.account ? 'wallet connected' : 'connect wallet',
                   description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
                   content: <ConnectWalletModal />,
@@ -170,19 +164,27 @@ const AccountModal = () => {
               }
             }}
           >
-            Change Method
+            {gameEditionView ? (
+              <Label geFontSize={20} geLabelStyle={{ textAlign: 'center' }}>
+                Change Method
+              </Label>
+            ) : (
+              'Change Method'
+            )}
           </CustomButton>
-          <CustomButton
-            border={gameEditionView ? `2px dashed ${theme(themeMode).colors.black}` : `1px solid ${theme(themeMode).colors.white}99`}
-            color={gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white}
-            background="transparent"
-            onClick={() => {
-              disconnectWallet();
-              logout();
-            }}
-          >
-            Disconnect Wallet
-          </CustomButton>
+          {!gameEditionView && (
+            <CustomButton
+              border={`1px solid ${theme(themeMode).colors.white}99`}
+              color={theme(themeMode).colors.white}
+              background="transparent"
+              onClick={() => {
+                disconnectWallet();
+                logout();
+              }}
+            >
+              Disconnect Wallet
+            </CustomButton>
+          )}
         </ButtonGroup>
       </ActionContainer>
     </AccountModalContainer>

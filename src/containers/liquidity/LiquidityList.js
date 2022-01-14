@@ -282,7 +282,6 @@ const LiquidityList = (props) => {
                 onClick={() => {
                   if (gameEditionView) {
                     return openModal({
-                      isVisible: true,
                       title: account?.account ? 'wallet connected' : 'connect wallet',
                       description: account?.account
                         ? `Account ID: ${reduceToken(account.account)}`

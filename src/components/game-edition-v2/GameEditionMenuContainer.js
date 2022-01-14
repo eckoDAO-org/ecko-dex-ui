@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
-import { ItemMenuArrowIcon } from '../../assets';
+import { GeArrowIcon } from '../../assets';
 import HeaderItem from '../../components/shared/HeaderItem';
-import theme from '../../styles/theme';
+import theme, { commonColors } from '../../styles/theme';
 import headerLinks from '../headerLinks';
 import menuItems from '../menuItems';
 import { FadeIn } from '../shared/animations';
+import GameEditionLabel from './shared/GameEditionLabel';
 import menuBackground from '../../assets/images/game-edition/menu-background.png';
 
 const Container = styled(FadeIn)`
@@ -19,16 +20,6 @@ const Container = styled(FadeIn)`
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  span {
-    font-family: ${({ theme: { fontFamily } }) => fontFamily.pixeboy};
-    color: #ffffff;
-    font-size: 52px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 53px;
-    letter-spacing: 0em;
-    text-align: center;
-  }
 `;
 
 const TopListContainer = styled.div`
@@ -37,9 +28,7 @@ const TopListContainer = styled.div`
   margin-top: 5%;
   align-items: center;
   justify-content: center;
-  /* & > *:not(:last-child) {
-    margin-bottom: 25px;
-  } */
+  align-items: flex-start;
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
     & > a {
@@ -51,6 +40,11 @@ const TopListContainer = styled.div`
 const RowMenuContainer = styled.div`
   display: flex;
   align-items: center;
+  svg {
+    path {
+      fill: ${({ showArrow, theme: { colors } }) => (showArrow ? colors.gameEditionYellow : 'transparent')};
+    }
+  }
 `;
 
 const GameEditionMenuContainer = () => {
@@ -59,17 +53,19 @@ const GameEditionMenuContainer = () => {
   return (
     <Container style={{ backgroundImage: `url(${menuBackground})` }}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <span style={{ marginBottom: 30 }}>MENU</span>
+        <GameEditionLabel fontSize={52} fontWeight={400} style={{ marginBottom: 30 }}>
+          MENU
+        </GameEditionLabel>
         <TopListContainer>
           {menuItems.map((item, index) => (
-            <RowMenuContainer key={index}>
-              {arrowVisible === item.label && <ItemMenuArrowIcon label={item.label} style={{ marginRight: 5.5 }} />}
+            <RowMenuContainer key={index} showArrow={arrowVisible === item.label}>
+              <GeArrowIcon label={item.label} style={{ marginRight: 5.5 }} />
               <HeaderItem
                 className={item.className}
                 route={item.route}
                 headerItemStyle={{
                   fontFamily: theme.fontFamily.pixeboy,
-                  color: arrowVisible === item.label ? '#FFC107' : '#ffffff',
+                  color: arrowVisible === item.label ? commonColors.gameEditionYellow : '#ffffff',
                   fontSize: 32,
                   fontWeight: 400,
                   textTransform: 'uppercase',
@@ -93,8 +89,8 @@ const GameEditionMenuContainer = () => {
             link={item?.link}
             headerItemStyle={{
               fontFamily: theme.fontFamily.pixeboy,
-              color: '#6D99E4',
-              margin: '0px 8px',
+              color: commonColors.gameEditionBlue,
+              margin: '0px 22px',
               fontSize: 20,
               fontWeight: 400,
               textTransform: 'uppercase',

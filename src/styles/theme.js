@@ -29,6 +29,18 @@ export const commonTheme = {
   inputSelectButtonWidth: 81,
 };
 
+export const commonColors = {
+  pink: '#D20790',
+  purple: '#240B2F',
+  black: '#15081F',
+  yellow: '#FEDE75',
+  green: '#69C549',
+  error: '#DB2828',
+  gameEditionYellow: '#FFC107',
+  gameEditionBlue: '#6D99E4',
+  gameEditionPink: '#F2248D',
+  gameEditionGrey: '#0000004D',
+};
 export const lightTheme = {
   ...commonTheme,
   backgroundBody:
@@ -38,14 +50,8 @@ export const lightTheme = {
   colors: {
     primary: '#FFFFFF',
     border: '#240B2F',
-    pink: '#D20790',
-    purple: '#240B2F',
-    black: '#15081F',
-    yellow: '#FEDE75',
     white: '#4C125A',
-    green: '#69C549',
-    error: '#DB2828',
-    lightBlue: '#6D99E4',
+    ...commonColors,
   },
   buttonBackgroundGradient: '#4C125A',
   backgroundRightModal: '#FFFFFF',
@@ -60,14 +66,8 @@ export const darkTheme = {
   colors: {
     primary: '#4C125A',
     border: '#ECEBEC',
-    pink: '#D20790',
-    purple: '#240B2F',
-    black: '#15081F',
-    yellow: '#FEDE75',
     white: '#FFFFFF',
-    green: '#69C549',
-    error: '#DB2828',
-    lightBlue: '#6D99E4',
+    ...commonColors,
   },
   buttonBackgroundGradient: '#FFFFFF',
   backgroundInput: 'transparent',

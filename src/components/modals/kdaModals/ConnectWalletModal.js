@@ -21,7 +21,7 @@ const ConnectWalletModal = () => {
       case WALLET.ZELCORE.name:
         if (gameEditionView) {
           return openModal({
-            title: 'connect wallet',
+            title: 'ZELCORE',
             description: 'Zelcore Signing (Safest)',
             content: <ConnectWalletZelcoreModal />,
           });

@@ -4,6 +4,7 @@ import { CloseGe } from '../../assets';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { FadeIn } from '../shared/animations';
 import modalBackground from '../../assets/images/game-edition/modal-background.png';
+import GameEditionLabel from './shared/GameEditionLabel';
 
 const GEModalContainer = styled(FadeIn)`
   top: 0;
@@ -19,63 +20,51 @@ const GEModalContainer = styled(FadeIn)`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  padding: 24px;
+  padding-top: 12px;
 `;
 
 const TitleContainer = styled.div`
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.pressStartRegular};
-  font-size: '16px';
   display: flex;
-  justify-content: space-between;
-
+  position: relative;
   width: 100%;
-  padding: 10px;
   text-transform: capitalize;
 `;
 
-const DescriptionContainer = styled.div`
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.pressStartRegular};
-  font-size: '16px';
-  display: flex;
-  justify-content: flex-start;
-  text-align: left;
-  margin-bottom: 10px;
-  width: 100%;
-  padding: 10px;
-`;
 const ContentModalContainer = styled.div`
   display: flex;
-  @media (min-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
-    justify-content: space-between;
+
+  & > *:not(:last-child) {
+    margin-bottom: 16px;
   }
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
-    & > *:not(:last-child) {
-      margin-bottom: 16px;
-    }
-  }
+
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 10px;
 `;
 
-const GameEditionModalsContainer = ({ title, description, content, onClose, modalStyle }) => {
+const GameEditionModalsContainer = ({ title, description, content, hideOnClose, onClose, modalStyle }) => {
   const { closeModal } = useContext(GameEditionContext);
   return (
     <GEModalContainer style={modalStyle}>
       <TitleContainer>
-        {title}
-        <CloseGe
-          style={{ cursor: 'pointer' }}
-          onClick={() => {
-            if (onClose) {
-              onClose();
-            } else {
-              closeModal();
-            }
-          }}
-        />
+        <GameEditionLabel fontSize={52} style={{ textAlign: 'center', flex: 1, display: 'block' }}>
+          {title}
+        </GameEditionLabel>
+        {!hideOnClose && (
+          <CloseGe
+            style={{ cursor: 'pointer', position: 'absolute', right: 20, top: 20 }}
+            onClick={() => {
+              if (onClose) {
+                onClose();
+              } else {
+                closeModal();
+              }
+            }}
+          />
+        )}
       </TitleContainer>
-      {description && <DescriptionContainer>{description}</DescriptionContainer>}
+      {description && <GameEditionLabel fontSize={20}>{description}</GameEditionLabel>}
       <ContentModalContainer>{content}</ContentModalContainer>
     </GEModalContainer>
   );

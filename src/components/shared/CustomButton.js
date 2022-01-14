@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useContext } from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { Button as SUIButton } from 'semantic-ui-react';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 
@@ -32,20 +32,25 @@ const StyledButton = styled(SUIButton)`
     if (disabled) return 'transparent !important';
     return buttonBackgroundGradient + '!important';
   }};
-  border-radius: 10px !important;
+  border-radius: ${({ borderRadius }) => (borderRadius ? `${borderRadius}px !important` : '10px !important')};
   opacity: 1 !important;
   border: ${({ theme: { colors }, $border, $gameEditionView, $outGameEditionView }) => {
     if ($outGameEditionView) return `1px solid ${colors.white} !important`;
     if ($border) return $border + ' !important';
-    if ($gameEditionView) return `2px dashed ${colors.black} !important`;
+    if ($gameEditionView) return `unset`;
     else return `1px solid ${colors.white} !important`;
   }};
-
+  ${({ disableGameEditionPadding, gameEditionView }) =>
+    disableGameEditionPadding &&
+    gameEditionView &&
+    css`
+      padding: 0px !important;
+    `};
   svg {
     margin-right: 4px;
-    path {
+    /* path {
       fill: ${({ theme: { colors } }) => colors.white};
-    }
+    } */
   }
 `;
 
@@ -62,12 +67,17 @@ const CustomButton = ({
   children,
   onClick,
   loading,
+  fluid,
+  borderRadius,
+  disableGameEditionPadding,
   outGameEditionView: $outGameEditionView,
 }) => {
   const { gameEditionView: $gameEditionView } = useContext(GameEditionContext);
   return (
     <StyledButton
       {...props}
+      fluid={fluid}
+      borderRadius={borderRadius}
       $gameEditionView={$gameEditionView}
       $outGameEditionView={$outGameEditionView}
       disabled={disabled}
@@ -79,6 +89,7 @@ const CustomButton = ({
       loading={loading}
       $border={border}
       $boxShadow={$boxShadow}
+      disableGameEditionPadding={disableGameEditionPadding}
     >
       {children || label}
     </StyledButton>
