@@ -147,7 +147,7 @@ const RightHeaderItems = () => {
       </HeaderItem>
       {gameEditionView && (
         <HeaderItem headerItemStyle={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '4px' }}>
-          <CustomPopup trigger={<CogIcon />} on="click" offset={[30, 10]} position="bottom right">
+          <CustomPopup containerStyle={{ padding: 32 }} trigger={<CogIcon />} on="click" offset={[30, 10]} position="bottom right">
             <SlippagePopupContent />
           </CustomPopup>
         </HeaderItem>
@@ -155,6 +155,7 @@ const RightHeaderItems = () => {
 
       <HeaderItem headerItemStyle={{ height: '100%', display: 'flex' }}>
         <CustomPopup
+          containerStyle={{ padding: 32 }}
           basic
           trigger={
             <div style={{ height: '100%', display: 'flex' }}>

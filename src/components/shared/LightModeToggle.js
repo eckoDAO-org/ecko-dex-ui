@@ -61,7 +61,7 @@ const GameLabel = styled.div`
   margin-right: 8px;
 `;
 
-const LightModeToggle = ({ animation }) => {
+const LightModeToggle = ({ animation, style }) => {
   const game = useContext(GameEditionContext);
   const { themeMode, themeToggler } = useContext(LightModeContext);
 
@@ -69,7 +69,7 @@ const LightModeToggle = ({ animation }) => {
     return themeMode === 'light' ? 'dark' : 'light';
   };
   return (
-    <ToggleContainer animation={animation}>
+    <ToggleContainer animation={animation} style={style}>
       <GameLabel gameEditionView={game.gameEditionView}>{`${getModeLabel()}`}</GameLabel>
       <Checkbox
         toggle

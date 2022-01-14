@@ -9,7 +9,6 @@ import theme from '../../../styles/theme';
 
 const ListContainer = styled.div`
   border-radius: 10px;
-  padding: 32px;
   z-index: 1;
   background: transparent;
   & > *:not(:last-child) {
@@ -61,7 +60,7 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
       {viewOtherComponents && (
         <>
           <CustomDivider />
-          <LightModeToggle />
+          <LightModeToggle style={{ justifyContent: 'flex-start' }} />
         </>
       )}
       {account.account && withLogout && (

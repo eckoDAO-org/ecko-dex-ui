@@ -12,7 +12,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  padding: 32px;
   background: transparent;
 `;
 
