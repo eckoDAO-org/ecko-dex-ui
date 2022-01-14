@@ -47,7 +47,7 @@ const verifierMap = {
 };
 /* const createAPIHost = (network, chainId) => `https://${network}.testnet.chainweb.com/chainweb/0.0/testnet02/chain/${chainId}/pact` */
 
-function ConnectWalletTorusModal({ onClose }) {
+function ConnectWalletTorusModal({ onClose, onConnectionSuccess }) {
   const modalContext = useContext(ModalContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
@@ -106,7 +106,7 @@ function ConnectWalletTorusModal({ onClose }) {
       setPublicKey(keyPair.publicKey);
       setPrivateKey(keyPair.secretKey);
 
-      await account.setVerifiedAccount(keyPair.publicKey);
+      await account.setVerifiedAccount(keyPair.publicKey, onConnectionSuccess);
 
       await wallet.storePrivKey(keyPair.secretKey);
       await wallet.setSelectedWallet(WALLET.TORUS);
@@ -134,7 +134,9 @@ function ConnectWalletTorusModal({ onClose }) {
       </Label>
       {gameEditionView ? (
         <GEGetZelcoreAccount>
-          <GameEditionLabel fontSize={40}>CONNECT WITH TORUS</GameEditionLabel>
+          <GameEditionLabel fontSize={40} onClick={login}>
+            CONNECT WITH TORUS
+          </GameEditionLabel>
         </GEGetZelcoreAccount>
       ) : (
         <ButtonContainer gameEditionView={gameEditionView}>
