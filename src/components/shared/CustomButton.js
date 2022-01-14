@@ -32,7 +32,7 @@ const StyledButton = styled(SUIButton)`
     if (disabled) return 'transparent !important';
     return buttonBackgroundGradient + '!important';
   }};
-  border-radius: ${({ borderRadius }) => (borderRadius ? `${borderRadius}px !important` : '10px !important')};
+  border-radius: ${({ $borderRadius }) => ($borderRadius ? `${$borderRadius}px !important` : '10px !important')};
   opacity: 1 !important;
   border: ${({ theme: { colors }, $border, $gameEditionView, $outGameEditionView }) => {
     if ($outGameEditionView) return `1px solid ${colors.white} !important`;
@@ -40,8 +40,8 @@ const StyledButton = styled(SUIButton)`
     if ($gameEditionView) return `unset`;
     else return `1px solid ${colors.white} !important`;
   }};
-  ${({ disableGameEditionPadding, gameEditionView }) =>
-    disableGameEditionPadding &&
+  ${({ $disableGameEditionPadding, gameEditionView }) =>
+    $disableGameEditionPadding &&
     gameEditionView &&
     css`
       padding: 0px !important;
@@ -77,7 +77,7 @@ const CustomButton = ({
     <StyledButton
       {...props}
       fluid={fluid}
-      borderRadius={borderRadius}
+      $borderRadius={borderRadius}
       $gameEditionView={$gameEditionView}
       $outGameEditionView={$outGameEditionView}
       disabled={disabled}
@@ -89,7 +89,7 @@ const CustomButton = ({
       loading={loading}
       $border={border}
       $boxShadow={$boxShadow}
-      disableGameEditionPadding={disableGameEditionPadding}
+      $disableGameEditionPadding={disableGameEditionPadding}
     >
       {children || label}
     </StyledButton>

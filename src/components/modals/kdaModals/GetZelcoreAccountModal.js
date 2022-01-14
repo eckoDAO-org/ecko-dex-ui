@@ -78,7 +78,7 @@ const DropdownContainer = styled.div`
   }
 `;
 
-const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
+const GetZelcoreAccountModal = ({ onClose, onConnectionSuccess }) => {
   const modalContext = useContext(ModalContext);
   const { account, setVerifiedAccount } = useContext(AccountContext);
   const { gameEditionView, closeModal, onWireSelect } = useContext(GameEditionContext);
@@ -94,7 +94,6 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
     setLoading(true);
     openZelcore();
     const getAccountsResponse = await getAccounts();
-    console.log(getAccountsResponse);
     if (getAccountsResponse.status === 'success') {
       setApproved(true);
       setAccounts(getAccountsResponse.data);
@@ -115,18 +114,18 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
     setSelectedAccount(value);
   };
 
-  const handleModalClose = async () => {
+  const handleModalClose = () => {
     if (onClose) {
       onClose();
     }
     if (account?.account) {
-      await closeModal();
+      closeModal();
     }
     setApproved(false);
   };
 
   const handleConnect = async () => {
-    await setVerifiedAccount(selectedAccount);
+    await setVerifiedAccount(selectedAccount, onConnectionSuccess);
     await wallet.signingWallet();
     await wallet.setSelectedWallet(WALLET.ZELCORE);
     await handleModalClose();

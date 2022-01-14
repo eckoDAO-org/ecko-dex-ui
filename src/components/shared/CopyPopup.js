@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { Icon, Popup } from 'semantic-ui-react';
+import { useGameEditionContext } from '../../contexts';
 import { LightModeContext } from '../../contexts/LightModeContext';
 import { theme } from '../../styles/theme';
 import CustomPopup from './CustomPopup';
@@ -7,9 +8,11 @@ import Label from './Label';
 
 const CopyPopup = ({ textToCopy, title, containerStyle }) => {
   const { themeMode } = useContext(LightModeContext);
-
+  const { gameEditionView } = useGameEditionContext();
   return (
     <CustomPopup
+      containerStyle={gameEditionView ? { padding: 8, border: '1px dashed #ffffff', borderRadius: 0, backgroundColor: '#000000' } : { padding: 8 }}
+      hideGradient={gameEditionView}
       on="click"
       position="bottom right"
       pinned
@@ -22,7 +25,7 @@ const CopyPopup = ({ textToCopy, title, containerStyle }) => {
         >
           <Icon
             name="copy"
-            style={{ marginLeft: '8px' }}
+            style={{ marginLeft: 8 }}
             onClick={() => {
               navigator.clipboard.writeText(textToCopy);
             }}
@@ -33,7 +36,6 @@ const CopyPopup = ({ textToCopy, title, containerStyle }) => {
     >
       <Popup.Content
         style={{
-          padding: '8px',
           color: theme(themeMode).colors.white,
         }}
       >

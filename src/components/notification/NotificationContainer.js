@@ -1,24 +1,22 @@
 import React from 'react';
-import { Icon } from 'semantic-ui-react';
-// import { ErrorCircledIcon, WarningCircleIcon, CheckedCircleIcon } from '../../assets/icons';
 import NotificationContent from './NotificationContent';
 
-const NotificationContainer = ({ type, message, title }) => {
+const NotificationContainer = ({ type, message, title, icon, titleStyle }) => {
   switch (type) {
     case 'default':
-      return <NotificationContent message={message} type={type} title={title} />;
+      return <NotificationContent icon={icon} message={message} type={type} title={title} titleStyle={titleStyle} />;
     case 'success':
-      return <NotificationContent icon={<Icon name="add" />} message={message} type={type} title={title} />;
+      return <NotificationContent icon={icon} message={message} type={type} title={title} titleStyle={titleStyle} />;
     case 'warning':
-      return <NotificationContent message={message} type={type} title={title} />;
+      return <NotificationContent icon={icon} message={message} type={type} title={title} titleStyle={titleStyle} />;
     case 'dark':
-      return <NotificationContent message={message} type={type} title={title} />;
+      return <NotificationContent icon={icon} message={message} type={type} title={title} titleStyle={titleStyle} />;
     case 'error':
-      return <NotificationContent message={message} type={type} title={title} />;
+      return <NotificationContent icon={icon} message={message} type={type} title={title} titleStyle={titleStyle} />;
     case 'info':
-      return <NotificationContent message={message} type={type} title={title} />;
+      return <NotificationContent icon={icon} message={message} type={type} title={title} titleStyle={titleStyle} />;
     default:
-      return <NotificationContent message={message} type={type} title={title} />;
+      return <NotificationContent icon={icon} message={message} type={type} title={title} titleStyle={titleStyle} />;
   }
 };
 

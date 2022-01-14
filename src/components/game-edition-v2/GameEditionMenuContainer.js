@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components/macro';
 import { GeArrowIcon } from '../../assets';
 import HeaderItem from '../../components/shared/HeaderItem';
@@ -8,6 +8,7 @@ import menuItems from '../menuItems';
 import { FadeIn } from '../shared/animations';
 import GameEditionLabel from './shared/GameEditionLabel';
 import menuBackground from '../../assets/images/game-edition/menu-background.png';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
 
 const Container = styled(FadeIn)`
   display: flex;
@@ -49,11 +50,11 @@ const RowMenuContainer = styled.div`
 
 const GameEditionMenuContainer = () => {
   const [arrowVisible, setArrowVisible] = useState('');
-
+  const { setShowTokens } = useContext(GameEditionContext);
   return (
     <Container style={{ backgroundImage: `url(${menuBackground})` }}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <GameEditionLabel fontSize={52} fontWeight={400} style={{ marginBottom: 30 }}>
+        <GameEditionLabel fontSize={52} fontWeight={400} style={{ marginBottom: 30 }} onClick={() => setShowTokens((prev) => !prev)}>
           MENU
         </GameEditionLabel>
         <TopListContainer>

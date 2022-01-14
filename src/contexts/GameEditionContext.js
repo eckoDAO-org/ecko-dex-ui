@@ -16,9 +16,16 @@ export const GameEditionProvider = (props) => {
   const [modalState, setModalState] = useState(initialModalState);
   const [isSwapping, setIsSwapping] = useState(false);
 
+  // loading bar
   const [loadingValue, setLoadingValue] = useState(1);
+
+  // show all wires below the gameboy
   const [showWires, setShowWires] = useState(false);
+
+  // show the selected wire connected to gameboy
   const [selectedWire, setSelectedWire] = useState(false);
+
+  const [showTokens, setShowTokens] = useState(false);
 
   useEffect(() => {
     let interval = null;
@@ -60,6 +67,8 @@ export const GameEditionProvider = (props) => {
         setShowWires,
         selectedWire,
         onWireSelect,
+        showTokens,
+        setShowTokens,
       }}
     >
       {props.children}

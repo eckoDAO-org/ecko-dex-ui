@@ -55,7 +55,7 @@ export const AccountProvider = (props) => {
     setSendRes(null);
   };
 
-  const setVerifiedAccount = async (accountName) => {
+  const setVerifiedAccount = async (accountName, onConnectionSuccess) => {
     /* console.log("network", network); */
     try {
       let data = await Pact.fetch.local(
@@ -70,6 +70,9 @@ export const AccountProvider = (props) => {
           ...data.result.data,
           balance: getCorrectBalance(data.result.data.balance),
         });
+        if (onConnectionSuccess) {
+          onConnectionSuccess();
+        }
       } else {
         await setAccount({ account: null, guard: null, balance: 0 });
         await swal({

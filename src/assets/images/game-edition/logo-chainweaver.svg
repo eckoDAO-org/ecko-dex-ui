@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="34" height="34" viewBox="0 0 34 34">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#131c8b"/>
+      <stop offset="1" stop-color="#0553cc"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="-0.015" y1="0.5" x2="0.962" y2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0.018" stop-color="#6546b4"/>
+      <stop offset="0.047" stop-color="#5f4fb8"/>
+      <stop offset="0.172" stop-color="#4b74c8"/>
+      <stop offset="0.297" stop-color="#3b91d5"/>
+      <stop offset="0.421" stop-color="#30a6de"/>
+      <stop offset="0.543" stop-color="#29b2e4"/>
+      <stop offset="0.66" stop-color="#27b7e6"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-3" x1="-0.07" y1="0.257" x2="0.527" y2="0.57" gradientUnits="objectBoundingBox">
+      <stop offset="0.017" stop-color="#6546b4"/>
+      <stop offset="0.124" stop-color="#5562c0"/>
+      <stop offset="0.264" stop-color="#4481ce"/>
+      <stop offset="0.411" stop-color="#3798d8"/>
+      <stop offset="0.567" stop-color="#2ea9e0"/>
+      <stop offset="0.738" stop-color="#28b3e4"/>
+      <stop offset="0.95" stop-color="#27b7e6"/>
+    </linearGradient>
+  </defs>
+  <g id="Chainweaver" transform="translate(9808.5 -4173.054)">
+    <circle id="Ellipse_5901" data-name="Ellipse 5901" cx="16.5" cy="16.5" r="16.5" transform="translate(-9808 4206.554) rotate(-90)" fill="#fff" stroke="rgba(0,0,0,0)" stroke-width="1"/>
+    <circle id="Ellipse_964" data-name="Ellipse 964" cx="15.81" cy="15.81" r="15.81" transform="translate(-9807.31 4174.245)" fill="url(#linear-gradient)"/>
+    <g id="Group_70373" data-name="Group 70373" transform="translate(-9828.164 3855.43)">
+      <path id="Path_42978" data-name="Path 42978" d="M55.851,324H49.613l-7.342,7.7v6.418Z" transform="translate(-9.998 0)" fill="url(#linear-gradient-2)"/>
+      <rect id="Rectangle_32692" data-name="Rectangle 32692" width="5.273" height="21.249" transform="translate(27 324)" fill="#27b7e6"/>
+      <path id="Path_42979" data-name="Path 42979" d="M59.862,361.364,51.2,348.614l-3.527,3.668,6.07,9.082Z" transform="translate(-13.532 -16.115)" fill="url(#linear-gradient-3)"/>
+    </g>
+  </g>
+</svg>

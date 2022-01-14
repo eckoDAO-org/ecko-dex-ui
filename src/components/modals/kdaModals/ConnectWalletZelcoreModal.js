@@ -1,24 +1,14 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 import CustomButton from '../../../components/shared/CustomButton';
-import { AccountContext } from '../../../contexts/AccountContext';
-import { WalletContext } from '../../../contexts/WalletContext';
 import { ModalContext } from '../../../contexts/ModalContext';
 import GetZelcoreAccountModal from './GetZelcoreAccountModal';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import { WALLET } from '../../../constants/wallet';
 import { theme } from '../../../styles/theme';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 import Label from '../../shared/Label';
 import pixeledPinkBox from '../../../assets/images/game-edition/pixeled-pink-box.svg';
 import GameEditionLabel from '../../game-edition-v2/shared/GameEditionLabel';
-
-const ActionContainer = styled.div`
-  display: flex;
-  flex-flow: row;
-  align-items: center;
-  justify-content: space-around;
-`;
 
 const GEGetZelcoreAccount = styled.div`
   background-image: ${`url(${pixeledPinkBox})`};
@@ -32,61 +22,11 @@ const GEGetZelcoreAccount = styled.div`
   cursor: pointer;
 `;
 
-const ConnectWalletZelcoreModal = () => {
+const ConnectWalletZelcoreModal = ({ onConnectionSuccess }) => {
   const modalContext = useContext(ModalContext);
-  const account = useContext(AccountContext);
-  const wallet = useContext(WalletContext);
   const { themeMode } = useContext(LightModeContext);
   const { gameEditionView, openModal } = useContext(GameEditionContext);
-  const [accountId, setAccountId] = useState('');
 
-  const is_hexadecimal = (str) => {
-    const regexp = /^[0-9a-fA-F]+$/;
-    if (regexp.test(str)) return true;
-    else return false;
-  };
-
-  const checkKey = (key) => {
-    try {
-      if (key.length !== 64) {
-        return false;
-      } else if (!is_hexadecimal(key)) {
-        return false;
-      }
-      return true;
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-  };
-
-  const resetValues = () => {
-    setAccountId('');
-  };
-
-  const handleModalClose = () => {
-    resetValues();
-    modalContext.closeModal();
-  };
-
-  const handleModalBack = () => {
-    resetValues();
-    modalContext.onBackModal();
-  };
-
-  const handleConnect = async () => {
-    await account.setVerifiedAccount(accountId);
-    await wallet.signingWallet();
-    await wallet.setSelectedWallet(WALLET.ZELCORE);
-
-    // if (response !== "success") {
-    //   setError({ message: "Account does not exist!" });
-    // } else {
-    //   handleModalClose();
-    // }
-
-    handleModalClose();
-  };
   return (
     <>
       <Label fontSize={13} geFontSize={20} geColor="yellow" geLabelStyle={{ textAlign: 'center' }}>
@@ -101,7 +41,7 @@ const ConnectWalletZelcoreModal = () => {
             openModal({
               hideOnClose: true,
               title: 'SELECT ACCOUNTS',
-              content: <GetZelcoreAccountModal />,
+              content: <GetZelcoreAccountModal onConnectionSuccess={onConnectionSuccess} />,
             })
           }
         >
@@ -128,32 +68,6 @@ const ConnectWalletZelcoreModal = () => {
           Get Zelcore Accounts
         </CustomButton>
       )}
-      <ActionContainer>
-        {!gameEditionView && (
-          <>
-            <CustomButton
-              fluid
-              border="none"
-              color={`${theme(themeMode).colors.white} `}
-              background="transparent"
-              onClick={() => {
-                handleModalBack();
-              }}
-            >
-              Cancel
-            </CustomButton>
-            <CustomButton
-              fluid
-              disabled={!checkKey(accountId)}
-              onClick={() => {
-                handleConnect();
-              }}
-            >
-              Connect
-            </CustomButton>
-          </>
-        )}
-      </ActionContainer>
     </>
   );
 };
