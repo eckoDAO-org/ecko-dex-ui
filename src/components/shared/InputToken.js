@@ -6,12 +6,11 @@ import CustomButton from './CustomButton';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { theme } from '../../styles/theme';
 import { LightModeContext } from '../../contexts/LightModeContext';
-import { PixeledArrowDown } from '../../assets';
+import { PixeledArrowDownIcon } from '../../assets';
 
 const Container = styled.div`
   position: absolute;
   padding-top: ${({ $gameEditionView }) => $gameEditionView && '10px'};
-  z-index: 1000;
   cursor: pointer;
   /* top: ${({ $gameEditionView }) => $gameEditionView && '4px'}; */
   right: 4px;

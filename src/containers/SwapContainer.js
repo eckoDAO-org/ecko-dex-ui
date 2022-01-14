@@ -18,6 +18,7 @@ import { SwapContext } from '../contexts/SwapContext';
 import { WalletContext } from '../contexts/WalletContext';
 import { getCorrectBalance, reduceBalance } from '../utils/reduceBalance';
 import TokenSelectorModalContent from '../components/swap/swap-modals/TokenSelectorModalContent';
+import TokenSelectorModalContentGE from '../components/swap/swap-modals/TokenSelectorModalContentGE';
 import HeaderItem from '../components/shared/HeaderItem';
 import CustomPopup from '../components/shared/CustomPopup';
 import { CogIcon } from '../assets';
@@ -441,7 +442,7 @@ const SwapContainer = () => {
         },
         content: (
           <GameEditionTokenSelectorContainer>
-            <TokenSelectorModalContent
+            <TokenSelectorModalContentGE
               selectedToken={selectedToken}
               tokenSelectorType={tokenSelectorType}
               onTokenClick={onTokenClick}
