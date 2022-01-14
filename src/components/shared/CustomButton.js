@@ -11,7 +11,7 @@ const StyledButton = styled(SUIButton)`
   align-items: center;
   font-family: ${({ theme: { fontFamily }, $gameEditionView, $outGameEditionView }) => {
     if ($outGameEditionView) return fontFamily.bold + '!important';
-    if ($gameEditionView) return fontFamily.pressStartRegular + '!important';
+    if ($gameEditionView) return fontFamily.pixeboy + '!important';
     else return fontFamily.bold + '!important';
   }};
   font-size: ${({ fontSize }) => (fontSize ? fontSize + ' !important' : '16px !important')};

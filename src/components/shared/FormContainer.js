@@ -19,7 +19,7 @@ const Container = styled.div`
   opacity: 1;
   background: ${({ $gameEditionView, theme: { backgroundContainer } }) => ($gameEditionView ? 'transparent' : backgroundContainer)};
   backdrop-filter: ${({ $gameEditionView }) => !$gameEditionView && `blur(50px)`};
-  padding: ${({ $gameEditionView }) => ($gameEditionView ? `10px 10px` : `32px 32px`)};
+  padding: ${({ $gameEditionView }) => ($gameEditionView ? `0px 10px 10px` : `32px 32px`)};
   /* & > *:not(:last-child) {
     margin-bottom: 32px;
   }

@@ -19,13 +19,15 @@ const Container = styled.div`
     gameEditionView || noInputBackground ? 'transparent' : backgroundInput};
   border: ${({ gameEditionView, theme: { colors } }) => !gameEditionView && `1px solid ${colors.white}99`};
   border-radius: ${({ gameEditionView }) => !gameEditionView && '4px'};
-  padding: ${({ gameEditionView }) => !gameEditionView && '10px 10px 0px 10px'};
+  padding: ${({ gameEditionView }) => (!gameEditionView ? '10px 10px 0px 10px' : '8px 14px 0px 30px')};
 
   .ui.input > input {
-    padding: ${({ gameEditionView }) => !gameEditionView && '10px 2px'};
+    margin-top: ${({ gameEditionView }) => gameEditionView && '5px'};
+    height: ${({ gameEditionView }) => gameEditionView && '22px'};
+    padding: ${({ gameEditionView }) => (!gameEditionView ? '10px 2px' : '0px')};
     font-family: ${({ gameEditionView, outGameEditionView, theme: { fontFamily } }) => {
       if (outGameEditionView) return fontFamily.regular + '!important';
-      if (gameEditionView) return fontFamily.pressStartRegular + '!important';
+      if (gameEditionView) return fontFamily.pixeboy + '!important';
       else return fontFamily.regular + '!important';
     }};
     color: ${({ gameEditionView, outGameEditionView, theme: { colors } }) => {
@@ -33,11 +35,13 @@ const Container = styled.div`
       if (gameEditionView) return colors.black + '!important';
       else return colors.white + '!important';
     }};
+    font-size: ${({ gameEditionView }) => gameEditionView && '34px'};
   }
   & input::placeholder {
     color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `${colors.black}70 !important` : ``)};
     text-transform: capitalize;
     font-family: 14px;
+    font-size: ${({ gameEditionView }) => gameEditionView && '34px'};
   }
   .ui.icon.input > input {
     padding-right: ${({ inputRightComponent, inputComponentWidth }) => (inputRightComponent ? `${inputComponentWidth + 70}px !important` : 0)};
@@ -53,7 +57,7 @@ const Container = styled.div`
     padding-right: ${({ gameEditionView }) => !gameEditionView && '0px'};
     background: transparent;
     border: ${({ gameEditionView }) => gameEditionView && 'none'};
-    font-family: ${({ gameEditionView, theme: { fontFamily } }) => (gameEditionView ? `${fontFamily.pressStartRegular}` : `${fontFamily.regular}`)};
+    font-family: ${({ gameEditionView, theme: { fontFamily } }) => (gameEditionView ? `${fontFamily.pixeboy}` : `${fontFamily.regular}`)};
   }
 `;
 
@@ -66,7 +70,7 @@ const TopLabelsContainer = styled.div`
   margin-right: 2px;
   span {
     font: ${({ gameEditionView, theme: { fontFamily } }) =>
-      gameEditionView ? `normal normal normal 13px/16px ${fontFamily.pressStartRegular}` : `normal normal bold 13px/16px Montserrat`};
+      gameEditionView ? `normal normal normal 13px/16px ${fontFamily.pixeboy}` : `normal normal bold 13px/16px Montserrat`};
     letter-spacing: 0px;
     color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `${colors.black}` : `${colors.white}`)};
     text-transform: capitalize;
@@ -84,7 +88,7 @@ const BottomLabelsContainer = styled.div`
   margin-right: 2px;
   span {
     font: ${({ gameEditionView, theme: { fontFamily } }) =>
-      gameEditionView ? `normal normal normal 10px/12px ${fontFamily.pressStartRegular}` : `normal normal normal 13px/16px Montserrat`};
+      gameEditionView ? `normal normal normal 20px ${fontFamily.pixeboy}` : `normal normal normal 13px/16px Montserrat`};
     letter-spacing: 0px;
     color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `${colors.black}` : `${colors.white}`)};
     text-transform: capitalize;
@@ -98,8 +102,8 @@ const Button = styled.button`
   justify-content: space-between;
   align-items: center;
   position: absolute;
-  top: 25%;
-  right: ${({ gameEditionView }) => (gameEditionView ? '10px' : '0px')};
+  top: ${({ gameEditionView }) => (gameEditionView ? '48%' : '25%')};
+  right: ${({ gameEditionView }) => (gameEditionView ? '-2px' : '0px')};
   height: 22px;
   padding-left: 8px !important;
   /* padding-right: 8px !important; */
@@ -107,13 +111,13 @@ const Button = styled.button`
   border-radius: 20px;
   span {
     font: ${({ gameEditionView, theme: { fontFamily } }) =>
-      gameEditionView ? `normal normal normal 14px/18px ${fontFamily.pressStartRegular}` : `normal normal bold 14px/18px ${fontFamily.bold}`};
+      gameEditionView ? `normal normal normal 29px ${fontFamily.pixeboy}` : `normal normal bold 14px/18px ${fontFamily.bold}`};
     color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `${colors.black}` : `${colors.white}`)};
     text-transform: capitalize;
 
     @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
       font: ${({ gameEditionView, theme: { fontFamily } }) =>
-        gameEditionView ? `normal normal normal 13px ${fontFamily.pressStartRegular}` : `normal normal bold 14px/18px ${fontFamily.bold}`};
+        gameEditionView ? `normal normal normal 13px ${fontFamily.pixeboy}` : `normal normal bold 14px/18px ${fontFamily.bold}`};
     }
   }
 
@@ -185,20 +189,20 @@ const Input = ({
     >
       {(topLeftLabel || topRightLabel) && (
         <TopLabelsContainer gameEditionView={gameEditionView}>
-          {topLeftLabel && (
+          {topLeftLabel && !gameEditionView && (
             <span
               style={{
-                fontFamily: gameEditionView ? theme().fontFamily.pressStartRegular : theme().fontFamily.bold,
+                fontFamily: gameEditionView ? theme().fontFamily.pixeboy : theme().fontFamily.bold,
                 ...topLeftLabelStyle,
               }}
             >
               {topLeftLabel}
             </span>
           )}
-          {topRightLabel && (
+          {topRightLabel && !gameEditionView && (
             <span
               style={{
-                fontFamily: gameEditionView ? theme().fontFamily.pressStartRegular : theme().fontFamily.regular,
+                fontFamily: gameEditionView ? theme().fontFamily.pixeboy : theme().fontFamily.regular,
                 marginLeft: !topLeftLabel ? 'auto' : 'unset',
                 textAlign: 'end',
                 ...topRightLabelStyle,
@@ -231,8 +235,6 @@ const Input = ({
             ? containerStyle
             : {
                 padding: !gameEditionView && '0px !important',
-                borderRadius: '10px',
-                border: gameEditionView ? `2px dashed ${theme().colors.black}` : 'none',
                 opacity: 1,
                 backgroundColor: 'transparent',
               }
@@ -240,10 +242,10 @@ const Input = ({
       />
       {(bottomLeftLabel || bottomRightLabel) && (
         <BottomLabelsContainer gameEditionView={gameEditionView}>
-          {bottomLeftLabel && (
+          {bottomLeftLabel && gameEditionView && (
             <span
               style={{
-                fontFamily: gameEditionView ? theme().fontFamily.pressStartRegular : theme().fontFamily.regular,
+                fontFamily: gameEditionView ? theme().fontFamily.pixeboy : theme().fontFamily.regular,
                 ...bottomLeftLabelStyle,
               }}
             >
@@ -253,7 +255,7 @@ const Input = ({
           {bottomRightLabel && (
             <span
               style={{
-                fontFamily: gameEditionView ? theme().fontFamily.pressStartRegular : theme().fontFamily.regular,
+                fontFamily: gameEditionView ? theme().fontFamily.pixeboy : theme().fontFamily.regular,
                 marginLeft: !topLeftLabel ? 'auto' : 'unset',
                 ...bottomRightLabelStyle,
               }}

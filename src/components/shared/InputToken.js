@@ -6,11 +6,13 @@ import CustomButton from './CustomButton';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { theme } from '../../styles/theme';
 import { LightModeContext } from '../../contexts/LightModeContext';
+import { PixeledArrowDownIcon } from '../../assets';
 
 const Container = styled.div`
   position: absolute;
+  padding-top: ${({ $gameEditionView }) => $gameEditionView && '10px'};
   cursor: pointer;
-  top: ${({ $gameEditionView }) => $gameEditionView && '4px'};
+  /* top: ${({ $gameEditionView }) => $gameEditionView && '4px'}; */
   right: 4px;
   display: flex;
   justify-content: space-between;
@@ -47,7 +49,7 @@ const ElementsContainer = styled.div`
     font-size: 16px;
     margin-right: 13px;
     font: ${({ $gameEditionView, theme: { fontFamily } }) => {
-      if ($gameEditionView) return `normal normal normal 14px/17px ${fontFamily.pressStartRegular}`;
+      if ($gameEditionView) return `normal normal normal 29px ${fontFamily.pixeboy}`;
     }};
     color: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? colors.black : colors.white)};
   }
@@ -57,7 +59,7 @@ const ElementsContainer = styled.div`
       font-size: 16px;
       margin-right: 13px;
       font: ${({ $gameEditionView, theme: { fontFamily } }) => {
-        if ($gameEditionView) return `normal normal normal 13px ${fontFamily.pressStartRegular}`;
+        if ($gameEditionView) return `normal normal normal 13px ${fontFamily.pixeboy}`;
       }};
       color: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? colors.black : colors.white)};
     }
@@ -83,22 +85,24 @@ const InputToken = ({ icon, code, onClick, onClickButton, disabledButton }) => {
 
   return (
     <Container $gameEditionView={gameEditionView}>
-      <CustomButton
-        buttonStyle={{
-          padding: '12px 8px',
-          textTransform: gameEditionView ? 'capitalize' : 'uppercase',
-        }}
-        border="none"
-        color={!gameEditionView && theme(themeMode).colors.white}
-        background="transparent"
-        fontSize={gameEditionView ? '13px' : '13px'}
-        onClick={onClickButton}
-        disabled={disabledButton}
-      >
-        Max
-      </CustomButton>
+      {!gameEditionView && (
+        <CustomButton
+          buttonStyle={{
+            padding: '12px 8px',
+            textTransform: gameEditionView ? 'capitalize' : 'uppercase',
+          }}
+          border="none"
+          color={!gameEditionView && theme(themeMode).colors.white}
+          background="transparent"
+          fontSize={gameEditionView ? '23px' : '13px'}
+          onClick={onClickButton}
+          disabled={disabledButton}
+        >
+          Max
+        </CustomButton>
+      )}
       <ElementsContainer $gameEditionView={gameEditionView} onClick={onClick}>
-        {!gameEditionView && <>{icon}</>}
+        <>{icon}</>
 
         <span>{code}</span>
       </ElementsContainer>

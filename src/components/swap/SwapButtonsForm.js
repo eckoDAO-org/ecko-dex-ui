@@ -15,7 +15,24 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
+  z-index: ${({ gameEditionView }) => (gameEditionView ? '0' : '1')};
+`;
+
+const LabelContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
   z-index: ${({ gameEditionView }) => !gameEditionView && '1'};
+`;
+
+const Label = styled.span`
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.regular)};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '20px' : '13px')};
+  color: ${({ theme: { colors }, gameEditionView }) => colors.yellow};
+  text-transform: capitalize;
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    text-align: left;
+  }
 `;
 
 const SwapButtonsForm = ({
@@ -50,50 +67,89 @@ const SwapButtonsForm = ({
   };
   return (
     <ButtonContainer gameEditionView={gameEditionView}>
-      <Button.Group fluid>
-        <CustomButton
-          /* background="none" */
-          disabled={account.account && (getButtonLabel() !== 'SWAP' || isNaN(fromValues.amount) || isNaN(toValues.amount))}
-          loading={loading}
-          onClick={async () => {
-            if (!account.account) {
-              if (gameEditionView) {
-                return openModal({
-                  title: account?.account ? 'wallet connected' : 'connect wallet',
-                  description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
-                  content: <ConnectWalletModal />,
-                });
-              } else {
-                return modalContext.openModal({
-                  title: account?.account ? 'wallet connected' : 'connect wallet',
-                  description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
-                  content: <ConnectWalletModal />,
-                });
+      {gameEditionView ? (
+        <LabelContainer>
+          <Label gameEditionView={gameEditionView}>{getButtonLabel()}</Label>
+        </LabelContainer>
+      ) : (
+        <Button.Group fluid>
+          <CustomButton
+            /* background="none" */
+            disabled={account.account && (getButtonLabel() !== 'SWAP' || isNaN(fromValues.amount) || isNaN(toValues.amount))}
+            loading={loading}
+            onClick={async () => {
+              if (!account.account) {
+                if (gameEditionView) {
+                  return openModal({
+                    isVisible: true,
+                    title: account?.account ? 'wallet connected' : 'connect wallet',
+                    description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
+                    content: <ConnectWalletModal />,
+                  });
+                } else {
+                  return modalContext.openModal({
+                    title: account?.account ? 'wallet connected' : 'connect wallet',
+                    description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
+                    content: <ConnectWalletModal />,
+                  });
+                }
               }
-            }
-            setLoading(true);
-            if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
-              const res = await swap.swapLocal(
-                {
-                  amount: fromValues.amount,
-                  address: fromValues.address,
-                  coin: fromValues.coin,
-                },
-                {
-                  amount: toValues.amount,
-                  address: toValues.address,
-                  coin: toValues.coin,
-                },
-                fromNote === '(estimated)' ? false : true
-              );
+              setLoading(true);
+              if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
+                const res = await swap.swapLocal(
+                  {
+                    amount: fromValues.amount,
+                    address: fromValues.address,
+                    coin: fromValues.coin,
+                  },
+                  {
+                    amount: toValues.amount,
+                    address: toValues.address,
+                    coin: toValues.coin,
+                  },
+                  fromNote === '(estimated)' ? false : true
+                );
 
-              if (res === -1) {
-                setLoading(false);
-                //error alert
-                if (swap.localRes) pwError();
-                return;
+                if (res === -1) {
+                  setLoading(false);
+                  //error alert
+                  if (swap.localRes) pwError();
+                  return;
+                } else {
+                  setShowTxModal(true);
+                  if (res?.result?.status === 'success') {
+                    setFromValues((prev) => ({
+                      ...prev,
+                      amount: '',
+                    }));
+                    setToValues((prev) => ({
+                      ...prev,
+                      amount: '',
+                    }));
+                  }
+                  setLoading(false);
+                }
               } else {
-                setShowTxModal(true);
+                const res = await swap.swapWallet(
+                  {
+                    amount: fromValues.amount,
+                    address: fromValues.address,
+                    coin: fromValues.coin,
+                  },
+                  {
+                    amount: toValues.amount,
+                    address: toValues.address,
+                    coin: toValues.coin,
+                  },
+                  fromNote === '(estimated)' ? false : true
+                );
+
+                if (!res) {
+                  wallet.setIsWaitingForWalletAuth(true);
+                } else {
+                  wallet.setWalletError(null);
+                  setShowTxModal(true);
+                }
                 if (res?.result?.status === 'success') {
                   setFromValues((prev) => ({
                     ...prev,
@@ -106,44 +162,12 @@ const SwapButtonsForm = ({
                 }
                 setLoading(false);
               }
-            } else {
-              const res = await swap.swapWallet(
-                {
-                  amount: fromValues.amount,
-                  address: fromValues.address,
-                  coin: fromValues.coin,
-                },
-                {
-                  amount: toValues.amount,
-                  address: toValues.address,
-                  coin: toValues.coin,
-                },
-                fromNote === '(estimated)' ? false : true
-              );
-
-              if (!res) {
-                wallet.setIsWaitingForWalletAuth(true);
-              } else {
-                wallet.setWalletError(null);
-                setShowTxModal(true);
-              }
-              if (res?.result?.status === 'success') {
-                setFromValues((prev) => ({
-                  ...prev,
-                  amount: '',
-                }));
-                setToValues((prev) => ({
-                  ...prev,
-                  amount: '',
-                }));
-              }
-              setLoading(false);
-            }
-          }}
-        >
-          {getButtonLabel()}
-        </CustomButton>
-      </Button.Group>
+            }}
+          >
+            {getButtonLabel()}
+          </CustomButton>
+        </Button.Group>
+      )}
     </ButtonContainer>
   );
 };

@@ -8,6 +8,7 @@ import WalletRequestView from '../components/swap/swap-modals/WalletRequestView'
 import SwapButtonsForm from '../components/swap/SwapButtonsForm';
 import SwapForm from '../components/swap/SwapForm';
 import SwapResults from '../components/swap/SwapResults';
+import SwapResultsGEv2 from '../components/swap/SwapResultsGEv2';
 import tokenData from '../constants/cryptoCurrencies';
 import { AccountContext } from '../contexts/AccountContext';
 import { GameEditionContext } from '../contexts/GameEditionContext';
@@ -17,6 +18,7 @@ import { SwapContext } from '../contexts/SwapContext';
 import { WalletContext } from '../contexts/WalletContext';
 import { getCorrectBalance, reduceBalance } from '../utils/reduceBalance';
 import TokenSelectorModalContent from '../components/swap/swap-modals/TokenSelectorModalContent';
+import TokenSelectorModalContentGE from '../components/swap/swap-modals/TokenSelectorModalContentGE';
 import HeaderItem from '../components/shared/HeaderItem';
 import CustomPopup from '../components/shared/CustomPopup';
 import { CogIcon } from '../assets';
@@ -25,6 +27,7 @@ import FormContainer from '../components/shared/FormContainer';
 import GradientBorder from '../components/shared/GradientBorder';
 import { Title } from '../components/layout/Containers';
 import BackgroundLogo from '../components/shared/BackgroundLogo';
+import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -44,6 +47,10 @@ const Container = styled(FadeIn)`
         height: 100%;
         display: flex;
         flex-direction: column;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        background-image: ${`url(${ArcadeBackground})`};
       `;
     } else {
       return css`
@@ -59,7 +66,7 @@ const SwapTitleContainer = styled.div`
   ${({ gameEditionView }) => {
     if (gameEditionView) {
       return css`
-        margin-top: 16px;
+        margin-top: 8px;
         margin-bottom: 0px;
         justify-content: center;
       `;
@@ -105,9 +112,9 @@ const RowContainer = styled.div`
 `;
 
 const Label = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.regular)};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '13px' : '13px')};
+  color: ${({ theme: { colors }, gameEditionView }) => colors.white};
   text-transform: capitalize;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     text-align: left;
@@ -115,10 +122,10 @@ const Label = styled.span`
 `;
 
 const Value = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.bold)};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '13px' : '13px')};
   line-height: 20px;
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
+  color: ${({ theme: { colors }, gameEditionView }) => colors.white};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'right')};
   }
@@ -435,7 +442,7 @@ const SwapContainer = () => {
         },
         content: (
           <GameEditionTokenSelectorContainer>
-            <TokenSelectorModalContent
+            <TokenSelectorModalContentGE
               selectedToken={selectedToken}
               tokenSelectorType={tokenSelectorType}
               onTokenClick={onTokenClick}
@@ -563,7 +570,11 @@ const SwapContainer = () => {
           /* handleTokenSelectorType={handleTokenSelectorType} */
         />
         {!isNaN(pact.ratio) && fromValues.amount && fromValues.coin && toValues.amount && toValues.coin ? (
-          <SwapResults priceImpact={priceImpact} fromValues={fromValues} toValues={toValues} />
+          gameEditionView ? (
+            <SwapResultsGEv2 priceImpact={priceImpact} fromValues={fromValues} toValues={toValues} />
+          ) : (
+            <SwapResults priceImpact={priceImpact} fromValues={fromValues} toValues={toValues} />
+          )
         ) : (
           <ResultContainer gameEditionView={gameEditionView}>
             <RowContainer gameEditionView={gameEditionView}>
