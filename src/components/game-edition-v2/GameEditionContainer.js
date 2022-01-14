@@ -1,7 +1,9 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
+import { useHistory } from 'react-router-dom';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { useAccountContext, useKaddexWalletContext, useNotificationContext } from '../../contexts';
+import { STATUSES } from '../../contexts/NotificationContext';
 import useWindowSize from '../../hooks/useWindowSize';
 import WalletWires from './components/WalletWires';
 import ConnectWalletWire from './components/ConnectWalletWire';
@@ -14,8 +16,8 @@ import { WALLET } from '../../constants/wallet';
 import ConnectWalletZelcoreModal from '../modals/kdaModals/ConnectWalletZelcoreModal';
 import ConnectWalletTorusModal from '../modals/kdaModals/ConnectWalletTorusModal';
 import ConnectWalletChainweaverModal from '../modals/kdaModals/ConnectWalletChainweaverModal';
-import { STATUSES } from '../../contexts/NotificationContext';
 import { FadeIn } from '../shared/animations';
+import GameEditionButtons from './components/PressedButton';
 
 const DesktopMainContainer = styled.div`
   display: flex;
@@ -50,6 +52,7 @@ const GameboyDesktopContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  position: relative;
   z-index: 2;
   .kaddex-logo {
     margin-top: 20px;
@@ -119,6 +122,7 @@ const SearchTokenList = styled(FadeIn)`
 
 const GameEditionContainer = ({ children }) => {
   const [width] = useWindowSize();
+  const history = useHistory();
   const { showNotification } = useNotificationContext();
   const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
 
@@ -227,6 +231,7 @@ const GameEditionContainer = ({ children }) => {
     <DesktopMainContainer showWires={showWires} selectedWire={selectedWire} showTokens={showTokens} style={{ justifyContent: 'flex-end' }}>
       <div style={{ display: 'flex' }}>
         <GameboyDesktopContainer showWires={showWires} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
+          <GameEditionButtons />
           <DisplayContent>
             {children}
             {modalState.open && (
