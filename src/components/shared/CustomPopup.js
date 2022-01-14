@@ -23,7 +23,7 @@ const PopupContainer = styled(({ hideGradient, ...rest }) => <GradientContainer 
   ${({ themeMode }) => {
     if ((browserDetection() === 'BRAVE' || browserDetection() === 'FIREFOX') && themeMode === 'dark') {
       return css`
-        background: #4c125a;
+        background: ${({ theme: { colors } }) => colors.primary};
       `;
     }
   }}

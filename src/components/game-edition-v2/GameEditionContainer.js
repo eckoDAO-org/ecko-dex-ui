@@ -113,7 +113,7 @@ const GameEditionContainer = ({ children }) => {
   const { showNotification } = useNotificationContext();
   const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
 
-  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal } = useContext(GameEditionContext);
+  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect } = useContext(GameEditionContext);
   const { account } = useAccountContext();
 
   // const switchAppSection = (direction) => {
@@ -140,6 +140,13 @@ const GameEditionContainer = ({ children }) => {
       autoClose: 3000,
     });
   };
+
+  const onCloseModal = () => {
+    closeModal();
+    if (!account.account) {
+      onWireSelect(null);
+    }
+  };
   const getWalletModal = (walletName) => {
     switch (walletName) {
       default:
@@ -147,19 +154,28 @@ const GameEditionContainer = ({ children }) => {
       case WALLET.ZELCORE.name:
         return openModal({
           title: WALLET.ZELCORE.name.toUpperCase(),
+          onClose: () => {
+            onCloseModal();
+          },
           content: <ConnectWalletZelcoreModal onConnectionSuccess={() => onConnectionSuccess(WALLET.ZELCORE)} />,
         });
 
       case WALLET.TORUS.name:
         return openModal({
           title: WALLET.TORUS.name.toUpperCase(),
-          content: <ConnectWalletTorusModal onClose={closeModal} onConnectionSuccess={() => onConnectionSuccess(WALLET.TORUS)} />,
+          onClose: () => {
+            onCloseModal();
+          },
+          content: <ConnectWalletTorusModal onConnectionSuccess={() => onConnectionSuccess(WALLET.TORUS)} />,
         });
 
       case WALLET.CHAINWEAVER.name:
         return openModal({
           title: WALLET.CHAINWEAVER.name.toUpperCase(),
-          content: <ConnectWalletChainweaverModal onClose={closeModal} onConnectionSuccess={() => onConnectionSuccess(WALLET.CHAINWEAVER)} />,
+          onClose: () => {
+            onCloseModal();
+          },
+          content: <ConnectWalletChainweaverModal onConnectionSuccess={() => onConnectionSuccess(WALLET.CHAINWEAVER)} />,
         });
 
       case WALLET.KADDEX_WALLET.name:
@@ -207,7 +223,7 @@ const GameEditionContainer = ({ children }) => {
               title={modalState.title}
               description={modalState.description}
               content={modalState.content}
-              s
+              onClose={modalState.onClose}
             />
           )}
         </DisplayContent>

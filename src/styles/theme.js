@@ -50,21 +50,21 @@ export const lightTheme = {
   colors: {
     primary: '#FFFFFF',
     border: '#240B2F',
-    white: '#4C125A',
+    white: '#212750',
     ...commonColors,
   },
-  buttonBackgroundGradient: '#4C125A',
+  buttonBackgroundGradient: '#212750',
   backgroundRightModal: '#FFFFFF',
-  backgroundInput: '#4C125A1A',
+  backgroundInput: '#2127501A',
   backgroundContainer: '#FFFFFF',
 };
 
 export const darkTheme = {
   ...commonTheme,
-  backgroundBody: 'transparent linear-gradient(122deg, #070610 0%, #4C125A 100%) 0% 0% no-repeat padding-box',
-  backgroundBodySafari: 'transparent linear-gradient(122deg, #070610 0%, #4C125A 100%) 0% 0% no-repeat padding-box',
+  backgroundBody: 'transparent linear-gradient(122deg, #070610 0%, #212750 100%) 0% 0% no-repeat padding-box',
+  backgroundBodySafari: 'transparent linear-gradient(122deg, #070610 0%, #212750 100%) 0% 0% no-repeat padding-box',
   colors: {
-    primary: '#4C125A',
+    primary: '#212750',
     border: '#ECEBEC',
     white: '#FFFFFF',
     ...commonColors,
