@@ -94,7 +94,6 @@ const GetZelcoreAccountModal = ({ onClose, onConnectionSuccess }) => {
     setLoading(true);
     openZelcore();
     const getAccountsResponse = await getAccounts();
-    console.log(getAccountsResponse);
     if (getAccountsResponse.status === 'success') {
       setApproved(true);
       setAccounts(getAccountsResponse.data);
@@ -115,13 +114,12 @@ const GetZelcoreAccountModal = ({ onClose, onConnectionSuccess }) => {
     setSelectedAccount(value);
   };
 
-  const handleModalClose = async () => {
+  const handleModalClose = () => {
     if (onClose) {
       onClose();
     }
-    console.log('account', account);
     if (account?.account) {
-      await closeModal();
+      closeModal();
     }
     setApproved(false);
   };

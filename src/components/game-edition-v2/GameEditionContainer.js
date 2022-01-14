@@ -8,7 +8,7 @@ import ConnectWalletWire from './wires/ConnectWalletWire';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
 import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.png';
 import gameboyMobile from '../../assets/images/game-edition/gameboy-mobile.png';
-import { AboutIcon, KaddexLogo, SwapIcon } from '../../assets';
+import { KaddexLogo } from '../../assets';
 import theme from '../../styles/theme';
 import { WALLET } from '../../constants/wallet';
 import ConnectWalletZelcoreModal from '../modals/kdaModals/ConnectWalletZelcoreModal';
