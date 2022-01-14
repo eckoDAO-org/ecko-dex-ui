@@ -6,7 +6,7 @@ import theme, { commonColors } from '../../styles/theme';
 import headerLinks from '../headerLinks';
 import menuItems from '../menuItems';
 import { FadeIn } from '../shared/animations';
-import GameEditionLabel from './shared/GameEditionLabel';
+import GameEditionLabel from './components/GameEditionLabel';
 import menuBackground from '../../assets/images/game-edition/menu-background.png';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 

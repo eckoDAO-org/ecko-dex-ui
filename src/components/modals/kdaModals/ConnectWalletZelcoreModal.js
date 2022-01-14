@@ -8,7 +8,7 @@ import { theme } from '../../../styles/theme';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 import Label from '../../shared/Label';
 import pixeledPinkBox from '../../../assets/images/game-edition/pixeled-pink-box.svg';
-import GameEditionLabel from '../../game-edition-v2/shared/GameEditionLabel';
+import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 
 const GEGetZelcoreAccount = styled.div`
   background-image: ${`url(${pixeledPinkBox})`};

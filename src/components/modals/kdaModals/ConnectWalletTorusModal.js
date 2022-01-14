@@ -12,7 +12,7 @@ import { WALLET } from '../../../constants/wallet';
 import { theme } from '../../../styles/theme';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 import LogoLoader from '../../../components/shared/LogoLoader';
-import GameEditionLabel from '../../game-edition-v2/shared/GameEditionLabel';
+import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import pixeledPinkBox from '../../../assets/images/game-edition/pixeled-pink-box.svg';
 import Label from '../../shared/Label';
 

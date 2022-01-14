@@ -8,7 +8,7 @@ import { ROUTE_GAME_EDITION_MENU } from '../../router/routes';
 import { KaddexLoadingIcon } from '../../assets';
 import GameEditionProgressBar from '../shared/GameEditionProgressBar';
 import loadingBackground from '../../assets/images/game-edition/loading-background.png';
-import GameEditionLabel from './shared/GameEditionLabel';
+import GameEditionLabel from './components/GameEditionLabel';
 import { WALLET } from '../../constants/wallet';
 
 const Container = styled.div`
