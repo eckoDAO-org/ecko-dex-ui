@@ -32,7 +32,7 @@ const GEGetZelcoreAccount = styled.div`
   cursor: pointer;
 `;
 
-const ConnectWalletZelcoreModal = () => {
+const ConnectWalletZelcoreModal = ({ onConnectionSuccess }) => {
   const modalContext = useContext(ModalContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
@@ -101,7 +101,7 @@ const ConnectWalletZelcoreModal = () => {
             openModal({
               hideOnClose: true,
               title: 'SELECT ACCOUNTS',
-              content: <GetZelcoreAccountModal />,
+              content: <GetZelcoreAccountModal onConnectionSuccess={onConnectionSuccess} />,
             })
           }
         >

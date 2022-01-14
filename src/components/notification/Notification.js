@@ -13,7 +13,16 @@ const Container = styled.div`
       width: 520px;
     }
   }
-
+  .Toastify__toast-container--bottom-right {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .Toastify__toast--game-edition {
+    background-color: #000000;
+    height: 88px;
+    width: 370px;
+    border-radius: 30px;
+  }
   .Toastify__toast--success {
     background: ${({ theme: { colors } }) => colors.success};
   }

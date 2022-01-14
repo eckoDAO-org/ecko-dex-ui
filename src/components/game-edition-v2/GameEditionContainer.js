@@ -8,7 +8,7 @@ import ConnectWalletWire from './wires/ConnectWalletWire';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
 import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.png';
 import gameboyMobile from '../../assets/images/game-edition/gameboy-mobile.png';
-import { KaddexLogo } from '../../assets';
+import { AboutIcon, KaddexLogo, SwapIcon } from '../../assets';
 import theme from '../../styles/theme';
 import { WALLET } from '../../constants/wallet';
 import ConnectWalletZelcoreModal from '../modals/kdaModals/ConnectWalletZelcoreModal';
@@ -130,6 +130,16 @@ const GameEditionContainer = ({ children }) => {
   //   }
   // };
 
+  const onConnectionSuccess = (wallet) => {
+    showNotification({
+      title: `${wallet.name}  was successfully connected`,
+      type: 'game-edition',
+      icon: wallet.notificationLogo,
+      closeButton: false,
+      titleStyle: { fontSize: 13 },
+      autoClose: 3000,
+    });
+  };
   const getWalletModal = (walletName) => {
     switch (walletName) {
       default:
@@ -137,19 +147,19 @@ const GameEditionContainer = ({ children }) => {
       case WALLET.ZELCORE.name:
         return openModal({
           title: WALLET.ZELCORE.name.toUpperCase(),
-          content: <ConnectWalletZelcoreModal />,
+          content: <ConnectWalletZelcoreModal onConnectionSuccess={() => onConnectionSuccess(WALLET.ZELCORE)} />,
         });
 
       case WALLET.TORUS.name:
         return openModal({
           title: WALLET.TORUS.name.toUpperCase(),
-          content: <ConnectWalletTorusModal onClose={closeModal} />,
+          content: <ConnectWalletTorusModal onClose={closeModal} onConnectionSuccess={() => onConnectionSuccess(WALLET.TORUS)} />,
         });
 
       case WALLET.CHAINWEAVER.name:
         return openModal({
           title: WALLET.CHAINWEAVER.name.toUpperCase(),
-          content: <ConnectWalletChainweaverModal onClose={closeModal} />,
+          content: <ConnectWalletChainweaverModal onClose={closeModal} onConnectionSuccess={() => onConnectionSuccess(WALLET.CHAINWEAVER)} />,
         });
 
       case WALLET.KADDEX_WALLET.name:
@@ -173,8 +183,9 @@ const GameEditionContainer = ({ children }) => {
     } else {
       closeModal();
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedWire]);
+  }, [selectedWire, account.account]);
 
   return width < theme.mediaQueries.desktopPixel ? (
     <MobileMainContainer>

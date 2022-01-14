@@ -78,7 +78,7 @@ const DropdownContainer = styled.div`
   }
 `;
 
-const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
+const GetZelcoreAccountModal = ({ onClose, onConnectionSuccess }) => {
   const modalContext = useContext(ModalContext);
   const { account, setVerifiedAccount } = useContext(AccountContext);
   const { gameEditionView, closeModal, onWireSelect } = useContext(GameEditionContext);
@@ -119,6 +119,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
     if (onClose) {
       onClose();
     }
+    console.log('account', account);
     if (account?.account) {
       await closeModal();
     }
@@ -126,7 +127,7 @@ const GetZelcoreAccountModal = ({ show, onClose, onBack }) => {
   };
 
   const handleConnect = async () => {
-    await setVerifiedAccount(selectedAccount);
+    await setVerifiedAccount(selectedAccount, onConnectionSuccess);
     await wallet.signingWallet();
     await wallet.setSelectedWallet(WALLET.ZELCORE);
     await handleModalClose();
