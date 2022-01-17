@@ -11,6 +11,8 @@ import UpButton from '../../../assets/images/game-edition/pressed-buttons/Cross-
 import RightButton from '../../../assets/images/game-edition/pressed-buttons/Cross-Right.png';
 import DownButton from '../../../assets/images/game-edition/pressed-buttons/Cross-Down.png';
 import LeftButton from '../../../assets/images/game-edition/pressed-buttons/Cross-Left.png';
+import AButton from '../../../assets/images/game-edition/pressed-buttons/A-BTN.png';
+import BButton from '../../../assets/images/game-edition/pressed-buttons/B-BTN.png';
 
 const GameEditionButtons = () => {
   const history = useHistory();
@@ -24,6 +26,8 @@ const GameEditionButtons = () => {
       <PressedButton type="right" onClick={() => console.log('right')} />
       <PressedButton type="down" onClick={() => console.log('down')} />
       <PressedButton type="left" onClick={() => console.log('left')} />
+      <PressedButton type="A" onClick={() => console.log('A')} />
+      <PressedButton type="B" onClick={() => console.log('B')} />
     </>
   );
 };
@@ -41,7 +45,7 @@ const ButtonContainer = styled.div`
       display: block;
     }
     
-    img.not-pressed {
+  img.not-pressed {
       display: none;
     }
   }
@@ -65,9 +69,19 @@ export const PressedButton = ({ type, onClick }) => {
           imgSize: { width: 42, height: 42 },
         };
       case 'L1':
-        return { img: L1Button, position: { top: 0, left: 0 }, imgSize: { width: 42, height: 42 } };
+        return {
+          img: L1Button,
+          pressed: { top: -13, left: 6 },
+          notPressed: { top: 0, left: 0, width: 230, height: 98 },
+          imgSize: { width: 225, height: 98 },
+        };
       case 'R1':
-        return { img: R1Button, position: { top: -20, right: 0 }, imgSize: { width: 228, height: 110 } };
+        return {
+          img: R1Button,
+          pressed: { top: -13, right: 6 },
+          notPressed: { top: 0, right: 0, width: 230, height: 98 },
+          imgSize: { width: 225, height: 98 },
+        };
       case 'up':
         return {
           img: UpButton,
@@ -96,6 +110,20 @@ export const PressedButton = ({ type, onClick }) => {
           pressed: { top: 114, left: 58 },
           notPressed: { top: 170, left: 78, height: 40, width: 40 },
           imgSize: { width: 150, height: 150 },
+        };
+      case 'A':
+        return {
+          img: AButton,
+          pressed: { top: 158, right: 38 },
+          notPressed: { top: 172, right: 58, height: 60, width: 60 },
+          imgSize: { width: 92, height: 86 },
+        };
+      case 'B':
+        return {
+          img: BButton,
+          pressed: { top: 195, right: 108 },
+          notPressed: { top: 236, right: 98, height: 60, width: 60 },
+          imgSize: { width: 92, height: 86 },
         };
 
       default:
