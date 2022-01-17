@@ -123,7 +123,7 @@ export const PressedButton = ({ type, onClick }) => {
         return {
           img: BButton,
           pressed: { top: 195, right: 108 },
-          notPressed: { top: 236, right: 98, height: 60, width: 60 },
+          notPressed: { top: 208, right: 125, height: 60, width: 60 },
           imgSize: { width: 92, height: 86 },
         };
 
