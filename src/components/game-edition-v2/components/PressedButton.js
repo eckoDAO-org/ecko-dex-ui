@@ -85,22 +85,15 @@ export const PressedButton = ({ type, onClick }) => {
       case 'up':
         return {
           img: UpButton,
-          pressed: { top: 114, left: 58 },
-          notPressed: { top: 132, left: 114, height: 40, width: 40 },
-          imgSize: { width: 150, height: 150 },
-        };
-      case 'right':
-        return {
-          img: RightButton,
           pressed: { top: 114, left: 60 },
-          notPressed: { top: 170, left: 150, height: 40, width: 40 },
-
+          notPressed: { top: 142, left: 114, height: 40, width: 40 },
           imgSize: { width: 150, height: 150 },
         };
+
       case 'down':
         return {
           img: DownButton,
-          pressed: { top: 114, left: 58 },
+          pressed: { top: 114, left: 60 },
           notPressed: { top: 207, left: 114, height: 40, width: 40 },
           imgSize: { width: 150, height: 150 },
         };
@@ -109,6 +102,14 @@ export const PressedButton = ({ type, onClick }) => {
           img: LeftButton,
           pressed: { top: 114, left: 58 },
           notPressed: { top: 170, left: 78, height: 40, width: 40 },
+          imgSize: { width: 150, height: 150 },
+        };
+      case 'right':
+        return {
+          img: RightButton,
+          pressed: { top: 114, left: 60 },
+          notPressed: { top: 170, left: 150, height: 40, width: 40 },
+
           imgSize: { width: 150, height: 150 },
         };
       case 'A':
