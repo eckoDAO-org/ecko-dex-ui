@@ -10,8 +10,8 @@ import { Divider } from 'semantic-ui-react';
 import useWindowSize from '../../hooks/useWindowSize';
 import { theme } from '../../styles/theme';
 import noExponents from '../../utils/noExponents';
-import FirstInput from '../../assets/images/game-edition/first-input-background.png';
-import SecondInput from '../../assets/images/game-edition/second-input-background.png';
+import FirstInput from '../../assets/images/game-edition/pixeled-yellow-box.svg';
+import SecondInput from '../../assets/images/game-edition/pixeled-purple-box.svg';
 import { PixeledCircleArrowIcon } from '../../assets';
 
 const Container = styled.div`

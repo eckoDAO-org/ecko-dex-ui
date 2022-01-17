@@ -1,10 +1,12 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
+import { useHistory } from 'react-router-dom';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { useAccountContext, useKaddexWalletContext, useNotificationContext } from '../../contexts';
+import { STATUSES } from '../../contexts/NotificationContext';
 import useWindowSize from '../../hooks/useWindowSize';
-import WalletWires from './wires/WalletWires';
-import ConnectWalletWire from './wires/ConnectWalletWire';
+import WalletWires from './components/WalletWires';
+import ConnectWalletWire from './components/ConnectWalletWire';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
 import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.png';
 import gameboyMobile from '../../assets/images/game-edition/gameboy-mobile.png';
@@ -14,8 +16,8 @@ import { WALLET } from '../../constants/wallet';
 import ConnectWalletZelcoreModal from '../modals/kdaModals/ConnectWalletZelcoreModal';
 import ConnectWalletTorusModal from '../modals/kdaModals/ConnectWalletTorusModal';
 import ConnectWalletChainweaverModal from '../modals/kdaModals/ConnectWalletChainweaverModal';
-import { STATUSES } from '../../contexts/NotificationContext';
 import { FadeIn } from '../shared/animations';
+import GameEditionButtons from './components/PressedButton';
 
 const DesktopMainContainer = styled.div`
   display: flex;
@@ -26,10 +28,11 @@ const DesktopMainContainer = styled.div`
   transition: transform 0.5s;
   transform: ${({ showWires, selectedWire, showTokens }) => {
     if (showTokens) {
-      return 'translate(-600px, 80px)';
+      return 'translate(-600px, 442px)';
     }
-    return showWires && !selectedWire && !showTokens ? 'translateY(-362px)' : 'translateY(80px)';
+    return showWires && !selectedWire && !showTokens ? 'translateY(0px)' : 'translateY(442px)';
   }};
+  opacity: ${({ showTokens }) => (showTokens ? 0.5 : 1)};
 `;
 
 const MobileMainContainer = styled.div`
@@ -49,6 +52,7 @@ const GameboyDesktopContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  position: relative;
   z-index: 2;
   .kaddex-logo {
     margin-top: 20px;
@@ -118,6 +122,7 @@ const SearchTokenList = styled(FadeIn)`
 
 const GameEditionContainer = ({ children }) => {
   const [width] = useWindowSize();
+  const history = useHistory();
   const { showNotification } = useNotificationContext();
   const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
 
@@ -223,9 +228,10 @@ const GameEditionContainer = ({ children }) => {
       </GameboyMobileContainer>
     </MobileMainContainer>
   ) : (
-    <div style={{ display: 'flex' }}>
-      <DesktopMainContainer showWires={showWires} selectedWire={selectedWire} showTokens={showTokens} style={{ justifyContent: 'flex-end' }}>
-        <GameboyDesktopContainer showWires={showWires} showTokens={showTokens} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
+    <DesktopMainContainer showWires={showWires} selectedWire={selectedWire} showTokens={showTokens} style={{ justifyContent: 'flex-end' }}>
+      <div style={{ display: 'flex' }}>
+        <GameboyDesktopContainer showWires={showWires} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
+          <GameEditionButtons />
           <DisplayContent>
             {children}
             {modalState.open && (
@@ -242,11 +248,11 @@ const GameEditionContainer = ({ children }) => {
             <KaddexLogo />
           </div>
         </GameboyDesktopContainer>
-        <ConnectWalletWire onClick={selectedWire ? null : () => setShowWires(true)} />
-        <WalletWires />
-      </DesktopMainContainer>
-      {showTokens && <SearchTokenList>tokens list</SearchTokenList>}
-    </div>
+        {showTokens && <SearchTokenList>tokens list</SearchTokenList>}
+      </div>
+      <ConnectWalletWire onClick={selectedWire ? null : () => setShowWires(true)} />
+      <WalletWires />
+    </DesktopMainContainer>
   );
 };
 

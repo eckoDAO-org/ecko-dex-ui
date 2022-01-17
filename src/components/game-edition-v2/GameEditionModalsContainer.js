@@ -4,7 +4,7 @@ import { CloseGe } from '../../assets';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { FadeIn } from '../shared/animations';
 import modalBackground from '../../assets/images/game-edition/modal-background.png';
-import GameEditionLabel from './shared/GameEditionLabel';
+import GameEditionLabel from './components/GameEditionLabel';
 
 const GEModalContainer = styled(FadeIn)`
   top: 0;

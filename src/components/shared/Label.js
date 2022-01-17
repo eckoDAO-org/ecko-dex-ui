@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components/macro';
 import { useGameEditionContext } from '../../contexts';
 import { commonTheme } from '../../styles/theme';
-import GameEditionLabel from '../game-edition-v2/shared/GameEditionLabel';
+import GameEditionLabel from '../game-edition-v2/components/GameEditionLabel';
 
 const STYText = styled.span`
   display: flex;
