@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
-import { useAccountContext } from '../../../contexts';
+import { useAccountContext, useWalletContext } from '../../../contexts';
 import { GameEditionContext, WIRE_CONTAINER_WIDTH } from '../../../contexts/GameEditionContext';
 import { FadeIn } from '../../shared/animations';
 import { HideWiresIcon } from '../../../assets';
@@ -119,13 +119,23 @@ export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
 };
 
 const WalletWires = () => {
-  const { showWires, setShowWires, selectedWire, onWireSelect } = useContext(GameEditionContext);
+  const { wallet } = useWalletContext();
+  const { showWires, onWireSelect, selectedWire } = useContext(GameEditionContext);
   const { logout } = useAccountContext();
 
   return (
     <WiresContainer showWires={showWires}>
       {showWires && (
-        <HideWiresContainer style={{ bottom: 30 }} onClick={() => setShowWires(false)}>
+        <HideWiresContainer
+          style={{ bottom: 30 }}
+          onClick={() => {
+            let oldWire = null;
+            if (wallet?.id) {
+              oldWire = WALLET[wallet.id];
+            }
+            onWireSelect(oldWire);
+          }}
+        >
           <HideWiresIcon />
         </HideWiresContainer>
       )}
@@ -135,8 +145,13 @@ const WalletWires = () => {
         selectedWire={selectedWire}
         style={{ top: -77 }}
         onClick={() => {
-          logout(true);
-          onWireSelect(null);
+          let oldWire = null;
+          if (wallet?.id !== selectedWire.id) {
+            oldWire = WALLET[wallet.id];
+          } else {
+            logout(true);
+          }
+          onWireSelect(oldWire);
         }}
       >
         <span>Disconnect</span>

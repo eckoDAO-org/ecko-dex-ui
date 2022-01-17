@@ -65,7 +65,7 @@ const RightHeaderItems = () => {
   return (
     <RightContainerHeader>
       <span className="mainnet-chain-2 mobile-none">Mainnet Chain 2</span>
-      {account?.account ? (
+      {account?.account && (
         <HeaderItem>
           <AccountInfo
             onClick={() => {
@@ -85,8 +85,6 @@ const RightHeaderItems = () => {
             balance={account.account ? `${reduceBalance(account.balance)} KDA` : ''}
           />
         </HeaderItem>
-      ) : (
-        <></>
       )}
 
       {!account.account && (

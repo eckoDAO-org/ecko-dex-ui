@@ -30,21 +30,20 @@ const DesktopMainContainer = styled.div`
   transform: ${({ showWires, selectedWire, showTokens, scale }) => {
     let animation = '';
     if (showTokens) {
-      animation = scale ? 'translate(-600px, 550px) scale(1.2)' : 'translate(-600px, 550px)';
+      animation = scale ? 'translate(-600px, 560px) scale(1.2)' : 'translate(-600px, 560px)';
       return animation;
     }
     if (showWires && !selectedWire && !showTokens) {
       animation = 'translateY(0px)';
       if (scale) {
-        animation = 'translateY(550px) scale(1.2)';
+        animation = 'translateY(560px) scale(1.2)';
       }
     } else {
       animation = 'translateY(442px)';
       if (scale) {
-        animation = 'translateY(550px) scale(1.2)';
+        animation = 'translateY(560px) scale(1.2)';
       }
     }
-    // return showWires && !selectedWire && !showTokens ? `translateY(0px)` : `translateY(442px)`;
     return animation;
   }};
   opacity: ${({ showTokens }) => (showTokens ? 0.5 : 1)};

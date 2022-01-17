@@ -41,6 +41,7 @@ const GameEditionStartAnimation = () => {
   }, [loadingValue, gameEditionView]);
 
   useEffect(() => {
+    console.log('wallet', wallet);
     if (wallet) {
       onWireSelect(WALLET[wallet.id]);
     }
