@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
 import { Input as SUIInput } from 'semantic-ui-react';
-import { ArrowDown, DropdownGe } from '../../assets';
+import { ArrowDown, PixeledArrowDownIcon } from '../../assets';
 import { theme } from '../../styles/theme';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 
@@ -123,7 +123,7 @@ const Button = styled.button`
 
   svg {
     path {
-      fill: ${({ theme: { colors } }) => colors.white}!important;
+      fill: ${({ gameEditionView, theme: { colors } }) => !gameEditionView && colors.white}!important;
     }
   }
 `;
@@ -170,7 +170,7 @@ const Input = ({
         >
           <span>
             {buttonLabel}
-            {gameEditionView ? <DropdownGe /> : <ArrowDown />}
+            {gameEditionView ? <PixeledArrowDownIcon /> : <ArrowDown />}
           </span>
         </Button>
       );

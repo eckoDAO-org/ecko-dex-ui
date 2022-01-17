@@ -13,7 +13,7 @@ const ResultContainer = styled.div`
   padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : ` 0px`)};
   width: 100%;
   /* position: ${({ gameEditionView }) => gameEditionView && 'absolute'}; */
-  margin-top: ${({ gameEditionView }) => gameEditionView && '20px'};
+  margin-top: ${({ gameEditionView }) => gameEditionView && '10px'};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     margin: ${({ gameEditionView }) => (gameEditionView ? `5px 0px` : ` 10px 0px`)};
     flex-flow: column;
@@ -27,6 +27,11 @@ const InfoContainer = styled.div`
   margin-right: 15px;
   display: flex;
   flex-flow: column;
+  min-width: 194px;
+  min-height: 82px;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -36,7 +41,7 @@ const InfoContainer = styled.div`
 const Label = styled.span`
   font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.regular)};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '20px' : '13px')};
-  color: ${({ theme: { colors }, gameEditionView }) => colors.lightBlue};
+  color: ${({ theme: { colors }, gameEditionView }) => colors.gameEditionBlue};
   text-transform: capitalize;
   display: flex;
   align-items: center;
@@ -63,8 +68,8 @@ const SwapResultsGEv2 = ({ priceImpact, fromValues, toValues }) => {
   return (
     <ResultContainer gameEditionView={gameEditionView}>
       <InfoContainer gameEditionView={gameEditionView}>
-        <Label gameEditionView={gameEditionView}>price</Label>
-        <Value gameEditionView={gameEditionView}>{`${reduceBalance(pact.ratio * (1 + priceImpact))} ${fromValues.coin} per ${toValues.coin}`}</Value>
+        <Label gameEditionView={gameEditionView}>{`price ${fromValues.coin} per ${toValues.coin}`}</Label>
+        <Value gameEditionView={gameEditionView}>{`${reduceBalance(pact.ratio * (1 + priceImpact))}`}</Value>
       </InfoContainer>
       <InfoContainer gameEditionView={gameEditionView}>
         <Label gameEditionView={gameEditionView}>Price Impact</Label>
