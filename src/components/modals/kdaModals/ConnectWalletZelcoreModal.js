@@ -7,7 +7,7 @@ import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { theme } from '../../../styles/theme';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 import Label from '../../shared/Label';
-import pixeledPinkBox from '../../../assets/images/game-edition/pixeled-pink-box.svg';
+import pixeledPinkBox from '../../../assets/images/game-edition/pixeled-box-pink.svg';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 
 const GEGetZelcoreAccount = styled.div`

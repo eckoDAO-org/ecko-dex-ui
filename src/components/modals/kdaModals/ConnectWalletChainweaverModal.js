@@ -11,7 +11,7 @@ import { LightModeContext } from '../../../contexts/LightModeContext';
 import { theme } from '../../../styles/theme';
 import Label from '../../shared/Label';
 import { GeCancelButtonIcon, GeConfirmButtonIcon } from '../../../assets';
-import pixeledYellowBox from '../../../assets/images/game-edition/pixeled-yellow-box.svg';
+import pixeledYellowBox from '../../../assets/images/game-edition/pixeled-box-yellow.svg';
 
 const ActionContainer = styled.div`
   display: flex;

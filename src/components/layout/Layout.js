@@ -7,7 +7,7 @@ import MobileHeader from './header/MobileHeader';
 import { ReactComponent as Stripes } from '../../assets/images/shared/stripes.svg';
 import GameEditionContainer from '../game-edition-v2/GameEditionContainer';
 import { useHistory } from 'react-router';
-import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from '../../router/routes';
+import { ROUTE_GAME_EDITION_MENU, ROUTE_SWAP } from '../../router/routes';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import browserDetection from '../../utils/browserDetection';
 import centerBackground from '../../assets/images/game-edition/center-background.png';

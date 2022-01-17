@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
-import { useHistory } from 'react-router-dom';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { useAccountContext, useKaddexWalletContext, useNotificationContext } from '../../contexts';
 import { STATUSES } from '../../contexts/NotificationContext';
@@ -18,6 +17,8 @@ import ConnectWalletTorusModal from '../modals/kdaModals/ConnectWalletTorusModal
 import ConnectWalletChainweaverModal from '../modals/kdaModals/ConnectWalletChainweaverModal';
 import { FadeIn } from '../shared/animations';
 import GameEditionButtons from './components/PressedButton';
+import { useLocation } from 'react-router-dom';
+import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION } from '../../router/routes';
 
 const DesktopMainContainer = styled.div`
   display: flex;
@@ -26,11 +27,25 @@ const DesktopMainContainer = styled.div`
   height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
   align-items: center;
   transition: transform 0.5s;
-  transform: ${({ showWires, selectedWire, showTokens }) => {
+  transform: ${({ showWires, selectedWire, showTokens, scale }) => {
+    let animation = '';
     if (showTokens) {
-      return 'translate(-600px, 442px)';
+      animation = scale ? 'translate(-600px, 550px) scale(1.2)' : 'translate(-600px, 550px)';
+      return animation;
     }
-    return showWires && !selectedWire && !showTokens ? 'translateY(0px)' : 'translateY(442px)';
+    if (showWires && !selectedWire && !showTokens) {
+      animation = 'translateY(0px)';
+      if (scale) {
+        animation = 'translateY(550px) scale(1.2)';
+      }
+    } else {
+      animation = 'translateY(442px)';
+      if (scale) {
+        animation = 'translateY(550px) scale(1.2)';
+      }
+    }
+    // return showWires && !selectedWire && !showTokens ? `translateY(0px)` : `translateY(442px)`;
+    return animation;
   }};
   opacity: ${({ showTokens }) => (showTokens ? 0.5 : 1)};
 `;
@@ -118,11 +133,12 @@ const DisplayContent = styled.div`
 
 const SearchTokenList = styled(FadeIn)`
   height: fit-content;
+  color: #ffff;
 `;
 
 const GameEditionContainer = ({ children }) => {
+  const location = useLocation();
   const [width] = useWindowSize();
-  const history = useHistory();
   const { showNotification } = useNotificationContext();
   const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
 
@@ -218,6 +234,7 @@ const GameEditionContainer = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedWire, account.account]);
 
+  const scale = location.pathname !== ROUTE_GAME_EDITION_MENU && location.pathname !== ROUTE_GAME_START_ANIMATION;
   return width < theme.mediaQueries.desktopPixel ? (
     <MobileMainContainer>
       <GameboyMobileContainer style={{ backgroundImage: `url(${gameboyMobile})` }}>
@@ -228,7 +245,13 @@ const GameEditionContainer = ({ children }) => {
       </GameboyMobileContainer>
     </MobileMainContainer>
   ) : (
-    <DesktopMainContainer showWires={showWires} selectedWire={selectedWire} showTokens={showTokens} style={{ justifyContent: 'flex-end' }}>
+    <DesktopMainContainer
+      showWires={showWires}
+      selectedWire={selectedWire}
+      showTokens={showTokens}
+      scale={scale}
+      style={{ justifyContent: 'flex-end' }}
+    >
       <div style={{ display: 'flex' }}>
         <GameboyDesktopContainer showWires={showWires} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
           <GameEditionButtons />
@@ -248,7 +271,11 @@ const GameEditionContainer = ({ children }) => {
             <KaddexLogo />
           </div>
         </GameboyDesktopContainer>
-        {showTokens && <SearchTokenList>tokens list</SearchTokenList>}
+        {showTokens && (
+          <SearchTokenList>
+            tokens list<button onClick={() => setShowTokens(false)}>X</button>
+          </SearchTokenList>
+        )}
       </div>
       <ConnectWalletWire onClick={selectedWire ? null : () => setShowWires(true)} />
       <WalletWires />

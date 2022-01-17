@@ -13,7 +13,7 @@ import { theme } from '../../../styles/theme';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 import LogoLoader from '../../../components/shared/LogoLoader';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
-import pixeledPinkBox from '../../../assets/images/game-edition/pixeled-pink-box.svg';
+import pixeledPinkBox from '../../../assets/images/game-edition/pixeled-box-pink.svg';
 import Label from '../../shared/Label';
 
 const GEGetZelcoreAccount = styled.div`

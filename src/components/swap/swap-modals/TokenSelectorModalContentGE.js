@@ -1,13 +1,11 @@
 import React, { useState, useContext } from 'react';
-import styled, { css } from 'styled-components/macro';
-import Search from '../../../components/shared/Search';
+import styled from 'styled-components/macro';
 import { SwapContext } from '../../../contexts/SwapContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { PartialScrollableScrollSection } from '../../layout/Containers';
 import useWindowSize from '../../../hooks/useWindowSize';
 import theme from '../../../styles/theme';
 import PixeledTokenSelectorIcon from '../../../assets/images/game-edition/pixeled-token-selector.svg';
-import PixeledTokenSelector from '../../../assets/images/game-edition/pixeled-token-selector.png';
 
 const Content = styled.div`
   display: flex;
@@ -64,7 +62,7 @@ const TokenItem = styled.div`
 const TokenSelectorModalContent = ({ show, tokenSelectorType, onTokenClick, onClose, fromToken, toToken }) => {
   const [searchValue, setSearchValue] = useState('');
   const swap = useContext(SwapContext);
-  const { gameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView, setShowTokens } = useContext(GameEditionContext);
 
   const [width] = useWindowSize();
   return (
@@ -103,6 +101,20 @@ const TokenSelectorModalContent = ({ show, tokenSelectorType, onTokenClick, onCl
                 </TokenItem>
               );
             })}
+          <TokenItem
+            gameEditionView={gameEditionView}
+            key={'...'}
+            selected={fromToken === '...' || toToken === '...'}
+            style={{
+              cursor: fromToken === '...' || toToken === '...' ? 'default' : 'pointer',
+            }}
+            onClick={() => {
+              setShowTokens(true);
+            }}
+          >
+            <PixeledTokenSelectorContainer gameEditionView={gameEditionView}>{crypto.icon}</PixeledTokenSelectorContainer>
+            ...
+          </TokenItem>
         </TokensContainer>
       </PartialScrollableScrollSection>
     </Content>
