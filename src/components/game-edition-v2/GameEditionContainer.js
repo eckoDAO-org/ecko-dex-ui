@@ -235,7 +235,6 @@ const GameEditionContainer = ({ children }) => {
   }, [selectedWire, account.account]);
 
   const scale = location.pathname !== ROUTE_GAME_EDITION_MENU && location.pathname !== ROUTE_GAME_START_ANIMATION;
-  console.log('scale', location.pathname);
   return width < theme.mediaQueries.desktopPixel ? (
     <MobileMainContainer>
       <GameboyMobileContainer style={{ backgroundImage: `url(${gameboyMobile})` }}>

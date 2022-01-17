@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import { GeArrowIcon } from '../../assets';
 import HeaderItem from '../../components/shared/HeaderItem';
 import theme, { commonColors } from '../../styles/theme';
 import headerLinks from '../headerLinks';
-import menuItems from '../menuItems';
+import menuItems, { POOL, STATS, SWAP } from '../menuItems';
 import { FadeIn } from '../shared/animations';
 import GameEditionLabel from './components/GameEditionLabel';
 import menuBackground from '../../assets/images/game-edition/menu-background.png';
+import { useGameEditionContext } from '../../contexts';
+import { useHistory } from 'react-router-dom';
 
 const Container = styled(FadeIn)`
   display: flex;
@@ -48,7 +51,43 @@ const RowMenuContainer = styled.div`
 `;
 
 const GameEditionMenuContainer = () => {
-  const [arrowVisible, setArrowVisible] = useState('');
+  const history = useHistory();
+  const [arrowVisible, setArrowVisible] = useState(SWAP.label);
+
+  const { setButtons } = useGameEditionContext();
+
+  useEffect(() => {
+    let route = '';
+    switch (arrowVisible) {
+      case SWAP.label:
+        route = SWAP.route;
+        break;
+
+      case POOL.label:
+        route = POOL.route;
+        break;
+
+      case STATS.label:
+        route = STATS.route;
+        break;
+      default:
+        route = '';
+        break;
+    }
+
+    setButtons({
+      B: () => history.push(route),
+      Up: () => {
+        const selectedIndex = menuItems.findIndex((i) => i.label === arrowVisible);
+        setArrowVisible(menuItems[selectedIndex - 1 < 0 ? menuItems.length - 1 : (selectedIndex - 1) % menuItems.length].label);
+      },
+      Down: () => {
+        const selectedIndex = menuItems.findIndex((i) => i.label === arrowVisible);
+        setArrowVisible(menuItems[(selectedIndex + 1) % menuItems.length].label);
+      },
+    });
+  }, [arrowVisible]);
+
   return (
     <Container style={{ backgroundImage: `url(${menuBackground})` }}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -69,7 +108,7 @@ const GameEditionMenuContainer = () => {
                   fontWeight: 400,
                   textTransform: 'uppercase',
                 }}
-                onMouseOver={() => setArrowVisible(item.label)}
+                // onMouseOver={() => setArrowVisible(item.label)}
                 notChangebleFontOnHover
               >
                 {item.label}

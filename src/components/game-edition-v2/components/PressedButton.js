@@ -13,21 +13,23 @@ import DownButton from '../../../assets/images/game-edition/pressed-buttons/Cros
 import LeftButton from '../../../assets/images/game-edition/pressed-buttons/Cross-Left.png';
 import AButton from '../../../assets/images/game-edition/pressed-buttons/A-BTN.png';
 import BButton from '../../../assets/images/game-edition/pressed-buttons/B-BTN.png';
+import { useGameEditionContext } from '../../../contexts';
 
 const GameEditionButtons = () => {
   const history = useHistory();
+  const { buttons } = useGameEditionContext();
   return (
     <>
       <PressedButton type="menu" onClick={() => history.push(ROUTE_GAME_EDITION_MENU)} />
       <PressedButton type="swap" onClick={() => console.log('swap')} />
       <PressedButton type="L1" onClick={() => console.log('L1')} />
       <PressedButton type="R1" onClick={() => console.log('R1')} />
-      <PressedButton type="up" onClick={() => console.log('up')} />
+      <PressedButton type="up" onClick={() => buttons.Up()} />
+      <PressedButton type="down" onClick={() => buttons.Down()} />
       <PressedButton type="right" onClick={() => console.log('right')} />
-      <PressedButton type="down" onClick={() => console.log('down')} />
       <PressedButton type="left" onClick={() => console.log('left')} />
       <PressedButton type="A" onClick={() => console.log('A')} />
-      <PressedButton type="B" onClick={() => console.log('B')} />
+      <PressedButton type="B" onClick={() => buttons.B()} />
     </>
   );
 };
