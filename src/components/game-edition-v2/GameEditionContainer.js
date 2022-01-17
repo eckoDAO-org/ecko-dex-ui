@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
-import { useHistory } from 'react-router-dom';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { useAccountContext, useKaddexWalletContext, useNotificationContext } from '../../contexts';
 import { STATUSES } from '../../contexts/NotificationContext';
@@ -118,11 +117,11 @@ const DisplayContent = styled.div`
 
 const SearchTokenList = styled(FadeIn)`
   height: fit-content;
+  color: #ffff;
 `;
 
 const GameEditionContainer = ({ children }) => {
   const [width] = useWindowSize();
-  const history = useHistory();
   const { showNotification } = useNotificationContext();
   const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
 
@@ -248,7 +247,11 @@ const GameEditionContainer = ({ children }) => {
             <KaddexLogo />
           </div>
         </GameboyDesktopContainer>
-        {showTokens && <SearchTokenList>tokens list</SearchTokenList>}
+        {showTokens && (
+          <SearchTokenList>
+            tokens list<button onClick={() => setShowTokens(false)}>X</button>
+          </SearchTokenList>
+        )}
       </div>
       <ConnectWalletWire onClick={selectedWire ? null : () => setShowWires(true)} />
       <WalletWires />

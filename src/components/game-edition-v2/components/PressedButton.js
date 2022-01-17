@@ -144,7 +144,7 @@ export const PressedButton = ({ type, onClick }) => {
       }}
       onMouseUp={() => setClassName('not-pressed')}
     >
-      <img className={className} src={button.img} style={{ ...button.imgSize }} />
+      <img className={className} src={button.img} style={{ ...button.imgSize }} alt="btn" />
     </ButtonContainer>
   );
 };

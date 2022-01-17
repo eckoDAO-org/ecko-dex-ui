@@ -6,7 +6,6 @@ import CustomButton from './CustomButton';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { theme } from '../../styles/theme';
 import { LightModeContext } from '../../contexts/LightModeContext';
-import { PixeledArrowDownIcon } from '../../assets';
 
 const Container = styled.div`
   position: absolute;
