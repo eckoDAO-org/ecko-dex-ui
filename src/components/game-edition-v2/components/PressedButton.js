@@ -21,9 +21,9 @@ const GameEditionButtons = () => {
       <PressedButton type="L1" onClick={() => console.log('L1')} />
       <PressedButton type="R1" onClick={() => console.log('R1')} />
       <PressedButton type="up" onClick={() => console.log('up')} />
-      {/* <PressedButton type="right" onClick={() => console.log('right')} />
+      <PressedButton type="right" onClick={() => console.log('right')} />
       <PressedButton type="down" onClick={() => console.log('down')} />
-      <PressedButton type="left" onClick={() => console.log('left')} /> */}
+      <PressedButton type="left" onClick={() => console.log('left')} />
     </>
   );
 };
@@ -33,6 +33,9 @@ export default GameEditionButtons;
 const ButtonContainer = styled.div`
   position: absolute;
   cursor: pointer;
+  display:flex;
+
+
   user-select: none;
   img.pressed {
       display: block;
@@ -48,21 +51,53 @@ export const PressedButton = ({ type, onClick }) => {
   const getButton = () => {
     switch (type) {
       case 'menu':
-        return { img: menuButton, position: { top: 364, left: 156 }, dimension: { width: 42, height: 42 } };
+        return {
+          img: menuButton,
+          pressed: { top: 364, left: 156 },
+          notPressed: { top: 364, left: 156, width: 42, height: 42 },
+          imgSize: { width: 42, height: 42 },
+        };
       case 'swap':
-        return { img: swapButton, position: { top: 316, left: 156 }, dimension: { width: 42, height: 42 } };
+        return {
+          img: swapButton,
+          pressed: { top: 316, left: 156 },
+          notPressed: { top: 316, left: 156, width: 42, height: 42 },
+          imgSize: { width: 42, height: 42 },
+        };
       case 'L1':
-        return { img: L1Button, position: { top: 0, left: 0 }, dimension: { width: 42, height: 42 } };
+        return { img: L1Button, position: { top: 0, left: 0 }, imgSize: { width: 42, height: 42 } };
       case 'R1':
-        return { img: R1Button, position: { top: -20, right: 0 }, dimension: { width: 228, height: 110 } };
+        return { img: R1Button, position: { top: -20, right: 0 }, imgSize: { width: 228, height: 110 } };
       case 'up':
-        return { img: UpButton, position: { top: 118, left: 58 }, dimension: { width: 150, height: 150 } };
-      //   case 'down':
-      //     return { img: DownButton, position: { top: -20, right: 0 }, dimension: { width: 228, height: 110 } };
-      //   case 'right':
-      //     return { img: RightButton, position: { top: 0, left: 0 }, dimension: { width: 42, height: 42 } };
-      //   case 'left':
-      //     return { img: LeftButton, position: { top: -20, right: 0 }, dimension: { width: 228, height: 110 } };
+        return {
+          img: UpButton,
+          pressed: { top: 114, left: 58 },
+          notPressed: { top: 132, left: 114, height: 40, width: 40 },
+          imgSize: { width: 150, height: 150 },
+        };
+      case 'right':
+        return {
+          img: RightButton,
+          pressed: { top: 114, left: 60 },
+          notPressed: { top: 170, left: 150, height: 40, width: 40 },
+
+          imgSize: { width: 150, height: 150 },
+        };
+      case 'down':
+        return {
+          img: DownButton,
+          pressed: { top: 114, left: 58 },
+          notPressed: { top: 207, left: 114, height: 40, width: 40 },
+          imgSize: { width: 150, height: 150 },
+        };
+      case 'left':
+        return {
+          img: LeftButton,
+          pressed: { top: 114, left: 58 },
+          notPressed: { top: 170, left: 78, height: 40, width: 40 },
+          imgSize: { width: 150, height: 150 },
+        };
+
       default:
         return null;
     }
@@ -73,14 +108,14 @@ export const PressedButton = ({ type, onClick }) => {
   return (
     <ButtonContainer
       className={className}
-      style={{ ...button.position, ...button.dimension }}
+      style={{ ...(className === 'pressed' ? button.pressed : button.notPressed) }}
       onMouseDown={() => {
         setClassName('pressed');
         onClick();
       }}
       onMouseUp={() => setClassName('not-pressed')}
     >
-      <img className={className} src={button.img} style={{ ...button.dimension }} />
+      <img className={className} src={button.img} style={{ ...button.imgSize }} />
     </ButtonContainer>
   );
 };
