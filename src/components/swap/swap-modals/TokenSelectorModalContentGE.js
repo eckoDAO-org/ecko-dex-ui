@@ -19,7 +19,7 @@ const TokensContainer = styled.div`
   flex-flow: row;
 
   & > div:not(:last-child) {
-    margin-right: 16px;
+    margin-right: 44px;
   }
 `;
 const PixeledTokenSelectorContainer = styled.div`

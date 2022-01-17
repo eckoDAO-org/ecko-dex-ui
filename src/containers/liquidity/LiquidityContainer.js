@@ -21,6 +21,7 @@ import tokenData from '../../constants/cryptoCurrencies';
 import SwapForm from '../../components/swap/SwapForm';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import TokenSelectorModalContent from '../../components/swap/swap-modals/TokenSelectorModalContent';
+import TokenSelectorModalContentGE from '../../components/swap/swap-modals/TokenSelectorModalContentGE';
 import { CogIcon } from '../../assets';
 import { FadeIn } from '../../components/shared/animations';
 import FormContainer from '../../components/shared/FormContainer';
@@ -31,6 +32,7 @@ import CustomPopup from '../../components/shared/CustomPopup';
 import SlippagePopupContent from '../../components/layout/header/SlippagePopupContent';
 import BackgroundLogo from '../../components/shared/BackgroundLogo';
 import browserDetection from '../../utils/browserDetection';
+import ArcadeBackground from '../../assets/images/game-edition/arcade-background.png';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -49,6 +51,10 @@ const Container = styled(FadeIn)`
         height: 100%;
         display: flex;
         flex-direction: column;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        background-image: ${`url(${ArcadeBackground})`};
       `;
     } else {
       return css`
@@ -71,7 +77,7 @@ const Title = styled.span`
   font: ${({ theme: { fontFamily }, gameEditionView }) =>
     gameEditionView ? `normal normal normal 16px/19px ${fontFamily.pressStartRegular}` : 'normal normal bold 32px/57px Montserrat'};
   letter-spacing: 0px;
-  color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.black : colors.white)};
+  color: ${({ gameEditionView, theme: { colors } }) => colors.white};
   text-transform: capitalize;
   svg {
     path {
@@ -118,7 +124,7 @@ const Value = styled.span`
   font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
   line-height: 20px;
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
+  color: ${({ theme: { colors }, gameEditionView }) => colors.white};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     text-align: ${({ gameEditionView }) => gameEditionView && 'left'};
     margin-bottom: ${({ gameEditionView }) => gameEditionView && '5px'};
@@ -139,6 +145,9 @@ const GameEditionTokenSelectorContainer = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 `;
 
 const LiquidityContainer = (props) => {
@@ -532,7 +541,7 @@ const LiquidityContainer = (props) => {
         },
         content: (
           <GameEditionTokenSelectorContainer>
-            <TokenSelectorModalContent
+            <TokenSelectorModalContentGE
               selectedToken={selectedToken}
               tokenSelectorType={tokenSelectorType}
               onTokenClick={onTokenClick}
