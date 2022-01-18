@@ -252,7 +252,7 @@ const GameEditionContainer = ({ children }) => {
       showWires={showWires}
       selectedWire={selectedWire}
       showTokens={showTokens}
-      scale={scale}
+      scale={scale ? true : undefined}
       style={{ justifyContent: 'flex-end' }}
     >
       <div style={{ display: 'flex' }}>
