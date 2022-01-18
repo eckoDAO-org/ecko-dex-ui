@@ -25,10 +25,10 @@ import { CogIcon } from '../assets';
 import SlippagePopupContent from '../components/layout/header/SlippagePopupContent';
 import FormContainer from '../components/shared/FormContainer';
 import GradientBorder from '../components/shared/GradientBorder';
-import { Title } from '../components/layout/Containers';
 import BackgroundLogo from '../components/shared/BackgroundLogo';
 import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
 import PixeledSwapResult from '../assets/images/game-edition/pixeled-swap-result.png';
+import Label from '../components/shared/Label';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -45,6 +45,7 @@ const Container = styled(FadeIn)`
   ${({ gameEditionView }) => {
     if (gameEditionView) {
       return css`
+        padding-top: 16px;
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -64,18 +65,11 @@ const Container = styled(FadeIn)`
 const SwapTitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-bottom: 14px;
   ${({ gameEditionView }) => {
     if (gameEditionView) {
       return css`
-        margin-top: 8px;
-        margin-bottom: 0px;
         justify-content: center;
-      `;
-    } else {
-      return css`
-        margin-top: 0px;
-        margin-bottom: 14px;
-        justify-content: space-between;
       `;
     }
   }}
@@ -117,7 +111,7 @@ const RowContainer = styled.div`
         display: flex;
         flex-flow: column;
         min-width: 194px;
-        min-height: 82px;
+        min-height: 68px;
         justify-content: center;
         text-align: center;
         align-items: center;
@@ -131,26 +125,6 @@ const RowContainer = styled.div`
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: ${({ gameEditionView }) => (gameEditionView ? `column` : ` row`)};
-  }
-`;
-
-const Label = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.regular)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '20px' : '13px')};
-  color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.gameEditionBlue : colors.white)};
-  text-transform: capitalize;
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    text-align: left;
-  }
-`;
-
-const Value = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.bold)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '24px' : '13px')};
-  line-height: 20px;
-  color: ${({ theme: { colors }, gameEditionView }) => colors.white};
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'right')};
   }
 `;
 
@@ -551,7 +525,9 @@ const SwapContainer = () => {
       {!gameEditionView && isLogoVisible && <BackgroundLogo />}
 
       <SwapTitleContainer gameEditionView={gameEditionView}>
-        <Title $gameEditionView={gameEditionView}>Swap</Title>
+        <Label fontSize={32} geCenter fontFamily="bold" geFontSize={52} geLabelStyle={{ lineHeight: '32px' }}>
+          Swap
+        </Label>
         {!gameEditionView && (
           <HeaderItem headerItemStyle={{ alignItems: 'center', display: 'flex' }}>
             <CustomPopup trigger={<CogIcon />} on="click" offset={[0, 0]} position="bottom right">
@@ -601,8 +577,10 @@ const SwapContainer = () => {
         ) : (
           <ResultContainer gameEditionView={gameEditionView}>
             <RowContainer gameEditionView={gameEditionView}>
-              <Label gameEditionView={gameEditionView}>max slippage</Label>
-              <Value gameEditionView={gameEditionView}>{`${pact.slippage * 100}%`}</Value>
+              <Label fontSize={13} geFontSize={20} geColor="blue">
+                Max slippage
+              </Label>
+              <Label fontSize={13} fontFamily="bold" geFontSize={28}>{`${pact.slippage * 100}%`}</Label>
             </RowContainer>
           </ResultContainer>
         )}
