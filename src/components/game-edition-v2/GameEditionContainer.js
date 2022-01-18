@@ -27,20 +27,20 @@ const DesktopMainContainer = styled.div`
   height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
   align-items: center;
   transition: transform 0.5s;
-  transform: ${({ showWires, selectedWire, showTokens, scale }) => {
+  transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
     let animation = '';
     if (showTokens) {
-      animation = scale ? 'translate(-600px, 560px) scale(1.2)' : 'translate(-600px, 560px)';
+      animation = $scale ? 'translate(-600px, 560px) scale(1.2)' : 'translate(-600px, 560px)';
       return animation;
     }
     if (showWires && !selectedWire && !showTokens) {
       animation = 'translateY(0px)';
-      if (scale) {
+      if ($scale) {
         animation = 'translateY(560px) scale(1.2)';
       }
     } else {
       animation = 'translateY(442px)';
-      if (scale) {
+      if ($scale) {
         animation = 'translateY(560px) scale(1.2)';
       }
     }
@@ -252,7 +252,7 @@ const GameEditionContainer = ({ children }) => {
       showWires={showWires}
       selectedWire={selectedWire}
       showTokens={showTokens}
-      scale={scale ? true : undefined}
+      $scale={scale}
       style={{ justifyContent: 'flex-end' }}
     >
       <div style={{ display: 'flex' }}>
