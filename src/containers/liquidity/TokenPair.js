@@ -8,7 +8,7 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { theme } from '../../styles/theme';
 import { ButtonContainer, ColumnContainer, Container, Label, RowContainer, Value } from '../../components/layout/Containers';
 import { LightModeContext } from '../../contexts/LightModeContext';
-import { ArrowDown, DropdownGe } from '../../assets';
+import { ArrowDown, PixeledArrowDownIcon } from '../../assets';
 import useWindowSize from '../../hooks/useWindowSize';
 
 const ResultContainer = styled.div`
@@ -41,9 +41,9 @@ const HeaderContainer = styled(Accordion.Title)`
   padding: 0px !important;
 
   font-family: ${({ $gameEditionView, theme: { fontFamily } }) =>
-    $gameEditionView ? `${fontFamily.pressStartRegular} !important` : `${fontFamily.bold} !important`};
-  color: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? `${colors.black} !important` : `${colors.white} !important`)};
-  font-size: ${({ $gameEditionView }) => ($gameEditionView ? '10px' : '16px !important')};
+    $gameEditionView ? `${fontFamily.pixeboy} !important` : `${fontFamily.bold} !important`};
+  color: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? `${colors.white} !important` : `${colors.white} !important`)};
+  font-size: ${({ $gameEditionView }) => ($gameEditionView ? '20px !important' : '16px !important')};
 
   svg {
     path {
@@ -57,6 +57,12 @@ const IconContainer = styled.div`
   justify-content: center;
   align-items: center;
   transform: ${({ active }) => (active ? 'rotate(0deg)' : 'rotate(-90deg)')};
+
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
 `;
 
 const TokenPair = (props) => {
@@ -81,7 +87,7 @@ const TokenPair = (props) => {
           onClick={() => handleActiveIndex(props.index)}
         >
           {token0} / {token1}
-          <IconContainer active={props.activeIndex === props.index}>{$gameEditionView ? <DropdownGe /> : <ArrowDown />}</IconContainer>
+          <IconContainer active={props.activeIndex === props.index}>{$gameEditionView ? <PixeledArrowDownIcon /> : <ArrowDown />}</IconContainer>
         </HeaderContainer>
         <Accordion.Content style={{ flexFlow: 'column', padding: 0 }} active={props.activeIndex === props.index}>
           {!$gameEditionView ? (
@@ -130,8 +136,12 @@ const TokenPair = (props) => {
                   <Value $gameEditionView={$gameEditionView}>{pairUnit(extractDecimal(balance))}</Value>
                 </ColumnContainer>
                 <ColumnContainer>
-                  <Label $gameEditionView={$gameEditionView}>Pooled {token0}:</Label>
-                  <Value $gameEditionView={$gameEditionView}>{pairUnit(extractDecimal(pooledAmount[0]))}</Value>
+                  <Label style={{ textAlign: 'right' }} $gameEditionView={$gameEditionView}>
+                    Pooled {token0}:
+                  </Label>
+                  <Value style={{ textAlign: 'right' }} $gameEditionView={$gameEditionView}>
+                    {pairUnit(extractDecimal(pooledAmount[0]))}
+                  </Value>
                 </ColumnContainer>
               </RowContainer>
               <RowContainer $gameEditionView={$gameEditionView}>
@@ -140,8 +150,12 @@ const TokenPair = (props) => {
                   <Value $gameEditionView={$gameEditionView}>{pairUnit(extractDecimal(pooledAmount[1]))}</Value>
                 </ColumnContainer>
                 <ColumnContainer>
-                  <Label $gameEditionView={$gameEditionView}>Your pool share:</Label>
-                  <Value $gameEditionView={$gameEditionView}>{reduceBalance((extractDecimal(balance) / extractDecimal(supply)) * 100)}%</Value>
+                  <Label style={{ textAlign: 'right' }} $gameEditionView={$gameEditionView}>
+                    Your pool share:
+                  </Label>
+                  <Value style={{ textAlign: 'right' }} $gameEditionView={$gameEditionView}>
+                    {reduceBalance((extractDecimal(balance) / extractDecimal(supply)) * 100)}%
+                  </Value>
                 </ColumnContainer>
               </RowContainer>
             </ResultContainer>
@@ -157,7 +171,7 @@ const TokenPair = (props) => {
                   marginBottom: $gameEditionView && width <= theme().mediaQueries.mobilePixel && '10px',
                 }}
                 background="transparent"
-                color={$gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white}
+                color={$gameEditionView ? theme(themeMode).colors.white : theme(themeMode).colors.white}
                 border={!$gameEditionView && `1px solid ${theme(themeMode).colors.white}99`}
                 onClick={() => {
                   props.selectRemoveLiquidity();

@@ -9,6 +9,7 @@ import CustomLabel from '../../components/shared/CustomLabel';
 import theme from '../../styles/theme';
 import reduceToken from '../../utils/reduceToken';
 import { Container } from '../layout/Containers';
+import Label from '../../components/shared/Label';
 
 const CustomGrid = styled.div`
   display: grid;
@@ -71,22 +72,28 @@ const HistoryCard = ({ tx }) => {
         window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${tx?.requestKey}`, '_blank', 'noopener,noreferrer');
       }}
     >
-      <CustomLabel bold textAlign={gameEditionView && 'start'}>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start', display: 'block' }}>
         Name
-      </CustomLabel>
-      <CustomLabel textAlign={gameEditionView ? 'end' : 'start'}>{`${getInfoCoin(3)?.name}-${getInfoCoin(5)?.name}`}</CustomLabel>
-      <CustomLabel bold textAlign={gameEditionView && 'start'}>
+      </Label>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block', whiteSpace: 'nowrap' }}>{`${getInfoCoin(3)?.name}-${
+        getInfoCoin(5)?.name
+      }`}</Label>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start', display: 'block' }}>
         Date
-      </CustomLabel>
-      <CustomLabel textAlign={gameEditionView ? 'end' : 'start'}>{`${getDate(tx?.blockTime)}`}</CustomLabel>
-      <CustomLabel bold textAlign={gameEditionView && 'start'}>
+      </Label>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block', whiteSpace: 'nowrap' }}>{`${getDate(tx?.blockTime)}`}</Label>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start', display: 'block' }}>
         Request Key
-      </CustomLabel>
-      <CustomLabel textAlign={gameEditionView ? 'end' : 'start'}>{reduceToken(tx?.requestKey)}</CustomLabel>
-      <CustomLabel bold textAlign={gameEditionView && 'start'}>
+      </Label>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block', whiteSpace: 'nowrap' }}>
+        {reduceToken(tx?.requestKey)}
+      </Label>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start', display: 'block' }}>
         Amount
-      </CustomLabel>
-      <CustomLabel textAlign={gameEditionView ? 'end' : 'start'}>{`${tx?.params[2]} ${getInfoCoin(3)?.name}`}</CustomLabel>
+      </Label>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block', whiteSpace: 'nowrap' }}>{`${tx?.params[2]} ${
+        getInfoCoin(3)?.name
+      }`}</Label>
     </CustomGrid>
   ) : (
     <HistoryCardContainer
@@ -96,7 +103,7 @@ const HistoryCard = ({ tx }) => {
       }}
     >
       {/* ICONS */}
-      {width >= theme.mediaQueries.mobilePixel && !gameEditionView ? (
+      {width >= theme.mediaQueries.mobilePixel ? (
         <>
           <IconsContainer style={{ flex: 1 }}>
             {getInfoCoin(3)?.icon}

@@ -21,7 +21,7 @@ const StyledButton = styled(SUIButton)`
   color: ${({ theme: { colors }, disabled, $color, $gameEditionView, $outGameEditionView }) => {
     if ($color) return $color + ' !important';
     if ($outGameEditionView) return `${colors.primary} !important`;
-    if ($gameEditionView) return `${colors.black} !important`;
+    if ($gameEditionView) return `${colors.white} !important`;
     if (disabled) return `${colors.white} !important`;
     else return `${colors.primary} !important`;
   }};

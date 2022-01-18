@@ -18,6 +18,8 @@ import FormContainer from '../../components/shared/FormContainer';
 import browserDetection from '../../utils/browserDetection';
 import useWindowSize from '../../hooks/useWindowSize';
 import LogoLoader from '../../components/shared/LogoLoader';
+import ArcadeBackground from '../../assets/images/game-edition/arcade-background.png';
+import Label from '../../components/shared/Label';
 
 const Container = styled.div`
   display: flex;
@@ -34,7 +36,7 @@ const TextContainer = styled.div`
   justify-content: flex-start;
   width: 100%;
   min-height: ${({ $gameEditionView }) => $gameEditionView && browserDetection() === 'SAFARI' && '136px'};
-  color: ${({ theme: { colors }, $gameEditionView }) => ($gameEditionView ? `${colors.black} !important` : colors.white)};
+  color: ${({ theme: { colors }, $gameEditionView }) => colors.white};
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     display: table;
@@ -70,9 +72,9 @@ const TitleContainer = styled.div`
 `;
 const Title = styled.span`
   font: ${({ $gameEditionView, theme: { fontFamily } }) =>
-    $gameEditionView ? `normal normal normal 16px/19px  ${fontFamily.pressStartRegular}` : ` normal normal bold 32px/57px ${fontFamily.bold}`};
+    $gameEditionView ? `normal normal normal 52px  ${fontFamily.pixeboy}` : ` normal normal bold 32px/57px ${fontFamily.bold}`};
   letter-spacing: 0px;
-  color: ${({ theme: { colors }, $gameEditionView }) => ($gameEditionView ? colors.black : colors.white)};
+  color: ${({ theme: { colors }, $gameEditionView }) => colors.white};
   text-transform: ${({ $gameEditionView }) => ($gameEditionView ? `uppercase` : ` capitalize`)}; ;
 `;
 
@@ -109,7 +111,13 @@ const LiquidityList = (props) => {
           overflow: 'auto',
           border: 'none',
           boxShadow: 'none',
-          background: 'none',
+          height: gameEditionView && '100%',
+          display: gameEditionView && 'flex',
+          flexDirection: gameEditionView && 'column',
+          backgroundRepeat: gameEditionView && 'no-repeat',
+          backgroundPosition: gameEditionView && 'center',
+          backgroundSize: gameEditionView && 'cover',
+          backgroundImage: gameEditionView && `url(${ArcadeBackground})`,
         }}
       >
         {gameEditionView && (
@@ -117,73 +125,86 @@ const LiquidityList = (props) => {
             <Title $gameEditionView={gameEditionView}>Pool</Title>
           </TitleContainer>
         )}
-        <TextContainer
+        {/* <TextContainer
           $gameEditionView={gameEditionView}
           style={{
             marginBottom: gameEditionView ? 15 : 30,
             background: 'transparent',
-            textAlign: 'left',
+            textAlign: 'center',
           }}
+        > */}
+        <Label
+          fontSize={24}
+          geFontSize={20}
+          geColor={'yellow'}
+          geLabelStyle={{ justifyContent: 'center', marginBottom: '14px' }}
+          labelStyle={{ marginBottom: '14px' }}
+          fontFamily="bold"
+          /* style={{
+              fontSize: gameEditionView ? (width <= theme().mediaQueries.mobilePixel ? 16 : 22) : 24,
+              fontFamily: gameEditionView ? theme(themeMode).fontFamily.pixeboy : theme(themeMode).fontFamily.bold,
+            }} */
         >
-          <h1
-            style={{
-              fontSize: gameEditionView ? (width <= theme().mediaQueries.mobilePixel ? 13 : 16) : 24,
-              fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.bold,
-            }}
-          >
-            Liquidity provider rewards
-          </h1>
-          <p
-            style={{
-              fontSize: gameEditionView ? (width <= theme().mediaQueries.mobilePixel ? 10 : 12) : 16,
-              fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
-            }}
-          >
-            Liquidity providers earn a 0.3% fee on all trades proportional to their share of the pool.
-            <br />
-            Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.
-          </p>
-        </TextContainer>
+          Liquidity provider rewards
+        </Label>
+        <Label
+          fontSize={16}
+          geFontSize={18}
+          geColor={'blue'}
+          geLabelStyle={{ textAlign: 'center', padding: '0px 10px' }}
+          /* style={{
+            fontSize: gameEditionView ? (width <= theme().mediaQueries.mobilePixel ? 14 : 20) : 16,
+            fontFamily: gameEditionView ? theme(themeMode).fontFamily.pixeboy : theme(themeMode).fontFamily.regular,
+          }} */
+        >
+          Liquidity providers earn a 0.3% fee on all trades proportional to their share of the pool.
+          <br />
+          Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.
+        </Label>
+        {/* </TextContainer> */}
         {account.account !== null ? (
           <BottomContainer $gameEditionView={gameEditionView}>
-            <TopContainer>
-              <Header
-                style={{
-                  fontSize: gameEditionView ? 16 : 32,
+            <Label
+              fontSize={32}
+              geFontSize={20}
+              geLabelStyle={{ justifyContent: 'center', margin: '10px 0px' }}
+              labelStyle={{ margin: '30px 0px 14px' }}
+              fontFamily="bold"
+              /* style={{
+                  fontSize: gameEditionView ? 22 : 32,
                   textAlign: 'left ',
-                  color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
-                  fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.bold,
-                }}
-              >
-                Your Liquidity
-              </Header>
-              <ButtonContainer style={{ marginBottom: gameEditionView ? 15 : 30 }}>
-                <Button.Group fluid style={{ flexDirection: gameEditionView && width <= theme().mediaQueries.mobilePixel ? 'column' : 'row' }}>
-                  <CustomButton
-                    disabled
-                    buttonStyle={{
-                      marginRight: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '15px',
-                      borderRadius: '20px',
-                      width: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '100%' : '48%',
-                      marginBottom: gameEditionView && width <= theme().mediaQueries.mobilePixel && '10px',
-                    }}
-                    onClick={() => props.selectCreatePair()}
-                  >
-                    Create a pair
-                  </CustomButton>
-                  <CustomButton
-                    buttonStyle={{
-                      marginLeft: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '-5px',
-                      borderRadius: '20px',
-                      width: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '100%' : '48%',
-                    }}
-                    onClick={() => props.selectAddLiquidity()}
-                  >
-                    Add Liquidity
-                  </CustomButton>
-                </Button.Group>
-              </ButtonContainer>
-            </TopContainer>
+                  color: theme(themeMode).colors.white,
+                  fontFamily: gameEditionView ? theme(themeMode).fontFamily.pixeboy : theme(themeMode).fontFamily.bold,
+                }} */
+            >
+              Your Liquidity
+            </Label>
+            <ButtonContainer style={{ marginBottom: gameEditionView ? 15 : 30 }}>
+              <Button.Group fluid style={{ flexDirection: gameEditionView && width <= theme().mediaQueries.mobilePixel ? 'column' : 'row' }}>
+                <CustomButton
+                  disabled
+                  buttonStyle={{
+                    marginRight: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '15px',
+                    borderRadius: '20px',
+                    width: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '100%' : '48%',
+                    marginBottom: gameEditionView && width <= theme().mediaQueries.mobilePixel && '10px',
+                  }}
+                  onClick={() => props.selectCreatePair()}
+                >
+                  Create a pair
+                </CustomButton>
+                <CustomButton
+                  buttonStyle={{
+                    marginLeft: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '-5px',
+                    borderRadius: '20px',
+                    width: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '100%' : '48%',
+                  }}
+                  onClick={() => props.selectAddLiquidity()}
+                >
+                  Add Liquidity
+                </CustomButton>
+              </Button.Group>
+            </ButtonContainer>
             {account.account !== null ? (
               liquidity.pairListAccount[0] ? (
                 liquidity.pairListAccount[0]?.balance ? (
@@ -213,7 +234,7 @@ const LiquidityList = (props) => {
                                 width: '100%',
                                 margin: '32px 0px',
                                 borderTop: gameEditionView
-                                  ? `1px dashed ${theme(themeMode).colors.black}`
+                                  ? `1px dashed ${theme(themeMode).colors.white}`
                                   : `1px solid  ${theme(themeMode).colors.white}99`,
                               }}
                             />
@@ -234,7 +255,7 @@ const LiquidityList = (props) => {
                     <p
                       style={{
                         fontSize: gameEditionView ? 12 : 16,
-                        fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
+                        fontFamily: gameEditionView ? theme(themeMode).fontFamily.pixeboy : theme(themeMode).fontFamily.regular,
                         textAlign: 'center',
                       }}
                     >
@@ -247,8 +268,8 @@ const LiquidityList = (props) => {
                           active
                           inline="centered"
                           style={{
-                            color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
-                            fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.regular,
+                            color: theme(themeMode).colors.white,
+                            fontFamily: gameEditionView ? theme(themeMode).fontFamily.pixeboy : theme(themeMode).fontFamily.regular,
                           }}
                         />
                       ) : (

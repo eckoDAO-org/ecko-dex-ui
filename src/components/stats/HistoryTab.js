@@ -25,8 +25,8 @@ export const CardContainer = styled.div`
   max-height: ${({ gameEditionView }) => (gameEditionView ? `50vh` : `500px`)};
   margin-left: auto;
   margin-right: auto;
-  border-radius: 10px;
-  border: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `2px dashed ${colors.black}`};
+  border-radius: ${({ gameEditionView }) => !gameEditionView && `10px`};
+  border: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `2px dashed ${colors.white}`};
 
   opacity: 1;
   background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? `transparent` : backgroundContainer)};
@@ -117,7 +117,7 @@ const HistoryTab = ({ activeTabs, setActiveTabs }) => {
                         style={{
                           width: '100%',
                           margin: gameEditionView ? '24px 0px' : '32px 0px',
-                          borderTop: gameEditionView ? `2px dashed ${theme(themeMode).colors.black}` : `1px solid  ${theme(themeMode).colors.white}`,
+                          borderTop: gameEditionView ? `2px dashed ${theme(themeMode).colors.white}` : `1px solid  ${theme(themeMode).colors.white}`,
                         }}
                       />
                     )}

@@ -3,8 +3,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import { PactContext } from '../contexts/PactContext';
 import StatsTab from '../components/stats/StatsTab';
 import HistoryTab from '../components/stats/HistoryTab';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { GameEditionContext } from '../contexts/GameEditionContext';
+import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
 
 const Container = styled.div`
   display: flex;
@@ -12,6 +13,19 @@ const Container = styled.div`
   height: 100%;
   padding: ${({ gameEditionView }) => !gameEditionView && '32px'};
   justify-content: flex-start;
+
+  ${({ gameEditionView }) => {
+    if (gameEditionView) {
+      return css`
+        height: 100%;
+        display: flex;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        background-image: ${`url(${ArcadeBackground})`};
+      `;
+    }
+  }}
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {
     padding: ${({ gameEditionView }) => !gameEditionView && '32px 11px'};
