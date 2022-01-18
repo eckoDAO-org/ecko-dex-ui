@@ -28,6 +28,7 @@ import GradientBorder from '../components/shared/GradientBorder';
 import { Title } from '../components/layout/Containers';
 import BackgroundLogo from '../components/shared/BackgroundLogo';
 import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
+import PixeledSwapResult from '../assets/images/game-edition/pixeled-swap-result.png';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -86,13 +87,16 @@ const GameEditionTokenSelectorContainer = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 `;
 
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 0px`)};
-  padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : ` 0px`)};
+  margin: ${({ gameEditionView }) => (gameEditionView ? `10px 0px` : ` 0px`)};
+  padding: ${({ gameEditionView }) => (gameEditionView ? `0px 10px` : ` 0px`)};
   flex-flow: column;
   width: 100%;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
@@ -105,7 +109,26 @@ const RowContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-flow: row;
-  margin: 16px 0px;
+  margin: ${({ gameEditionView }) => !gameEditionView && `16px 0px`};
+
+  ${({ gameEditionView }) => {
+    if (gameEditionView) {
+      return css`
+        display: flex;
+        flex-flow: column;
+        min-width: 194px;
+        min-height: 82px;
+        justify-content: center;
+        text-align: center;
+        align-items: center;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        background-image: ${`url(${PixeledSwapResult})`};
+      `;
+    }
+  }}
+
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: ${({ gameEditionView }) => (gameEditionView ? `column` : ` row`)};
   }
@@ -113,8 +136,8 @@ const RowContainer = styled.div`
 
 const Label = styled.span`
   font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.regular)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '13px' : '13px')};
-  color: ${({ theme: { colors }, gameEditionView }) => colors.white};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '20px' : '13px')};
+  color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.gameEditionBlue : colors.white)};
   text-transform: capitalize;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     text-align: left;
@@ -123,7 +146,7 @@ const Label = styled.span`
 
 const Value = styled.span`
   font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.bold)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '13px' : '13px')};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '24px' : '13px')};
   line-height: 20px;
   color: ${({ theme: { colors }, gameEditionView }) => colors.white};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {

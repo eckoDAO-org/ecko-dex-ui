@@ -9,7 +9,7 @@ const STYText = styled.span`
   align-items: center;
   cursor: ${({ onClick }) => onClick && 'pointer'};
   z-index: 1;
-  color: ${({ theme: { colors }, labelColor }) => labelColor || colors.white};
+  color: ${({ withShade, theme: { colors }, labelColor }) => (labelColor || withShade ? `${colors.white}99` : colors.white)};
   ${({ inverted, theme: { colors } }) =>
     inverted &&
     css`
@@ -30,6 +30,7 @@ const Label = ({
   geColor,
   inverted,
   onClick,
+  withShade,
 }) => {
   const { gameEditionView } = useGameEditionContext();
   return gameEditionView ? (
@@ -42,6 +43,7 @@ const Label = ({
       inverted={inverted}
       fontSize={fontSize}
       onClick={onClick}
+      withShade={withShade}
       style={{ fontFamily: commonTheme.fontFamily[fontFamily], ...labelStyle }}
     >
       {children}

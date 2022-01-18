@@ -2,9 +2,9 @@ import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
-import CustomLabel from '../../components/shared/CustomLabel';
 import { extractDecimal, reduceBalance } from '../../utils/reduceBalance';
-import { ColumnContainer, Container, Label, Value } from '../layout/Containers';
+import { ColumnContainer, Container } from '../layout/Containers';
+import Label from '../../components/shared/Label';
 
 const StatsCardContainer = styled(Container)`
   width: 100%;
@@ -44,55 +44,57 @@ const StatsCard = ({ pair }) => {
 
   return gameEditionView ? (
     <CustomGrid>
-      <CustomLabel bold textAlign={gameEditionView && 'start'}>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start' }}>
         Name
-      </CustomLabel>
-      <CustomLabel textAlign={gameEditionView ? 'end' : 'start'}>{`${pair.token0}/${pair.token1}`}</CustomLabel>
-      <CustomLabel bold textAlign={gameEditionView && 'start'}>
+      </Label>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block' }}>{`${pair.token0}/${pair.token1}`}</Label>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start' }}>
         token0
-      </CustomLabel>
-      <CustomLabel textAlign={gameEditionView ? 'end' : 'start'}>{reduceBalance(pair.reserves[0])}</CustomLabel>
-      <CustomLabel bold textAlign={gameEditionView && 'start'}>
+      </Label>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block' }}>
+        {reduceBalance(pair.reserves[0])}
+      </Label>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start' }}>
         token1
-      </CustomLabel>
-      <CustomLabel textAlign={gameEditionView ? 'end' : 'start'}>{reduceBalance(pair.reserves[1])}</CustomLabel>
-      <CustomLabel bold textAlign={gameEditionView && 'start'}>
+      </Label>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block' }}>
+        {reduceBalance(pair.reserves[1])}
+      </Label>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start' }}>
         Rate
-      </CustomLabel>
-      <CustomLabel textAlign={gameEditionView ? 'end' : 'start'}>{`${reduceBalance(
+      </Label>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block' }}>{`${reduceBalance(
         extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1])
-      )} ${pair.token0}/${pair.token1}`}</CustomLabel>
+      )} ${pair.token0}/${pair.token1}`}</Label>
     </CustomGrid>
   ) : (
-    <StatsCardContainer gameEditionView={gameEditionView}>
+    <StatsCardContainer>
       {/* ICONS */}
       <IconsContainer style={{ marginRight: '16px' }}>
         {tokenData[pair.token0].icon}
         {tokenData[pair.token1].icon}
-        <CustomLabel bold>{`${pair.token0}-${pair.token1}`}</CustomLabel>
+        <Label fontSize={13} fontFamily="bold">{`${pair.token0}-${pair.token1}`}</Label>
       </IconsContainer>
       {/* TR TOKEN 0 */}
-      <ColumnContainer gameEditionView={gameEditionView} style={{ marginRight: '16px' }}>
-        <Label gameEditionView={gameEditionView} withShade="99">
+      <ColumnContainer style={{ marginRight: '16px' }}>
+        <Label fontSize={13} withShade>
           Total Reserve - Token0
         </Label>
-        <Value gameEditionView={gameEditionView}>{reduceBalance(pair.reserves[0])}0</Value>
+        <Label>{reduceBalance(pair.reserves[0])}0</Label>
       </ColumnContainer>
       {/* TR TOKEN 1 */}
-      <ColumnContainer gameEditionView={gameEditionView} style={{ marginRight: '16px' }}>
-        <Label gameEditionView={gameEditionView} withShade="99">
+      <ColumnContainer style={{ marginRight: '16px' }}>
+        <Label fontSize={13} withShade>
           Total Reserve - Token1
         </Label>
-        <Value gameEditionView={gameEditionView}>{reduceBalance(pair.reserves[1])}0</Value>
+        <Label>{reduceBalance(pair.reserves[1])}0</Label>
       </ColumnContainer>
       {/* RATE */}
-      <ColumnContainer gameEditionView={gameEditionView} style={{ marginRight: '16px' }}>
-        <Label gameEditionView={gameEditionView} withShade="99">
+      <ColumnContainer style={{ marginRight: '16px' }}>
+        <Label fontSize={13} withShade>
           Rate
         </Label>
-        <Value gameEditionView={gameEditionView}>{`${reduceBalance(extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1]))} ${
-          pair.token0
-        }/${pair.token1}`}</Value>
+        <Label>{`${reduceBalance(extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1]))} ${pair.token0}/${pair.token1}`}</Label>
       </ColumnContainer>
     </StatsCardContainer>
   );

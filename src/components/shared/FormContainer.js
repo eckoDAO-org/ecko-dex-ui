@@ -12,9 +12,9 @@ const Container = styled.div`
   justify-content: space-between;
   width: 100%;
   height: ${({ $gameEditionView }) => $gameEditionView && `100%`};
-  border-radius: 10px;
+  border-radius: ${({ $gameEditionView }) => !$gameEditionView && `10px`};
   border: ${({ $gameEditionView, withGameEditionBorder, theme: { colors } }) =>
-    $gameEditionView && withGameEditionBorder && `2px dashed ${colors.black}`};
+    $gameEditionView && withGameEditionBorder && `2px dashed ${colors.white}`};
 
   opacity: 1;
   background: ${({ $gameEditionView, theme: { backgroundContainer } }) => ($gameEditionView ? 'transparent' : backgroundContainer)};

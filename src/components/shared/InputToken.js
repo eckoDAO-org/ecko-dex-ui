@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
-import { ArrowDown, DropdownGe } from '../../assets';
+import { ArrowDown, PixeledArrowDownIcon } from '../../assets';
 import CustomButton from './CustomButton';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { theme } from '../../styles/theme';
@@ -19,7 +19,7 @@ const Container = styled.div`
   min-width: ${({ theme: { inputTokenWidth } }) => `${inputTokenWidth}px`};
   svg {
     path {
-      fill: ${({ theme: { colors } }) => colors.white};
+      fill: ${({ $gameEditionView, theme: { colors } }) => !$gameEditionView && colors.white};
     }
   }
 
@@ -105,7 +105,7 @@ const InputToken = ({ icon, code, onClick, onClickButton, disabledButton }) => {
 
         <span>{code}</span>
       </ElementsContainer>
-      {gameEditionView ? <DropdownGe /> : <ArrowDown />}
+      {gameEditionView ? <PixeledArrowDownIcon /> : <ArrowDown />}
     </Container>
   );
 };

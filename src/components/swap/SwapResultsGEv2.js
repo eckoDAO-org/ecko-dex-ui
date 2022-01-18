@@ -9,13 +9,16 @@ import PixeledSwapResult from '../../assets/images/game-edition/pixeled-swap-res
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 16px 0px`)};
-  padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : ` 0px`)};
-  width: 100%;
+  margin: 10px 0px 0px;
+  padding: 0px 10px;
+  /* width: 100%; */
   /* position: ${({ gameEditionView }) => gameEditionView && 'absolute'}; */
-  margin-top: ${({ gameEditionView }) => gameEditionView && '20px'};
+  width: 436px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    margin: ${({ gameEditionView }) => (gameEditionView ? `5px 0px` : ` 10px 0px`)};
+    margin: 5px 0px;
     flex-flow: column;
   }
   & > *:not(:last-child) {
@@ -27,6 +30,11 @@ const InfoContainer = styled.div`
   margin-right: 15px;
   display: flex;
   flex-flow: column;
+  min-width: 194px;
+  min-height: 82px;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -36,7 +44,7 @@ const InfoContainer = styled.div`
 const Label = styled.span`
   font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.regular)};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '20px' : '13px')};
-  color: ${({ theme: { colors }, gameEditionView }) => colors.lightBlue};
+  color: ${({ theme: { colors }, gameEditionView }) => colors.gameEditionBlue};
   text-transform: capitalize;
   display: flex;
   align-items: center;
@@ -47,7 +55,7 @@ const Label = styled.span`
 
 const Value = styled.span`
   font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.bold)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '16px' : '13px')};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '24px' : '13px')};
   line-height: 20px;
   color: ${({ theme: { colors }, gameEditionView }) => colors.white};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
@@ -63,8 +71,8 @@ const SwapResultsGEv2 = ({ priceImpact, fromValues, toValues }) => {
   return (
     <ResultContainer gameEditionView={gameEditionView}>
       <InfoContainer gameEditionView={gameEditionView}>
-        <Label gameEditionView={gameEditionView}>price</Label>
-        <Value gameEditionView={gameEditionView}>{`${reduceBalance(pact.ratio * (1 + priceImpact))} ${fromValues.coin} per ${toValues.coin}`}</Value>
+        <Label gameEditionView={gameEditionView}>{`price ${fromValues.coin} per ${toValues.coin}`}</Label>
+        <Value gameEditionView={gameEditionView}>{`${reduceBalance(pact.ratio * (1 + priceImpact))}`}</Value>
       </InfoContainer>
       <InfoContainer gameEditionView={gameEditionView}>
         <Label gameEditionView={gameEditionView}>Price Impact</Label>
