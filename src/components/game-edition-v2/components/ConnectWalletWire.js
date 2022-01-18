@@ -31,7 +31,10 @@ const ConnectWalletWire = ({ onClick }) => {
   const { showWires, selectedWire } = useContext(GameEditionContext);
 
   return (
-    <WireConnectionContainer showWires={showWires} onClick={selectedWire ? null : () => onClick()}>
+    <WireConnectionContainer
+      showWires={showWires}
+      onClick={selectedWire || location.pathname === ROUTE_GAME_START_ANIMATION ? null : () => onClick()}
+    >
       {location?.pathname !== ROUTE_GAME_START_ANIMATION && !selectedWire && (
         <FadeIn>
           <WireConnectionIcon />

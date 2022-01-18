@@ -180,6 +180,7 @@ const GameEditionContainer = ({ children }) => {
       onWireSelect(null);
     }
   };
+
   const getWalletModal = (walletName) => {
     switch (walletName) {
       default:
@@ -212,7 +213,6 @@ const GameEditionContainer = ({ children }) => {
         });
 
       case WALLET.KADDEX_WALLET.name:
-        console.log('isInstalled', isInstalled);
         if (!isInstalled) {
           showNotification({
             title: 'Wallet not found',
@@ -220,7 +220,7 @@ const GameEditionContainer = ({ children }) => {
             type: STATUSES.WARNING,
           });
         } else {
-          initializeKaddexWallet();
+          initializeKaddexWallet(async () => await onConnectionSuccess(WALLET.KADDEX_WALLET));
           closeModal();
         }
         break;
@@ -280,7 +280,7 @@ const GameEditionContainer = ({ children }) => {
           </SearchTokenList>
         )}
       </div>
-      <ConnectWalletWire onClick={selectedWire ? null : () => setShowWires(true)} />
+      <ConnectWalletWire onClick={() => setShowWires(true)} />
       <WalletWires />
     </DesktopMainContainer>
   );

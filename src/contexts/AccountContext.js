@@ -6,6 +6,7 @@ import { getCorrectBalance } from '../utils/reduceBalance';
 import { chainId, creationTime, GAS_PRICE, getCurrentDate, getCurrentTime, network } from '../constants/contextConstants';
 import { NotificationContext } from './NotificationContext';
 import useLocalStorage from '../hooks/useLocalStorage';
+import { useGameEditionContext } from '.';
 
 export const AccountContext = createContext();
 
@@ -13,6 +14,7 @@ export const AccountProvider = (props) => {
   const [sendRes, setSendRes] = useState(null);
   const [localRes, setLocalRes] = useState(null);
   const notificationContext = useContext(NotificationContext);
+  const { gameEditionView } = useGameEditionContext();
 
   const [account, setAccount, removeAccount] = useLocalStorage('acct', { account: null, guard: null, balance: 0 });
   const [privKey, setPrivKey, removePrivKey] = useLocalStorage('pk', '');
@@ -108,12 +110,12 @@ export const AccountProvider = (props) => {
     }
   };
 
-  const logout = (notReload) => {
+  const logout = () => {
     removeAccount();
     localStorage.removeItem('signing', null);
     removePrivKey();
     localStorage.removeItem('wallet');
-    if (!notReload) {
+    if (!gameEditionView) {
       window.location.reload();
     }
   };
