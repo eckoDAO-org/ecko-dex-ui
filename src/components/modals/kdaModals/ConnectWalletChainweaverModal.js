@@ -4,9 +4,7 @@ import { Input as SUIInput } from 'semantic-ui-react';
 import CustomButton from '../../../components/shared/CustomButton';
 import Input from '../../../components/shared/Input';
 import { AccountContext } from '../../../contexts/AccountContext';
-import { WalletContext } from '../../../contexts/WalletContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import { WALLET } from '../../../constants/wallet';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 import { theme } from '../../../styles/theme';
 import Label from '../../shared/Label';
@@ -23,7 +21,6 @@ const ActionContainer = styled.div`
 
 const ConnectWalletChainweaverModal = ({ onClose }) => {
   const account = useContext(AccountContext);
-  const wallet = useContext(WalletContext);
   const { gameEditionView } = useContext(GameEditionContext);
   const { themeMode } = useContext(LightModeContext);
 
@@ -68,8 +65,6 @@ const ConnectWalletChainweaverModal = ({ onClose }) => {
 
   const handleConnect = async () => {
     await account.setVerifiedAccount(accountId);
-    await wallet.signingWallet();
-    await wallet.setSelectedWallet(WALLET.CHAINWEAVER);
 
     handleModalClose();
   };

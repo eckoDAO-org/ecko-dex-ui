@@ -146,7 +146,7 @@ const WalletWires = () => {
         style={{ top: -77 }}
         onClick={() => {
           let oldWire = null;
-          if (wallet?.id !== selectedWire.id) {
+          if (wallet?.id !== selectedWire?.id) {
             oldWire = WALLET[wallet.id];
           } else {
             logout(true);

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
-import { useAccountContext, useKaddexWalletContext, useNotificationContext } from '../../contexts';
+import { useAccountContext, useKaddexWalletContext, useNotificationContext, useWalletContext } from '../../contexts';
 import { STATUSES } from '../../contexts/NotificationContext';
 import useWindowSize from '../../hooks/useWindowSize';
 import WalletWires from './components/WalletWires';
@@ -140,6 +140,7 @@ const GameEditionContainer = ({ children }) => {
   const [width] = useWindowSize();
   const { showNotification } = useNotificationContext();
   const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
+  const { wallet, signingWallet, setSelectedWallet } = useWalletContext();
 
   const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens, setShowTokens } =
     useContext(GameEditionContext);
@@ -159,7 +160,10 @@ const GameEditionContainer = ({ children }) => {
   //   }
   // };
 
-  const onConnectionSuccess = (wallet) => {
+  const onConnectionSuccess = async (wallet) => {
+    await signingWallet();
+    await setSelectedWallet(wallet);
+    closeModal();
     showNotification({
       title: `${wallet.name}  was successfully connected`,
       type: 'game-edition',
@@ -186,7 +190,7 @@ const GameEditionContainer = ({ children }) => {
           onClose: () => {
             onCloseModal();
           },
-          content: <ConnectWalletZelcoreModal onConnectionSuccess={() => onConnectionSuccess(WALLET.ZELCORE)} />,
+          content: <ConnectWalletZelcoreModal onConnectionSuccess={async () => await onConnectionSuccess(WALLET.ZELCORE)} />,
         });
 
       case WALLET.TORUS.name:
@@ -195,7 +199,7 @@ const GameEditionContainer = ({ children }) => {
           onClose: () => {
             onCloseModal();
           },
-          content: <ConnectWalletTorusModal onConnectionSuccess={() => onConnectionSuccess(WALLET.TORUS)} />,
+          content: <ConnectWalletTorusModal onConnectionSuccess={async () => await onConnectionSuccess(WALLET.TORUS)} />,
         });
 
       case WALLET.CHAINWEAVER.name:
@@ -204,7 +208,7 @@ const GameEditionContainer = ({ children }) => {
           onClose: () => {
             onCloseModal();
           },
-          content: <ConnectWalletChainweaverModal onConnectionSuccess={() => onConnectionSuccess(WALLET.CHAINWEAVER)} />,
+          content: <ConnectWalletChainweaverModal onConnectionSuccess={async () => await onConnectionSuccess(WALLET.CHAINWEAVER)} />,
         });
 
       case WALLET.KADDEX_WALLET.name:
@@ -224,7 +228,7 @@ const GameEditionContainer = ({ children }) => {
   };
 
   useEffect(() => {
-    if (selectedWire && !account.account) {
+    if ((selectedWire && !account.account) || (selectedWire && selectedWire?.id !== wallet?.id)) {
       getWalletModal(selectedWire.name);
     } else {
       closeModal();
