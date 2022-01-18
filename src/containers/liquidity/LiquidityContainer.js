@@ -33,6 +33,7 @@ import SlippagePopupContent from '../../components/layout/header/SlippagePopupCo
 import BackgroundLogo from '../../components/shared/BackgroundLogo';
 import browserDetection from '../../utils/browserDetection';
 import ArcadeBackground from '../../assets/images/game-edition/arcade-background.png';
+import PixeledSwapResult from '../../assets/images/game-edition/pixeled-swap-result.png';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -96,11 +97,27 @@ const ButtonContainer = styled.div`
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 16px 0px 0px 0px`)};
+  margin: 16px 0px 0px 0px;
   flex-flow: column;
   width: 100%;
-  padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : 0)};
-  margin-top: ${({ gameEditionView }) => gameEditionView && '30px'};
+  padding: 0;
+
+  ${({ gameEditionView }) => {
+    if (gameEditionView) {
+      return css`
+        display: flex;
+        flex-flow: row;
+        justify-content: space-between;
+        margin: 10px 0px 0px;
+        padding: 0px 10px;
+        width: 436px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+      `;
+    }
+  }}
+
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     margin: ${({ gameEditionView }) => gameEditionView && `10px 0px 5px 0px`};
     flex-flow: column;
@@ -115,19 +132,56 @@ const InnerRowContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-flow: row;
+
+  ${({ gameEditionView }) => {
+    if (gameEditionView) {
+      return css`
+        margin-right: 15px;
+        display: flex;
+        flex-flow: column;
+        min-width: 194px;
+        min-height: 82px;
+        justify-content: center;
+        text-align: center;
+        align-items: center;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        background-image: ${`url(${PixeledSwapResult})`};
+      `;
+    }
+  }}
+
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: ${({ gameEditionView }) => (gameEditionView ? 'column' : `row`)};
   }
 `;
 
 const Value = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.bold)};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '24px' : '13px')};
   line-height: 20px;
   color: ${({ theme: { colors }, gameEditionView }) => colors.white};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     text-align: ${({ gameEditionView }) => gameEditionView && 'left'};
     margin-bottom: ${({ gameEditionView }) => gameEditionView && '5px'};
+  }
+`;
+
+const LabelContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  z-index: ${({ gameEditionView }) => !gameEditionView && '1'};
+`;
+
+const Label = styled.span`
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.regular)};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '20px' : '13px')};
+  color: ${({ theme: { colors }, gameEditionView }) => colors.yellow};
+  text-transform: capitalize;
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    text-align: left;
   }
 `;
 
@@ -697,13 +751,19 @@ const LiquidityContainer = (props) => {
       <FormContainer
         gameEditionView={gameEditionView}
         footer={
-          <ButtonContainer gameEditionView={gameEditionView}>
-            <Button.Group fluid>
-              <CustomButton disabled={!buttonStatus().status} onClick={() => setShowReview(true)}>
-                {buttonStatus().msg}
-              </CustomButton>
-            </Button.Group>
-          </ButtonContainer>
+          gameEditionView ? (
+            <LabelContainer>
+              <Label gameEditionView={gameEditionView}>{buttonStatus().msg}</Label>
+            </LabelContainer>
+          ) : (
+            <ButtonContainer gameEditionView={gameEditionView}>
+              <Button.Group fluid>
+                <CustomButton disabled={!buttonStatus().status} onClick={() => setShowReview(true)}>
+                  {buttonStatus().msg}
+                </CustomButton>
+              </Button.Group>
+            </ButtonContainer>
+          )
         }
       >
         {!gameEditionView && <GradientBorder />}

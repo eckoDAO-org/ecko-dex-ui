@@ -9,13 +9,16 @@ import PixeledSwapResult from '../../assets/images/game-edition/pixeled-swap-res
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 16px 0px`)};
-  padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : ` 0px`)};
-  width: 100%;
+  margin: 10px 0px 0px;
+  padding: 0px 10px;
+  /* width: 100%; */
   /* position: ${({ gameEditionView }) => gameEditionView && 'absolute'}; */
-  margin-top: ${({ gameEditionView }) => gameEditionView && '10px'};
+  width: 436px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    margin: ${({ gameEditionView }) => (gameEditionView ? `5px 0px` : ` 10px 0px`)};
+    margin: 5px 0px;
     flex-flow: column;
   }
   & > *:not(:last-child) {
@@ -52,7 +55,7 @@ const Label = styled.span`
 
 const Value = styled.span`
   font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.bold)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '16px' : '13px')};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '24px' : '13px')};
   line-height: 20px;
   color: ${({ theme: { colors }, gameEditionView }) => colors.white};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {

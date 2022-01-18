@@ -95,8 +95,8 @@ const GameEditionTokenSelectorContainer = styled.div`
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 0px`)};
-  padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : ` 0px`)};
+  margin: ${({ gameEditionView }) => (gameEditionView ? `10px 0px` : ` 0px`)};
+  padding: ${({ gameEditionView }) => (gameEditionView ? `0px 10px` : ` 0px`)};
   flex-flow: column;
   width: 100%;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
@@ -109,7 +109,7 @@ const RowContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-flow: row;
-  margin: 16px 0px;
+  margin: ${({ gameEditionView }) => !gameEditionView && `16px 0px`};
 
   ${({ gameEditionView }) => {
     if (gameEditionView) {
@@ -146,7 +146,7 @@ const Label = styled.span`
 
 const Value = styled.span`
   font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.bold)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '16px' : '13px')};
+  font-size: ${({ gameEditionView }) => (gameEditionView ? '24px' : '13px')};
   line-height: 20px;
   color: ${({ theme: { colors }, gameEditionView }) => colors.white};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
