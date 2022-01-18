@@ -8,8 +8,6 @@ import { ModalContext } from '../../../contexts/ModalContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { commonTheme, theme } from '../../../styles/theme';
 import { getAccounts, openZelcore } from '../../../utils/zelcore';
-import { WalletContext } from '../../../contexts/WalletContext';
-import { WALLET } from '../../../constants/wallet';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 import LogoLoader from '../../../components/shared/LogoLoader';
 import Label from '../../shared/Label';
@@ -84,7 +82,6 @@ const GetZelcoreAccountModal = ({ onClose, onConnectionSuccess }) => {
   const { gameEditionView, closeModal, onWireSelect } = useContext(GameEditionContext);
   const { themeMode } = useContext(LightModeContext);
 
-  const wallet = useContext(WalletContext);
   const [loading, setLoading] = useState(false);
   const [accounts, setAccounts] = useState(null);
   const [selectedAccount, setSelectedAccount] = useState(null);
@@ -114,20 +111,17 @@ const GetZelcoreAccountModal = ({ onClose, onConnectionSuccess }) => {
     setSelectedAccount(value);
   };
 
-  const handleModalClose = () => {
+  const handleModalClose = async () => {
     if (onClose) {
       onClose();
     }
-    if (account?.account) {
-      closeModal();
-    }
+
     setApproved(false);
   };
 
   const handleConnect = async () => {
     await setVerifiedAccount(selectedAccount, onConnectionSuccess);
-    await wallet.signingWallet();
-    await wallet.setSelectedWallet(WALLET.ZELCORE);
+
     await handleModalClose();
   };
 

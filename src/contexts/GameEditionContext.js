@@ -74,6 +74,7 @@ export const GameEditionProvider = (props) => {
         showWires,
         setShowWires,
         selectedWire,
+        setSelectedWire,
         onWireSelect,
         showTokens,
         setShowTokens,

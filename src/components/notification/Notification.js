@@ -5,7 +5,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Container = styled.div`
   .Toastify__toast {
-    border-radius: 4px;
+    height: 88px;
+    width: 370px;
+    border-radius: 30px;
   }
 
   .Toastify__toast-container {
@@ -19,9 +21,6 @@ const Container = styled.div`
   }
   .Toastify__toast--game-edition {
     background-color: #000000;
-    height: 88px;
-    width: 370px;
-    border-radius: 30px;
   }
   .Toastify__toast--success {
     background: ${({ theme: { colors } }) => colors.success};

@@ -99,7 +99,7 @@ const ButtonGroup = styled(Button.Group)`
 const AccountModal = () => {
   const { account, logout } = useContext(AccountContext);
   const modalContext = useContext(ModalContext);
-  const { gameEditionView, openModal } = useContext(GameEditionContext);
+  const { gameEditionView, setSelectedWire, setShowWires } = useContext(GameEditionContext);
   const { themeMode } = useContext(LightModeContext);
   const { wallet } = useContext(WalletContext);
   const { disconnectWallet } = useContext(KaddexWalletContext);
@@ -150,11 +150,8 @@ const AccountModal = () => {
             background="transparent"
             onClick={() => {
               if (gameEditionView) {
-                return openModal({
-                  title: account?.account ? 'wallet connected' : 'connect wallet',
-                  description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
-                  content: <ConnectWalletModal />,
-                });
+                setSelectedWire(null);
+                setShowWires(true);
               } else {
                 return modalContext.openModal({
                   title: account?.account ? 'wallet connected' : 'connect wallet',

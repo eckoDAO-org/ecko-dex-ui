@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
-import { useAccountContext, useKaddexWalletContext, useNotificationContext } from '../../contexts';
+import { useAccountContext, useKaddexWalletContext, useNotificationContext, useWalletContext } from '../../contexts';
 import { STATUSES } from '../../contexts/NotificationContext';
 import useWindowSize from '../../hooks/useWindowSize';
 import WalletWires from './components/WalletWires';
@@ -27,24 +27,23 @@ const DesktopMainContainer = styled.div`
   height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
   align-items: center;
   transition: transform 0.5s;
-  transform: ${({ showWires, selectedWire, showTokens, scale }) => {
+  transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
     let animation = '';
     if (showTokens) {
-      animation = scale ? 'translate(-600px, 550px) scale(1.2)' : 'translate(-600px, 550px)';
+      animation = $scale ? 'translate(-600px, 560px) scale(1.2)' : 'translate(-600px, 560px)';
       return animation;
     }
     if (showWires && !selectedWire && !showTokens) {
       animation = 'translateY(0px)';
-      if (scale) {
-        animation = 'translateY(550px) scale(1.2)';
+      if ($scale) {
+        animation = 'translateY(560px) scale(1.2)';
       }
     } else {
       animation = 'translateY(442px)';
-      if (scale) {
-        animation = 'translateY(550px) scale(1.2)';
+      if ($scale) {
+        animation = 'translateY(560px) scale(1.2)';
       }
     }
-    // return showWires && !selectedWire && !showTokens ? `translateY(0px)` : `translateY(442px)`;
     return animation;
   }};
   opacity: ${({ showTokens }) => (showTokens ? 0.5 : 1)};
@@ -141,6 +140,7 @@ const GameEditionContainer = ({ children }) => {
   const [width] = useWindowSize();
   const { showNotification } = useNotificationContext();
   const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
+  const { wallet, signingWallet, setSelectedWallet } = useWalletContext();
 
   const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens, setShowTokens } =
     useContext(GameEditionContext);
@@ -160,7 +160,10 @@ const GameEditionContainer = ({ children }) => {
   //   }
   // };
 
-  const onConnectionSuccess = (wallet) => {
+  const onConnectionSuccess = async (wallet) => {
+    await signingWallet();
+    await setSelectedWallet(wallet);
+    closeModal();
     showNotification({
       title: `${wallet.name}  was successfully connected`,
       type: 'game-edition',
@@ -177,6 +180,7 @@ const GameEditionContainer = ({ children }) => {
       onWireSelect(null);
     }
   };
+
   const getWalletModal = (walletName) => {
     switch (walletName) {
       default:
@@ -187,7 +191,7 @@ const GameEditionContainer = ({ children }) => {
           onClose: () => {
             onCloseModal();
           },
-          content: <ConnectWalletZelcoreModal onConnectionSuccess={() => onConnectionSuccess(WALLET.ZELCORE)} />,
+          content: <ConnectWalletZelcoreModal onConnectionSuccess={async () => await onConnectionSuccess(WALLET.ZELCORE)} />,
         });
 
       case WALLET.TORUS.name:
@@ -196,7 +200,7 @@ const GameEditionContainer = ({ children }) => {
           onClose: () => {
             onCloseModal();
           },
-          content: <ConnectWalletTorusModal onConnectionSuccess={() => onConnectionSuccess(WALLET.TORUS)} />,
+          content: <ConnectWalletTorusModal onConnectionSuccess={async () => await onConnectionSuccess(WALLET.TORUS)} />,
         });
 
       case WALLET.CHAINWEAVER.name:
@@ -205,11 +209,10 @@ const GameEditionContainer = ({ children }) => {
           onClose: () => {
             onCloseModal();
           },
-          content: <ConnectWalletChainweaverModal onConnectionSuccess={() => onConnectionSuccess(WALLET.CHAINWEAVER)} />,
+          content: <ConnectWalletChainweaverModal onConnectionSuccess={async () => await onConnectionSuccess(WALLET.CHAINWEAVER)} />,
         });
 
       case WALLET.KADDEX_WALLET.name:
-        console.log('isInstalled', isInstalled);
         if (!isInstalled) {
           showNotification({
             title: 'Wallet not found',
@@ -217,7 +220,7 @@ const GameEditionContainer = ({ children }) => {
             type: STATUSES.WARNING,
           });
         } else {
-          initializeKaddexWallet();
+          initializeKaddexWallet(async () => await onConnectionSuccess(WALLET.KADDEX_WALLET));
           closeModal();
         }
         break;
@@ -225,7 +228,7 @@ const GameEditionContainer = ({ children }) => {
   };
 
   useEffect(() => {
-    if (selectedWire && !account.account) {
+    if ((selectedWire && !account.account) || (selectedWire && selectedWire?.id !== wallet?.id)) {
       getWalletModal(selectedWire.name);
     } else {
       closeModal();
@@ -249,7 +252,7 @@ const GameEditionContainer = ({ children }) => {
       showWires={showWires}
       selectedWire={selectedWire}
       showTokens={showTokens}
-      scale={scale}
+      $scale={scale}
       style={{ justifyContent: 'flex-end' }}
     >
       <div style={{ display: 'flex' }}>
@@ -277,7 +280,7 @@ const GameEditionContainer = ({ children }) => {
           </SearchTokenList>
         )}
       </div>
-      <ConnectWalletWire onClick={selectedWire ? null : () => setShowWires(true)} />
+      <ConnectWalletWire onClick={() => setShowWires(true)} />
       <WalletWires />
     </DesktopMainContainer>
   );

@@ -1,19 +1,22 @@
 import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import styled from 'styled-components/macro';
-import { KaddexLightModeLogo, KaddexLogo } from '../../../assets';
+import styled, { css } from 'styled-components/macro';
+import { GameModeIcon, KaddexLightModeLogo, KaddexLogoWhite } from '../../../assets';
 import { ROUTE_INDEX } from '../../../router/routes';
 import menuItems from '../../menuItems';
 import RightHeaderItems from './RightHeaderItems';
 import HeaderItem from '../../../components/shared/HeaderItem';
 import { LightModeContext } from '../../../contexts/LightModeContext';
+import { useGameEditionContext } from '../../../contexts';
+import { commonTheme } from '../../../styles/theme';
 
 const Container = styled.div`
   display: flex;
   flex-flow: row;
+  align-items: center;
   justify-content: space-between;
   min-height: ${({ theme: { header } }) => `${header.height}px`};
-  padding: 0 7.5em;
+  padding: 0 48px;
 `;
 
 const LeftContainer = styled.div`
@@ -48,9 +51,34 @@ const AnimatedDiv = styled.div`
   }
 `;
 
-const DesktopHeader = ({ className, gameEditionView }) => {
+const GameEditionButton = styled.div`
+  cursor: pointer;
+  height: fit-content;
+  padding: 8px 18px;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? 'transparent' : colors.white)}};
+  color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.white : colors.primary)};
+  svg{
+    path{
+      fill: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.white : colors.primary)};
+    }
+  }
+  ${({ gameEditionView, theme: { colors } }) =>
+    gameEditionView &&
+    css`
+      border: 1px solid ${colors.white}4D;
+      box-sizing: border-box;
+      border-radius: 40px;
+    `}
+`;
+
+const DesktopHeader = ({ className }) => {
   const history = useHistory();
   const [buttonHover, setButtonHover] = useState(null);
+  const { gameEditionView, setGameEditionView, closeModal } = useGameEditionContext();
 
   const { themeMode } = useContext(LightModeContext);
 
@@ -58,7 +86,7 @@ const DesktopHeader = ({ className, gameEditionView }) => {
     <Container className={className}>
       <LeftContainer>
         {themeMode === 'dark' ? (
-          <KaddexLogo style={{ cursor: 'pointer' }} onClick={() => history.push(ROUTE_INDEX)} />
+          <KaddexLogoWhite style={{ cursor: 'pointer' }} onClick={() => history.push(ROUTE_INDEX)} />
         ) : (
           <KaddexLightModeLogo style={{ cursor: 'pointer' }} onClick={() => history.push(ROUTE_INDEX)} />
         )}
@@ -79,6 +107,18 @@ const DesktopHeader = ({ className, gameEditionView }) => {
           ))}
         </AnimatedDiv>
       </LeftContainer>
+
+      <GameEditionButton
+        gameEditionView={gameEditionView}
+        onClick={() => {
+          setGameEditionView(!gameEditionView);
+          closeModal();
+        }}
+      >
+        {!gameEditionView && <GameModeIcon style={{ marginRight: 9.4 }} />}
+        <span style={{ fontFamily: commonTheme.fontFamily.bold }}>{gameEditionView ? 'Exit Game Mode' : 'Game Mode'}</span>
+      </GameEditionButton>
+
       <RightContainer>
         <RightHeaderItems />
       </RightContainer>
