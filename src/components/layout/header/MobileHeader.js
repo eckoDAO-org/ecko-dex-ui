@@ -8,11 +8,13 @@ import { HamburgerIcon, KaddexLetterLogo } from '../../../assets';
 import menuItems from '../../menuItems';
 import { useHistory } from 'react-router';
 import { ROUTE_SWAP } from '../../../router/routes';
+import GameEditionModeButton from './GameEditionModeButton';
 
 const Container = styled.div`
   display: flex;
   flex-flow: row;
   justify-content: space-between;
+  align-items: center;
   min-height: ${({ theme: { header } }) => `${header.height}px`};
   width: 100%;
   padding: 0 1.5em;
@@ -51,9 +53,9 @@ const MobileHeader = ({ className }) => {
           </CustomPopup>
         </HeaderItem>
         <KaddexLetterLogo onClick={() => history.push(ROUTE_SWAP)} />
-
-        {/* <GameEditionToggle /> */}
       </LeftContainer>
+
+      <GameEditionModeButton />
       <RightContainer>
         <RightHeaderItems />
       </RightContainer>

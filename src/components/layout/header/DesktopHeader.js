@@ -1,14 +1,14 @@
 import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import styled, { css } from 'styled-components/macro';
-import { GameModeIcon, KaddexLightModeLogo, KaddexLogoWhite } from '../../../assets';
+import styled from 'styled-components/macro';
+import { KaddexLightModeLogo, KaddexLogoWhite } from '../../../assets';
 import { ROUTE_INDEX } from '../../../router/routes';
 import menuItems from '../../menuItems';
 import RightHeaderItems from './RightHeaderItems';
 import HeaderItem from '../../../components/shared/HeaderItem';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 import { useGameEditionContext } from '../../../contexts';
-import { commonTheme } from '../../../styles/theme';
+import GameEditionButton from './GameEditionModeButton';
 
 const Container = styled.div`
   display: flex;
@@ -51,34 +51,10 @@ const AnimatedDiv = styled.div`
   }
 `;
 
-const GameEditionButton = styled.div`
-  cursor: pointer;
-  height: fit-content;
-  padding: 8px 18px;
-  border-radius: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? 'transparent' : colors.white)}};
-  color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.white : colors.primary)};
-  svg{
-    path{
-      fill: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.white : colors.primary)};
-    }
-  }
-  ${({ gameEditionView, theme: { colors } }) =>
-    gameEditionView &&
-    css`
-      border: 1px solid ${colors.white}4D;
-      box-sizing: border-box;
-      border-radius: 40px;
-    `}
-`;
-
 const DesktopHeader = ({ className }) => {
   const history = useHistory();
   const [buttonHover, setButtonHover] = useState(null);
-  const { gameEditionView, setGameEditionView, closeModal } = useGameEditionContext();
+  const { gameEditionView } = useGameEditionContext();
 
   const { themeMode } = useContext(LightModeContext);
 
@@ -108,16 +84,7 @@ const DesktopHeader = ({ className }) => {
         </AnimatedDiv>
       </LeftContainer>
 
-      <GameEditionButton
-        gameEditionView={gameEditionView}
-        onClick={() => {
-          setGameEditionView(!gameEditionView);
-          closeModal();
-        }}
-      >
-        {!gameEditionView && <GameModeIcon style={{ marginRight: 9.4 }} />}
-        <span style={{ fontFamily: commonTheme.fontFamily.bold }}>{gameEditionView ? 'Exit Game Mode' : 'Game Mode'}</span>
-      </GameEditionButton>
+      <GameEditionButton />
 
       <RightContainer>
         <RightHeaderItems />

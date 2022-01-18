@@ -18,6 +18,8 @@ import BellNotification from '../../right-modal-notification/BellNotification';
 import { NotificationContext } from '../../../contexts/NotificationContext';
 import AccountModal from '../../modals/kdaModals/AccountModal';
 import { NotificationModalContext } from '../../../contexts/NotificationModalContext';
+import useWindowSize from '../../../hooks/useWindowSize';
+import { commonTheme } from '../../../styles/theme';
 
 const RightContainerHeader = styled.div`
   display: flex;
@@ -49,12 +51,15 @@ const RightContainerHeader = styled.div`
     font-size: 16px;
     font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
     color: ${({ theme: { colors } }) => colors.white};
+    white-space: nowrap;
   }
 `;
 
 const FadeContainer = styled.div``;
 
 const RightHeaderItems = () => {
+  const [width] = useWindowSize();
+
   const { account } = useContext(AccountContext);
   const modalContext = useContext(ModalContext);
   const { gameEditionView, openModal } = useContext(GameEditionContext);
@@ -64,7 +69,7 @@ const RightHeaderItems = () => {
   return (
     <RightContainerHeader>
       <span className="mainnet-chain-2 mobile-none">Mainnet Chain 2</span>
-      {account?.account && (
+      {account?.account && width > commonTheme.mediaQueries.desktopPixel && (
         <HeaderItem>
           <AccountInfo
             onClick={() => {

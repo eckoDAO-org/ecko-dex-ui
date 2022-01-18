@@ -80,7 +80,7 @@ export const PressedButton = ({ type, onClick }) => {
       case 'R1':
         return {
           img: R1Button,
-          pressed: { top: -13, right: 6 },
+          pressed: { top: -13, right: 7 },
           notPressed: { top: 0, right: 0, width: 230, height: 98 },
           imgSize: { width: 225, height: 98 },
         };
