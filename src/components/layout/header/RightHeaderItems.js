@@ -18,7 +18,6 @@ import BellNotification from '../../right-modal-notification/BellNotification';
 import { NotificationContext } from '../../../contexts/NotificationContext';
 import AccountModal from '../../modals/kdaModals/AccountModal';
 import { NotificationModalContext } from '../../../contexts/NotificationModalContext';
-import PowerIconWrapper from './PowerIconWrapper';
 
 const RightContainerHeader = styled.div`
   display: flex;
@@ -58,7 +57,7 @@ const FadeContainer = styled.div``;
 const RightHeaderItems = () => {
   const { account } = useContext(AccountContext);
   const modalContext = useContext(ModalContext);
-  const { gameEditionView, openModal, setGameEditionView, closeModal } = useContext(GameEditionContext);
+  const { gameEditionView, openModal } = useContext(GameEditionContext);
   const notificationModalContext = useContext(NotificationModalContext);
   const notification = useContext(NotificationContext);
 
@@ -115,14 +114,15 @@ const RightHeaderItems = () => {
           </HeaderItem>
         </FadeContainer>
       )}
-      <HeaderItem disableHover>
-        <PowerIconWrapper
-          onClick={() => {
-            setGameEditionView(!gameEditionView);
-            closeModal();
-          }}
-        />
-      </HeaderItem>
+
+      {gameEditionView && (
+        <HeaderItem headerItemStyle={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '4px' }}>
+          <CustomPopup containerStyle={{ padding: 32 }} trigger={<CogIcon />} on="click" offset={[30, 10]} position="bottom right">
+            <SlippagePopupContent />
+          </CustomPopup>
+        </HeaderItem>
+      )}
+
       <HeaderItem>
         <BellNotification
           hasNotification={notification.notificationList?.some((notif) => notif.isReaded === false)}
@@ -143,13 +143,6 @@ const RightHeaderItems = () => {
           }}
         />
       </HeaderItem>
-      {gameEditionView && (
-        <HeaderItem headerItemStyle={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '4px' }}>
-          <CustomPopup containerStyle={{ padding: 32 }} trigger={<CogIcon />} on="click" offset={[30, 10]} position="bottom right">
-            <SlippagePopupContent />
-          </CustomPopup>
-        </HeaderItem>
-      )}
 
       <HeaderItem headerItemStyle={{ height: '100%', display: 'flex' }}>
         <CustomPopup
