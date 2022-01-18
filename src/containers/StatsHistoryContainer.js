@@ -6,12 +6,15 @@ import HistoryTab from '../components/stats/HistoryTab';
 import styled, { css } from 'styled-components/macro';
 import { GameEditionContext } from '../contexts/GameEditionContext';
 import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
+import { TitleContainer } from '../components/layout/Containers';
+import Label from '../components/shared/Label';
 
 const Container = styled.div`
   display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: ${({ gameEditionView }) => !gameEditionView && '32px'};
+  padding: ${({ gameEditionView }) => (gameEditionView ? '16px' : '32px')};
   justify-content: flex-start;
 
   ${({ gameEditionView }) => {
@@ -32,7 +35,7 @@ const Container = styled.div`
   }
 `;
 
-const StatsContainer = () => {
+const StatsHistoryContainer = () => {
   const pact = useContext(PactContext);
   const { gameEditionView } = useContext(GameEditionContext);
   const [activeTabs, setActiveTabs] = useState('POOL_STATS');
@@ -43,13 +46,30 @@ const StatsContainer = () => {
 
   return (
     <Container gameEditionView={gameEditionView}>
+      <TitleContainer
+        $gameEditionView={gameEditionView}
+        style={{
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          maxWidth: '1110px',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Label fontSize={32} fontFamily="bold" geFontSize={40} withShade={activeTabs !== 'POOL_STATS'} onClick={() => setActiveTabs('POOL_STATS')}>
+          Stats
+        </Label>
+        <Label fontSize={32} fontFamily="bold" geFontSize={40} withShade={activeTabs !== 'HISTORY'} onClick={() => setActiveTabs('HISTORY')}>
+          History
+        </Label>
+      </TitleContainer>
+
       {activeTabs === 'POOL_STATS' ? (
-        <StatsTab activeTabs={activeTabs} setActiveTabs={() => setActiveTabs('HISTORY')} />
+        <StatsTab activeTabs={activeTabs} setActiveTabs={setActiveTabs} />
       ) : (
-        <HistoryTab activeTabs={activeTabs} setActiveTabs={() => setActiveTabs('POOL_STATS')} />
+        <HistoryTab activeTabs={activeTabs} setActiveTabs={setActiveTabs} />
       )}
     </Container>
   );
 };
 
-export default StatsContainer;
+export default StatsHistoryContainer;

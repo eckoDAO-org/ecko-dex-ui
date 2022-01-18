@@ -4,7 +4,7 @@ import Layout from '../components/layout/Layout';
 import PoolContainer from '../containers/PoolContainer';
 import SwapContainer from '../containers/SwapContainer';
 import WrapContainer from '../containers/WrapContainer';
-import StatsContainer from '../containers/StatsContainer';
+import StatsHistoryContainer from '../containers/StatsHistoryContainer';
 import StaticContainer from '../containers/StaticContainer';
 import KpennyContainer from '../containers/KpennyContainer';
 import KpennyRedeemContainer from '../containers/KpennyRedeemContainer';
@@ -35,7 +35,7 @@ export default () => {
             <Route exact path={ROUTE_GAME_EDITION_MENU} component={GameEditionMenuContainer} />
             <Route exact path={ROUTE_POOL} component={PoolContainer} />
             <Route exact path={ROUTE_WRAP} component={WrapContainer} />
-            <Route exact path={ROUTE_STATS} component={StatsContainer} />
+            <Route exact path={ROUTE_STATS} component={StatsHistoryContainer} />
             <Route exact path={ROUTE_STATIC} component={StaticContainer} />
             <Route exact path={ROUTE_KPY_RES} component={KpennyContainer} />
             <Route exact path={ROUTE_KPY_RED} component={KpennyRedeemContainer} />

@@ -13,7 +13,7 @@ const STYText = styled.span`
   font-weight: ${({ fontWeight }) => fontWeight};
 `;
 
-const GameEditionLabel = ({ children, fontSize, fontWeight, color, style, onClick }) => {
+const GameEditionLabel = ({ withShade, children, fontSize, fontWeight, color, style, onClick }) => {
   const getColor = () => {
     switch (color) {
       case 'white':
@@ -29,7 +29,7 @@ const GameEditionLabel = ({ children, fontSize, fontWeight, color, style, onClic
     }
   };
   return (
-    <STYText style={style} fontWeight={fontWeight} fontSize={fontSize} color={getColor()} onClick={onClick}>
+    <STYText style={style} fontWeight={fontWeight} fontSize={fontSize} color={withShade ? `${getColor()}99` : getColor()} onClick={onClick}>
       {children}
     </STYText>
   );
