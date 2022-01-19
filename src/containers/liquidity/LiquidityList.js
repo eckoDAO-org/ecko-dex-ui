@@ -81,6 +81,7 @@ const LiquidityList = (props) => {
           overflow: 'auto',
           border: 'none',
           boxShadow: 'none',
+          background: 'transparent',
           height: gameEditionView && '100%',
           display: gameEditionView && 'flex',
           flexDirection: gameEditionView && 'column',

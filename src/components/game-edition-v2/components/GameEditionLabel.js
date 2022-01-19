@@ -5,6 +5,7 @@ import { commonColors } from '../../../styles/theme';
 
 const STYText = styled.span`
   display: flex;
+  position: relative;
   align-items: center;
   cursor: ${({ onClick }) => onClick && 'pointer'};
   color: ${({ color }) => color};

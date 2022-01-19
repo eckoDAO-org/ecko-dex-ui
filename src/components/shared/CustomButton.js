@@ -3,28 +3,14 @@ import React, { useContext } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { Button as SUIButton } from 'semantic-ui-react';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
+import Label from './Label';
 
 const StyledButton = styled(SUIButton)`
   cursor: pointer;
   display: flex !important;
   justify-content: center;
   align-items: center;
-  font-family: ${({ theme: { fontFamily }, $gameEditionView, $outGameEditionView }) => {
-    if ($outGameEditionView) return fontFamily.bold + '!important';
-    if ($gameEditionView) return fontFamily.pixeboy + '!important';
-    else return fontFamily.bold + '!important';
-  }};
-  font-size: ${({ fontSize }) => (fontSize ? fontSize + ' !important' : '16px !important')};
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
-    font-size: ${({ $gameEditionView }) => ($gameEditionView ? '11px !important' : '13px !important')};
-  }
-  color: ${({ theme: { colors }, disabled, $color, $gameEditionView, $outGameEditionView }) => {
-    if ($color) return $color + ' !important';
-    if ($outGameEditionView) return `${colors.primary} !important`;
-    if ($gameEditionView) return `${colors.white} !important`;
-    if (disabled) return `${colors.white} !important`;
-    else return `${colors.primary} !important`;
-  }};
+
   background: ${({ theme: { buttonBackgroundGradient }, disabled, background, $gameEditionView, $outGameEditionView }) => {
     if ($outGameEditionView) return buttonBackgroundGradient + '!important';
     if (background) return background + ' !important';
@@ -63,7 +49,15 @@ const CustomButton = ({
   background,
   color,
   label,
+  fontFamily = 'bold',
   fontSize,
+  labelStyle,
+  geFontSize = 20,
+  geFontWeight,
+  geLabelStyle,
+  geColor,
+  withShade,
+  geCenter,
   children,
   onClick,
   loading,
@@ -82,8 +76,6 @@ const CustomButton = ({
       $outGameEditionView={$outGameEditionView}
       disabled={disabled}
       background={background}
-      $color={color}
-      fontSize={fontSize}
       style={buttonStyle}
       onClick={onClick}
       loading={loading}
@@ -91,7 +83,21 @@ const CustomButton = ({
       $boxShadow={$boxShadow}
       $disableGameEditionPadding={disableGameEditionPadding}
     >
-      {children || label}
+      <Label
+        fontFamily={fontFamily}
+        fontSize={fontSize}
+        labelStyle={labelStyle}
+        geFontSize={geFontSize}
+        geFontWeight={geFontWeight}
+        geLabelStyle={geLabelStyle}
+        geColor={geColor}
+        color={color}
+        inverted={!disabled}
+        withShade={withShade}
+        geCenter={geCenter}
+      >
+        {children || label}
+      </Label>
     </StyledButton>
   );
 };

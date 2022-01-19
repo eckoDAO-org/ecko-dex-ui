@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { ROUTE_GAME_EDITION_MENU } from '../../../router/routes';
+import { ROUTE_GAME_EDITION_MENU, ROUTE_SWAP } from '../../../router/routes';
 import menuButton from '../../../assets/images/game-edition/pressed-buttons/Menu.png';
 import swapButton from '../../../assets/images/game-edition/pressed-buttons/Menu.png';
 import L1Button from '../../../assets/images/game-edition/pressed-buttons/L1.png';
@@ -17,18 +17,30 @@ import { useGameEditionContext } from '../../../contexts';
 
 const GameEditionButtons = () => {
   const history = useHistory();
-  const { buttons } = useGameEditionContext();
+  const { buttons, closeModal } = useGameEditionContext();
   return (
     <>
-      <PressedButton type="menu" onClick={() => history.push(ROUTE_GAME_EDITION_MENU)} />
-      <PressedButton type="swap" onClick={buttons.B ? () => console.log('swap') : null} />
+      <PressedButton
+        type="menu"
+        onClick={() => {
+          history.push(ROUTE_GAME_EDITION_MENU);
+          closeModal();
+        }}
+      />
+      <PressedButton
+        type="swap"
+        onClick={() => {
+          history.push(ROUTE_SWAP);
+          closeModal();
+        }}
+      />
       <PressedButton type="L1" onClick={buttons.L1 ? () => console.log('L1') : null} />
       <PressedButton type="R1" onClick={buttons.R1 ? () => console.log('R1') : null} />
       <PressedButton type="up" onClick={buttons.Up ? () => buttons.Up() : null} />
       <PressedButton type="down" onClick={buttons.Down ? () => buttons.Down() : null} />
-      <PressedButton type="right" onClick={buttons.Right ? () => console.log('right') : null} />
-      <PressedButton type="left" onClick={buttons.Left ? () => console.log('left') : null} />
-      <PressedButton type="A" onClick={buttons.A ? () => console.log('A') : null} />
+      <PressedButton type="right" onClick={buttons.Right ? () => buttons.Right() : null} />
+      <PressedButton type="left" onClick={buttons.Left ? () => buttons.Left() : null} />
+      <PressedButton type="A" onClick={buttons.A ? () => buttons.A() : null} />
       <PressedButton type="B" onClick={buttons.B ? () => buttons.B() : null} />
     </>
   );
