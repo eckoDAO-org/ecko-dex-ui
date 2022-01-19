@@ -73,14 +73,14 @@ export const PressedButton = ({ type, onClick }) => {
       case 'L1':
         return {
           img: L1Button,
-          pressed: { top: -13, left: 6 },
+          pressed: { top: -17, left: -1 },
           notPressed: { top: 0, left: 0, width: 230, height: 98 },
           imgSize: { width: 225, height: 98 },
         };
       case 'R1':
         return {
           img: R1Button,
-          pressed: { top: -13, right: 7 },
+          pressed: { top: -17, right: 5 },
           notPressed: { top: 0, right: 0, width: 230, height: 98 },
           imgSize: { width: 225, height: 98 },
         };

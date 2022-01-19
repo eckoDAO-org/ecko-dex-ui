@@ -7,7 +7,7 @@ import useWindowSize from '../../hooks/useWindowSize';
 import WalletWires from './components/WalletWires';
 import ConnectWalletWire from './components/ConnectWalletWire';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
-import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.png';
+import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.svg';
 import gameboyMobile from '../../assets/images/game-edition/gameboy-mobile.png';
 import { KaddexLogo } from '../../assets';
 import theme from '../../styles/theme';
@@ -60,8 +60,9 @@ const MobileMainContainer = styled.div`
 
 const GameboyDesktopContainer = styled.div`
   background-repeat: no-repeat;
+  background-size: contain;
   background-position: center;
-  min-height: 540px;
+  min-height: 534px;
   width: 930px;
   display: flex;
   align-items: center;
