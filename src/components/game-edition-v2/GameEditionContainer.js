@@ -30,18 +30,18 @@ const DesktopMainContainer = styled.div`
   transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
     let animation = '';
     if (showTokens) {
-      animation = $scale ? 'translate(-600px, 560px) scale(1.2)' : 'translate(-600px, 560px) scale(1)';
+      animation = $scale ? 'translate(-600px, 532px)' : 'translate(-600px, 560px)';
       return animation;
     }
     if (showWires && !selectedWire && !showTokens) {
-      animation = 'translateY(0px) scale(1)';
+      animation = 'translateY(0px)';
       if ($scale) {
-        animation = 'translateY(560px) scale(1.2)';
+        animation = 'translateY(532px)';
       }
     } else {
-      animation = 'translateY(442px) scale(1)';
+      animation = 'translateY(442px)';
       if ($scale) {
-        animation = 'translateY(560px) scale(1.2)';
+        animation = 'translateY(532px)';
       }
     }
     return animation;
@@ -59,10 +59,12 @@ const MobileMainContainer = styled.div`
 `;
 
 const GameboyDesktopContainer = styled.div`
+  transition: all 0.5s;
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  min-height: 540px;
-  width: 930px;
+  height: ${({ $scale }) => ($scale ? 691 : 540)}px;
+  width: ${({ $scale }) => ($scale ? 1190 : 930)}px;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -102,10 +104,11 @@ const GameboyMobileContainer = styled.div`
 `;
 
 const DisplayContent = styled.div`
-  width: 446px;
+  transition: all 0.5s;
+  width: ${({ $scale }) => ($scale ? 574 : 446)}px;
   margin-left: 14px;
-  margin-top: 90px;
-  height: 329px;
+  margin-top: ${({ $scale }) => ($scale ? 118 : 90)}px;
+  height: ${({ $scale }) => ($scale ? 421 : 329)}px;
   background: rgba(0, 0, 0, 0.02);
   box-shadow: inset 0px 0px 20px rgba(0, 0, 0, 0.75);
   display: flex;
@@ -237,7 +240,10 @@ const GameEditionContainer = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedWire, account.account]);
 
-  const scale = location.pathname !== ROUTE_GAME_EDITION_MENU && location.pathname !== ROUTE_GAME_START_ANIMATION && !showWires && account?.account;
+  const scale =
+    location.pathname !== ROUTE_GAME_EDITION_MENU && location.pathname !== ROUTE_GAME_START_ANIMATION && !showWires && account?.account
+      ? true
+      : false;
   return width < theme.mediaQueries.desktopPixel ? (
     <MobileMainContainer>
       <GameboyMobileContainer style={{ backgroundImage: `url(${gameboyMobile})` }}>
@@ -256,9 +262,9 @@ const GameEditionContainer = ({ children }) => {
       style={{ justifyContent: 'flex-end' }}
     >
       <div style={{ display: 'flex' }}>
-        <GameboyDesktopContainer showWires={showWires} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
-          <GameEditionButtons />
-          <DisplayContent>
+        <GameboyDesktopContainer $scale={scale} showWires={showWires} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
+          <GameEditionButtons scale={scale} />
+          <DisplayContent $scale={scale}>
             {children}
             {modalState.open && (
               <GameEditionModalsContainer
@@ -281,7 +287,7 @@ const GameEditionContainer = ({ children }) => {
         )}
       </div>
       <ConnectWalletWire onClick={() => setShowWires(true)} />
-      <WalletWires />
+      <WalletWires scale={scale} />
     </DesktopMainContainer>
   );
 };

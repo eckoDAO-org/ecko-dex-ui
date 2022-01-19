@@ -67,11 +67,17 @@ const ConnectionWireContainer = styled.div`
     }}
   }
 
-  ${({ isSelected, translateX }) => {
+  ${({ isSelected, translateX, $scale }) => {
     if (isSelected) {
+      let animation = '';
+      if ($scale) {
+        animation = `translate(${translateX}px, -236px) scale(1.2)`;
+      } else {
+        animation = `translate(${translateX}px, -260px)`;
+      }
       return css`
         transition: transform 0.5s;
-        transform: translate(${translateX}px, -260px);
+        transform: ${animation};
       `;
     } else {
       return css`
@@ -90,7 +96,7 @@ const BlurWire = styled(FadeIn)`
   z-index: -1;
 `;
 
-export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
+export const ConnectionWire = ({ scale, wire, containerStyle, onClick }) => {
   const { selectedWire, showWires } = useContext(GameEditionContext);
   const { account } = useAccountContext();
 
@@ -110,6 +116,7 @@ export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
       onClick={onClick}
       isSelected={selectedWire?.id === wire.id}
       selectedWire={selectedWire}
+      $scale={scale}
     >
       <span>{wire.name}</span>
       {wire.wireIcon}
@@ -118,7 +125,7 @@ export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
   );
 };
 
-const WalletWires = () => {
+const WalletWires = ({ scale }) => {
   const { wallet } = useWalletContext();
   const { showWires, onWireSelect, selectedWire } = useContext(GameEditionContext);
   const { logout } = useAccountContext();
@@ -158,7 +165,7 @@ const WalletWires = () => {
       </DisconnectButton>
 
       {[WALLET.KADDEX_WALLET, WALLET.ZELCORE, WALLET.CHAINWEAVER, WALLET.TORUS].map((wire, i) => (
-        <ConnectionWire key={i} wire={wire} onClick={selectedWire ? null : () => onWireSelect(wire)} />
+        <ConnectionWire key={i} scale={scale} wire={wire} onClick={selectedWire ? null : () => onWireSelect(wire)} />
       ))}
     </WiresContainer>
   );

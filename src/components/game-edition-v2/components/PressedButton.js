@@ -15,21 +15,21 @@ import AButton from '../../../assets/images/game-edition/pressed-buttons/A-BTN.p
 import BButton from '../../../assets/images/game-edition/pressed-buttons/B-BTN.png';
 import { useGameEditionContext } from '../../../contexts';
 
-const GameEditionButtons = () => {
+const GameEditionButtons = ({ scale }) => {
   const history = useHistory();
   const { buttons } = useGameEditionContext();
   return (
     <>
-      <PressedButton type="menu" onClick={() => history.push(ROUTE_GAME_EDITION_MENU)} />
-      <PressedButton type="swap" onClick={() => console.log('swap')} />
-      <PressedButton type="L1" onClick={() => console.log('L1')} />
-      <PressedButton type="R1" onClick={() => console.log('R1')} />
-      <PressedButton type="up" onClick={() => buttons.Up()} />
-      <PressedButton type="down" onClick={() => buttons.Down()} />
-      <PressedButton type="right" onClick={() => console.log('right')} />
-      <PressedButton type="left" onClick={() => console.log('left')} />
-      <PressedButton type="A" onClick={() => console.log('A')} />
-      <PressedButton type="B" onClick={() => buttons.B()} />
+      <PressedButton scale={scale} type="menu" onClick={() => history.push(ROUTE_GAME_EDITION_MENU)} />
+      <PressedButton scale={scale} type="swap" onClick={() => console.log('swap')} />
+      <PressedButton scale={scale} type="L1" onClick={() => console.log('L1')} />
+      <PressedButton scale={scale} type="R1" onClick={() => console.log('R1')} />
+      <PressedButton scale={scale} type="up" onClick={() => buttons.Up()} />
+      <PressedButton scale={scale} type="down" onClick={() => buttons.Down()} />
+      <PressedButton scale={scale} type="right" onClick={() => console.log('right')} />
+      <PressedButton scale={scale} type="left" onClick={() => console.log('left')} />
+      <PressedButton scale={scale} type="A" onClick={() => console.log('A')} />
+      <PressedButton scale={scale} type="B" onClick={() => buttons.B()} />
     </>
   );
 };
@@ -53,7 +53,16 @@ const ButtonContainer = styled.div`
   }
 `;
 
-export const PressedButton = ({ type, onClick }) => {
+export const PressedButton = ({ scale, type, onClick }) => {
+  console.log('scale', scale);
+
+  const getValue = (v) => {
+    let value = v;
+    if (scale) {
+      value += value - value * 0.7814;
+    }
+    return value;
+  };
   const getButton = () => {
     switch (type) {
       case 'menu':
@@ -66,21 +75,21 @@ export const PressedButton = ({ type, onClick }) => {
       case 'swap':
         return {
           img: swapButton,
-          pressed: { top: 316, left: 156 },
-          notPressed: { top: 316, left: 156, width: 42, height: 42 },
-          imgSize: { width: 42, height: 42 },
+          pressed: { top: getValue(316), left: getValue(156) },
+          notPressed: { top: getValue(316), left: getValue(156), width: getValue(42), height: getValue(42) },
+          imgSize: { width: getValue(42), height: getValue(42) },
         };
       case 'L1':
         return {
           img: L1Button,
-          pressed: { top: -13, left: 6 },
-          notPressed: { top: 0, left: 0, width: 230, height: 98 },
-          imgSize: { width: 225, height: 98 },
+          pressed: { top: getValue(-15), left: getValue(4) },
+          notPressed: { top: 0, left: 0, width: getValue(238), height: getValue(98) },
+          imgSize: { width: getValue(225), height: getValue(98) },
         };
       case 'R1':
         return {
           img: R1Button,
-          pressed: { top: -13, right: 7 },
+          pressed: { top: -15, right: 4 },
           notPressed: { top: 0, right: 0, width: 230, height: 98 },
           imgSize: { width: 225, height: 98 },
         };
