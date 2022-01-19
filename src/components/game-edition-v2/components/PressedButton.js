@@ -59,15 +59,15 @@ export const PressedButton = ({ type, onClick }) => {
       case 'menu':
         return {
           img: menuButton,
-          pressed: { top: 364, left: 156 },
-          notPressed: { top: 364, left: 156, width: 42, height: 42 },
+          pressed: { top: 366, left: 152 },
+          notPressed: { top: 366, left: 152, width: 42, height: 42 },
           imgSize: { width: 42, height: 42 },
         };
       case 'swap':
         return {
           img: swapButton,
-          pressed: { top: 316, left: 156 },
-          notPressed: { top: 316, left: 156, width: 42, height: 42 },
+          pressed: { top: 316, left: 152 },
+          notPressed: { top: 316, left: 152, width: 42, height: 42 },
           imgSize: { width: 42, height: 42 },
         };
       case 'L1':
@@ -87,30 +87,30 @@ export const PressedButton = ({ type, onClick }) => {
       case 'up':
         return {
           img: UpButton,
-          pressed: { top: 114, left: 60 },
-          notPressed: { top: 132, left: 114, height: 40, width: 40 },
+          pressed: { top: 112, left: 54 },
+          notPressed: { top: 130, left: 108, height: 40, width: 40 },
           imgSize: { width: 150, height: 150 },
         };
 
       case 'down':
         return {
           img: DownButton,
-          pressed: { top: 114, left: 60 },
-          notPressed: { top: 207, left: 114, height: 40, width: 40 },
+          pressed: { top: 112, left: 54 },
+          notPressed: { top: 205, left: 108, height: 40, width: 40 },
           imgSize: { width: 150, height: 150 },
         };
       case 'left':
         return {
           img: LeftButton,
-          pressed: { top: 114, left: 58 },
-          notPressed: { top: 170, left: 78, height: 40, width: 40 },
+          pressed: { top: 112, left: 54 },
+          notPressed: { top: 168, left: 71, height: 40, width: 40 },
           imgSize: { width: 150, height: 150 },
         };
       case 'right':
         return {
           img: RightButton,
-          pressed: { top: 114, left: 60 },
-          notPressed: { top: 170, left: 150, height: 40, width: 40 },
+          pressed: { top: 112, left: 54 },
+          notPressed: { top: 168, left: 146, height: 40, width: 40 },
 
           imgSize: { width: 150, height: 150 },
         };
