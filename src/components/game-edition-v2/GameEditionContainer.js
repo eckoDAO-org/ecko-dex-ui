@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { useAccountContext, useKaddexWalletContext, useNotificationContext, useWalletContext } from '../../contexts';
 import { STATUSES } from '../../contexts/NotificationContext';
@@ -28,23 +28,14 @@ const DesktopMainContainer = styled.div`
   align-items: center;
   transition: transform 0.5s;
   transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
-    let animation = '';
     if (showTokens) {
-      animation = $scale ? 'translate(-600px, 532px)' : 'translate(-600px, 560px)';
-      return animation;
+      return $scale ? 'translate(-600px, 532px)' : 'translate(-600px, 560px)';
     }
     if (showWires && !selectedWire && !showTokens) {
-      animation = 'translateY(0px)';
-      if ($scale) {
-        animation = 'translateY(532px)';
-      }
+      return $scale ? 'translateY(532px)' : 'translateY(0px)';
     } else {
-      animation = 'translateY(442px)';
-      if ($scale) {
-        animation = 'translateY(532px)';
-      }
+      return $scale ? 'translateY(442px)' : 'translateY(442px)';
     }
-    return animation;
   }};
   opacity: ${({ showTokens }) => (showTokens ? 0.5 : 1)};
 `;
@@ -63,8 +54,18 @@ const GameboyDesktopContainer = styled.div`
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  height: ${({ $scale }) => ($scale ? 691 : 540)}px;
-  width: ${({ $scale }) => ($scale ? 1190 : 930)}px;
+  ${({ $scale }) => {
+    if ($scale) {
+      return css`
+        height: 691px;
+        width: 1190px;
+      `;
+    }
+    return css`
+      height: 540px;
+      width: 930px;
+    `;
+  }}
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -105,10 +106,22 @@ const GameboyMobileContainer = styled.div`
 
 const DisplayContent = styled.div`
   transition: all 0.5s;
-  width: ${({ $scale }) => ($scale ? 574 : 446)}px;
+  ${({ $scale }) => {
+    if ($scale) {
+      return css`
+        width: 574px;
+        height: 421px;
+        margin-top: 118px;
+      `;
+    }
+    return css`
+      width: 446px;
+      height: 329px;
+      margin-top: 90px;
+    `;
+  }}
+
   margin-left: 14px;
-  margin-top: ${({ $scale }) => ($scale ? 118 : 90)}px;
-  height: ${({ $scale }) => ($scale ? 421 : 329)}px;
   background: rgba(0, 0, 0, 0.02);
   box-shadow: inset 0px 0px 20px rgba(0, 0, 0, 0.75);
   display: flex;
@@ -138,6 +151,54 @@ const SearchTokenList = styled(FadeIn)`
   color: #ffff;
 `;
 
+const B = styled.div`
+  /* background: green; */
+  transition: all 0.5s;
+  /* height: auto; */
+
+  ${({ $scale }) => {
+    if ($scale) {
+      return css`
+        transform: translateY(532px);
+      `;
+    }
+    return css`
+      transform: translateY(442px);
+    `;
+  }}
+`;
+
+const Box = styled.div`
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: all 0.5s;
+  ${({ $scale }) => {
+    if ($scale) {
+      return css`
+        height: 691px;
+        width: 1190px;
+      `;
+    }
+    return css`
+      height: 540px;
+      width: 930px;
+    `;
+  }}
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  z-index: 2;
+  .kaddex-logo {
+    margin-top: 20px;
+    margin-left: 24px;
+    svg {
+      height: 14.5px;
+    }
+  }
+  opacity: ${({ showWires, showTokens }) => (showWires || showTokens ? 0.5 : 1)};
+`;
 const GameEditionContainer = ({ children }) => {
   const location = useLocation();
   const [width] = useWindowSize();
@@ -145,7 +206,7 @@ const GameEditionContainer = ({ children }) => {
   const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
   const { wallet, signingWallet, setSelectedWallet } = useWalletContext();
 
-  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens, setShowTokens } =
+  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens, setShowTokens, setButtons } =
     useContext(GameEditionContext);
   const { account } = useAccountContext();
 
@@ -244,6 +305,7 @@ const GameEditionContainer = ({ children }) => {
     location.pathname !== ROUTE_GAME_EDITION_MENU && location.pathname !== ROUTE_GAME_START_ANIMATION && !showWires && account?.account
       ? true
       : false;
+
   return width < theme.mediaQueries.desktopPixel ? (
     <MobileMainContainer>
       <GameboyMobileContainer style={{ backgroundImage: `url(${gameboyMobile})` }}>
