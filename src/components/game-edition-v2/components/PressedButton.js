@@ -21,15 +21,15 @@ const GameEditionButtons = () => {
   return (
     <>
       <PressedButton type="menu" onClick={() => history.push(ROUTE_GAME_EDITION_MENU)} />
-      <PressedButton type="swap" onClick={() => console.log('swap')} />
-      <PressedButton type="L1" onClick={() => console.log('L1')} />
-      <PressedButton type="R1" onClick={() => console.log('R1')} />
-      <PressedButton type="up" onClick={() => buttons.Up()} />
-      <PressedButton type="down" onClick={() => buttons.Down()} />
-      <PressedButton type="right" onClick={() => console.log('right')} />
-      <PressedButton type="left" onClick={() => console.log('left')} />
-      <PressedButton type="A" onClick={() => console.log('A')} />
-      <PressedButton type="B" onClick={() => buttons.B()} />
+      <PressedButton type="swap" onClick={buttons.B ? () => () => console.log('swap') : null} />
+      <PressedButton type="L1" onClick={buttons.L1 ? () => () => console.log('L1') : null} />
+      <PressedButton type="R1" onClick={buttons.R1 ? () => () => console.log('R1') : null} />
+      <PressedButton type="up" onClick={buttons.Up ? () => () => buttons.Up() : null} />
+      <PressedButton type="down" onClick={buttons.Down ? () => () => buttons.Down() : null} />
+      <PressedButton type="right" onClick={buttons.Right ? () => () => console.log('right') : null} />
+      <PressedButton type="left" onClick={buttons.Left ? () => () => console.log('left') : null} />
+      <PressedButton type="A" onClick={buttons.A ? () => () => console.log('A') : null} />
+      <PressedButton type="B" onClick={buttons.B ? () => buttons.B() : null} />
     </>
   );
 };
@@ -142,7 +142,9 @@ export const PressedButton = ({ type, onClick }) => {
       style={{ ...(className === 'pressed' ? button.pressed : button.notPressed) }}
       onMouseDown={() => {
         setClassName('pressed');
-        onClick();
+        if (onClick) {
+          onClick();
+        }
       }}
       onMouseUp={() => setClassName('not-pressed')}
     >
