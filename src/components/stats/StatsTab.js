@@ -5,12 +5,10 @@ import styled from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { LightModeContext } from '../../contexts/LightModeContext';
 import { PactContext } from '../../contexts/PactContext';
-import useWindowSize from '../../hooks/useWindowSize';
 import GradientBorder from '../../components/shared/GradientBorder';
 import LogoLoader from '../../components/shared/LogoLoader';
-import ModalContainer from '../../components/shared/ModalContainer';
 import { theme } from '../../styles/theme';
-import { PartialScrollableScrollSection, Title, TitleContainer } from '../layout/Containers';
+import { PartialScrollableScrollSection } from '../layout/Containers';
 import StatsCard from './StatsCard';
 
 export const CardContainer = styled.div`
@@ -37,14 +35,6 @@ export const CardContainer = styled.div`
   }
 `;
 
-const Tabs = styled(Title)`
-  opacity: ${({ active }) => (active ? '1' : '0.4')};
-  cursor: pointer;
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel + 1}px`}) {
-    font-size: 24px;
-  }
-`;
-
 const StatsTab = ({ activeTabs, setActiveTabs }) => {
   const pact = useContext(PactContext);
   const { gameEditionView } = useContext(GameEditionContext);
@@ -54,41 +44,15 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
     await pact.getPairList();
   }, []);
 
-  const [width] = useWindowSize();
-
   return (
-    <ModalContainer
-      withoutRainbowBackground
-      backgroundNotChangebleWithTheme
-      containerStyle={{
-        maxHeight: !gameEditionView && '80vh',
-        padding: gameEditionView ? (width <= theme().mediaQueries.mobilePixel ? '16px 8px' : '16px 24px') : 0,
-        border: gameEditionView && '1px solid transparent',
-        height: gameEditionView && '100%',
-      }}
-    >
-      <TitleContainer
-        $gameEditionView={gameEditionView}
-        style={{
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          maxWidth: '1110px',
-          justifyContent: 'space-between',
-        }}
-      >
-        <Tabs $gameEditionView={gameEditionView} active={activeTabs === 'POOL_STATS'}>
-          Stats
-        </Tabs>
-        <Tabs $gameEditionView={gameEditionView} active={activeTabs === 'HISTORY'} onClick={setActiveTabs}>
-          History
-        </Tabs>
-      </TitleContainer>
-      <CardContainer gameEditionView={gameEditionView}>
-        {!gameEditionView && <GradientBorder />}
-        <PartialScrollableScrollSection style={{ width: '100%' }} className="scrollbar-none">
-          {pact.pairList[0] ? (
-            Object.values(pact.pairList).map((pair, index) =>
-              pair && pair.reserves ? (
+    <CardContainer gameEditionView={gameEditionView}>
+      {!gameEditionView && <GradientBorder />}
+      <PartialScrollableScrollSection style={{ width: '100%' }} className="scrollbar-none">
+        {pact.pairList[0] ? (
+          Object.values(pact.pairList).map(
+            (pair, index) =>
+              pair &&
+              pair.reserves && (
                 <div key={index}>
                   <StatsCard pair={pair} key={index} />
                   {Object.values(pact.pairList).length - 1 !== index && (
@@ -101,16 +65,13 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
                     />
                   )}
                 </div>
-              ) : (
-                ''
               )
-            )
-          ) : (
-            <LogoLoader />
-          )}
-        </PartialScrollableScrollSection>
-      </CardContainer>
-    </ModalContainer>
+          )
+        ) : (
+          <LogoLoader />
+        )}
+      </PartialScrollableScrollSection>
+    </CardContainer>
   );
 };
 

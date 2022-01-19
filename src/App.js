@@ -21,7 +21,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme(themeMode)}>
-      <GlobalStyle />
+      <GlobalStyle themeMode={themeMode} />
       <GameEditionProvider>
         <NotificationRender>
           <AccountProvider>

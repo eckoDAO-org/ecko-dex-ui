@@ -14,7 +14,6 @@ const StatsCardContainer = styled(Container)`
     & > *:not(:last-child) {
       margin-bottom: 16px;
     }
-    /* flex-direction: column; */
   }
 
   flex-flow: wrap;

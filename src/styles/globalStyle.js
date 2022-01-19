@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components/macro';
+import { createGlobalStyle, css } from 'styled-components/macro';
 import browserDetection from '../utils/browserDetection';
 import appBackground from '../assets/images/shared/app-background.png';
 
@@ -29,7 +29,18 @@ export default createGlobalStyle`
       min-width: 0;
       font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
       color: ${({ theme: { colors } }) => colors.primary};
-      background-image: url(${appBackground});
+      ${({ themeMode, theme: { backgroundBody, backgroundBodySafari } }) => {
+        console.log('themeMode', themeMode);
+        return themeMode === 'light'
+          ? css`
+              background: ${backgroundBody};
+            `
+          : css`
+              background-image: url(${appBackground});
+            `;
+      }};
+      
+      /* background-image: url(${appBackground}); */
       /* background: ${({ theme: { backgroundBody, backgroundBodySafari } }) =>
         browserDetection() === 'SAFARI' ? backgroundBodySafari : backgroundBody}; */
       opacity: 1;

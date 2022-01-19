@@ -7,7 +7,7 @@ import useWindowSize from '../../hooks/useWindowSize';
 import WalletWires from './components/WalletWires';
 import ConnectWalletWire from './components/ConnectWalletWire';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
-import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.png';
+import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.svg';
 import gameboyMobile from '../../assets/images/game-edition/gameboy-mobile.png';
 import { KaddexLogo } from '../../assets';
 import theme from '../../styles/theme';
@@ -30,18 +30,18 @@ const DesktopMainContainer = styled.div`
   transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
     let animation = '';
     if (showTokens) {
-      animation = $scale ? 'translate(-600px, 560px) scale(1.2)' : 'translate(-600px, 560px)';
+      animation = $scale ? 'translate(-600px, 560px) scale(1.28)' : 'translate(-600px, 560px) scale(1)';
       return animation;
     }
     if (showWires && !selectedWire && !showTokens) {
-      animation = 'translateY(0px)';
+      animation = 'translateY(0px) scale(1)';
       if ($scale) {
-        animation = 'translateY(560px) scale(1.2)';
+        animation = 'translateY(560px) scale(1.28)';
       }
     } else {
-      animation = 'translateY(442px)';
+      animation = 'translateY(442px) scale(1)';
       if ($scale) {
-        animation = 'translateY(560px) scale(1.2)';
+        animation = 'translateY(560px) scale(1.28)';
       }
     }
     return animation;
@@ -60,8 +60,9 @@ const MobileMainContainer = styled.div`
 
 const GameboyDesktopContainer = styled.div`
   background-repeat: no-repeat;
+  background-size: contain;
   background-position: center;
-  min-height: 540px;
+  min-height: 534px;
   width: 930px;
   display: flex;
   align-items: center;
@@ -104,7 +105,7 @@ const GameboyMobileContainer = styled.div`
 const DisplayContent = styled.div`
   width: 446px;
   margin-left: 14px;
-  margin-top: 100px;
+  margin-top: 90px;
   height: 329px;
   background: rgba(0, 0, 0, 0.02);
   box-shadow: inset 0px 0px 20px rgba(0, 0, 0, 0.75);
@@ -237,7 +238,11 @@ const GameEditionContainer = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedWire, account.account]);
 
-  const scale = location.pathname !== ROUTE_GAME_EDITION_MENU && location.pathname !== ROUTE_GAME_START_ANIMATION;
+  const scale =
+    location.pathname !== ROUTE_GAME_EDITION_MENU && location.pathname !== ROUTE_GAME_START_ANIMATION && !showWires && account?.account
+      ? true
+      : false;
+
   return width < theme.mediaQueries.desktopPixel ? (
     <MobileMainContainer>
       <GameboyMobileContainer style={{ backgroundImage: `url(${gameboyMobile})` }}>

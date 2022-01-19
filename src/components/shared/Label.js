@@ -29,12 +29,20 @@ const Label = ({
   geLabelStyle,
   geColor,
   inverted,
-  onClick,
   withShade,
+  geCenter,
+  onClick,
 }) => {
   const { gameEditionView } = useGameEditionContext();
   return gameEditionView ? (
-    <GameEditionLabel fontSize={geFontSize} fontWeight={geFontWeight} color={geColor} style={geLabelStyle} onClick={onClick}>
+    <GameEditionLabel
+      fontSize={geFontSize}
+      fontWeight={geFontWeight}
+      color={geColor}
+      withShade={withShade}
+      style={geCenter ? { ...geLabelStyle, display: 'block', textAlign: 'center' } : { ...geLabelStyle }}
+      onClick={onClick}
+    >
       {children}
     </GameEditionLabel>
   ) : (

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useContext, useState } from 'react';
 import styled from 'styled-components/macro';
-import { Loader, Button, Header, Divider } from 'semantic-ui-react';
+import { Loader, Button, Divider } from 'semantic-ui-react';
 import CustomButton from '../../components/shared/CustomButton';
 import TokenPair from './TokenPair';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
@@ -29,20 +29,6 @@ const Container = styled.div`
   height: ${({ $gameEditionView }) => $gameEditionView && '100%'};
 `;
 
-const TextContainer = styled.div`
-  display: flex;
-  flex-flow: column;
-  text-align: left;
-  justify-content: flex-start;
-  width: 100%;
-  min-height: ${({ $gameEditionView }) => $gameEditionView && browserDetection() === 'SAFARI' && '136px'};
-  color: ${({ theme: { colors }, $gameEditionView }) => colors.white};
-
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    display: table;
-  }
-`;
-
 const BottomContainer = styled.div`
   display: flex;
   flex-flow: column;
@@ -62,27 +48,11 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const TopContainer = styled.div``;
-
-const TitleContainer = styled.div`
-  display: flex;
-  min-height: ${({ $gameEditionView }) => $gameEditionView && browserDetection() === 'SAFARI' && '20px'};
-  justify-content: ${({ $gameEditionView }) => ($gameEditionView ? `center` : ` space-between`)};
-  margin-bottom: ${({ $gameEditionView }) => ($gameEditionView ? `16px` : ` 24px`)};
-`;
-const Title = styled.span`
-  font: ${({ $gameEditionView, theme: { fontFamily } }) =>
-    $gameEditionView ? `normal normal normal 52px  ${fontFamily.pixeboy}` : ` normal normal bold 32px/57px ${fontFamily.bold}`};
-  letter-spacing: 0px;
-  color: ${({ theme: { colors }, $gameEditionView }) => colors.white};
-  text-transform: ${({ $gameEditionView }) => ($gameEditionView ? `uppercase` : ` capitalize`)}; ;
-`;
-
 const LiquidityList = (props) => {
   const modalContext = useContext(ModalContext);
   const liquidity = useContext(LiquidityContext);
   const { account } = useContext(AccountContext);
-  const { gameEditionView, openModal } = useContext(GameEditionContext);
+  const { gameEditionView, setShowWires } = useContext(GameEditionContext);
   const { themeMode } = useContext(LightModeContext);
   const [activeIndex, setActiveIndex] = useState(null);
   const [accordionHeight, setAccordionHeight] = useState(null);
@@ -121,90 +91,69 @@ const LiquidityList = (props) => {
         }}
       >
         {gameEditionView && (
-          <TitleContainer $gameEditionView={gameEditionView}>
-            <Title $gameEditionView={gameEditionView}>Pool</Title>
-          </TitleContainer>
+          <Label geFontSize={52} geCenter geLabelStyle={{ textTransform: 'uppercase' }}>
+            Pool
+          </Label>
         )}
-        {/* <TextContainer
-          $gameEditionView={gameEditionView}
-          style={{
-            marginBottom: gameEditionView ? 15 : 30,
-            background: 'transparent',
-            textAlign: 'center',
-          }}
-        > */}
+
         <Label
           fontSize={24}
           geFontSize={20}
           geColor={'yellow'}
-          geLabelStyle={{ justifyContent: 'center', marginBottom: '14px' }}
+          geCenter
+          geLabelStyle={{ marginBottom: '14px' }}
           labelStyle={{ marginBottom: '14px' }}
           fontFamily="bold"
-          /* style={{
-              fontSize: gameEditionView ? (width <= theme().mediaQueries.mobilePixel ? 16 : 22) : 24,
-              fontFamily: gameEditionView ? theme(themeMode).fontFamily.pixeboy : theme(themeMode).fontFamily.bold,
-            }} */
         >
           Liquidity provider rewards
         </Label>
-        <Label
-          fontSize={16}
-          geFontSize={18}
-          geColor={'blue'}
-          geLabelStyle={{ textAlign: 'center', padding: '0px 10px' }}
-          /* style={{
-            fontSize: gameEditionView ? (width <= theme().mediaQueries.mobilePixel ? 14 : 20) : 16,
-            fontFamily: gameEditionView ? theme(themeMode).fontFamily.pixeboy : theme(themeMode).fontFamily.regular,
-          }} */
-        >
+        <Label fontSize={16} geFontSize={18} geColor={'blue'} geCenter geLabelStyle={{ padding: '0px 10px' }}>
           Liquidity providers earn a 0.3% fee on all trades proportional to their share of the pool.
           <br />
           Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.
         </Label>
-        {/* </TextContainer> */}
         {account.account !== null ? (
           <BottomContainer $gameEditionView={gameEditionView}>
             <Label
               fontSize={32}
               geFontSize={20}
-              geLabelStyle={{ justifyContent: 'center', margin: '10px 0px' }}
+              geCenter
+              geLabelStyle={{ margin: '10px 0px' }}
               labelStyle={{ margin: '30px 0px 14px' }}
               fontFamily="bold"
-              /* style={{
-                  fontSize: gameEditionView ? 22 : 32,
-                  textAlign: 'left ',
-                  color: theme(themeMode).colors.white,
-                  fontFamily: gameEditionView ? theme(themeMode).fontFamily.pixeboy : theme(themeMode).fontFamily.bold,
-                }} */
             >
               Your Liquidity
             </Label>
-            <ButtonContainer style={{ marginBottom: gameEditionView ? 15 : 30 }}>
-              <Button.Group fluid style={{ flexDirection: gameEditionView && width <= theme().mediaQueries.mobilePixel ? 'column' : 'row' }}>
-                <CustomButton
-                  disabled
-                  buttonStyle={{
-                    marginRight: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '15px',
-                    borderRadius: '20px',
-                    width: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '100%' : '48%',
-                    marginBottom: gameEditionView && width <= theme().mediaQueries.mobilePixel && '10px',
-                  }}
-                  onClick={() => props.selectCreatePair()}
-                >
-                  Create a pair
-                </CustomButton>
-                <CustomButton
-                  buttonStyle={{
-                    marginLeft: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '-5px',
-                    borderRadius: '20px',
-                    width: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '100%' : '48%',
-                  }}
-                  onClick={() => props.selectAddLiquidity()}
-                >
-                  Add Liquidity
-                </CustomButton>
-              </Button.Group>
-            </ButtonContainer>
+            <Button.Group
+              fluid
+              style={{
+                marginBottom: gameEditionView ? 15 : 30,
+                flexDirection: gameEditionView && width <= theme().mediaQueries.mobilePixel ? 'column' : 'row',
+              }}
+            >
+              <CustomButton
+                disabled
+                buttonStyle={{
+                  marginRight: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '15px',
+                  borderRadius: '20px',
+                  width: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '100%' : '48%',
+                  marginBottom: gameEditionView && width <= theme().mediaQueries.mobilePixel && '10px',
+                }}
+                onClick={() => props.selectCreatePair()}
+              >
+                Create a pair
+              </CustomButton>
+              <CustomButton
+                buttonStyle={{
+                  marginLeft: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '-5px',
+                  borderRadius: '20px',
+                  width: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '100%' : '48%',
+                }}
+                onClick={() => props.selectAddLiquidity()}
+              >
+                Add Liquidity
+              </CustomButton>
+            </Button.Group>
             {account.account !== null ? (
               liquidity.pairListAccount[0] ? (
                 liquidity.pairListAccount[0]?.balance ? (
@@ -287,6 +236,7 @@ const LiquidityList = (props) => {
           <ButtonContainer
             $gameEditionView={gameEditionView}
             style={{
+              marginTop: 16,
               width: gameEditionView && '93%',
               justifyContent: !gameEditionView && 'start',
             }}
@@ -302,13 +252,7 @@ const LiquidityList = (props) => {
                 fontSize={14}
                 onClick={() => {
                   if (gameEditionView) {
-                    return openModal({
-                      title: account?.account ? 'wallet connected' : 'connect wallet',
-                      description: account?.account
-                        ? `Account ID: ${reduceToken(account.account)}`
-                        : 'Connect a wallet using one of the methods below',
-                      content: <ConnectWalletModal />,
-                    });
+                    setShowWires(true);
                   } else {
                     modalContext.openModal({
                       title: account?.account ? 'wallet connected' : 'connect wallet',
