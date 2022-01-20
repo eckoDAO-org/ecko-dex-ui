@@ -5,6 +5,7 @@ import { Button as SUIButton } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import Label from './Label';
+import GameEditionButton from '../game-edition-v2/components/GameEditionButton';
 
 const StyledButton = styled(SUIButton)`
   cursor: pointer;
@@ -59,7 +60,6 @@ const CustomButton = ({
   props,
   disabled,
   buttonStyle,
-  color,
   label,
   fontFamily = 'bold',
   fontSize,
@@ -75,11 +75,17 @@ const CustomButton = ({
   loading,
   fluid,
   type,
+  geType,
+  geLabel,
   outGameEditionView,
 }) => {
   const { gameEditionView: $gameEditionView } = useContext(GameEditionContext);
 
-  return (
+  return $gameEditionView && geType ? (
+    <GameEditionButton type={geType} disabled={disabled} onClick={onClick}>
+      {geLabel}
+    </GameEditionButton>
+  ) : (
     <StyledButton
       {...props}
       fluid={fluid}
@@ -99,7 +105,6 @@ const CustomButton = ({
         geFontWeight={geFontWeight}
         geLabelStyle={geLabelStyle}
         geColor={geColor}
-        // color={color}
         outGameEditionView={outGameEditionView}
         inverted={type === 'secondary'}
         withShade={withShade || disabled}
@@ -117,6 +122,7 @@ CustomButton.propTypes = {
   children: PropTypes.any.isRequired,
   onClick: PropTypes.func.isRequired,
   type: PropTypes.oneOf(['primary', 'secondary', 'basic']),
+  geType: PropTypes.oneOf(['confirm', 'cancel', 'retry', 'pink']),
   disabled: PropTypes.bool,
 };
 

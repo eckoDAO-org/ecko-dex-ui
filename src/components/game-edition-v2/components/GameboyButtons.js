@@ -15,7 +15,7 @@ import AButton from '../../../assets/images/game-edition/pressed-buttons/A-BTN.p
 import BButton from '../../../assets/images/game-edition/pressed-buttons/B-BTN.png';
 import { useGameEditionContext } from '../../../contexts';
 
-const GameEditionButtons = () => {
+const GameboyButtons = () => {
   const history = useHistory();
   const { buttons, closeModal } = useGameEditionContext();
   return (
@@ -46,7 +46,7 @@ const GameEditionButtons = () => {
   );
 };
 
-export default GameEditionButtons;
+export default GameboyButtons;
 
 const ButtonContainer = styled.div`
   position: absolute;

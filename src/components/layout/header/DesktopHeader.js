@@ -8,7 +8,7 @@ import RightHeaderItems from './RightHeaderItems';
 import HeaderItem from '../../../components/shared/HeaderItem';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 import { useGameEditionContext } from '../../../contexts';
-import GameEditionButton from './GameEditionModeButton';
+import GameEditionModeButton from './GameEditionModeButton';
 
 const Container = styled.div`
   display: flex;
@@ -84,7 +84,7 @@ const DesktopHeader = ({ className }) => {
         </AnimatedDiv>
       </LeftContainer>
 
-      <GameEditionButton />
+      <GameEditionModeButton />
 
       <RightContainer>
         <RightHeaderItems />

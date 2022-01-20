@@ -9,7 +9,6 @@ import { ColumnContainer, Container, RowContainer, Value } from '../../component
 import { ArrowDown, PixeledArrowDownIcon } from '../../assets';
 import useWindowSize from '../../hooks/useWindowSize';
 import Label from '../../components/shared/Label';
-import GameEditionButton from '../../components/game-edition-v2/components/GameEditionButton';
 
 const ResultContainer = styled.div`
   display: flex !important;
@@ -175,49 +174,32 @@ const TokenPair = (props) => {
           )}
 
           <ActionContainer>
-            {$gameEditionView ? (
-              <GameEditionButton
-                type="cancel"
-                onClick={() => {
-                  props.selectRemoveLiquidity();
-                  props.setTokenPair(props.pair);
-                }}
-              />
-            ) : (
-              <CustomButton
-                fluid
-                type="primary"
-                buttonStyle={{
-                  marginRight: 10,
-                }}
-                onClick={() => {
-                  props.selectRemoveLiquidity();
-                  props.setTokenPair(props.pair);
-                }}
-              >
-                Remove
-              </CustomButton>
-            )}
-            {$gameEditionView ? (
-              <GameEditionButton
-                type="confirm"
-                onClick={() => {
-                  props.selectAddLiquidity();
-                  props.setTokenPair(props.pair);
-                }}
-              />
-            ) : (
-              <CustomButton
-                fluid
-                type="secondary"
-                onClick={() => {
-                  props.selectAddLiquidity();
-                  props.setTokenPair(props.pair);
-                }}
-              >
-                Add
-              </CustomButton>
-            )}
+            <CustomButton
+              fluid
+              geType="cancel"
+              type="primary"
+              buttonStyle={{
+                marginRight: 10,
+              }}
+              onClick={() => {
+                props.selectRemoveLiquidity();
+                props.setTokenPair(props.pair);
+              }}
+            >
+              Remove
+            </CustomButton>
+
+            <CustomButton
+              fluid
+              geType="confirm"
+              type="secondary"
+              onClick={() => {
+                props.selectAddLiquidity();
+                props.setTokenPair(props.pair);
+              }}
+            >
+              Add
+            </CustomButton>
           </ActionContainer>
         </Accordion.Content>
       </Accordion>

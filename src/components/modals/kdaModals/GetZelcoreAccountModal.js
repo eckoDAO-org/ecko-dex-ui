@@ -6,12 +6,11 @@ import reduceToken from '../../../utils/reduceToken';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { ModalContext } from '../../../contexts/ModalContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import { commonTheme, theme } from '../../../styles/theme';
+import { commonTheme } from '../../../styles/theme';
 import { getAccounts, openZelcore } from '../../../utils/zelcore';
-import { LightModeContext } from '../../../contexts/LightModeContext';
 import LogoLoader from '../../../components/shared/LogoLoader';
 import Label from '../../shared/Label';
-import { GeArrowIcon, GeCancelButtonIcon, GeConfirmButtonIcon, GeRetryButtonIcon } from '../../../assets';
+import { GeArrowIcon } from '../../../assets';
 
 const ActionContainer = styled.div`
   display: flex;
@@ -38,7 +37,7 @@ const DropdownContainer = styled.div`
     display: flex;
     justify-content: space-between;
     padding: 12px;
-    border: 2px dashed ${({ theme: { colors } }) => colors.white};
+    border: 2px dashed #ffffff;
     color: #ffffff;
     background-color: #000000e6;
   }
@@ -46,7 +45,7 @@ const DropdownContainer = styled.div`
   .ui.selection.dropdown .menu {
     margin-top: 10px !important;
     background-color: #000000e6;
-    border: 2px dashed ${({ theme: { colors } }) => colors.white};
+    border: 2px dashed #ffffff;
     max-height: fit-content;
     @media (min-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
       max-height: 8em;
@@ -54,7 +53,7 @@ const DropdownContainer = styled.div`
   }
 
   .ui.selection.visible.dropdown .menu {
-    border: 2px dashed ${({ theme: { colors } }) => colors.white};
+    border: 2px dashed #ffffff;
     max-height: 120px;
   }
 
@@ -67,12 +66,12 @@ const DropdownContainer = styled.div`
   }
 
   .ui.selection.active.dropdown:hover {
-    border: 2px dashed ${({ theme: { colors } }) => colors.white};
+    border: 2px dashed #ffffff;
   }
 
   .ui.default.dropdown:not(.button) > .text,
   .ui.dropdown:not(.button) > .default.text {
-    color: ${({ theme: { colors } }) => colors.white};
+    color: #ffffff;
   }
 `;
 
@@ -80,7 +79,6 @@ const GetZelcoreAccountModal = ({ onClose, onConnectionSuccess }) => {
   const modalContext = useContext(ModalContext);
   const { account, setVerifiedAccount } = useContext(AccountContext);
   const { gameEditionView, closeModal, onWireSelect } = useContext(GameEditionContext);
-  const { themeMode } = useContext(LightModeContext);
 
   const [loading, setLoading] = useState(false);
   const [accounts, setAccounts] = useState(null);
@@ -151,13 +149,12 @@ const GetZelcoreAccountModal = ({ onClose, onConnectionSuccess }) => {
               <LogoLoader />
             ) : (
               <CustomButton
-                buttonStyle={{ width: gameEditionView && '100%' }}
-                disableGameEditionPadding
+                geType="retry"
                 onClick={() => {
                   getAccountsFromWallet();
                 }}
               >
-                {gameEditionView ? <GeRetryButtonIcon /> : 'Retry'}
+                Retry
               </CustomButton>
             )}
           </ActionContainer>
@@ -213,20 +210,12 @@ const GetZelcoreAccountModal = ({ onClose, onConnectionSuccess }) => {
             />
           )}
           <ActionContainer gameEditionView={gameEditionView}>
-            <CustomButton
-              disableGameEditionPadding
-              fluid={!gameEditionView}
-              border="none"
-              boxShadow="none"
-              color={theme(themeMode).colors.white}
-              background="transparent"
-              onClick={() => handleCancel()}
-            >
-              {gameEditionView ? <GeCancelButtonIcon /> : 'Cancel'}
+            <CustomButton geType="cancel" fluid onClick={() => handleCancel()}>
+              Cancel
             </CustomButton>
 
-            <CustomButton disableGameEditionPadding fluid={!gameEditionView} disabled={!selectedAccount} onClick={async () => await handleConnect()}>
-              {gameEditionView ? <GeConfirmButtonIcon /> : 'Connect'}
+            <CustomButton fluid geType="confirm" disabled={!selectedAccount} onClick={async () => await handleConnect()}>
+              Connect
             </CustomButton>
           </ActionContainer>
         </ZelcoreModalContent>

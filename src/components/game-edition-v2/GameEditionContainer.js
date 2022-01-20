@@ -16,7 +16,7 @@ import ConnectWalletZelcoreModal from '../modals/kdaModals/ConnectWalletZelcoreM
 import ConnectWalletTorusModal from '../modals/kdaModals/ConnectWalletTorusModal';
 import ConnectWalletChainweaverModal from '../modals/kdaModals/ConnectWalletChainweaverModal';
 import { FadeIn } from '../shared/animations';
-import GameEditionButtons from './components/PressedButton';
+import GameboyButtons from './components/GameboyButtons';
 import { useLocation } from 'react-router-dom';
 import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION } from '../../router/routes';
 import TokenSelectorModalContent from '../swap/swap-modals/TokenSelectorModalContent';
@@ -254,7 +254,7 @@ const GameEditionContainer = ({ children }) => {
     >
       <div style={{ display: 'flex' }}>
         <GameboyDesktopContainer showWires={showWires} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
-          <GameEditionButtons />
+          <GameboyButtons />
           <DisplayContent>
             {children}
             {modalState.open && (
