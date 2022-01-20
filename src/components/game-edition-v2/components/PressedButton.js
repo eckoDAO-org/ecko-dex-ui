@@ -166,6 +166,9 @@ export const PressedButton = ({ type, onClick }) => {
 };
 
 PressedButton.propTypes = {
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
   type: PropTypes.oneOf(['menu', 'swap', 'L1', 'R1', 'up', 'right', 'down', 'left', 'A', 'B']).isRequired,
+};
+PressedButton.defaultProps = {
+  onClick: null,
 };
