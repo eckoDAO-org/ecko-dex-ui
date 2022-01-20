@@ -8,7 +8,7 @@ import WalletRequestView from '../../components/swap/swap-modals/WalletRequestVi
 import { ReactComponent as ArrowBack } from '../../assets/images/shared/arrow-back.svg';
 import { ReactComponent as CloseGE } from '../../assets/images/shared/close-ge.svg';
 import { Button } from 'semantic-ui-react';
-import CustomLabel from '../../components/shared/CustomLabel';
+import Label from '../../components/shared/Label';
 import CustomButton from '../../components/shared/CustomButton';
 import ReviewTxModal from '../../components/modals/liquidity/ReviewTxModal';
 import TxView from '../../components/swap/swap-modals/TxView';
@@ -76,7 +76,7 @@ const TitleContainer = styled.div`
 
 const Title = styled.span`
   font: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? `normal normal normal 16px/19px ${fontFamily.pressStartRegular}` : 'normal normal bold 32px/57px Montserrat'};
+    gameEditionView ? `normal normal normal 16px/19px ${fontFamily.pixeboy}` : 'normal normal bold 32px/57px Montserrat'};
   letter-spacing: 0px;
   color: ${({ gameEditionView, theme: { colors } }) => colors.white};
   text-transform: capitalize;
@@ -175,7 +175,7 @@ const LabelContainer = styled.div`
   z-index: ${({ gameEditionView }) => !gameEditionView && '1'};
 `;
 
-const Label = styled.span`
+/* const Label = styled.span`
   font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.regular)};
   font-size: ${({ gameEditionView }) => (gameEditionView ? '20px' : '13px')};
   color: ${({ theme: { colors }, gameEditionView }) => colors.yellow};
@@ -183,7 +183,7 @@ const Label = styled.span`
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     text-align: left;
   }
-`;
+`; */
 
 const initialStateValue = {
   coin: '',
@@ -720,12 +720,7 @@ const LiquidityContainer = (props) => {
       {!gameEditionView && isLogoVisible && <BackgroundLogo />}
 
       <TitleContainer gameEditionView={gameEditionView}>
-        <Title
-          gameEditionView={gameEditionView}
-          style={{
-            fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.bold,
-          }}
-        >
+        <Label fontSize={32} geCenter fontFamily="bold" geFontSize={52} geLabelStyle={{ lineHeight: '32px' }} onClose={() => props.closeLiquidity()}>
           {!gameEditionView && (
             <ArrowBack
               style={{
@@ -738,8 +733,8 @@ const LiquidityContainer = (props) => {
             />
           )}
           Add Liquidity
-        </Title>
-        {gameEditionView && <CloseGE style={{ cursor: 'pointer' }} onClick={() => props.closeLiquidity()} />}
+        </Label>
+        {/* {gameEditionView && <CloseGE style={{ cursor: 'pointer' }} onClick={() => props.closeLiquidity()} />} */}
         {!gameEditionView && (
           <HeaderItem headerItemStyle={{ alignItems: 'center', display: 'flex' }}>
             <CustomPopup trigger={<CogIcon />} on="click" offset={[10, 10]} position="bottom right">
@@ -753,7 +748,9 @@ const LiquidityContainer = (props) => {
         footer={
           gameEditionView ? (
             <LabelContainer>
-              <Label gameEditionView={gameEditionView}>{buttonStatus().msg}</Label>
+              <Label geColor="yellow" geFontSize={20}>
+                {buttonStatus().msg}
+              </Label>
             </LabelContainer>
           ) : (
             <ButtonContainer gameEditionView={gameEditionView}>
@@ -782,20 +779,24 @@ const LiquidityContainer = (props) => {
           <>
             <ResultContainer gameEditionView={gameEditionView}>
               <InnerRowContainer gameEditionView={gameEditionView}>
-                <CustomLabel textAlign={gameEditionView && 'start'} fontSize="13px">{`${toValues.coin} per ${fromValues.coin}`}</CustomLabel>
-                <Value gameEditionView={gameEditionView}>{reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}</Value>
+                <Label fontSize={13} geFontSize={20} geColor="blue">{`${toValues.coin} per ${fromValues.coin}`}</Label>
+                <Label geFontSize={28} fontSize={13} fontFamily="bold">
+                  {reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}
+                </Label>
               </InnerRowContainer>
               <InnerRowContainer gameEditionView={gameEditionView}>
-                <CustomLabel textAlign={gameEditionView && 'start'} fontSize="13px">{`${fromValues.coin} per ${toValues.coin}`}</CustomLabel>
-                <Value gameEditionView={gameEditionView}>{reduceBalance(pact.getRatio1(toValues.coin, fromValues.coin)) ?? '-'}</Value>
+                <Label fontSize={13} geFontSize={20} geColor="blue">{`${fromValues.coin} per ${toValues.coin}`}</Label>
+                <Label geFontSize={28} fontSize={13} fontFamily="bold">
+                  {reduceBalance(pact.getRatio1(toValues.coin, fromValues.coin)) ?? '-'}
+                </Label>
               </InnerRowContainer>
               <InnerRowContainer gameEditionView={gameEditionView}>
-                <CustomLabel textAlign={gameEditionView && 'start'} fontSize="13px">
+                <Label fontSize={13} geFontSize={20} geColor="blue">
                   Share of Pool
-                </CustomLabel>
-                <Value gameEditionView={gameEditionView}>
+                </Label>
+                <Label geFontSize={28} fontSize={13} fontFamily="bold">
                   {!pact.share(fromValues.amount) ? 0 : reduceBalance(pact.share(fromValues.amount) * 100)}%
-                </Value>
+                </Label>
               </InnerRowContainer>
             </ResultContainer>
           </>

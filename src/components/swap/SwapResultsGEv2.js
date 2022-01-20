@@ -27,7 +27,7 @@ const InfoContainer = styled.div`
   display: flex;
   flex-flow: column;
   min-width: 194px;
-  min-height: 68px;
+  min-height: 80px;
   justify-content: center;
   text-align: center;
   align-items: center;
@@ -57,7 +57,9 @@ const SwapResultsGEv2 = ({ priceImpact, fromValues, toValues }) => {
         </Label>
       </InfoContainer>
       <InfoContainer geFontSize={20} geColor="blue">
-        <Label>max slippage</Label>
+        <Label geFontSize={20} geColor="blue">
+          max slippage
+        </Label>
         <Label geFontSize={28}>{`${pact.slippage * 100}%`}</Label>
       </InfoContainer>
       <InfoContainer>
