@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 import { Search as SUISearch } from 'semantic-ui-react';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
-import { SearchGEIcon } from '../../assets';
 
 const Container = styled.div.attrs({ icon: 'search' })`
   margin-bottom: 15px;
@@ -27,17 +26,6 @@ const Container = styled.div.attrs({ icon: 'search' })`
   .ui.input > input {
     border: none;
     color: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `${colors.white}`};
-  }
-`;
-
-const SearchIconContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 10px;
-  svg {
-    path {
-      fill: ${({ theme: { colors } }) => colors.white};
-    }
   }
 `;
 

@@ -6,7 +6,6 @@ import { ArrowBack } from '../../assets';
 import TxView from '../../components/swap/swap-modals/TxView';
 import WalletRequestView from '../../components/swap/swap-modals/WalletRequestView';
 import { WalletContext } from '../../contexts/WalletContext';
-import { ReactComponent as CloseGE } from '../../assets/images/shared/close-ge.svg';
 import CustomButton from '../../components/shared/CustomButton';
 import FormContainer from '../../components/shared/FormContainer';
 import Input from '../../components/shared/Input';
@@ -74,20 +73,6 @@ const TitleContainer = styled.div`
   margin-bottom: ${({ gameEditionView }) => (gameEditionView ? '10px' : `14px`)};
   width: 100%;
   padding: ${({ gameEditionView }) => gameEditionView && '10px'};
-`;
-
-const Title = styled.span`
-  font: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? `normal normal normal 16px/19px ${fontFamily.pressStartRegular}` : `normal normal bold 32px/57px ${fontFamily.bold}`};
-  letter-spacing: 0px;
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? `${colors.black}` : `${colors.white}`)};
-  text-transform: capitalize;
-
-  svg {
-    path {
-      fill: ${({ theme: { colors } }) => colors.white};
-    }
-  }
 `;
 
 const ButtonContainer = styled.div`
@@ -337,10 +322,6 @@ const RemoveLiqContainer = (props) => {
           <ButtonContainer gameEditionView={gameEditionView} style={gameEditionView ? { marginTop: '3px' } : {}}>
             <Button.Group fluid>
               <CustomButton
-                border={gameEditionView ? `2px dashed #ffffff` : `1px solid ${theme(themeMode).colors.white}99`}
-                buttonStyle={gameEditionView ? { padding: 10 } : {}}
-                borderRadius={gameEditionView && '0'}
-                background="transparent"
                 buttonStyle={{
                   width: '20%',
                 }}
@@ -350,42 +331,15 @@ const RemoveLiqContainer = (props) => {
                 25%
               </CustomButton>
               <MyButtonDivider />
-              <CustomButton
-                border={gameEditionView ? `2px dashed #ffffff` : `1px solid ${theme(themeMode).colors.white}99`}
-                buttonStyle={gameEditionView ? { padding: 10 } : {}}
-                borderRadius={gameEditionView && '0'}
-                buttonStyle={{
-                  width: '20%',
-                }}
-                type={amount === 50 ? 'secondary' : 'primary'}
-                onClick={() => setAmount(50)}
-              >
+              <CustomButton type={amount === 50 ? 'secondary' : 'primary'} onClick={() => setAmount(50)}>
                 50%
               </CustomButton>
               <MyButtonDivider />
-              <CustomButton
-                border={gameEditionView ? `2px dashed #ffffff` : `1px solid ${theme(themeMode).colors.white}99`}
-                buttonStyle={gameEditionView ? { padding: 10 } : {}}
-                borderRadius={gameEditionView && '0'}
-                buttonStyle={{
-                  width: '20%',
-                }}
-                type={amount === 75 ? 'secondary' : 'primary'}
-                onClick={() => setAmount(75)}
-              >
+              <CustomButton type={amount === 75 ? 'secondary' : 'primary'} onClick={() => setAmount(75)}>
                 75%
               </CustomButton>
               <MyButtonDivider />
-              <CustomButton
-                border={gameEditionView ? `2px dashed #ffffff` : `1px solid ${theme(themeMode).colors.white}99`}
-                buttonStyle={gameEditionView ? { padding: 10 } : {}}
-                borderRadius={gameEditionView && '0'}
-                buttonStyle={{
-                  width: '20%',
-                }}
-                type={amount === 100 ? 'secondary' : 'primary'}
-                onClick={() => setAmount(100)}
-              >
+              <CustomButton type={amount === 100 ? 'secondary' : 'primary'} onClick={() => setAmount(100)}>
                 100%
               </CustomButton>
             </Button.Group>

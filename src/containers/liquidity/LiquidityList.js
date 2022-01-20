@@ -1,13 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useContext, useState } from 'react';
-import styled, { css } from 'styled-components/macro';
+import styled from 'styled-components/macro';
 import { Loader, Button, Divider } from 'semantic-ui-react';
 import CustomButton from '../../components/shared/CustomButton';
 import TokenPair from './TokenPair';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { AccountContext } from '../../contexts/AccountContext';
 import { theme } from '../../styles/theme';
-import ModalContainer from '../../components/shared/ModalContainer';
 import reduceToken from '../../utils/reduceToken';
 import ConnectWalletModal from '../../components/modals/kdaModals/ConnectWalletModal';
 import { ModalContext } from '../../contexts/ModalContext';
@@ -18,7 +17,6 @@ import FormContainer from '../../components/shared/FormContainer';
 import browserDetection from '../../utils/browserDetection';
 import useWindowSize from '../../hooks/useWindowSize';
 import LogoLoader from '../../components/shared/LogoLoader';
-import ArcadeBackground from '../../assets/images/game-edition/arcade-background.png';
 import Label from '../../components/shared/Label';
 
 const Container = styled.div`
@@ -26,7 +24,6 @@ const Container = styled.div`
   height: 100%;
   flex-direction: column;
 
-  /* margin-top: ${({ $gameEditionView }) => ($gameEditionView ? '0px' : '24px')}; */
   margin-left: auto;
   margin-right: auto;
   justify-content: ${({ $gameEditionView }) => ($gameEditionView ? 'space-between' : 'center')};
@@ -38,17 +35,6 @@ const BottomContainer = styled.div`
   align-items: left;
   justify-content: flex-start;
   width: 100%;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-flow: row;
-  justify-content: center;
-  margin-right: 2px;
-  width: 100%;
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: column;
-  }
 `;
 
 const LiquidityList = (props) => {

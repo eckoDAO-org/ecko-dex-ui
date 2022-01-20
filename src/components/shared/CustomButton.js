@@ -5,8 +5,6 @@ import { Button as SUIButton } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import Label from './Label';
-import { theme } from '../../styles/theme';
-import { useLightModeContext } from '../../contexts';
 
 const StyledButton = styled(SUIButton)`
   cursor: pointer;
@@ -52,17 +50,8 @@ const StyledButton = styled(SUIButton)`
     }
   }}
 
-  ${({ $disableGameEditionPadding, gameEditionView }) =>
-    $disableGameEditionPadding &&
-    gameEditionView &&
-    css`
-      padding: 0px !important;
-    `};
   svg {
     margin-right: 4px;
-    /* path {
-      fill: ${({ theme: { colors } }) => colors.white};
-    } */
   }
 `;
 
@@ -89,21 +78,7 @@ const CustomButton = ({
   outGameEditionView,
 }) => {
   const { gameEditionView: $gameEditionView } = useContext(GameEditionContext);
-  const { themeMode } = useLightModeContext();
 
-  const getLabelColor = () => {
-    switch (type) {
-      case 'primary':
-        return theme(themeMode).colors.white;
-      case 'secondary':
-        return theme(themeMode).colors.primary;
-      case 'basic':
-        return theme(themeMode).colors.white;
-      default:
-        return theme(themeMode).colors.white;
-    }
-  };
-  console.log('color', color);
   return (
     <StyledButton
       {...props}
