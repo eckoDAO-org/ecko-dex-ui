@@ -128,6 +128,17 @@ const SearchTokenList = styled(FadeIn)`
   color: #ffff;
 `;
 
+const WiresContainer = styled.div`
+  transition: transform 0s;
+  transform: ${({ showTokens }) => {
+    if (showTokens) {
+      return 'translate(-250px, 0px)';
+    }
+    return 'translate(0px, 0px)';
+  }};
+  opacity: ${({ showTokens }) => (showTokens ? 0.5 : 1)};
+`;
+
 const GameEditionContainer = ({ children }) => {
   const location = useLocation();
   const [width] = useWindowSize();
@@ -169,9 +180,11 @@ const GameEditionContainer = ({ children }) => {
 
   const onCloseModal = () => {
     closeModal();
-    if (!account.account) {
-      onWireSelect(null);
+    let oldWire = null;
+    if (wallet && selectedWire && wallet?.id !== selectedWire?.id) {
+      oldWire = WALLET[wallet.id];
     }
+    onWireSelect(oldWire);
   };
 
   const getWalletModal = (walletName) => {
@@ -253,7 +266,7 @@ const GameEditionContainer = ({ children }) => {
       style={{ justifyContent: 'flex-end' }}
     >
       <div style={{ display: 'flex' }}>
-        <GameboyDesktopContainer showWires={showWires} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
+        <GameboyDesktopContainer showWires={showWires} showTokens={showTokens} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
           <GameboyButtons />
           <DisplayContent>
             {children}
@@ -274,12 +287,13 @@ const GameEditionContainer = ({ children }) => {
         {showTokens && (
           <SearchTokenList>
             <TokenSelectorModalContent onCloseTokensList={() => setShowTokens(false)} />
-            {/* tokens list<button onClick={() => setShowTokens(false)}>X</button> */}
           </SearchTokenList>
         )}
       </div>
-      <ConnectWalletWire onClick={() => setShowWires(true)} />
-      <WalletWires />
+      <WiresContainer showTokens={showTokens}>
+        <ConnectWalletWire onClick={() => setShowWires(true)} />
+        <WalletWires />
+      </WiresContainer>
     </DesktopMainContainer>
   );
 };
