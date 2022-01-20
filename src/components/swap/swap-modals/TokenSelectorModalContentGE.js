@@ -43,7 +43,7 @@ const PixeledTokenSelectorContainer = styled.div`
   }
   .tree-dots {
     path {
-      fill: ${({ selected, theme: { colors } }) => (selected ? '#000000' : '#ffffff')};
+      fill: ${({ selected }) => (selected ? '#000000' : '#ffffff')};
     }
   }
 `;
@@ -115,7 +115,6 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
       Right: () => onSelectToken('right'),
       Left: () => onSelectToken('left'),
       B: () => {
-        console.log('selectedToken', selectedToken);
         if (!selectedToken) {
           setShowTokens(true);
         }

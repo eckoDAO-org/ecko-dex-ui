@@ -43,8 +43,8 @@ const TokenItem = styled.div`
   display: flex;
   align-items: center;
   font-size: 16px;
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => fontFamily.regular};
-  color: ${({ gameEditionView, selected, theme: { colors } }) => (selected ? `${colors.white}99` : colors.white)};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
+  color: ${({ selected, theme: { colors } }) => (selected ? `${colors.white}99` : colors.white)};
   svg {
     margin-right: 8px;
     width: 24px;
@@ -115,13 +115,12 @@ const TokenSelectorModalContent = ({ show, tokenSelectorType, onTokenClick, onCl
                   >
                     {crypto.icon}
                     {crypto.name}
-                    {(tokenSelectorType === 'from' && fromToken === crypto.name) || (tokenSelectorType === 'to' && toToken === crypto.name) ? (
-                      <Label gameEditionView={gameEditionView} style={{ marginLeft: 5 }}>
-                        (Selected)
-                      </Label>
-                    ) : (
-                      <></>
-                    )}
+                    {(tokenSelectorType === 'from' && fromToken === crypto.name) ||
+                      (tokenSelectorType === 'to' && toToken === crypto.name && (
+                        <Label gameEditionView={gameEditionView} style={{ marginLeft: 5 }}>
+                          (Selected)
+                        </Label>
+                      ))}
                   </TokenItem>
                   {gameEditionView && <Divider gameEditionView={gameEditionView} />}
                 </>
