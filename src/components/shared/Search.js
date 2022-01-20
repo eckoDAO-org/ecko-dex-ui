@@ -6,10 +6,10 @@ import { SearchGEIcon } from '../../assets';
 
 const Container = styled.div.attrs({ icon: 'search' })`
   margin-bottom: 15px;
-
+  width: 100%;
   border-radius: 4px;
   border: ${({ theme: { colors }, gameEditionView }) => !gameEditionView && `1px solid ${colors.white}99 `};
-  color: ${({ gameEditionView, theme: { colors } }) => gameEditionView && '#fff'};
+  color: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `${colors.white}`};
   background: ${({ gameEditionView, theme: { colors } }) => gameEditionView && 'rgba(132, 127, 168, 0.34)'};
   border-radius: ${({ gameEditionView, theme: { colors } }) => gameEditionView && '40px'};
   .ui.search .prompt {
@@ -22,11 +22,11 @@ const Container = styled.div.attrs({ icon: 'search' })`
   }
   .ui.input > input:active,
   .ui.input > input:focus {
-    color: ${({ gameEditionView, theme: { colors } }) => gameEditionView && '#fff'};
+    color: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `${colors.white}`};
   }
   .ui.input > input {
     border: none;
-    color: ${({ gameEditionView, theme: { colors } }) => gameEditionView && '#fff'};
+    color: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `${colors.white}`};
   }
 `;
 

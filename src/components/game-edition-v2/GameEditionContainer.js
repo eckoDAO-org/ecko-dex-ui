@@ -273,7 +273,7 @@ const GameEditionContainer = ({ children }) => {
         </GameboyDesktopContainer>
         {showTokens && (
           <SearchTokenList>
-            <TokenSelectorModalContent />
+            <TokenSelectorModalContent onCloseTokensList={() => setShowTokens(false)} />
             {/* tokens list<button onClick={() => setShowTokens(false)}>X</button> */}
           </SearchTokenList>
         )}
