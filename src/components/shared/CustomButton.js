@@ -2,6 +2,7 @@
 import React, { useContext } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { Button as SUIButton } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import Label from './Label';
 
@@ -10,43 +11,54 @@ const StyledButton = styled(SUIButton)`
   display: flex !important;
   justify-content: center;
   align-items: center;
+  border-radius: 10px !important;
+  ${({ type, $outGameEditionView, $gameEditionView, theme: { colors }, buttonBackgroundGradient, hideBorder }) => {
+    if ($gameEditionView && !$outGameEditionView) {
+      return css`
+        border: 2px dashed #ffffff !important;
+        border-radius: 0px !important;
+        padding: 10px !important;
+        background: transparent !important;
+      `;
+    } else {
+      switch (type) {
+        case 'primary':
+          return css`
+          height: 42px;
+        border: 1px solid ${colors.white}99 !important};
+        background: transparent !important;
+      `;
+        case 'secondary':
+          return css`
+          height: 42px;
+        border: 1px solid ${colors.white}99 !important};
+        background: ${colors.white} !important;
+      `;
+        case 'basic':
+          return css`
+          height: 42px;
+        border: 1px solid transparent !important};
+        background: transparent !important;
+      `;
+        default:
+          return css`
+            height: 42px;
+            border: ${({ hideBorder }) => !hideBorder && `1px solid ${colors.white} !important`};
+            background: ${buttonBackgroundGradient} !important;
+          `;
+      }
+    }
+  }}
 
-  background: ${({ theme: { buttonBackgroundGradient }, disabled, background, $gameEditionView, $outGameEditionView }) => {
-    if ($outGameEditionView) return buttonBackgroundGradient + '!important';
-    if (background) return background + ' !important';
-    if ($gameEditionView) return 'transparent !important';
-    if (disabled) return 'transparent !important';
-    return buttonBackgroundGradient + '!important';
-  }};
-  border-radius: ${({ $borderRadius }) => ($borderRadius ? `${$borderRadius}px !important` : '10px !important')};
-  opacity: 1 !important;
-  border: ${({ theme: { colors }, $border, $gameEditionView, $outGameEditionView }) => {
-    if ($outGameEditionView) return `1px solid ${colors.white} !important`;
-    if ($border) return $border + ' !important';
-    if ($gameEditionView) return `unset`;
-    else return `1px solid ${colors.white} !important`;
-  }};
-  ${({ $disableGameEditionPadding, gameEditionView }) =>
-    $disableGameEditionPadding &&
-    gameEditionView &&
-    css`
-      padding: 0px !important;
-    `};
   svg {
     margin-right: 4px;
-    /* path {
-      fill: ${({ theme: { colors } }) => colors.white};
-    } */
   }
 `;
 
 const CustomButton = ({
   props,
   disabled,
-  border,
-  boxShadow: $boxShadow,
   buttonStyle,
-  background,
   color,
   label,
   fontFamily = 'bold',
@@ -62,26 +74,22 @@ const CustomButton = ({
   onClick,
   loading,
   fluid,
-  borderRadius,
-  disableGameEditionPadding,
-  outGameEditionView: $outGameEditionView,
+  type,
+  outGameEditionView,
 }) => {
   const { gameEditionView: $gameEditionView } = useContext(GameEditionContext);
+
   return (
     <StyledButton
       {...props}
       fluid={fluid}
-      $borderRadius={borderRadius}
       $gameEditionView={$gameEditionView}
-      $outGameEditionView={$outGameEditionView}
       disabled={disabled}
-      background={background}
       style={buttonStyle}
       onClick={onClick}
       loading={loading}
-      $border={border}
-      $boxShadow={$boxShadow}
-      $disableGameEditionPadding={disableGameEditionPadding}
+      type={type}
+      $outGameEditionView={outGameEditionView}
     >
       <Label
         fontFamily={fontFamily}
@@ -91,9 +99,10 @@ const CustomButton = ({
         geFontWeight={geFontWeight}
         geLabelStyle={geLabelStyle}
         geColor={geColor}
-        color={color}
-        inverted={!disabled}
-        withShade={withShade}
+        // color={color}
+        outGameEditionView={outGameEditionView}
+        inverted={type === 'secondary'}
+        withShade={withShade || disabled}
         geCenter={geCenter}
       >
         {children || label}
@@ -103,3 +112,15 @@ const CustomButton = ({
 };
 
 export default CustomButton;
+
+CustomButton.propTypes = {
+  children: PropTypes.any.isRequired,
+  onClick: PropTypes.func.isRequired,
+  type: PropTypes.oneOf(['primary', 'secondary', 'basic']),
+  disabled: PropTypes.bool,
+};
+
+CustomButton.defaultProps = {
+  type: 'primary',
+  disabled: false,
+};

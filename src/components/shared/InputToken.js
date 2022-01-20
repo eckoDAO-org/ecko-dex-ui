@@ -4,14 +4,11 @@ import styled from 'styled-components/macro';
 import { ArrowDown, PixeledArrowDownIcon } from '../../assets';
 import CustomButton from './CustomButton';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
-import { theme } from '../../styles/theme';
-import { LightModeContext } from '../../contexts/LightModeContext';
 
 const Container = styled.div`
   position: absolute;
   padding-top: ${({ $gameEditionView }) => $gameEditionView && '10px'};
   cursor: pointer;
-  /* top: ${({ $gameEditionView }) => $gameEditionView && '4px'}; */
   right: 4px;
   display: flex;
   justify-content: space-between;
@@ -72,15 +69,10 @@ const ElementsContainer = styled.div`
       margin-right: 4px;
     }
   }
-
-  /* svg:first-child {
-    margin-right: 8px;
-  } */
 `;
 
 const InputToken = ({ icon, code, onClick, onClickButton, disabledButton }) => {
   const { gameEditionView } = useContext(GameEditionContext);
-  const { themeMode } = useContext(LightModeContext);
 
   return (
     <Container $gameEditionView={gameEditionView}>
@@ -88,12 +80,10 @@ const InputToken = ({ icon, code, onClick, onClickButton, disabledButton }) => {
         <CustomButton
           buttonStyle={{
             padding: '12px 8px',
-            textTransform: gameEditionView ? 'capitalize' : 'uppercase',
           }}
-          border="none"
-          color={!gameEditionView && theme(themeMode).colors.white}
-          background="transparent"
-          fontSize={gameEditionView ? '23px' : '13px'}
+          labelStyle={{ textTransform: 'uppercase' }}
+          type="basic"
+          fontSize={13}
           onClick={onClickButton}
           disabled={disabledButton}
         >

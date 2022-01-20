@@ -1,18 +1,16 @@
 import React from 'react';
 import CustomButton from '../../../components/shared/CustomButton';
 import { WALLET } from '../../../constants/wallet';
-import { useKaddexWalletContext, useNotificationContext, useModalContext, useLightModeContext, useGameEditionContext } from '../../../contexts';
+import { useKaddexWalletContext, useNotificationContext, useModalContext, useGameEditionContext } from '../../../contexts';
 import ConnectWalletZelcoreModal from './ConnectWalletZelcoreModal';
 import ConnecWalletTorusModal from './ConnectWalletTorusModal';
 import ConnectWalletChainweaverModal from './ConnectWalletChainweaverModal';
-import { theme } from '../../../styles/theme';
 
 const ConnectWalletModal = () => {
   const modalContext = useModalContext();
   const { STATUSES, showNotification } = useNotificationContext();
   const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
   const { gameEditionView, openModal, closeModal } = useGameEditionContext();
-  const { themeMode } = useLightModeContext();
 
   const openWalletModal = (walletName) => {
     switch (walletName) {
@@ -84,9 +82,6 @@ const ConnectWalletModal = () => {
   return Object.values(WALLET).map((wallet, index) => (
     <CustomButton
       key={index}
-      border={gameEditionView ? `2px dashed ${theme(themeMode).colors.black}` : `1px solid ${theme(themeMode).colors.white}99`}
-      background="transparent"
-      color={gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white}
       onClick={() => {
         openWalletModal(wallet.name);
       }}

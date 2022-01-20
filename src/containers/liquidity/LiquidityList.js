@@ -7,7 +7,6 @@ import TokenPair from './TokenPair';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { AccountContext } from '../../contexts/AccountContext';
 import { theme } from '../../styles/theme';
-import ModalContainer from '../../components/shared/ModalContainer';
 import reduceToken from '../../utils/reduceToken';
 import ConnectWalletModal from '../../components/modals/kdaModals/ConnectWalletModal';
 import { ModalContext } from '../../contexts/ModalContext';
@@ -18,15 +17,16 @@ import FormContainer from '../../components/shared/FormContainer';
 import browserDetection from '../../utils/browserDetection';
 import useWindowSize from '../../hooks/useWindowSize';
 import LogoLoader from '../../components/shared/LogoLoader';
-import ArcadeBackground from '../../assets/images/game-edition/arcade-background.png';
 import Label from '../../components/shared/Label';
 
 const Container = styled.div`
   display: flex;
-  margin-top: ${({ $gameEditionView }) => ($gameEditionView ? '0px' : '24px')};
+  height: 100%;
+  flex-direction: column;
+
   margin-left: auto;
   margin-right: auto;
-  height: ${({ $gameEditionView }) => $gameEditionView && '100%'};
+  justify-content: ${({ $gameEditionView }) => ($gameEditionView ? 'space-between' : 'center')};
 `;
 
 const BottomContainer = styled.div`
@@ -35,17 +35,6 @@ const BottomContainer = styled.div`
   align-items: left;
   justify-content: flex-start;
   width: 100%;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-flow: row;
-  justify-content: center;
-  margin-right: 2px;
-  width: 100%;
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: column;
-  }
 `;
 
 const LiquidityList = (props) => {
@@ -72,25 +61,7 @@ const LiquidityList = (props) => {
 
   return (
     <Container $gameEditionView={gameEditionView}>
-      <ModalContainer
-        withoutRainbowBackground
-        containerStyle={{
-          maxHeight: !gameEditionView && '80vh',
-          maxWidth: 900,
-          minWidth: 0,
-          overflow: 'auto',
-          border: 'none',
-          boxShadow: 'none',
-          background: 'transparent',
-          height: gameEditionView && '100%',
-          display: gameEditionView && 'flex',
-          flexDirection: gameEditionView && 'column',
-          backgroundRepeat: gameEditionView && 'no-repeat',
-          backgroundPosition: gameEditionView && 'center',
-          backgroundSize: gameEditionView && 'cover',
-          backgroundImage: gameEditionView && `url(${ArcadeBackground})`,
-        }}
-      >
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
         {gameEditionView && (
           <Label geFontSize={52} geCenter geLabelStyle={{ textTransform: 'uppercase' }}>
             Pool
@@ -113,61 +84,61 @@ const LiquidityList = (props) => {
           <br />
           Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.
         </Label>
-        {account.account !== null ? (
-          <BottomContainer $gameEditionView={gameEditionView}>
-            <Label
-              fontSize={32}
-              geFontSize={20}
-              geCenter
-              geLabelStyle={{ margin: '10px 0px' }}
-              labelStyle={{ margin: '30px 0px 14px' }}
-              fontFamily="bold"
-            >
-              Your Liquidity
-            </Label>
-            <Button.Group
-              fluid
-              style={{
-                marginBottom: gameEditionView ? 15 : 30,
-                flexDirection: gameEditionView && width <= theme().mediaQueries.mobilePixel ? 'column' : 'row',
+      </div>
+      {account.account !== null ? (
+        <BottomContainer $gameEditionView={gameEditionView}>
+          <Label
+            fontSize={32}
+            geFontSize={20}
+            geCenter
+            geLabelStyle={{ margin: '10px 0px' }}
+            labelStyle={{ margin: '30px 0px 14px' }}
+            fontFamily="bold"
+          >
+            Your Liquidity
+          </Label>
+          <Button.Group
+            fluid
+            style={{
+              marginBottom: gameEditionView ? 15 : 30,
+              flexDirection: gameEditionView && width <= theme().mediaQueries.mobilePixel ? 'column' : 'row',
+            }}
+          >
+            <CustomButton
+              disabled
+              type="primary"
+              buttonStyle={{
+                marginRight: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '15px',
+                marginBottom: gameEditionView && width <= theme().mediaQueries.mobilePixel && '10px',
               }}
+              onClick={() => props.selectCreatePair()}
             >
-              <CustomButton
-                disabled
-                buttonStyle={{
-                  marginRight: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '15px',
-                  borderRadius: '20px',
-                  width: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '100%' : '48%',
-                  marginBottom: gameEditionView && width <= theme().mediaQueries.mobilePixel && '10px',
-                }}
-                onClick={() => props.selectCreatePair()}
-              >
-                Create a pair
-              </CustomButton>
-              <CustomButton
-                buttonStyle={{
-                  marginLeft: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '-5px',
-                  borderRadius: '20px',
-                  width: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '100%' : '48%',
-                }}
-                onClick={() => props.selectAddLiquidity()}
-              >
-                Add Liquidity
-              </CustomButton>
-            </Button.Group>
-            {account.account !== null ? (
-              liquidity.pairListAccount[0] ? (
-                liquidity.pairListAccount[0]?.balance ? (
-                  <FormContainer
-                    $gameEditionView={gameEditionView}
-                    containerStyle={{ padding: gameEditionView && 16, minHeight: accordionHeight }}
-                    withGameEditionBorder
-                  >
-                    {!gameEditionView && <GradientBorder />}
-                    {Object.values(liquidity.pairListAccount).map((pair, index) => {
-                      return pair && pair.balance ? (
+              Create a pair
+            </CustomButton>
+            <CustomButton
+              type="secondary"
+              buttonStyle={{
+                marginLeft: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '-5px',
+              }}
+              onClick={() => props.selectAddLiquidity()}
+            >
+              Add Liquidity
+            </CustomButton>
+          </Button.Group>
+          {account.account !== null &&
+            (liquidity.pairListAccount[0] ? (
+              liquidity.pairListAccount[0]?.balance && (
+                <FormContainer
+                  $gameEditionView={gameEditionView}
+                  containerStyle={{ padding: gameEditionView && 16, marginBottom: gameEditionView && 16, minHeight: accordionHeight }}
+                  withGameEditionBorder
+                >
+                  {!gameEditionView && <GradientBorder />}
+                  {Object.values(liquidity.pairListAccount).map((pair, index) => {
+                    return (
+                      pair &&
+                      pair.balance && (
                         <div id={`token-pair-${index}`}>
-                          {' '}
                           <TokenPair
                             key={pair.name}
                             pair={pair}
@@ -177,7 +148,7 @@ const LiquidityList = (props) => {
                             activeIndex={activeIndex}
                             index={index}
                             setActiveIndex={setActiveIndex}
-                          />{' '}
+                          />
                           {Object.values(liquidity.pairListAccount).length - 1 !== index && (
                             <Divider
                               style={{
@@ -190,87 +161,69 @@ const LiquidityList = (props) => {
                             />
                           )}
                         </div>
-                      ) : (
-                        <></>
-                      );
-                    })}
-                  </FormContainer>
-                ) : (
-                  <></>
-                )
-              ) : (
-                <FormContainer gameEditionView={gameEditionView}>
-                  {!gameEditionView && <GradientBorder />}
-                  {liquidity.pairListAccount?.error ? (
-                    <p
-                      style={{
-                        fontSize: gameEditionView ? 12 : 16,
-                        fontFamily: gameEditionView ? theme(themeMode).fontFamily.pixeboy : theme(themeMode).fontFamily.regular,
-                        textAlign: 'center',
-                      }}
-                    >
-                      An error was encountered. Please reload the page
-                    </p>
-                  ) : (
-                    <>
-                      {browserDetection() === 'SAFARI' ? (
-                        <Loader
-                          active
-                          inline="centered"
-                          style={{
-                            color: theme(themeMode).colors.white,
-                            fontFamily: gameEditionView ? theme(themeMode).fontFamily.pixeboy : theme(themeMode).fontFamily.regular,
-                          }}
-                        />
-                      ) : (
-                        <LogoLoader />
-                      )}
-                    </>
-                  )}
+                      )
+                    );
+                  })}
                 </FormContainer>
               )
             ) : (
-              <></>
-            )}
-          </BottomContainer>
-        ) : (
-          <ButtonContainer
-            $gameEditionView={gameEditionView}
-            style={{
-              marginTop: 16,
-              width: gameEditionView && '93%',
-              justifyContent: !gameEditionView && 'start',
+              <FormContainer gameEditionView={gameEditionView}>
+                {!gameEditionView && <GradientBorder />}
+                {liquidity.pairListAccount?.error ? (
+                  <p
+                    style={{
+                      fontSize: gameEditionView ? 12 : 16,
+                      fontFamily: gameEditionView ? theme(themeMode).fontFamily.pixeboy : theme(themeMode).fontFamily.regular,
+                      textAlign: 'center',
+                    }}
+                  >
+                    An error was encountered. Please reload the page
+                  </p>
+                ) : (
+                  <>
+                    {browserDetection() === 'SAFARI' ? (
+                      <Loader
+                        active
+                        inline="centered"
+                        style={{
+                          color: theme(themeMode).colors.white,
+                          fontFamily: gameEditionView ? theme(themeMode).fontFamily.pixeboy : theme(themeMode).fontFamily.regular,
+                        }}
+                      />
+                    ) : (
+                      <LogoLoader />
+                    )}
+                  </>
+                )}
+              </FormContainer>
+            ))}
+        </BottomContainer>
+      ) : (
+        <Button.Group fluid={gameEditionView} style={!gameEditionView ? { marginTop: 24, width: 214 } : {}}>
+          <CustomButton
+            type="secondary"
+            buttonStyle={{
+              padding: !gameEditionView && '10px 16px',
+              width: !gameEditionView && '214px',
+              height: !gameEditionView && '40px',
+            }}
+            fontSize={14}
+            onClick={() => {
+              if (gameEditionView) {
+                setShowWires(true);
+              } else {
+                modalContext.openModal({
+                  title: account?.account ? 'wallet connected' : 'connect wallet',
+                  description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
+                  content: <ConnectWalletModal />,
+                });
+              }
             }}
           >
-            <Button.Group fluid={gameEditionView}>
-              <CustomButton
-                hover={true}
-                buttonStyle={{
-                  padding: !gameEditionView && '10px 16px',
-                  width: !gameEditionView && '214px',
-                  height: !gameEditionView && '40px',
-                }}
-                fontSize={14}
-                onClick={() => {
-                  if (gameEditionView) {
-                    setShowWires(true);
-                  } else {
-                    modalContext.openModal({
-                      title: account?.account ? 'wallet connected' : 'connect wallet',
-                      description: account?.account
-                        ? `Account ID: ${reduceToken(account.account)}`
-                        : 'Connect a wallet using one of the methods below',
-                      content: <ConnectWalletModal />,
-                    });
-                  }
-                }}
-              >
-                Connect Wallet
-              </CustomButton>
-            </Button.Group>
-          </ButtonContainer>
-        )}
-      </ModalContainer>
+            Connect Wallet
+          </CustomButton>
+        </Button.Group>
+      )}
     </Container>
   );
 };

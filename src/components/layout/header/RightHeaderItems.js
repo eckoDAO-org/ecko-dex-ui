@@ -138,7 +138,7 @@ const RightHeaderItems = () => {
                   onClick={() => {
                     notification.removeAllItem();
                   }}
-                  label=" Remove All Notification"
+                  label="Remove All Notification"
                   fontSize="12px"
                   buttonStyle={{ width: '100%' }}
                   outGameEditionView

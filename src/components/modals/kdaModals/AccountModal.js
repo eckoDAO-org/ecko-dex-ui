@@ -5,13 +5,11 @@ import { ExplorerIcon } from '../../../assets';
 import { NETWORK_TYPE } from '../../../constants/contextConstants';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import { LightModeContext } from '../../../contexts/LightModeContext';
 import { ModalContext } from '../../../contexts/ModalContext';
 import { WalletContext } from '../../../contexts/WalletContext';
 import { KaddexWalletContext } from '../../../contexts/KaddexWalletContext';
 import CopyPopup from '../../../components/shared/CopyPopup';
 import CustomButton from '../../../components/shared/CustomButton';
-import { theme } from '../../../styles/theme';
 import reduceToken from '../../../utils/reduceToken';
 import { Container } from '../../layout/Containers';
 import ConnectWalletModal from './ConnectWalletModal';
@@ -100,7 +98,6 @@ const AccountModal = () => {
   const { account, logout } = useContext(AccountContext);
   const modalContext = useContext(ModalContext);
   const { gameEditionView, setSelectedWire, setShowWires } = useContext(GameEditionContext);
-  const { themeMode } = useContext(LightModeContext);
   const { wallet } = useContext(WalletContext);
   const { disconnectWallet } = useContext(KaddexWalletContext);
 
@@ -143,11 +140,7 @@ const AccountModal = () => {
       <ActionContainer $gameEditionView={gameEditionView}>
         <ButtonGroup $gameEditionView={gameEditionView} fluid>
           <CustomButton
-            border={gameEditionView ? `2px dashed ${theme(themeMode).colors.white}` : `none`}
-            buttonStyle={gameEditionView ? { padding: 10 } : {}}
-            borderRadius={gameEditionView && '0'}
-            color={theme(themeMode).colors.white}
-            background="transparent"
+            type="basic"
             onClick={() => {
               if (gameEditionView) {
                 setSelectedWire(null);
@@ -161,19 +154,11 @@ const AccountModal = () => {
               }
             }}
           >
-            {gameEditionView ? (
-              <Label geFontSize={20} geLabelStyle={{ textAlign: 'center' }}>
-                Change Method
-              </Label>
-            ) : (
-              'Change Method'
-            )}
+            Change Method
           </CustomButton>
           {!gameEditionView && (
             <CustomButton
-              border={`1px solid ${theme(themeMode).colors.white}99`}
-              color={theme(themeMode).colors.white}
-              background="transparent"
+              type="primary"
               onClick={() => {
                 disconnectWallet();
                 logout();
