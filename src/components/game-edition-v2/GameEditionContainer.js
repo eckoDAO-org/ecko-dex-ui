@@ -30,7 +30,7 @@ const DesktopMainContainer = styled.div`
   transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
     let animation = '';
     if (showTokens) {
-      animation = $scale ? 'translate(-600px, 560px) scale(1.28)' : 'translate(-600px, 560px) scale(1)';
+      animation = $scale ? 'translate(-600px, 560px) scale(1.28)' : 'translate(-600px, 442px) scale(1)';
       return animation;
     }
     if (showWires && !selectedWire && !showTokens) {

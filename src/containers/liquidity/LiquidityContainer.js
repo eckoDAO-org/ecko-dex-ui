@@ -2,31 +2,28 @@
 import React, { useEffect, useState, useContext } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { throttle, debounce } from 'throttle-debounce';
+import { ModalContext } from '../../contexts/ModalContext';
+import { AccountContext } from '../../contexts/AccountContext';
+import { WalletContext } from '../../contexts/WalletContext';
+import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { PactContext } from '../../contexts/PactContext';
+import { LightModeContext } from '../../contexts/LightModeContext';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { reduceBalance, getCorrectBalance } from '../../utils/reduceBalance';
 import WalletRequestView from '../../components/swap/swap-modals/WalletRequestView';
-import { ReactComponent as ArrowBack } from '../../assets/images/shared/arrow-back.svg';
-import { ReactComponent as CloseGE } from '../../assets/images/shared/close-ge.svg';
+import { ArrowBack, CogIcon } from '../../assets';
 import { Button } from 'semantic-ui-react';
 import Label from '../../components/shared/Label';
 import CustomButton from '../../components/shared/CustomButton';
 import ReviewTxModal from '../../components/modals/liquidity/ReviewTxModal';
 import TxView from '../../components/swap/swap-modals/TxView';
-import { ModalContext } from '../../contexts/ModalContext';
-import { AccountContext } from '../../contexts/AccountContext';
-import { WalletContext } from '../../contexts/WalletContext';
-import { LiquidityContext } from '../../contexts/LiquidityContext';
-import { theme } from '../../styles/theme';
 import tokenData from '../../constants/cryptoCurrencies';
 import SwapForm from '../../components/swap/SwapForm';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
 import TokenSelectorModalContent from '../../components/swap/swap-modals/TokenSelectorModalContent';
 import TokenSelectorModalContentGE from '../../components/swap/swap-modals/TokenSelectorModalContentGE';
-import { CogIcon } from '../../assets';
 import { FadeIn } from '../../components/shared/animations';
 import FormContainer from '../../components/shared/FormContainer';
 import GradientBorder from '../../components/shared/GradientBorder';
-import { LightModeContext } from '../../contexts/LightModeContext';
 import HeaderItem from '../../components/shared/HeaderItem';
 import CustomPopup from '../../components/shared/CustomPopup';
 import SlippagePopupContent from '../../components/layout/header/SlippagePopupContent';
@@ -34,6 +31,7 @@ import BackgroundLogo from '../../components/shared/BackgroundLogo';
 import browserDetection from '../../utils/browserDetection';
 import ArcadeBackground from '../../assets/images/game-edition/arcade-background.png';
 import PixeledSwapResult from '../../assets/images/game-edition/pixeled-swap-result.png';
+import { theme } from '../../styles/theme';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -72,19 +70,6 @@ const TitleContainer = styled.div`
   margin-bottom: 14px;
   width: 100%;
   margin-top: 16px;
-`;
-
-const Title = styled.span`
-  font: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? `normal normal normal 16px/19px ${fontFamily.pixeboy}` : 'normal normal bold 32px/57px Montserrat'};
-  letter-spacing: 0px;
-  color: ${({ gameEditionView, theme: { colors } }) => colors.white};
-  text-transform: capitalize;
-  svg {
-    path {
-      fill: ${({ theme: { colors } }) => colors.white};
-    }
-  }
 `;
 
 const ButtonContainer = styled.div`
@@ -157,33 +142,12 @@ const InnerRowContainer = styled.div`
   }
 `;
 
-const Value = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.bold)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '24px' : '13px')};
-  line-height: 20px;
-  color: ${({ theme: { colors }, gameEditionView }) => colors.white};
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    text-align: ${({ gameEditionView }) => gameEditionView && 'left'};
-    margin-bottom: ${({ gameEditionView }) => gameEditionView && '5px'};
-  }
-`;
-
 const LabelContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
   z-index: ${({ gameEditionView }) => !gameEditionView && '1'};
 `;
-
-/* const Label = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.regular)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '20px' : '13px')};
-  color: ${({ theme: { colors }, gameEditionView }) => colors.yellow};
-  text-transform: capitalize;
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    text-align: left;
-  }
-`; */
 
 const initialStateValue = {
   coin: '',
