@@ -19,6 +19,7 @@ import { FadeIn } from '../shared/animations';
 import GameEditionButtons from './components/PressedButton';
 import { useLocation } from 'react-router-dom';
 import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION } from '../../router/routes';
+import TokenSelectorModalContent from '../swap/swap-modals/TokenSelectorModalContent';
 
 const DesktopMainContainer = styled.div`
   display: flex;
@@ -28,25 +29,16 @@ const DesktopMainContainer = styled.div`
   align-items: center;
   transition: transform 0.5s;
   transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
-    let animation = '';
     if (showTokens) {
-      animation = $scale ? 'translate(-600px, 560px) scale(1.28)' : 'translate(-600px, 442px) scale(1)';
-      return animation;
+      return $scale ? 'translate(-600px, 560px) scale(1.28)' : 'translate(-600px, 442px) scale(1)';
     }
     if (showWires && !selectedWire && !showTokens) {
-      animation = 'translateY(0px) scale(1)';
-      if ($scale) {
-        animation = 'translateY(560px) scale(1.28)';
-      }
+      return $scale ? 'translateY(560px) scale(1.28)' : 'translateY(0px) scale(1)';
     } else {
-      animation = 'translateY(442px) scale(1)';
-      if ($scale) {
-        animation = 'translateY(560px) scale(1.28)';
-      }
+      return $scale ? 'translateY(560px) scale(1.28)' : 'translateY(442px) scale(1)';
     }
-    return animation;
   }};
-  opacity: ${({ showTokens }) => (showTokens ? 0.5 : 1)};
+  /* opacity: ${({ showTokens }) => (showTokens ? 0.5 : 1)}; */
 `;
 
 const MobileMainContainer = styled.div`
@@ -281,7 +273,8 @@ const GameEditionContainer = ({ children }) => {
         </GameboyDesktopContainer>
         {showTokens && (
           <SearchTokenList>
-            tokens list<button onClick={() => setShowTokens(false)}>X</button>
+            <TokenSelectorModalContent />
+            {/* tokens list<button onClick={() => setShowTokens(false)}>X</button> */}
           </SearchTokenList>
         )}
       </div>
