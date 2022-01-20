@@ -6,10 +6,12 @@ import { SearchGEIcon } from '../../assets';
 
 const Container = styled.div.attrs({ icon: 'search' })`
   margin-bottom: 15px;
-
+  width: 100%;
   border-radius: 4px;
-  border: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? `2px dashed ${colors.black} ` : `1px solid ${colors.white}99 `)};
-  color: ${({ gameEditionView, theme: { colors } }) => gameEditionView && colors.black};
+  border: ${({ theme: { colors }, gameEditionView }) => !gameEditionView && `1px solid ${colors.white}99 `};
+  color: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `${colors.white}`};
+  background: ${({ gameEditionView, theme: { colors } }) => gameEditionView && 'rgba(132, 127, 168, 0.34)'};
+  border-radius: ${({ gameEditionView, theme: { colors } }) => gameEditionView && '40px'};
   .ui.search .prompt {
     border-radius: 4px;
     color: ${({ theme: { colors } }) => colors.white};
@@ -20,13 +22,11 @@ const Container = styled.div.attrs({ icon: 'search' })`
   }
   .ui.input > input:active,
   .ui.input > input:focus {
-    color: ${({ gameEditionView, theme: { colors } }) => gameEditionView && colors.black};
-    font-family: ${({ theme: { fontFamily }, gameEditionView }) => gameEditionView && fontFamily.pressStartRegular};
+    color: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `${colors.white}`};
   }
   .ui.input > input {
     border: none;
-    color: ${({ gameEditionView, theme: { colors } }) => gameEditionView && colors.black};
-    font-family: ${({ theme: { fontFamily }, gameEditionView }) => gameEditionView && fontFamily.pressStartRegular};
+    color: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `${colors.white}`};
   }
 `;
 
@@ -45,22 +45,7 @@ const Search = ({ fluid, containerStyle, placeholder, value, onChange }) => {
   const { gameEditionView } = useContext(GameEditionContext);
   return (
     <Container gameEditionView={gameEditionView} fluid={fluid} style={containerStyle}>
-      <SUISearch
-        fluid
-        open={false}
-        icon={
-          gameEditionView ? (
-            <SearchIconContainer>
-              <SearchGEIcon />
-            </SearchIconContainer>
-          ) : (
-            'search'
-          )
-        }
-        placeholder={placeholder}
-        value={value}
-        onSearchChange={onChange}
-      />
+      <SUISearch fluid open={false} icon={'search'} placeholder={placeholder} value={value} onSearchChange={onChange} />
     </Container>
   );
 };

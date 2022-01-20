@@ -17,7 +17,8 @@ const Container = styled.div`
   width: 100%;
   background-color: ${({ gameEditionView, noInputBackground, theme: { backgroundInput } }) =>
     gameEditionView || noInputBackground ? 'transparent' : backgroundInput};
-  border: ${({ gameEditionView, theme: { colors } }) => !gameEditionView && `1px solid ${colors.white}99`};
+  border: ${({ withBorder, gameEditionView, theme: { colors } }) =>
+    gameEditionView ? withBorder && '2px dashed #ffffff' : `1px solid ${colors.white}99`};
   border-radius: ${({ gameEditionView }) => !gameEditionView && '4px'};
   padding: ${({ gameEditionView }) => (!gameEditionView ? '10px 10px 0px 10px' : '8px 14px 0px 30px')};
 
@@ -30,7 +31,8 @@ const Container = styled.div`
       if (gameEditionView) return fontFamily.pixeboy + '!important';
       else return fontFamily.regular + '!important';
     }};
-    color: ${({ gameEditionView, outGameEditionView, theme: { colors } }) => {
+    color: ${({ color, gameEditionView, outGameEditionView, theme: { colors } }) => {
+      if (color) return color + '!important';
       if (outGameEditionView) return colors.white + '!important';
       if (gameEditionView) return colors.black + '!important';
       else return colors.white + '!important';
@@ -38,7 +40,8 @@ const Container = styled.div`
     font-size: ${({ gameEditionView }) => gameEditionView && '34px'};
   }
   & input::placeholder {
-    color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `${colors.black}70 !important` : ``)};
+    color: ${({ color, gameEditionView, theme: { colors } }) =>
+      gameEditionView ? (color ? color : `${colors.black}70 !important`) : `${colors.white} !important`};
     text-transform: capitalize;
     font-family: 14px;
     font-size: ${({ gameEditionView }) => gameEditionView && '34px'};
@@ -52,7 +55,7 @@ const Container = styled.div`
   .ui.labeled.input > .label:not(.corner) {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-    color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `${colors.black} !important` : `${colors.white} !important`)};
+    color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? '#fff' : `${colors.white} !important`)};
     padding-left: ${({ gameEditionView }) => !gameEditionView && '0px'};
     padding-right: ${({ gameEditionView }) => !gameEditionView && '0px'};
     background: transparent;
@@ -152,6 +155,8 @@ const Input = ({
   onChange,
   error,
   type,
+  color,
+  withBorder,
   maxLength,
   outGameEditionView,
   noInputBackground,
@@ -183,6 +188,8 @@ const Input = ({
       gameEditionView={gameEditionView}
       outGameEditionView={outGameEditionView}
       noInputBackground={noInputBackground}
+      color={color}
+      withBorder={withBorder}
       inputRightComponent={inputRightComponent || withSelectButton}
       inputComponentWidth={inputRightComponent ? theme().inputTokenWidth : theme().inputSelectButtonWidth}
       style={containerStyle}

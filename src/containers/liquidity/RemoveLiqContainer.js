@@ -19,6 +19,9 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 import GradientBorder from '../../components/shared/GradientBorder';
 import { LightModeContext } from '../../contexts/LightModeContext';
 import { ModalContext } from '../../contexts/ModalContext';
+import ArcadeBackground from '../../assets/images/game-edition/arcade-background.png';
+import Label from '../../components/shared/Label';
+import PixeledSwapResult from '../../assets/images/game-edition/pixeled-swap-result.png';
 
 const Container = styled.div`
   display: flex;
@@ -39,6 +42,10 @@ const Container = styled.div`
         height: 100%;
         display: flex;
         flex-direction: column;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        background-image: ${`url(${ArcadeBackground})`};
       `;
     } else {
       return css`
@@ -102,6 +109,23 @@ const ResultContainer = styled.div`
   flex-flow: column;
   width: 100%;
   padding: ${({ gameEditionView }) => gameEditionView && '10px'};
+
+  ${({ gameEditionView }) => {
+    if (gameEditionView) {
+      return css`
+        display: flex;
+        flex-flow: row;
+        justify-content: space-between;
+        margin: 10px 0px 0px;
+        padding: 0px 10px;
+        width: 436px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+      `;
+    }
+  }}
+
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
   }
@@ -112,24 +136,30 @@ const InnerRowContainer = styled.div`
   justify-content: space-between;
   margin-top: ${({ gameEditionView }) => !gameEditionView && '10px'};
   flex-flow: row;
+
+  ${({ gameEditionView }) => {
+    if (gameEditionView) {
+      return css`
+        margin-right: 15px;
+        display: flex;
+        flex-flow: column;
+        min-width: 194px;
+        min-height: 82px;
+        justify-content: center;
+        text-align: center;
+        align-items: center;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        background-image: ${`url(${PixeledSwapResult})`};
+      `;
+    }
+  }}
+
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     margin-bottom: 5px;
     flex-flow: row;
   }
-`;
-
-const Label = styled.span`
-  font: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? `normal normal normal 10px/12px ${fontFamily.pressStartRegular}` : `normal normal normal 13px/16px ${fontFamily.regular}`};
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? `${colors.black}` : `${colors.white}`)};
-  text-transform: capitalize;
-`;
-
-const Value = styled.span`
-  font: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? `normal normal normal 10px/12px ${fontFamily.pressStartRegular}` : `normal normal normal 13px/16px ${fontFamily.bold}`};
-  line-height: 20px;
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? `${colors.black}` : `${colors.white}`)};
 `;
 
 const RemoveLiqContainer = (props) => {
@@ -218,7 +248,7 @@ const RemoveLiqContainer = (props) => {
     <Container gameEditionView={gameEditionView}>
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
       <TitleContainer gameEditionView={gameEditionView}>
-        <Title gameEditionView={gameEditionView}>
+        <Label fontSize={32} geCenter fontFamily="bold" geFontSize={44} geLabelStyle={{ lineHeight: '32px' }} onClose={() => props.closeLiquidity()}>
           {!gameEditionView && (
             <ArrowBack
               style={{
@@ -231,8 +261,8 @@ const RemoveLiqContainer = (props) => {
             />
           )}
           Remove Liquidity
-        </Title>
-        {gameEditionView && <CloseGE onClick={() => props.closeLiquidity()} />}
+        </Label>
+        {/* {gameEditionView && <CloseGE onClick={() => props.closeLiquidity()} />} */}
       </TitleContainer>
 
       <FormContainer
@@ -280,7 +310,7 @@ const RemoveLiqContainer = (props) => {
                   }
                 }}
               >
-                Remove Liquidity
+                Press B to remove liquidity
               </CustomButton>
             </Button.Group>
           </ButtonContainer>
@@ -294,6 +324,8 @@ const RemoveLiqContainer = (props) => {
             topLeftLabel="Pool Tokens to Remove"
             placeholder="Enter Amount"
             size="large"
+            color={gameEditionView && '#fff'}
+            withBorder
             label={{ content: '%' }}
             onChange={(e) => {
               if (Number(e.target.value) <= 100 && Number(e.target.value) >= 0) {
@@ -305,6 +337,10 @@ const RemoveLiqContainer = (props) => {
           <ButtonContainer gameEditionView={gameEditionView} style={gameEditionView ? { marginTop: '3px' } : {}}>
             <Button.Group fluid>
               <CustomButton
+                border={gameEditionView ? `2px dashed #ffffff` : `1px solid ${theme(themeMode).colors.white}99`}
+                buttonStyle={gameEditionView ? { padding: 10 } : {}}
+                borderRadius={gameEditionView && '0'}
+                background="transparent"
                 buttonStyle={{
                   width: '20%',
                 }}
@@ -315,6 +351,9 @@ const RemoveLiqContainer = (props) => {
               </CustomButton>
               <MyButtonDivider />
               <CustomButton
+                border={gameEditionView ? `2px dashed #ffffff` : `1px solid ${theme(themeMode).colors.white}99`}
+                buttonStyle={gameEditionView ? { padding: 10 } : {}}
+                borderRadius={gameEditionView && '0'}
                 buttonStyle={{
                   width: '20%',
                 }}
@@ -325,6 +364,9 @@ const RemoveLiqContainer = (props) => {
               </CustomButton>
               <MyButtonDivider />
               <CustomButton
+                border={gameEditionView ? `2px dashed #ffffff` : `1px solid ${theme(themeMode).colors.white}99`}
+                buttonStyle={gameEditionView ? { padding: 10 } : {}}
+                borderRadius={gameEditionView && '0'}
                 buttonStyle={{
                   width: '20%',
                 }}
@@ -335,6 +377,9 @@ const RemoveLiqContainer = (props) => {
               </CustomButton>
               <MyButtonDivider />
               <CustomButton
+                border={gameEditionView ? `2px dashed #ffffff` : `1px solid ${theme(themeMode).colors.white}99`}
+                buttonStyle={gameEditionView ? { padding: 10 } : {}}
+                borderRadius={gameEditionView && '0'}
                 buttonStyle={{
                   width: '20%',
                 }}
@@ -349,18 +394,28 @@ const RemoveLiqContainer = (props) => {
 
         <ResultContainer gameEditionView={gameEditionView}>
           <InnerRowContainer gameEditionView={gameEditionView}>
-            <Label gameEditionView={gameEditionView}>
+            <Label fontSize={13} geFontSize={20} geColor="blue">
               {token0} per {token1}
             </Label>
-            <Value gameEditionView={gameEditionView}>{pairUnit(extractDecimal(pooled))}</Value>
+            <Label geFontSize={28} fontSize={13} fontFamily="bold">
+              {pairUnit(extractDecimal(pooled))}
+            </Label>
           </InnerRowContainer>
           <InnerRowContainer gameEditionView={gameEditionView}>
-            <Label gameEditionView={gameEditionView}>Pooled {token0}</Label>
-            <Value gameEditionView={gameEditionView}>{pairUnit(extractDecimal(pooledToken0))}</Value>
+            <Label fontSize={13} geFontSize={20} geColor="blue">
+              Pooled {token0}
+            </Label>
+            <Label geFontSize={28} fontSize={13} fontFamily="bold">
+              {pairUnit(extractDecimal(pooledToken0))}
+            </Label>
           </InnerRowContainer>
           <InnerRowContainer gameEditionView={gameEditionView}>
-            <Label gameEditionView={gameEditionView}>Pooled {token1}</Label>
-            <Value gameEditionView={gameEditionView}>{pairUnit(extractDecimal(pooledToken1))}</Value>
+            <Label fontSize={13} geFontSize={20} geColor="blue">
+              Pooled {token1}
+            </Label>
+            <Label geFontSize={28} fontSize={13} fontFamily="bold">
+              {pairUnit(extractDecimal(pooledToken1))}
+            </Label>
           </InnerRowContainer>
         </ResultContainer>
       </FormContainer>

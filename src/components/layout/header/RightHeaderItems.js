@@ -159,10 +159,10 @@ const RightHeaderItems = () => {
             </div>
           }
           on="click"
-          offset={[0, -14]}
+          offset={[14, -14]}
           position="bottom right"
         >
-          <PopupContentList items={headerLinks} viewOtherComponents withLogout PopupContentListStyle={{ minWidth: 170 }} />
+          <PopupContentList items={headerLinks} viewOtherComponents withLogout PopupContentListStyle={{ minWidth: 100 }} />
         </CustomPopup>
       </HeaderItem>
     </RightContainerHeader>
