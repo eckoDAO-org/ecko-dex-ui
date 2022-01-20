@@ -241,6 +241,7 @@ const RemoveLiqContainer = (props) => {
           <ButtonContainer gameEditionView={gameEditionView}>
             <Button.Group fluid style={{ padding: 0 }}>
               <CustomButton
+                type="secondary"
                 loading={loading}
                 disabled={isNaN(amount) || reduceBalance(amount) === 0}
                 onClick={async () => {
@@ -307,21 +308,7 @@ const RemoveLiqContainer = (props) => {
                 buttonStyle={{
                   width: '20%',
                 }}
-                background={
-                  amount === 25 ? (gameEditionView ? `${theme(themeMode).colors.black}` : `${theme(themeMode).colors.white}`) : 'transparent'
-                }
-                border={!gameEditionView && `1px solid ${theme(themeMode).colors.white}99`}
-                color={
-                  amount === 25
-                    ? gameEditionView
-                      ? `${theme(themeMode).colors.yellow}`
-                      : themeMode === 'dark'
-                      ? `${theme(themeMode).colors.black}`
-                      : `${theme(themeMode).colors.primary}`
-                    : gameEditionView
-                    ? `${theme(themeMode).colors.black}`
-                    : `${theme(themeMode).colors.white}`
-                }
+                type={amount === 25 ? 'secondary' : 'primary'}
                 onClick={() => setAmount(25)}
               >
                 25%
@@ -331,21 +318,7 @@ const RemoveLiqContainer = (props) => {
                 buttonStyle={{
                   width: '20%',
                 }}
-                border={!gameEditionView && `1px solid ${theme(themeMode).colors.white}99`}
-                background={
-                  amount === 50 ? (gameEditionView ? `${theme(themeMode).colors.black}` : `${theme(themeMode).colors.white}`) : 'transparent'
-                }
-                color={
-                  amount === 50
-                    ? gameEditionView
-                      ? `${theme(themeMode).colors.yellow}`
-                      : themeMode === 'dark'
-                      ? `${theme(themeMode).colors.black}`
-                      : `${theme(themeMode).colors.primary}`
-                    : gameEditionView
-                    ? `${theme(themeMode).colors.black}`
-                    : `${theme(themeMode).colors.white}`
-                }
+                type={amount === 50 ? 'secondary' : 'primary'}
                 onClick={() => setAmount(50)}
               >
                 50%
@@ -355,21 +328,7 @@ const RemoveLiqContainer = (props) => {
                 buttonStyle={{
                   width: '20%',
                 }}
-                border={!gameEditionView && `1px solid ${theme(themeMode).colors.white}99`}
-                background={
-                  amount === 75 ? (gameEditionView ? `${theme(themeMode).colors.black}` : `${theme(themeMode).colors.white}`) : 'transparent'
-                }
-                color={
-                  amount === 75
-                    ? gameEditionView
-                      ? `${theme(themeMode).colors.yellow}`
-                      : themeMode === 'dark'
-                      ? `${theme(themeMode).colors.black}`
-                      : `${theme(themeMode).colors.primary}`
-                    : gameEditionView
-                    ? `${theme(themeMode).colors.black}`
-                    : `${theme(themeMode).colors.white}`
-                }
+                type={amount === 75 ? 'secondary' : 'primary'}
                 onClick={() => setAmount(75)}
               >
                 75%
@@ -379,21 +338,7 @@ const RemoveLiqContainer = (props) => {
                 buttonStyle={{
                   width: '20%',
                 }}
-                border={!gameEditionView && `1px solid ${theme(themeMode).colors.white}99`}
-                background={
-                  amount === 100 ? (gameEditionView ? `${theme(themeMode).colors.black}` : `${theme(themeMode).colors.white}`) : 'transparent'
-                }
-                color={
-                  amount === 100
-                    ? gameEditionView
-                      ? `${theme(themeMode).colors.yellow}`
-                      : themeMode === 'dark'
-                      ? `${theme(themeMode).colors.black}`
-                      : `${theme(themeMode).colors.primary}`
-                    : gameEditionView
-                    ? `${theme(themeMode).colors.black}`
-                    : `${theme(themeMode).colors.white}`
-                }
+                type={amount === 100 ? 'secondary' : 'primary'}
                 onClick={() => setAmount(100)}
               >
                 100%

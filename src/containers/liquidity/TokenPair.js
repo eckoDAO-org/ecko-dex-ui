@@ -1,16 +1,15 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
-import { Accordion, Button } from 'semantic-ui-react';
-
+import { Accordion } from 'semantic-ui-react';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { reduceBalance, extractDecimal, pairUnit } from '../../utils/reduceBalance';
 import CustomButton from '../../components/shared/CustomButton';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { theme } from '../../styles/theme';
-import { ButtonContainer, ColumnContainer, Container, RowContainer, Value } from '../../components/layout/Containers';
-import { LightModeContext } from '../../contexts/LightModeContext';
-import { ArrowDown, GeCancelButtonIcon, GeConfirmButtonIcon, PixeledArrowDownIcon } from '../../assets';
+import { ColumnContainer, Container, RowContainer, Value } from '../../components/layout/Containers';
+import { ArrowDown, PixeledArrowDownIcon } from '../../assets';
 import useWindowSize from '../../hooks/useWindowSize';
 import Label from '../../components/shared/Label';
+import GameEditionButton from '../../components/game-edition-v2/components/GameEditionButton';
 
 const ResultContainer = styled.div`
   display: flex !important;
@@ -60,9 +59,16 @@ const IconContainer = styled.div`
   }
 `;
 
+const ActionContainer = styled.div`
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0;
+`;
+
 const TokenPair = (props) => {
   const { gameEditionView: $gameEditionView } = useContext(GameEditionContext);
-  const { themeMode } = useContext(LightModeContext);
   let { token0, token1, balance, supply, pooledAmount } = props.pair;
 
   const handleActiveIndex = (index) => {
@@ -92,19 +98,27 @@ const TokenPair = (props) => {
           {!$gameEditionView ? (
             <ResultContainer>
               <RowContainer>
-                <Label fontSize={13}>Your pool tokens:</Label>
+                <Label fontSize={13} withShade>
+                  Your pool tokens:
+                </Label>
                 <Label fontSize={16}>{pairUnit(extractDecimal(balance))}</Label>
               </RowContainer>
               <RowContainer>
-                <Label fontSize={13}>Pooled {token0}:</Label>
+                <Label fontSize={13} withShade>
+                  Pooled {token0}:
+                </Label>
                 <Label fontSize={16}>{pairUnit(extractDecimal(pooledAmount[0]))}</Label>
               </RowContainer>
               <RowContainer>
-                <Label fontSize={13}>Pooled {token1}:</Label>
+                <Label fontSize={13} withShade>
+                  Pooled {token1}:
+                </Label>
                 <Label fontSize={16}>{pairUnit(extractDecimal(pooledAmount[1]))}</Label>
               </RowContainer>
               <RowContainer>
-                <Label fontSize={13}>Your pool share:</Label>
+                <Label fontSize={13} withShade>
+                  Your pool share:
+                </Label>
                 <Label fontSize={16}>{reduceBalance((extractDecimal(balance) / extractDecimal(supply)) * 100)}%</Label>
               </RowContainer>
             </ResultContainer>
@@ -160,40 +174,51 @@ const TokenPair = (props) => {
             </ResultContainer>
           )}
 
-          <ButtonContainer id="token-pair-button-container">
-            <Button.Group fluid style={{ flexDirection: $gameEditionView && width <= theme().mediaQueries.mobilePixel ? 'column' : 'row' }}>
-              <CustomButton
-                buttonStyle={{
-                  marginRight: $gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '30px',
-                  width: $gameEditionView && width <= theme().mediaQueries.mobilePixel ? '100%' : '48%',
-                  height: '40px',
-                  marginBottom: $gameEditionView && width <= theme().mediaQueries.mobilePixel && '10px',
+          <ActionContainer>
+            {$gameEditionView ? (
+              <GameEditionButton
+                type="cancel"
+                onClick={() => {
+                  props.selectRemoveLiquidity();
+                  props.setTokenPair(props.pair);
                 }}
-                background="transparent"
-                color={theme(themeMode).colors.white}
-                border={!$gameEditionView && `1px solid ${theme(themeMode).colors.white}99`}
+              />
+            ) : (
+              <CustomButton
+                fluid
+                type="primary"
+                buttonStyle={{
+                  marginRight: 10,
+                }}
                 onClick={() => {
                   props.selectRemoveLiquidity();
                   props.setTokenPair(props.pair);
                 }}
               >
-                {$gameEditionView ? <GeCancelButtonIcon /> : 'Remove'}
+                Remove
               </CustomButton>
-              <CustomButton
-                buttonStyle={{
-                  marginLeft: $gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '-20px',
-                  width: $gameEditionView && width <= theme().mediaQueries.mobilePixel ? '100%' : '48%',
-                  height: '40px',
+            )}
+            {$gameEditionView ? (
+              <GameEditionButton
+                type="confirm"
+                onClick={() => {
+                  props.selectAddLiquidity();
+                  props.setTokenPair(props.pair);
                 }}
+              />
+            ) : (
+              <CustomButton
+                fluid
+                type="secondary"
                 onClick={() => {
                   props.selectAddLiquidity();
                   props.setTokenPair(props.pair);
                 }}
               >
-                {$gameEditionView ? <GeConfirmButtonIcon /> : 'Remove'}
+                Add
               </CustomButton>
-            </Button.Group>
-          </ButtonContainer>
+            )}
+          </ActionContainer>
         </Accordion.Content>
       </Accordion>
     </Container>

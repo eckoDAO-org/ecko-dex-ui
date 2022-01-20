@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import LiquidityContainer from './liquidity/LiquidityContainer';
 import LiquidityList from './liquidity/LiquidityList';
 import RemoveLiqContainer from './liquidity/RemoveLiqContainer';
+import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
+import { useGameEditionContext } from '../contexts';
 
 const Container = styled.div`
   display: flex;
@@ -10,13 +12,31 @@ const Container = styled.div`
   height: 100%;
 
   align-items: center;
+  ${({ $gameEditionView }) => {
+    if ($gameEditionView) {
+      return css`
+        padding: 16px;
+        height: 100%;
+        display: flex;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        background-image: ${`url(${ArcadeBackground})`};
+        overflow: auto;
+        ::-webkit-scrollbar {
+          display: none;
+        }
+      `;
+    }
+  }}
 `;
 
 const PoolContainer = () => {
+  const { gameEditionView } = useGameEditionContext();
   const [selectedView, setSelectedView] = useState(false);
   const [pair, setPair] = useState(null);
   return (
-    <Container>
+    <Container $gameEditionView={gameEditionView}>
       {selectedView === 'Remove Liquidity' ? (
         <RemoveLiqContainer
           closeLiquidity={() => {
