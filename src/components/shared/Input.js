@@ -52,7 +52,7 @@ const Container = styled.div`
   .ui.labeled.input > .label:not(.corner) {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-    color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `${colors.black} !important` : `${colors.white} !important`)};
+    color: ${({ gameEditionView, theme: { colors } }) => `${colors.white} !important`};
     padding-left: ${({ gameEditionView }) => !gameEditionView && '0px'};
     padding-right: ${({ gameEditionView }) => !gameEditionView && '0px'};
     background: transparent;
