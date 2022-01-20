@@ -10,7 +10,7 @@ const STYText = styled.span`
   align-items: center;
   cursor: ${({ onClick }) => onClick && 'pointer'};
   z-index: 1;
-  color: ${({ withShade, theme: { colors }, color }) => (color || withShade ? `${colors.white}99` : colors.white)};
+  color: ${({ withShade, theme: { colors }, color }) => (color ? color : withShade ? `${colors.white}99` : colors.white)};
   ${({ inverted, color, theme: { colors } }) =>
     inverted &&
     !color &&

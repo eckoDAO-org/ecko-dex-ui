@@ -324,6 +324,8 @@ const RemoveLiqContainer = (props) => {
             topLeftLabel="Pool Tokens to Remove"
             placeholder="Enter Amount"
             size="large"
+            color={'#fff'}
+            withBorder
             label={{ content: '%' }}
             onChange={(e) => {
               if (Number(e.target.value) <= 100 && Number(e.target.value) >= 0) {
@@ -335,13 +337,15 @@ const RemoveLiqContainer = (props) => {
           <ButtonContainer gameEditionView={gameEditionView} style={gameEditionView ? { marginTop: '3px' } : {}}>
             <Button.Group fluid>
               <CustomButton
+                border={gameEditionView ? `2px dashed #ffffff` : `1px solid ${theme(themeMode).colors.white}99`}
+                buttonStyle={gameEditionView ? { padding: 10 } : {}}
+                borderRadius={gameEditionView && '0'}
+                background="transparent"
                 buttonStyle={{
                   width: '20%',
                 }}
-                background={
-                  amount === 25 ? (gameEditionView ? `${theme(themeMode).colors.black}` : `${theme(themeMode).colors.white}`) : 'transparent'
-                }
-                border={!gameEditionView && `1px solid ${theme(themeMode).colors.white}99`}
+                background={amount === 25 ? (gameEditionView ? `#6D99E4` : `${theme(themeMode).colors.white}`) : 'transparent'}
+                /* border={!gameEditionView && } */
                 color={
                   amount === 25
                     ? gameEditionView
@@ -359,13 +363,13 @@ const RemoveLiqContainer = (props) => {
               </CustomButton>
               <MyButtonDivider />
               <CustomButton
+                border={gameEditionView ? `2px dashed #ffffff` : `1px solid ${theme(themeMode).colors.white}99`}
+                buttonStyle={gameEditionView ? { padding: 10 } : {}}
+                borderRadius={gameEditionView && '0'}
                 buttonStyle={{
                   width: '20%',
                 }}
-                border={!gameEditionView && `1px solid ${theme(themeMode).colors.white}99`}
-                background={
-                  amount === 50 ? (gameEditionView ? `${theme(themeMode).colors.black}` : `${theme(themeMode).colors.white}`) : 'transparent'
-                }
+                background={amount === 50 ? (gameEditionView ? `#6D99E4` : `${theme(themeMode).colors.white}`) : 'transparent'}
                 color={
                   amount === 50
                     ? gameEditionView
@@ -383,13 +387,13 @@ const RemoveLiqContainer = (props) => {
               </CustomButton>
               <MyButtonDivider />
               <CustomButton
+                border={gameEditionView ? `2px dashed #ffffff` : `1px solid ${theme(themeMode).colors.white}99`}
+                buttonStyle={gameEditionView ? { padding: 10 } : {}}
+                borderRadius={gameEditionView && '0'}
                 buttonStyle={{
                   width: '20%',
                 }}
-                border={!gameEditionView && `1px solid ${theme(themeMode).colors.white}99`}
-                background={
-                  amount === 75 ? (gameEditionView ? `${theme(themeMode).colors.black}` : `${theme(themeMode).colors.white}`) : 'transparent'
-                }
+                background={amount === 75 ? (gameEditionView ? `#6D99E4` : `${theme(themeMode).colors.white}`) : 'transparent'}
                 color={
                   amount === 75
                     ? gameEditionView
@@ -407,13 +411,13 @@ const RemoveLiqContainer = (props) => {
               </CustomButton>
               <MyButtonDivider />
               <CustomButton
+                border={gameEditionView ? `2px dashed #ffffff` : `1px solid ${theme(themeMode).colors.white}99`}
+                buttonStyle={gameEditionView ? { padding: 10 } : {}}
+                borderRadius={gameEditionView && '0'}
                 buttonStyle={{
                   width: '20%',
                 }}
-                border={!gameEditionView && `1px solid ${theme(themeMode).colors.white}99`}
-                background={
-                  amount === 100 ? (gameEditionView ? `${theme(themeMode).colors.black}` : `${theme(themeMode).colors.white}`) : 'transparent'
-                }
+                background={amount === 100 ? (gameEditionView ? `#6D99E4` : `${theme(themeMode).colors.white}`) : 'transparent'}
                 color={
                   amount === 100
                     ? gameEditionView
