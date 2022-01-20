@@ -324,7 +324,7 @@ const RemoveLiqContainer = (props) => {
             topLeftLabel="Pool Tokens to Remove"
             placeholder="Enter Amount"
             size="large"
-            color={'#fff'}
+            color={gameEditionView && '#fff'}
             withBorder
             label={{ content: '%' }}
             onChange={(e) => {
