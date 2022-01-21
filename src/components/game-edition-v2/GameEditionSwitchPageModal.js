@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 
@@ -7,7 +7,8 @@ import GameEditionLabel from './components/GameEditionLabel';
 import { PixeledArrowDownIcon } from '../../assets';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useGameEditionContext } from '../../contexts';
-import { ROUTE_POOL, ROUTE_STATS, ROUTE_SWAP } from '../../router/routes';
+
+const SCROLL_OFFSET = 95;
 
 const Content = styled.div`
   display: flex;
@@ -21,10 +22,15 @@ const Content = styled.div`
 const ItemsContainer = styled.div`
   display: flex;
   flex-flow: row;
-  transition: transform 0.5s;
-  max-width: 100%;
-
-  transform: ${({ translateX }) => `translateX(${translateX}px)`};
+  width: 436px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  & > div:first-child {
+    margin-left: ${SCROLL_OFFSET}px;
+  }
+  & > div:last-child {
+    margin-right: ${SCROLL_OFFSET}px;
+  }
 `;
 const IconContainer = styled.div`
   margin-bottom: 10px;
@@ -44,35 +50,21 @@ const IconContainer = styled.div`
 const Item = styled.div`
   display: flex;
   justify-content: center;
-  ${({ isVisible }) => {
-    if (isVisible) {
-      return css`
-        /* opacity: 1;
-        transition: opacity 0s 0.2s; */
-      `;
-    } else {
-      return css`
-        /* opacity: 0;
-        transition: opacity 0s; */
-        /* mask: linear-gradient(270deg,#fff, transparent); */
-      `;
-    }
-  }}
 `;
+
 const GameEditionSwitchPageModal = ({ direction }) => {
   const location = useLocation();
   const history = useHistory();
   const { closeModal } = useGameEditionContext();
-  const [translateX, setTranslateX] = useState(65);
+  const [translateX, setTranslateX] = useState(0);
 
-  //   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
-  const [secondsCount, setSecondsCount] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+  const [intervalId, setIntervalId] = useState(null);
   const { setButtons } = useContext(GameEditionContext);
 
   const getCorrectSwitchIndex = (itemIndex) => {
     let index = null;
-    console.log('direction', direction);
     if (direction === 'left') {
       if (itemIndex - 1 < 0) {
         index = itemIndex;
@@ -80,7 +72,6 @@ const GameEditionSwitchPageModal = ({ direction }) => {
         index = itemIndex - 1;
       }
     } else {
-      console.log('itemIndex', itemIndex);
       if (itemIndex + 1 > menuItems.length) {
         index = itemIndex;
       } else {
@@ -90,6 +81,7 @@ const GameEditionSwitchPageModal = ({ direction }) => {
     return index;
   };
 
+  // init index based on the current route when this page is rendered
   useEffect(() => {
     let index = null;
     switch (location.pathname) {
@@ -117,63 +109,80 @@ const GameEditionSwitchPageModal = ({ direction }) => {
         break;
     }
     if (direction === 'right' && index + 1 < menuItems.length) {
-      setTranslateX((prev) => prev - 274);
+      const scrollX = index + 1 === 1 ? SCROLL_OFFSET : 0;
+      onSwitch(direction, index, scrollX);
     }
     if (direction === 'left' && index - 1 >= 0) {
-      setTranslateX((prev) => prev + 274);
+      const scrollX = index + 1 === menuItems.length ? SCROLL_OFFSET : 0;
+      onSwitch(direction, index, scrollX);
     }
-    setSelectedItemIndex(index);
   }, []);
+
+  const startTimer = () => {
+    const interval = setInterval(() => {
+      setSeconds((seconds) => seconds + 1);
+    }, 1000);
+    setIntervalId(interval);
+  };
+
+  const stopTimer = () => {
+    clearInterval(setSeconds(0));
+  };
+  console.log('secondsCount', seconds);
+  // init buttons and starting interval to navigate into selected page after 2 seconds
   useEffect(() => {
     setButtons({
       R1: () => onSwitch('right'),
       L1: () => onSwitch('left'),
     });
-    // if (selectedItemIndex < menuItems.length) {
-    //   setSelectedItem(menuItems[selectedItemIndex]);
-    // } else {
-    //   setSelectedItem(null);
-    // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    // const interval = setInterval(() => setSecondsCount((prev) => prev + 1), 1000);
-    // return () => clearInterval(interval);
+    stopTimer();
+    startTimer();
   }, [selectedItemIndex]);
-  //   console.log('selectedItemIndex', selectedItemIndex);
 
-  // useEffect(() => {
-  //   if (secondsCount === 2) {
-  //     setButtons({
-  //       R1: null,
-  //       L1: null,
-  //     });
-  //     closeModal();
-  //     history.push(menuItems[selectedItemIndex].route);
-  //     //   console.log('item', menuItems[selectedItemIndex]);
-  //   }
-  // }, [secondsCount]);
+  // navigate to page if secondsCount === 2
+  useEffect(() => {
+    if (seconds === 5) {
+      setButtons({
+        R1: null,
+        L1: null,
+      });
+      closeModal();
 
-  const onSwitch = (direction) => {
+      history.push(menuItems[selectedItemIndex].route);
+    }
+  }, [seconds]);
+
+  // funcation on L1 and R1 buttons
+  const onSwitch = (direction, index, scrollX) => {
     if (direction === 'right' && selectedItemIndex + 1 < menuItems.length) {
-      setSelectedItemIndex((prev) => prev + 1);
-      setTranslateX((prev) => prev - 274);
+      setSelectedItemIndex((prev) => index || prev + 1);
+
+      setTranslateX((prev) => prev + 274 + (scrollX || 0));
     }
     if (direction === 'left' && selectedItemIndex - 1 >= 0) {
-      setSelectedItemIndex((prev) => prev - 1);
+      setSelectedItemIndex((prev) => index || prev - 1);
 
-      setTranslateX((prev) => prev + 274);
+      setTranslateX((prev) => prev - 274 - (scrollX || 0));
     }
   };
+
+  useEffect(() => {
+    const elementContainer = document.getElementById('switch-items-container');
+    if (elementContainer) {
+      elementContainer.scrollTo(translateX, 0);
+    }
+  }, [translateX]);
 
   return (
     <Content>
       <IconContainer>
         <PixeledArrowDownIcon />
       </IconContainer>
-      <ItemsContainer translateX={translateX}>
+      <ItemsContainer id="switch-items-container" translateX={translateX}>
         {menuItems.map((item, i) => {
           const isSelected = selectedItemIndex === item.id;
           return (
-            <Item key={i} isVisible={selectedItemIndex === i} selected={isSelected} style={{ minWidth: 274 }}>
+            <Item key={i} selected={isSelected} style={{ minWidth: 274 }}>
               <GameEditionLabel fontSize={92} color={isSelected ? 'yellow' : 'grey'}>
                 {item.label}
               </GameEditionLabel>
