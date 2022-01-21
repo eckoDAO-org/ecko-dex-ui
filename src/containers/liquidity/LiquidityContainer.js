@@ -12,7 +12,6 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { reduceBalance, getCorrectBalance } from '../../utils/reduceBalance';
 import WalletRequestView from '../../components/swap/swap-modals/WalletRequestView';
 import { ArrowBack, CogIcon } from '../../assets';
-import { Button } from 'semantic-ui-react';
 import Label from '../../components/shared/Label';
 import CustomButton from '../../components/shared/CustomButton';
 import ReviewTxModal from '../../components/modals/liquidity/ReviewTxModal';
@@ -21,7 +20,6 @@ import tokenData from '../../constants/cryptoCurrencies';
 import SwapForm from '../../components/swap/SwapForm';
 import TokenSelectorModalContent from '../../components/swap/swap-modals/TokenSelectorModalContent';
 import TokenSelectorModalContentGE from '../../components/swap/swap-modals/TokenSelectorModalContentGE';
-import { FadeIn } from '../../components/shared/animations';
 import FormContainer from '../../components/shared/FormContainer';
 import GradientBorder from '../../components/shared/GradientBorder';
 import HeaderItem from '../../components/shared/HeaderItem';
@@ -29,37 +27,28 @@ import CustomPopup from '../../components/shared/CustomPopup';
 import SlippagePopupContent from '../../components/layout/header/SlippagePopupContent';
 import BackgroundLogo from '../../components/shared/BackgroundLogo';
 import browserDetection from '../../utils/browserDetection';
-import ArcadeBackground from '../../assets/images/game-edition/arcade-background.png';
 import PixeledSwapResult from '../../assets/images/game-edition/pixeled-swap-result.png';
 import { theme } from '../../styles/theme';
 
-const Container = styled(FadeIn)`
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  overflow: auto;
-  position: relative;
+const Container = styled.div`
   display: flex;
   flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
   height: 100%;
-  justify-content: center;
-
-  ${({ gameEditionView }) => {
-    if (gameEditionView) {
+  justify-content: ${({ $gameEditionView }) => ($gameEditionView ? 'space-between' : 'center')};
+  ${({ $gameEditionView }) => {
+    if ($gameEditionView) {
       return css`
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        background-image: ${`url(${ArcadeBackground})`};
-      `;
-    } else {
-      return css`
-        max-width: 550px;
+        justify-content: space-between;
+        width: 100%;
       `;
     }
+    return css`
+      justify-content: center;
+      max-width: 550px;
+      width: 550px;
+    `;
   }}
 `;
 
@@ -69,13 +58,12 @@ const TitleContainer = styled.div`
   justify-content: space-between;
   margin-bottom: 14px;
   width: 100%;
-  margin-top: 16px;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: ${({ gameEditionView }) => (gameEditionView && browserDetection() === 'SAFARI' ? '0px' : '16px')};
+  margin-top: ${browserDetection() === 'SAFARI' ? '0px' : '16px'};
   width: 100%;
 `;
 
@@ -125,7 +113,7 @@ const InnerRowContainer = styled.div`
         display: flex;
         flex-flow: column;
         min-width: 194px;
-        min-height: 82px;
+        min-height: 64px;
         justify-content: center;
         text-align: center;
         align-items: center;
@@ -140,13 +128,6 @@ const InnerRowContainer = styled.div`
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: ${({ gameEditionView }) => (gameEditionView ? 'column' : `row`)};
   }
-`;
-
-const LabelContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  z-index: ${({ gameEditionView }) => !gameEditionView && '1'};
 `;
 
 const initialStateValue = {
@@ -678,7 +659,7 @@ const LiquidityContainer = (props) => {
   }, [showReview]);
 
   return (
-    <Container gameEditionView={gameEditionView} onAnimationEnd={() => setIsLogoVisible(true)} className="scrollbar-none">
+    <Container $gameEditionView={gameEditionView} onAnimationEnd={() => setIsLogoVisible(true)} className="scrollbar-none">
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
 
       {!gameEditionView && isLogoVisible && <BackgroundLogo />}
@@ -708,21 +689,18 @@ const LiquidityContainer = (props) => {
         )}
       </TitleContainer>
       <FormContainer
+        style={{ justifyContent: 'space-between' }}
         gameEditionView={gameEditionView}
         footer={
           gameEditionView ? (
-            <LabelContainer>
-              <Label geColor="yellow" geFontSize={20}>
-                {buttonStatus().msg}
-              </Label>
-            </LabelContainer>
+            <Label geCenter geColor="yellow" geFontSize={20}>
+              {buttonStatus().msg}
+            </Label>
           ) : (
-            <ButtonContainer gameEditionView={gameEditionView}>
-              <Button.Group fluid>
-                <CustomButton disabled={!buttonStatus().status} onClick={() => setShowReview(true)}>
-                  {buttonStatus().msg}
-                </CustomButton>
-              </Button.Group>
+            <ButtonContainer>
+              <CustomButton fluid disabled={!buttonStatus().status} onClick={() => setShowReview(true)}>
+                {buttonStatus().msg}
+              </CustomButton>
             </ButtonContainer>
           )
         }

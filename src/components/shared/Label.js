@@ -46,7 +46,7 @@ const Label = ({
       withShade={withShade}
       style={
         geCenter
-          ? { ...geLabelStyle, display: 'block', textAlign: 'center', width: onClose ? '100%' : 'auto' }
+          ? { ...geLabelStyle, display: 'block', textAlign: 'center', width: onClose || geCenter ? '100%' : 'auto' }
           : { ...geLabelStyle, width: onClose ? '100%' : 'auto' }
       }
       onClick={onClick}

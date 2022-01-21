@@ -95,10 +95,10 @@ const GameboyMobileContainer = styled.div`
 `;
 
 const DisplayContent = styled.div`
-  width: 446px;
-  margin-left: 14px;
+  width: 455px;
+  margin-left: 6px;
   margin-top: 90px;
-  height: 329px;
+  height: 335px;
   background: rgba(0, 0, 0, 0.02);
   box-shadow: inset 0px 0px 20px rgba(0, 0, 0, 0.75);
   display: flex;

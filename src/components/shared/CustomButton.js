@@ -13,13 +13,14 @@ const StyledButton = styled(SUIButton)`
   justify-content: center;
   align-items: center;
   border-radius: 10px !important;
-  ${({ type, $outGameEditionView, $gameEditionView, theme: { colors }, buttonBackgroundGradient, hideBorder }) => {
+  margin: 0px;
+  ${({ type, $outGameEditionView, $gameEditionView, theme: { colors }, buttonBackgroundGradient, $background }) => {
     if ($gameEditionView && !$outGameEditionView) {
       return css`
         border: 2px dashed #ffffff !important;
         border-radius: 0px !important;
         padding: 10px !important;
-        background: transparent !important;
+        background: ${({ $background }) => $background || 'transparent'} !important;
       `;
     } else {
       switch (type) {
@@ -78,6 +79,7 @@ const CustomButton = ({
   geType,
   geLabel,
   outGameEditionView,
+  background,
 }) => {
   const { gameEditionView: $gameEditionView } = useContext(GameEditionContext);
 
@@ -96,6 +98,7 @@ const CustomButton = ({
       loading={loading}
       type={type}
       $outGameEditionView={outGameEditionView}
+      $background={background}
     >
       <Label
         fontFamily={fontFamily}

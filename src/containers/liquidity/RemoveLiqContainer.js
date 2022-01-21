@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useContext } from 'react';
-import { Button } from 'semantic-ui-react';
 import styled, { css } from 'styled-components/macro';
 import { ArrowBack } from '../../assets';
 import TxView from '../../components/swap/swap-modals/TxView';
@@ -18,39 +17,29 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 import GradientBorder from '../../components/shared/GradientBorder';
 import { LightModeContext } from '../../contexts/LightModeContext';
 import { ModalContext } from '../../contexts/ModalContext';
-import ArcadeBackground from '../../assets/images/game-edition/arcade-background.png';
 import Label from '../../components/shared/Label';
 import PixeledSwapResult from '../../assets/images/game-edition/pixeled-swap-result.png';
 
 const Container = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-flow: column;
-  width: 100%;
-  max-width: ${({ gameEditionView }) => !gameEditionView && `550px`};
+  height: 100%;
+  flex-direction: column;
+
   margin-left: auto;
   margin-right: auto;
-  padding: ${({ gameEditionView }) => gameEditionView && `10px 10px`};
-  margin-top: 0px;
-  position: relative;
-
-  ${({ gameEditionView }) => {
-    if (gameEditionView) {
+  justify-content: ${({ $gameEditionView }) => ($gameEditionView ? 'space-between' : 'center')};
+  ${({ $gameEditionView }) => {
+    if ($gameEditionView) {
       return css`
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        background-image: ${`url(${ArcadeBackground})`};
-      `;
-    } else {
-      return css`
-        max-width: 550px;
+        justify-content: space-between;
+        width: 100%;
       `;
     }
+    return css`
+      justify-content: center;
+      max-width: 550px;
+      width: 550px;
+    `;
   }}
 `;
 
@@ -60,25 +49,22 @@ const SubContainer = styled.div`
   align-items: center;
   flex-flow: column;
   width: 100%;
-  padding: ${({ gameEditionView }) => gameEditionView && '10px'};
 
   & > *:first-child {
     margin-bottom: 16px;
   }
 `;
 
-const TitleContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: ${({ gameEditionView }) => (gameEditionView ? '10px' : `14px`)};
-  width: 100%;
-  padding: ${({ gameEditionView }) => gameEditionView && '10px'};
-`;
-
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
+  & > button:not(:last-child) {
+    margin-right: 4px;
+  }
+  & > button:last-child {
+    margin-right: 0px;
+  }
 `;
 
 const MyButtonDivider = styled.div`
@@ -129,7 +115,7 @@ const InnerRowContainer = styled.div`
         display: flex;
         flex-flow: column;
         min-width: 194px;
-        min-height: 82px;
+        min-height: 64px;
         justify-content: center;
         text-align: center;
         align-items: center;
@@ -230,74 +216,70 @@ const RemoveLiqContainer = (props) => {
   }, [showTxModal]);
 
   return (
-    <Container gameEditionView={gameEditionView}>
+    <Container $gameEditionView={gameEditionView}>
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
-      <TitleContainer gameEditionView={gameEditionView}>
-        <Label fontSize={32} geCenter fontFamily="bold" geFontSize={44} geLabelStyle={{ lineHeight: '32px' }} onClose={() => props.closeLiquidity()}>
-          {!gameEditionView && (
-            <ArrowBack
-              style={{
-                cursor: 'pointer',
-                color: theme(themeMode).colors.white,
-                marginRight: '15px',
-                justifyContent: 'center',
-              }}
-              onClick={() => props.closeLiquidity()}
-            />
-          )}
-          Remove Liquidity
-        </Label>
-        {/* {gameEditionView && <CloseGE onClick={() => props.closeLiquidity()} />} */}
-      </TitleContainer>
+      <Label
+        fontSize={32}
+        geCenter
+        fontFamily="bold"
+        geFontSize={44}
+        labelStyle={{ marginBottom: 14 }}
+        geLabelStyle={{ lineHeight: '32px', marginBottom: 10 }}
+        onClose={() => props.closeLiquidity()}
+      >
+        {!gameEditionView && (
+          <ArrowBack
+            style={{
+              cursor: 'pointer',
+              color: theme(themeMode).colors.white,
+              marginRight: '15px',
+              justifyContent: 'center',
+            }}
+            onClick={() => props.closeLiquidity()}
+          />
+        )}
+        Remove Liquidity
+      </Label>
 
       <FormContainer
         containerStyle={gameEditionView ? { border: 'none', padding: 0 } : {}}
         footer={
           <ButtonContainer gameEditionView={gameEditionView}>
-            <Button.Group fluid style={{ padding: 0 }}>
-              <CustomButton
-                type="secondary"
-                loading={loading}
-                disabled={isNaN(amount) || reduceBalance(amount) === 0}
-                onClick={async () => {
-                  if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
-                    setLoading(true);
-                    const res = await liquidity.removeLiquidityLocal(
-                      tokenData[token0].code,
-                      tokenData[token1].code,
-                      reduceBalance(pooled, PRECISION)
-                    );
-                    if (res === -1) {
-                      setLoading(false);
-                      alert('Incorrect password. If forgotten, you can reset it with your private key');
-                      return;
-                    } else {
-                      setShowTxModal(true);
-                      setLoading(false);
-                    }
+            <CustomButton
+              fluid
+              type="secondary"
+              loading={loading}
+              disabled={isNaN(amount) || reduceBalance(amount) === 0}
+              onClick={async () => {
+                if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
+                  setLoading(true);
+                  const res = await liquidity.removeLiquidityLocal(tokenData[token0].code, tokenData[token1].code, reduceBalance(pooled, PRECISION));
+                  if (res === -1) {
+                    setLoading(false);
+                    alert('Incorrect password. If forgotten, you can reset it with your private key');
+                    return;
                   } else {
-                    setLoading(true);
-                    const res = await liquidity.removeLiquidityWallet(
-                      tokenData[token0].code,
-                      tokenData[token1].code,
-                      reduceBalance(pooled, PRECISION)
-                    );
-                    if (!res) {
-                      wallet.setIsWaitingForWalletAuth(true);
-                      setLoading(false);
-                      /* pact.setWalletError(true); */
-                      /* walletError(); */
-                    } else {
-                      wallet.setWalletError(null);
-                      setShowTxModal(true);
-                      setLoading(false);
-                    }
+                    setShowTxModal(true);
+                    setLoading(false);
                   }
-                }}
-              >
-                Press B to remove liquidity
-              </CustomButton>
-            </Button.Group>
+                } else {
+                  setLoading(true);
+                  const res = await liquidity.removeLiquidityWallet(tokenData[token0].code, tokenData[token1].code, reduceBalance(pooled, PRECISION));
+                  if (!res) {
+                    wallet.setIsWaitingForWalletAuth(true);
+                    setLoading(false);
+                    /* pact.setWalletError(true); */
+                    /* walletError(); */
+                  } else {
+                    wallet.setWalletError(null);
+                    setShowTxModal(true);
+                    setLoading(false);
+                  }
+                }
+              }}
+            >
+              Press B to remove liquidity
+            </CustomButton>
           </ButtonContainer>
         }
       >
@@ -319,30 +301,42 @@ const RemoveLiqContainer = (props) => {
             }}
             numberOnly
           />
-          <ButtonContainer gameEditionView={gameEditionView} style={gameEditionView ? { marginTop: '3px' } : {}}>
-            <Button.Group fluid>
-              <CustomButton
-                buttonStyle={{
-                  width: '20%',
-                }}
-                type={amount === 25 ? 'secondary' : 'primary'}
-                onClick={() => setAmount(25)}
-              >
-                25%
-              </CustomButton>
-              <MyButtonDivider />
-              <CustomButton type={amount === 50 ? 'secondary' : 'primary'} onClick={() => setAmount(50)}>
-                50%
-              </CustomButton>
-              <MyButtonDivider />
-              <CustomButton type={amount === 75 ? 'secondary' : 'primary'} onClick={() => setAmount(75)}>
-                75%
-              </CustomButton>
-              <MyButtonDivider />
-              <CustomButton type={amount === 100 ? 'secondary' : 'primary'} onClick={() => setAmount(100)}>
-                100%
-              </CustomButton>
-            </Button.Group>
+          <ButtonContainer>
+            <CustomButton
+              fluid
+              type={amount === 25 ? 'secondary' : 'primary'}
+              background={gameEditionView && amount === 25 && '#6D99E4'}
+              onClick={() => setAmount(25)}
+            >
+              25%
+            </CustomButton>
+            <MyButtonDivider />
+            <CustomButton
+              fluid
+              type={amount === 50 ? 'secondary' : 'primary'}
+              background={gameEditionView && amount === 50 && '#6D99E4'}
+              onClick={() => setAmount(50)}
+            >
+              50%
+            </CustomButton>
+            <MyButtonDivider />
+            <CustomButton
+              fluid
+              type={amount === 75 ? 'secondary' : 'primary'}
+              background={gameEditionView && amount === 75 && '#6D99E4'}
+              onClick={() => setAmount(75)}
+            >
+              75%
+            </CustomButton>
+            <MyButtonDivider />
+            <CustomButton
+              fluid
+              type={amount === 100 ? 'secondary' : 'primary'}
+              background={gameEditionView && amount === 100 && '#6D99E4'}
+              onClick={() => setAmount(100)}
+            >
+              100%
+            </CustomButton>
           </ButtonContainer>
         </SubContainer>
 
