@@ -126,9 +126,10 @@ const GameEditionSwitchPageModal = ({ direction }) => {
   };
 
   const stopTimer = () => {
-    clearInterval(setSeconds(0));
+    setSeconds(0);
+    clearInterval(intervalId);
   };
-  console.log('secondsCount', seconds);
+
   // init buttons and starting interval to navigate into selected page after 2 seconds
   useEffect(() => {
     setButtons({
@@ -141,7 +142,7 @@ const GameEditionSwitchPageModal = ({ direction }) => {
 
   // navigate to page if secondsCount === 2
   useEffect(() => {
-    if (seconds === 5) {
+    if (seconds === 2) {
       setButtons({
         R1: null,
         L1: null,

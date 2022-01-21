@@ -25,7 +25,7 @@ export const CardContainer = styled.div`
   margin-left: auto;
   margin-right: auto;
   border-radius: ${({ gameEditionView }) => !gameEditionView && `10px`};
-  border: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `2px dashed ${colors.white}`};
+  border: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `2px dashed #ffffff`};
 
   opacity: 1;
   background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? `transparent` : backgroundContainer)};
