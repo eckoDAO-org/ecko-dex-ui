@@ -47,14 +47,14 @@ const Item = styled.div`
   ${({ isVisible }) => {
     if (isVisible) {
       return css`
-        opacity: 1;
-        transition: opacity 0s 0.2s;
+        /* opacity: 1;
+        transition: opacity 0s 0.2s; */
       `;
     } else {
       return css`
-        opacity: 0;
+        /* opacity: 0;
+        transition: opacity 0s; */
         /* mask: linear-gradient(270deg,#fff, transparent); */
-        transition: opacity 0s;
       `;
     }
   }}
@@ -93,17 +93,17 @@ const GameEditionSwitchPageModal = ({ direction }) => {
   useEffect(() => {
     let index = null;
     switch (location.pathname) {
-      case SWAP:
+      case SWAP.route:
         const swapIndex = menuItems.findIndex((r) => r.id === SWAP.id);
         index = getCorrectSwitchIndex(swapIndex);
         setSelectedItemIndex(index);
         break;
-      case POOL:
+      case POOL.route:
         const poolIndex = menuItems.findIndex((r) => r.id === POOL.id);
         index = getCorrectSwitchIndex(poolIndex);
         setSelectedItemIndex(index);
         break;
-      case STATS:
+      case STATS.route:
         const statsIndex = menuItems.findIndex((r) => r.id === STATS.id);
         index = getCorrectSwitchIndex(statsIndex);
         setSelectedItemIndex(index);
@@ -115,6 +115,12 @@ const GameEditionSwitchPageModal = ({ direction }) => {
           index = 1;
         }
         break;
+    }
+    if (direction === 'right' && index + 1 < menuItems.length) {
+      setTranslateX((prev) => prev - 274);
+    }
+    if (direction === 'left' && index - 1 >= 0) {
+      setTranslateX((prev) => prev + 274);
     }
     setSelectedItemIndex(index);
   }, []);
@@ -129,22 +135,22 @@ const GameEditionSwitchPageModal = ({ direction }) => {
     //   setSelectedItem(null);
     // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const interval = setInterval(() => setSecondsCount((prev) => prev + 1), 1000);
-    return () => clearInterval(interval);
+    // const interval = setInterval(() => setSecondsCount((prev) => prev + 1), 1000);
+    // return () => clearInterval(interval);
   }, [selectedItemIndex]);
   //   console.log('selectedItemIndex', selectedItemIndex);
 
-  useEffect(() => {
-    if (secondsCount === 2) {
-      setButtons({
-        R1: null,
-        L1: null,
-      });
-      closeModal();
-      history.push(menuItems[selectedItemIndex].route);
-      //   console.log('item', menuItems[selectedItemIndex]);
-    }
-  }, [secondsCount]);
+  // useEffect(() => {
+  //   if (secondsCount === 2) {
+  //     setButtons({
+  //       R1: null,
+  //       L1: null,
+  //     });
+  //     closeModal();
+  //     history.push(menuItems[selectedItemIndex].route);
+  //     //   console.log('item', menuItems[selectedItemIndex]);
+  //   }
+  // }, [secondsCount]);
 
   const onSwitch = (direction) => {
     if (direction === 'right' && selectedItemIndex + 1 < menuItems.length) {
