@@ -84,38 +84,31 @@ const GameEditionSwitchPageModal = ({ direction }) => {
   // init index based on the current route when this page is rendered
   useEffect(() => {
     let index = null;
-    switch (location.pathname) {
-      case SWAP.route:
-        const swapIndex = menuItems.findIndex((r) => r.id === SWAP.id);
-        index = getCorrectSwitchIndex(swapIndex);
-        setSelectedItemIndex(index);
-        break;
-      case POOL.route:
-        const poolIndex = menuItems.findIndex((r) => r.id === POOL.id);
-        index = getCorrectSwitchIndex(poolIndex);
-        setSelectedItemIndex(index);
-        break;
-      case STATS.route:
-        const statsIndex = menuItems.findIndex((r) => r.id === STATS.id);
-        index = getCorrectSwitchIndex(statsIndex);
-        setSelectedItemIndex(index);
-        break;
-      default:
-        if (direction === 'left') {
-          index = 0;
-        } else {
-          index = 1;
+    const routeIndex = menuItems.findIndex((r) => r.route === location.pathname);
+    let scrollX = translateX;
+    console.log('routeIndex', routeIndex);
+    if (!routeIndex) {
+      if (direction === 'left') {
+        index = 0;
+      } else {
+        index = 1;
+      }
+    } else {
+      index = getCorrectSwitchIndex(routeIndex);
+      if (direction === 'left') {
+        const elementContainer = document.getElementById('switch-items-container');
+        if (elementContainer) {
+          elementContainer.scrollTo(menuItems.length * 274, 0);
         }
-        break;
+      }
+      if (index > menuItems.length - 1) {
+        index = menuItems.length - 1;
+        console.log('here');
+      }
     }
-    if (direction === 'right' && index + 1 < menuItems.length) {
-      const scrollX = index + 1 === 1 ? SCROLL_OFFSET : 0;
-      onSwitch(direction, index, scrollX);
-    }
-    if (direction === 'left' && index - 1 >= 0) {
-      const scrollX = index + 1 === menuItems.length ? SCROLL_OFFSET : 0;
-      onSwitch(direction, index, scrollX);
-    }
+    console.log('index', index);
+    // const scrollX = index + 1 === 1 || index + 1 === menuItems.length ? SCROLL_OFFSET : 0;
+    onSwitch(direction, index);
   }, []);
 
   const startTimer = () => {
@@ -141,23 +134,24 @@ const GameEditionSwitchPageModal = ({ direction }) => {
   }, [selectedItemIndex]);
 
   // navigate to page if secondsCount === 2
-  useEffect(() => {
-    if (seconds === 2) {
-      setButtons({
-        R1: null,
-        L1: null,
-      });
-      closeModal();
+  // useEffect(() => {
+  //   if (seconds === 2) {
+  //     setButtons({
+  //       R1: null,
+  //       L1: null,
+  //     });
+  //     closeModal();
 
-      history.push(menuItems[selectedItemIndex].route);
-    }
-  }, [seconds]);
+  //     history.push(menuItems[selectedItemIndex].route);
+  //   }
+  // }, [seconds]);
+  console.log('selectedItemIndex', selectedItemIndex);
 
   // funcation on L1 and R1 buttons
   const onSwitch = (direction, index, scrollX) => {
     if (direction === 'right' && selectedItemIndex + 1 < menuItems.length) {
       setSelectedItemIndex((prev) => index || prev + 1);
-
+      console.log('scrollX', scrollX);
       setTranslateX((prev) => prev + 274 + (scrollX || 0));
     }
     if (direction === 'left' && selectedItemIndex - 1 >= 0) {

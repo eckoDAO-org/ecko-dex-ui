@@ -30,6 +30,16 @@ const DesktopMainContainer = styled.div`
   transition: transform 0.5s;
   transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
     if (showTokens) {
+      return 'translate(-600px, 442px)';
+    }
+    if (showWires && !selectedWire && !showTokens) {
+      return 'translateY(0px)';
+    } else {
+      return 'translateY(442px)';
+    }
+  }};
+  /* transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
+    if (showTokens) {
       return $scale ? 'translate(-600px, 560px) scale(1.28)' : 'translate(-600px, 442px) scale(1)';
     }
     if (showWires && !selectedWire && !showTokens) {
@@ -37,8 +47,7 @@ const DesktopMainContainer = styled.div`
     } else {
       return $scale ? 'translateY(560px) scale(1.28)' : 'translateY(442px) scale(1)';
     }
-  }};
-  /* opacity: ${({ showTokens }) => (showTokens ? 0.5 : 1)}; */
+  }}; */
 `;
 
 const MobileMainContainer = styled.div`

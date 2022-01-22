@@ -45,7 +45,7 @@ const Container = styled(FadeIn)`
   ${({ gameEditionView }) => {
     if (gameEditionView) {
       return css`
-        padding-top: 16px;
+        padding: 16px;
         height: 100%;
         display: flex;
         flex-direction: column;

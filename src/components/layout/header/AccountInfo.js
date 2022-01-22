@@ -8,14 +8,13 @@ const Container = styled.div`
     opacity: 0.7;
     cursor: pointer;
   }
-  & > div:first-child {
+  /* & > div:first-child {
     margin-right: -16px;
-  }
+  } */
 `;
 
 const BalanceContainer = styled.div`
   padding: 7px 32px 7px 16px;
-  /* background: rgba(205, 205, 205, 0.5); */
   font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
   font-size: 14px;
   white-space: nowrap;
@@ -47,7 +46,7 @@ const AccountContainer = styled.div`
 const AccountInfo = ({ account, balance, onClick }) => {
   return (
     <Container onClick={onClick}>
-      <BalanceContainer className="mobile-none">{balance}</BalanceContainer>
+      {/* <BalanceContainer className="mobile-none">{balance}</BalanceContainer> */}
       <AccountContainer>{account}</AccountContainer>
     </Container>
   );
