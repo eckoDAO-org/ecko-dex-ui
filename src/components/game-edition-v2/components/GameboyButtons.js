@@ -32,6 +32,7 @@ const GameboyButtons = () => {
     if (location.pathname === ROUTE_GAME_START_ANIMATION) {
       return null;
     }
+    console.log('buttons[buttonKey]', buttons[buttonKey]);
     return buttons[buttonKey] ? buttons[buttonKey]() : openGameEditionSwitchPage(buttonKey);
   };
   return (
@@ -39,15 +40,23 @@ const GameboyButtons = () => {
       <PressedButton
         type="menu"
         onClick={() => {
-          history.push(ROUTE_GAME_EDITION_MENU);
-          closeModal();
+          if (buttons?.Menu) {
+            buttons.Menu();
+          } else {
+            history.push(ROUTE_GAME_EDITION_MENU);
+            closeModal();
+          }
         }}
       />
       <PressedButton
         type="swap"
         onClick={() => {
-          history.push(ROUTE_SWAP);
-          closeModal();
+          if (buttons?.Swap) {
+            buttons.Swap();
+          } else {
+            history.push(ROUTE_SWAP);
+            closeModal();
+          }
         }}
       />
       <PressedButton type="L1" onClick={() => handleSwitchPage('L1')} />

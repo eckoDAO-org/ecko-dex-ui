@@ -128,23 +128,25 @@ const GameEditionSwitchPageModal = ({ direction }) => {
     setButtons({
       R1: () => onSwitch('right'),
       L1: () => onSwitch('left'),
+      Menu: () => null,
+      Swap: () => null,
     });
     stopTimer();
     startTimer();
   }, [selectedItemIndex]);
 
   // navigate to page if secondsCount === 2
-  // useEffect(() => {
-  //   if (seconds === 2) {
-  //     setButtons({
-  //       R1: null,
-  //       L1: null,
-  //     });
-  //     closeModal();
+  useEffect(() => {
+    if (seconds === 2) {
+      setButtons({
+        R1: null,
+        L1: null,
+      });
+      closeModal();
 
-  //     history.push(menuItems[selectedItemIndex].route);
-  //   }
-  // }, [seconds]);
+      history.push(menuItems[selectedItemIndex].route);
+    }
+  }, [seconds]);
   console.log('selectedItemIndex', selectedItemIndex);
 
   // funcation on L1 and R1 buttons
@@ -167,6 +169,15 @@ const GameEditionSwitchPageModal = ({ direction }) => {
       elementContainer.scrollTo(translateX, 0);
     }
   }, [translateX]);
+
+  useEffect(() => {
+    return () => {
+      setButtons({
+        R1: null,
+        L1: null,
+      });
+    };
+  }, []);
 
   return (
     <Content>
