@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
 import LiquidityContainer from './liquidity/LiquidityContainer';
 import LiquidityList from './liquidity/LiquidityList';
@@ -32,11 +32,59 @@ const Container = styled.div`
 `;
 
 const PoolContainer = () => {
-  const { gameEditionView } = useGameEditionContext();
+  const { gameEditionView, setButtons } = useGameEditionContext();
   const [selectedView, setSelectedView] = useState(false);
   const [pair, setPair] = useState(null);
+
+  const [scrollTo, setScrollTo] = useState(0);
+
+  useEffect(() => {
+    const elementContainer = document.getElementById('pool-scrolling-container');
+
+    if (elementContainer) {
+      elementContainer.scrollTo(0, scrollTo);
+    }
+
+    setButtons({
+      Down: () => {
+        if (scrollTo + elementContainer.firstElementChild.clientHeight < elementContainer.firstElementChild.scrollHeight - 20) {
+          setScrollTo((prev) => prev + 20);
+        }
+      },
+      Up: () => {
+        if (scrollTo > 0) {
+          setScrollTo((prev) => prev - 20);
+        }
+      },
+    });
+  }, [scrollTo]);
+
+  const listenToScroll = () => {
+    const elementContainer = document.getElementById('pool-scrolling-container');
+
+    const position = elementContainer.firstElementChild.he;
+    console.log('position', position);
+  };
+
+  useEffect(() => {
+    const elementContainer = document.getElementById('pool-scrolling-container');
+    if (elementContainer)
+      elementContainer.addEventListener('scroll', () => {
+        listenToScroll();
+      });
+  }, []);
+
+  console.log('scrollTo', scrollTo);
+
   return (
-    <Container $gameEditionView={gameEditionView}>
+    <Container
+      id="pool-scrolling-container"
+      onWheel={() => {
+        const elementContainer = document.getElementById('pool-scrolling-container');
+        console.log('elementContainer', elementContainer.scrollHeight);
+      }}
+      $gameEditionView={gameEditionView}
+    >
       {selectedView === 'Remove Liquidity' ? (
         <RemoveLiqContainer
           closeLiquidity={() => {
