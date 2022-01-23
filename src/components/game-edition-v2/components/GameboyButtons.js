@@ -23,6 +23,7 @@ const GameboyButtons = () => {
 
   const openGameEditionSwitchPage = (buttonKey) => {
     return openModal({
+      title: null,
       content: <GameEditionSwitchPageModal direction={buttonKey === 'L1' ? 'left' : 'right'} />,
       hideOnClose: true,
     });
