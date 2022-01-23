@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import styled, { css } from 'styled-components/macro';
 import LiquidityContainer from './liquidity/LiquidityContainer';
 import LiquidityList from './liquidity/LiquidityList';
 import RemoveLiqContainer from './liquidity/RemoveLiqContainer';
 import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
 import { useGameEditionContext } from '../contexts';
+import useButtonScrollEvent from '../hooks/useButtonScrollEvent';
 
 const Container = styled.div`
   display: flex;
@@ -32,59 +33,12 @@ const Container = styled.div`
 `;
 
 const PoolContainer = () => {
-  const { gameEditionView, setButtons } = useGameEditionContext();
+  const { gameEditionView } = useGameEditionContext();
   const [selectedView, setSelectedView] = useState(false);
   const [pair, setPair] = useState(null);
-
-  const [scrollTo, setScrollTo] = useState(0);
-
-  useEffect(() => {
-    const elementContainer = document.getElementById('pool-scrolling-container');
-
-    if (elementContainer) {
-      elementContainer.scrollTo(0, scrollTo);
-    }
-
-    setButtons({
-      Down: () => {
-        if (scrollTo + elementContainer.firstElementChild.clientHeight < elementContainer.firstElementChild.scrollHeight - 20) {
-          setScrollTo((prev) => prev + 20);
-        }
-      },
-      Up: () => {
-        if (scrollTo > 0) {
-          setScrollTo((prev) => prev - 20);
-        }
-      },
-    });
-  }, [scrollTo]);
-
-  const listenToScroll = () => {
-    const elementContainer = document.getElementById('pool-scrolling-container');
-
-    const position = elementContainer.firstElementChild.he;
-    console.log('position', position);
-  };
-
-  useEffect(() => {
-    const elementContainer = document.getElementById('pool-scrolling-container');
-    if (elementContainer)
-      elementContainer.addEventListener('scroll', () => {
-        listenToScroll();
-      });
-  }, []);
-
-  console.log('scrollTo', scrollTo);
-
+  useButtonScrollEvent('pool-scrolling-container');
   return (
-    <Container
-      id="pool-scrolling-container"
-      onWheel={() => {
-        const elementContainer = document.getElementById('pool-scrolling-container');
-        console.log('elementContainer', elementContainer.scrollHeight);
-      }}
-      $gameEditionView={gameEditionView}
-    >
+    <Container id="pool-scrolling-container" $gameEditionView={gameEditionView}>
       {selectedView === 'Remove Liquidity' ? (
         <RemoveLiqContainer
           closeLiquidity={() => {
