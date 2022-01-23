@@ -142,7 +142,6 @@ const RemoveLiqContainer = (props) => {
   const { token0, token1, balance, pooledAmount } = props.pair;
 
   const [amount, setAmount] = useState(100);
-  const [showTxModal, setShowTxModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [pooled, setPooled] = useState(balance);
   const [pooledToken0, setPooledToken0] = useState(reduceBalance(pooledAmount[0], 12));
@@ -170,50 +169,44 @@ const RemoveLiqContainer = (props) => {
     wallet.setWalletError(null);
   };
 
-  useEffect(() => {
-    if (showTxModal) {
-      if (gameEditionView) {
-        openModal({
-          title: 'transaction details',
-          closeModal: () => {
-            setShowTxModal(false);
-            closeModal();
-          },
-          content: (
-            <TxView
-              view="Remove Liquidity"
-              token0={token0}
-              onClose={() => {
-                setShowTxModal(false);
-                closeModal();
-              }}
-              token1={token1}
-            />
-          ),
-        });
-      } else {
-        modalContext.openModal({
-          title: 'transaction details',
-          description: '',
-          onClose: () => {
-            setShowTxModal(false);
-            modalContext.closeModal();
-          },
-          content: (
-            <TxView
-              view="Remove Liquidity"
-              token0={token0}
-              onClose={() => {
-                setShowTxModal(false);
-                modalContext.closeModal();
-              }}
-              token1={token1}
-            />
-          ),
-        });
-      }
+  const openTxViewModal = () => {
+    if (gameEditionView) {
+      openModal({
+        title: 'transaction details',
+        closeModal: () => {
+          closeModal();
+        },
+        content: (
+          <TxView
+            view="Remove Liquidity"
+            token0={token0}
+            onClose={() => {
+              closeModal();
+            }}
+            token1={token1}
+          />
+        ),
+      });
+    } else {
+      modalContext.openModal({
+        title: 'transaction details',
+        description: '',
+        onClose: () => {
+          modalContext.closeModal();
+        },
+        content: (
+          <TxView
+            view="Remove Liquidity"
+            token0={token0}
+            onClose={() => {
+              modalContext.closeModal();
+            }}
+            token1={token1}
+          />
+        ),
+      });
     }
-  }, [showTxModal]);
+  };
 
   return (
     <Container $gameEditionView={gameEditionView}>
@@ -259,7 +252,7 @@ const RemoveLiqContainer = (props) => {
                     alert('Incorrect password. If forgotten, you can reset it with your private key');
                     return;
                   } else {
-                    setShowTxModal(true);
+                    openTxViewModal();
                     setLoading(false);
                   }
                 } else {
@@ -272,7 +265,7 @@ const RemoveLiqContainer = (props) => {
                     /* walletError(); */
                   } else {
                     wallet.setWalletError(null);
-                    setShowTxModal(true);
+                    openTxViewModal();
                     setLoading(false);
                   }
                 }

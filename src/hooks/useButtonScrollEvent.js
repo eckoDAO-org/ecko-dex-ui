@@ -25,10 +25,9 @@ const useButtonScrollEvent = (elementId) => {
       if (!wheelScrolling) {
         elementContainer.scrollTo(0, scrollTo);
       }
-
       setButtons({
         Down: () => {
-          if (scrollTo + elementContainer.firstElementChild.clientHeight < elementContainer.firstElementChild.scrollHeight - 20 || scrollTo === 0) {
+          if (scrollTo + elementContainer.clientHeight < elementContainer.scrollHeight || scrollTo === 0) {
             setWheelScrolling(false);
             setScrollTo((prev) => prev + 20);
           }

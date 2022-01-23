@@ -34,7 +34,7 @@ export const commonColors = {
   purple: '#240B2F',
   black: '#15081F',
   yellow: '#FEDE75',
-  green: '#69C549',
+  green: '#41CC41',
   error: '#DB2828',
   gameEditionYellow: '#FFC107',
   gameEditionBlue: '#6D99E4',

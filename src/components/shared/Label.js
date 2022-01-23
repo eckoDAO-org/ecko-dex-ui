@@ -1,6 +1,5 @@
 import React from 'react';
 import styled, { css } from 'styled-components/macro';
-import { CloseGe } from '../../assets';
 import { useGameEditionContext } from '../../contexts';
 import { commonTheme } from '../../styles/theme';
 import GameEditionLabel from '../game-edition-v2/components/GameEditionLabel';
@@ -44,15 +43,12 @@ const Label = ({
       fontWeight={geFontWeight}
       color={geColor}
       withShade={withShade}
-      style={
-        geCenter
-          ? { ...geLabelStyle, display: 'block', textAlign: 'center', width: onClose || geCenter ? '100%' : 'auto' }
-          : { ...geLabelStyle, width: onClose ? '100%' : 'auto' }
-      }
+      onClose={onClose}
+      center={geCenter}
+      style={geLabelStyle}
       onClick={onClick}
     >
       {children}
-      {onClose && <CloseGe style={{ cursor: 'pointer', position: 'absolute', right: 12, top: 6 }} onClick={onClose} />}
     </GameEditionLabel>
   ) : (
     <STYText

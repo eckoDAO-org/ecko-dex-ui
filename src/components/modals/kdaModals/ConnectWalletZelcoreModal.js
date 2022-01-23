@@ -3,9 +3,11 @@ import CustomButton from '../../../components/shared/CustomButton';
 import { ModalContext } from '../../../contexts/ModalContext';
 import GetZelcoreAccountModal from './GetZelcoreAccountModal';
 import Label from '../../shared/Label';
+import { useGameEditionContext } from '../../../contexts';
 
 const ConnectWalletZelcoreModal = ({ onConnectionSuccess }) => {
   const modalContext = useContext(ModalContext);
+  const { gameEditionView, openModal } = useGameEditionContext();
 
   return (
     <>
@@ -20,14 +22,22 @@ const ConnectWalletZelcoreModal = ({ onConnectionSuccess }) => {
         geType="pink"
         geLabel="SELECT ACCOUNTS"
         onClick={() => {
-          modalContext.openModal({
-            id: 'ZELCORE_ACCOUNT',
-            title: 'get zelcore accounts',
-            description: 'Select Accounts',
+          if (gameEditionView) {
+            openModal({
+              hideOnClose: true,
+              title: 'SELECT ACCOUNTS',
+              content: <GetZelcoreAccountModal onConnectionSuccess={onConnectionSuccess} />,
+            });
+          } else {
+            modalContext.openModal({
+              id: 'ZELCORE_ACCOUNT',
+              title: 'get zelcore accounts',
+              description: 'Select Accounts',
 
-            onBack: () => modalContext.onBackModal(),
-            content: <GetZelcoreAccountModal onClose={() => modalContext.closeModal()} onBack={() => modalContext.onBackModal()} />,
-          });
+              onBack: () => modalContext.onBackModal(),
+              content: <GetZelcoreAccountModal onClose={() => modalContext.closeModal()} onBack={() => modalContext.onBackModal()} />,
+            });
+          }
         }}
       >
         Get Zelcore Accounts

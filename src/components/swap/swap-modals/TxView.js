@@ -1,34 +1,29 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components/macro';
-import { Message, Icon, Divider } from 'semantic-ui-react';
+import { Icon, Divider } from 'semantic-ui-react';
+import { LightModeContext } from '../../../contexts/LightModeContext';
+import { useGameEditionContext } from '../../../contexts';
+import { AccountContext } from '../../../contexts/AccountContext';
 import { ErrorIcon, SuccessfullIcon } from '../../../assets';
+import { GameEditionContext } from '../../../contexts/GameEditionContext';
+import { SwapContext } from '../../../contexts/SwapContext';
 import { extractDecimal, gasUnit, reduceBalance } from '../../../utils/reduceBalance';
 import CustomButton from '../../../components/shared/CustomButton';
-import { SwapContext } from '../../../contexts/SwapContext';
-import { ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
-import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import reduceToken from '../../../utils/reduceToken';
-import { AccountContext } from '../../../contexts/AccountContext';
 import { PactContext } from '../../../contexts/PactContext';
 import tokenData from '../../../constants/cryptoCurrencies';
 import PopupTxView from './PopupTxView';
-import { theme } from '../../../styles/theme';
-import { LightModeContext } from '../../../contexts/LightModeContext';
-
-const RowContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 15px 0px;
-`;
+import { commonColors, theme } from '../../../styles/theme';
+import Label from '../../shared/Label';
+import { ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
 
 const Content = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
   svg {
-    display: ${({ gameEditionView }) => gameEditionView && 'none '};
     path {
-      fill: ${({ theme: { colors } }) => colors.white};
+      fill: ${({ theme: { colors }, gameEditionView }) => !gameEditionView && colors.white};
     }
   }
   justify-content: space-between;
@@ -40,27 +35,6 @@ const Content = styled.div`
       height: 40px;
     }
   }
-`;
-
-const Title = styled.div`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
-  font-size: 16px;
-  padding: ${({ gameEditionView }) => (gameEditionView ? '0px' : '16px')};
-
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
-    padding: ${({ gameEditionView }) => (gameEditionView ? '20px 0px' : '8px')};
-  }
-  width: ${({ gameEditionView }) => (gameEditionView ? '100%' : 'auto')};
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
-  text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
-`;
-
-const SubTitle = styled.div`
-  width: ${({ gameEditionView }) => (gameEditionView ? '100%' : 'auto')};
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '14px' : '16px')};
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
-  text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
 `;
 
 const TransactionsDetails = styled.div`
@@ -80,18 +54,6 @@ const FlexStartRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-`;
-
-const HighlightLabel = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '16px')};
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
-`;
-
-const Label = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : `${colors.white}`)};
 `;
 
 const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
@@ -116,24 +78,26 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
   const successView = () => {
     return (
       <Content gameEditionView={gameEditionView}>
-        <Title gameEditionView={gameEditionView}>Preview Successful!</Title>
-        <SuccessfullIcon />
+        <Label geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
+          Preview Successful!
+        </Label>
+        {!gameEditionView && <SuccessfullIcon style={{ marginTop: 16, marginBottom: 16 }} />}
 
-        <TransactionsDetails gameEditionView={gameEditionView}>
+        <TransactionsDetails>
           <SpaceBetweenRow>
-            <HighlightLabel gameEditionView={gameEditionView}>From</HighlightLabel>
-            <Label gameEditionView={gameEditionView}></Label>
+            <Label fontFamily="bold">From</Label>
+            <Label fontSize={13}></Label>
           </SpaceBetweenRow>
           <SpaceBetweenRow>
-            <Label gameEditionView={gameEditionView}>Account</Label>
-            <Label gameEditionView={gameEditionView}>
+            <Label fontSize={13}>Account</Label>
+            <Label fontSize={13}>
               {`${reduceToken(account.account)}`}
               <PopupTxView isAccountPopup />
             </Label>
           </SpaceBetweenRow>
           <SpaceBetweenRow>
-            <Label gameEditionView={gameEditionView}>Chain ID</Label>
-            <Label gameEditionView={gameEditionView}>{swap.localRes.metaData.publicMeta.chainId}</Label>
+            <Label fontSize={13}>Chain ID</Label>
+            <Label fontSize={13}>{swap.localRes.metaData.publicMeta.chainId}</Label>
           </SpaceBetweenRow>
           <Divider
             style={{
@@ -145,46 +109,48 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
 
           <SpaceBetweenRow>
             <FlexStartRow>
-              {getTokenIcon(swap.localRes.result.data[0].token)}
-              <HighlightLabel gameEditionView={gameEditionView}>{`${extractDecimal(swap.localRes.result.data[0].amount)} `}</HighlightLabel>
+              <Label fontFamily="bold"> {getTokenIcon(swap.localRes.result.data[0].token)}</Label>
+              <Label fontFamily="bold">{`${extractDecimal(swap.localRes.result.data[0].amount)} `}</Label>
             </FlexStartRow>
-            <HighlightLabel gameEditionView={gameEditionView}>{` ${showTicker(swap.localRes.result.data[0].token)}`}</HighlightLabel>
+            <Label fontFamily="bold">{` ${showTicker(swap.localRes.result.data[0].token)}`}</Label>
           </SpaceBetweenRow>
           <SpaceBetweenRow>
-            <HighlightLabel gameEditionView={gameEditionView}>
+            <Label fontFamily="bold">
               <Icon name="long arrow alternate down" style={{}} />
-            </HighlightLabel>
-            <Label gameEditionView={gameEditionView}>{`1 ${showTicker(swap.localRes.result.data[0].token)} = ${reduceBalance(
-              pact.computeOut(1),
-              12
-            )} ${showTicker(swap.localRes.result.data[1].token)}`}</Label>
+            </Label>
+            <Label fontSize={13}>{`1 ${showTicker(swap.localRes.result.data[0].token)} = ${reduceBalance(pact.computeOut(1), 12)} ${showTicker(
+              swap.localRes.result.data[1].token
+            )}`}</Label>
           </SpaceBetweenRow>
           <SpaceBetweenRow>
             <FlexStartRow>
-              {getTokenIcon(swap.localRes.result.data[1].token)}
-              <HighlightLabel gameEditionView={gameEditionView}>{`${extractDecimal(swap.localRes.result.data[1].amount)} `}</HighlightLabel>
+              <Label fontFamily="bold"> {getTokenIcon(swap.localRes.result.data[1].token)}</Label>
+              <Label fontFamily="bold">{`${extractDecimal(swap.localRes.result.data[1].amount)} `}</Label>
             </FlexStartRow>
-            <HighlightLabel gameEditionView={gameEditionView}>{` ${showTicker(swap.localRes.result.data[1].token)}`}</HighlightLabel>
+            <Label fontFamily="bold">{` ${showTicker(swap.localRes.result.data[1].token)}`}</Label>
           </SpaceBetweenRow>
           <SpaceBetweenRow>
-            <Label gameEditionView={gameEditionView}>Gas Cost</Label>
-            <Label gameEditionView={gameEditionView} style={{ color: !gameEditionView && '#41CC41' }}>
+            <Label fontSize={13}>Gas Cost</Label>
+            <div style={{ display: 'flex' }}>
               {ENABLE_GAS_STATION ? (
                 <>
-                  <s>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</s>
-                  <span style={{ marginLeft: 5 }}>FREE!</span>
+                  <Label fontSize={13} color={commonColors.green} geColor="green">{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</Label>
+                  <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ marginLeft: 5 }}>
+                    FREE!
+                  </Label>
                 </>
               ) : (
-                <span>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</span>
+                <Label>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</Label>
               )}
               {ENABLE_GAS_STATION && <PopupTxView />}
-            </Label>
+            </div>
           </SpaceBetweenRow>
         </TransactionsDetails>
         <CustomButton
           buttonStyle={{
             width: '100%',
             marginTop: !gameEditionView && '16px',
+            marginBottom: gameEditionView && '16px',
           }}
           onClick={async () => {
             setLoading(true);
@@ -203,51 +169,57 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
   const successRemoveView = () => {
     return (
       <Content gameEditionView={gameEditionView} style={{ bottom: gameEditionView && '132px' }}>
-        <Title gameEditionView={gameEditionView}>Preview Successful!</Title>
+        <Label geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
+          Preview Successful!
+        </Label>
 
-        <SuccessfullIcon />
-
-        <TransactionsDetails gameEditionView={gameEditionView}>
+        {!gameEditionView && <SuccessfullIcon style={{ marginTop: 16, marginBottom: 16 }} />}
+        <TransactionsDetails>
           <FlexStartRow style={{ marginBottom: 16 }}>
-            <HighlightLabel gameEditionView={gameEditionView}>Remove</HighlightLabel>
+            <Label fontFamily="bold">Remove</Label>
           </FlexStartRow>
           <SpaceBetweenRow>
             <FlexStartRow>
               {getTokenIcon(token0)}
-              <HighlightLabel gameEditionView={gameEditionView}>{`${extractDecimal(swap.localRes.result.data.amount0)} `}</HighlightLabel>
+
+              <Label fontFamily="bold">{`${extractDecimal(swap?.localRes?.result?.data?.amount0)} `}</Label>
             </FlexStartRow>
-            <HighlightLabel gameEditionView={gameEditionView}>{` ${showTicker(token0)}`}</HighlightLabel>
+            <Label fontFamily="bold">{` ${showTicker(token0)}`}</Label>
           </SpaceBetweenRow>
           <FlexStartRow style={{ marginBottom: 16 }}>
-            <HighlightLabel gameEditionView={gameEditionView}>Remove</HighlightLabel>
+            <Label fontFamily="bold">Remove</Label>
           </FlexStartRow>
           <SpaceBetweenRow>
             <FlexStartRow>
               {getTokenIcon(token1)}
-              <HighlightLabel gameEditionView={gameEditionView}>{`${extractDecimal(swap.localRes.result.data.amount1)} `}</HighlightLabel>
+
+              <Label fontFamily="bold">{`${extractDecimal(swap?.localRes?.result?.data?.amount1)} `}</Label>
             </FlexStartRow>
-            <HighlightLabel gameEditionView={gameEditionView}>{` ${showTicker(token1)}`}</HighlightLabel>
+            <Label fontFamily="bold">{` ${showTicker(token1)}`}</Label>
           </SpaceBetweenRow>
 
           <SpaceBetweenRow>
-            <Label gameEditionView={gameEditionView}>Gas Cost</Label>
-            <Label gameEditionView={gameEditionView} style={{ color: !gameEditionView && '#41CC41' }}>
+            <Label fontSize={13}>Gas Cost</Label>
+            <div style={{ display: 'flex' }}>
               {ENABLE_GAS_STATION ? (
                 <>
-                  <s>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</s>
-                  <span style={{ marginLeft: 5 }}>FREE!</span>
+                  <Label fontSize={13} color="#41CC41" geColor="green">{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</Label>
+                  <Label fontSize={13} color="#41CC41" geColor="green" labelStyle={{ marginLeft: 5 }}>
+                    FREE!
+                  </Label>
                 </>
               ) : (
-                <span>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</span>
+                <Label>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</Label>
               )}
               {ENABLE_GAS_STATION && <PopupTxView />}
-            </Label>
+            </div>
           </SpaceBetweenRow>
         </TransactionsDetails>
         <CustomButton
           buttonStyle={{
             width: '100%',
             marginTop: !gameEditionView && '16px',
+            marginBottom: gameEditionView && '16px',
           }}
           onClick={async () => {
             setLoading(true);
@@ -266,48 +238,53 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
   const successAddView = () => {
     return (
       <Content gameEditionView={gameEditionView}>
-        <Title gameEditionView={gameEditionView}>Preview Successful!</Title>
-        <SuccessfullIcon />
-        <TransactionsDetails gameEditionView={gameEditionView}>
+        <Label geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
+          Preview Successful!
+        </Label>
+        {!gameEditionView && <SuccessfullIcon style={{ marginTop: 16, marginBottom: 16 }} />}
+        <TransactionsDetails>
           <FlexStartRow style={{ marginBottom: 16 }}>
-            <Label gameEditionView={gameEditionView}>Add</Label>
+            <Label fontSize={13}>Add</Label>
           </FlexStartRow>
           <SpaceBetweenRow>
             <FlexStartRow>
               {getTokenIcon(token0)}
-              <HighlightLabel gameEditionView={gameEditionView}>{`${extractDecimal(swap.localRes.result.data.amount0)} `}</HighlightLabel>
+              <Label fontFamily="bold">{`${extractDecimal(swap.localRes.result.data.amount0)}`}</Label>
             </FlexStartRow>
-            <HighlightLabel gameEditionView={gameEditionView}>{` ${showTicker(token0)}`}</HighlightLabel>
+            <Label fontFamily="bold">{` ${showTicker(token0)}`}</Label>
           </SpaceBetweenRow>
           <FlexStartRow style={{ marginBottom: 16 }}>
-            <Label gameEditionView={gameEditionView}>Add</Label>
+            <Label fontSize={13}>Add</Label>
           </FlexStartRow>
           <SpaceBetweenRow>
             <FlexStartRow>
               {getTokenIcon(token1)}
-              <HighlightLabel gameEditionView={gameEditionView}>{`${extractDecimal(swap.localRes.result.data.amount1)} `}</HighlightLabel>
+              <Label fontFamily="bold">{`${extractDecimal(swap.localRes.result.data.amount1)} `}</Label>
             </FlexStartRow>
-            <HighlightLabel gameEditionView={gameEditionView}>{` ${showTicker(token1)}`}</HighlightLabel>
+            <Label fontFamily="bold">{` ${showTicker(token1)}`}</Label>
           </SpaceBetweenRow>
           <SpaceBetweenRow>
-            <Label gameEditionView={gameEditionView}>Gas Cost</Label>
-            <Label gameEditionView={gameEditionView} style={{ color: !gameEditionView && '#41CC41' }}>
+            <Label fontSize={13}>Gas Cost</Label>
+            <div style={{ display: 'flex' }}>
               {ENABLE_GAS_STATION ? (
                 <>
-                  <s>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</s>
-                  <span style={{ marginLeft: 5 }}>FREE!</span>
+                  <Label fontSize={13} color={commonColors.green} geColor="green">{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</Label>
+                  <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ marginLeft: 5 }}>
+                    FREE!
+                  </Label>
                 </>
               ) : (
-                <span>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</span>
+                <Label>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</Label>
               )}
               {ENABLE_GAS_STATION && <PopupTxView />}
-            </Label>
+            </div>
           </SpaceBetweenRow>
         </TransactionsDetails>
         <CustomButton
           buttonStyle={{
             width: '100%',
             marginTop: !gameEditionView && '16px',
+            marginBottom: gameEditionView && '16px',
           }}
           onClick={async () => {
             setLoading(true);
@@ -332,27 +309,29 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
   const failView = () => {
     return (
       <Content gameEditionView={gameEditionView}>
-        <ErrorIcon />
-        <Title gameEditionView={gameEditionView}>Preview Failed!</Title>
-        <SubTitle gameEditionView={gameEditionView}>Error Message</SubTitle>
-        <TransactionsDetails gameEditionView={gameEditionView}>
-          <Message color="red" style={{ wordBreak: 'break-all', backgroundColor: theme(themeMode).colors.black }}>
-            <RowContainer>
-              <span style={{ wordBreak: 'break-all' }}>{swap.localRes.result.error.message}</span>
-            </RowContainer>
-          </Message>
-          {swap.localRes.result.error.message.includes('insufficient') ? (
-            <span style={{ wordBreak: 'break-all' }}>TIP: Try setting a higher slippage amount</span>
-          ) : (
-            <></>
+        {!gameEditionView && <ErrorIcon style={{ marginTop: 16, marginBottom: 16 }} />}
+        <Label geCenter geColor="yellow">
+          Preview Failed!
+        </Label>
+        <Label fontFamily="bold" labelStyle={{ marginBottom: ' 12px', marginTop: 16, width: '100%' }}>
+          Error Message
+        </Label>
+        <TransactionsDetails style={{ marginTop: 16, marginBottom: 16 }}>
+          <Message color="red">{swap?.localRes?.result?.error?.message}</Message>
+
+          {swap?.localRes?.result?.error?.message?.includes('insufficient') && (
+            <Label geColor="blue" geCenter labelStyle={{ marginTop: 16 }} geLabelStyle={{ marginTop: 16 }}>
+              TIP: Try setting a higher slippage amount
+            </Label>
           )}
         </TransactionsDetails>
+
         <CustomButton
           onClick={() => {
             onClose();
           }}
+          geType="retry"
           buttonStyle={{
-            width: gameEditionView && '100%',
             marginTop: !gameEditionView && '16px',
           }}
         >
@@ -365,23 +344,24 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
   const localError = () => {
     return (
       <Content gameEditionView={gameEditionView} style={{ marginTop: 16 }}>
-        <Title gameEditionView={gameEditionView}>Transaction Error!</Title>
-        <ErrorIcon style={{ width: '60px', height: ' 60px' }} />
-        <SubTitle style={{ textAlign: 'start', width: '100%', marginBottom: ' 12px', marginTop: 16 }} gameEditionView={gameEditionView}>
+        <Label geCenter geColor="yellow">
+          Transaction Error!
+        </Label>
+        {!gameEditionView && <ErrorIcon style={{ width: '60px', height: ' 60px', margin: '16px 0' }} />}
+        <Label fontFamily="bold" labelStyle={{ marginBottom: ' 12px', marginTop: 16, width: '100%' }}>
           Error Message
-        </SubTitle>
-        <TransactionsDetails gameEditionView={gameEditionView}>
-          <Message color="red" style={{ wordBreak: 'break-all', backgroundColor: theme(themeMode).colors.black }}>
-            <RowContainer>
-              <span style={{ wordBreak: 'break-all' }}>{swap.localRes}</span>
-            </RowContainer>
+        </Label>
+        <TransactionsDetails style={{ marginTop: 16, marginBottom: 16 }}>
+          <Message color="red" style={{ wordBreak: 'break-all' }}>
+            {swap?.localRes}
           </Message>
         </TransactionsDetails>
         <CustomButton
           buttonStyle={{
             width: '100%',
-            marginTop: !gameEditionView && '32px',
+            marginTop: !gameEditionView && '16px',
           }}
+          geType="retry"
           onClick={() => {
             onClose();
           }}
@@ -410,3 +390,29 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
 };
 
 export default TxView;
+
+const MessageContainer = styled.div`
+  border: ${({ color, gameEditionView }) => (gameEditionView ? `2px dashed ${color}` : `1px solid ${color}`)};
+  padding: 16px 24px;
+  border-radius: ${({ gameEditionView }) => !gameEditionView && '4px'};
+  background-color: ${({ gameEditionView, theme: { colors } }) => !gameEditionView && colors.black};
+`;
+const Message = ({ color, children }) => {
+  const { gameEditionView } = useGameEditionContext();
+
+  const getColor = () => {
+    switch (color) {
+      case 'red':
+        return commonColors.error;
+      default:
+        return null;
+    }
+  };
+  return (
+    <MessageContainer gameEditionView={gameEditionView} color={getColor()}>
+      <Label color={getColor()} geColor={color} labelStyle={{ wordBreak: 'break-all' }} geLabelStyle={{ wordBreak: 'break-all' }}>
+        {children}
+      </Label>
+    </MessageContainer>
+  );
+};

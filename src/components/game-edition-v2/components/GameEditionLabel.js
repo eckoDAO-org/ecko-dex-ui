@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
 import { commonColors } from '../../../styles/theme';
+import { CloseGe } from '../../../assets';
 
 const STYText = styled.span`
   display: flex;
@@ -14,7 +15,7 @@ const STYText = styled.span`
   font-weight: ${({ fontWeight }) => fontWeight};
 `;
 
-const GameEditionLabel = ({ withShade, children, fontSize, fontWeight, color, style, onClick }) => {
+const GameEditionLabel = ({ center, withShade, children, fontSize, fontWeight, color, style, onClick, onClose }) => {
   const getColor = () => {
     switch (color) {
       case 'white':
@@ -25,13 +26,28 @@ const GameEditionLabel = ({ withShade, children, fontSize, fontWeight, color, st
         return commonColors.gameEditionGrey;
       case 'blue':
         return commonColors.gameEditionBlue;
+      case 'red':
+        return commonColors.error;
+      case 'green':
+        return commonColors.green;
       default:
         return '#ffffff';
     }
   };
   return (
-    <STYText style={style} fontWeight={fontWeight} fontSize={fontSize} color={withShade ? `${getColor()}99` : getColor()} onClick={onClick}>
+    <STYText
+      style={
+        center
+          ? { ...style, display: 'block', textAlign: 'center', width: onClose || center ? '100%' : 'auto' }
+          : { ...style, width: onClose ? '100%' : 'auto' }
+      }
+      fontWeight={fontWeight}
+      fontSize={fontSize}
+      color={withShade ? `${getColor()}99` : getColor()}
+      onClick={onClick}
+    >
       {children}
+      {onClose && <CloseGe style={{ cursor: 'pointer', position: 'absolute', right: 12, top: 6 }} onClick={onClose} />}
     </STYText>
   );
 };
@@ -47,7 +63,7 @@ GameEditionLabel.propTypes = {
 };
 
 GameEditionLabel.defaultProps = {
-  fontSize: 14,
+  fontSize: 20,
   fontWeight: 400,
   onClick: null,
   color: 'white',

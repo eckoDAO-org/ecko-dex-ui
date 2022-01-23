@@ -14,12 +14,16 @@ const StyledButton = styled(SUIButton)`
   align-items: center;
   border-radius: 10px !important;
   margin: 0px;
+  span {
+    opacity: ${({ loading }) => (loading ? 0 : 1)};
+  }
   ${({ type, $outGameEditionView, $gameEditionView, theme: { colors }, buttonBackgroundGradient, $background }) => {
     if ($gameEditionView && !$outGameEditionView) {
       return css`
         border: 2px dashed #ffffff !important;
         border-radius: 0px !important;
         padding: 10px !important;
+        min-height: 38px !important;
         background: ${({ $background }) => $background || 'transparent'} !important;
       `;
     } else {
@@ -100,21 +104,23 @@ const CustomButton = ({
       $outGameEditionView={outGameEditionView}
       $background={background}
     >
-      <Label
-        fontFamily={fontFamily}
-        fontSize={fontSize}
-        labelStyle={labelStyle}
-        geFontSize={geFontSize}
-        geFontWeight={geFontWeight}
-        geLabelStyle={geLabelStyle}
-        geColor={geColor}
-        outGameEditionView={outGameEditionView}
-        inverted={type === 'secondary'}
-        withShade={withShade || disabled}
-        geCenter={geCenter}
-      >
-        {children || label}
-      </Label>
+      {
+        <Label
+          fontFamily={fontFamily}
+          fontSize={fontSize}
+          labelStyle={labelStyle}
+          geFontSize={geFontSize}
+          geFontWeight={geFontWeight}
+          geLabelStyle={geLabelStyle}
+          geColor={geColor}
+          outGameEditionView={outGameEditionView}
+          inverted={type === 'secondary'}
+          withShade={withShade || disabled}
+          geCenter={geCenter}
+        >
+          {children || label}
+        </Label>
+      }
     </StyledButton>
   );
 };

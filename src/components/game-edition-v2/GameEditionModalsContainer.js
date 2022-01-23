@@ -5,6 +5,7 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { FadeIn } from '../shared/animations';
 import modalBackground from '../../assets/images/game-edition/modal-background.png';
 import GameEditionLabel from './components/GameEditionLabel';
+import useButtonScrollEvent from '../../hooks/useButtonScrollEvent';
 
 const GEModalContainer = styled(FadeIn)`
   top: 0;
@@ -22,6 +23,10 @@ const GEModalContainer = styled(FadeIn)`
   background-position: center;
   padding: 24px;
   padding-top: 12px;
+  overflow: auto;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const TitleContainer = styled.div`
@@ -45,8 +50,10 @@ const ContentModalContainer = styled.div`
 
 const GameEditionModalsContainer = ({ title, description, content, hideOnClose, onClose, modalStyle }) => {
   const { closeModal } = useContext(GameEditionContext);
+
+  useButtonScrollEvent('game-edition-modal-container');
   return (
-    <GEModalContainer style={modalStyle}>
+    <GEModalContainer style={modalStyle} id="game-edition-modal-container">
       <TitleContainer>
         <GameEditionLabel fontSize={52} style={{ textAlign: 'center', flex: 1, display: 'block' }}>
           {title}
@@ -57,9 +64,8 @@ const GameEditionModalsContainer = ({ title, description, content, hideOnClose, 
             onClick={() => {
               if (onClose) {
                 onClose();
-              } else {
-                closeModal();
               }
+              closeModal();
             }}
           />
         )}
