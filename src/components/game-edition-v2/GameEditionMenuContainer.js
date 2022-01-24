@@ -57,6 +57,7 @@ const GameEditionMenuContainer = () => {
   const { setButtons } = useGameEditionContext();
 
   useEffect(() => {
+    console.log('here');
     let route = '';
     switch (arrowVisible) {
       case SWAP.label:

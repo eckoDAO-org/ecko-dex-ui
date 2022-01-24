@@ -27,7 +27,7 @@ const AccountIdContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  border: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? `2px dashed ${colors.white}` : `1px solid ${colors.white}99`)};
+  border: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? `2px dashed #ffffff` : `1px solid ${colors.white}99`)};
   padding: 14px 10px;
   align-items: center;
   font-size: ${({ $gameEditionView }) => ($gameEditionView ? '13px' : '16px')};

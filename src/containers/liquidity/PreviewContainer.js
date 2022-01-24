@@ -1,14 +1,10 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
-
 import FormContainer from '../../components/shared/FormContainer';
 import Input from '../../components/shared/Input';
-
 import TokenSelector from '../../components/shared/TokenSelector';
-
 import { PactContext } from '../../contexts/PactContext';
 import { reduceBalance } from '../../utils/reduceBalance';
-
 import { ReactComponent as ArrowBack } from '../../assets/images/shared/arrow-back.svg';
 import theme from '../../styles/theme';
 
@@ -75,7 +71,7 @@ const PreviewContainer = (props) => {
               cursor: 'pointer',
               color: '#FFFFFF',
               marginRight: '15px',
-              justifyContent: 'center'
+              justifyContent: 'center',
             }}
             onClick={() => props.closeLiquidity()}
           />

@@ -26,7 +26,7 @@ export const CardContainer = styled.div`
   opacity: 1;
   background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? `transparent` : backgroundContainer)}; // or add new style
   backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
-  border: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `2px dashed ${colors.white}`};
+  border: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `2px dashed #ffffff`};
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     padding: ${({ gameEditionView }) => gameEditionView && `12px`};

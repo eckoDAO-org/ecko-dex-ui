@@ -5,6 +5,7 @@ import LiquidityList from './liquidity/LiquidityList';
 import RemoveLiqContainer from './liquidity/RemoveLiqContainer';
 import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
 import { useGameEditionContext } from '../contexts';
+import useButtonScrollEvent from '../hooks/useButtonScrollEvent';
 
 const Container = styled.div`
   display: flex;
@@ -35,8 +36,9 @@ const PoolContainer = () => {
   const { gameEditionView } = useGameEditionContext();
   const [selectedView, setSelectedView] = useState(false);
   const [pair, setPair] = useState(null);
+  useButtonScrollEvent('pool-scrolling-container');
   return (
-    <Container $gameEditionView={gameEditionView}>
+    <Container id="pool-scrolling-container" $gameEditionView={gameEditionView}>
       {selectedView === 'Remove Liquidity' ? (
         <RemoveLiqContainer
           closeLiquidity={() => {

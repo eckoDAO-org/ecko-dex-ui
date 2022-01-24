@@ -24,16 +24,8 @@ import { commonTheme } from '../../../styles/theme';
 const RightContainerHeader = styled.div`
   display: flex;
   align-items: center;
-  & > *:first-child {
-    margin-right: 13px;
-  }
-  & > *:not(:first-child):not(:last-child) {
+  & > *:not(first-child) {
     margin-right: 14px;
-  }
-  @media (min-width: ${({ theme: { mediaQueries } }) => mediaQueries.mobileBreakpoint}) {
-    & > *:not(:first-child):not(:last-child) {
-      margin-right: 16px;
-    }
   }
 
   .fadeOut {
@@ -45,13 +37,6 @@ const RightContainerHeader = styled.div`
     visibility: visible;
     opacity: 1;
     transition: opacity 1s linear;
-  }
-
-  .mainnet-chain-2 {
-    font-size: 16px;
-    font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
-    color: ${({ theme: { colors } }) => colors.white};
-    white-space: nowrap;
   }
 `;
 

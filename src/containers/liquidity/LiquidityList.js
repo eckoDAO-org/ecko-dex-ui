@@ -23,9 +23,9 @@ const Container = styled.div`
   display: flex;
   height: 100%;
   flex-direction: column;
-
   margin-left: auto;
   margin-right: auto;
+  width: ${({ $gameEditionView }) => $gameEditionView && '100%'};
   justify-content: ${({ $gameEditionView }) => ($gameEditionView ? 'space-between' : 'center')};
 `;
 
@@ -108,20 +108,14 @@ const LiquidityList = (props) => {
               disabled
               type="primary"
               buttonStyle={{
-                marginRight: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '15px',
+                marginRight: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '10px',
                 marginBottom: gameEditionView && width <= theme().mediaQueries.mobilePixel && '10px',
               }}
               onClick={() => props.selectCreatePair()}
             >
               Create a pair
             </CustomButton>
-            <CustomButton
-              type="secondary"
-              buttonStyle={{
-                marginLeft: gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '-5px',
-              }}
-              onClick={() => props.selectAddLiquidity()}
-            >
+            <CustomButton type="secondary" onClick={() => props.selectAddLiquidity()}>
               Add Liquidity
             </CustomButton>
           </Button.Group>

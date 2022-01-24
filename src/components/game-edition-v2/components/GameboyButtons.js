@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
-import { ROUTE_GAME_EDITION_MENU, ROUTE_SWAP } from '../../../router/routes';
+import { useHistory, useLocation } from 'react-router-dom';
+import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from '../../../router/routes';
 import menuButton from '../../../assets/images/game-edition/pressed-buttons/Menu.png';
 import swapButton from '../../../assets/images/game-edition/pressed-buttons/Menu.png';
 import L1Button from '../../../assets/images/game-edition/pressed-buttons/L1.png';
@@ -14,28 +14,54 @@ import LeftButton from '../../../assets/images/game-edition/pressed-buttons/Cros
 import AButton from '../../../assets/images/game-edition/pressed-buttons/A-BTN.png';
 import BButton from '../../../assets/images/game-edition/pressed-buttons/B-BTN.png';
 import { useGameEditionContext } from '../../../contexts';
+import GameEditionSwitchPageModal from '../GameEditionSwitchPageModal';
 
-const GameEditionButtons = () => {
+const GameboyButtons = () => {
   const history = useHistory();
-  const { buttons, closeModal } = useGameEditionContext();
+  const location = useLocation();
+  const { buttons, openModal, closeModal } = useGameEditionContext();
+
+  const openGameEditionSwitchPage = (buttonKey) => {
+    return openModal({
+      title: null,
+      content: <GameEditionSwitchPageModal direction={buttonKey === 'L1' ? 'left' : 'right'} />,
+      hideOnClose: true,
+    });
+  };
+
+  const handleSwitchPage = (buttonKey) => {
+    if (location.pathname === ROUTE_GAME_START_ANIMATION) {
+      return null;
+    }
+    console.log('buttons[buttonKey]', buttons[buttonKey]);
+    return buttons[buttonKey] ? buttons[buttonKey]() : openGameEditionSwitchPage(buttonKey);
+  };
   return (
     <>
       <PressedButton
         type="menu"
         onClick={() => {
-          history.push(ROUTE_GAME_EDITION_MENU);
-          closeModal();
+          if (buttons?.Menu) {
+            buttons.Menu();
+          } else {
+            history.push(ROUTE_GAME_EDITION_MENU);
+            closeModal();
+          }
         }}
       />
       <PressedButton
         type="swap"
         onClick={() => {
-          history.push(ROUTE_SWAP);
-          closeModal();
+          if (buttons?.Swap) {
+            buttons.Swap();
+          } else {
+            history.push(ROUTE_SWAP);
+            closeModal();
+          }
         }}
       />
-      <PressedButton type="L1" onClick={buttons.L1 ? () => console.log('L1') : null} />
-      <PressedButton type="R1" onClick={buttons.R1 ? () => console.log('R1') : null} />
+      <PressedButton type="L1" onClick={() => handleSwitchPage('L1')} />
+      <PressedButton type="R1" onClick={() => handleSwitchPage('R1')} />
       <PressedButton type="up" onClick={buttons.Up ? () => buttons.Up() : null} />
       <PressedButton type="down" onClick={buttons.Down ? () => buttons.Down() : null} />
       <PressedButton type="right" onClick={buttons.Right ? () => buttons.Right() : null} />
@@ -46,7 +72,7 @@ const GameEditionButtons = () => {
   );
 };
 
-export default GameEditionButtons;
+export default GameboyButtons;
 
 const ButtonContainer = styled.div`
   position: absolute;

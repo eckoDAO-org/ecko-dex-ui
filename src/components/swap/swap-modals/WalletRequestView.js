@@ -5,13 +5,15 @@ import { Transition } from 'react-spring/renderprops';
 import ModalContainer from '../../../components/shared/ModalContainer';
 import { Loader, Icon } from 'semantic-ui-react';
 import CustomButton from '../../../components/shared/CustomButton';
-import GameEditionModalsContainer from '../../game-edition/GameEditionModalsContainer';
+import GameEditionModalsContainer from '../../game-edition-v2/GameEditionModalsContainer';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { WalletContext } from '../../../contexts/WalletContext';
 import { WALLET } from '../../../constants/wallet';
 import { openZelcore } from '../../../utils/zelcore';
 import { theme } from '../../../styles/theme';
 import { LightModeContext } from '../../../contexts/LightModeContext';
+import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
+import Label from '../../shared/Label';
 
 const Container = styled.div`
   position: absolute;
@@ -33,9 +35,7 @@ const Content = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  svg {
-    display: ${({ gameEditionView }) => gameEditionView && 'none '};
-  }
+
   width: 100%;
   justify-content: space-between;
 `;
@@ -52,17 +52,6 @@ const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-`;
-
-const SubTitle = styled.div`
-  /* font-size: normal normal normal 12px/18px Montserrat; */
-
-  width: ${({ gameEditionView }) => (gameEditionView ? '100%' : 'auto')};
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
-  margin: ${({ gameEditionView }) => !gameEditionView && '16px 0px'};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '12px' : '14px')};
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.primary)};
-  text-align: left;
 `;
 
 const WalletRequestView = ({ show, onClose, error }) => {
@@ -85,40 +74,27 @@ const WalletRequestView = ({ show, onClose, error }) => {
       content={
         error?.error ? (
           <ContentContainer>
-            <Content gameEditionView={gameEditionView} style={{ marginBottom: '30px' }}>
-              <SubTitle
-                gameEditionView={gameEditionView}
-                style={{
-                  color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
-                }}
-              >
-                {error.content}
-              </SubTitle>
+            <Content>
+              <GameEditionLabel color="yellow">{error?.content}</GameEditionLabel>
             </Content>
             <CustomButton
+              geType="confirm"
               onClick={() => {
                 onClose();
               }}
-            >
-              <Icon name="checkmark" /> Got it
-            </CustomButton>{' '}
+            />
           </ContentContainer>
         ) : (
-          <Content gameEditionView={gameEditionView}>
-            <SubTitle
-              gameEditionView={gameEditionView}
-              style={{
-                color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
-              }}
-            >
+          <Content>
+            <GameEditionLabel center color="yellow">
               Follow instructions in the wallet to preview and sign your transaction.
-            </SubTitle>
+            </GameEditionLabel>
             <LoaderContainer>
               <Loader
                 active
                 inline="centered"
                 style={{
-                  color: gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white,
+                  color: theme(themeMode).colors.black,
                 }}
               ></Loader>
             </LoaderContainer>
@@ -134,15 +110,15 @@ const WalletRequestView = ({ show, onClose, error }) => {
           <Container style={props}>
             {error?.error ? (
               <ModalContainer
-                title={error.title}
+                title={error?.title}
                 containerStyle={{
                   maxHeight: '80vh',
                   maxWidth: '90vw',
                 }}
                 onClose={onClose}
               >
-                <Content style={{ marginBottom: '30px' }}>
-                  <SubTitle style={{ color: theme(themeMode).colors.white }}>{error.content}</SubTitle>
+                <Content style={{ marginBottom: 30, marginTop: 24 }}>
+                  <Label>{error?.content}</Label>
                 </Content>
                 <CustomButton
                   onClick={() => {
@@ -153,18 +129,16 @@ const WalletRequestView = ({ show, onClose, error }) => {
                 </CustomButton>
               </ModalContainer>
             ) : (
-              /* <Backdrop onClose={onClose} /> */
               <ModalContainer
                 title="Please Sign"
                 containerStyle={{
                   maxHeight: '80vh',
                   maxWidth: '90vw',
-                }} /* onClose={onClose} */
+                }}
+                onClose={onClose}
               >
-                <Content>
-                  <SubTitle style={{ color: theme(themeMode).colors.white }}>
-                    Follow instructions in the wallet to preview and sign your transaction.
-                  </SubTitle>
+                <Content style={{ marginTop: 16 }}>
+                  <Label style={{ textAlign: 'center' }}>Follow instructions in the wallet to preview and sign your transaction.</Label>
                   <LoaderContainer>
                     <Loader active inline="centered" style={{ color: theme(themeMode).colors.white }}></Loader>
                   </LoaderContainer>

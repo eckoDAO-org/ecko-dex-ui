@@ -21,6 +21,11 @@ const HideWiresContainer = styled.div`
   left: 50%;
   transform: translate(-50%, 0px);
   cursor: pointer;
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
 `;
 
 const DisconnectButton = styled(HideWiresContainer)`

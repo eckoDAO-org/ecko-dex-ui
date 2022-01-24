@@ -16,7 +16,7 @@ import ConnectWalletZelcoreModal from '../modals/kdaModals/ConnectWalletZelcoreM
 import ConnectWalletTorusModal from '../modals/kdaModals/ConnectWalletTorusModal';
 import ConnectWalletChainweaverModal from '../modals/kdaModals/ConnectWalletChainweaverModal';
 import { FadeIn } from '../shared/animations';
-import GameEditionButtons from './components/PressedButton';
+import GameboyButtons from './components/GameboyButtons';
 import { useLocation } from 'react-router-dom';
 import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION } from '../../router/routes';
 import TokenSelectorModalContent from '../swap/swap-modals/TokenSelectorModalContent';
@@ -30,6 +30,16 @@ const DesktopMainContainer = styled.div`
   transition: transform 0.5s;
   transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
     if (showTokens) {
+      return 'translate(-600px, 442px)';
+    }
+    if (showWires && !selectedWire && !showTokens) {
+      return 'translateY(0px)';
+    } else {
+      return 'translateY(442px)';
+    }
+  }};
+  /* transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
+    if (showTokens) {
       return $scale ? 'translate(-600px, 560px) scale(1.28)' : 'translate(-600px, 442px) scale(1)';
     }
     if (showWires && !selectedWire && !showTokens) {
@@ -37,8 +47,7 @@ const DesktopMainContainer = styled.div`
     } else {
       return $scale ? 'translateY(560px) scale(1.28)' : 'translateY(442px) scale(1)';
     }
-  }};
-  /* opacity: ${({ showTokens }) => (showTokens ? 0.5 : 1)}; */
+  }}; */
 `;
 
 const MobileMainContainer = styled.div`
@@ -95,10 +104,10 @@ const GameboyMobileContainer = styled.div`
 `;
 
 const DisplayContent = styled.div`
-  width: 446px;
-  margin-left: 14px;
+  width: 455px;
+  margin-left: 6px;
   margin-top: 90px;
-  height: 329px;
+  height: 335px;
   background: rgba(0, 0, 0, 0.02);
   box-shadow: inset 0px 0px 20px rgba(0, 0, 0, 0.75);
   display: flex;
@@ -128,6 +137,17 @@ const SearchTokenList = styled(FadeIn)`
   color: #ffff;
 `;
 
+const WiresContainer = styled.div`
+  transition: transform 0s;
+  transform: ${({ showTokens }) => {
+    if (showTokens) {
+      return 'translate(-250px, 0px)';
+    }
+    return 'translate(0px, 0px)';
+  }};
+  opacity: ${({ showTokens }) => (showTokens ? 0.5 : 1)};
+`;
+
 const GameEditionContainer = ({ children }) => {
   const location = useLocation();
   const [width] = useWindowSize();
@@ -138,20 +158,6 @@ const GameEditionContainer = ({ children }) => {
   const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens, setShowTokens } =
     useContext(GameEditionContext);
   const { account } = useAccountContext();
-
-  // const switchAppSection = (direction) => {
-  //   let cur = history.location.pathname;
-  //   if (direction === 'left') {
-  //     let prevPage = menuItems.findIndex((path) => path.route === cur) - 1;
-  //     if (prevPage < 0) history.push(menuItems[menuItems.length - 1].route);
-  //     else return history.push(menuItems[prevPage].route);
-  //   }
-  //   if (direction === 'right') {
-  //     let nextPage = menuItems.findIndex((path) => path.route === cur) + 1;
-  //     if (nextPage > menuItems.length - 1) history.push(menuItems[0]?.route);
-  //     else return history.push(menuItems[nextPage].route);
-  //   }
-  // };
 
   const onConnectionSuccess = async (wallet) => {
     await signingWallet();
@@ -169,9 +175,11 @@ const GameEditionContainer = ({ children }) => {
 
   const onCloseModal = () => {
     closeModal();
-    if (!account.account) {
-      onWireSelect(null);
+    let oldWire = null;
+    if (wallet && selectedWire && wallet?.id !== selectedWire?.id) {
+      oldWire = WALLET[wallet.id];
     }
+    onWireSelect(oldWire);
   };
 
   const getWalletModal = (walletName) => {
@@ -253,8 +261,8 @@ const GameEditionContainer = ({ children }) => {
       style={{ justifyContent: 'flex-end' }}
     >
       <div style={{ display: 'flex' }}>
-        <GameboyDesktopContainer showWires={showWires} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
-          <GameEditionButtons />
+        <GameboyDesktopContainer showWires={showWires} showTokens={showTokens} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
+          <GameboyButtons />
           <DisplayContent>
             {children}
             {modalState.open && (
@@ -274,12 +282,13 @@ const GameEditionContainer = ({ children }) => {
         {showTokens && (
           <SearchTokenList>
             <TokenSelectorModalContent onCloseTokensList={() => setShowTokens(false)} />
-            {/* tokens list<button onClick={() => setShowTokens(false)}>X</button> */}
           </SearchTokenList>
         )}
       </div>
-      <ConnectWalletWire onClick={() => setShowWires(true)} />
-      <WalletWires />
+      <WiresContainer showTokens={showTokens}>
+        <ConnectWalletWire onClick={() => setShowWires(true)} />
+        <WalletWires />
+      </WiresContainer>
     </DesktopMainContainer>
   );
 };

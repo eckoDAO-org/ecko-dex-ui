@@ -10,7 +10,6 @@ const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 10px 0px 0px;
-  padding: 0px 10px;
 
   width: 436px;
   overflow-x: auto;

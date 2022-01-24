@@ -22,10 +22,12 @@ const WrapperContainer = styled(Wrapper)`
   height: 100%;
 
   .mainnet-chain-2 {
-    font-size: 16px;
+    font-size: 13px;
     font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
     color: ${({ theme: { colors } }) => colors.white};
-    padding: 0 1.5em;
+    @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
+      padding: 0 1.5em;
+    }
   }
 `;
 

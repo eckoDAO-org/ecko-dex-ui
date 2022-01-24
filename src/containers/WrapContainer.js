@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import { Modal, Header, Icon } from 'semantic-ui-react';
 import ModalContainer from '../components/shared/ModalContainer';
 import CustomButton from '../components/shared/CustomButton';
-
 import Input from '../components/shared/Input';
 import InputToken from '../components/shared/InputToken';
 import MenuTabs from '../components/shared/MenuTabs';
 import cryptoCurrencies from '../constants/tokens';
-
 import { ROUTE_INDEX } from '../router/routes';
 import { NavLink } from 'react-router-dom';
 import TokenSelectorModal from '../components/swap/swap-modals/TokenSelectorModal';

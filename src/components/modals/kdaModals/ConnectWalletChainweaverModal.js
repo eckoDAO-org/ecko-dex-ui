@@ -7,7 +7,6 @@ import { AccountContext } from '../../../contexts/AccountContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import Label from '../../shared/Label';
 import pixeledYellowBox from '../../../assets/images/game-edition/pixeled-box-yellow.svg';
-import GameEditionButton from '../../game-edition-v2/components/GameEditionButton';
 
 const ActionContainer = styled.div`
   display: flex;
@@ -105,37 +104,20 @@ const ConnectWalletChainweaverModal = ({ onClose }) => {
       </Label>
 
       <ActionContainer gameEditionView={gameEditionView}>
-        {gameEditionView ? (
-          <GameEditionButton
-            type="cancel"
-            onClick={() => {
-              resetValues();
-            }}
-          />
-        ) : (
-          <CustomButton
-            fluid
-            type="basic"
-            onClick={() => {
-              resetValues();
-            }}
-          >
-            Cancel
-          </CustomButton>
-        )}
-        {gameEditionView ? (
-          <GameEditionButton
-            type="confirm"
-            disabled={!checkKey(accountId)}
-            onClick={() => {
-              handleConnect();
-            }}
-          />
-        ) : (
-          <CustomButton fluid type="primary" disabled={!checkKey(accountId)} onClick={() => handleConnect()}>
-            Confirm
-          </CustomButton>
-        )}
+        <CustomButton
+          fluid
+          geType="cancel"
+          type="basic"
+          onClick={() => {
+            resetValues();
+          }}
+        >
+          Cancel
+        </CustomButton>
+
+        <CustomButton fluid type="primary" geType="confirm" disabled={!checkKey(accountId)} onClick={() => handleConnect()}>
+          Confirm
+        </CustomButton>
       </ActionContainer>
     </>
   );
