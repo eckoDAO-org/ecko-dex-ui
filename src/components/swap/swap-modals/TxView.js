@@ -140,9 +140,9 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
                   </Label>
                 </>
               ) : (
-                <Label>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</Label>
+                <Label color={commonColors.green} geColor="green">{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</Label>
               )}
-              {ENABLE_GAS_STATION && <PopupTxView />}
+              {ENABLE_GAS_STATION && <PopupTxView popupStyle={{ maxWidth: '400px' }} />}
             </div>
           </SpaceBetweenRow>
         </TransactionsDetails>
@@ -204,15 +204,15 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
             <div style={{ display: 'flex' }}>
               {ENABLE_GAS_STATION ? (
                 <>
-                  <Label fontSize={13} color="#41CC41" geColor="green">{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</Label>
-                  <Label fontSize={13} color="#41CC41" geColor="green" labelStyle={{ marginLeft: 5 }}>
+                  <Label fontSize={13} color={commonColors.green} geColor="green">{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</Label>
+                  <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ marginLeft: 5 }}>
                     FREE!
                   </Label>
                 </>
               ) : (
-                <Label>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</Label>
+                <Label color={commonColors.green} geColor="green">{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</Label>
               )}
-              {ENABLE_GAS_STATION && <PopupTxView />}
+              {ENABLE_GAS_STATION && <PopupTxView popupStyle={{ maxWidth: '400px' }} />}
             </div>
           </SpaceBetweenRow>
         </TransactionsDetails>
@@ -276,9 +276,9 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
                   </Label>
                 </>
               ) : (
-                <Label>{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</Label>
+                <Label color={commonColors.green} geColor="green">{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</Label>
               )}
-              {ENABLE_GAS_STATION && <PopupTxView />}
+              {ENABLE_GAS_STATION && <PopupTxView popupStyle={{ maxWidth: '400px' }} />}
             </div>
           </SpaceBetweenRow>
         </TransactionsDetails>

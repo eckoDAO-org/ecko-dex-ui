@@ -40,8 +40,8 @@ const GameEditionLabel = ({ center, withShade, children, fontSize, fontWeight, c
     <STYText
       style={
         center
-          ? { ...style, display: 'block', textAlign: 'center', width: onClose || center ? '100%' : 'auto' }
-          : { ...style, width: onClose ? '100%' : 'auto' }
+          ? { display: 'block', textAlign: 'center', width: onClose || center ? '100%' : 'auto', ...style }
+          : { width: onClose ? '100%' : 'auto', ...style }
       }
       fontWeight={fontWeight}
       fontSize={fontSize}
