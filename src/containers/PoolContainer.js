@@ -16,7 +16,7 @@ const Container = styled.div`
   ${({ $gameEditionView }) => {
     if ($gameEditionView) {
       return css`
-        padding: 16px;
+        padding: 16px 0px;
         height: 100%;
         display: flex;
         background-repeat: no-repeat;

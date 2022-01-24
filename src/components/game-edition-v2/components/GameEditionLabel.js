@@ -9,7 +9,7 @@ const STYText = styled.span`
   position: relative;
   align-items: center;
   cursor: ${({ onClick }) => onClick && 'pointer'};
-  color: ${({ color }) => color};
+  color: ${({ color }) => color} !important;
   font-size: ${({ fontSize }) => fontSize}px;
   font-family: ${({ theme: { fontFamily } }) => fontFamily.pixeboy};
   font-weight: ${({ fontWeight }) => fontWeight};
@@ -40,16 +40,16 @@ const GameEditionLabel = ({ center, withShade, children, fontSize, fontWeight, c
     <STYText
       style={
         center
-          ? { ...style, display: 'block', textAlign: 'center', width: onClose || center ? '100%' : 'auto' }
-          : { ...style, width: onClose ? '100%' : 'auto' }
+          ? { display: 'block', textAlign: 'center', width: onClose || center ? '100%' : 'auto', ...style }
+          : { width: onClose ? '100%' : 'auto', ...style }
       }
       fontWeight={fontWeight}
       fontSize={fontSize}
-      color={withShade ? `${getColor()}99` : getColor()}
+      color={withShade ? `${getColor()}${withShade === true ? 99 : withShade}` : getColor()}
       onClick={onClick}
     >
       {children}
-      {onClose && <CloseGe style={{ cursor: 'pointer', position: 'absolute', right: 12, top: 6 }} onClick={onClose} />}
+      {onClose && <CloseGe style={{ cursor: 'pointer', position: 'absolute', right: 16, top: 6 }} onClick={onClose} />}
     </STYText>
   );
 };
@@ -61,7 +61,7 @@ GameEditionLabel.propTypes = {
   fontSize: PropTypes.number,
   fontWeight: PropTypes.number,
   onClose: PropTypes.func,
-  color: PropTypes.oneOf(['white', 'yellow', 'blue', 'grey']),
+  color: PropTypes.oneOf(['white', 'yellow', 'blue', 'grey', 'green', 'black', 'red']),
 };
 
 GameEditionLabel.defaultProps = {

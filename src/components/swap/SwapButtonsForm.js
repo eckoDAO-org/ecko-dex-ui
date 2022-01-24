@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Button } from 'semantic-ui-react';
 import styled from 'styled-components/macro';
 import pwError from '../alerts/pwError';
 import CustomButton from '../../components/shared/CustomButton';
@@ -79,6 +78,7 @@ const SwapButtonsForm = ({
       ) : (
         <CustomButton
           fluid
+          type={getButtonLabel() === 'SWAP' ? 'secondary' : 'primary'}
           disabled={account.account && (getButtonLabel() !== 'SWAP' || isNaN(fromValues.amount) || isNaN(toValues.amount))}
           loading={loading}
           onClick={async () => {

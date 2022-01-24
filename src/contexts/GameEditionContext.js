@@ -9,6 +9,11 @@ const initialModalState = {
   content: null,
 };
 
+export const GE_DESKTOP_CONFIGURATION = {
+  displayWidth: 455,
+  displayHeight: 335,
+};
+
 export const PROGRESS_BAR_MAX_VALUE = 89;
 export const WIRE_CONTAINER_WIDTH = 930;
 export const GameEditionProvider = (props) => {

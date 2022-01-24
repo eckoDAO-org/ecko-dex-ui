@@ -3,17 +3,16 @@ import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { Transition } from 'react-spring/renderprops';
 import ModalContainer from '../../../components/shared/ModalContainer';
-import { Loader, Icon } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 import CustomButton from '../../../components/shared/CustomButton';
 import GameEditionModalsContainer from '../../game-edition-v2/GameEditionModalsContainer';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { WalletContext } from '../../../contexts/WalletContext';
 import { WALLET } from '../../../constants/wallet';
 import { openZelcore } from '../../../utils/zelcore';
-import { theme } from '../../../styles/theme';
-import { LightModeContext } from '../../../contexts/LightModeContext';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import Label from '../../shared/Label';
+import LogoLoader from '../../shared/LogoLoader';
 
 const Container = styled.div`
   position: absolute;
@@ -56,7 +55,6 @@ const ContentContainer = styled.div`
 
 const WalletRequestView = ({ show, onClose, error }) => {
   const wallet = useContext(WalletContext);
-  const { themeMode } = useContext(LightModeContext);
 
   useEffect(() => {
     if (show && wallet.wallet.name === WALLET.ZELCORE.name) {
@@ -75,10 +73,13 @@ const WalletRequestView = ({ show, onClose, error }) => {
         error?.error ? (
           <ContentContainer>
             <Content>
-              <GameEditionLabel color="yellow">{error?.content}</GameEditionLabel>
+              <GameEditionLabel center color="yellow">
+                {error?.content}
+              </GameEditionLabel>
             </Content>
             <CustomButton
               geType="confirm"
+              buttonStyle={{ display: 'flex', justifyContent: 'center' }}
               onClick={() => {
                 onClose();
               }}
@@ -90,13 +91,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
               Follow instructions in the wallet to preview and sign your transaction.
             </GameEditionLabel>
             <LoaderContainer>
-              <Loader
-                active
-                inline="centered"
-                style={{
-                  color: theme(themeMode).colors.black,
-                }}
-              ></Loader>
+              <LogoLoader />
             </LoaderContainer>
           </Content>
         )
@@ -140,7 +135,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
                 <Content style={{ marginTop: 16 }}>
                   <Label style={{ textAlign: 'center' }}>Follow instructions in the wallet to preview and sign your transaction.</Label>
                   <LoaderContainer>
-                    <Loader active inline="centered" style={{ color: theme(themeMode).colors.white }}></Loader>
+                    <LogoLoader />
                   </LoaderContainer>
                 </Content>
               </ModalContainer>

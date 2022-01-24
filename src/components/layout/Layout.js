@@ -23,6 +23,7 @@ const WrapperContainer = styled(Wrapper)`
 
   .mainnet-chain-2 {
     font-size: 13px;
+    text-align: center;
     font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
     color: ${({ theme: { colors } }) => colors.white};
     @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {

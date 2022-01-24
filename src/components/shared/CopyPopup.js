@@ -11,7 +11,7 @@ const CopyPopup = ({ textToCopy, title, containerStyle }) => {
   const { gameEditionView } = useGameEditionContext();
   return (
     <CustomPopup
-      containerStyle={gameEditionView ? { padding: 8, border: '1px dashed #ffffff', borderRadius: 0, backgroundColor: '#000000' } : { padding: 8 }}
+      containerStyle={gameEditionView ? { padding: 8, border: '2px dashed #ffffff', borderRadius: 0, backgroundColor: '#000000' } : { padding: 8 }}
       hideGradient={gameEditionView}
       on="click"
       position="bottom right"

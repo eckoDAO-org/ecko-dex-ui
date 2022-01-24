@@ -54,7 +54,7 @@ const RightHeaderItems = () => {
   return (
     <RightContainerHeader>
       <span className="mainnet-chain-2 mobile-none">Mainnet Chain 2</span>
-      {account?.account && width > commonTheme.mediaQueries.desktopPixel && (
+      {account?.account && width >= commonTheme.mediaQueries.desktopPixel && (
         <HeaderItem>
           <AccountInfo
             onClick={() => {

@@ -3,8 +3,9 @@ import styled from 'styled-components/macro';
 import { useLocation } from 'react-router-dom';
 import { ROUTE_GAME_START_ANIMATION } from '../../../router/routes';
 import { FadeIn } from '../../shared/animations';
-import { ConnectWalletIcon, WireConnectionIcon } from '../../../assets';
+import { ConnectWalletIcon, WireConnectionLightIcon, WireConnectionDarkIcon } from '../../../assets';
 import { GameEditionContext, WIRE_CONTAINER_WIDTH } from '../../../contexts/GameEditionContext';
+import { useLightModeContext } from '../../../contexts';
 
 const WireConnectionContainer = styled.div`
   margin-top: 8px;
@@ -28,6 +29,7 @@ const ConnectWalletContainer = styled.div`
 
 const ConnectWalletWire = ({ onClick }) => {
   const location = useLocation();
+  const { themeMode } = useLightModeContext();
   const { showWires, selectedWire } = useContext(GameEditionContext);
 
   return (
@@ -37,7 +39,7 @@ const ConnectWalletWire = ({ onClick }) => {
     >
       {location?.pathname !== ROUTE_GAME_START_ANIMATION && !selectedWire && (
         <FadeIn>
-          <WireConnectionIcon />
+          {themeMode === 'light' ? <WireConnectionDarkIcon /> : <WireConnectionLightIcon />}
           <ConnectWalletContainer>
             <ConnectWalletIcon />
           </ConnectWalletContainer>

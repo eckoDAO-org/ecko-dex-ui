@@ -16,6 +16,11 @@ const STYText = styled.span`
       color: ${colors.primary};
     `}
   font-size: ${({ fontSize }) => fontSize}px;
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
 `;
 
 const Label = ({

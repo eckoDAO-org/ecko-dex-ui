@@ -1,59 +1,58 @@
 import React, { useContext } from 'react';
-import { Icon, Popup } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 import CopyPopup from '../../../components/shared/CopyPopup';
 import CustomPopup from '../../../components/shared/CustomPopup';
 import { theme } from '../../../styles/theme';
-import browserDetection from '../../../utils/browserDetection';
+import Label from '../../shared/Label';
 
-const PopupTxView = ({ isAccountPopup }) => {
+const PopupTxView = ({ isAccountPopup, popupStyle, offset }) => {
   const { gameEditionView } = useContext(GameEditionContext);
   const { account } = useContext(AccountContext);
   const { themeMode } = useContext(LightModeContext);
 
+  const containerStyle = gameEditionView
+    ? {
+        padding: 8,
+        border: '2px dashed #ffffff',
+        borderRadius: 0,
+        backgroundColor: '#000000',
+      }
+    : { color: `${theme(themeMode).colors.white}` };
+
   return isAccountPopup ? (
     <CustomPopup
+      containerStyle={containerStyle}
+      hideGradient={gameEditionView}
       trigger={<Icon name="info circle" style={{ margin: ' 0px 0px 0px 4px' }} />}
       position="top right"
       on="click"
-      containerStyle={{
-        color: gameEditionView
-          ? browserDetection() === 'BRAVE'
-            ? `${theme(themeMode).colors.white}`
-            : `${theme(themeMode).colors.black}`
-          : `${theme(themeMode).colors.white}`,
-      }}
     >
-      <Popup.Header
-        style={{
+      <Label
+        fontFamily="bold"
+        labelStyle={{
           padding: '12px 12px 4px 12px',
           display: 'flex',
-          color: gameEditionView
-            ? browserDetection() === 'BRAVE'
-              ? `${theme(themeMode).colors.white}`
-              : `${theme(themeMode).colors.black}`
-            : `${theme(themeMode).colors.white}`,
         }}
+        geColor="yellow"
+        geLabelStyle={{ marginBottom: 8 }}
       >
         Public Key
         <CopyPopup textToCopy={account.account} />
-      </Popup.Header>
-      <Popup.Content
-        style={{
-          inlineSize: '270px',
-          overflowWrap: ' break-word',
-          padding: '4px 12px 12px 12px',
-          color: gameEditionView
-            ? browserDetection() === 'BRAVE'
-              ? `${theme(themeMode).colors.white}`
-              : `${theme(themeMode).colors.black}`
-            : `${theme(themeMode).colors.white}`,
+      </Label>
+      <Label
+        geLabelStyle={{ inlineSize: 270, display: 'block', overflowWrap: 'break-word', width: 'unset' }}
+        labelStyle={{
+          inlineSize: 270,
+          display: 'block',
+          overflowWrap: 'break-word',
+          padding: '4px 12px 12px',
         }}
       >
         {account.account}
-      </Popup.Content>
+      </Label>
     </CustomPopup>
   ) : (
     <CustomPopup
@@ -70,40 +69,31 @@ const PopupTxView = ({ isAccountPopup }) => {
           style={{ marginLeft: '2px', marginRight: 0 }}
         />
       }
-      position="top center"
-      containerStyle={{
-        color: gameEditionView
-          ? browserDetection() === 'BRAVE'
-            ? `${theme(themeMode).colors.white} !important`
-            : `${theme(themeMode).colors.black}  !important`
-          : `${theme(themeMode).colors.white}  !important`,
-      }}
+      offset={offset}
+      position="top right"
+      popupStyle={popupStyle}
+      containerStyle={containerStyle}
+      hideGradient={gameEditionView}
     >
-      <Popup.Header
-        style={{
+      <Label
+        geColor="yellow"
+        fontFamily="bold"
+        geLabelStyle={{ marginBottom: 8 }}
+        labelStyle={{
           padding: '8px 8px 4px 8px',
-          color: gameEditionView
-            ? browserDetection() === 'BRAVE'
-              ? `${theme(themeMode).colors.white} !important`
-              : `${theme(themeMode).colors.black}  !important`
-            : `${theme(themeMode).colors.white}  !important`,
         }}
       >
         Why is Gas free?
-      </Popup.Header>
-      <Popup.Content
-        style={{
+      </Label>
+      <Label
+        geCenter
+        labelStyle={{
           padding: '8px 4px 8px 8px',
-          color: gameEditionView
-            ? browserDetection() === 'BRAVE'
-              ? `${theme(themeMode).colors.white} !important`
-              : `${theme(themeMode).colors.black}  !important`
-            : `${theme(themeMode).colors.white}  !important`,
         }}
       >
         Kadena has a novel concept called gas stations that allows smart contracts to pay for users' gas. This means you do not need to hold KDA to
         trade any token pair!
-      </Popup.Content>
+      </Label>
     </CustomPopup>
   );
 };

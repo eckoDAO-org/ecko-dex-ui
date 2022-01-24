@@ -27,8 +27,8 @@ import FormContainer from '../components/shared/FormContainer';
 import GradientBorder from '../components/shared/GradientBorder';
 import BackgroundLogo from '../components/shared/BackgroundLogo';
 import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
-import PixeledSwapResult from '../assets/images/game-edition/pixeled-swap-result.png';
 import Label from '../components/shared/Label';
+import PixeledInfoContainer from '../components/game-edition-v2/components/PixeledInfoContainer';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -45,7 +45,7 @@ const Container = styled(FadeIn)`
   ${({ gameEditionView }) => {
     if (gameEditionView) {
       return css`
-        padding: 16px;
+        padding: 16px 0px;
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -86,45 +86,23 @@ const GameEditionTokenSelectorContainer = styled.div`
   text-align: center;
 `;
 
-const ResultContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: ${({ gameEditionView }) => (gameEditionView ? `10px 0px` : ` 0px`)};
-  padding: ${({ gameEditionView }) => (gameEditionView ? `0px 10px` : ` 0px`)};
-  flex-flow: column;
+const ResultContainer = styled(PixeledInfoContainer)`
+  ${({ gameEditionView }) => {
+    if (gameEditionView) {
+      return css`
+        margin: 10px 0;
+      `;
+    } else {
+      return css`
+        justify-content: space-between;
+        margin: 16px 0px;
+      `;
+    }
+  }}
   width: 100%;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
     margin-bottom: 0px;
-  }
-`;
-
-const RowContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-flow: row;
-  margin: ${({ gameEditionView }) => !gameEditionView && `16px 0px`};
-
-  ${({ gameEditionView }) => {
-    if (gameEditionView) {
-      return css`
-        display: flex;
-        flex-flow: column;
-        min-width: 194px;
-        min-height: 68px;
-        justify-content: center;
-        text-align: center;
-        align-items: center;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: contain;
-        background-image: ${`url(${PixeledSwapResult})`};
-      `;
-    }
-  }}
-
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: ${({ gameEditionView }) => (gameEditionView ? `column` : ` row`)};
   }
 `;
 
@@ -433,9 +411,9 @@ const SwapContainer = () => {
     if (gameEditionView) {
       openModal({
         title: 'Select a Token',
-        closeModal: () => {
+        onClose: () => {
+          console.log('Here');
           setTokenSelectorType(null);
-          closeModal();
         },
         content: (
           <GameEditionTokenSelectorContainer>
@@ -576,12 +554,10 @@ const SwapContainer = () => {
           )
         ) : (
           <ResultContainer gameEditionView={gameEditionView}>
-            <RowContainer gameEditionView={gameEditionView}>
-              <Label fontSize={13} geFontSize={20} geColor="blue">
-                Max slippage
-              </Label>
-              <Label fontSize={13} fontFamily="bold" geFontSize={28}>{`${pact.slippage * 100}%`}</Label>
-            </RowContainer>
+            <Label fontSize={13} geFontSize={20} geColor="blue">
+              Max slippage
+            </Label>
+            <Label fontSize={13} fontFamily="bold" geFontSize={28}>{`${pact.slippage * 100}%`}</Label>
           </ResultContainer>
         )}
       </FormContainer>
