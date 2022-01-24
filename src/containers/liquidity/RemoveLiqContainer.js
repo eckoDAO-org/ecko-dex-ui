@@ -19,6 +19,7 @@ import { LightModeContext } from '../../contexts/LightModeContext';
 import { ModalContext } from '../../contexts/ModalContext';
 import Label from '../../components/shared/Label';
 import PixeledSwapResult from '../../assets/images/game-edition/pixeled-swap-result.png';
+import PressButtonToActionLabel from '../../components/game-edition-v2/components/PressButtonToActionLabel';
 
 const Container = styled.div`
   display: flex;
@@ -232,41 +233,53 @@ const RemoveLiqContainer = (props) => {
         containerStyle={gameEditionView ? { border: 'none', padding: 0 } : {}}
         footer={
           <ButtonContainer gameEditionView={gameEditionView}>
-            <CustomButton
-              fluid
-              type="secondary"
-              loading={loading}
-              disabled={isNaN(amount) || reduceBalance(amount) === 0}
-              onClick={async () => {
-                if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
-                  setLoading(true);
-                  const res = await liquidity.removeLiquidityLocal(tokenData[token0].code, tokenData[token1].code, reduceBalance(pooled, PRECISION));
-                  if (res === -1) {
-                    setLoading(false);
-                    alert('Incorrect password. If forgotten, you can reset it with your private key');
-                    return;
+            {gameEditionView ? (
+              <PressButtonToActionLabel button="B" actionLabel="remove liquidity" />
+            ) : (
+              <CustomButton
+                fluid
+                type="secondary"
+                loading={loading}
+                disabled={isNaN(amount) || reduceBalance(amount) === 0}
+                onClick={async () => {
+                  if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
+                    setLoading(true);
+                    const res = await liquidity.removeLiquidityLocal(
+                      tokenData[token0].code,
+                      tokenData[token1].code,
+                      reduceBalance(pooled, PRECISION)
+                    );
+                    if (res === -1) {
+                      setLoading(false);
+                      alert('Incorrect password. If forgotten, you can reset it with your private key');
+                      return;
+                    } else {
+                      openTxViewModal();
+                      setLoading(false);
+                    }
                   } else {
-                    openTxViewModal();
-                    setLoading(false);
+                    setLoading(true);
+                    const res = await liquidity.removeLiquidityWallet(
+                      tokenData[token0].code,
+                      tokenData[token1].code,
+                      reduceBalance(pooled, PRECISION)
+                    );
+                    if (!res) {
+                      wallet.setIsWaitingForWalletAuth(true);
+                      setLoading(false);
+                      /* pact.setWalletError(true); */
+                      /* walletError(); */
+                    } else {
+                      wallet.setWalletError(null);
+                      openTxViewModal();
+                      setLoading(false);
+                    }
                   }
-                } else {
-                  setLoading(true);
-                  const res = await liquidity.removeLiquidityWallet(tokenData[token0].code, tokenData[token1].code, reduceBalance(pooled, PRECISION));
-                  if (!res) {
-                    wallet.setIsWaitingForWalletAuth(true);
-                    setLoading(false);
-                    /* pact.setWalletError(true); */
-                    /* walletError(); */
-                  } else {
-                    wallet.setWalletError(null);
-                    openTxViewModal();
-                    setLoading(false);
-                  }
-                }
-              }}
-            >
-              Press B to remove liquidity
-            </CustomButton>
+                }}
+              >
+                Remove liquidity
+              </CustomButton>
+            )}
           </ButtonContainer>
         }
       >
