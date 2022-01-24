@@ -159,20 +159,6 @@ const GameEditionContainer = ({ children }) => {
     useContext(GameEditionContext);
   const { account } = useAccountContext();
 
-  // const switchAppSection = (direction) => {
-  //   let cur = history.location.pathname;
-  //   if (direction === 'left') {
-  //     let prevPage = menuItems.findIndex((path) => path.route === cur) - 1;
-  //     if (prevPage < 0) history.push(menuItems[menuItems.length - 1].route);
-  //     else return history.push(menuItems[prevPage].route);
-  //   }
-  //   if (direction === 'right') {
-  //     let nextPage = menuItems.findIndex((path) => path.route === cur) + 1;
-  //     if (nextPage > menuItems.length - 1) history.push(menuItems[0]?.route);
-  //     else return history.push(menuItems[nextPage].route);
-  //   }
-  // };
-
   const onConnectionSuccess = async (wallet) => {
     await signingWallet();
     await setSelectedWallet(wallet);

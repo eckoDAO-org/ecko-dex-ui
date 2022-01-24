@@ -2,18 +2,21 @@ import React, { useContext, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
 import Input from '../../components/shared/Input';
 import InputToken from '../../components/shared/InputToken';
-import { SwapIcon } from '../../assets';
+import { ArrowDown, PixeledArrowDownIcon, SwapIcon } from '../../assets';
 import { limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
 import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { Divider } from 'semantic-ui-react';
 import useWindowSize from '../../hooks/useWindowSize';
-import { theme } from '../../styles/theme';
+import { commonColors, theme } from '../../styles/theme';
 import noExponents from '../../utils/noExponents';
 import FirstInput from '../../assets/images/game-edition/pixeled-box-yellow.svg';
 import SecondInput from '../../assets/images/game-edition/pixeled-box-purple.svg';
 import { GeArrowIcon } from '../../assets';
 import { PixeledCircleArrowIcon } from '../../assets';
+import CustomButton from '../shared/CustomButton';
+import { useGameEditionContext } from '../../contexts';
+import CustomInput from '../shared/CustomInput';
 
 const Container = styled.div`
   position: relative;
@@ -79,35 +82,34 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
       <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
         {gameEditionView && <GeArrowIcon style={{ width: 14.65, height: 14.65 }} />}
         <FirstInputContainer gameEditionView={gameEditionView}>
-          <Input
+          <CustomInput
             error={isNaN(fromValues.amount)}
             topLeftLabel={fromNote ? `from ${fromNote}` : `from`}
             topRightLabel={`balance: ${reduceBalance(fromValues.balance) ?? '-'}`}
             bottomLeftLabel={`balance: ${reduceBalance(fromValues.balance) ?? '-'}`} //using for gameEdition
+            geColor="black"
             placeholder="0.0"
             maxLength="15"
             size={width <= theme().mediaQueries.mobilePixel && gameEditionView ? 'medium' : 'large'}
-            inputRightComponent={
-              fromValues.coin ? (
-                <InputToken
-                  icon={tokenData[fromValues.coin].icon}
-                  code={tokenData[fromValues.coin].name}
-                  onClick={() => {
-                    setTokenSelectorType('from');
-                  }}
-                  onClickButton={() => {
-                    setInputSide('from');
-                    setFromValues((prev) => ({
-                      ...prev,
-                      amount: reduceBalance(fromValues.balance),
-                    }));
-                  }}
-                  disabledButton={!fromValues.balance}
-                />
-              ) : null
-            }
-            withSelectButton
+            containerStyle={{ minHeight: 60 }}
             numberOnly
+            inputRightComponent={
+              <InputToken
+                geColor="black"
+                values={fromValues}
+                disabledButton={!fromValues.balance}
+                onClick={() => {
+                  setTokenSelectorType('from');
+                }}
+                onMaxClickButton={() => {
+                  setInputSide('from');
+                  setFromValues((prev) => ({
+                    ...prev,
+                    amount: reduceBalance(fromValues.balance),
+                  }));
+                }}
+              />
+            }
             value={noExponents(fromValues.amount)}
             onSelectButtonClick={() => {
               setTokenSelectorType('from');
@@ -146,33 +148,44 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
         {gameEditionView && <div style={{ width: 14.65, height: 14.65 }} />}
 
         <SecondInputContainer gameEditionView={gameEditionView}>
-          <Input
+          <CustomInput
             error={isNaN(toValues.amount)}
             topLeftLabel={toNote ? `to ${toNote}` : `to`}
             topRightLabel={`balance: ${reduceBalance(toValues.balance) ?? '-'}`}
             bottomLeftLabel={`balance: ${reduceBalance(toValues.balance) ?? '-'}`} //using for gameEdition
             placeholder="0.0"
+            geColor="white"
             size={width <= theme().mediaQueries.mobilePixel && gameEditionView ? 'medium' : 'large'}
             maxLength="15"
-            inputRightComponent={
-              toValues.coin ? (
-                <InputToken
-                  icon={tokenData[toValues.coin].icon}
-                  code={tokenData[toValues.coin].name}
-                  onClick={() => setTokenSelectorType('to')}
-                  onClickButton={() => {
-                    setInputSide('to');
-                    setToValues((prev) => ({
-                      ...prev,
-                      amount: reduceBalance(toValues.balance),
-                    }));
-                  }}
-                  disabledButton={fromValues.amount === fromValues.balance}
-                />
-              ) : null
-            }
-            withSelectButton
+            containerStyle={{ minHeight: 60 }}
             numberOnly
+            // inputRightComponent={
+            //   <InputRightComponent
+            //     values={toValues}
+            //     setTokenSelectorType={setTokenSelectorType}
+            //     setInputSide={setInputSide}
+            //     side="to"
+            //     setValues={setFromValues}
+            //     geColor="white"
+            //   />
+            // }
+            inputRightComponent={
+              <InputToken
+                geColor="white"
+                values={toValues}
+                disabledButton={!toValues.balance}
+                onClick={() => {
+                  setTokenSelectorType('to');
+                }}
+                onMaxClickButton={() => {
+                  setInputSide('to');
+                  setFromValues((prev) => ({
+                    ...prev,
+                    amount: reduceBalance(toValues.balance),
+                  }));
+                }}
+              />
+            }
             value={noExponents(toValues.amount)}
             onSelectButtonClick={() => {
               setTokenSelectorType('to');
@@ -190,5 +203,39 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
     </Container>
   );
 };
+
+// const InputRightComponent = ({ values, setTokenSelectorType, setInputSide, setValues, side, geColor }) => {
+//   const { gameEditionView } = useGameEditionContext();
+//   return values.coin ? (
+//     <InputToken
+//       geColor={geColor}
+//       icon={tokenData[values.coin].icon}
+//       code={tokenData[values.coin].name}
+//       onClick={() => {
+//         setTokenSelectorType(side);
+//       }}
+//       onMaxClickButton={() => {
+//         setInputSide(side);
+//         setValues((prev) => ({
+//           ...prev,
+//           amount: reduceBalance(values.balance),
+//         }));
+//       }}
+//       disabledButton={!values.balance}
+//     />
+//   ) : (
+//     <CustomButton
+//       type="basic"
+//       geBasic
+//       onClick={() => setTokenSelectorType(side)}
+//       buttonStyle={{
+//         padding: 0,
+//       }}
+//     >
+//       Select
+//       {gameEditionView ? <PixeledArrowDownIcon /> : <ArrowDown style={{ marginRight: 0, marginLeft: 8 }} />}
+//     </CustomButton>
+//   );
+// };
 
 export default SwapForm;

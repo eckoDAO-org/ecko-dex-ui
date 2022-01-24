@@ -23,13 +23,15 @@ const GameEditionLabel = ({ center, withShade, children, fontSize, fontWeight, c
       case 'yellow':
         return commonColors.gameEditionYellow;
       case 'grey':
-        return commonColors.gameEditionGrey;
+        return commonColors.gameEditionWhiteGrey;
       case 'blue':
         return commonColors.gameEditionBlue;
       case 'red':
         return commonColors.error;
       case 'green':
         return commonColors.green;
+      case 'black':
+        return commonColors.black;
       default:
         return '#ffffff';
     }

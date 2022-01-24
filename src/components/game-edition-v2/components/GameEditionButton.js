@@ -32,7 +32,7 @@ const Button = styled.div`
   }}
 `;
 
-const GameEditionButton = ({ type, onClick, disabled, children }) => {
+const GameEditionButton = ({ type, onClick, disabled, children, style }) => {
   const getButtonIcon = () => {
     switch (type) {
       case 'confirm':
@@ -49,7 +49,7 @@ const GameEditionButton = ({ type, onClick, disabled, children }) => {
   };
 
   return (
-    <Button onClick={disabled ? null : (e) => onClick(e)} disabled={disabled} type={type}>
+    <Button onClick={disabled ? null : (e) => onClick(e)} disabled={disabled} type={type} style={style}>
       {getButtonIcon()}
     </Button>
   );

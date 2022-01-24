@@ -9,8 +9,7 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 const Container = styled.div`
   display: flex;
   flex-flow: column;
-  margin-bottom: ${({ gameEditionView, outGameEditionView }) => {
-    if (outGameEditionView) return '0px';
+  margin-bottom: ${({ gameEditionView }) => {
     if (gameEditionView) return '10px';
     else return '0px';
   }};
@@ -26,22 +25,21 @@ const Container = styled.div`
     margin-top: ${({ gameEditionView }) => gameEditionView && '5px'};
     height: ${({ gameEditionView }) => gameEditionView && '22px'};
     padding: ${({ gameEditionView }) => (!gameEditionView ? '10px 2px' : '0px')};
-    font-family: ${({ gameEditionView, outGameEditionView, theme: { fontFamily } }) => {
-      if (outGameEditionView) return fontFamily.regular + '!important';
+    font-family: ${({ gameEditionView, theme: { fontFamily } }) => {
       if (gameEditionView) return fontFamily.pixeboy + '!important';
       else return fontFamily.regular + '!important';
     }};
-    color: ${({ color, gameEditionView, outGameEditionView, theme: { colors } }) => {
+    color: ${({ color, gameEditionView, theme: { colors }, geColor }) => {
+      if (geColor && gameEditionView) return geColor + '!important';
       if (color) return color + '!important';
-      if (outGameEditionView) return colors.white + '!important';
       if (gameEditionView) return colors.black + '!important';
       else return colors.white + '!important';
     }};
     font-size: ${({ gameEditionView }) => gameEditionView && '34px'};
   }
   & input::placeholder {
-    color: ${({ color, gameEditionView, theme: { colors } }) =>
-      gameEditionView ? (color ? color : `${colors.black}70 !important`) : `${colors.white} !important`};
+    /* color: ${({ color, gameEditionView, theme: { colors } }) =>
+      gameEditionView ? (color ? color : `${colors.black}70 !important`) : `${colors.white} !important`}; */
     text-transform: capitalize;
     font-family: 14px;
     font-size: ${({ gameEditionView }) => gameEditionView && '34px'};
@@ -55,7 +53,7 @@ const Container = styled.div`
   .ui.labeled.input > .label:not(.corner) {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-    color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? '#fff' : `${colors.white} !important`)};
+    /* color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? '#fff' : `${colors.white} !important`)}; */
     padding-left: ${({ gameEditionView }) => !gameEditionView && '0px'};
     padding-right: ${({ gameEditionView }) => !gameEditionView && '0px'};
     background: transparent;
@@ -68,18 +66,13 @@ const TopLabelsContainer = styled.div`
   align-items: center;
   display: flex;
   justify-content: space-between;
-  margin-bottom: ${(gameEditionView) => (gameEditionView ? '2px' : '8px')};
   margin-left: 2px;
   margin-right: 2px;
   span {
-    font: ${({ gameEditionView, theme: { fontFamily } }) =>
-      gameEditionView ? `normal normal normal 13px/16px ${fontFamily.pixeboy}` : `normal normal bold 13px/16px Montserrat`};
+    font: ${({ theme: { fontFamily } }) => fontFamily.regular};
     letter-spacing: 0px;
-    color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `${colors.black}` : `${colors.white}`)};
+    color: ${({ theme: { colors } }) => colors.white};
     text-transform: capitalize;
-    @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
-      font-size: ${({ gameEditionView }) => (gameEditionView ? `10px` : ``)};
-    }
   }
 `;
 
@@ -93,7 +86,11 @@ const BottomLabelsContainer = styled.div`
     font: ${({ gameEditionView, theme: { fontFamily } }) =>
       gameEditionView ? `normal normal normal 20px ${fontFamily.pixeboy}` : `normal normal normal 13px/16px Montserrat`};
     letter-spacing: 0px;
-    color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? `${colors.black}` : `${colors.white}`)};
+    color: ${({ gameEditionView, theme: { colors }, geColor }) => {
+      if (geColor && gameEditionView) return `${geColor}80`;
+      if (gameEditionView) return colors.black;
+      return colors.white;
+    }};
     text-transform: capitalize;
   }
 `;
@@ -158,8 +155,8 @@ const Input = ({
   color,
   withBorder,
   maxLength,
-  outGameEditionView,
   noInputBackground,
+  geColor,
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
 
@@ -185,8 +182,8 @@ const Input = ({
   };
   return (
     <Container
+      geColor={geColor}
       gameEditionView={gameEditionView}
-      outGameEditionView={outGameEditionView}
       noInputBackground={noInputBackground}
       color={color}
       withBorder={withBorder}
@@ -195,11 +192,11 @@ const Input = ({
       style={containerStyle}
     >
       {(topLeftLabel || topRightLabel) && (
-        <TopLabelsContainer gameEditionView={gameEditionView}>
+        <TopLabelsContainer>
           {topLeftLabel && !gameEditionView && (
             <span
               style={{
-                fontFamily: gameEditionView ? theme().fontFamily.pixeboy : theme().fontFamily.bold,
+                fontFamily: theme().fontFamily.bold,
                 ...topLeftLabelStyle,
               }}
             >
@@ -209,7 +206,7 @@ const Input = ({
           {topRightLabel && !gameEditionView && (
             <span
               style={{
-                fontFamily: gameEditionView ? theme().fontFamily.pixeboy : theme().fontFamily.regular,
+                fontFamily: theme().fontFamily.regular,
                 marginLeft: !topLeftLabel ? 'auto' : 'unset',
                 textAlign: 'end',
                 ...topRightLabelStyle,
@@ -248,11 +245,11 @@ const Input = ({
         }
       />
       {(bottomLeftLabel || bottomRightLabel) && (
-        <BottomLabelsContainer gameEditionView={gameEditionView}>
+        <BottomLabelsContainer gameEditionView={gameEditionView} geColor={geColor}>
           {bottomLeftLabel && gameEditionView && (
             <span
               style={{
-                fontFamily: gameEditionView ? theme().fontFamily.pixeboy : theme().fontFamily.regular,
+                fontFamily: theme().fontFamily.pixeboy,
                 ...bottomLeftLabelStyle,
               }}
             >

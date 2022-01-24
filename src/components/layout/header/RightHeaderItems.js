@@ -27,17 +27,6 @@ const RightContainerHeader = styled.div`
   & > *:not(first-child) {
     margin-right: 14px;
   }
-  /* & > *:first-child {
-    margin-right: 13px;
-  }
-  & > *:not(:first-child):not(:last-child) {
-    margin-right: 14px;
-  }
-  @media (min-width: ${({ theme: { mediaQueries } }) => mediaQueries.mobileBreakpoint}) {
-    & > *:not(:first-child):not(:last-child) {
-      margin-right: 16px;
-    }
-  } */
 
   .fadeOut {
     visibility: hidden;

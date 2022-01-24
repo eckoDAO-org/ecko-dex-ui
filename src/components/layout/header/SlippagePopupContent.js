@@ -2,11 +2,10 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { PactContext } from '../../../contexts/PactContext';
-import Input from '../../../components/shared/Input';
-import { LightModeContext } from '../../../contexts/LightModeContext';
-import { theme } from '../../../styles/theme';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
+import Input from '../../../components/shared/Input';
 import LightModeToggle from '../../../components/shared/LightModeToggle';
+import Label from '../../shared/Label';
 
 const Container = styled.div`
   display: flex;
@@ -15,25 +14,10 @@ const Container = styled.div`
   background: transparent;
 `;
 
-const BoldLabel = styled.span`
-  font-size: 13px;
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold} !important;
-  text-transform: capitalize;
-`;
-
-const RegularLabel = styled.span`
-  font-size: 13px;
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
-  text-transform: capitalize;
-  color: ${({ theme: { colors } }) => colors.white};
-`;
-
 const SlippageTolleranceValue = styled.div`
   border-radius: 16px;
   border: ${({ theme: { colors } }) => `1px solid ${colors.white}`};
-  /* box-shadow: ${({ isSelected, theme: { colors } }) => (isSelected ? `0 0 5px ${colors.white};` : 'none')}; */
   color: ${({ isSelected, theme: { colors } }) => (isSelected ? colors.primary : colors.white)};
-  /* text-shadow: ${({ isSelected, theme: { colors } }) => (isSelected ? `0 0 5px ${colors.white};` : 'none')}; */
   font-family: ${({ isSelected, theme: { fontFamily } }) => (isSelected ? fontFamily.bold : fontFamily.regular)};
   font-size: 14px;
   padding: 6.5px 8.5px;
@@ -56,6 +40,7 @@ const ContainerInputTypeNumber = styled.div`
     padding: 0px;
     text-align: right;
     font-size: 14px;
+    margin: 0px;
   }
   .ui.fluid.input > input {
     width: 80px !important;
@@ -78,7 +63,6 @@ const Row = styled.div`
 const SlippagePopupContent = () => {
   const pact = useContext(PactContext);
   const { gameEditionView } = useContext(GameEditionContext);
-  const { themeMode } = useContext(LightModeContext);
   const [slp, setSlp] = useState(pact.slippage * 100);
   const [tl, setTl] = useState(pact.ttl * 60);
   useEffect(() => {
@@ -89,14 +73,18 @@ const SlippagePopupContent = () => {
   }, [tl]);
   return (
     <Container>
-      <BoldLabel style={{ color: theme(themeMode).colors.white }}>Transactions Settings</BoldLabel>
+      <Label outGameEditionView fontSize={13} fontFamily="bold">
+        Transactions Settings
+      </Label>
       {!gameEditionView && (
         <Row style={{ marginTop: 16 }}>
           <LightModeToggle />
         </Row>
       )}
 
-      <RegularLabel style={{ marginTop: 16 }}>Slippage Tolerance</RegularLabel>
+      <Label outGameEditionView fontSize={13} labelStyle={{ marginTop: 16 }}>
+        Slippage Tolerance
+      </Label>
 
       <Row style={{ marginTop: 8 }}>
         <SlippageTolleranceValue isSelected={slp === 0.1} onClick={() => setSlp(0.1)}>
@@ -117,6 +105,7 @@ const SlippagePopupContent = () => {
               border: 'none ',
               boxShadow: 'none !important',
               padding: '0px',
+              margin: 0,
             }}
             placeholder={`${slp}`}
             numberOnly
@@ -131,12 +120,13 @@ const SlippagePopupContent = () => {
         </ContainerInputTypeNumber>
       </Row>
 
-      <RegularLabel style={{ marginTop: 16 }}>Transaction deadline</RegularLabel>
+      <Label fontSize={13} outGameEditionView labelStyle={{ marginTop: 16 }}>
+        Transaction deadline
+      </Label>
       <Row style={{ marginTop: 8 }}>
         <ContainerInputTypeNumber>
           <Input
             noInputBackground
-            outGameEditionView
             containerStyle={{
               border: 'none',
               boxShadow: 'none !important',
@@ -152,7 +142,9 @@ const SlippagePopupContent = () => {
             }}
           />
         </ContainerInputTypeNumber>
-        <RegularLabel style={{ color: theme(themeMode).colors.white, marginLeft: 8 }}>minutes</RegularLabel>
+        <Label fontSize={13} outGameEditionView labelStyle={{ marginLeft: 8 }}>
+          minutes
+        </Label>
       </Row>
     </Container>
   );

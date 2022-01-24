@@ -67,12 +67,6 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const MyButtonDivider = styled.div`
-  width: 2%;
-  height: auto;
-  display: inline-block;
-`;
-
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -303,7 +297,6 @@ const RemoveLiqContainer = (props) => {
             >
               25%
             </CustomButton>
-            <MyButtonDivider />
             <CustomButton
               fluid
               type={amount === 50 ? 'secondary' : 'primary'}
@@ -312,7 +305,6 @@ const RemoveLiqContainer = (props) => {
             >
               50%
             </CustomButton>
-            <MyButtonDivider />
             <CustomButton
               fluid
               type={amount === 75 ? 'secondary' : 'primary'}
@@ -321,7 +313,6 @@ const RemoveLiqContainer = (props) => {
             >
               75%
             </CustomButton>
-            <MyButtonDivider />
             <CustomButton
               fluid
               type={amount === 100 ? 'secondary' : 'primary'}
