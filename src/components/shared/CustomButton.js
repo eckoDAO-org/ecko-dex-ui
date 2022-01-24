@@ -17,13 +17,12 @@ const StyledButton = styled(SUIButton)`
   span {
     opacity: ${({ loading }) => (loading ? 0 : 1)};
   }
-  ${({ type, $outGameEditionView, $gameEditionView, theme: { colors }, buttonBackgroundGradient }) => {
+  ${({ type, $outGameEditionView, $gameEditionView, theme: { colors }, buttonBackgroundGradient, $geBasic }) => {
     if ($gameEditionView && !$outGameEditionView) {
       return css`
-        border: ${({ geBasic }) => (geBasic ? 'none' : '2px dashed #ffffff')} !important;
-        padding: ${({ geBasic }) => (geBasic ? '0px ' : '10px')} !important;
+        border: ${$geBasic} ? 'none' : '2px dashed #ffffff' !important;
+        padding: ${$geBasic} ? '0px' : '10px' !important;
         border-radius: 0px !important;
-        padding: 10px !important;
         min-height: 38px !important;
         background: ${({ $background }) => $background || 'transparent'} !important;
       `;
@@ -103,7 +102,7 @@ const CustomButton = ({
       onClick={onClick}
       loading={loading}
       type={type}
-      geBasic={geBasic}
+      $geBasic={geBasic}
       $outGameEditionView={outGameEditionView}
       $background={background}
     >

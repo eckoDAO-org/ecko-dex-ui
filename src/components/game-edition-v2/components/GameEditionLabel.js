@@ -61,7 +61,7 @@ GameEditionLabel.propTypes = {
   fontSize: PropTypes.number,
   fontWeight: PropTypes.number,
   onClose: PropTypes.func,
-  color: PropTypes.oneOf(['white', 'yellow', 'blue', 'grey']),
+  color: PropTypes.oneOf(['white', 'yellow', 'blue', 'grey', 'green', 'black', 'red']),
 };
 
 GameEditionLabel.defaultProps = {

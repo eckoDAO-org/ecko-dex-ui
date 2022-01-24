@@ -1,21 +1,15 @@
 import React, { useContext, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
-import Input from '../../components/shared/Input';
 import InputToken from '../../components/shared/InputToken';
-import { ArrowDown, PixeledArrowDownIcon, SwapIcon } from '../../assets';
+import { SwapIcon } from '../../assets';
 import { limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
-import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { Divider } from 'semantic-ui-react';
-import useWindowSize from '../../hooks/useWindowSize';
-import { commonColors, theme } from '../../styles/theme';
 import noExponents from '../../utils/noExponents';
 import FirstInput from '../../assets/images/game-edition/pixeled-box-yellow.svg';
 import SecondInput from '../../assets/images/game-edition/pixeled-box-purple.svg';
 import { GeArrowIcon } from '../../assets';
 import { PixeledCircleArrowIcon } from '../../assets';
-import CustomButton from '../shared/CustomButton';
-import { useGameEditionContext } from '../../contexts';
 import CustomInput from '../shared/CustomInput';
 
 const Container = styled.div`
@@ -75,8 +69,6 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
   const { gameEditionView } = useContext(GameEditionContext);
   const [rotation, setRotation] = useState(0);
 
-  const [width] = useWindowSize();
-
   return (
     <Container gameEditionView={gameEditionView}>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
@@ -90,7 +82,6 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
             geColor="black"
             placeholder="0.0"
             maxLength="15"
-            size={width <= theme().mediaQueries.mobilePixel && gameEditionView ? 'medium' : 'large'}
             containerStyle={{ minHeight: 60 }}
             numberOnly
             inputRightComponent={
@@ -155,7 +146,6 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
             bottomLeftLabel={`balance: ${reduceBalance(toValues.balance) ?? '-'}`} //using for gameEdition
             placeholder="0.0"
             geColor="white"
-            size={width <= theme().mediaQueries.mobilePixel && gameEditionView ? 'medium' : 'large'}
             maxLength="15"
             containerStyle={{ minHeight: 60 }}
             numberOnly

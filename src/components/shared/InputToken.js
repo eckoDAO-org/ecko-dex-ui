@@ -11,9 +11,8 @@ const Container = styled.div`
   ${({ $gameEditionView }) => {
     if ($gameEditionView) {
       return css`
-        padding-right: 20px;
         position: absolute;
-        right: 0px;
+        right: 26px;
         top: 4px;
       `;
     }
@@ -21,7 +20,6 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
-  right: 0px;
 
   min-width: ${({ theme: { inputTokenWidth } }) => `${inputTokenWidth}px`};
   svg {
@@ -90,7 +88,6 @@ const ElementsContainer = styled.div`
 
 const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor }) => {
   const { gameEditionView } = useContext(GameEditionContext);
-  console.log('values', values);
   return (
     <Container $gameEditionView={gameEditionView} geColor={geColor}>
       {values?.coin ? (
@@ -118,17 +115,20 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
           {gameEditionView ? <PixeledArrowDownIcon /> : <ArrowDown />}
         </>
       ) : (
-        <CustomButton
-          type="basic"
-          geBasic
-          onClick={onClick}
-          buttonStyle={{
-            padding: 0,
-          }}
-        >
-          Select
+        <>
+          <CustomButton
+            type="basic"
+            geBasic
+            onClick={onClick}
+            buttonStyle={{
+              padding: 0,
+              marginRight: gameEditionView && 10,
+            }}
+          >
+            Select
+          </CustomButton>
           {gameEditionView ? <PixeledArrowDownIcon /> : <ArrowDown style={{ marginRight: 0, marginLeft: 8 }} />}
-        </CustomButton>
+        </>
       )}
     </Container>
   );
