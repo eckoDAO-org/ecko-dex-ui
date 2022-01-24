@@ -8,7 +8,7 @@ import { WalletContext } from '../../contexts/WalletContext';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { PactContext } from '../../contexts/PactContext';
 import { LightModeContext } from '../../contexts/LightModeContext';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
 import { reduceBalance, getCorrectBalance } from '../../utils/reduceBalance';
 import WalletRequestView from '../../components/swap/swap-modals/WalletRequestView';
 import { ArrowBack, CogIcon } from '../../assets';
@@ -27,8 +27,8 @@ import CustomPopup from '../../components/shared/CustomPopup';
 import SlippagePopupContent from '../../components/layout/header/SlippagePopupContent';
 import BackgroundLogo from '../../components/shared/BackgroundLogo';
 import browserDetection from '../../utils/browserDetection';
-import PixeledSwapResult from '../../assets/images/game-edition/pixeled-swap-result.png';
 import { theme } from '../../styles/theme';
+import PixeledInfoContainer from '../../components/game-edition-v2/components/PixeledInfoContainer';
 
 const Container = styled.div`
   display: flex;
@@ -83,10 +83,13 @@ const ResultContainer = styled.div`
         justify-content: space-between;
         margin: 10px 0px 0px;
         padding: 0px 10px;
-        width: 436px;
+        width: ${GE_DESKTOP_CONFIGURATION.displayWidth}px;
         overflow-x: auto;
         overflow-y: hidden;
         white-space: nowrap;
+        & > div:not(:last-child) {
+          margin-right: 15px;
+        }
       `;
     }
   }}
@@ -101,30 +104,15 @@ const ResultContainer = styled.div`
   }
 `;
 
-const InnerRowContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-flow: row;
-
+const InnerRowContainer = styled(PixeledInfoContainer)`
   ${({ gameEditionView }) => {
-    if (gameEditionView) {
+    if (!gameEditionView) {
       return css`
-        margin-right: 15px;
-        display: flex;
-        flex-flow: column;
-        min-width: 194px;
-        min-height: 64px;
-        justify-content: center;
-        text-align: center;
-        align-items: center;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: contain;
-        background-image: ${`url(${PixeledSwapResult})`};
+        justify-content: space-between;
+        flex-flow: row;
       `;
     }
   }}
-
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: ${({ gameEditionView }) => (gameEditionView ? 'column' : `row`)};
   }

@@ -17,15 +17,21 @@ const Container = styled.div`
   display: flex;
   flex-flow: column;
   width: 100%;
-  ${({ gameEditionView }) =>
-    !gameEditionView &&
-    css`
-      svg {
-        path {
-          fill: ${({ theme: { colors } }) => colors.white};
+  ${({ gameEditionView }) => {
+    if (gameEditionView) {
+      return css`
+        padding: 0 16px;
+      `;
+    } else {
+      return css`
+        svg {
+          path {
+            fill: ${({ theme: { colors } }) => colors.white};
+          }
         }
-      }
-    `}
+      `;
+    }
+  }}
 `;
 const FirstInputContainer = styled.div`
   width: 100%;

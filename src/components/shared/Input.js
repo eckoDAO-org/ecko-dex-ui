@@ -143,9 +143,10 @@ const Input = ({
     >
       {(topLeftLabel || topRightLabel) && !gameEditionView && (
         <TopLabelsContainer>
-          {topLeftLabel && <Label>{topLeftLabel}</Label>}
+          {topLeftLabel && <Label fontFamily="bold">{topLeftLabel}</Label>}
           {topRightLabel && (
             <Label
+              fontFamily="bold"
               style={{
                 marginLeft: !topLeftLabel ? 'auto' : 'unset',
                 textAlign: 'end',

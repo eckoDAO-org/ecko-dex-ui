@@ -25,6 +25,7 @@ const Container = styled.div`
   flex-direction: column;
   margin-left: auto;
   margin-right: auto;
+  padding: 0 16px;
   width: ${({ $gameEditionView }) => $gameEditionView && '100%'};
   justify-content: ${({ $gameEditionView }) => ($gameEditionView ? 'space-between' : 'center')};
 `;

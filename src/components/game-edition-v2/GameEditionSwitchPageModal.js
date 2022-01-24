@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components/macro';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
 
 import menuItems, { POOL, STATS, SWAP } from '../menuItems';
 import GameEditionLabel from './components/GameEditionLabel';
@@ -22,7 +22,7 @@ const Content = styled.div`
 const ItemsContainer = styled.div`
   display: flex;
   flex-flow: row;
-  width: 436px;
+  width: ${GE_DESKTOP_CONFIGURATION.displayWidth}px;
   overflow-x: auto;
   scroll-behavior: smooth;
   & > div:first-child {

@@ -3,37 +3,26 @@ import styled from 'styled-components/macro';
 import { PactContext } from '../../contexts/PactContext';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { reduceBalance } from '../../utils/reduceBalance';
-import PixeledSwapResult from '../../assets/images/game-edition/pixeled-swap-result.png';
 import Label from '../shared/Label';
+import { GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
+import PixeledInfoContainer from '../game-edition-v2/components/PixeledInfoContainer';
 
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 10px 0px 0px;
-
-  width: 436px;
+  padding-left: 16px;
+  width: ${GE_DESKTOP_CONFIGURATION.displayWidth}px;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
+  & > div:not(:last-child) {
+    margin-right: 15px;
+  }
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     margin: 5px 0px;
     flex-flow: column;
   }
-`;
-
-const InfoContainer = styled.div`
-  margin-right: 15px;
-  display: flex;
-  flex-flow: column;
-  min-width: 194px;
-  min-height: 80px;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  background-image: ${`url(${PixeledSwapResult})`};
 `;
 
 const SwapResultsGEv2 = ({ priceImpact, fromValues, toValues }) => {
@@ -41,11 +30,11 @@ const SwapResultsGEv2 = ({ priceImpact, fromValues, toValues }) => {
   const liquidity = useContext(LiquidityContext);
   return (
     <ResultContainer>
-      <InfoContainer>
+      <PixeledInfoContainer gameEditionView>
         <Label geFontSize={20} geColor="blue">{`price ${fromValues.coin} per ${toValues.coin}`}</Label>
         <Label geFontSize={28}>{`${reduceBalance(pact.ratio * (1 + priceImpact))}`}</Label>
-      </InfoContainer>
-      <InfoContainer>
+      </PixeledInfoContainer>
+      <PixeledInfoContainer gameEditionView>
         <Label geFontSize={20} geColor="blue">
           Price Impact
         </Label>
@@ -54,21 +43,21 @@ const SwapResultsGEv2 = ({ priceImpact, fromValues, toValues }) => {
             ? '< 0.01%'
             : `${reduceBalance(pact.priceImpactWithoutFee(priceImpact) * 100, 4)}%`}
         </Label>
-      </InfoContainer>
-      <InfoContainer geFontSize={20} geColor="blue">
+      </PixeledInfoContainer>
+      <PixeledInfoContainer gameEditionView geFontSize={20} geColor="blue">
         <Label geFontSize={20} geColor="blue">
           max slippage
         </Label>
         <Label geFontSize={28}>{`${pact.slippage * 100}%`}</Label>
-      </InfoContainer>
-      <InfoContainer>
+      </PixeledInfoContainer>
+      <PixeledInfoContainer gameEditionView>
         <Label geFontSize={20} geColor="blue">
           liquidity provider fee
         </Label>
         <Label geFontSize={28}>
           {`${(liquidity.liquidityProviderFee * parseFloat(fromValues.amount)).toFixed(fromValues.precision)} ${fromValues.coin}`}
         </Label>
-      </InfoContainer>
+      </PixeledInfoContainer>
     </ResultContainer>
   );
 };

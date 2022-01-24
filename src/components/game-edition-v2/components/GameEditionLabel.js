@@ -49,7 +49,7 @@ const GameEditionLabel = ({ center, withShade, children, fontSize, fontWeight, c
       onClick={onClick}
     >
       {children}
-      {onClose && <CloseGe style={{ cursor: 'pointer', position: 'absolute', right: 12, top: 6 }} onClick={onClose} />}
+      {onClose && <CloseGe style={{ cursor: 'pointer', position: 'absolute', right: 16, top: 6 }} onClick={onClose} />}
     </STYText>
   );
 };

@@ -13,13 +13,13 @@ import tokenData from '../../constants/cryptoCurrencies';
 import { extractDecimal, limitDecimalPlaces, pairUnit, reduceBalance } from '../../utils/reduceBalance';
 import { theme } from '../../styles/theme';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
 import GradientBorder from '../../components/shared/GradientBorder';
 import { LightModeContext } from '../../contexts/LightModeContext';
 import { ModalContext } from '../../contexts/ModalContext';
 import Label from '../../components/shared/Label';
-import PixeledSwapResult from '../../assets/images/game-edition/pixeled-swap-result.png';
 import PressButtonToActionLabel from '../../components/game-edition-v2/components/PressButtonToActionLabel';
+import PixeledInfoContainer from '../../components/game-edition-v2/components/PixeledInfoContainer';
 
 const Container = styled.div`
   display: flex;
@@ -50,7 +50,7 @@ const SubContainer = styled.div`
   align-items: center;
   flex-flow: column;
   width: 100%;
-
+  padding: ${({ gameEditionView }) => gameEditionView && '0 16px'};
   & > *:first-child {
     margin-bottom: 16px;
   }
@@ -61,7 +61,7 @@ const ButtonContainer = styled.div`
   justify-content: center;
   width: 100%;
   & > button:not(:last-child) {
-    margin-right: 4px;
+    margin-right: 8px;
   }
   & > button:last-child {
     margin-right: 0px;
@@ -71,10 +71,8 @@ const ButtonContainer = styled.div`
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 16px 0px;
   flex-flow: column;
   width: 100%;
-  padding: ${({ gameEditionView }) => gameEditionView && '10px'};
 
   ${({ gameEditionView }) => {
     if (gameEditionView) {
@@ -82,12 +80,19 @@ const ResultContainer = styled.div`
         display: flex;
         flex-flow: row;
         justify-content: space-between;
-        margin: 10px 0px 0px;
-        padding: 0px 10px;
-        width: 436px;
+        padding-left: 16px;
+        margin-top: 24px;
+        width: ${GE_DESKTOP_CONFIGURATION.displayWidth}px;
         overflow-x: auto;
         overflow-y: hidden;
         white-space: nowrap;
+        & > div:not(:last-child) {
+          margin-right: 15px;
+        }
+      `;
+    } else {
+      return css`
+        margin: 16px 0px;
       `;
     }
   }}
@@ -97,27 +102,13 @@ const ResultContainer = styled.div`
   }
 `;
 
-const InnerRowContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: ${({ gameEditionView }) => !gameEditionView && '10px'};
-  flex-flow: row;
-
+const InnerRowContainer = styled(PixeledInfoContainer)`
   ${({ gameEditionView }) => {
-    if (gameEditionView) {
+    if (!gameEditionView) {
       return css`
-        margin-right: 15px;
-        display: flex;
-        flex-flow: column;
-        min-width: 194px;
-        min-height: 64px;
-        justify-content: center;
-        text-align: center;
-        align-items: center;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: contain;
-        background-image: ${`url(${PixeledSwapResult})`};
+        justify-content: space-between;
+        flex-flow: row;
+        margin-top: 10px;
       `;
     }
   }}

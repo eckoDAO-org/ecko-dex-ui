@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
 import { useAccountContext, useKaddexWalletContext, useNotificationContext, useWalletContext } from '../../contexts';
 import { STATUSES } from '../../contexts/NotificationContext';
 import useWindowSize from '../../hooks/useWindowSize';
@@ -104,10 +104,10 @@ const GameboyMobileContainer = styled.div`
 `;
 
 const DisplayContent = styled.div`
-  width: 455px;
+  width: ${GE_DESKTOP_CONFIGURATION.displayWidth}px;
   margin-left: 6px;
   margin-top: 90px;
-  height: 335px;
+  height: ${GE_DESKTOP_CONFIGURATION.displayHeight}px;
   background: rgba(0, 0, 0, 0.02);
   box-shadow: inset 0px 0px 20px rgba(0, 0, 0, 0.75);
   display: flex;
