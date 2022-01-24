@@ -278,15 +278,16 @@ const RemoveLiqContainer = (props) => {
             topLeftLabel="Pool Tokens to Remove"
             placeholder="Enter Amount"
             size="large"
-            color={gameEditionView && '#fff'}
+            geColor="white"
             withBorder
+            numberOnly
             label={{ content: '%' }}
+            inputStyle={{ marginBottom: 5 }}
             onChange={(e) => {
               if (Number(e.target.value) <= 100 && Number(e.target.value) >= 0) {
                 setAmount(limitDecimalPlaces(e.target.value, 2));
               }
             }}
-            numberOnly
           />
           <ButtonContainer>
             <CustomButton

@@ -20,8 +20,8 @@ const StyledButton = styled(SUIButton)`
   ${({ type, $outGameEditionView, $gameEditionView, theme: { colors }, buttonBackgroundGradient, $geBasic }) => {
     if ($gameEditionView && !$outGameEditionView) {
       return css`
-        border: ${$geBasic} ? 'none' : '2px dashed #ffffff' !important;
-        padding: ${$geBasic} ? '0px' : '10px' !important;
+        border: ${$geBasic ? 'none' : '2px dashed #ffffff'} !important;
+        padding: ${$geBasic ? '0px' : '10px'} !important;
         border-radius: 0px !important;
         min-height: 38px !important;
         background: ${({ $background }) => $background || 'transparent'} !important;

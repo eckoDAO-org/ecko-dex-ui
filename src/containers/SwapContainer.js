@@ -433,9 +433,9 @@ const SwapContainer = () => {
     if (gameEditionView) {
       openModal({
         title: 'Select a Token',
-        closeModal: () => {
+        onClose: () => {
+          console.log('Here');
           setTokenSelectorType(null);
-          closeModal();
         },
         content: (
           <GameEditionTokenSelectorContainer>

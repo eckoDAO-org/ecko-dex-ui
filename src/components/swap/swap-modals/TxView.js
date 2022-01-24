@@ -147,6 +147,7 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
           </SpaceBetweenRow>
         </TransactionsDetails>
         <CustomButton
+          type="secondary"
           buttonStyle={{
             width: '100%',
             marginTop: !gameEditionView && '16px',
@@ -216,6 +217,7 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
           </SpaceBetweenRow>
         </TransactionsDetails>
         <CustomButton
+          type="secondary"
           buttonStyle={{
             width: '100%',
             marginTop: !gameEditionView && '16px',
@@ -281,6 +283,7 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
           </SpaceBetweenRow>
         </TransactionsDetails>
         <CustomButton
+          type="secondary"
           buttonStyle={{
             width: '100%',
             marginTop: !gameEditionView && '16px',

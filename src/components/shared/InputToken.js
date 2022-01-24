@@ -119,6 +119,7 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
           <CustomButton
             type="basic"
             geBasic
+            geColor={geColor}
             onClick={onClick}
             buttonStyle={{
               padding: 0,

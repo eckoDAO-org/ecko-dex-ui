@@ -31,7 +31,9 @@ const SlippageTolleranceValue = styled.div`
 const ContainerInputTypeNumber = styled.div`
   display: flex;
   align-items: center;
-  padding: 6.5px 8.5px;
+  height: 35px;
+  justify-content: center;
+  padding: 0px 8.5px;
   border-radius: 16px;
   border: ${({ theme: { colors } }) => `1px solid ${colors.white}`};
   color: ${({ theme: { colors } }) => colors.white};
@@ -126,6 +128,7 @@ const SlippagePopupContent = () => {
       <Row style={{ marginTop: 8 }}>
         <ContainerInputTypeNumber>
           <Input
+            outGameEditionView
             noInputBackground
             containerStyle={{
               border: 'none',

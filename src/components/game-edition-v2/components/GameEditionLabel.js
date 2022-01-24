@@ -9,7 +9,7 @@ const STYText = styled.span`
   position: relative;
   align-items: center;
   cursor: ${({ onClick }) => onClick && 'pointer'};
-  color: ${({ color }) => color};
+  color: ${({ color }) => color} !important;
   font-size: ${({ fontSize }) => fontSize}px;
   font-family: ${({ theme: { fontFamily } }) => fontFamily.pixeboy};
   font-weight: ${({ fontWeight }) => fontWeight};
@@ -45,7 +45,7 @@ const GameEditionLabel = ({ center, withShade, children, fontSize, fontWeight, c
       }
       fontWeight={fontWeight}
       fontSize={fontSize}
-      color={withShade ? `${getColor()}99` : getColor()}
+      color={withShade ? `${getColor()}${withShade === true ? 99 : withShade}` : getColor()}
       onClick={onClick}
     >
       {children}
