@@ -30,7 +30,7 @@ const DesktopMainContainer = styled.div`
   transition: transform 0.5s;
   transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
     if (showTokens) {
-      return 'translate(-600px, 442px)';
+      return 'translate(-30%, 442px)';
     }
     if (showWires && !selectedWire && !showTokens) {
       return 'translateY(0px)';
@@ -135,6 +135,8 @@ const DisplayContent = styled.div`
 const SearchTokenList = styled(FadeIn)`
   height: fit-content;
   color: #ffff;
+  margin-right: -7%;
+  margin-left: 7%;
 `;
 
 const WiresContainer = styled.div`

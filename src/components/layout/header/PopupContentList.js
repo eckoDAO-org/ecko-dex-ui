@@ -72,7 +72,7 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
         </>
       )}
 
-      {account?.account && width <= commonTheme.mediaQueries.mobilePixel && (
+      {account?.account && width < commonTheme.mediaQueries.desktopPixel && (
         <AccountInfo
           onClick={() => {
             if (gameEditionView) {

@@ -55,7 +55,7 @@ const GameEditionModeButton = () => {
         closeModal();
       }}
     >
-      {width > commonTheme.mediaQueries.desktopPixel ? (
+      {width >= commonTheme.mediaQueries.desktopPixel ? (
         <>
           {!gameEditionView && <GameModeIcon style={{ marginRight: 9.4 }} />}
           <span style={{ fontFamily: commonTheme.fontFamily.bold, whiteSpace: 'nowrap' }}>{gameEditionView ? 'Exit Game Mode' : 'Game Mode'}</span>
