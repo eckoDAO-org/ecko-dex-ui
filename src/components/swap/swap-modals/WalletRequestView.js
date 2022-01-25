@@ -66,7 +66,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
 
   return gameEditionView && show ? (
     <GameEditionModalsContainer
-      modalStyle={{ zIndex: 1 }}
+      containerStyle={{ zIndex: 1 }}
       title={error?.error ? error.title : 'Please Sign'}
       onClose={onClose}
       content={
