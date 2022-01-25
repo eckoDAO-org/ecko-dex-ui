@@ -28,7 +28,7 @@ import SlippagePopupContent from '../../components/layout/header/SlippagePopupCo
 import BackgroundLogo from '../../components/shared/BackgroundLogo';
 import browserDetection from '../../utils/browserDetection';
 import { theme } from '../../styles/theme';
-import PixeledInfoContainer from '../../components/game-edition-v2/components/PixeledInfoContainer';
+import PixeledInfoContainerBlue from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import PressButtonToActionLabel from '../../components/game-edition-v2/components/PressButtonToActionLabel';
 
@@ -106,7 +106,7 @@ const ResultContainer = styled.div`
   }
 `;
 
-const InnerRowContainer = styled(PixeledInfoContainer)`
+const InnerRowContainer = styled(PixeledInfoContainerBlue)`
   ${({ gameEditionView }) => {
     if (!gameEditionView) {
       return css`

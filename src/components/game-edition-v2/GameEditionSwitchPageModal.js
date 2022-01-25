@@ -189,7 +189,7 @@ const GameEditionSwitchPageModal = ({ direction }) => {
           const isSelected = selectedItemIndex === item.id;
           return (
             <Item key={i} selected={isSelected} style={{ minWidth: 274 }}>
-              <GameEditionLabel fontSize={92} color={isSelected ? 'yellow' : 'grey'}>
+              <GameEditionLabel fontSize={92} color={isSelected ? 'yellow' : 'white-grey'}>
                 {item.label}
               </GameEditionLabel>
             </Item>

@@ -271,6 +271,7 @@ const GameEditionContainer = ({ children }) => {
               <GameEditionModalsContainer
                 hideOnClose={modalState.hideOnClose}
                 title={modalState.title}
+                titleFontSize={modalState.titleFontSize}
                 description={modalState.description}
                 content={modalState.content}
                 onClose={modalState.onClose}

@@ -42,6 +42,7 @@ export const commonColors = {
   gameEditionPink: '#F2248D',
   gameEditionWhiteGrey: '#FFFFFF80',
   gameEditionBlackGrey: '#00000080',
+  gameEditionBlueGrey: '#5F7498',
 };
 export const lightTheme = {
   ...commonTheme,

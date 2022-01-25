@@ -5,7 +5,7 @@ import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { reduceBalance } from '../../utils/reduceBalance';
 import Label from '../shared/Label';
 import { GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
-import PixeledInfoContainer from '../game-edition-v2/components/PixeledInfoContainer';
+import PixeledInfoContainer from '../game-edition-v2/components/PixeledInfoContainerBlue';
 
 const ResultContainer = styled.div`
   display: flex;
