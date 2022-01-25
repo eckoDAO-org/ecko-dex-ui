@@ -174,13 +174,13 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
             <GameEditionLabel color="blue">gas cost KDA</GameEditionLabel>
             {ENABLE_GAS_STATION ? (
               <>
-                <GameEditionLabel geColor="white">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</GameEditionLabel>
-                <GameEditionLabel geColor="white" labelStyle={{ marginLeft: 5 }}>
+                <GameEditionLabel fontSize={13} geColor="white">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</GameEditionLabel>
+                <GameEditionLabel fontSize={13} geColor="white" labelStyle={{ marginLeft: 5 }}>
                   FREE!
                 </GameEditionLabel>
               </>
             ) : (
-              <GameEditionLabel geColor="white">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</GameEditionLabel>
+              <GameEditionLabel fontSize={13} geColor="white">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</GameEditionLabel>
             )}
           </PixeledInfoContainerBlue>
         </Row>
@@ -194,7 +194,7 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
   const successView = () => {
     return (
       <Content gameEditionView={gameEditionView}>
-        <Label geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
+        <Label fontFamily="bold" geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
           Preview Successful!
         </Label>
         {!gameEditionView && <SuccessfullIcon />}
@@ -256,7 +256,7 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
                   </Label>
                 </>
               ) : (
-                <Label color={commonColors.green} geColor="green">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</Label>
+                <Label fontSize={13} color={commonColors.green} geColor="green">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</Label>
               )}
               {ENABLE_GAS_STATION && <PopupTxView popupStyle={{ maxWidth: '400px' }} />}
             </div>
@@ -283,7 +283,7 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
   const successRemoveView = () => {
     return (
       <Content gameEditionView={gameEditionView} style={{ bottom: gameEditionView && '132px' }}>
-        <Label geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
+        <Label fontFamily="bold" geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
           Preview Successful!
         </Label>
 
@@ -323,7 +323,7 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
                   </Label>
                 </>
               ) : (
-                <Label color={commonColors.green} geColor="green">{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</Label>
+                <Label fontSize={13} color={commonColors.green} geColor="green">{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</Label>
               )}
               {ENABLE_GAS_STATION && <PopupTxView popupStyle={{ maxWidth: '400px' }} />}
             </div>
@@ -350,7 +350,7 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
   const successAddView = () => {
     return (
       <Content gameEditionView={gameEditionView}>
-        <Label geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
+        <Label fontFamily="bold" geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
           Preview Successful!
         </Label>
         {!gameEditionView && <SuccessfullIcon />}
@@ -457,7 +457,7 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
   const localError = () => {
     return (
       <Content gameEditionView={gameEditionView} style={{ marginTop: 16 }}>
-        <Label geCenter geColor="yellow">
+        <Label fontFamily="bold" geCenter geColor="yellow">
           Transaction Error!
         </Label>
         {!gameEditionView && <ErrorIcon style={{ width: '60px', height: ' 60px', margin: '16px 0' }} />}
@@ -486,6 +486,7 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
   };
 
   const renderSwitch = () => {
+    console.log('view', view);
     if (swap.localRes && swap.localRes.result && swap.localRes.result.status === 'success') {
       switch (view) {
         default:

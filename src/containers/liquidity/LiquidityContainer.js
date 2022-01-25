@@ -602,6 +602,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
           ),
         });
       } else {
+        console.log('here', selectedView);
         modalContext.openModal({
           title: 'transaction details',
           description: '',

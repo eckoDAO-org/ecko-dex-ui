@@ -6,6 +6,8 @@ import { SuccessfullIcon } from '../../../assets';
 import { PactContext } from '../../../contexts/PactContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import tokenData from '../../../constants/cryptoCurrencies';
+import Label from '../../shared/Label';
+import { LIQUIDITY_VIEW } from '../../../constants/liquidityView';
 
 const Content = styled.div`
   display: flex;
@@ -34,24 +36,26 @@ const TransactionsDetails = styled.div`
   flex-direction: column;
   padding: 24px 0px;
   padding-top: 5px;
+  & > *:not(:last-child) {
+    margin-bottom: 16px;
+  }
 `;
 
-const SpaceBetweenRow = styled.div`
+const Row = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-`;
-
-const FlexStartRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-`;
-
-const FlexEndRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  &.sb {
+    justify-content: space-between;
+  }
+  &.fs {
+    justify-content: flex-start;
+  }
+  &.fe {
+    justify-content: flex-end;
+  }
+  &.c {
+    justify-content: center;
+  }
 `;
 
 const SubTitle = styled.div`
@@ -63,12 +67,6 @@ const SubTitle = styled.div`
   align-items: center;
   position: relative;
   justify-content: center;
-`;
-
-const Label = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
 `;
 
 const Value = styled.span`
@@ -94,62 +92,64 @@ const ReviewTxModal = ({ fromValues, toValues, supply, liquidityView }) => {
   };
 
   const ContentView = () => {
-    if (liquidityView === 'Add Liquidity') {
+    if (liquidityView === LIQUIDITY_VIEW.ADD_LIQUIDITY) {
       return (
         <TransactionsDetails>
-          <FlexStartRow>
-            <SubTitle
-              style={{
-                marginBottom: '16px',
-                justifyContent: 'center',
-              }}
-              gameEditionView={gameEditionView}
-            >
+          <Row className="fs">
+            <Label fontFamily="bold" fontSize={13}>
               Deposit Desired
-            </SubTitle>
-          </FlexStartRow>
+            </Label>
+          </Row>
 
           {/* FIRST COIN */}
-          <SpaceBetweenRow>
-            <FlexStartRow>
+          <Row className="sb" style={{ marginBottom: 8 }}>
+            <Row className="fs">
               {getTokenIcon(fromValues.coin)}
-              <Label gameEditionView={gameEditionView}>{fromValues.amount}</Label>
-            </FlexStartRow>
-            <Label gameEditionView={gameEditionView}>{fromValues.coin}</Label>
-          </SpaceBetweenRow>
+              <Label fontFamily="bold" fontSize={13}>
+                {fromValues.amount}
+              </Label>
+            </Row>
+            <Label fontFamily="bold" fontSize={13}>
+              {fromValues.coin}
+            </Label>
+          </Row>
           {/* FIRST RATE */}
-          <FlexEndRow style={{ padding: '8px 0px 16px 0px' }}>
-            <Value gameEditionView={gameEditionView}>{`1 ${fromValues?.coin} =  ${reduceBalance(1 / pact.ratio)} ${toValues?.coin}`}</Value>
-          </FlexEndRow>
+          <Row className="fe">
+            <Label fontSize={10}>{`1 ${fromValues?.coin} =  ${reduceBalance(1 / pact.ratio)} ${toValues?.coin}`}</Label>
+          </Row>
           {/* SECOND COIN */}
-          <SpaceBetweenRow>
-            <FlexStartRow>
+          <Row className="sb" style={{ marginBottom: 8 }}>
+            <Row className="fs">
               {getTokenIcon(toValues.coin)}
-              <Label gameEditionView={gameEditionView}>{toValues.amount}</Label>
-            </FlexStartRow>
-            <Label gameEditionView={gameEditionView}>{toValues.coin}</Label>
-          </SpaceBetweenRow>
+              <Label fontFamily="bold" fontSize={13}>
+                {toValues.amount}
+              </Label>
+            </Row>
+            <Label fontFamily="bold" fontSize={13}>
+              {toValues.coin}
+            </Label>
+          </Row>
           {/* SECOND RATE */}
-          <FlexEndRow style={{ padding: '8px 0px' }}>
-            <Value gameEditionView={gameEditionView}>{`1 ${toValues?.coin} =  ${reduceBalance(1 / pact.ratio)} ${fromValues?.coin}`}</Value>
-          </FlexEndRow>
-          <SpaceBetweenRow>
-            <Value gameEditionView={gameEditionView}>Share of Pool:</Value>
-            <Value gameEditionView={gameEditionView}>{reduceBalance(pact.share(fromValues?.amount) * 100)}%</Value>
-          </SpaceBetweenRow>
+          <Row className="fe">
+            <Label fontSize={10}>{`1 ${toValues?.coin} =  ${reduceBalance(1 / pact.ratio)} ${fromValues?.coin}`}</Label>
+          </Row>
+          <Row className="sb">
+            <Label fontSize={10}>Share of Pool:</Label>
+            <Label fontSize={10}>{reduceBalance(pact.share(fromValues?.amount) * 100)}%</Label>
+          </Row>
         </TransactionsDetails>
       );
     } else {
       return (
         <TransactionsDetails>
-          <SpaceBetweenRow>
-            <Label>{`1 ${fromValues?.coin}`}</Label>
-            <Value>{`${reduceBalance(toValues.amount / fromValues.amount)} ${toValues.coin}`}</Value>
-          </SpaceBetweenRow>
-          <SpaceBetweenRow style={{ padding: '16px 0px' }}>
-            <Label>{`1 ${toValues?.coin} `}</Label>
-            <Value>{`${reduceBalance(fromValues.amount / toValues.amount)} ${fromValues.coin}`}</Value>
-          </SpaceBetweenRow>
+          <Row className="sb">
+            <Label fontSize={13}>{`1 ${fromValues?.coin}`}</Label>
+            <Label fontSize={10}>{`${reduceBalance(toValues.amount / fromValues.amount)} ${toValues.coin}`}</Label>
+          </Row>
+          <Row style={{ padding: '16px 0px' }}>
+            <Label fontSize={13}>{`1 ${toValues?.coin} `}</Label>
+            <Label fontSize={10}>{`${reduceBalance(fromValues.amount / toValues.amount)} ${fromValues.coin}`}</Label>
+          </Row>
         </TransactionsDetails>
       );
     }
@@ -157,11 +157,16 @@ const ReviewTxModal = ({ fromValues, toValues, supply, liquidityView }) => {
 
   return (
     <Content gameEditionView={gameEditionView}>
-      {!gameEditionView && <Title style={{ padding: '16px 0px', fontSize: 16 }}>Preview Succesful</Title>}
+      {!gameEditionView && (
+        <Label fontFamily="bold" labelStyle={{ padding: '16px 0px' }}>
+          Preview Succesful
+        </Label>
+      )}
       <SuccessfullIcon />
       {ContentView()}
       <CustomButton
-        buttonStyle={{ width: '100%' }}
+        type="secondary"
+        fluid
         loading={loading}
         onClick={() => {
           setLoading(true);

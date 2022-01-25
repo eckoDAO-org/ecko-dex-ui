@@ -13,7 +13,7 @@ const Container = styled.div`
   width: 100%;
 
   align-items: center;
-  ${({ $gameEditionView }) => {
+  ${({ $gameEditionView, selectedView }) => {
     if ($gameEditionView) {
       return css`
         padding: 16px 0px;
@@ -29,11 +29,17 @@ const Container = styled.div`
         }
       `;
     } else {
+      if (selectedView === LIQUIDITY_VIEW.LIQUIDITY_LIST) {
+        return css`
+          padding-top: 10%;
+          @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {
+            padding-bottom: 40px;
+          }
+        `;
+      }
       return css`
-        padding-top: 10%;
-        @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {
-          padding-bottom: 40px;
-        }
+        height: 100%;
+        justify-content: center;
       `;
     }
   }}
@@ -45,7 +51,7 @@ const PoolContainer = () => {
   const [pair, setPair] = useState(null);
   useButtonScrollEvent(gameEditionView && 'pool-scrolling-container');
   return (
-    <Container id="pool-scrolling-container" $gameEditionView={gameEditionView}>
+    <Container id="pool-scrolling-container" $gameEditionView={gameEditionView} selectedView={selectedView}>
       {selectedView === LIQUIDITY_VIEW.REMOVE_LIQUIDITY && (
         <RemoveLiqContainer
           closeLiquidity={() => {
@@ -74,34 +80,6 @@ const PoolContainer = () => {
           pair={pair}
         />
       )}
-      {/* {selectedView === 'Remove Liquidity' ? (
-        <RemoveLiqContainer
-          closeLiquidity={() => {
-            setPair(null);
-            setSelectedView(false);
-          }}
-          selectedView={selectedView}
-          pair={pair}
-        />
-      ) : selectedView ? (
-        <LiquidityContainer
-          closeLiquidity={() => {
-            setPair(null);
-            setSelectedView(false);
-          }}
-          selectedView={selectedView}
-          setSelectedView={setSelectedView}
-          pair={pair}
-        />
-      ) : (
-        <LiquidityList
-          selectCreatePair={() => setSelectedView('Create A Pair')}
-          selectAddLiquidity={() => setSelectedView('Add Liquidity')}
-          selectRemoveLiquidity={() => setSelectedView('Remove Liquidity')}
-          selectPreviewLiquidity={() => setSelectedView('Preview Liquidity')}
-          setTokenPair={(pair) => setPair(pair)}
-        />
-      )} */}
     </Container>
   );
 };

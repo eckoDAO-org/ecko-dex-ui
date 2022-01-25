@@ -20,6 +20,7 @@ import { extractDecimal, limitDecimalPlaces, pairUnit, reduceBalance } from '../
 import { ArrowBack } from '../../assets';
 import { theme } from '../../styles/theme';
 import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
+import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 
 const Container = styled.div`
   display: flex;
@@ -163,7 +164,7 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
         },
         content: (
           <TxView
-            view="Remove Liquidity"
+            view={LIQUIDITY_VIEW.REMOVE_LIQUIDITY}
             token0={token0}
             onClose={() => {
               closeModal();
@@ -181,7 +182,7 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
         },
         content: (
           <TxView
-            view="Remove Liquidity"
+            view={LIQUIDITY_VIEW.REMOVE_LIQUIDITY}
             token0={token0}
             onClose={() => {
               modalContext.closeModal();
