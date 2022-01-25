@@ -29,6 +29,7 @@ import BackgroundLogo from '../../components/shared/BackgroundLogo';
 import browserDetection from '../../utils/browserDetection';
 import { theme } from '../../styles/theme';
 import PixeledInfoContainer from '../../components/game-edition-v2/components/PixeledInfoContainer';
+import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 
 const Container = styled.div`
   display: flex;
@@ -137,7 +138,7 @@ const GameEditionTokenSelectorContainer = styled.div`
   text-align: center;
 `;
 
-const LiquidityContainer = (props) => {
+const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidity }) => {
   const pact = useContext(PactContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
@@ -145,7 +146,6 @@ const LiquidityContainer = (props) => {
   const modalContext = useContext(ModalContext);
   const { themeMode } = useContext(LightModeContext);
   const { gameEditionView, openModal, closeModal, isSwapping, setIsSwapping } = useContext(GameEditionContext);
-  const { selectedView, setSelectedView } = props;
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
   const [inputSide, setInputSide] = useState('');
@@ -219,17 +219,17 @@ const LiquidityContainer = (props) => {
 
   useEffect(() => {
     setInputSide('from');
-    if (props?.pair?.token0 && fromValues === initialStateValue) {
-      handleTokenValue('from', tokenData[props?.pair?.token0]);
+    if (pair?.token0 && fromValues === initialStateValue) {
+      handleTokenValue('from', tokenData[pair?.token0]);
     }
-  }, [props?.pair?.token0]);
+  }, [pair?.token0]);
 
   useEffect(() => {
     setInputSide('to');
-    if (props?.pair?.token1 && toValues === initialStateValue) {
-      handleTokenValue('to', tokenData[props?.pair?.token1]);
+    if (pair?.token1 && toValues === initialStateValue) {
+      handleTokenValue('to', tokenData[pair?.token1]);
     }
-  }, [props?.pair?.token1]);
+  }, [pair?.token1]);
   ////////
 
   useEffect(async () => {
@@ -311,7 +311,7 @@ const LiquidityContainer = (props) => {
       }
     }
     if (isNaN(pact.ratio) || fromValues.amount === '') {
-      if (selectedView === 'Add Liquidity') {
+      if (selectedView === LIQUIDITY_VIEW.ADD_LIQUIDITY) {
         setToValues((prev) => ({ ...prev, amount: '' }));
       }
     }
@@ -341,7 +341,7 @@ const LiquidityContainer = (props) => {
       }
     }
     if (isNaN(pact.ratio) || toValues.amount === '') {
-      if (selectedView === 'Add Liquidity') {
+      if (selectedView === LIQUIDITY_VIEW.ADD_LIQUIDITY) {
         setFromValues((prev) => ({ ...prev, amount: '' }));
       }
     }
@@ -406,9 +406,9 @@ const LiquidityContainer = (props) => {
       6: { msg: 'Select different tokens', status: false },
     };
     if (!account.account.account) return status[0];
-    if (selectedView === 'Create A Pair') {
+    if (selectedView === LIQUIDITY_VIEW.CREATE_A_PAIR) {
       if (pairExist) {
-        setSelectedView('Add Liquidity');
+        setSelectedView(LIQUIDITY_VIEW.ADD_LIQUIDITY);
       } else return status[4];
     } else if (isNaN(pact.ratio)) {
       return status[4];
@@ -424,7 +424,7 @@ const LiquidityContainer = (props) => {
   };
 
   const supply = async () => {
-    if (selectedView === 'Create A Pair') {
+    if (selectedView === LIQUIDITY_VIEW.CREATE_A_PAIR) {
       if (wallet.signing.method !== 'sign') {
         const res = await liquidity.createTokenPairLocal(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
         if (res === -1) {
@@ -457,7 +457,7 @@ const LiquidityContainer = (props) => {
           /* walletError(); */
         } else {
           wallet.setWalletError(null);
-          setSelectedView('Add Liquidity');
+          setSelectedView(LIQUIDITY_VIEW.ADD_LIQUIDITY);
           setShowTxModal(true);
         }
         /* setShowTxModal(true) */
@@ -653,7 +653,7 @@ const LiquidityContainer = (props) => {
       {!gameEditionView && isLogoVisible && <BackgroundLogo />}
 
       <TitleContainer gameEditionView={gameEditionView}>
-        <Label fontSize={32} geCenter fontFamily="bold" geFontSize={52} geLabelStyle={{ lineHeight: '32px' }} onClose={() => props.closeLiquidity()}>
+        <Label fontSize={32} geCenter fontFamily="bold" geFontSize={52} geLabelStyle={{ lineHeight: '32px' }} onClose={() => closeLiquidity()}>
           {!gameEditionView && (
             <ArrowBack
               style={{
@@ -662,7 +662,7 @@ const LiquidityContainer = (props) => {
                 marginRight: '15px',
                 justifyContent: 'center',
               }}
-              onClick={() => props.closeLiquidity()}
+              onClick={() => closeLiquidity()}
             />
           )}
           Add Liquidity

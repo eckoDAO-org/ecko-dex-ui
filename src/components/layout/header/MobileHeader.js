@@ -12,12 +12,19 @@ import GameEditionModeButton from './GameEditionModeButton';
 
 const Container = styled.div`
   display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: start;
+  min-height: ${({ theme: { header } }) => `${header.mobileHeight}px`};
+  width: 100%;
+  padding: 0 1.5em;
+`;
+const RowContainer = styled.div`
+  display: flex;
   flex-flow: row;
   justify-content: space-between;
   align-items: center;
-  min-height: ${({ theme: { header } }) => `${header.height}px`};
   width: 100%;
-  padding: 0 1.5em;
 `;
 
 const LeftContainer = styled.div`
@@ -46,19 +53,22 @@ const MobileHeader = ({ className }) => {
 
   return (
     <Container className={className}>
-      <LeftContainer>
-        <HeaderItem headerItemStyle={{ marginTop: '4px' }}>
-          <CustomPopup basic trigger={<HamburgerIcon />} on="click" offset={[0, 14]} position="bottom left">
-            <PopupContentList items={menuItems} />
-          </CustomPopup>
-        </HeaderItem>
-        <KaddexLetterLogo onClick={() => history.push(ROUTE_SWAP)} />
-      </LeftContainer>
+      <RowContainer>
+        <LeftContainer>
+          <HeaderItem headerItemStyle={{ marginTop: '4px' }}>
+            <CustomPopup basic trigger={<HamburgerIcon />} on="click" offset={[0, 14]} position="bottom left">
+              <PopupContentList items={menuItems} />
+            </CustomPopup>
+          </HeaderItem>
+          <KaddexLetterLogo onClick={() => history.push(ROUTE_SWAP)} />
+        </LeftContainer>
 
-      <GameEditionModeButton />
-      <RightContainer>
-        <RightHeaderItems />
-      </RightContainer>
+        <GameEditionModeButton />
+        <RightContainer>
+          <RightHeaderItems />
+        </RightContainer>
+      </RowContainer>
+      <span className="mainnet-chain-2 desktop-none">Mainnet Chain 2</span>
     </Container>
   );
 };

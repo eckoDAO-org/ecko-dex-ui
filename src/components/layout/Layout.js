@@ -27,7 +27,7 @@ const WrapperContainer = styled(Wrapper)`
     font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
     color: ${({ theme: { colors } }) => colors.white};
     @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
-      padding: 0 1.5em;
+      padding-top: 10px;
     }
   }
 `;
@@ -35,7 +35,12 @@ const WrapperContainer = styled(Wrapper)`
 const MainContent = styled.div`
   height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
-    padding: 0 1.5em;
+    padding: 0 16px;
+    height: ${({ theme: { header } }) => `calc(100% - ${header.mobileHeight}px)`};
+    overflow-x: auto;
+    ::-webkit-scrollbar {
+      display: none;
+    }
   }
 `;
 
@@ -63,8 +68,8 @@ const Layout = ({ children }) => {
       <WrapperContainer>
         <div>
           <MobileHeader className="desktop-none" />
-          <span className="mainnet-chain-2 desktop-none">Mainnet Chain 2</span>
-          <DesktopHeader className="mobile-none" gameEditionView={game.gameEditionView} />
+
+          <DesktopHeader className="tablet-none" gameEditionView={game.gameEditionView} />
         </div>
         {game.gameEditionView ? (
           <>

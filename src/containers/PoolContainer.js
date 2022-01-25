@@ -6,11 +6,11 @@ import RemoveLiqContainer from './liquidity/RemoveLiqContainer';
 import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
 import { useGameEditionContext } from '../contexts';
 import useButtonScrollEvent from '../hooks/useButtonScrollEvent';
+import { LIQUIDITY_VIEW } from '../constants/liquidityView';
 
 const Container = styled.div`
   display: flex;
   width: 100%;
-  height: 100%;
 
   align-items: center;
   ${({ $gameEditionView }) => {
@@ -28,18 +28,53 @@ const Container = styled.div`
           display: none;
         }
       `;
+    } else {
+      return css`
+        padding-top: 10%;
+        @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {
+          padding-bottom: 40px;
+        }
+      `;
     }
   }}
 `;
 
 const PoolContainer = () => {
   const { gameEditionView } = useGameEditionContext();
-  const [selectedView, setSelectedView] = useState(false);
+  const [selectedView, setSelectedView] = useState(LIQUIDITY_VIEW.LIQUIDITY_LIST);
   const [pair, setPair] = useState(null);
-  useButtonScrollEvent('pool-scrolling-container');
+  useButtonScrollEvent(gameEditionView && 'pool-scrolling-container');
   return (
     <Container id="pool-scrolling-container" $gameEditionView={gameEditionView}>
-      {selectedView === 'Remove Liquidity' ? (
+      {selectedView === LIQUIDITY_VIEW.REMOVE_LIQUIDITY && (
+        <RemoveLiqContainer
+          closeLiquidity={() => {
+            setPair(null);
+            setSelectedView(LIQUIDITY_VIEW.LIQUIDITY_LIST);
+          }}
+          pair={pair}
+        />
+      )}
+      {selectedView === LIQUIDITY_VIEW.LIQUIDITY_LIST && (
+        <LiquidityList
+          selectCreatePair={() => setSelectedView('Create A Pair')}
+          selectAddLiquidity={() => setSelectedView(LIQUIDITY_VIEW.ADD_LIQUIDITY)}
+          selectRemoveLiquidity={() => setSelectedView(LIQUIDITY_VIEW.REMOVE_LIQUIDITY)}
+          setTokenPair={(pair) => setPair(pair)}
+        />
+      )}
+      {selectedView === LIQUIDITY_VIEW.ADD_LIQUIDITY && (
+        <LiquidityContainer
+          closeLiquidity={() => {
+            setPair(null);
+            setSelectedView(LIQUIDITY_VIEW.LIQUIDITY_LIST);
+          }}
+          selectedView={selectedView}
+          setSelectedView={setSelectedView}
+          pair={pair}
+        />
+      )}
+      {/* {selectedView === 'Remove Liquidity' ? (
         <RemoveLiqContainer
           closeLiquidity={() => {
             setPair(null);
@@ -66,7 +101,7 @@ const PoolContainer = () => {
           selectPreviewLiquidity={() => setSelectedView('Preview Liquidity')}
           setTokenPair={(pair) => setPair(pair)}
         />
-      )}
+      )} */}
     </Container>
   );
 };

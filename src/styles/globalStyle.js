@@ -104,8 +104,13 @@ export default createGlobalStyle`
       }
     }
 
-    .mobile-none {
+    .tablet-none {
       @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
+        display: none !important;
+      }
+    }
+    .mobile-none {
+      @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel - 1}px`}) {
         display: none !important;
       }
     }

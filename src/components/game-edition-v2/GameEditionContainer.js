@@ -121,10 +121,10 @@ const DisplayContent = styled.div`
   }
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
-    width: 253px;
-    height: 310px;
-    margin-left: 5px;
-    margin-top: 53px;
+    width: 280px;
+    height: 357px;
+    margin-left: 2px;
+    margin-top: 26px;
     border-radius: 6px;
     & > *:first-child {
       border-radius: 6px;

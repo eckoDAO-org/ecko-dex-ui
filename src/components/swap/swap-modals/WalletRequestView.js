@@ -72,14 +72,12 @@ const WalletRequestView = ({ show, onClose, error }) => {
       content={
         error?.error ? (
           <ContentContainer>
-            <Content>
-              <GameEditionLabel center color="yellow">
-                {error?.content}
-              </GameEditionLabel>
-            </Content>
+            <GameEditionLabel center color="yellow" style={{ padding: '0 30px' }}>
+              {error?.content}
+            </GameEditionLabel>
             <CustomButton
               geType="confirm"
-              buttonStyle={{ display: 'flex', justifyContent: 'center' }}
+              geButtonStyle={{ display: 'flex', justifyContent: 'center' }}
               onClick={() => {
                 onClose();
               }}
@@ -112,9 +110,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
                 }}
                 onClose={onClose}
               >
-                <Content style={{ marginBottom: 30, marginTop: 24 }}>
-                  <Label>{error?.content}</Label>
-                </Content>
+                <Label labelStyle={{ marginBottom: 30, marginTop: 24 }}>{error?.content}</Label>
                 <CustomButton
                   onClick={() => {
                     onClose();

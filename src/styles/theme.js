@@ -6,6 +6,7 @@ export const commonTheme = {
   },
   header: {
     height: 65,
+    mobileHeight: 81,
   },
   footer: {
     modalFooter: 57,

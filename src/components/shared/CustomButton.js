@@ -85,11 +85,12 @@ const CustomButton = ({
   outGameEditionView,
   background,
   geBasic,
+  geButtonStyle,
 }) => {
   const { gameEditionView: $gameEditionView } = useContext(GameEditionContext);
 
   return $gameEditionView && geType ? (
-    <GameEditionButton type={geType} disabled={disabled} onClick={onClick}>
+    <GameEditionButton type={geType} disabled={disabled} onClick={onClick} style={geButtonStyle}>
       {geLabel}
     </GameEditionButton>
   ) : (
