@@ -69,9 +69,10 @@ const Container = styled.div`
     }
   }}
 
-  /* .ui.icon.input > input {
-    padding-right: ${({ inputRightComponent, inputComponentWidth }) => (inputRightComponent ? `${inputComponentWidth + 70}px !important` : 0)};
-  } */
+  .ui.icon.input > input {
+    padding-right: 10px !important; /* ${({ inputRightComponent, inputComponentWidth }) =>
+      inputRightComponent ? `${inputComponentWidth + 10}px !important` : 0}; */
+  }
   .ui.button:hover .icon {
     opacity: 1;
   }

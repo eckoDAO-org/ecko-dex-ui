@@ -78,9 +78,9 @@ const Title = styled.span`
 
   font-size: 32px;
 
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {
     width: min-content;
-    font-size: 16px;
+    font-size: 22px;
   }
   text-transform: capitalize;
   white-space: nowrap;

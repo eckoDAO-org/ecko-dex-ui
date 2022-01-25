@@ -56,7 +56,7 @@ const MobileHeader = ({ className }) => {
       <RowContainer>
         <LeftContainer>
           <HeaderItem headerItemStyle={{ marginTop: '4px' }}>
-            <CustomPopup basic trigger={<HamburgerIcon />} on="click" offset={[0, 14]} position="bottom left">
+            <CustomPopup basic trigger={<HamburgerIcon />} on="click" offset={[-10, -8]} position="bottom left">
               <PopupContentList items={menuItems} />
             </CustomPopup>
           </HeaderItem>
