@@ -57,7 +57,7 @@ const MobileHeader = ({ className }) => {
         <LeftContainer>
           <HeaderItem headerItemStyle={{ marginTop: '4px' }}>
             <CustomPopup basic trigger={<HamburgerIcon />} on="click" offset={[-10, -8]} position="bottom left">
-              <PopupContentList items={menuItems} />
+              <PopupContentList withoutAccountInfo items={menuItems} />
             </CustomPopup>
           </HeaderItem>
           <KaddexLetterLogo onClick={() => history.push(ROUTE_SWAP)} />

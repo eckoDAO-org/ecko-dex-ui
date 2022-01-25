@@ -70,7 +70,7 @@ const Container = styled.div`
   }}
 
   .ui.icon.input > input {
-    padding-right: 10px !important; /* ${({ inputRightComponent, inputComponentWidth }) =>
+    padding-right: 5px !important; /* ${({ inputRightComponent, inputComponentWidth }) =>
       inputRightComponent ? `${inputComponentWidth + 10}px !important` : 0}; */
   }
   .ui.button:hover .icon {

@@ -39,7 +39,7 @@ const HeaderItemContent = styled.div`
   align-items: center;
 `;
 
-const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContentListStyle }) => {
+const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContentListStyle, withoutAccountInfo }) => {
   const { account, logout } = useAccountContext();
   const { gameEditionView, openModal } = useGameEditionContext();
   const modalContext = useModalContext();
@@ -72,7 +72,7 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
         </>
       )}
 
-      {account?.account && width < commonTheme.mediaQueries.desktopPixel && (
+      {!withoutAccountInfo && account?.account && width < commonTheme.mediaQueries.desktopPixel && (
         <AccountInfo
           onClick={() => {
             if (gameEditionView) {
