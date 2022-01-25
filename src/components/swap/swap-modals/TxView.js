@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { Icon, Divider } from 'semantic-ui-react';
 import { LightModeContext } from '../../../contexts/LightModeContext';
 import { useGameEditionContext } from '../../../contexts';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { ChainIcon, ErrorIcon, PixeledCircleArrowIcon, SuccessfullIcon } from '../../../assets';
-import { GameEditionContext } from '../../../contexts/GameEditionContext';
+import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../../contexts/GameEditionContext';
 import { SwapContext } from '../../../contexts/SwapContext';
 import { extractDecimal, gasUnit, reduceBalance } from '../../../utils/reduceBalance';
 import CustomButton from '../../../components/shared/CustomButton';
@@ -21,11 +21,14 @@ import pixeledInfoContainerWhite from '../../../assets/images/game-edition/pixel
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import PixeledInfoContainerBlue from '../../game-edition-v2/components/PixeledInfoContainerBlue';
 import PressButtonToActionLabel from '../../game-edition-v2/components/PressButtonToActionLabel';
+import { PixeledInfoContainerWhite } from '../../game-edition-v2/components/PixeledInfoContainerWhite';
 
 const Content = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
   & > *:not(:last-child) {
     margin-bottom: 16px;
   }
@@ -34,9 +37,16 @@ const Content = styled.div`
       fill: ${({ theme: { colors }, gameEditionView }) => !gameEditionView && colors.white};
     }
   }
-  justify-content: space-between;
-  width: 100%;
-  height: ${({ gameEditionView }) => gameEditionView && '100%'};
+
+  ${({ gameEditionView }) => {
+    if (gameEditionView) {
+      return css`
+        padding: 16px;
+        height: 100%;
+      `;
+    }
+  }}
+
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
     svg {
       width: 40px;
@@ -66,6 +76,9 @@ const Row = styled.div`
   &.c {
     justify-content: center;
   }
+  img {
+    margin-right: 0px !important;
+  }
 `;
 
 const PreviewContainer = styled.div`
@@ -73,25 +86,6 @@ const PreviewContainer = styled.div`
   flex-direction: column;
   & > *:not(:last-child) {
     margin-bottom: 16px;
-  }
-`;
-
-const PixeledInfoContainerWhite = styled.div`
-  margin-top: 20px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  background-image: ${`url(${pixeledInfoContainerWhite})`};
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 108px;
-  width: 193px;
-  padding-left: 18px;
-
-  .chain-icon {
-    margin-left: 4px;
-    margin-right: 2px;
   }
 `;
 
@@ -123,9 +117,9 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
 
   const successViewGE = () => {
     return (
-      <PreviewContainer gameEditionView={gameEditionView}>
-        <Row className="sb" style={{ position: 'relative' }}>
-          <PixeledInfoContainerWhite>
+      <SuccessViewGE
+        leftItem={
+          <>
             <Row className="fs">
               {getTokenIcon(swap?.localRes?.result?.data[0]?.token)}
               <GameEditionLabel fontSize={32} color="black" fontFamily="bold" style={{ marginLeft: 6.5 }}>
@@ -141,18 +135,16 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
                 {swap?.localRes?.metaData?.publicMeta?.chainId}
               </GameEditionLabel>
             </Row>
-          </PixeledInfoContainerWhite>
-          <PixeledCircleArrowIcon
-            style={{ position: 'absolute', width: 51.5, height: 49, top: 'calc(50% - 20px)', left: '44%', transform: 'rotate(-90deg)' }}
-          />
-          <PixeledInfoContainerWhite>
+          </>
+        }
+        rightItem={
+          <>
             <Row className="fs">
               {getTokenIcon(swap?.localRes?.result?.data[1]?.token)}
               <GameEditionLabel fontSize={32} color="black" fontFamily="bold" style={{ marginLeft: 6.5 }}>
                 {`${extractDecimal(swap?.localRes?.result?.data[1]?.amount)} `}
               </GameEditionLabel>
             </Row>
-
             <GameEditionLabel color="blue">From</GameEditionLabel>
             <Row className="fs">
               <GameEditionLabel fontSize={22} color="blue-grey">{`${reduceToken(account.account)}`}</GameEditionLabel>
@@ -161,33 +153,36 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
                 {swap?.localRes?.metaData?.publicMeta?.chainId}
               </GameEditionLabel>
             </Row>
-          </PixeledInfoContainerWhite>
-        </Row>
-        <Row className="sb">
-          <PixeledInfoContainerBlue gameEditionView>
-            <GameEditionLabel color="blue">
-              price {showTicker(swap?.localRes?.result?.data[0]?.token)} per {showTicker(swap?.localRes?.result?.data[1]?.token)}
-            </GameEditionLabel>
-            <GameEditionLabel color="white">1 = {reduceBalance(pact?.computeOut(1), 12)}</GameEditionLabel>
-          </PixeledInfoContainerBlue>
-          <PixeledInfoContainerBlue gameEditionView>
-            <GameEditionLabel color="blue">gas cost KDA</GameEditionLabel>
-            {ENABLE_GAS_STATION ? (
+          </>
+        }
+        infoItems={[
+          {
+            label: `price ${showTicker(swap?.localRes?.result?.data[0]?.token)} per ${showTicker(swap?.localRes?.result?.data[1]?.token)}`,
+            value: `1 = ${reduceBalance(pact?.computeOut(1), 12)}`,
+          },
+          {
+            label: `price ${showTicker(swap?.localRes?.result?.data[0]?.token)} per ${showTicker(swap?.localRes?.result?.data[1]?.token)}`,
+            value: `1 = ${reduceBalance(pact?.computeOut(1), 12)}`,
+          },
+          {
+            label: `price ${showTicker(swap?.localRes?.result?.data[0]?.token)} per ${showTicker(swap?.localRes?.result?.data[1]?.token)}`,
+            value: `1 = ${reduceBalance(pact?.computeOut(1), 12)}`,
+          },
+          {
+            label: 'gas cost KDA',
+            value: ENABLE_GAS_STATION ? (
               <>
-                <GameEditionLabel fontSize={13} geColor="white">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</GameEditionLabel>
-                <GameEditionLabel fontSize={13} geColor="white" labelStyle={{ marginLeft: 5 }}>
+                <GameEditionLabel geColor="white">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</GameEditionLabel>
+                <GameEditionLabel geColor="white" labelStyle={{ marginLeft: 5 }}>
                   FREE!
                 </GameEditionLabel>
               </>
             ) : (
-              <GameEditionLabel fontSize={13} geColor="white">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</GameEditionLabel>
-            )}
-          </PixeledInfoContainerBlue>
-        </Row>
-        <Row className="c">
-          <PressButtonToActionLabel actionLabel="send" />
-        </Row>
-      </PreviewContainer>
+              <GameEditionLabel geColor="white">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</GameEditionLabel>
+            ),
+          },
+        ]}
+      />
     );
   };
 
@@ -333,14 +328,14 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
         <Label geCenter geColor="yellow">
           Preview Failed!
         </Label>
-        <Label fontFamily="bold" labelStyle={{ marginBottom: ' 12px', marginTop: 16, width: '100%' }}>
+        <Label fontFamily="bold" labelStyle={{ marginBottom: ' 12px', width: '100%' }}>
           Error Message
         </Label>
         <TransactionsDetails>
           <Message color="red">{swap?.localRes?.result?.error?.message}</Message>
 
           {swap?.localRes?.result?.error?.message?.includes('insufficient') && (
-            <Label geColor="blue" geCenter labelStyle={{ marginTop: 16 }} geLabelStyle={{ marginTop: 16 }}>
+            <Label geColor="blue" geCenter>
               TIP: Try setting a higher slippage amount
             </Label>
           )}
@@ -351,9 +346,6 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
             onClose();
           }}
           geType="retry"
-          buttonStyle={{
-            marginTop: !gameEditionView && '16px',
-          }}
         >
           Retry
         </CustomButton>
@@ -363,12 +355,12 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
 
   const localError = () => {
     return (
-      <Content gameEditionView={gameEditionView} style={{ marginTop: 16 }}>
+      <Content gameEditionView={gameEditionView}>
         <Label fontFamily="bold" geCenter geColor="yellow">
           Transaction Error!
         </Label>
         {!gameEditionView && <ErrorIcon style={{ width: '60px', height: ' 60px', margin: '16px 0' }} />}
-        <Label fontFamily="bold" labelStyle={{ marginBottom: ' 12px', marginTop: 16, width: '100%' }}>
+        <Label fontFamily="bold" labelStyle={{ marginBottom: ' 12px', width: '100%' }}>
           Error Message
         </Label>
         <TransactionsDetails>
@@ -379,7 +371,6 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
         <CustomButton
           buttonStyle={{
             width: '100%',
-            marginTop: !gameEditionView && '16px',
           }}
           geType="retry"
           onClick={() => {
@@ -469,7 +460,7 @@ const SuccesViewContainer = ({ swap, onClick, loading, children }) => {
   const { gameEditionView } = useGameEditionContext();
   return (
     <Content gameEditionView={gameEditionView}>
-      <Label fontFamily="bold" geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
+      <Label fontFamily="bold" geCenter geColor="yellow">
         Preview Successful!
       </Label>
       {!gameEditionView && <SuccessfullIcon />}
@@ -493,5 +484,44 @@ const SuccesViewContainer = ({ swap, onClick, loading, children }) => {
         Send Transaction
       </CustomButton>
     </Content>
+  );
+};
+
+const InfoContainer = styled(Row)`
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: ${GE_DESKTOP_CONFIGURATION.displayWidth};
+  padding-left: 16px;
+  & > div:not(:last-child) {
+    margin-right: 16px;
+  }
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const SuccessViewGE = ({ leftItem, rightItem, infoItems }) => {
+  const { gameEditionView } = useGameEditionContext();
+  return (
+    <PreviewContainer gameEditionView={gameEditionView}>
+      <Row className="sb" style={{ position: 'relative', paddingLeft: 16, paddingRight: 16 }}>
+        <PixeledInfoContainerWhite>{leftItem}</PixeledInfoContainerWhite>
+        <PixeledCircleArrowIcon
+          style={{ position: 'absolute', width: 51.5, height: 49, top: 'calc(50% - 20px)', left: '44%', transform: 'rotate(-90deg)' }}
+        />
+        <PixeledInfoContainerWhite>{rightItem}</PixeledInfoContainerWhite>
+      </Row>
+      <InfoContainer style={{ width: GE_DESKTOP_CONFIGURATION.displayWidth }}>
+        {infoItems?.map((item, i) => (
+          <PixeledInfoContainerBlue key={i} gameEditionView>
+            <GameEditionLabel color="blue">{item.label}</GameEditionLabel>
+            <GameEditionLabel color="white">{item?.value}</GameEditionLabel>
+          </PixeledInfoContainerBlue>
+        ))}
+      </InfoContainer>
+      <Row className="c">
+        <PressButtonToActionLabel actionLabel="send" />
+      </Row>
+    </PreviewContainer>
   );
 };

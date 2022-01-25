@@ -47,13 +47,22 @@ const ContentModalContainer = styled.div`
   height: 100%;
 `;
 
-const GameEditionModalsContainer = ({ title, description, content, hideOnClose, onClose, modalStyle, titleFontSize = 52 }) => {
+const GameEditionModalsContainer = ({
+  title,
+  description,
+  content,
+  hideOnClose,
+  onClose,
+  containerStyle,
+  titleContainerStyle,
+  titleFontSize = 52,
+}) => {
   const { closeModal } = useContext(GameEditionContext);
 
   useButtonScrollEvent('game-edition-modal-container');
   return (
-    <GEModalContainer style={modalStyle} id="game-edition-modal-container">
-      <TitleContainer>
+    <GEModalContainer style={containerStyle} id="game-edition-modal-container">
+      <TitleContainer style={titleContainerStyle}>
         <GameEditionLabel fontSize={titleFontSize} style={{ textAlign: 'center', flex: 1, display: 'block' }}>
           {title}
         </GameEditionLabel>
