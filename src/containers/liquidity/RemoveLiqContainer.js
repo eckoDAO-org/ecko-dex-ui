@@ -158,6 +158,12 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
   const openTxViewModal = () => {
     if (gameEditionView) {
       openModal({
+        titleFontSize: 32,
+        containerStyle: { padding: 0 },
+        titleContainerStyle: {
+          padding: 16,
+          paddingBottom: 0,
+        },
         title: 'transaction details',
         closeModal: () => {
           closeModal();

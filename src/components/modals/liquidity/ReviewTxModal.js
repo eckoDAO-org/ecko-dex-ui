@@ -92,7 +92,6 @@ const ReviewTxModal = ({ fromValues, toValues, supply, liquidityView }) => {
           </Row>
           {/* FIRST RATE */}
           <Row className="fe">
-            {console.log('pact.ratio', pact.ratio)}
             <Label fontSize={10}>{`1 ${fromValues?.coin} =  ${reduceBalance(1 / pact.ratio)} ${toValues?.coin}`}</Label>
           </Row>
           {/* SECOND COIN */}

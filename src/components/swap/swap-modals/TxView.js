@@ -19,7 +19,7 @@ import { ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstan
 import { LIQUIDITY_VIEW } from '../../../constants/liquidityView';
 import pixeledInfoContainerWhite from '../../../assets/images/game-edition/pixeled-info-container-white.svg';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
-import PixeledInfoContainerBlue from '../../game-edition-v2/components/PixeledInfoContainerBlue';
+import PixeledInfoContainerBlue, { InfoContainer } from '../../game-edition-v2/components/PixeledInfoContainerBlue';
 import PressButtonToActionLabel from '../../game-edition-v2/components/PressButtonToActionLabel';
 import { PixeledInfoContainerWhite } from '../../game-edition-v2/components/PixeledInfoContainerWhite';
 
@@ -76,9 +76,6 @@ const Row = styled.div`
   &.c {
     justify-content: center;
   }
-  img {
-    margin-right: 0px !important;
-  }
 `;
 
 const PreviewContainer = styled.div`
@@ -122,7 +119,7 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
           <>
             <Row className="fs">
               {getTokenIcon(swap?.localRes?.result?.data[0]?.token)}
-              <GameEditionLabel fontSize={32} color="black" fontFamily="bold" style={{ marginLeft: 6.5 }}>
+              <GameEditionLabel fontSize={32} color="black" fontFamily="bold">
                 {`${extractDecimal(swap?.localRes?.result?.data[0]?.amount)} `}
               </GameEditionLabel>
             </Row>
@@ -141,7 +138,7 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
           <>
             <Row className="fs">
               {getTokenIcon(swap?.localRes?.result?.data[1]?.token)}
-              <GameEditionLabel fontSize={32} color="black" fontFamily="bold" style={{ marginLeft: 6.5 }}>
+              <GameEditionLabel fontSize={32} color="black" fontFamily="bold">
                 {`${extractDecimal(swap?.localRes?.result?.data[1]?.amount)} `}
               </GameEditionLabel>
             </Row>
@@ -156,14 +153,6 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
           </>
         }
         infoItems={[
-          {
-            label: `price ${showTicker(swap?.localRes?.result?.data[0]?.token)} per ${showTicker(swap?.localRes?.result?.data[1]?.token)}`,
-            value: `1 = ${reduceBalance(pact?.computeOut(1), 12)}`,
-          },
-          {
-            label: `price ${showTicker(swap?.localRes?.result?.data[0]?.token)} per ${showTicker(swap?.localRes?.result?.data[1]?.token)}`,
-            value: `1 = ${reduceBalance(pact?.computeOut(1), 12)}`,
-          },
           {
             label: `price ${showTicker(swap?.localRes?.result?.data[0]?.token)} per ${showTicker(swap?.localRes?.result?.data[1]?.token)}`,
             value: `1 = ${reduceBalance(pact?.computeOut(1), 12)}`,
@@ -241,6 +230,61 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
           <Label fontFamily="bold">{` ${showTicker(swap?.localRes?.result?.data[1]?.token)}`}</Label>
         </Row>
       </SuccesViewContainer>
+    );
+  };
+
+  const successRemoveViewGE = () => {
+    return (
+      <SuccessViewGE
+        leftItem={
+          <>
+            <Row className="fs">
+              <GameEditionLabel fontSize={32} color="black" fontFamily="bold">
+                Remove
+              </GameEditionLabel>
+            </Row>
+
+            <GameEditionLabel color="blue">{showTicker(token0)}</GameEditionLabel>
+            <Row className="fs">
+              {getTokenIcon(token0)}
+              <GameEditionLabel fontSize={22} color="blue-grey">
+                {extractDecimal(swap?.localRes?.result?.data?.amount0)}
+              </GameEditionLabel>
+            </Row>
+          </>
+        }
+        rightItem={
+          <>
+            <Row className="fs">
+              <GameEditionLabel fontSize={32} color="black" fontFamily="bold">
+                Remove
+              </GameEditionLabel>
+            </Row>
+            <GameEditionLabel color="blue">{` ${showTicker(token1)}`}</GameEditionLabel>
+            <Row className="fs">
+              {getTokenIcon(token1)}
+              <GameEditionLabel fontSize={22} color="blue-grey">
+                {extractDecimal(swap?.localRes?.result?.data?.amount1)}
+              </GameEditionLabel>
+            </Row>
+          </>
+        }
+        infoItems={[
+          {
+            label: 'gas cost KDA',
+            value: ENABLE_GAS_STATION ? (
+              <>
+                <GameEditionLabel geColor="white">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</GameEditionLabel>
+                <GameEditionLabel geColor="white" labelStyle={{ marginLeft: 5 }}>
+                  FREE!
+                </GameEditionLabel>
+              </>
+            ) : (
+              <GameEditionLabel geColor="white">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</GameEditionLabel>
+            ),
+          },
+        ]}
+      />
     );
   };
 
@@ -389,7 +433,7 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
         default:
           return () => {};
         case LIQUIDITY_VIEW.REMOVE_LIQUIDITY:
-          return successRemoveView();
+          return gameEditionView ? successRemoveViewGE() : successRemoveView();
         case LIQUIDITY_VIEW.ADD_LIQUIDITY:
           return successAddView();
         case undefined:
@@ -486,19 +530,6 @@ const SuccesViewContainer = ({ swap, onClick, loading, children }) => {
     </Content>
   );
 };
-
-const InfoContainer = styled(Row)`
-  overflow-x: auto;
-  overflow-y: hidden;
-  width: ${GE_DESKTOP_CONFIGURATION.displayWidth};
-  padding-left: 16px;
-  & > div:not(:last-child) {
-    margin-right: 16px;
-  }
-  ::-webkit-scrollbar {
-    display: none;
-  }
-`;
 
 const SuccessViewGE = ({ leftItem, rightItem, infoItems }) => {
   const { gameEditionView } = useGameEditionContext();
