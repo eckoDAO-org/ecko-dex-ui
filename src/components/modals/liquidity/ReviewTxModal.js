@@ -24,12 +24,6 @@ const Content = styled.div`
   justify-content: ${({ gameEditionView }) => gameEditionView && 'space-between '};
 `;
 
-const Title = styled.div`
-  font-family: montserrat-bold;
-  font-size: 24px;
-  ${({ theme: { colors } }) => colors.white};
-`;
-
 const TransactionsDetails = styled.div`
   width: 100%;
   display: flex;
@@ -56,23 +50,6 @@ const Row = styled.div`
   &.c {
     justify-content: center;
   }
-`;
-
-const SubTitle = styled.div`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '14px' : '13px')};
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
-  text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
-  width: ${({ gameEditionView }) => (gameEditionView ? '100%' : 'auto')};
-  align-items: center;
-  position: relative;
-  justify-content: center;
-`;
-
-const Value = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  font-size: 10px;
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : `${colors.white}99`)};
 `;
 
 const ReviewTxModal = ({ fromValues, toValues, supply, liquidityView }) => {
@@ -115,6 +92,7 @@ const ReviewTxModal = ({ fromValues, toValues, supply, liquidityView }) => {
           </Row>
           {/* FIRST RATE */}
           <Row className="fe">
+            {console.log('pact.ratio', pact.ratio)}
             <Label fontSize={10}>{`1 ${fromValues?.coin} =  ${reduceBalance(1 / pact.ratio)} ${toValues?.coin}`}</Label>
           </Row>
           {/* SECOND COIN */}
@@ -131,7 +109,7 @@ const ReviewTxModal = ({ fromValues, toValues, supply, liquidityView }) => {
           </Row>
           {/* SECOND RATE */}
           <Row className="fe">
-            <Label fontSize={10}>{`1 ${toValues?.coin} =  ${reduceBalance(1 / pact.ratio)} ${fromValues?.coin}`}</Label>
+            <Label fontSize={10}>{`1 ${toValues?.coin} =  ${reduceBalance(pact.ratio)} ${fromValues?.coin}`}</Label>
           </Row>
           <Row className="sb">
             <Label fontSize={10}>Share of Pool:</Label>

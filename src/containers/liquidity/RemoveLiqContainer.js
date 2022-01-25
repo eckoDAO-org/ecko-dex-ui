@@ -124,7 +124,7 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
   const liquidity = useContext(LiquidityContext);
   const { themeMode } = useContext(LightModeContext);
   const modalContext = useContext(ModalContext);
-  const { gameEditionView, openModal, closeModal } = useContext(GameEditionContext);
+  const { gameEditionView, openModal, closeModal, setButtons } = useContext(GameEditionContext);
   const { token0, token1, balance, pooledAmount } = pair;
 
   const [amount, setAmount] = useState(100);
@@ -194,6 +194,44 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
     }
   };
 
+  const onRemoveLiquidity = async () => {
+    if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
+      setLoading(true);
+      const res = await liquidity.removeLiquidityLocal(tokenData[token0].code, tokenData[token1].code, reduceBalance(pooled, PRECISION));
+      if (res === -1) {
+        setLoading(false);
+        alert('Incorrect password. If forgotten, you can reset it with your private key');
+        return;
+      } else {
+        openTxViewModal();
+        setLoading(false);
+      }
+    } else {
+      setLoading(true);
+      const res = await liquidity.removeLiquidityWallet(tokenData[token0].code, tokenData[token1].code, reduceBalance(pooled, PRECISION));
+      if (!res) {
+        wallet.setIsWaitingForWalletAuth(true);
+        setLoading(false);
+        /* pact.setWalletError(true); */
+        /* walletError(); */
+      } else {
+        wallet.setWalletError(null);
+        openTxViewModal();
+        setLoading(false);
+      }
+    }
+  };
+  useEffect(() => {
+    setButtons({
+      B: async () => {
+        console.log('onRemove');
+        if (!isNaN(amount) && reduceBalance(amount) !== 0) {
+          await onRemoveLiquidity();
+        }
+      },
+    });
+  }, [amount]);
+
   return (
     <Container $gameEditionView={gameEditionView}>
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
@@ -232,41 +270,7 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
                 type="secondary"
                 loading={loading}
                 disabled={isNaN(amount) || reduceBalance(amount) === 0}
-                onClick={async () => {
-                  if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
-                    setLoading(true);
-                    const res = await liquidity.removeLiquidityLocal(
-                      tokenData[token0].code,
-                      tokenData[token1].code,
-                      reduceBalance(pooled, PRECISION)
-                    );
-                    if (res === -1) {
-                      setLoading(false);
-                      alert('Incorrect password. If forgotten, you can reset it with your private key');
-                      return;
-                    } else {
-                      openTxViewModal();
-                      setLoading(false);
-                    }
-                  } else {
-                    setLoading(true);
-                    const res = await liquidity.removeLiquidityWallet(
-                      tokenData[token0].code,
-                      tokenData[token1].code,
-                      reduceBalance(pooled, PRECISION)
-                    );
-                    if (!res) {
-                      wallet.setIsWaitingForWalletAuth(true);
-                      setLoading(false);
-                      /* pact.setWalletError(true); */
-                      /* walletError(); */
-                    } else {
-                      wallet.setWalletError(null);
-                      openTxViewModal();
-                      setLoading(false);
-                    }
-                  }
-                }}
+                onClick={async () => await onRemoveLiquidity()}
               >
                 Remove Liquidity
               </CustomButton>

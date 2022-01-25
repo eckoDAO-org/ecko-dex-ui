@@ -21,8 +21,7 @@ const GEModalContainer = styled(FadeIn)`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  padding: 24px;
-  padding-top: 12px;
+  padding: 16px;
   overflow: auto;
   ::-webkit-scrollbar {
     display: none;
