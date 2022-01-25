@@ -90,7 +90,7 @@ const ResultContainer = styled(PixeledInfoContainer)`
   ${({ gameEditionView }) => {
     if (gameEditionView) {
       return css`
-        /*         margin: 16px 0; */
+        margin: 14px 0;
       `;
     } else {
       return css`

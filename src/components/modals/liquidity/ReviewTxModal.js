@@ -120,12 +120,16 @@ const ReviewTxModal = ({ fromValues, toValues, supply, liquidityView }) => {
       return (
         <TransactionsDetails>
           <Row className="sb">
-            <Label fontSize={13}>{`1 ${fromValues?.coin}`}</Label>
-            <Label fontSize={10}>{`${reduceBalance(toValues.amount / fromValues.amount)} ${toValues.coin}`}</Label>
+            <Label fontSize={13}>1 ${fromValues?.coin}</Label>
+            <Label fontSize={10}>
+              {reduceBalance(toValues.amount / fromValues.amount)} ${toValues.coin}
+            </Label>
           </Row>
           <Row style={{ padding: '16px 0px' }}>
-            <Label fontSize={13}>{`1 ${toValues?.coin} `}</Label>
-            <Label fontSize={10}>{`${reduceBalance(fromValues.amount / toValues.amount)} ${fromValues.coin}`}</Label>
+            <Label fontSize={13}>1 ${toValues?.coin}</Label>
+            <Label fontSize={10}>
+              {reduceBalance(fromValues.amount / toValues.amount)} ${fromValues.coin}
+            </Label>
           </Row>
         </TransactionsDetails>
       );

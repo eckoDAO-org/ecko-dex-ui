@@ -1,29 +1,9 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components/macro';
 import { PactContext } from '../../contexts/PactContext';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { reduceBalance } from '../../utils/reduceBalance';
 import Label from '../shared/Label';
-import { GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
 import PixeledInfoContainer, { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
-
-/* const InfoContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 10px 0px 0px;
-  padding-left: 16px;
-  width: ${GE_DESKTOP_CONFIGURATION.displayWidth}px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  & > div:not(:last-child) {
-    margin-right: 15px;
-  }
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    margin: 5px 0px;
-    flex-flow: column;
-  }
-`; */
 
 const SwapResultsGEv2 = ({ priceImpact, fromValues, toValues }) => {
   const pact = useContext(PactContext);
