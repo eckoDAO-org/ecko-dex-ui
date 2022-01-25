@@ -408,7 +408,6 @@ const SwapContainer = () => {
       openModal({
         title: 'Select a Token',
         onClose: () => {
-          console.log('Here');
           setTokenSelectorType(null);
         },
         content: (

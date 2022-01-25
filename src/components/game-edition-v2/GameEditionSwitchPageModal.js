@@ -103,7 +103,6 @@ const GameEditionSwitchPageModal = ({ direction }) => {
       }
       if (index > menuItems.length - 1) {
         index = menuItems.length - 1;
-        console.log('here');
       }
     }
     console.log('index', index);

@@ -95,9 +95,9 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, o
       >
         <TokensContainer gameEditionView={gameEditionView}>
           {cryptoCurrencies.length ? (
-            cryptoCurrencies.map((crypto) => {
+            cryptoCurrencies.map((crypto, i) => {
               return (
-                <>
+                <React.Fragment key={i}>
                   <TokenItem
                     gameEditionView={gameEditionView}
                     key={crypto.name}
@@ -125,7 +125,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, o
                     )}
                   </TokenItem>
                   {gameEditionView && <Divider gameEditionView={gameEditionView} />}
-                </>
+                </React.Fragment>
               );
             })
           ) : (

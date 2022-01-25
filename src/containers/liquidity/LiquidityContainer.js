@@ -153,7 +153,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
   const liquidity = useContext(LiquidityContext);
   const modalContext = useContext(ModalContext);
   const { themeMode } = useContext(LightModeContext);
-  const { gameEditionView, openModal, closeModal, isSwapping, setIsSwapping } = useContext(GameEditionContext);
+  const { gameEditionView, openModal, closeModal, isSwapping, setIsSwapping, setButtons } = useContext(GameEditionContext);
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
   const [inputSide, setInputSide] = useState('');
@@ -653,6 +653,18 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
       }
     }
   }, [showReview]);
+
+  useEffect(() => {
+    setButtons({
+      B: async () => {
+        console.log('onAdd');
+        if (buttonStatus().status) {
+          setShowReview(true);
+        }
+        // await onRemoveLiquidity()
+      },
+    });
+  }, [buttonStatus().status]);
 
   return (
     <Container $gameEditionView={gameEditionView} onAnimationEnd={() => setIsLogoVisible(true)} className="scrollbar-none">

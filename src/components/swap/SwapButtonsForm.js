@@ -91,6 +91,7 @@ const SwapButtonsForm = ({
         },
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showTxModal, account.account, gameEditionView, fromValues, toValues]);
 
   const handleClick = async () => {

@@ -174,13 +174,13 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
             <GameEditionLabel color="blue">gas cost KDA</GameEditionLabel>
             {ENABLE_GAS_STATION ? (
               <>
-                <GameEditionLabel geColor="white">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</GameEditionLabel>
-                <GameEditionLabel geColor="white" labelStyle={{ marginLeft: 5 }}>
+                <GameEditionLabel fontSize={13} geColor="white">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</GameEditionLabel>
+                <GameEditionLabel fontSize={13} geColor="white" labelStyle={{ marginLeft: 5 }}>
                   FREE!
                 </GameEditionLabel>
               </>
             ) : (
-              <GameEditionLabel geColor="white">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</GameEditionLabel>
+              <GameEditionLabel fontSize={13} geColor="white">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</GameEditionLabel>
             )}
           </PixeledInfoContainerBlue>
         </Row>
@@ -193,229 +193,136 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
 
   const successView = () => {
     return (
-      <Content gameEditionView={gameEditionView}>
-        <Label geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
-          Preview Successful!
-        </Label>
-        {!gameEditionView && <SuccessfullIcon />}
-
-        <TransactionsDetails>
-          <Row className="sb">
-            <Label fontFamily="bold">From</Label>
-            <Label fontSize={13}></Label>
-          </Row>
-          <Row className="sb">
-            <Label fontSize={13}>Account</Label>
-            <Label fontSize={13}>
-              {`${reduceToken(account.account)}`}
-              <PopupTxView isAccountPopup />
-            </Label>
-          </Row>
-          <Row className="sb">
-            <Label fontSize={13}>Chain ID</Label>
-            <Label fontSize={13}>{swap?.localRes?.metaData?.publicMeta?.chainId}</Label>
-          </Row>
-          <Divider
-            style={{
-              width: '100%',
-              marginTop: 0,
-              borderTop: gameEditionView ? `2px dashed ${theme(themeMode).colors.black}` : `1px solid ${theme(themeMode).colors.white}`,
-            }}
-          />
-
-          <Row className="sb">
-            <Row className="fs">
-              <Label fontFamily="bold"> {getTokenIcon(swap?.localRes?.result?.data[0]?.token)}</Label>
-              <Label fontFamily="bold">{`${extractDecimal(swap?.localRes?.result?.data[0]?.amount)} `}</Label>
-            </Row>
-            <Label fontFamily="bold">{` ${showTicker(swap?.localRes?.result?.data[0]?.token)}`}</Label>
-          </Row>
-          <Row className="sb">
-            <Label fontFamily="bold">
-              <Icon name="long arrow alternate down" style={{}} />
-            </Label>
-            <Label fontSize={13}>{`1 ${showTicker(swap?.localRes?.result?.data[0]?.token)} = ${reduceBalance(pact?.computeOut(1), 12)} ${showTicker(
-              swap?.localRes?.result?.data[1]?.token
-            )}`}</Label>
-          </Row>
-          <Row className="sb">
-            <Row className="fs">
-              <Label fontFamily="bold"> {getTokenIcon(swap?.localRes?.result?.data[1]?.token)}</Label>
-              <Label fontFamily="bold">{`${extractDecimal(swap?.localRes?.result?.data[1]?.amount)} `}</Label>
-            </Row>
-            <Label fontFamily="bold">{` ${showTicker(swap?.localRes?.result?.data[1]?.token)}`}</Label>
-          </Row>
-          <Row className="sb">
-            <Label fontSize={13}>Gas Cost</Label>
-            <div style={{ display: 'flex' }}>
-              {ENABLE_GAS_STATION ? (
-                <>
-                  <Label fontSize={13} color={commonColors.green} geColor="green">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</Label>
-                  <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ marginLeft: 5 }}>
-                    FREE!
-                  </Label>
-                </>
-              ) : (
-                <Label color={commonColors.green} geColor="green">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</Label>
-              )}
-              {ENABLE_GAS_STATION && <PopupTxView popupStyle={{ maxWidth: '400px' }} />}
-            </div>
-          </Row>
-        </TransactionsDetails>
-        <CustomButton
-          type="secondary"
-          buttonStyle={{
+      <SuccesViewContainer
+        swap={swap}
+        loading={loading}
+        onClick={() => {
+          sendTransaction();
+        }}
+      >
+        <Row className="sb">
+          <Label fontFamily="bold">From</Label>
+          <Label fontSize={13}></Label>
+        </Row>
+        <Row className="sb">
+          <Label fontSize={13}>Account</Label>
+          <Label fontSize={13}>
+            {`${reduceToken(account.account)}`}
+            <PopupTxView isAccountPopup />
+          </Label>
+        </Row>
+        <Row className="sb">
+          <Label fontSize={13}>Chain ID</Label>
+          <Label fontSize={13}>{swap?.localRes?.metaData?.publicMeta?.chainId}</Label>
+        </Row>
+        <Divider
+          style={{
             width: '100%',
-            marginTop: !gameEditionView && '16px',
-            marginBottom: gameEditionView && '16px',
+            marginTop: 0,
+            borderTop: gameEditionView ? `2px dashed ${theme(themeMode).colors.black}` : `1px solid ${theme(themeMode).colors.white}`,
           }}
-          onClick={() => {
-            sendTransaction();
-          }}
-          loading={loading}
-        >
-          Send Transaction
-        </CustomButton>
-      </Content>
+        />
+
+        <Row className="sb">
+          <Row className="fs">
+            <Label fontFamily="bold"> {getTokenIcon(swap?.localRes?.result?.data[0]?.token)}</Label>
+            <Label fontFamily="bold">{`${extractDecimal(swap?.localRes?.result?.data[0]?.amount)} `}</Label>
+          </Row>
+          <Label fontFamily="bold">{` ${showTicker(swap?.localRes?.result?.data[0]?.token)}`}</Label>
+        </Row>
+        <Row className="sb">
+          <Label fontFamily="bold">
+            <Icon name="long arrow alternate down" style={{}} />
+          </Label>
+          <Label fontSize={13}>{`1 ${showTicker(swap?.localRes?.result?.data[0]?.token)} = ${reduceBalance(pact?.computeOut(1), 12)} ${showTicker(
+            swap?.localRes?.result?.data[1]?.token
+          )}`}</Label>
+        </Row>
+        <Row className="sb">
+          <Row className="fs">
+            <Label fontFamily="bold"> {getTokenIcon(swap?.localRes?.result?.data[1]?.token)}</Label>
+            <Label fontFamily="bold">{`${extractDecimal(swap?.localRes?.result?.data[1]?.amount)} `}</Label>
+          </Row>
+          <Label fontFamily="bold">{` ${showTicker(swap?.localRes?.result?.data[1]?.token)}`}</Label>
+        </Row>
+      </SuccesViewContainer>
     );
   };
 
   const successRemoveView = () => {
     return (
-      <Content gameEditionView={gameEditionView} style={{ bottom: gameEditionView && '132px' }}>
-        <Label geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
-          Preview Successful!
-        </Label>
-
-        {!gameEditionView && <SuccessfullIcon />}
-        <TransactionsDetails>
+      <SuccesViewContainer
+        swap={swap}
+        loading={loading}
+        onClick={() => {
+          sendTransaction();
+        }}
+      >
+        <Row className="fs">
+          <Label fontFamily="bold">Remove</Label>
+        </Row>
+        <Row className="sb">
           <Row className="fs">
-            <Label fontFamily="bold">Remove</Label>
-          </Row>
-          <Row className="sb">
-            <Row className="fs">
-              {getTokenIcon(token0)}
+            {getTokenIcon(token0)}
 
-              <Label fontFamily="bold">{`${extractDecimal(swap?.localRes?.result?.data?.amount0)} `}</Label>
-            </Row>
-            <Label fontFamily="bold">{` ${showTicker(token0)}`}</Label>
+            <Label fontFamily="bold">{`${extractDecimal(swap?.localRes?.result?.data?.amount0)} `}</Label>
           </Row>
+          <Label fontFamily="bold">{` ${showTicker(token0)}`}</Label>
+        </Row>
+        <Row className="fs">
+          <Label fontFamily="bold">Remove</Label>
+        </Row>
+        <Row className="sb">
           <Row className="fs">
-            <Label fontFamily="bold">Remove</Label>
-          </Row>
-          <Row className="sb">
-            <Row className="fs">
-              {getTokenIcon(token1)}
+            {getTokenIcon(token1)}
 
-              <Label fontFamily="bold">{`${extractDecimal(swap?.localRes?.result?.data?.amount1)} `}</Label>
-            </Row>
-            <Label fontFamily="bold">{` ${showTicker(token1)}`}</Label>
+            <Label fontFamily="bold">{`${extractDecimal(swap?.localRes?.result?.data?.amount1)} `}</Label>
           </Row>
-
-          <Row className="sb">
-            <Label fontSize={13}>Gas Cost</Label>
-            <div style={{ display: 'flex' }}>
-              {ENABLE_GAS_STATION ? (
-                <>
-                  <Label fontSize={13} color={commonColors.green} geColor="green">{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</Label>
-                  <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ marginLeft: 5 }}>
-                    FREE!
-                  </Label>
-                </>
-              ) : (
-                <Label color={commonColors.green} geColor="green">{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</Label>
-              )}
-              {ENABLE_GAS_STATION && <PopupTxView popupStyle={{ maxWidth: '400px' }} />}
-            </div>
-          </Row>
-        </TransactionsDetails>
-        <CustomButton
-          type="secondary"
-          buttonStyle={{
-            width: '100%',
-            marginTop: !gameEditionView && '16px',
-            marginBottom: gameEditionView && '16px',
-          }}
-          onClick={() => {
-            sendTransaction();
-          }}
-          loading={loading}
-        >
-          Send Transaction
-        </CustomButton>
-      </Content>
+          <Label fontFamily="bold">{` ${showTicker(token1)}`}</Label>
+        </Row>
+      </SuccesViewContainer>
     );
   };
 
   const successAddView = () => {
     return (
-      <Content gameEditionView={gameEditionView}>
-        <Label geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
-          Preview Successful!
-        </Label>
-        {!gameEditionView && <SuccessfullIcon />}
-        <TransactionsDetails>
+      <SuccesViewContainer
+        swap={swap}
+        loading={loading}
+        onClick={async () => {
+          setLoading(true);
+          if (view === LIQUIDITY_VIEW.ADD_LIQUIDITY) {
+            swap.swapSend();
+            onClose();
+          } else {
+            await createTokenPair();
+            await swap.swapSend();
+            onClose();
+          }
+          setLoading(false);
+        }}
+      >
+        <Row className="fs">
+          <Label fontSize={13}>Add</Label>
+        </Row>
+        <Row className="sb">
           <Row className="fs">
-            <Label fontSize={13}>Add</Label>
+            {getTokenIcon(token0)}
+            <Label fontFamily="bold">{`${extractDecimal(swap.localRes.result.data.amount0)}`}</Label>
           </Row>
-          <Row className="sb">
-            <Row className="fs">
-              {getTokenIcon(token0)}
-              <Label fontFamily="bold">{`${extractDecimal(swap.localRes.result.data.amount0)}`}</Label>
-            </Row>
-            <Label fontFamily="bold">{` ${showTicker(token0)}`}</Label>
-          </Row>
+          <Label fontFamily="bold">{` ${showTicker(token0)}`}</Label>
+        </Row>
+        <Row className="fs">
+          <Label fontSize={13}>Add</Label>
+        </Row>
+        <Row className="sb">
           <Row className="fs">
-            <Label fontSize={13}>Add</Label>
+            {getTokenIcon(token1)}
+            <Label fontFamily="bold">{`${extractDecimal(swap.localRes.result.data.amount1)} `}</Label>
           </Row>
-          <Row className="sb">
-            <Row className="fs">
-              {getTokenIcon(token1)}
-              <Label fontFamily="bold">{`${extractDecimal(swap.localRes.result.data.amount1)} `}</Label>
-            </Row>
-            <Label fontFamily="bold">{` ${showTicker(token1)}`}</Label>
-          </Row>
-          <Row className="sb">
-            <Label fontSize={13}>Gas Cost</Label>
-            <div style={{ display: 'flex' }}>
-              {ENABLE_GAS_STATION ? (
-                <>
-                  <Label fontSize={13} color={commonColors.green} geColor="green">{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</Label>
-                  <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ marginLeft: 5 }}>
-                    FREE!
-                  </Label>
-                </>
-              ) : (
-                <Label color={commonColors.green} geColor="green">{`${gasUnit(GAS_PRICE * swap.localRes.gas)} KDA`}</Label>
-              )}
-              {ENABLE_GAS_STATION && <PopupTxView popupStyle={{ maxWidth: '400px' }} />}
-            </div>
-          </Row>
-        </TransactionsDetails>
-        <CustomButton
-          type="secondary"
-          buttonStyle={{
-            width: '100%',
-            marginTop: !gameEditionView && '16px',
-            marginBottom: gameEditionView && '16px',
-          }}
-          onClick={async () => {
-            setLoading(true);
-            if (view === 'Add Liquidity') {
-              swap.swapSend();
-              onClose();
-            } else {
-              await createTokenPair();
-              await swap.swapSend();
-              onClose();
-            }
-            setLoading(false);
-          }}
-          loading={loading}
-        >
-          Send Transaction
-        </CustomButton>
-      </Content>
+          <Label fontFamily="bold">{` ${showTicker(token1)}`}</Label>
+        </Row>
+      </SuccesViewContainer>
     );
   };
 
@@ -457,7 +364,7 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
   const localError = () => {
     return (
       <Content gameEditionView={gameEditionView} style={{ marginTop: 16 }}>
-        <Label geCenter geColor="yellow">
+        <Label fontFamily="bold" geCenter geColor="yellow">
           Transaction Error!
         </Label>
         {!gameEditionView && <ErrorIcon style={{ width: '60px', height: ' 60px', margin: '16px 0' }} />}
@@ -510,6 +417,7 @@ const MessageContainer = styled.div`
   border-radius: ${({ gameEditionView }) => !gameEditionView && '4px'};
   background-color: ${({ gameEditionView, theme: { colors } }) => !gameEditionView && colors.black};
 `;
+
 const Message = ({ color, children }) => {
   const { gameEditionView } = useGameEditionContext();
 
@@ -527,5 +435,63 @@ const Message = ({ color, children }) => {
         {children}
       </Label>
     </MessageContainer>
+  );
+};
+
+// GAS COST COMPONENT
+const GasCost = ({ swap }) => {
+  return (
+    <Row className="sb">
+      <Label fontSize={13}>Gas Cost</Label>
+      <div style={{ display: 'flex' }}>
+        {ENABLE_GAS_STATION ? (
+          <>
+            <Label fontSize={13} color={commonColors.green} geColor="green">
+              {gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA
+            </Label>
+            <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ marginLeft: 5 }}>
+              FREE!
+            </Label>
+          </>
+        ) : (
+          <Label fontSize={13} color={commonColors.green} geColor="green">
+            {gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA
+          </Label>
+        )}
+        {ENABLE_GAS_STATION && <PopupTxView popupStyle={{ maxWidth: '400px' }} />}
+      </div>
+    </Row>
+  );
+};
+
+// CONTENT CONTAINER
+const SuccesViewContainer = ({ swap, onClick, loading, children }) => {
+  const { gameEditionView } = useGameEditionContext();
+  return (
+    <Content gameEditionView={gameEditionView}>
+      <Label fontFamily="bold" geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
+        Preview Successful!
+      </Label>
+      {!gameEditionView && <SuccessfullIcon />}
+
+      <TransactionsDetails>
+        {children}
+        <GasCost swap={swap} />
+      </TransactionsDetails>
+      <CustomButton
+        type="secondary"
+        buttonStyle={{
+          width: '100%',
+          marginTop: !gameEditionView && '16px',
+          marginBottom: gameEditionView && '16px',
+        }}
+        onClick={async () => {
+          await onClick();
+        }}
+        loading={loading}
+      >
+        Send Transaction
+      </CustomButton>
+    </Content>
   );
 };
