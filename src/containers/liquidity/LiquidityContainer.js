@@ -30,6 +30,7 @@ import browserDetection from '../../utils/browserDetection';
 import { theme } from '../../styles/theme';
 import PixeledInfoContainer from '../../components/game-edition-v2/components/PixeledInfoContainer';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
+import PressButtonToActionLabel from '../../components/game-edition-v2/components/PressButtonToActionLabel';
 
 const Container = styled.div`
   display: flex;
@@ -136,6 +137,13 @@ const GameEditionTokenSelectorContainer = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
+`;
+
+const LabelContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  z-index: ${({ gameEditionView }) => !gameEditionView && '1'};
 `;
 
 const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidity }) => {
@@ -681,12 +689,23 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
         gameEditionView={gameEditionView}
         footer={
           gameEditionView ? (
-            <Label geCenter geColor="yellow" geFontSize={20}>
-              {buttonStatus().msg}
-            </Label>
+            <LabelContainer gameEditionView={gameEditionView}>
+              {buttonStatus().status === true ? (
+                <PressButtonToActionLabel button="B" actionLabel="add liquidity" />
+              ) : (
+                <Label geCenter geColor="yellow" geFontSize={20}>
+                  {buttonStatus().msg}
+                </Label>
+              )}
+            </LabelContainer>
           ) : (
             <ButtonContainer>
-              <CustomButton fluid disabled={!buttonStatus().status} onClick={() => setShowReview(true)}>
+              <CustomButton
+                fluid
+                type={buttonStatus().status === true ? 'secondary' : 'primary'}
+                disabled={!buttonStatus().status}
+                onClick={() => setShowReview(true)}
+              >
                 {buttonStatus().msg}
               </CustomButton>
             </ButtonContainer>
