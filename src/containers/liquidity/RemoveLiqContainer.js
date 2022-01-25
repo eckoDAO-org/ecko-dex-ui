@@ -267,7 +267,7 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
                   }
                 }}
               >
-                Remove liquidity
+                Remove Liquidity
               </CustomButton>
             )}
           </ButtonContainer>
