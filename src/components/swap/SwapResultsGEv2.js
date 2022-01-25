@@ -5,9 +5,9 @@ import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { reduceBalance } from '../../utils/reduceBalance';
 import Label from '../shared/Label';
 import { GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
-import PixeledInfoContainer from '../game-edition-v2/components/PixeledInfoContainerBlue';
+import PixeledInfoContainer, { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
 
-const ResultContainer = styled.div`
+/* const InfoContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 10px 0px 0px;
@@ -23,13 +23,13 @@ const ResultContainer = styled.div`
     margin: 5px 0px;
     flex-flow: column;
   }
-`;
+`; */
 
 const SwapResultsGEv2 = ({ priceImpact, fromValues, toValues }) => {
   const pact = useContext(PactContext);
   const liquidity = useContext(LiquidityContext);
   return (
-    <ResultContainer>
+    <InfoContainer>
       <PixeledInfoContainer gameEditionView>
         <Label geFontSize={20} geColor="blue">{`price ${fromValues.coin} per ${toValues.coin}`}</Label>
         <Label geFontSize={28}>{`${reduceBalance(pact.ratio * (1 + priceImpact))}`}</Label>
@@ -58,7 +58,7 @@ const SwapResultsGEv2 = ({ priceImpact, fromValues, toValues }) => {
           {`${(liquidity.liquidityProviderFee * parseFloat(fromValues.amount)).toFixed(fromValues.precision)} ${fromValues.coin}`}
         </Label>
       </PixeledInfoContainer>
-    </ResultContainer>
+    </InfoContainer>
   );
 };
 

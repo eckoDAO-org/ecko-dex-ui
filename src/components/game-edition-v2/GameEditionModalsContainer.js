@@ -68,7 +68,7 @@ const GameEditionModalsContainer = ({
         </GameEditionLabel>
         {!hideOnClose && (
           <CloseGe
-            style={{ cursor: 'pointer', position: 'absolute', right: 20, top: '50%', transform: 'translate(0px, -50%)' }}
+            style={{ cursor: 'pointer', position: 'absolute', right: 20, top: '62%', transform: 'translate(0px, -62%)' }}
             onClick={() => {
               if (onClose) {
                 onClose();
