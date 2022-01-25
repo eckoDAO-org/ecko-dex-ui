@@ -46,7 +46,7 @@ const AccountContainer = styled.div`
 const AccountInfo = ({ account, balance, onClick }) => {
   return (
     <Container onClick={onClick}>
-      {/* <BalanceContainer className="mobile-none">{balance}</BalanceContainer> */}
+      {/* <BalanceContainer className="tablet-none">{balance}</BalanceContainer> */}
       <AccountContainer>{account}</AccountContainer>
     </Container>
   );

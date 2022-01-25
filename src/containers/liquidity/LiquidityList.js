@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useContext, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { Loader, Button, Divider } from 'semantic-ui-react';
 import CustomButton from '../../components/shared/CustomButton';
 import TokenPair from './TokenPair';
@@ -23,11 +23,23 @@ const Container = styled.div`
   display: flex;
   height: 100%;
   flex-direction: column;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0 16px;
-  width: ${({ $gameEditionView }) => $gameEditionView && '100%'};
-  justify-content: ${({ $gameEditionView }) => ($gameEditionView ? 'space-between' : 'center')};
+
+  ${({ $gameEditionView }) => {
+    if ($gameEditionView) {
+      return css`
+        padding: 0 16px;
+        width: 100%;
+        justify-content: space-between;
+      `;
+    } else {
+      return css`
+        justify-content: flex-start;
+
+        margin-left: auto;
+        margin-right: auto;
+      `;
+    }
+  }}
 `;
 
 const BottomContainer = styled.div`

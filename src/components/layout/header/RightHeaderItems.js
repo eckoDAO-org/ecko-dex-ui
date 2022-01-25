@@ -53,7 +53,7 @@ const RightHeaderItems = () => {
 
   return (
     <RightContainerHeader>
-      <span className="mainnet-chain-2 mobile-none">Mainnet Chain 2</span>
+      <span className="mainnet-chain-2 tablet-none">Mainnet Chain 2</span>
       {account?.account && width >= commonTheme.mediaQueries.desktopPixel && (
         <HeaderItem>
           <AccountInfo
@@ -78,7 +78,7 @@ const RightHeaderItems = () => {
 
       {!account.account && (
         <FadeContainer style={{ display: gameEditionView && 'none' }}>
-          <HeaderItem className="mobile-none">
+          <HeaderItem className="tablet-none">
             <Button
               hover={true}
               buttonStyle={{ padding: '10px 16px' }}

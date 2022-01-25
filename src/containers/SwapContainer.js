@@ -100,10 +100,6 @@ const ResultContainer = styled(PixeledInfoContainer)`
     }
   }}
   width: 100%;
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: column;
-    margin-bottom: 0px;
-  }
 `;
 
 const SwapContainer = () => {

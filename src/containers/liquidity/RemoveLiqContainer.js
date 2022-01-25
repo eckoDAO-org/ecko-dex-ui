@@ -39,7 +39,7 @@ const Container = styled.div`
     return css`
       justify-content: center;
       max-width: 550px;
-      width: 550px;
+      width: 100%;
     `;
   }}
 `;
@@ -60,11 +60,10 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  & > button:not(:last-child) {
-    margin-right: 8px;
-  }
-  & > button:last-child {
-    margin-right: 0px;
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {
+    & > button {
+      padding: 0px !important;
+    }
   }
 `;
 
@@ -119,13 +118,13 @@ const InnerRowContainer = styled(PixeledInfoContainer)`
   }
 `;
 
-const RemoveLiqContainer = (props) => {
+const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
   const wallet = useContext(WalletContext);
   const liquidity = useContext(LiquidityContext);
   const { themeMode } = useContext(LightModeContext);
   const modalContext = useContext(ModalContext);
   const { gameEditionView, openModal, closeModal } = useContext(GameEditionContext);
-  const { token0, token1, balance, pooledAmount } = props.pair;
+  const { token0, token1, balance, pooledAmount } = pair;
 
   const [amount, setAmount] = useState(100);
   const [loading, setLoading] = useState(false);
@@ -202,9 +201,9 @@ const RemoveLiqContainer = (props) => {
         geCenter
         fontFamily="bold"
         geFontSize={44}
-        labelStyle={{ marginBottom: 14 }}
+        labelStyle={{ marginBottom: 14, whiteSpace: 'nowrap' }}
         geLabelStyle={{ lineHeight: '32px', marginBottom: 10 }}
-        onClose={() => props.closeLiquidity()}
+        onClose={() => closeLiquidity()}
       >
         {!gameEditionView && (
           <ArrowBack
@@ -214,7 +213,7 @@ const RemoveLiqContainer = (props) => {
               marginRight: '15px',
               justifyContent: 'center',
             }}
-            onClick={() => props.closeLiquidity()}
+            onClick={() => closeLiquidity()}
           />
         )}
         Remove Liquidity

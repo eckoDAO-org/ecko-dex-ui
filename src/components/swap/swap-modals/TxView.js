@@ -16,6 +16,7 @@ import PopupTxView from './PopupTxView';
 import { commonColors, theme } from '../../../styles/theme';
 import Label from '../../shared/Label';
 import { ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
+import { LIQUIDITY_VIEW } from '../../../constants/liquidityView';
 
 const Content = styled.div`
   display: flex;
@@ -380,9 +381,9 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
       switch (view) {
         default:
           return () => {};
-        case 'Remove Liquidity':
+        case LIQUIDITY_VIEW.REMOVE_LIQUIDITY:
           return successRemoveView();
-        case 'Add Liquidity':
+        case LIQUIDITY_VIEW.ADD_LIQUIDITY:
           return successAddView();
         case undefined:
           return successView();
