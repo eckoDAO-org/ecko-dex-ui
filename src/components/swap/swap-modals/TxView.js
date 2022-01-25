@@ -114,19 +114,21 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
 
   const successViewGE = () => {
     return (
-      <SuccessViewGE
+      <SuccessViewContainerGE
         leftItem={
           <>
             <Row className="fs">
               {getTokenIcon(swap?.localRes?.result?.data[0]?.token)}
               <GameEditionLabel fontSize={32} color="black" fontFamily="bold">
-                {`${extractDecimal(swap?.localRes?.result?.data[0]?.amount)} `}
+                {extractDecimal(swap?.localRes?.result?.data[0]?.amount)}
               </GameEditionLabel>
             </Row>
 
             <GameEditionLabel color="blue">From</GameEditionLabel>
             <Row className="fs">
-              <GameEditionLabel fontSize={22} color="blue-grey">{`${reduceToken(account.account)}`}</GameEditionLabel>
+              <GameEditionLabel fontSize={22} color="blue-grey">
+                {reduceToken(account.account)}
+              </GameEditionLabel>
               <ChainIcon className="chain-icon" />
               <GameEditionLabel fontSize={22} color="blue-grey">
                 {swap?.localRes?.metaData?.publicMeta?.chainId}
@@ -139,12 +141,14 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
             <Row className="fs">
               {getTokenIcon(swap?.localRes?.result?.data[1]?.token)}
               <GameEditionLabel fontSize={32} color="black" fontFamily="bold">
-                {`${extractDecimal(swap?.localRes?.result?.data[1]?.amount)} `}
+                {extractDecimal(swap?.localRes?.result?.data[1]?.amount)}
               </GameEditionLabel>
             </Row>
             <GameEditionLabel color="blue">From</GameEditionLabel>
             <Row className="fs">
-              <GameEditionLabel fontSize={22} color="blue-grey">{`${reduceToken(account.account)}`}</GameEditionLabel>
+              <GameEditionLabel fontSize={22} color="blue-grey">
+                {reduceToken(account.account)}
+              </GameEditionLabel>
               <ChainIcon className="chain-icon" />
               <GameEditionLabel fontSize={22} color="blue-grey">
                 {swap?.localRes?.metaData?.publicMeta?.chainId}
@@ -161,13 +165,13 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
             label: 'gas cost KDA',
             value: ENABLE_GAS_STATION ? (
               <>
-                <GameEditionLabel geColor="white">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</GameEditionLabel>
+                <GameEditionLabel geColor="white">{gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA</GameEditionLabel>
                 <GameEditionLabel geColor="white" labelStyle={{ marginLeft: 5 }}>
                   FREE!
                 </GameEditionLabel>
               </>
             ) : (
-              <GameEditionLabel geColor="white">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</GameEditionLabel>
+              <GameEditionLabel geColor="white">{gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA</GameEditionLabel>
             ),
           },
         ]}
@@ -210,9 +214,9 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
         <Row className="sb">
           <Row className="fs">
             <Label fontFamily="bold"> {getTokenIcon(swap?.localRes?.result?.data[0]?.token)}</Label>
-            <Label fontFamily="bold">{`${extractDecimal(swap?.localRes?.result?.data[0]?.amount)} `}</Label>
+            <Label fontFamily="bold">{extractDecimal(swap?.localRes?.result?.data[0]?.amount)}</Label>
           </Row>
-          <Label fontFamily="bold">{` ${showTicker(swap?.localRes?.result?.data[0]?.token)}`}</Label>
+          <Label fontFamily="bold">{showTicker(swap?.localRes?.result?.data[0]?.token)}</Label>
         </Row>
         <Row className="sb">
           <Label fontFamily="bold">
@@ -233,14 +237,14 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
     );
   };
 
-  const successRemoveViewGE = () => {
+  const successAddRemoveViewGE = ({ label }) => {
     return (
-      <SuccessViewGE
+      <SuccessViewContainerGE
         leftItem={
           <>
             <Row className="fs">
               <GameEditionLabel fontSize={32} color="black" fontFamily="bold">
-                Remove
+                {label}
               </GameEditionLabel>
             </Row>
 
@@ -257,10 +261,10 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
           <>
             <Row className="fs">
               <GameEditionLabel fontSize={32} color="black" fontFamily="bold">
-                Remove
+                {label}
               </GameEditionLabel>
             </Row>
-            <GameEditionLabel color="blue">{` ${showTicker(token1)}`}</GameEditionLabel>
+            <GameEditionLabel color="blue">{showTicker(token1)}</GameEditionLabel>
             <Row className="fs">
               {getTokenIcon(token1)}
               <GameEditionLabel fontSize={22} color="blue-grey">
@@ -274,13 +278,13 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
             label: 'gas cost KDA',
             value: ENABLE_GAS_STATION ? (
               <>
-                <GameEditionLabel geColor="white">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</GameEditionLabel>
+                <GameEditionLabel geColor="white">{gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA</GameEditionLabel>
                 <GameEditionLabel geColor="white" labelStyle={{ marginLeft: 5 }}>
                   FREE!
                 </GameEditionLabel>
               </>
             ) : (
-              <GameEditionLabel geColor="white">{`${gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA`}</GameEditionLabel>
+              <GameEditionLabel geColor="white">{gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA</GameEditionLabel>
             ),
           },
         ]}
@@ -288,78 +292,28 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
     );
   };
 
-  const successRemoveView = () => {
+  const successAddRemoveView = ({ label, onClick }) => {
     return (
-      <SuccesViewContainer
-        swap={swap}
-        loading={loading}
-        onClick={() => {
-          sendTransaction();
-        }}
-      >
+      <SuccesViewContainer swap={swap} loading={loading} onClick={onClick}>
         <Row className="fs">
-          <Label fontFamily="bold">Remove</Label>
+          <Label fontFamily="bold">{label}</Label>
         </Row>
         <Row className="sb">
           <Row className="fs">
             {getTokenIcon(token0)}
-
-            <Label fontFamily="bold">{`${extractDecimal(swap?.localRes?.result?.data?.amount0)} `}</Label>
+            <Label fontFamily="bold">{extractDecimal(swap?.localRes?.result?.data?.amount0)}</Label>
           </Row>
-          <Label fontFamily="bold">{` ${showTicker(token0)}`}</Label>
+          <Label fontFamily="bold">{showTicker(token0)}</Label>
         </Row>
         <Row className="fs">
-          <Label fontFamily="bold">Remove</Label>
+          <Label fontFamily="bold">{label}</Label>
         </Row>
         <Row className="sb">
           <Row className="fs">
             {getTokenIcon(token1)}
-
-            <Label fontFamily="bold">{`${extractDecimal(swap?.localRes?.result?.data?.amount1)} `}</Label>
+            <Label fontFamily="bold">{extractDecimal(swap?.localRes?.result?.data?.amount1)}</Label>
           </Row>
-          <Label fontFamily="bold">{` ${showTicker(token1)}`}</Label>
-        </Row>
-      </SuccesViewContainer>
-    );
-  };
-
-  const successAddView = () => {
-    return (
-      <SuccesViewContainer
-        swap={swap}
-        loading={loading}
-        onClick={async () => {
-          setLoading(true);
-          if (view === LIQUIDITY_VIEW.ADD_LIQUIDITY) {
-            swap.swapSend();
-            onClose();
-          } else {
-            await createTokenPair();
-            await swap.swapSend();
-            onClose();
-          }
-          setLoading(false);
-        }}
-      >
-        <Row className="fs">
-          <Label fontSize={13}>Add</Label>
-        </Row>
-        <Row className="sb">
-          <Row className="fs">
-            {getTokenIcon(token0)}
-            <Label fontFamily="bold">{`${extractDecimal(swap.localRes.result.data.amount0)}`}</Label>
-          </Row>
-          <Label fontFamily="bold">{` ${showTicker(token0)}`}</Label>
-        </Row>
-        <Row className="fs">
-          <Label fontSize={13}>Add</Label>
-        </Row>
-        <Row className="sb">
-          <Row className="fs">
-            {getTokenIcon(token1)}
-            <Label fontFamily="bold">{`${extractDecimal(swap.localRes.result.data.amount1)} `}</Label>
-          </Row>
-          <Label fontFamily="bold">{` ${showTicker(token1)}`}</Label>
+          <Label fontFamily="bold">{showTicker(token1)}</Label>
         </Row>
       </SuccesViewContainer>
     );
@@ -400,7 +354,7 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
   const localError = () => {
     return (
       <Content gameEditionView={gameEditionView}>
-        <Label fontFamily="bold" geCenter geColor="yellow">
+        <Label fontFamily="bold" geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
           Transaction Error!
         </Label>
         {!gameEditionView && <ErrorIcon style={{ width: '60px', height: ' 60px', margin: '16px 0' }} />}
@@ -427,15 +381,28 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
     );
   };
 
+  const onAddLiquidity = async () => {
+    setLoading(true);
+    if (view === LIQUIDITY_VIEW.ADD_LIQUIDITY) {
+      swap.swapSend();
+      onClose();
+    } else {
+      await createTokenPair();
+      await swap.swapSend();
+      onClose();
+    }
+    setLoading(false);
+  };
+
   const renderSwitch = () => {
     if (swap.localRes && swap.localRes.result && swap.localRes.result.status === 'success') {
       switch (view) {
         default:
           return () => {};
         case LIQUIDITY_VIEW.REMOVE_LIQUIDITY:
-          return gameEditionView ? successRemoveViewGE() : successRemoveView();
+          return gameEditionView ? successAddRemoveViewGE({ label: 'Remove' }) : successAddRemoveView({ label: 'Remove', onClick: sendTransaction });
         case LIQUIDITY_VIEW.ADD_LIQUIDITY:
-          return successAddView();
+          return gameEditionView ? successAddRemoveViewGE({ label: 'Add' }) : successAddRemoveView({ label: 'Add', onClick: onAddLiquidity });
         case undefined:
           return gameEditionView ? successViewGE() : successView();
       }
@@ -504,7 +471,7 @@ const SuccesViewContainer = ({ swap, onClick, loading, children }) => {
   const { gameEditionView } = useGameEditionContext();
   return (
     <Content gameEditionView={gameEditionView}>
-      <Label fontFamily="bold" geCenter geColor="yellow">
+      <Label fontFamily="bold" geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
         Preview Successful!
       </Label>
       {!gameEditionView && <SuccessfullIcon />}
@@ -531,7 +498,7 @@ const SuccesViewContainer = ({ swap, onClick, loading, children }) => {
   );
 };
 
-const SuccessViewGE = ({ leftItem, rightItem, infoItems }) => {
+const SuccessViewContainerGE = ({ leftItem, rightItem, infoItems }) => {
   const { gameEditionView } = useGameEditionContext();
   return (
     <PreviewContainer gameEditionView={gameEditionView}>

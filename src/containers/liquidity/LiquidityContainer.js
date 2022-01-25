@@ -176,6 +176,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
 
   useEffect(() => {
     if (showTxModal === false) {
+      console.log('here');
       setFromValues({
         coin: 'KDA',
         account: '',
@@ -356,28 +357,6 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
   }, [toValues.amount]);
 
   useEffect(() => {
-    if (wallet.walletSuccess) {
-      setFromValues({
-        coin: '',
-        account: null,
-        guard: null,
-        balance: null,
-        amount: '',
-        precision: 0,
-      });
-      setToValues({
-        coin: '',
-        account: null,
-        guard: null,
-        balance: null,
-        amount: '',
-        precision: 0,
-      });
-      wallet.setWalletSuccess(false);
-    }
-  }, [wallet.walletSuccess]);
-
-  useEffect(() => {
     if (!isNaN(pact.ratio)) {
       if (fromValues.amount !== '' && toValues.amount === '') {
         setToValues({
@@ -457,7 +436,6 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
         }
       } else {
         setShowReview(false);
-        console.log('param,', tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
         const res = await liquidity.addLiquidityWallet(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
         if (!res) {
           wallet.setIsWaitingForWalletAuth(true);
@@ -468,21 +446,6 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
           setSelectedView(LIQUIDITY_VIEW.ADD_LIQUIDITY);
           setShowTxModal(true);
         }
-        /* setShowTxModal(true) */
-        setFromValues({
-          account: null,
-          guard: null,
-          balance: null,
-          amount: '',
-          coin: '',
-        });
-        setToValues({
-          account: null,
-          guard: null,
-          balance: null,
-          amount: '',
-          coin: '',
-        });
       }
     }
   };
@@ -581,6 +544,12 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
     if (showTxModal) {
       if (gameEditionView) {
         openModal({
+          titleFontSize: 32,
+          containerStyle: { padding: 0 },
+          titleContainerStyle: {
+            padding: 16,
+            paddingBottom: 0,
+          },
           title: 'transaction details',
           closeModal: () => {
             setShowTxModal(false);

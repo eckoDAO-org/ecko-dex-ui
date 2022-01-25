@@ -248,7 +248,21 @@ const GameEditionContainer = ({ children }) => {
   return width < theme.mediaQueries.desktopPixel ? (
     <MobileMainContainer>
       <GameboyMobileContainer style={{ backgroundImage: `url(${gameboyMobile})` }}>
-        <DisplayContent>{children}</DisplayContent>
+        <DisplayContent>
+          {children}
+          {modalState.open && (
+            <GameEditionModalsContainer
+              hideOnClose={modalState.hideOnClose}
+              title={modalState.title}
+              titleFontSize={modalState.titleFontSize}
+              containerStyle={modalState.containerStyle}
+              titleContainerStyle={modalState.titleContainerStyle}
+              description={modalState.description}
+              content={modalState.content}
+              onClose={modalState.onClose}
+            />
+          )}
+        </DisplayContent>
         <div className="kaddex-logo">
           <KaddexLogo />
         </div>

@@ -67,6 +67,7 @@ const PoolContainer = () => {
           selectAddLiquidity={() => setSelectedView(LIQUIDITY_VIEW.ADD_LIQUIDITY)}
           selectRemoveLiquidity={() => setSelectedView(LIQUIDITY_VIEW.REMOVE_LIQUIDITY)}
           setTokenPair={(pair) => setPair(pair)}
+          pair={pair}
         />
       )}
       {selectedView === LIQUIDITY_VIEW.ADD_LIQUIDITY && (
