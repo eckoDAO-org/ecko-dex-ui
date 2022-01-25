@@ -22,10 +22,12 @@ const GameEditionLabel = ({ center, withShade, children, fontSize, fontWeight, c
         return '#ffffff';
       case 'yellow':
         return commonColors.gameEditionYellow;
-      case 'grey':
+      case 'white-grey':
         return commonColors.gameEditionWhiteGrey;
       case 'blue':
         return commonColors.gameEditionBlue;
+      case 'blue-grey':
+        return commonColors.gameEditionBlueGrey;
       case 'red':
         return commonColors.error;
       case 'green':
@@ -61,7 +63,7 @@ GameEditionLabel.propTypes = {
   fontSize: PropTypes.number,
   fontWeight: PropTypes.number,
   onClose: PropTypes.func,
-  color: PropTypes.oneOf(['white', 'yellow', 'blue', 'grey', 'green', 'black', 'red']),
+  color: PropTypes.oneOf(['white', 'white-grey', 'yellow', 'blue', 'blue-grey', 'green', 'black', 'red']),
 };
 
 GameEditionLabel.defaultProps = {

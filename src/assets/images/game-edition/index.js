@@ -1,10 +1,11 @@
+export { ReactComponent as ChainIcon } from './chain.svg';
+export { ReactComponent as ConnectWalletIcon } from './connect-wallet.svg';
+export { ReactComponent as GameModeIcon } from './game-mode.svg';
+export { ReactComponent as GeArrowIcon } from './ge-arrow.svg';
 export { ReactComponent as GeCancelButtonIcon } from './cancel-button.svg';
 export { ReactComponent as GeConfirmButtonIcon } from './confirm-button.svg';
 export { ReactComponent as GeRetryButtonIcon } from './retry-button.svg';
-export { ReactComponent as ConnectWalletIcon } from './connect-wallet.svg';
-export { ReactComponent as GameModeIcon } from './game-mode.svg';
 export { ReactComponent as HideWiresIcon } from './hide-wires.svg';
-export { ReactComponent as GeArrowIcon } from './ge-arrow.svg';
 export { ReactComponent as KaddexLoadingIcon } from './kaddex-loading.svg';
 export { ReactComponent as LogoChainweaverIcon } from './logo-chainweaver.svg';
 export { ReactComponent as LogoTorusIcon } from './logo-torus.svg';

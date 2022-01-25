@@ -121,6 +121,7 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
             geBasic
             geColor={geColor}
             onClick={onClick}
+            geFontSize={29}
             buttonStyle={{
               padding: 0,
               marginRight: gameEditionView && 10,

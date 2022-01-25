@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components/macro';
-import PixledInfoBackground from '../../../assets/images/game-edition/pixeled-info-container.png';
+import pixeledInfoContainerBlue from '../../../assets/images/game-edition/pixeled-info-container-blue.png';
 
-export const PixeledInfoContainer = styled.div`
+export const PixeledInfoContainerBlue = styled.div`
   display: flex;
   ${({ gameEditionView }) =>
     gameEditionView &&
@@ -15,7 +15,7 @@ export const PixeledInfoContainer = styled.div`
       background-repeat: no-repeat;
       background-position: center;
       background-size: contain;
-      background-image: ${`url(${PixledInfoBackground})`};
+      background-image: ${`url(${pixeledInfoContainerBlue})`};
       span {
         text-align: center;
         display: block;
@@ -23,4 +23,4 @@ export const PixeledInfoContainer = styled.div`
     `}
 `;
 
-export default PixeledInfoContainer;
+export default PixeledInfoContainerBlue;

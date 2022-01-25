@@ -1,25 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useContext } from 'react';
 import styled, { css } from 'styled-components/macro';
-import { ArrowBack } from '../../assets';
+import { LightModeContext } from '../../contexts/LightModeContext';
+import { ModalContext } from '../../contexts/ModalContext';
+import { LiquidityContext } from '../../contexts/LiquidityContext';
+import { WalletContext } from '../../contexts/WalletContext';
 import TxView from '../../components/swap/swap-modals/TxView';
 import WalletRequestView from '../../components/swap/swap-modals/WalletRequestView';
-import { WalletContext } from '../../contexts/WalletContext';
 import CustomButton from '../../components/shared/CustomButton';
 import FormContainer from '../../components/shared/FormContainer';
 import Input from '../../components/shared/Input';
-import { PRECISION } from '../../constants/contextConstants';
 import tokenData from '../../constants/cryptoCurrencies';
-import { extractDecimal, limitDecimalPlaces, pairUnit, reduceBalance } from '../../utils/reduceBalance';
-import { theme } from '../../styles/theme';
-import { LiquidityContext } from '../../contexts/LiquidityContext';
-import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
 import GradientBorder from '../../components/shared/GradientBorder';
-import { LightModeContext } from '../../contexts/LightModeContext';
-import { ModalContext } from '../../contexts/ModalContext';
 import Label from '../../components/shared/Label';
 import PressButtonToActionLabel from '../../components/game-edition-v2/components/PressButtonToActionLabel';
-import PixeledInfoContainer from '../../components/game-edition-v2/components/PixeledInfoContainer';
+import PixeledInfoContainerBlue from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
+import { PRECISION } from '../../constants/contextConstants';
+import { extractDecimal, limitDecimalPlaces, pairUnit, reduceBalance } from '../../utils/reduceBalance';
+import { ArrowBack } from '../../assets';
+import { theme } from '../../styles/theme';
+import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
 
 const Container = styled.div`
   display: flex;
@@ -101,7 +101,7 @@ const ResultContainer = styled.div`
   }
 `;
 
-const InnerRowContainer = styled(PixeledInfoContainer)`
+const InnerRowContainer = styled(PixeledInfoContainerBlue)`
   ${({ gameEditionView }) => {
     if (!gameEditionView) {
       return css`

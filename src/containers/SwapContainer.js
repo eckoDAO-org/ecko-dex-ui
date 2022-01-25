@@ -28,7 +28,7 @@ import GradientBorder from '../components/shared/GradientBorder';
 import BackgroundLogo from '../components/shared/BackgroundLogo';
 import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
 import Label from '../components/shared/Label';
-import PixeledInfoContainer from '../components/game-edition-v2/components/PixeledInfoContainer';
+import PixeledInfoContainer from '../components/game-edition-v2/components/PixeledInfoContainerBlue';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -458,8 +458,9 @@ const SwapContainer = () => {
     if (showTxModal) {
       if (gameEditionView) {
         openModal({
+          titleFontSize: 32,
           title: 'transaction details',
-          closeModal: () => {
+          onClose: () => {
             setShowTxModal(false);
             closeModal();
           },
@@ -525,6 +526,7 @@ const SwapContainer = () => {
             loading={loading}
             noLiquidity={noLiquidity}
             setShowTxModal={setShowTxModal}
+            showTxModal={showTxModal}
           />
         }
       >
