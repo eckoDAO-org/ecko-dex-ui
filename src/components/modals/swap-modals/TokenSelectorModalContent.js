@@ -48,10 +48,10 @@ const TokenItem = styled.div`
     font-size: ${({ gameEditionView }) => gameEditionView && '13px'};
   }
 `;
-const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, onCloseTokensList, fromToken, toToken }) => {
+const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, fromToken, toToken }) => {
   const [searchValue, setSearchValue] = useState('');
   const swap = useContext(SwapContext);
-  const { gameEditionView, showTokens } = useContext(GameEditionContext);
+  const { gameEditionView, showTokens, setOutsideToken, setShowTokens, onCloseTokensList } = useContext(GameEditionContext);
   const { themeMode } = useContext(LightModeContext);
 
   const [width] = useWindowSize();
@@ -60,9 +60,10 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, o
     return code.toLocaleLowerCase().includes(searchValue?.toLocaleLowerCase()) || c.name.toLowerCase().includes(searchValue?.toLowerCase());
   });
 
-  const onSelectToken = (crypto) => {
+  const onSelectToken = async (crypto) => {
     if (gameEditionView && showTokens) {
-      console.log('crypto', crypto);
+      await setOutsideToken((prev) => ({ ...prev, token: crypto }));
+      await setShowTokens(false);
     }
     if (tokenSelectorType === 'from' && fromToken === crypto.name) return;
     if (tokenSelectorType === 'to' && toToken === crypto.name) return;
@@ -89,7 +90,12 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, o
           onChange={(e, { value }) => setSearchValue(value)}
         />
         {gameEditionView && (
-          <CloseIcon onClick={() => onCloseTokensList()} style={{ margin: '10px 0px 0px 40px', width: 14, height: 14, cursor: 'pointer' }} />
+          <CloseIcon
+            onClick={() => {
+              onCloseTokensList();
+            }}
+            style={{ margin: '10px 0px 0px 40px', width: 14, height: 14, cursor: 'pointer' }}
+          />
         )}
       </div>
       {!gameEditionView && (
@@ -118,8 +124,8 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, o
                     style={{
                       cursor: fromToken === crypto.name || toToken === crypto.name ? 'default' : 'pointer',
                     }}
-                    onClick={() => {
-                      onSelectToken(crypto);
+                    onClick={async () => {
+                      await onSelectToken(crypto);
                     }}
                   >
                     {crypto.icon}

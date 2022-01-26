@@ -157,8 +157,7 @@ const GameEditionContainer = ({ children }) => {
   const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
   const { wallet, signingWallet, setSelectedWallet } = useWalletContext();
 
-  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens, setShowTokens } =
-    useContext(GameEditionContext);
+  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens } = useContext(GameEditionContext);
   const { account } = useAccountContext();
 
   const onConnectionSuccess = async (wallet) => {
@@ -302,7 +301,7 @@ const GameEditionContainer = ({ children }) => {
         </GameboyDesktopContainer>
         {showTokens && (
           <SearchTokenList>
-            <TokenSelectorModalContent onCloseTokensList={() => setShowTokens(false)} />
+            <TokenSelectorModalContent />
           </SearchTokenList>
         )}
       </div>

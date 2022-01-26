@@ -100,7 +100,7 @@ const SwapContainer = () => {
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const modalContext = useContext(ModalContext);
-  const { gameEditionView, openModal, closeModal, isSwapping, setIsSwapping } = useContext(GameEditionContext);
+  const { gameEditionView, openModal, closeModal, outsideToken } = useContext(GameEditionContext);
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
 
   const [selectedToken, setSelectedToken] = useState(null);
@@ -129,13 +129,6 @@ const SwapContainer = () => {
   const [noLiquidity, setNoLiquidity] = useState(false);
   const [priceImpact, setPriceImpact] = useState('');
   const [isLogoVisible, setIsLogoVisible] = useState(false);
-
-  useEffect(() => {
-    if (gameEditionView && isSwapping) {
-      swapValues();
-      setIsSwapping(false);
-    }
-  }, [isSwapping]);
 
   useEffect(() => {
     if (!isNaN(fromValues.amount)) {
@@ -388,6 +381,21 @@ const SwapContainer = () => {
     if (tokenSelectorType === 'to') return setSelectedToken(toValues.coin);
     return setSelectedToken(null);
   }, [tokenSelectorType]);
+
+  // to handle token for game edition from token list
+  useEffect(() => {
+    if (outsideToken?.token && gameEditionView) {
+      if (outsideToken?.tokenSelectorType === 'from' && fromValues.coin === outsideToken?.token.name) return;
+      if (outsideToken?.tokenSelectorType === 'to' && toValues?.coin === outsideToken?.token.name) return;
+      if (
+        (outsideToken.tokenSelectorType === 'from' && fromValues.coin !== outsideToken?.token.name) ||
+        (outsideToken.tokenSelectorType === 'to' && toValues?.coin !== outsideToken?.token.name)
+      ) {
+        onTokenClick({ crypto: outsideToken?.token });
+        closeModal();
+      }
+    }
+  }, [outsideToken, gameEditionView]);
 
   useEffect(() => {
     if (tokenSelectorType !== null) {
