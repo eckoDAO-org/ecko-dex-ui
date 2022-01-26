@@ -1,12 +1,11 @@
-import React, { useState, useContext, useEffect, useRef } from 'react';
-import styled, { css } from 'styled-components/macro';
+import React, { useState, useContext, useEffect } from 'react';
+import styled from 'styled-components/macro';
+import { useGameEditionContext } from '../../contexts';
 import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
-
-import menuItems, { POOL, STATS, SWAP } from '../menuItems';
+import menuItems from '../menuItems';
 import GameEditionLabel from './components/GameEditionLabel';
 import { PixeledArrowDownIcon } from '../../assets';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useGameEditionContext } from '../../contexts';
 
 const SCROLL_OFFSET = 95;
 
@@ -52,7 +51,7 @@ const Item = styled.div`
   justify-content: center;
 `;
 
-const GameEditionSwitchPageModal = ({ direction }) => {
+const GameEditionL1R1PageModal = ({ direction }) => {
   const location = useLocation();
   const history = useHistory();
   const { closeModal } = useGameEditionContext();
@@ -202,4 +201,4 @@ const GameEditionSwitchPageModal = ({ direction }) => {
   );
 };
 
-export default GameEditionSwitchPageModal;
+export default GameEditionL1R1PageModal;

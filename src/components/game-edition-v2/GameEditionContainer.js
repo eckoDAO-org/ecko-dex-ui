@@ -258,6 +258,7 @@ const GameEditionContainer = ({ children }) => {
               containerStyle={modalState.containerStyle}
               titleContainerStyle={modalState.titleContainerStyle}
               description={modalState.description}
+              type={modalState.type}
               content={modalState.content}
               onClose={modalState.onClose}
             />
@@ -289,6 +290,7 @@ const GameEditionContainer = ({ children }) => {
                 containerStyle={modalState.containerStyle}
                 titleContainerStyle={modalState.titleContainerStyle}
                 description={modalState.description}
+                type={modalState.type}
                 content={modalState.content}
                 onClose={modalState.onClose}
               />

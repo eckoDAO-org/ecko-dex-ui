@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
 import { Divider } from 'semantic-ui-react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { LightModeContext } from '../../contexts/LightModeContext';
 import { PactContext } from '../../contexts/PactContext';
@@ -12,21 +12,33 @@ import { PartialScrollableScrollSection } from '../layout/Containers';
 import StatsCard from './StatsCard';
 
 export const CardContainer = styled.div`
-  position: ${({ gameEditionView }) => !gameEditionView && `relative`};
   display: flex;
   flex-flow: column;
   align-items: center;
-  padding: ${({ gameEditionView }) => (gameEditionView ? `24px` : `32px `)};
   width: 100%;
   max-width: 1110px;
   margin-left: auto;
   margin-right: auto;
-  border-radius: ${({ gameEditionView }) => !gameEditionView && `10px`};
 
   opacity: 1;
-  background: ${({ gameEditionView, theme: { backgroundContainer } }) => (gameEditionView ? `transparent` : backgroundContainer)}; // or add new style
-  backdrop-filter: ${({ gameEditionView }) => !gameEditionView && `blur(50px)`};
-  border: ${({ gameEditionView, theme: { colors } }) => gameEditionView && `2px dashed #ffffff`};
+
+  ${({ gameEditionView, theme: { backgroundContainer } }) => {
+    if (gameEditionView) {
+      return css`
+        background-color: #ffffff0d;
+        border: 2px dashed #fff;
+        padding: 24px;
+      `;
+    } else {
+      return css`
+        backdrop-filter: blur(50px);
+        background-color: ${backgroundContainer};
+        border-radius: 10px;
+        padding: 32px;
+        position: relative;
+      `;
+    }
+  }}
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     padding: ${({ gameEditionView }) => gameEditionView && `12px`};

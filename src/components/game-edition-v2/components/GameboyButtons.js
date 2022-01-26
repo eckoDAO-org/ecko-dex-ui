@@ -14,17 +14,18 @@ import LeftButton from '../../../assets/images/game-edition/pressed-buttons/Cros
 import AButton from '../../../assets/images/game-edition/pressed-buttons/A-BTN.png';
 import BButton from '../../../assets/images/game-edition/pressed-buttons/B-BTN.png';
 import { useGameEditionContext } from '../../../contexts';
-import GameEditionSwitchPageModal from '../GameEditionSwitchPageModal';
+import GameEditionL1R1PageModal from '../GameEditionL1R1PageModal';
 
 const GameboyButtons = () => {
   const history = useHistory();
   const location = useLocation();
   const { buttons, openModal, closeModal } = useGameEditionContext();
 
-  const openGameEditionSwitchPage = (buttonKey) => {
+  const openGameEditionL1R1Page = (buttonKey) => {
     return openModal({
       title: null,
-      content: <GameEditionSwitchPageModal direction={buttonKey === 'L1' ? 'left' : 'right'} />,
+      type: 'arcade',
+      content: <GameEditionL1R1PageModal direction={buttonKey === 'L1' ? 'left' : 'right'} />,
       hideOnClose: true,
     });
   };
@@ -34,7 +35,7 @@ const GameboyButtons = () => {
       return null;
     }
     console.log('buttons[buttonKey]', buttons[buttonKey]);
-    return buttons[buttonKey] ? buttons[buttonKey]() : openGameEditionSwitchPage(buttonKey);
+    return buttons[buttonKey] ? buttons[buttonKey]() : openGameEditionL1R1Page(buttonKey);
   };
   return (
     <>

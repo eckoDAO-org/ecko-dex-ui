@@ -176,7 +176,6 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
 
   useEffect(() => {
     if (showTxModal === false) {
-      console.log('here');
       setFromValues({
         coin: 'KDA',
         account: '',
@@ -492,7 +491,9 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
   const handleTokenSelectorType = () => {
     if (gameEditionView) {
       openModal({
+        titleFontSize: 32,
         title: 'Select a Token',
+        type: 'arcade-dark',
         closeModal: () => {
           setTokenSelectorType(null);
           closeModal();
@@ -642,7 +643,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
       {!gameEditionView && isLogoVisible && <BackgroundLogo />}
 
       <TitleContainer gameEditionView={gameEditionView}>
-        <Label fontSize={32} geCenter fontFamily="bold" geFontSize={52} geLabelStyle={{ lineHeight: '32px' }} onClose={() => closeLiquidity()}>
+        <Label fontSize={32} geCenter fontFamily="bold" geFontSize={32} geLabelStyle={{ lineHeight: '32px' }} onClose={() => closeLiquidity()}>
           {!gameEditionView && (
             <ArrowBack
               style={{

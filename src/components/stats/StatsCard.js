@@ -44,17 +44,19 @@ const StatsCard = ({ pair }) => {
   return gameEditionView ? (
     <CustomGrid>
       <Label geFontSize={20} geLabelStyle={{ textAlign: 'start' }}>
-        Name
+        Pair
       </Label>
-      <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block' }}>{`${pair.token0}/${pair.token1}`}</Label>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block' }}>
+        {pair.token0}/{pair.token1}
+      </Label>
       <Label geFontSize={20} geLabelStyle={{ textAlign: 'start' }}>
-        token0
+        {pair.token0}
       </Label>
       <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block' }}>
         {reduceBalance(pair.reserves[0])}
       </Label>
       <Label geFontSize={20} geLabelStyle={{ textAlign: 'start' }}>
-        token1
+        {pair.token1}
       </Label>
       <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block' }}>
         {reduceBalance(pair.reserves[1])}
@@ -62,9 +64,9 @@ const StatsCard = ({ pair }) => {
       <Label geFontSize={20} geLabelStyle={{ textAlign: 'start' }}>
         Rate
       </Label>
-      <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block' }}>{`${reduceBalance(
-        extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1])
-      )} ${pair.token0}/${pair.token1}`}</Label>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block' }}>
+        {reduceBalance(extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1]))} {pair.token0}/{pair.token1}
+      </Label>
     </CustomGrid>
   ) : (
     <StatsCardContainer>

@@ -16,7 +16,7 @@ const Container = styled.div`
       return css`
         background-color: transparent;
         border: ${withBorder && '2px dashed #ffffff'};
-        padding: 8px 14px 0px 30px;
+        padding: 12px 14px 0px 30px;
         .ui.input {
           align-items: center;
         }
@@ -25,20 +25,20 @@ const Container = styled.div`
           padding: 0px;
           font-family: ${outGameEditionView ? fontFamily.regular : fontFamily.pixeboy};
           color: ${geColor ? geColor : outGameEditionView ? colors.white : colors.black} !important;
-          font-size: 34px;
+          font-size: 26px;
         }
 
         input::placeholder {
           color: ${geColor ? geColor : `${colors.black}99`} !important;
           text-transform: capitalize;
           font-family: ${outGameEditionView ? fontFamily.regular : fontFamily.pixeboy};
-          font-size: 34px;
+          font-size: 26px;
         }
         .ui.labeled.input > .label:not(.corner) {
           font-family: ${fontFamily.pixeboy};
           border: none;
           color: #ffffff !important;
-          font-size: 34px;
+          font-size: 26px;
           padding: 0px;
         }
       `;

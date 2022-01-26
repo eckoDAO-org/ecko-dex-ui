@@ -18,6 +18,7 @@ import browserDetection from '../../utils/browserDetection';
 import useWindowSize from '../../hooks/useWindowSize';
 import LogoLoader from '../../components/shared/LogoLoader';
 import Label from '../../components/shared/Label';
+import PressButtonToActionLabel from '../../components/game-edition-v2/components/PressButtonToActionLabel';
 
 const Container = styled.div`
   display: flex;
@@ -29,7 +30,6 @@ const Container = styled.div`
       return css`
         padding: 0 16px;
         width: 100%;
-        justify-content: space-between;
       `;
     } else {
       return css`
@@ -54,7 +54,7 @@ const LiquidityList = (props) => {
   const modalContext = useContext(ModalContext);
   const liquidity = useContext(LiquidityContext);
   const { account } = useContext(AccountContext);
-  const { gameEditionView, setShowWires } = useContext(GameEditionContext);
+  const { gameEditionView, setShowWires, setButtons, openModal } = useContext(GameEditionContext);
   const { themeMode } = useContext(LightModeContext);
   const [activeIndex, setActiveIndex] = useState(null);
   const [accordionHeight, setAccordionHeight] = useState(null);
@@ -72,41 +72,66 @@ const LiquidityList = (props) => {
 
   const [width] = useWindowSize();
 
+  useEffect(() => {
+    console.log('Here');
+    setButtons({
+      B: () => {
+        openModal({
+          title: 'Details',
+          content: (
+            <>
+              <Label geFontSize={20} geColor={'yellow'} geCenter geLabelStyle={{ marginBottom: '14px' }}>
+                Liquidity provider rewards
+              </Label>
+              <Label geFontSize={18} geColor={'blue'} geCenter geLabelStyle={{ padding: '0px 10px' }}>
+                Liquidity providers earn a 0.3% fee on all trades proportional to their share of the pool.
+                <br />
+                Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.
+              </Label>
+            </>
+          ),
+        });
+      },
+    });
+  }, []);
   return (
     <Container $gameEditionView={gameEditionView}>
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        {gameEditionView && (
-          <Label geFontSize={52} geCenter geLabelStyle={{ textTransform: 'uppercase' }}>
-            Pool
+      {gameEditionView && (
+        <Label geFontSize={52} geCenter geLabelStyle={{ textTransform: 'uppercase' }}>
+          Pool
+        </Label>
+      )}
+      {!gameEditionView && (
+        <>
+          <Label
+            fontSize={24}
+            geFontSize={20}
+            geColor={'yellow'}
+            geCenter
+            geLabelStyle={{ marginBottom: '14px' }}
+            labelStyle={{ marginBottom: '14px' }}
+            fontFamily="bold"
+          >
+            Liquidity provider rewards
           </Label>
-        )}
+          <Label fontSize={16} geFontSize={18} geColor={'blue'} geCenter geLabelStyle={{ padding: '0px 10px' }}>
+            Liquidity providers earn a 0.3% fee on all trades proportional to their share of the pool.
+            <br />
+            Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.
+          </Label>
+        </>
+      )}
 
-        <Label
-          fontSize={24}
-          geFontSize={20}
-          geColor={'yellow'}
-          geCenter
-          geLabelStyle={{ marginBottom: '14px' }}
-          labelStyle={{ marginBottom: '14px' }}
-          fontFamily="bold"
-        >
-          Liquidity provider rewards
-        </Label>
-        <Label fontSize={16} geFontSize={18} geColor={'blue'} geCenter geLabelStyle={{ padding: '0px 10px' }}>
-          Liquidity providers earn a 0.3% fee on all trades proportional to their share of the pool.
-          <br />
-          Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.
-        </Label>
-      </div>
       {account.account !== null ? (
         <BottomContainer $gameEditionView={gameEditionView}>
           <Label
             fontSize={32}
-            geFontSize={20}
+            geFontSize={26}
             geCenter
-            geLabelStyle={{ margin: '10px 0px' }}
+            geLabelStyle={{ marginBottom: 20 }}
             labelStyle={{ margin: '30px 0px 14px' }}
             fontFamily="bold"
+            geColor="yellow"
           >
             Your Liquidity
           </Label>
@@ -128,16 +153,24 @@ const LiquidityList = (props) => {
             >
               Create a pair
             </CustomButton>
-            <CustomButton type="secondary" onClick={() => props.selectAddLiquidity()}>
+            <CustomButton type="secondary" background="#ffffff2b" onClick={() => props.selectAddLiquidity()}>
               Add Liquidity
             </CustomButton>
           </Button.Group>
+
+          {gameEditionView && <PressButtonToActionLabel actionLabel="for more info" />}
+
           {account.account !== null &&
             (liquidity.pairListAccount[0] ? (
               liquidity.pairListAccount[0]?.balance && (
                 <FormContainer
                   $gameEditionView={gameEditionView}
-                  containerStyle={{ padding: gameEditionView && 16, marginBottom: gameEditionView && 16, minHeight: accordionHeight }}
+                  containerStyle={{
+                    padding: gameEditionView && 16,
+                    margin: gameEditionView && '16px 0',
+                    minHeight: accordionHeight,
+                    backgroundColor: gameEditionView && '#ffffff0d',
+                  }}
                   withGameEditionBorder
                 >
                   {!gameEditionView && <GradientBorder />}

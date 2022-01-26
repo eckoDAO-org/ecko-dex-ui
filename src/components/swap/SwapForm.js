@@ -64,13 +64,6 @@ const SecondInputContainer = styled.div`
   }}
 `;
 
-const PixeledCircleArrowContainer = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -41%);
-`;
-
 const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, toNote, setTokenSelectorType, setInputSide, swapValues }) => {
   const { gameEditionView } = useContext(GameEditionContext);
   const [rotation, setRotation] = useState(0);
@@ -121,13 +114,12 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
         </FirstInputContainer>
       </div>
       {gameEditionView ? (
-        <PixeledCircleArrowContainer>
-          <PixeledCircleArrowIcon
-            onClick={() => {
-              swapValues();
-            }}
-          />
-        </PixeledCircleArrowContainer>
+        <PixeledCircleArrowIcon
+          style={{ width: 50, position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -41%)' }}
+          onClick={() => {
+            swapValues();
+          }}
+        />
       ) : (
         <Divider horizontal style={{ zIndex: 1 }}>
           <SwapIcon
