@@ -12,7 +12,7 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 import browserDetection from '../../utils/browserDetection';
 import centerBackground from '../../assets/images/game-edition/center-background.png';
 import useWindowSize from '../../hooks/useWindowSize';
-import theme, { commonTheme } from '../../styles/theme';
+import { commonTheme } from '../../styles/theme';
 
 const MainContainer = styled.div`
   display: flex;
@@ -65,8 +65,7 @@ const Layout = ({ children }) => {
   }, [game.gameEditionView]);
 
   const [width, height] = useWindowSize();
-  console.log('width', width);
-  console.log('height', height);
+
   return (
     <MainContainer>
       {/* <CustomParticles /> */}

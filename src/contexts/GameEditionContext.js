@@ -25,9 +25,8 @@ export const GameEditionProvider = (props) => {
     Right: null,
     Left: null,
   });
-  const [gameEditionView, setGameEditionView] = useState(false);
+  const [gameEditionView, setGameEditionView] = useState(true);
   const [modalState, setModalState] = useState(initialModalState);
-  const [isSwapping, setIsSwapping] = useState(false);
 
   // loading bar
   const [loadingValue, setLoadingValue] = useState(1);
@@ -79,8 +78,7 @@ export const GameEditionProvider = (props) => {
         setModalState,
         openModal,
         closeModal,
-        isSwapping,
-        setIsSwapping,
+
         loadingValue,
         showWires,
         setShowWires,

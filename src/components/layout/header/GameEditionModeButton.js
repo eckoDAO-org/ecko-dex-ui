@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components/macro';
-import { GameModeIcon, ObliqueStrokeIcon } from '../../../assets';
+import { GameModeIcon } from '../../../assets';
 import { useGameEditionContext } from '../../../contexts';
 import useWindowSize from '../../../hooks/useWindowSize';
 import { commonTheme } from '../../../styles/theme';
@@ -51,12 +51,12 @@ const GameEditionModeButton = () => {
   const { gameEditionView, closeModal, setGameEditionView } = useGameEditionContext();
   const [width, height] = useWindowSize();
 
-  useEffect(() => {
-    if (width < commonTheme.mediaQueries.desktopPixel || height < commonTheme.mediaQueries.gameEditionDesktopHeightPixel) {
-      setGameEditionView(false);
-      closeModal();
-    }
-  }, [width, height]);
+  // useEffect(() => {
+  //   if (width < commonTheme.mediaQueries.desktopPixel || height < commonTheme.mediaQueries.gameEditionDesktopHeightPixel) {
+  //     setGameEditionView(false);
+  //     closeModal();
+  //   }
+  // }, [width, height]);
   return (
     <Button
       gameEditionView={gameEditionView}

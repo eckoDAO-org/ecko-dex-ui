@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
-import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from '../../../router/routes';
+import { useGameEditionContext } from '../../../contexts';
 import menuButton from '../../../assets/images/game-edition/pressed-buttons/Menu.png';
 import swapButton from '../../../assets/images/game-edition/pressed-buttons/Menu.png';
 import L1Button from '../../../assets/images/game-edition/pressed-buttons/L1.png';
@@ -13,8 +13,8 @@ import DownButton from '../../../assets/images/game-edition/pressed-buttons/Cros
 import LeftButton from '../../../assets/images/game-edition/pressed-buttons/Cross-Left.png';
 import AButton from '../../../assets/images/game-edition/pressed-buttons/A-BTN.png';
 import BButton from '../../../assets/images/game-edition/pressed-buttons/B-BTN.png';
-import { useGameEditionContext } from '../../../contexts';
 import GameEditionL1R1PageModal from '../GameEditionL1R1PageModal';
+import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from '../../../router/routes';
 
 const GameboyButtons = () => {
   const history = useHistory();
@@ -34,7 +34,6 @@ const GameboyButtons = () => {
     if (location.pathname === ROUTE_GAME_START_ANIMATION) {
       return null;
     }
-    console.log('buttons[buttonKey]', buttons[buttonKey]);
     return buttons[buttonKey] ? buttons[buttonKey]() : openGameEditionL1R1Page(buttonKey);
   };
   return (
