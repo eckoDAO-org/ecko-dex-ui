@@ -4,9 +4,10 @@ import styled, { css } from 'styled-components/macro';
 import { LightModeContext } from '../../contexts/LightModeContext';
 import { ModalContext } from '../../contexts/ModalContext';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { WalletContext } from '../../contexts/WalletContext';
-import TxView from '../../components/swap/swap-modals/TxView';
-import WalletRequestView from '../../components/swap/swap-modals/WalletRequestView';
+import TxView from '../../components/modals/swap-modals/TxView';
+import WalletRequestView from '../../components/modals/swap-modals/WalletRequestView';
 import CustomButton from '../../components/shared/CustomButton';
 import FormContainer from '../../components/shared/FormContainer';
 import Input from '../../components/shared/Input';
@@ -14,12 +15,11 @@ import tokenData from '../../constants/cryptoCurrencies';
 import GradientBorder from '../../components/shared/GradientBorder';
 import Label from '../../components/shared/Label';
 import PressButtonToActionLabel from '../../components/game-edition-v2/components/PressButtonToActionLabel';
-import PixeledInfoContainerBlue, { InfoContainer } from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
+import { InfoContainer } from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
 import { PRECISION } from '../../constants/contextConstants';
 import { extractDecimal, limitDecimalPlaces, pairUnit, reduceBalance } from '../../utils/reduceBalance';
 import { ArrowBack } from '../../assets';
 import { theme } from '../../styles/theme';
-import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import PixeledBlueContainer from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
 
@@ -66,40 +66,6 @@ const ButtonContainer = styled.div`
     & > button {
       padding: 0px !important;
     }
-  }
-`;
-
-const ResultContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-flow: column;
-  width: 100%;
-
-  ${({ gameEditionView }) => {
-    if (gameEditionView) {
-      return css`
-        display: flex;
-        flex-flow: row;
-        justify-content: space-between;
-        padding-left: 16px;
-        margin-top: 24px;
-        width: ${GE_DESKTOP_CONFIGURATION.displayWidth}px;
-        overflow-x: auto;
-        overflow-y: hidden;
-        white-space: nowrap;
-        & > div:not(:last-child) {
-          margin-right: 15px;
-        }
-      `;
-    } else {
-      return css`
-        margin: 16px 0px;
-      `;
-    }
-  }}
-
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: column;
   }
 `;
 
@@ -164,7 +130,7 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
           paddingBottom: 0,
         },
         title: 'transaction details',
-        closeModal: () => {
+        onClose: () => {
           closeModal();
         },
         content: (

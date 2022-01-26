@@ -19,7 +19,7 @@ import { FadeIn } from '../shared/animations';
 import GameboyButtons from './components/GameboyButtons';
 import { useLocation } from 'react-router-dom';
 import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION } from '../../router/routes';
-import TokenSelectorModalContent from '../swap/swap-modals/TokenSelectorModalContent';
+import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
 
 const DesktopMainContainer = styled.div`
   display: flex;

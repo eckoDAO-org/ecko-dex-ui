@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled, { css } from 'styled-components/macro';
 import LiquidityContainer from './liquidity/LiquidityContainer';
 import LiquidityList from './liquidity/LiquidityList';
 import RemoveLiqContainer from './liquidity/RemoveLiqContainer';
-import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
 import { useGameEditionContext } from '../contexts';
 import useButtonScrollEvent from '../hooks/useButtonScrollEvent';
 import { LIQUIDITY_VIEW } from '../constants/liquidityView';
-import Label from '../components/shared/Label';
 
 const Container = styled.div`
   display: flex;
@@ -48,12 +46,10 @@ const Container = styled.div`
 `;
 
 const PoolContainer = () => {
-  const { gameEditionView, buttons } = useGameEditionContext();
+  const { gameEditionView } = useGameEditionContext();
   const [selectedView, setSelectedView] = useState(LIQUIDITY_VIEW.LIQUIDITY_LIST);
   const [pair, setPair] = useState(null);
   useButtonScrollEvent(gameEditionView && 'pool-scrolling-container');
-
-  console.log('buttons', buttons);
 
   return (
     <Container id="pool-scrolling-container" $gameEditionView={gameEditionView} selectedView={selectedView}>

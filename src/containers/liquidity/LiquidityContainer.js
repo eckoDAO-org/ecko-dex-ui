@@ -8,18 +8,18 @@ import { WalletContext } from '../../contexts/WalletContext';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { PactContext } from '../../contexts/PactContext';
 import { LightModeContext } from '../../contexts/LightModeContext';
-import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { reduceBalance, getCorrectBalance } from '../../utils/reduceBalance';
-import WalletRequestView from '../../components/swap/swap-modals/WalletRequestView';
+import WalletRequestView from '../../components/modals/swap-modals/WalletRequestView';
 import { ArrowBack, CogIcon } from '../../assets';
 import Label from '../../components/shared/Label';
 import CustomButton from '../../components/shared/CustomButton';
 import ReviewTxModal from '../../components/modals/liquidity/ReviewTxModal';
-import TxView from '../../components/swap/swap-modals/TxView';
+import TxView from '../../components/modals/swap-modals/TxView';
 import tokenData from '../../constants/cryptoCurrencies';
 import SwapForm from '../../components/swap/SwapForm';
-import TokenSelectorModalContent from '../../components/swap/swap-modals/TokenSelectorModalContent';
-import TokenSelectorModalContentGE from '../../components/swap/swap-modals/TokenSelectorModalContentGE';
+import TokenSelectorModalContent from '../../components/modals/swap-modals/TokenSelectorModalContent';
+import TokenSelectorModalContentGE from '../../components/modals/swap-modals/TokenSelectorModalContentGE';
 import FormContainer from '../../components/shared/FormContainer';
 import GradientBorder from '../../components/shared/GradientBorder';
 import HeaderItem from '../../components/shared/HeaderItem';
@@ -28,7 +28,7 @@ import SlippagePopupContent from '../../components/layout/header/SlippagePopupCo
 import BackgroundLogo from '../../components/shared/BackgroundLogo';
 import browserDetection from '../../utils/browserDetection';
 import { theme } from '../../styles/theme';
-import PixeledInfoContainerBlue, { InfoContainer } from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
+import { InfoContainer } from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import PressButtonToActionLabel from '../../components/game-edition-v2/components/PressButtonToActionLabel';
 import PixeledBlueContainer from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
@@ -70,42 +70,6 @@ const ButtonContainer = styled.div`
   width: 100%;
 `;
 
-const ResultContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 16px 0px 0px 0px;
-  flex-flow: column;
-  width: 100%;
-  padding: 0;
-
-  ${({ gameEditionView }) => {
-    if (gameEditionView) {
-      return css`
-        display: flex;
-        flex-flow: row;
-        justify-content: space-between;
-        margin: 10px 0px 0px;
-        padding: 0px 10px;
-        width: ${GE_DESKTOP_CONFIGURATION.displayWidth}px;
-        overflow-x: auto;
-        overflow-y: hidden;
-        white-space: nowrap;
-        & > div:not(:last-child) {
-          margin-right: 15px;
-        }
-      `;
-    }
-  }}
-
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    margin: ${({ gameEditionView }) => gameEditionView && `10px 0px 5px 0px`};
-    flex-flow: column;
-  }
-
-  & > *:not(:last-child) {
-    margin-bottom: ${({ gameEditionView }) => !gameEditionView && `10px`};
-  }
-`;
 const DesktopInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -494,7 +458,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
         titleFontSize: 32,
         title: 'Select a Token',
         type: 'arcade-dark',
-        closeModal: () => {
+        onClose: () => {
           setTokenSelectorType(null);
           closeModal();
         },
@@ -552,7 +516,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
             paddingBottom: 0,
           },
           title: 'transaction details',
-          closeModal: () => {
+          onClose: () => {
             setShowTxModal(false);
             closeModal();
           },
@@ -603,12 +567,18 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
     if (showReview) {
       if (gameEditionView) {
         openModal({
+          titleFontSize: 32,
+          containerStyle: { padding: 0 },
+          titleContainerStyle: {
+            padding: 16,
+            paddingBottom: 0,
+          },
           title: 'transaction details',
-          closeModal: () => {
+          onClose: () => {
             setShowReview(false);
             closeModal();
           },
-          content: <ReviewTxModal fromValues={fromValues} toValues={toValues} supply={supply} liquidityView={selectedView} />,
+          content: <ReviewTxModal fromValues={fromValues} toValues={toValues} supply={supply} />,
         });
       } else {
         modalContext.openModal({
@@ -618,7 +588,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
             setShowReview(false);
             modalContext.closeModal();
           },
-          content: <ReviewTxModal fromValues={fromValues} toValues={toValues} supply={supply} liquidityView={selectedView} />,
+          content: <ReviewTxModal fromValues={fromValues} toValues={toValues} supply={supply} />,
         });
       }
     }
@@ -627,14 +597,12 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
   useEffect(() => {
     setButtons({
       B: async () => {
-        console.log('onAdd');
-        if (buttonStatus().status) {
+        if (buttonStatus().status && !showReview && !showTxModal) {
           setShowReview(true);
         }
-        // await onRemoveLiquidity()
       },
     });
-  }, [buttonStatus().status]);
+  }, [buttonStatus().status, showReview, showTxModal]);
 
   return (
     <Container $gameEditionView={gameEditionView} onAnimationEnd={() => setIsLogoVisible(true)} className="scrollbar-none">

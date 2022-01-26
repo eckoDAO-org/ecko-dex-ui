@@ -7,7 +7,7 @@ import { SwapContext } from '../../../contexts/SwapContext';
 import CustomButton from '../../../components/shared/CustomButton';
 import Label from '../../shared/Label';
 import { LIQUIDITY_VIEW } from '../../../constants/liquidityView';
-import { SuccessAddRemoveView, SuccessAddRemoveViewGE } from './LiquidityTxView';
+import { SuccessAddRemoveView, SuccessAddRemoveViewGE } from '../../modals/liquidity/LiquidityTxView';
 import { SwapSuccessView, SwapSuccessViewGE } from './SwapSuccesTxView';
 import { commonColors } from '../../../styles/theme';
 

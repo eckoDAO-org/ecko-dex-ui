@@ -178,7 +178,7 @@ const LiquidityList = (props) => {
                     return (
                       pair &&
                       pair.balance && (
-                        <div id={`token-pair-${index}`}>
+                        <div key={index} id={`token-pair-${index}`}>
                           <TokenPair
                             key={pair.name}
                             pair={pair}
