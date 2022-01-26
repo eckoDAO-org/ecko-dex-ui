@@ -6,7 +6,7 @@ import browserDetection from '../../utils/browserDetection';
 import GradientContainer from './GradientContainer';
 
 const Popup = styled(SUIPopup)`
-  /* max-width: unset !important; */
+  max-width: ${browserDetection() === 'SAFARI' && 'unset !important'};
 `;
 
 const PopupContainer = styled(({ hideGradient, ...rest }) => <GradientContainer hideGradient={hideGradient} {...rest} />)`
