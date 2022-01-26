@@ -115,7 +115,7 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
       </div>
       {gameEditionView ? (
         <PixeledCircleArrowIcon
-          style={{ width: 50, position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -41%)' }}
+          style={{ width: 40, position: 'absolute', top: '47%', left: '50%', transform: 'translate(-47%, -41%)' }}
           onClick={() => {
             swapValues();
           }}

@@ -147,15 +147,15 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
           return () => {};
         case LIQUIDITY_VIEW.REMOVE_LIQUIDITY:
           return gameEditionView ? (
-            <SuccessAddRemoveViewGE token0={token0} token1={token1} swap={swap} label="Remove" />
+            <SuccessAddRemoveViewGE token0={token0} token1={token1} swap={swap} label="Remove Liquidity" onBPress={sendTransaction} />
           ) : (
-            <SuccessAddRemoveView token0={token0} token1={token1} swap={swap} label="Remove" loading={loading} onClick={sendTransaction} />
+            <SuccessAddRemoveView token0={token0} token1={token1} swap={swap} label="Remove Liquidity" loading={loading} onClick={sendTransaction} />
           );
         case LIQUIDITY_VIEW.ADD_LIQUIDITY:
           return gameEditionView ? (
-            <SuccessAddRemoveViewGE token0={token0} token1={token1} swap={swap} label="Add" />
+            <SuccessAddRemoveViewGE token0={token0} token1={token1} swap={swap} label="Add Liquidity" onBPress={onAddLiquidity} />
           ) : (
-            <SuccessAddRemoveView token0={token0} token1={token1} swap={swap} label="Add" loading={loading} onClick={onAddLiquidity} />
+            <SuccessAddRemoveView token0={token0} token1={token1} swap={swap} label="Add Liquidity" loading={loading} onClick={onAddLiquidity} />
           );
         case undefined:
           return gameEditionView ? (

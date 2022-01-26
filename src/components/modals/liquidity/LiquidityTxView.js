@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
 import { extractDecimal, gasUnit } from '../../../utils/reduceBalance';
 import { getTokenIcon, showTicker } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import Label from '../../shared/Label';
 import { Row, SuccessViewContainerGE, SuccesViewContainer } from '../../modals/swap-modals/common-result-components';
+import { useGameEditionContext } from '../../../contexts';
 
-export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label }) => {
+export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }) => {
+  const { setButtons } = useGameEditionContext();
+  useEffect(() => {
+    setButtons({ B: onBPress });
+  }, []);
+
   return (
     <SuccessViewContainerGE
       hideIcon

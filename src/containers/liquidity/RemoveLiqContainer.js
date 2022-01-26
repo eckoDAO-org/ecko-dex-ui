@@ -108,6 +108,18 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
   }, [amount]);
 
   useEffect(() => {
+    if (!isNaN(amount) && reduceBalance(amount) !== 0) {
+      setButtons({
+        B: () => {
+          onRemoveLiquidity();
+        },
+      });
+    } else {
+      setButtons({ B: null });
+    }
+  }, [amount, pooled, pooledToken0, pooledToken1]);
+
+  useEffect(() => {
     if (wallet.walletSuccess) {
       //?//
       setLoading(false);
@@ -192,15 +204,6 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
       }
     }
   };
-  useEffect(() => {
-    setButtons({
-      B: async () => {
-        if (!isNaN(amount) && reduceBalance(amount) !== 0) {
-          await onRemoveLiquidity();
-        }
-      },
-    });
-  }, [amount]);
 
   return (
     <Container $gameEditionView={gameEditionView}>

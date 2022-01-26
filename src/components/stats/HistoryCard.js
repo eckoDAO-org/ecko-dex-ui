@@ -72,25 +72,25 @@ const HistoryCard = ({ tx }) => {
         window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${tx?.requestKey}`, '_blank', 'noopener,noreferrer');
       }}
     >
-      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start', display: 'block' }}>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start', display: 'block' }} geColor="yellow">
         Swap Pair
       </Label>
       <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block', whiteSpace: 'nowrap' }}>
         {getInfoCoin(3)?.name}/{getInfoCoin(5)?.name}
       </Label>
-      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start', display: 'block' }}>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start', display: 'block' }} geColor="yellow">
         Date
       </Label>
       <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block', whiteSpace: 'nowrap' }}>
         {getDate(tx?.blockTime)}
       </Label>
-      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start', display: 'block' }}>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start', display: 'block' }} geColor="yellow">
         Request Key
       </Label>
       <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block', whiteSpace: 'nowrap' }}>
         {reduceToken(tx?.requestKey)}
       </Label>
-      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start', display: 'block' }}>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start', display: 'block' }} geColor="yellow">
         Amount
       </Label>
       <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block', whiteSpace: 'nowrap' }}>
