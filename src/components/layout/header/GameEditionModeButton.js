@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { GameModeIcon, ObliqueStrokeIcon } from '../../../assets';
 import { useGameEditionContext } from '../../../contexts';
@@ -47,27 +48,39 @@ const Button = styled.div`
 `;
 
 const GameEditionModeButton = () => {
-  const [width] = useWindowSize();
   const { gameEditionView, closeModal, setGameEditionView } = useGameEditionContext();
+  const [width, height] = useWindowSize();
+
+  useEffect(() => {
+    if (width < commonTheme.mediaQueries.desktopPixel || height < commonTheme.mediaQueries.gameEditionDesktopHeightPixel) {
+      setGameEditionView(false);
+      closeModal();
+    }
+  }, [width, height]);
   return (
     <Button
       gameEditionView={gameEditionView}
       onClick={() => {
-        setGameEditionView(!gameEditionView);
-        closeModal();
+        if (width >= commonTheme.mediaQueries.desktopPixel && height >= commonTheme.mediaQueries.gameEditionDesktopHeightPixel) {
+          setGameEditionView(!gameEditionView);
+          closeModal();
+        }
       }}
     >
-      {width >= commonTheme.mediaQueries.desktopPixel ? (
-        <>
-          {!gameEditionView && <GameModeIcon style={{ marginRight: 9.4 }} />}
-          <span style={{ fontFamily: commonTheme.fontFamily.bold, whiteSpace: 'nowrap' }}>{gameEditionView ? 'Exit Game Mode' : 'Game Mode'}</span>
-        </>
-      ) : (
-        <>
-          {gameEditionView && <ObliqueStrokeIcon style={{ position: 'absolute' }} />}
-          <GameModeIcon />
-        </>
-      )}
+      {
+        width >= commonTheme.mediaQueries.desktopPixel && height >= commonTheme.mediaQueries.gameEditionDesktopHeightPixel && (
+          <>
+            {!gameEditionView && <GameModeIcon style={{ marginRight: 9.4 }} />}
+            <span style={{ fontFamily: commonTheme.fontFamily.bold, whiteSpace: 'nowrap' }}>{gameEditionView ? 'Exit Game Mode' : 'Game Mode'}</span>
+          </>
+        )
+        // : (
+        //   <>
+        //     {gameEditionView && <ObliqueStrokeIcon style={{ position: 'absolute' }} />}
+        //     <GameModeIcon />
+        //   </>
+        // )
+      }
     </Button>
   );
 };
