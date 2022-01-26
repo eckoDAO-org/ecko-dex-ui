@@ -1,11 +1,25 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
+import PropTypes from 'prop-types';
 import { CloseGe } from '../../assets';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { FadeIn } from '../shared/animations';
 import modalBackground from '../../assets/images/game-edition/modal-background.png';
+import arcadeBackground from '../../assets/images/game-edition/arcade-background.png';
+import arcadeDarkBackground from '../../assets/images/game-edition/arcade-dark-background.png';
 import GameEditionLabel from './components/GameEditionLabel';
 import useButtonScrollEvent from '../../hooks/useButtonScrollEvent';
+
+const getBackground = (type) => {
+  switch (type) {
+    case 'arcade':
+      return arcadeBackground;
+    case 'arcade-dark':
+      return arcadeDarkBackground;
+    default:
+      return modalBackground;
+  }
+};
 
 const GEModalContainer = styled(FadeIn)`
   top: 0;
@@ -13,7 +27,7 @@ const GEModalContainer = styled(FadeIn)`
   width: 100%;
   height: 100%;
   border-radius: 19px;
-  background-image: url(${modalBackground});
+  background-image: ${({ type }) => `url(${getBackground(type)})`};
   position: absolute;
   display: flex;
   flex-flow: column;
@@ -56,12 +70,13 @@ const GameEditionModalsContainer = ({
   containerStyle,
   titleContainerStyle,
   titleFontSize = 52,
+  type,
 }) => {
   const { closeModal } = useContext(GameEditionContext);
 
   useButtonScrollEvent('game-edition-modal-container');
   return (
-    <GEModalContainer style={containerStyle} id="game-edition-modal-container">
+    <GEModalContainer type={type} style={containerStyle} id="game-edition-modal-container">
       <TitleContainer style={titleContainerStyle}>
         <GameEditionLabel fontSize={titleFontSize} style={{ textAlign: 'center', flex: 1, display: 'block' }}>
           {title}
@@ -85,3 +100,13 @@ const GameEditionModalsContainer = ({
 };
 
 export default GameEditionModalsContainer;
+
+GameEditionModalsContainer.propTypes = {
+  titleFontSize: PropTypes.number,
+  type: PropTypes.oneOf(['modal', 'arcade', 'arcade-dark']),
+};
+
+GameEditionModalsContainer.defaultProps = {
+  titleFontSize: 52,
+  type: 'modal',
+};

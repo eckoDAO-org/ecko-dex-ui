@@ -45,9 +45,8 @@ const RightContainer = styled.div`
 const AnimatedDiv = styled.div`
   display: flex;
   align-items: center;
-  margin-right: 25px;
   & > *:not(:last-child) {
-    margin-right: 25px;
+    margin-right: 24px;
   }
 `;
 

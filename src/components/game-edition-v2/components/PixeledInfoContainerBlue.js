@@ -1,6 +1,8 @@
+import React from 'react';
 import styled, { css } from 'styled-components/macro';
 import pixeledInfoContainerBlue from '../../../assets/images/game-edition/pixeled-info-container-blue.png';
 import { GE_DESKTOP_CONFIGURATION } from '../../../contexts/GameEditionContext';
+import Label from '../../shared/Label';
 
 export const InfoContainer = styled.div`
   overflow-x: auto;
@@ -23,8 +25,8 @@ export const PixeledInfoContainerBlue = styled.div`
     gameEditionView &&
     css`
       flex-flow: column;
-      min-width: 194px;
-      min-height: 82px;
+      min-width: 160px;
+      min-height: 68px;
       justify-content: center;
       text-align: center;
       align-items: center;
@@ -39,4 +41,15 @@ export const PixeledInfoContainerBlue = styled.div`
     `}
 `;
 
-export default PixeledInfoContainerBlue;
+const PixeledBlueContainer = ({ label, value }) => {
+  return (
+    <PixeledInfoContainerBlue gameEditionView>
+      <Label geFontSize={18} geColor="blue">
+        {label}
+      </Label>
+      <Label geFontSize={24}>{value}</Label>
+    </PixeledInfoContainerBlue>
+  );
+};
+
+export default PixeledBlueContainer;

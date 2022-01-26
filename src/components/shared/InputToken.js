@@ -8,12 +8,12 @@ import tokenData from '../../constants/cryptoCurrencies';
 import Label from './Label';
 
 const Container = styled.div`
-  ${({ $gameEditionView }) => {
+  ${({ $gameEditionView, coin }) => {
     if ($gameEditionView) {
       return css`
         position: absolute;
         right: 26px;
-        top: 4px;
+        top: ${({ coin }) => (coin ? 9 : 0)}px;
       `;
     }
   }}
@@ -52,29 +52,6 @@ const ElementsContainer = styled.div`
       fill: ${({ theme: { colors } }) => colors.white};
     }
   }
-  /* span {
-    font-size: 16px;
-    margin-right: 13px;
-    font: ${({ $gameEditionView, theme: { fontFamily } }) => {
-    if ($gameEditionView) return `normal normal normal 29px ${fontFamily.pixeboy}`;
-  }};
-    color: ${({ $gameEditionView, theme: { colors }, geColor }) => {
-    if ($gameEditionView && geColor) return geColor;
-    if ($gameEditionView) return colors.black;
-    return colors.white;
-  }};
-  } */
-
-  /* @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
-    span {
-      font-size: 16px;
-      margin-right: 13px;
-      font: ${({ $gameEditionView, theme: { fontFamily } }) => {
-    if ($gameEditionView) return `normal normal normal 13px ${fontFamily.pixeboy}`;
-  }};
-      color: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? colors.black : colors.white)};
-    }
-  } */
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
     img {
@@ -89,7 +66,7 @@ const ElementsContainer = styled.div`
 const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor }) => {
   const { gameEditionView } = useContext(GameEditionContext);
   return (
-    <Container $gameEditionView={gameEditionView} geColor={geColor}>
+    <Container $gameEditionView={gameEditionView} geColor={geColor} coin={values?.coin}>
       {values?.coin ? (
         <>
           {!gameEditionView && (
@@ -108,7 +85,7 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
           )}
           <ElementsContainer $gameEditionView={gameEditionView} geColor={geColor} onClick={onClick}>
             {tokenData[values.coin].icon}
-            <Label geFontSize={29} geColor={geColor}>
+            <Label geFontSize={24} geColor={geColor}>
               {tokenData[values.coin].name}
             </Label>
           </ElementsContainer>
@@ -121,7 +98,7 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
             geBasic
             geColor={geColor}
             onClick={onClick}
-            geFontSize={29}
+            geFontSize={24}
             buttonStyle={{
               padding: 0,
               marginRight: gameEditionView && 10,

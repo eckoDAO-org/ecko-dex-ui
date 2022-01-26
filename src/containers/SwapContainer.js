@@ -29,6 +29,7 @@ import BackgroundLogo from '../components/shared/BackgroundLogo';
 import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
 import Label from '../components/shared/Label';
 import PixeledInfoContainer from '../components/game-edition-v2/components/PixeledInfoContainerBlue';
+import PixeledBlueContainer from '../components/game-edition-v2/components/PixeledInfoContainerBlue';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -45,7 +46,8 @@ const Container = styled(FadeIn)`
   ${({ gameEditionView }) => {
     if (gameEditionView) {
       return css`
-        padding: 16px 0px;
+        padding-top: 24px;
+        padding-bottom: 16px;
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -86,20 +88,11 @@ const GameEditionTokenSelectorContainer = styled.div`
   text-align: center;
 `;
 
-const ResultContainer = styled(PixeledInfoContainer)`
-  ${({ gameEditionView }) => {
-    if (gameEditionView) {
-      return css`
-        margin: 14px 0;
-      `;
-    } else {
-      return css`
-        justify-content: space-between;
-        margin: 16px 0px;
-      `;
-    }
-  }}
+const ResultContainer = styled.div`
+  display: flex;
   width: 100%;
+  justify-content: space-between;
+  margin: 16px 0px;
 `;
 
 const SwapContainer = () => {
@@ -406,7 +399,9 @@ const SwapContainer = () => {
   const handleTokenSelectorType = () => {
     if (gameEditionView) {
       openModal({
+        titleFontSize: 32,
         title: 'Select a Token',
+        type: 'arcade-dark',
         onClose: () => {
           setTokenSelectorType(null);
         },
@@ -550,12 +545,18 @@ const SwapContainer = () => {
             <SwapResults priceImpact={priceImpact} fromValues={fromValues} toValues={toValues} />
           )
         ) : (
-          <ResultContainer gameEditionView={gameEditionView}>
-            <Label fontSize={13} geFontSize={20} geColor="blue">
-              Max slippage
-            </Label>
-            <Label fontSize={13} fontFamily="bold" geFontSize={28}>{`${pact.slippage * 100}%`}</Label>
-          </ResultContainer>
+          <>
+            {gameEditionView ? (
+              <PixeledBlueContainer label="Max Slippage" value={`${pact.slippage * 100}%`} />
+            ) : (
+              <ResultContainer gameEditionView={gameEditionView}>
+                <Label fontSize={13} geFontSize={20} geColor="blue">
+                  Max slippage
+                </Label>
+                <Label fontSize={13} fontFamily="bold" geFontSize={28}>{`${pact.slippage * 100}%`}</Label>
+              </ResultContainer>
+            )}
+          </>
         )}
       </FormContainer>
     </Container>

@@ -103,14 +103,16 @@ const AccountModal = () => {
 
   return (
     <AccountModalContainer>
-      <Label geFontSize={20} geColor="yellow" geLabelStyle={{ textAlign: 'center' }}>
+      <Label geFontSize={20} geColor="yellow" geLabelStyle={{ textAlign: 'center' }} labelStyle={{ marginTop: 16, width: '100%' }}>
         Connected with {wallet?.name}
       </Label>
 
       {account?.account && (
         <AccountIdContainer $gameEditionView={gameEditionView}>
           <RowContainer>
-            <Label geFontSize={20}>Account</Label>
+            <Label fontFamily="bold" geFontSize={20}>
+              Account
+            </Label>
 
             <RightContainer
               $gameEditionView={gameEditionView}
@@ -119,21 +121,25 @@ const AccountModal = () => {
               }
             >
               <ExplorerIcon />
-              <Label geFontSize={20}>View in Explorer</Label>
+              <Label fontFamily="bold" geFontSize={20}>
+                View in Explorer
+              </Label>
             </RightContainer>
           </RowContainer>
           <RowContainer>
-            <Label geFontSize={20}>{reduceToken(account.account)}</Label>
+            <Label fontFamily="bold" geFontSize={20}>
+              {reduceToken(account.account)}
+            </Label>
 
             <CopyPopup textToCopy={account.account} title="Copy Address" containerStyle={{ textAlign: 'right' }} />
           </RowContainer>
         </AccountIdContainer>
       )}
       <RowContainer>
-        <Label fontSize={13} geFontSize={24}>
+        <Label fontSize={14} geFontSize={24}>
           Balance
         </Label>
-        <Label fontSize={13} geFontSize={24}>
+        <Label fontFamily="bold" fontSize={14} geFontSize={24}>
           {account.balance}
         </Label>
       </RowContainer>

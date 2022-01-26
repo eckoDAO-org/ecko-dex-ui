@@ -73,15 +73,17 @@ const HistoryCard = ({ tx }) => {
       }}
     >
       <Label geFontSize={20} geLabelStyle={{ textAlign: 'start', display: 'block' }}>
-        Name
+        Swap Pair
       </Label>
-      <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block', whiteSpace: 'nowrap' }}>{`${getInfoCoin(3)?.name}-${
-        getInfoCoin(5)?.name
-      }`}</Label>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block', whiteSpace: 'nowrap' }}>
+        {getInfoCoin(3)?.name}/{getInfoCoin(5)?.name}
+      </Label>
       <Label geFontSize={20} geLabelStyle={{ textAlign: 'start', display: 'block' }}>
         Date
       </Label>
-      <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block', whiteSpace: 'nowrap' }}>{`${getDate(tx?.blockTime)}`}</Label>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block', whiteSpace: 'nowrap' }}>
+        {getDate(tx?.blockTime)}
+      </Label>
       <Label geFontSize={20} geLabelStyle={{ textAlign: 'start', display: 'block' }}>
         Request Key
       </Label>
@@ -91,9 +93,9 @@ const HistoryCard = ({ tx }) => {
       <Label geFontSize={20} geLabelStyle={{ textAlign: 'start', display: 'block' }}>
         Amount
       </Label>
-      <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block', whiteSpace: 'nowrap' }}>{`${tx?.params[2]} ${
-        getInfoCoin(3)?.name
-      }`}</Label>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block', whiteSpace: 'nowrap' }}>
+        {tx?.params[2]} {getInfoCoin(3)?.name}
+      </Label>
     </CustomGrid>
   ) : (
     <HistoryCardContainer

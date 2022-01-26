@@ -19,9 +19,9 @@ const Btn = styled.div`
     color: #ffffff;
   }
 `;
-const PressButtonToActionLabel = ({ button, actionLabel }) => {
+const PressButtonToActionLabel = ({ button, actionLabel, style }) => {
   return (
-    <GameEditionLabel color="yellow" fontSize={20}>
+    <GameEditionLabel color="yellow" fontSize={20} style={{ justifyContent: 'center', ...style }}>
       PRESS{' '}
       <Btn style={{ backgroundImage: `url(${emptyButton})` }}>
         <span className="button-label">{button}</span>

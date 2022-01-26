@@ -5,9 +5,9 @@ import StatsTab from '../components/stats/StatsTab';
 import HistoryTab from '../components/stats/HistoryTab';
 import styled, { css } from 'styled-components/macro';
 import { GameEditionContext } from '../contexts/GameEditionContext';
-import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
 import { TitleContainer } from '../components/layout/Containers';
 import Label from '../components/shared/Label';
+import modalBackground from '../assets/images/game-edition/modal-background.png';
 
 const Container = styled.div`
   display: flex;
@@ -25,7 +25,7 @@ const Container = styled.div`
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
-        background-image: ${`url(${ArcadeBackground})`};
+        background-image: ${`url(${modalBackground})`};
       `;
     }
   }}

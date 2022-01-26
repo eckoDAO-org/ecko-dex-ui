@@ -240,15 +240,13 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
   const successAddRemoveViewGE = ({ label }) => {
     return (
       <SuccessViewContainerGE
+        hideIcon
+        title={label}
         leftItem={
           <>
-            <Row className="fs">
-              <GameEditionLabel fontSize={32} color="black" fontFamily="bold">
-                {label}
-              </GameEditionLabel>
-            </Row>
-
-            <GameEditionLabel color="blue">{showTicker(token0)}</GameEditionLabel>
+            <GameEditionLabel fontSize={32} color="blue">
+              {showTicker(token0)}
+            </GameEditionLabel>
             <Row className="fs">
               {getTokenIcon(token0)}
               <GameEditionLabel fontSize={22} color="blue-grey">
@@ -259,12 +257,10 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
         }
         rightItem={
           <>
-            <Row className="fs">
-              <GameEditionLabel fontSize={32} color="black" fontFamily="bold">
-                {label}
-              </GameEditionLabel>
-            </Row>
-            <GameEditionLabel color="blue">{showTicker(token1)}</GameEditionLabel>
+            <GameEditionLabel fontSize={32} color="blue">
+              {showTicker(token1)}
+            </GameEditionLabel>
+
             <Row className="fs">
               {getTokenIcon(token1)}
               <GameEditionLabel fontSize={22} color="blue-grey">
@@ -498,15 +494,22 @@ const SuccesViewContainer = ({ swap, onClick, loading, children }) => {
   );
 };
 
-const SuccessViewContainerGE = ({ leftItem, rightItem, infoItems }) => {
+const SuccessViewContainerGE = ({ leftItem, rightItem, infoItems, hideIcon, title }) => {
   const { gameEditionView } = useGameEditionContext();
   return (
     <PreviewContainer gameEditionView={gameEditionView}>
+      {title && (
+        <GameEditionLabel center color="yellow" fontSize={24} style={{ marginBottom: 0 }}>
+          {title}
+        </GameEditionLabel>
+      )}
       <Row className="sb" style={{ position: 'relative', paddingLeft: 16, paddingRight: 16 }}>
         <PixeledInfoContainerWhite>{leftItem}</PixeledInfoContainerWhite>
-        <PixeledCircleArrowIcon
-          style={{ position: 'absolute', width: 51.5, height: 49, top: 'calc(50% - 20px)', left: '44%', transform: 'rotate(-90deg)' }}
-        />
+        {!hideIcon && (
+          <PixeledCircleArrowIcon
+            style={{ position: 'absolute', width: 51.5, height: 49, top: 'calc(50% - 20px)', left: '44%', transform: 'rotate(-90deg)' }}
+          />
+        )}
         <PixeledInfoContainerWhite>{rightItem}</PixeledInfoContainerWhite>
       </Row>
       <InfoContainer style={{ width: GE_DESKTOP_CONFIGURATION.displayWidth }}>

@@ -25,7 +25,8 @@ const useButtonScrollEvent = (elementId) => {
       if (!wheelScrolling) {
         elementContainer.scrollTo(0, scrollTo);
       }
-      setButtons({
+      setButtons((prev) => ({
+        ...prev,
         Down: () => {
           if (scrollTo + elementContainer.clientHeight < elementContainer.scrollHeight || scrollTo === 0) {
             setWheelScrolling(false);
@@ -38,7 +39,7 @@ const useButtonScrollEvent = (elementId) => {
             setScrollTo((prev) => prev - 20);
           }
         },
-      });
+      }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scrollTo, elementId]);

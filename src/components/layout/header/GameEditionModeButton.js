@@ -8,8 +8,10 @@ import { commonTheme } from '../../../styles/theme';
 const Button = styled.div`
   cursor: pointer;
   height: fit-content;
-  position: relative;
-
+  position: absolute;
+  width: 168px;
+  left: 50%;
+  transform: translate(-50%, 0);
   border-radius: 40px;
   display: flex;
   align-items: center;

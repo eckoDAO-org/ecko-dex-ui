@@ -230,7 +230,6 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
   useEffect(() => {
     setButtons({
       B: async () => {
-        console.log('onRemove');
         if (!isNaN(amount) && reduceBalance(amount) !== 0) {
           await onRemoveLiquidity();
         }
@@ -245,7 +244,7 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
         fontSize={32}
         geCenter
         fontFamily="bold"
-        geFontSize={44}
+        geFontSize={32}
         labelStyle={{ marginBottom: 14, whiteSpace: 'nowrap' }}
         geLabelStyle={{ lineHeight: '32px', marginBottom: 10 }}
         onClose={() => closeLiquidity()}

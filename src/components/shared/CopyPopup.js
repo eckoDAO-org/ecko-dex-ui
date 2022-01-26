@@ -25,12 +25,16 @@ const CopyPopup = ({ textToCopy, title, containerStyle }) => {
         >
           <Icon
             name="copy"
-            style={{ marginLeft: 8 }}
+            style={{ marginLeft: 8, color: gameEditionView && '#fff' }}
             onClick={() => {
               navigator.clipboard.writeText(textToCopy);
             }}
           />
-          {title && <Label geFontSize={20}>{title}</Label>}
+          {title && (
+            <Label fontFamily="bold" geFontSize={20}>
+              {title}
+            </Label>
+          )}
         </div>
       }
     >

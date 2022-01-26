@@ -5,6 +5,7 @@ import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import PixeledTokenSelectorBlueIcon from '../../../assets/images/game-edition/pixeled-token-selector-blue.svg';
 import PixeledTokenSelectorWhiteIcon from '../../../assets/images/game-edition/pixeled-token-selector-white.svg';
 import { PixeledArrowDownIcon, TreeDotsHorizontalIcon } from '../../../assets';
+import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 
 const Content = styled.div`
   display: flex;
@@ -40,6 +41,7 @@ const PixeledTokenSelectorContainer = styled.div`
     width: 45px !important;
     height: 45px !important;
     margin-right: 0px !important;
+    margin-bottom: 4px;
   }
   .tree-dots {
     path {
@@ -49,9 +51,11 @@ const PixeledTokenSelectorContainer = styled.div`
 `;
 
 const IconContainer = styled.div`
-  margin-bottom: 10px;
+  margin-bottom: 16px;
   .rotated {
     transform: rotate(180deg);
+    margin-top: 16px;
+    margin-bottom: 0px;
   }
   svg {
     width: 20px;
@@ -163,7 +167,9 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
               }}
             >
               <PixeledTokenSelectorContainer selected={selectedToken?.name === crypto.name}>{crypto.icon}</PixeledTokenSelectorContainer>
-              {crypto.name}
+              <GameEditionLabel fontSize={32} center color={selectedToken?.name === crypto.name ? 'yellow' : 'white'}>
+                {crypto.name}
+              </GameEditionLabel>
             </TokenItem>
           );
         })}
@@ -175,10 +181,13 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
             setShowTokens(true);
           }}
         >
-          <PixeledTokenSelectorContainer selected={selectedToken?.name === crypto.name}>
+          <PixeledTokenSelectorContainer selected={!selectedToken}>
             <TreeDotsHorizontalIcon className="tree-dots" />
           </PixeledTokenSelectorContainer>
-          MORE
+
+          <GameEditionLabel fontSize={32} center color={!selectedToken ? 'yellow' : 'white'}>
+            MORE
+          </GameEditionLabel>
         </TokenItem>
       </TokensContainer>
       <IconContainer>
