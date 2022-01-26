@@ -10,7 +10,7 @@ export const InfoContainer = styled.div`
   display: flex;
   align-items: center;
   width: ${GE_DESKTOP_CONFIGURATION.displayWidth}px;
-  padding-left: 16px;
+  padding: 0 16px;
   & > div:not(:last-child) {
     margin-right: 16px;
   }
@@ -41,9 +41,9 @@ export const PixeledInfoContainerBlue = styled.div`
     `}
 `;
 
-const PixeledBlueContainer = ({ label, value }) => {
+const PixeledBlueContainer = ({ label, value, style }) => {
   return (
-    <PixeledInfoContainerBlue gameEditionView>
+    <PixeledInfoContainerBlue gameEditionView style={style}>
       <Label geFontSize={18} geColor="blue">
         {label}
       </Label>

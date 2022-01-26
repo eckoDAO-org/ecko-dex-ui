@@ -4,9 +4,10 @@ import styled, { css } from 'styled-components/macro';
 import { LightModeContext } from '../../contexts/LightModeContext';
 import { ModalContext } from '../../contexts/ModalContext';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { WalletContext } from '../../contexts/WalletContext';
-import TxView from '../../components/swap/swap-modals/TxView';
-import WalletRequestView from '../../components/swap/swap-modals/WalletRequestView';
+import TxView from '../../components/modals/swap-modals/TxView';
+import WalletRequestView from '../../components/modals/swap-modals/WalletRequestView';
 import CustomButton from '../../components/shared/CustomButton';
 import FormContainer from '../../components/shared/FormContainer';
 import Input from '../../components/shared/Input';
@@ -14,13 +15,13 @@ import tokenData from '../../constants/cryptoCurrencies';
 import GradientBorder from '../../components/shared/GradientBorder';
 import Label from '../../components/shared/Label';
 import PressButtonToActionLabel from '../../components/game-edition-v2/components/PressButtonToActionLabel';
-import PixeledInfoContainerBlue from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
+import { InfoContainer } from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
 import { PRECISION } from '../../constants/contextConstants';
 import { extractDecimal, limitDecimalPlaces, pairUnit, reduceBalance } from '../../utils/reduceBalance';
 import { ArrowBack } from '../../assets';
 import { theme } from '../../styles/theme';
-import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
+import PixeledBlueContainer from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
 
 const Container = styled.div`
   display: flex;
@@ -68,55 +69,19 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const ResultContainer = styled.div`
+const DesktopInfoContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  flex-flow: column;
-  width: 100%;
-
-  ${({ gameEditionView }) => {
-    if (gameEditionView) {
-      return css`
-        display: flex;
-        flex-flow: row;
-        justify-content: space-between;
-        padding-left: 16px;
-        margin-top: 24px;
-        width: ${GE_DESKTOP_CONFIGURATION.displayWidth}px;
-        overflow-x: auto;
-        overflow-y: hidden;
-        white-space: nowrap;
-        & > div:not(:last-child) {
-          margin-right: 15px;
-        }
-      `;
-    } else {
-      return css`
-        margin: 16px 0px;
-      `;
-    }
-  }}
-
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: column;
+  flex-direction: column;
+  margin: 16px 0;
+  & > div:not(:last-child) {
+    margin-bottom: 10px;
   }
 `;
 
-const InnerRowContainer = styled(PixeledInfoContainerBlue)`
-  ${({ gameEditionView }) => {
-    if (!gameEditionView) {
-      return css`
-        justify-content: space-between;
-        flex-flow: row;
-        margin-top: 10px;
-      `;
-    }
-  }}
-
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    margin-bottom: 5px;
-    flex-flow: row;
-  }
+const InnerRowContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
@@ -143,6 +108,18 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
   }, [amount]);
 
   useEffect(() => {
+    if (!isNaN(amount) && reduceBalance(amount) !== 0) {
+      setButtons({
+        B: () => {
+          onRemoveLiquidity();
+        },
+      });
+    } else {
+      setButtons({ B: null });
+    }
+  }, [amount, pooled, pooledToken0, pooledToken1]);
+
+  useEffect(() => {
     if (wallet.walletSuccess) {
       //?//
       setLoading(false);
@@ -165,7 +142,7 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
           paddingBottom: 0,
         },
         title: 'transaction details',
-        closeModal: () => {
+        onClose: () => {
           closeModal();
         },
         content: (
@@ -227,15 +204,6 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
       }
     }
   };
-  useEffect(() => {
-    setButtons({
-      B: async () => {
-        if (!isNaN(amount) && reduceBalance(amount) !== 0) {
-          await onRemoveLiquidity();
-        }
-      },
-    });
-  }, [amount]);
 
   return (
     <Container $gameEditionView={gameEditionView}>
@@ -246,7 +214,7 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
         fontFamily="bold"
         geFontSize={32}
         labelStyle={{ marginBottom: 14, whiteSpace: 'nowrap' }}
-        geLabelStyle={{ lineHeight: '32px', marginBottom: 10 }}
+        geLabelStyle={{ lineHeight: '32px', marginBottom: 16 }}
         onClose={() => closeLiquidity()}
       >
         {!gameEditionView && (
@@ -338,32 +306,36 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
           </ButtonContainer>
         </SubContainer>
 
-        <ResultContainer gameEditionView={gameEditionView}>
-          <InnerRowContainer gameEditionView={gameEditionView}>
-            <Label fontSize={13} geFontSize={20} geColor="blue">
-              {token0} per {token1}
-            </Label>
-            <Label geFontSize={28} fontSize={13} fontFamily="bold">
-              {pairUnit(extractDecimal(pooled))}
-            </Label>
-          </InnerRowContainer>
-          <InnerRowContainer gameEditionView={gameEditionView}>
-            <Label fontSize={13} geFontSize={20} geColor="blue">
-              Pooled {token0}
-            </Label>
-            <Label geFontSize={28} fontSize={13} fontFamily="bold">
-              {pairUnit(extractDecimal(pooledToken0))}
-            </Label>
-          </InnerRowContainer>
-          <InnerRowContainer gameEditionView={gameEditionView}>
-            <Label fontSize={13} geFontSize={20} geColor="blue">
-              Pooled {token1}
-            </Label>
-            <Label geFontSize={28} fontSize={13} fontFamily="bold">
-              {pairUnit(extractDecimal(pooledToken1))}
-            </Label>
-          </InnerRowContainer>
-        </ResultContainer>
+        {gameEditionView ? (
+          <InfoContainer style={{ marginTop: 32 }}>
+            <PixeledBlueContainer label={`${token0}/${token1}`} value={pairUnit(extractDecimal(pooled))} />
+            <PixeledBlueContainer label={`Pooled ${token0}`} value={pairUnit(extractDecimal(pooledToken0))} />
+            <PixeledBlueContainer label={`Pooled ${token1}`} value={pairUnit(extractDecimal(pooledToken1))} />
+          </InfoContainer>
+        ) : (
+          <DesktopInfoContainer>
+            <InnerRowContainer>
+              <Label fontSize={13}>
+                {token0} per {token1}
+              </Label>
+              <Label fontSize={13} fontFamily="bold">
+                {pairUnit(extractDecimal(pooled))}
+              </Label>
+            </InnerRowContainer>
+            <InnerRowContainer>
+              <Label fontSize={13}>Pooled {token0}</Label>
+              <Label fontSize={13} fontFamily="bold">
+                {pairUnit(extractDecimal(pooledToken0))}
+              </Label>
+            </InnerRowContainer>
+            <InnerRowContainer>
+              <Label fontSize={13}>Pooled {token1}</Label>
+              <Label fontSize={13} fontFamily="bold">
+                {pairUnit(extractDecimal(pooledToken1))}
+              </Label>
+            </InnerRowContainer>
+          </DesktopInfoContainer>
+        )}
       </FormContainer>
     </Container>
   );

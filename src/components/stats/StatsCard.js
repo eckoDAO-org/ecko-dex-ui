@@ -43,25 +43,25 @@ const StatsCard = ({ pair }) => {
 
   return gameEditionView ? (
     <CustomGrid>
-      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start' }}>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start' }} geColor="yellow">
         Pair
       </Label>
       <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block' }}>
         {pair.token0}/{pair.token1}
       </Label>
-      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start' }}>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start' }} geColor="yellow">
         {pair.token0}
       </Label>
       <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block' }}>
         {reduceBalance(pair.reserves[0])}
       </Label>
-      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start' }}>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start' }} geColor="yellow">
         {pair.token1}
       </Label>
       <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block' }}>
         {reduceBalance(pair.reserves[1])}
       </Label>
-      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start' }}>
+      <Label geFontSize={20} geLabelStyle={{ textAlign: 'start' }} geColor="yellow">
         Rate
       </Label>
       <Label geFontSize={20} geLabelStyle={{ textAlign: 'end', display: 'block' }}>

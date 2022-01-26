@@ -73,7 +73,6 @@ const LiquidityList = (props) => {
   const [width] = useWindowSize();
 
   useEffect(() => {
-    console.log('Here');
     setButtons({
       B: () => {
         openModal({
@@ -158,11 +157,10 @@ const LiquidityList = (props) => {
             </CustomButton>
           </Button.Group>
 
-          {gameEditionView && <PressButtonToActionLabel actionLabel="for more info" />}
-
+          {gameEditionView && <PressButtonToActionLabel actionLabel="for more info" hideTo />}
           {account.account !== null &&
             (liquidity.pairListAccount[0] ? (
-              liquidity.pairListAccount[0]?.balance && (
+              liquidity.pairListAccount[0]?.balance ? (
                 <FormContainer
                   $gameEditionView={gameEditionView}
                   containerStyle={{
@@ -175,36 +173,37 @@ const LiquidityList = (props) => {
                 >
                   {!gameEditionView && <GradientBorder />}
                   {Object.values(liquidity.pairListAccount).map((pair, index) => {
-                    return (
-                      pair &&
-                      pair.balance && (
-                        <div id={`token-pair-${index}`}>
-                          <TokenPair
-                            key={pair.name}
-                            pair={pair}
-                            selectAddLiquidity={props.selectAddLiquidity}
-                            selectRemoveLiquidity={props.selectRemoveLiquidity}
-                            setTokenPair={props.setTokenPair}
-                            activeIndex={activeIndex}
-                            index={index}
-                            setActiveIndex={setActiveIndex}
+                    return pair && pair.balance ? (
+                      <div key={index} id={`token-pair-${index}`}>
+                        <TokenPair
+                          key={pair.name}
+                          pair={pair}
+                          selectAddLiquidity={props.selectAddLiquidity}
+                          selectRemoveLiquidity={props.selectRemoveLiquidity}
+                          setTokenPair={props.setTokenPair}
+                          activeIndex={activeIndex}
+                          index={index}
+                          setActiveIndex={setActiveIndex}
+                        />
+                        {Object.values(liquidity.pairListAccount).length - 1 !== index && (
+                          <Divider
+                            style={{
+                              width: '100%',
+                              margin: '32px 0px',
+                              borderTop: gameEditionView
+                                ? `1px dashed ${theme(themeMode).colors.white}`
+                                : `1px solid  ${theme(themeMode).colors.white}99`,
+                            }}
                           />
-                          {Object.values(liquidity.pairListAccount).length - 1 !== index && (
-                            <Divider
-                              style={{
-                                width: '100%',
-                                margin: '32px 0px',
-                                borderTop: gameEditionView
-                                  ? `1px dashed ${theme(themeMode).colors.white}`
-                                  : `1px solid  ${theme(themeMode).colors.white}99`,
-                              }}
-                            />
-                          )}
-                        </div>
-                      )
+                        )}
+                      </div>
+                    ) : (
+                      <></>
                     );
                   })}
                 </FormContainer>
+              ) : (
+                <></>
               )
             ) : (
               <FormContainer gameEditionView={gameEditionView}>

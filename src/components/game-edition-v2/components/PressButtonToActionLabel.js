@@ -19,14 +19,15 @@ const Btn = styled.div`
     color: #ffffff;
   }
 `;
-const PressButtonToActionLabel = ({ button, actionLabel, style }) => {
+const PressButtonToActionLabel = ({ button, actionLabel, hideTo, style }) => {
   return (
     <GameEditionLabel color="yellow" fontSize={20} style={{ justifyContent: 'center', ...style }}>
       PRESS{' '}
       <Btn style={{ backgroundImage: `url(${emptyButton})` }}>
         <span className="button-label">{button}</span>
       </Btn>{' '}
-      TO {actionLabel}
+      {!hideTo && 'TO '}
+      {actionLabel}
     </GameEditionLabel>
   );
 };

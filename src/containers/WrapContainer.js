@@ -8,7 +8,7 @@ import MenuTabs from '../components/shared/MenuTabs';
 import cryptoCurrencies from '../constants/tokens';
 import { ROUTE_INDEX } from '../router/routes';
 import { NavLink } from 'react-router-dom';
-import TokenSelectorModal from '../components/swap/swap-modals/TokenSelectorModal';
+import TokenSelectorModal from '../components/modals/swap-modals/TokenSelectorModal';
 
 const WrapContainer = (props) => {
   const [activeItem, setActiveItem] = useState(0);

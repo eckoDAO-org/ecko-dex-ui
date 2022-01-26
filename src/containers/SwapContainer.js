@@ -3,8 +3,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { throttle, debounce } from 'throttle-debounce';
 import { FadeIn } from '../components/shared/animations';
-import TxView from '../components/swap/swap-modals/TxView';
-import WalletRequestView from '../components/swap/swap-modals/WalletRequestView';
+import TxView from '../components/modals/swap-modals/TxView';
+import WalletRequestView from '../components/modals/swap-modals/WalletRequestView';
 import SwapButtonsForm from '../components/swap/SwapButtonsForm';
 import SwapForm from '../components/swap/SwapForm';
 import SwapResults from '../components/swap/SwapResults';
@@ -17,8 +17,8 @@ import { PactContext } from '../contexts/PactContext';
 import { SwapContext } from '../contexts/SwapContext';
 import { WalletContext } from '../contexts/WalletContext';
 import { getCorrectBalance, reduceBalance } from '../utils/reduceBalance';
-import TokenSelectorModalContent from '../components/swap/swap-modals/TokenSelectorModalContent';
-import TokenSelectorModalContentGE from '../components/swap/swap-modals/TokenSelectorModalContentGE';
+import TokenSelectorModalContent from '../components/modals/swap-modals/TokenSelectorModalContent';
+import TokenSelectorModalContentGE from '../components/modals/swap-modals/TokenSelectorModalContentGE';
 import HeaderItem from '../components/shared/HeaderItem';
 import CustomPopup from '../components/shared/CustomPopup';
 import { CogIcon } from '../assets';
@@ -28,7 +28,6 @@ import GradientBorder from '../components/shared/GradientBorder';
 import BackgroundLogo from '../components/shared/BackgroundLogo';
 import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
 import Label from '../components/shared/Label';
-import PixeledInfoContainer from '../components/game-edition-v2/components/PixeledInfoContainerBlue';
 import PixeledBlueContainer from '../components/game-edition-v2/components/PixeledInfoContainerBlue';
 
 const Container = styled(FadeIn)`
@@ -453,6 +452,11 @@ const SwapContainer = () => {
       if (gameEditionView) {
         openModal({
           titleFontSize: 32,
+          containerStyle: { padding: 0 },
+          titleContainerStyle: {
+            padding: 16,
+            paddingBottom: 0,
+          },
           title: 'transaction details',
           onClose: () => {
             setShowTxModal(false);
@@ -547,7 +551,7 @@ const SwapContainer = () => {
         ) : (
           <>
             {gameEditionView ? (
-              <PixeledBlueContainer label="Max Slippage" value={`${pact.slippage * 100}%`} />
+              <PixeledBlueContainer label="Max Slippage" value={`${pact.slippage * 100}%`} style={{ marginTop: 10 }} />
             ) : (
               <ResultContainer gameEditionView={gameEditionView}>
                 <Label fontSize={13} geFontSize={20} geColor="blue">

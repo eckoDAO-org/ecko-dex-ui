@@ -51,7 +51,7 @@ const TokenItem = styled.div`
 const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, onCloseTokensList, fromToken, toToken }) => {
   const [searchValue, setSearchValue] = useState('');
   const swap = useContext(SwapContext);
-  const { gameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView, showTokens } = useContext(GameEditionContext);
   const { themeMode } = useContext(LightModeContext);
 
   const [width] = useWindowSize();
@@ -59,6 +59,19 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, o
     const code = c.code !== 'coin' ? c.code.split('.')[1] : c.code;
     return code.toLocaleLowerCase().includes(searchValue?.toLocaleLowerCase()) || c.name.toLowerCase().includes(searchValue?.toLowerCase());
   });
+
+  const onSelectToken = (crypto) => {
+    if (gameEditionView && showTokens) {
+      console.log('crypto', crypto);
+    }
+    if (tokenSelectorType === 'from' && fromToken === crypto.name) return;
+    if (tokenSelectorType === 'to' && toToken === crypto.name) return;
+    if ((tokenSelectorType === 'from' && fromToken !== crypto.name) || (tokenSelectorType === 'to' && toToken !== crypto.name)) {
+      onTokenClick({ crypto });
+      setSearchValue('');
+      onClose();
+    }
+  };
   return (
     <Content>
       {!gameEditionView && (
@@ -106,13 +119,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, o
                       cursor: fromToken === crypto.name || toToken === crypto.name ? 'default' : 'pointer',
                     }}
                     onClick={() => {
-                      if (tokenSelectorType === 'from' && fromToken === crypto.name) return;
-                      if (tokenSelectorType === 'to' && toToken === crypto.name) return;
-                      if ((tokenSelectorType === 'from' && fromToken !== crypto.name) || (tokenSelectorType === 'to' && toToken !== crypto.name)) {
-                        onTokenClick({ crypto });
-                        setSearchValue('');
-                        onClose();
-                      }
+                      onSelectToken(crypto);
                     }}
                   >
                     {crypto.icon}

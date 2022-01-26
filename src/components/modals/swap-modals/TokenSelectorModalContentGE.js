@@ -6,6 +6,7 @@ import PixeledTokenSelectorBlueIcon from '../../../assets/images/game-edition/pi
 import PixeledTokenSelectorWhiteIcon from '../../../assets/images/game-edition/pixeled-token-selector-white.svg';
 import { PixeledArrowDownIcon, TreeDotsHorizontalIcon } from '../../../assets';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
+import PressButtonToActionLabel from '../../game-edition-v2/components/PressButtonToActionLabel';
 
 const Content = styled.div`
   display: flex;
@@ -105,7 +106,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
 
   const [selectedToken, setSelectedToken] = useState(null);
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(1);
-  const { setShowTokens, setButtons } = useContext(GameEditionContext);
+  const { gameEditionView, setShowTokens, setButtons } = useContext(GameEditionContext);
 
   const cryptoCurrencies = Object.values(swap.tokenData)
     .filter((c) => {
@@ -115,22 +116,26 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
     ?.map((c) => c);
 
   useEffect(() => {
-    setButtons({
-      Right: () => onSelectToken('right'),
-      Left: () => onSelectToken('left'),
-      B: () => {
-        if (!selectedToken) {
-          setShowTokens(true);
-        }
-      },
-    });
-    if (selectedTokenIndex < cryptoCurrencies.length) {
-      setSelectedToken(cryptoCurrencies[selectedTokenIndex]);
-    } else {
-      setSelectedToken(null);
+    if (gameEditionView) {
+      setButtons({
+        Right: () => onSelectToken('right'),
+        Left: () => onSelectToken('left'),
+        B: () => {
+          if (!selectedToken) {
+            setShowTokens(true);
+          } else {
+            onTokenSelect(selectedToken);
+          }
+        },
+      });
+      if (selectedTokenIndex < cryptoCurrencies.length) {
+        setSelectedToken(cryptoCurrencies[selectedTokenIndex]);
+      } else {
+        setSelectedToken(null);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedTokenIndex, selectedToken]);
+  }, [selectedTokenIndex, selectedToken, gameEditionView]);
 
   const onSelectToken = (direction) => {
     if (direction === 'right' && selectedTokenIndex + 1 <= cryptoCurrencies.length) {
@@ -141,6 +146,15 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
       setSelectedTokenIndex((prev) => prev - 1);
 
       setTranslateX((prev) => prev + 150);
+    }
+  };
+  const onTokenSelect = (crypto) => {
+    if (tokenSelectorType === 'from' && fromToken === crypto.name) return;
+    if (tokenSelectorType === 'to' && toToken === crypto.name) return;
+    if ((tokenSelectorType === 'from' && fromToken !== crypto.name) || (tokenSelectorType === 'to' && toToken !== crypto.name)) {
+      onTokenClick({ crypto });
+      setSearchValue('');
+      onClose();
     }
   };
 
@@ -156,15 +170,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
               isVisible={selectedTokenIndex - 1 <= i && selectedTokenIndex + 1 >= i}
               key={crypto.name}
               selected={selectedToken?.name === crypto.name}
-              onClick={() => {
-                if (tokenSelectorType === 'from' && fromToken === crypto.name) return;
-                if (tokenSelectorType === 'to' && toToken === crypto.name) return;
-                if ((tokenSelectorType === 'from' && fromToken !== crypto.name) || (tokenSelectorType === 'to' && toToken !== crypto.name)) {
-                  onTokenClick({ crypto });
-                  setSearchValue('');
-                  onClose();
-                }
-              }}
+              onClick={() => onTokenSelect(crypto)}
             >
               <PixeledTokenSelectorContainer selected={selectedToken?.name === crypto.name}>{crypto.icon}</PixeledTokenSelectorContainer>
               <GameEditionLabel fontSize={32} center color={selectedToken?.name === crypto.name ? 'yellow' : 'white'}>
@@ -193,6 +199,8 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
       <IconContainer>
         <PixeledArrowDownIcon className="rotated" />
       </IconContainer>
+
+      <PressButtonToActionLabel actionLabel="select token" />
     </Content>
   );
 };
