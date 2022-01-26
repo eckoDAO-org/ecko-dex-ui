@@ -28,9 +28,10 @@ import SlippagePopupContent from '../../components/layout/header/SlippagePopupCo
 import BackgroundLogo from '../../components/shared/BackgroundLogo';
 import browserDetection from '../../utils/browserDetection';
 import { theme } from '../../styles/theme';
-import PixeledInfoContainerBlue from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
+import PixeledInfoContainerBlue, { InfoContainer } from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import PressButtonToActionLabel from '../../components/game-edition-v2/components/PressButtonToActionLabel';
+import PixeledBlueContainer from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
 
 const Container = styled.div`
   display: flex;
@@ -105,19 +106,18 @@ const ResultContainer = styled.div`
     margin-bottom: ${({ gameEditionView }) => !gameEditionView && `10px`};
   }
 `;
-
-const InnerRowContainer = styled(PixeledInfoContainerBlue)`
-  ${({ gameEditionView }) => {
-    if (!gameEditionView) {
-      return css`
-        justify-content: space-between;
-        flex-flow: row;
-      `;
-    }
-  }}
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: ${({ gameEditionView }) => (gameEditionView ? 'column' : `row`)};
+const DesktopInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+  & > div:not(:last-child) {
+    margin-bottom: 10px;
   }
+`;
+const InnerRowContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 const initialStateValue = {
@@ -708,28 +708,47 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
 
         {fromValues.coin && toValues.coin && (
           <>
-            <ResultContainer gameEditionView={gameEditionView}>
-              <InnerRowContainer gameEditionView={gameEditionView}>
-                <Label fontSize={13} geFontSize={20} geColor="blue">{`${toValues.coin} per ${fromValues.coin}`}</Label>
-                <Label geFontSize={28} fontSize={13} fontFamily="bold">
-                  {reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}
-                </Label>
-              </InnerRowContainer>
-              <InnerRowContainer gameEditionView={gameEditionView}>
-                <Label fontSize={13} geFontSize={20} geColor="blue">{`${fromValues.coin} per ${toValues.coin}`}</Label>
-                <Label geFontSize={28} fontSize={13} fontFamily="bold">
-                  {reduceBalance(pact.getRatio1(toValues.coin, fromValues.coin)) ?? '-'}
-                </Label>
-              </InnerRowContainer>
-              <InnerRowContainer gameEditionView={gameEditionView}>
-                <Label fontSize={13} geFontSize={20} geColor="blue">
-                  Share of Pool
-                </Label>
-                <Label geFontSize={28} fontSize={13} fontFamily="bold">
-                  {!pact.share(fromValues.amount) ? 0 : reduceBalance(pact.share(fromValues.amount) * 100)}%
-                </Label>
-              </InnerRowContainer>
-            </ResultContainer>
+            {gameEditionView ? (
+              <>
+                <InfoContainer style={{ marginTop: 16 }}>
+                  <PixeledBlueContainer
+                    label={`${toValues.coin}/${fromValues.coin}`}
+                    value={reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}
+                  />
+                  <PixeledBlueContainer
+                    label={`${fromValues.coin}/${toValues.coin}`}
+                    value={reduceBalance(pact.getRatio1(fromValues.coin, toValues.coin)) ?? '-'}
+                  />
+                  <PixeledBlueContainer
+                    label="share of pool"
+                    value={`${!pact.share(fromValues.amount) ? 0 : reduceBalance(pact.share(fromValues.amount) * 100)}%`}
+                  />
+                </InfoContainer>
+              </>
+            ) : (
+              <>
+                <DesktopInfoContainer>
+                  <InnerRowContainer>
+                    <Label fontSize={13}>{`${toValues.coin}/${fromValues.coin}`}</Label>
+                    <Label fontSize={13} fontFamily="bold">
+                      {reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}
+                    </Label>
+                  </InnerRowContainer>
+                  <InnerRowContainer>
+                    <Label fontSize={13}>{`${fromValues.coin}/${toValues.coin}`}</Label>
+                    <Label fontSize={13} fontFamily="bold">
+                      {reduceBalance(pact.getRatio1(fromValues.coin, toValues.coin)) ?? '-'}
+                    </Label>
+                  </InnerRowContainer>
+                  <InnerRowContainer>
+                    <Label fontSize={13}>Share of Pool</Label>
+                    <Label fontSize={13} fontFamily="bold">
+                      {!pact.share(fromValues.amount) ? 0 : reduceBalance(pact.share(fromValues.amount) * 100)}%
+                    </Label>
+                  </InnerRowContainer>
+                </DesktopInfoContainer>
+              </>
+            )}
           </>
         )}
       </FormContainer>

@@ -17,11 +17,11 @@ import { commonColors, theme } from '../../../styles/theme';
 import Label from '../../shared/Label';
 import { ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
 import { LIQUIDITY_VIEW } from '../../../constants/liquidityView';
-import pixeledInfoContainerWhite from '../../../assets/images/game-edition/pixeled-info-container-white.svg';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
-import PixeledInfoContainerBlue, { InfoContainer } from '../../game-edition-v2/components/PixeledInfoContainerBlue';
+import { InfoContainer } from '../../game-edition-v2/components/PixeledInfoContainerBlue';
 import PressButtonToActionLabel from '../../game-edition-v2/components/PressButtonToActionLabel';
 import { PixeledInfoContainerWhite } from '../../game-edition-v2/components/PixeledInfoContainerWhite';
+import PixeledBlueContainer from '../../game-edition-v2/components/PixeledInfoContainerBlue';
 
 const Content = styled.div`
   display: flex;
@@ -158,7 +158,7 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
         }
         infoItems={[
           {
-            label: `price ${showTicker(swap?.localRes?.result?.data[0]?.token)} per ${showTicker(swap?.localRes?.result?.data[1]?.token)}`,
+            label: `${showTicker(swap?.localRes?.result?.data[0]?.token)}/${showTicker(swap?.localRes?.result?.data[1]?.token)}`,
             value: `1 = ${reduceBalance(pact?.computeOut(1), 12)}`,
           },
           {
@@ -514,10 +514,7 @@ const SuccessViewContainerGE = ({ leftItem, rightItem, infoItems, hideIcon, titl
       </Row>
       <InfoContainer style={{ width: GE_DESKTOP_CONFIGURATION.displayWidth }}>
         {infoItems?.map((item, i) => (
-          <PixeledInfoContainerBlue key={i} gameEditionView>
-            <GameEditionLabel color="blue">{item.label}</GameEditionLabel>
-            <GameEditionLabel color="white">{item?.value}</GameEditionLabel>
-          </PixeledInfoContainerBlue>
+          <PixeledBlueContainer key={i} label={item.label} value={item.value} />
         ))}
       </InfoContainer>
       <Row className="c">

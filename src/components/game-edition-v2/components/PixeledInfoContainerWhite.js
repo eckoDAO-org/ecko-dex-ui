@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import pixeledInfoContainerWhite from '../../../assets/images/game-edition/pixeled-info-container-white.svg';
 
 export const PixeledInfoContainerWhite = styled.div`
-  margin-top: 16px;
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;

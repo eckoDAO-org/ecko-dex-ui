@@ -28,7 +28,6 @@ import GradientBorder from '../components/shared/GradientBorder';
 import BackgroundLogo from '../components/shared/BackgroundLogo';
 import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
 import Label from '../components/shared/Label';
-import PixeledInfoContainer from '../components/game-edition-v2/components/PixeledInfoContainerBlue';
 import PixeledBlueContainer from '../components/game-edition-v2/components/PixeledInfoContainerBlue';
 
 const Container = styled(FadeIn)`
@@ -453,6 +452,11 @@ const SwapContainer = () => {
       if (gameEditionView) {
         openModal({
           titleFontSize: 32,
+          containerStyle: { padding: 0 },
+          titleContainerStyle: {
+            padding: 16,
+            paddingBottom: 0,
+          },
           title: 'transaction details',
           onClose: () => {
             setShowTxModal(false);
@@ -547,7 +551,7 @@ const SwapContainer = () => {
         ) : (
           <>
             {gameEditionView ? (
-              <PixeledBlueContainer label="Max Slippage" value={`${pact.slippage * 100}%`} />
+              <PixeledBlueContainer label="Max Slippage" value={`${pact.slippage * 100}%`} style={{ marginTop: 10 }} />
             ) : (
               <ResultContainer gameEditionView={gameEditionView}>
                 <Label fontSize={13} geFontSize={20} geColor="blue">

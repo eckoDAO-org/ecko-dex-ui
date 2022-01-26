@@ -34,7 +34,7 @@ const SwapResults = ({ priceImpact, fromValues, toValues }) => {
       <RowContainer>
         <Label fontSize={13}>Price</Label>
         <Label fontSize={13} fontFamily="bold">
-          {reduceBalance(pact.ratio * (1 + priceImpact))} {fromValues.coin}7{toValues.coin}
+          {reduceBalance(pact.ratio * (1 + priceImpact))} {fromValues.coin}/{toValues.coin}
         </Label>
       </RowContainer>
       <RowContainer>
