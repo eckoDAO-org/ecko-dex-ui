@@ -74,7 +74,7 @@ const LiquidityList = (props) => {
 
   useEffect(() => {
     setButtons({
-      B: () => {
+      A: () => {
         openModal({
           title: 'Details',
           content: (
@@ -157,7 +157,7 @@ const LiquidityList = (props) => {
             </CustomButton>
           </Button.Group>
 
-          {gameEditionView && <PressButtonToActionLabel actionLabel="for more info" hideTo />}
+          {gameEditionView && <PressButtonToActionLabel button="A" actionLabel="for more info" hideTo />}
           {account.account !== null &&
             (liquidity.pairListAccount[0] ? (
               liquidity.pairListAccount[0]?.balance ? (

@@ -11,6 +11,8 @@ import { ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from '../../router/routes';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import browserDetection from '../../utils/browserDetection';
 import centerBackground from '../../assets/images/game-edition/center-background.png';
+import useWindowSize from '../../hooks/useWindowSize';
+import { commonTheme } from '../../styles/theme';
 
 const MainContainer = styled.div`
   display: flex;
@@ -26,9 +28,6 @@ const WrapperContainer = styled(Wrapper)`
     text-align: center;
     font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
     color: ${({ theme: { colors } }) => colors.white};
-    @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
-      padding-top: 10px;
-    }
   }
 `;
 
@@ -62,16 +61,20 @@ const Layout = ({ children }) => {
     game.gameEditionView ? history.push(ROUTE_GAME_START_ANIMATION) : history.push(ROUTE_SWAP);
   }, [game.gameEditionView]);
 
+  const [width, height] = useWindowSize();
+
   return (
     <MainContainer>
       {/* <CustomParticles /> */}
       <WrapperContainer>
         <div>
-          <MobileHeader className="desktop-none" />
+          <MobileHeader className="mobile-only" />
 
-          <DesktopHeader className="tablet-none" gameEditionView={game.gameEditionView} />
+          <DesktopHeader className="mobile-none" gameEditionView={game.gameEditionView} />
         </div>
-        {game.gameEditionView ? (
+        {game.gameEditionView &&
+        width >= commonTheme.mediaQueries.desktopPixel &&
+        height >= commonTheme.mediaQueries.gameEditionDesktopHeightPixel ? (
           <>
             <img src={centerBackground} style={{ position: 'absolute', width: '100%', top: 0, zIndex: -1 }} alt="" />
             <GameEditionContainer>{children}</GameEditionContainer>

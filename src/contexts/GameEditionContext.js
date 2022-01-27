@@ -25,9 +25,8 @@ export const GameEditionProvider = (props) => {
     Right: null,
     Left: null,
   });
-  const [gameEditionView, setGameEditionView] = useState(true);
+  const [gameEditionView, setGameEditionView] = useState(false);
   const [modalState, setModalState] = useState(initialModalState);
-  const [isSwapping, setIsSwapping] = useState(false);
 
   // loading bar
   const [loadingValue, setLoadingValue] = useState(1);
@@ -39,6 +38,7 @@ export const GameEditionProvider = (props) => {
   const [selectedWire, setSelectedWire] = useState(false);
 
   const [showTokens, setShowTokens] = useState(false);
+  const [outsideToken, setOutsideToken] = useState({ tokenSelectorType: null, token: null, fromToken: null, toToken: null });
 
   useEffect(() => {
     let interval = null;
@@ -64,6 +64,11 @@ export const GameEditionProvider = (props) => {
     setSelectedWire(wire);
   };
 
+  const onCloseTokensList = () => {
+    setShowTokens(false);
+    setOutsideToken({ tokenSelectorType: null, token: null, fromToken: null, toToken: null });
+  };
+
   return (
     <GameEditionContext.Provider
       value={{
@@ -73,8 +78,7 @@ export const GameEditionProvider = (props) => {
         setModalState,
         openModal,
         closeModal,
-        isSwapping,
-        setIsSwapping,
+
         loadingValue,
         showWires,
         setShowWires,
@@ -85,6 +89,9 @@ export const GameEditionProvider = (props) => {
         setShowTokens,
         buttons,
         setButtons,
+        outsideToken,
+        setOutsideToken,
+        onCloseTokensList,
       }}
     >
       {props.children}

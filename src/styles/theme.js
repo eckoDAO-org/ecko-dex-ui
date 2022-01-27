@@ -24,6 +24,7 @@ export const commonTheme = {
     mobileSmallPixel: 320,
     mobilePixel: 768,
     desktopPixel: 1024,
+    gameEditionDesktopHeightPixel: 768,
     footerMinWidth: '50rem',
   },
   inputTokenWidth: 78,

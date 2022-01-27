@@ -117,7 +117,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
   const liquidity = useContext(LiquidityContext);
   const modalContext = useContext(ModalContext);
   const { themeMode } = useContext(LightModeContext);
-  const { gameEditionView, openModal, closeModal, isSwapping, setIsSwapping, setButtons } = useContext(GameEditionContext);
+  const { gameEditionView, openModal, closeModal, setButtons, outsideToken } = useContext(GameEditionContext);
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
   const [inputSide, setInputSide] = useState('');
@@ -151,13 +151,6 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
       setToValues(initialStateValue);
     }
   }, [showTxModal]);
-
-  useEffect(() => {
-    if (gameEditionView && isSwapping) {
-      swapValues();
-      setIsSwapping(false);
-    }
-  }, [isSwapping]);
 
   /////// when pass pair by the container, set the token on InputToken
   const handleTokenValue = async (by, crypto) => {
@@ -446,6 +439,21 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
     setTokenSelectorType(null);
   }, [toValues, fromValues]);
 
+  // to handle token for game edition from token list
+  useEffect(() => {
+    if (outsideToken?.token && gameEditionView) {
+      if (outsideToken?.tokenSelectorType === 'from' && fromValues.coin === outsideToken?.token.name) return;
+      if (outsideToken?.tokenSelectorType === 'to' && toValues?.coin === outsideToken?.token.name) return;
+      if (
+        (outsideToken.tokenSelectorType === 'from' && fromValues.coin !== outsideToken?.token.name) ||
+        (outsideToken.tokenSelectorType === 'to' && toValues?.coin !== outsideToken?.token.name)
+      ) {
+        onTokenClick({ crypto: outsideToken?.token });
+        closeModal();
+      }
+    }
+  }, [outsideToken, gameEditionView]);
+
   useEffect(() => {
     if (tokenSelectorType !== null) {
       handleTokenSelectorType();
@@ -689,7 +697,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
                   />
                   <PixeledBlueContainer
                     label="share of pool"
-                    value={`${!pact.share(fromValues.amount) ? 0 : reduceBalance(pact.share(fromValues.amount) * 100)}%`}
+                    value={`${!pact.share(fromValues.amount) ? 0 : (pact.share(fromValues.amount) * 100).toPrecision(4)}%`}
                   />
                 </InfoContainer>
               </>

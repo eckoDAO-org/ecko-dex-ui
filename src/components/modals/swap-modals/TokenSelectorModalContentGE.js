@@ -106,7 +106,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
 
   const [selectedToken, setSelectedToken] = useState(null);
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(1);
-  const { gameEditionView, setShowTokens, setButtons } = useContext(GameEditionContext);
+  const { gameEditionView, setShowTokens, setButtons, setOutsideToken } = useContext(GameEditionContext);
 
   const cryptoCurrencies = Object.values(swap.tokenData)
     .filter((c) => {
@@ -122,6 +122,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
         Left: () => onSelectToken('left'),
         B: () => {
           if (!selectedToken) {
+            setOutsideToken({ token: null, tokenSelectorType, fromToken, toToken });
             setShowTokens(true);
           } else {
             onTokenSelect(selectedToken);
@@ -184,6 +185,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
           key="MORE"
           selected={!selectedToken}
           onClick={() => {
+            setOutsideToken({ token: null, tokenSelectorType, fromToken, toToken });
             setShowTokens(true);
           }}
         >

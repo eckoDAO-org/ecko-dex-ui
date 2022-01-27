@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { useGameEditionContext } from '../../contexts';
@@ -62,51 +63,34 @@ const GameEditionL1R1PageModal = ({ direction }) => {
   const [intervalId, setIntervalId] = useState(null);
   const { setButtons } = useContext(GameEditionContext);
 
-  const getCorrectSwitchIndex = (itemIndex) => {
-    let index = null;
-    if (direction === 'left') {
-      if (itemIndex - 1 < 0) {
-        index = itemIndex;
-      } else {
-        index = itemIndex - 1;
-      }
-    } else {
-      if (itemIndex + 1 > menuItems.length) {
-        index = itemIndex;
-      } else {
-        index = itemIndex + 1;
-      }
-    }
-    return index;
-  };
-
   // init index based on the current route when this page is rendered
   useEffect(() => {
-    let index = null;
     const routeIndex = menuItems.findIndex((r) => r.route === location.pathname);
-    let scrollX = translateX;
-    console.log('routeIndex', routeIndex);
-    if (!routeIndex) {
+    if (routeIndex < 0) {
       if (direction === 'left') {
-        index = 0;
+        onSwitch(direction, 0);
       } else {
-        index = 1;
+        onSwitch(direction, 1);
       }
     } else {
-      index = getCorrectSwitchIndex(routeIndex);
-      if (direction === 'left') {
-        const elementContainer = document.getElementById('switch-items-container');
-        if (elementContainer) {
-          elementContainer.scrollTo(menuItems.length * 274, 0);
+      if (direction === 'right') {
+        if (routeIndex === menuItems.length - 1) {
+          setSelectedItemIndex(routeIndex);
+          setTranslateX(routeIndex * 274);
+        } else if (routeIndex >= 0) {
+          setSelectedItemIndex(routeIndex + 1);
+          setTranslateX((routeIndex + 1) * 274);
+        }
+      } else {
+        if (routeIndex === 0) {
+          setSelectedItemIndex(0);
+          setTranslateX(0);
+        } else if (routeIndex <= menuItems.length - 1) {
+          setSelectedItemIndex(routeIndex - 1);
+          setTranslateX((routeIndex - 1) * 274);
         }
       }
-      if (index > menuItems.length - 1) {
-        index = menuItems.length - 1;
-      }
     }
-    console.log('index', index);
-    // const scrollX = index + 1 === 1 || index + 1 === menuItems.length ? SCROLL_OFFSET : 0;
-    onSwitch(direction, index);
   }, []);
 
   const startTimer = () => {
@@ -145,19 +129,17 @@ const GameEditionL1R1PageModal = ({ direction }) => {
       history.push(menuItems[selectedItemIndex].route);
     }
   }, [seconds]);
-  console.log('selectedItemIndex', selectedItemIndex);
 
   // funcation on L1 and R1 buttons
   const onSwitch = (direction, index, scrollX) => {
     if (direction === 'right' && selectedItemIndex + 1 < menuItems.length) {
-      setSelectedItemIndex((prev) => index || prev + 1);
-      console.log('scrollX', scrollX);
-      setTranslateX((prev) => prev + 274 + (scrollX || 0));
+      setSelectedItemIndex((prev) => prev + 1);
+      setTranslateX((prev) => prev + 274);
     }
     if (direction === 'left' && selectedItemIndex - 1 >= 0) {
-      setSelectedItemIndex((prev) => index || prev - 1);
+      setSelectedItemIndex((prev) => prev - 1);
 
-      setTranslateX((prev) => prev - 274 - (scrollX || 0));
+      setTranslateX((prev) => prev - 274);
     }
   };
 
