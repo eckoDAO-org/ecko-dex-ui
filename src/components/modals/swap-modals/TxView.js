@@ -68,7 +68,7 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
   const failView = () => {
     return (
       <Content gameEditionView={gameEditionView}>
-        {!gameEditionView && <ErrorIcon />}
+        {!gameEditionView && <ErrorIcon style={{ marginTop: 16 }} />}
         <Label geCenter geColor="yellow">
           Preview Failed!
         </Label>
