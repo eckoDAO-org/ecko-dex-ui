@@ -1,19 +1,23 @@
 import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { KaddexLightModeLogo, KaddexLogo } from '../../../assets';
+import { KaddexLightModeLogo, KaddexLogoWhite } from '../../../assets';
 import { ROUTE_INDEX } from '../../../router/routes';
 import menuItems from '../../menuItems';
 import RightHeaderItems from './RightHeaderItems';
-import HeaderItem from '../../../shared/HeaderItem';
+import HeaderItem from '../../../components/shared/HeaderItem';
 import { LightModeContext } from '../../../contexts/LightModeContext';
+import { useGameEditionContext } from '../../../contexts';
+import GameEditionModeButton from './GameEditionModeButton';
 
 const Container = styled.div`
   display: flex;
   flex-flow: row;
+  align-items: center;
   justify-content: space-between;
   min-height: ${({ theme: { header } }) => `${header.height}px`};
-  padding: 0 7.5em;
+  padding: 0 48px;
+  padding-top: 16px;
 `;
 
 const LeftContainer = styled.div`
@@ -33,12 +37,6 @@ const LeftContainer = styled.div`
     opacity: 1;
     transition: opacity 1s linear;
   }
-
-  /* svg {
-    path {
-      fill: ${({ theme: { colors } }) => colors.white};
-    }
-  } */
 `;
 
 const RightContainer = styled.div`
@@ -48,15 +46,15 @@ const RightContainer = styled.div`
 const AnimatedDiv = styled.div`
   display: flex;
   align-items: center;
-  margin-right: 25px;
   & > *:not(:last-child) {
-    margin-right: 25px;
+    margin-right: 24px;
   }
 `;
 
-const DesktopHeader = ({ className, gameEditionView }) => {
+const DesktopHeader = ({ className }) => {
   const history = useHistory();
   const [buttonHover, setButtonHover] = useState(null);
+  const { gameEditionView } = useGameEditionContext();
 
   const { themeMode } = useContext(LightModeContext);
 
@@ -64,7 +62,7 @@ const DesktopHeader = ({ className, gameEditionView }) => {
     <Container className={className}>
       <LeftContainer>
         {themeMode === 'dark' ? (
-          <KaddexLogo style={{ cursor: 'pointer' }} onClick={() => history.push(ROUTE_INDEX)} />
+          <KaddexLogoWhite style={{ cursor: 'pointer' }} onClick={() => history.push(ROUTE_INDEX)} />
         ) : (
           <KaddexLightModeLogo style={{ cursor: 'pointer' }} onClick={() => history.push(ROUTE_INDEX)} />
         )}
@@ -85,6 +83,9 @@ const DesktopHeader = ({ className, gameEditionView }) => {
           ))}
         </AnimatedDiv>
       </LeftContainer>
+
+      <GameEditionModeButton />
+
       <RightContainer>
         <RightHeaderItems />
       </RightContainer>

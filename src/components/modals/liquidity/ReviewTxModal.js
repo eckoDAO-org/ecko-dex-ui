@@ -1,11 +1,15 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import { reduceBalance } from '../../../utils/reduceBalance';
-import CustomButton from '../../../shared/CustomButton';
+import CustomButton from '../../../components/shared/CustomButton';
 import { SuccessfullIcon } from '../../../assets';
 import { PactContext } from '../../../contexts/PactContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import tokenData from '../../../constants/cryptoCurrencies';
+import Label from '../../shared/Label';
+import { Row, SuccessViewContainerGE } from '../../modals/swap-modals/common-result-components';
+import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
+import { useGameEditionContext } from '../../../contexts';
 
 const Content = styled.div`
   display: flex;
@@ -14,18 +18,12 @@ const Content = styled.div`
   svg {
     display: ${({ gameEditionView }) => gameEditionView && 'none '};
     path {
-      fill: ${({ theme: { colors } }) => colors.white};
+      fill: ${({ gameEditionView, theme: { colors } }) => !gameEditionView && colors.white};
     }
   }
   width: 100%;
   height: ${({ gameEditionView }) => gameEditionView && '100% '};
   justify-content: ${({ gameEditionView }) => gameEditionView && 'space-between '};
-`;
-
-const Title = styled.div`
-  font-family: montserrat-bold;
-  font-size: 24px;
-  ${({ theme: { colors } }) => colors.white};
 `;
 
 const TransactionsDetails = styled.div`
@@ -34,50 +32,12 @@ const TransactionsDetails = styled.div`
   flex-direction: column;
   padding: 24px 0px;
   padding-top: 5px;
+  & > *:not(:last-child) {
+    margin-bottom: 16px;
+  }
 `;
 
-const SpaceBetweenRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const FlexStartRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-`;
-
-const FlexEndRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-`;
-
-const SubTitle = styled.div`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '14px' : '13px')};
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
-  text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'center')};
-  width: ${({ gameEditionView }) => (gameEditionView ? '100%' : 'auto')};
-  align-items: center;
-  position: relative;
-  justify-content: center;
-`;
-
-const Label = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
-`;
-
-const Value = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  font-size: 10px;
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : `${colors.white}99`)};
-`;
-
-const ReviewTxModal = ({ fromValues, toValues, supply, liquidityView }) => {
+const ReviewTxModal = ({ fromValues, toValues, supply }) => {
   const pact = useContext(PactContext);
   const { gameEditionView } = useContext(GameEditionContext);
 
@@ -94,82 +54,135 @@ const ReviewTxModal = ({ fromValues, toValues, supply, liquidityView }) => {
   };
 
   const ContentView = () => {
-    if (liquidityView === 'Add Liquidity') {
-      return (
-        <TransactionsDetails>
-          <FlexStartRow>
-            <SubTitle
-              style={{
-                marginBottom: '16px',
-                justifyContent: 'center',
-              }}
-              gameEditionView={gameEditionView}
-            >
-              Deposit Desired
-            </SubTitle>
-          </FlexStartRow>
+    return (
+      <TransactionsDetails>
+        <Row className="fs">
+          <Label fontFamily="bold" fontSize={13}>
+            Deposit Desired
+          </Label>
+        </Row>
 
-          {/* FIRST COIN */}
-          <SpaceBetweenRow>
-            <FlexStartRow>
+        {/* FIRST COIN */}
+        <Row className="sb" style={{ marginBottom: 8 }}>
+          <Row className="fs">
+            {getTokenIcon(fromValues.coin)}
+            <Label fontFamily="bold" fontSize={13}>
+              {fromValues.amount}
+            </Label>
+          </Row>
+          <Label fontFamily="bold" fontSize={13}>
+            {fromValues.coin}
+          </Label>
+        </Row>
+        {/* FIRST RATE */}
+        <Row className="fe">
+          <Label fontSize={13}>{`1 ${fromValues?.coin} =  ${reduceBalance(1 / pact.ratio)} ${toValues?.coin}`}</Label>
+        </Row>
+        {/* SECOND COIN */}
+        <Row className="sb" style={{ marginBottom: 8 }}>
+          <Row className="fs">
+            {getTokenIcon(toValues.coin)}
+            <Label fontFamily="bold" fontSize={13}>
+              {toValues.amount}
+            </Label>
+          </Row>
+          <Label fontFamily="bold" fontSize={13}>
+            {toValues.coin}
+          </Label>
+        </Row>
+        {/* SECOND RATE */}
+        <Row className="fe">
+          <Label fontSize={13}>{`1 ${toValues?.coin} =  ${reduceBalance(pact.ratio)} ${fromValues?.coin}`}</Label>
+        </Row>
+        <Row className="sb">
+          <Label fontSize={13}>Share of Pool:</Label>
+          <Label fontSize={13}>{(pact.share(fromValues?.amount) * 100).toPrecision(4)} %</Label>
+        </Row>
+      </TransactionsDetails>
+    );
+  };
+
+  const ContentViewGe = ({ loading }) => {
+    const { setButtons } = useGameEditionContext();
+    useEffect(() => {
+      setButtons({
+        B: !loading
+          ? () => {
+              setLoading(true);
+              supply();
+            }
+          : null,
+      });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [loading]);
+    return (
+      <SuccessViewContainerGE
+        hideIcon
+        loading={loading}
+        title="Deposit Desired"
+        leftItem={
+          <>
+            <GameEditionLabel fontSize={32} color="blue">
+              {fromValues.coin}
+            </GameEditionLabel>
+
+            <Row className="fs">
               {getTokenIcon(fromValues.coin)}
-              <Label gameEditionView={gameEditionView}>{fromValues.amount}</Label>
-            </FlexStartRow>
-            <Label gameEditionView={gameEditionView}>{fromValues.coin}</Label>
-          </SpaceBetweenRow>
-          {/* FIRST RATE */}
-          <FlexEndRow style={{ padding: '8px 0px 16px 0px' }}>
-            <Value gameEditionView={gameEditionView}>{`1 ${fromValues?.coin} =  ${reduceBalance(1 / pact.ratio)} ${toValues?.coin}`}</Value>
-          </FlexEndRow>
-          {/* SECOND COIN */}
-          <SpaceBetweenRow>
-            <FlexStartRow>
+              <GameEditionLabel fontSize={22} color="blue-grey">
+                {fromValues.amount}
+              </GameEditionLabel>
+            </Row>
+
+            <GameEditionLabel color="blue">{`1 ${fromValues?.coin} =  ${reduceBalance(1 / pact.ratio)} ${toValues?.coin}`}</GameEditionLabel>
+          </>
+        }
+        rightItem={
+          <>
+            <GameEditionLabel fontSize={32} color="blue">
+              {toValues.coin}
+            </GameEditionLabel>
+
+            <Row className="fs">
               {getTokenIcon(toValues.coin)}
-              <Label gameEditionView={gameEditionView}>{toValues.amount}</Label>
-            </FlexStartRow>
-            <Label gameEditionView={gameEditionView}>{toValues.coin}</Label>
-          </SpaceBetweenRow>
-          {/* SECOND RATE */}
-          <FlexEndRow style={{ padding: '8px 0px' }}>
-            <Value gameEditionView={gameEditionView}>{`1 ${toValues?.coin} =  ${reduceBalance(1 / pact.ratio)} ${fromValues?.coin}`}</Value>
-          </FlexEndRow>
-          <SpaceBetweenRow>
-            <Value gameEditionView={gameEditionView}>Share of Pool:</Value>
-            <Value gameEditionView={gameEditionView}>{reduceBalance(pact.share(fromValues?.amount) * 100)}%</Value>
-          </SpaceBetweenRow>
-        </TransactionsDetails>
-      );
-    } else {
-      return (
-        <TransactionsDetails>
-          <SpaceBetweenRow>
-            <Label>{`1 ${fromValues?.coin}`}</Label>
-            <Value>{`${reduceBalance(toValues.amount / fromValues.amount)} ${toValues.coin}`}</Value>
-          </SpaceBetweenRow>
-          <SpaceBetweenRow style={{ padding: '16px 0px' }}>
-            <Label>{`1 ${toValues?.coin} `}</Label>
-            <Value>{`${reduceBalance(fromValues.amount / toValues.amount)} ${fromValues.coin}`}</Value>
-          </SpaceBetweenRow>
-        </TransactionsDetails>
-      );
-    }
+              <GameEditionLabel fontSize={22} color="blue-grey">
+                {toValues.amount}
+              </GameEditionLabel>
+            </Row>
+            <GameEditionLabel color="blue">{`1 ${toValues?.coin} =  ${reduceBalance(pact.ratio)} ${fromValues?.coin}`}</GameEditionLabel>
+          </>
+        }
+        infoItems={[
+          {
+            label: 'Share of Pool',
+            value: `${(pact.share(fromValues?.amount) * 100).toPrecision(4)} %`,
+          },
+        ]}
+      />
+    );
   };
 
   return (
     <Content gameEditionView={gameEditionView}>
-      {!gameEditionView && <Title style={{ padding: '16px 0px', fontSize: 16 }}>Preview Succesful</Title>}
+      {!gameEditionView && (
+        <Label fontFamily="bold" labelStyle={{ padding: '16px 0px' }}>
+          Preview Succesful
+        </Label>
+      )}
       <SuccessfullIcon />
-      {ContentView()}
-      <CustomButton
-        buttonStyle={{ width: '100%' }}
-        loading={loading}
-        onClick={() => {
-          setLoading(true);
-          supply();
-        }}
-      >
-        Confirm
-      </CustomButton>
+      {gameEditionView ? <ContentViewGe loading={loading} /> : <ContentView />}
+      {!gameEditionView && (
+        <CustomButton
+          type="secondary"
+          fluid
+          loading={loading}
+          onClick={() => {
+            setLoading(true);
+            supply();
+          }}
+        >
+          Confirm
+        </CustomButton>
+      )}
     </Content>
   );
 };

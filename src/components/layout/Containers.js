@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 export const PartialScrollableScrollSection = styled.div`
   flex: 1;
@@ -39,27 +39,27 @@ export const ColumnContainer = styled.div`
 `;
 
 export const Label = styled.span`
-  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  color: ${({ $gameEditionView, withShade, theme: { colors } }) => ($gameEditionView ? colors.black : `${colors.white}99 !important`)};
-  font-size: ${({ $gameEditionView }) => ($gameEditionView ? '10px' : '13px')};
+  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pixeboy : fontFamily.regular)};
+  color: ${({ $gameEditionView, withShade, theme: { colors } }) => ($gameEditionView ? colors.white : `${colors.white}99 !important`)};
+  font-size: ${({ $gameEditionView }) => ($gameEditionView ? '18px' : '13px')};
   text-align: ${({ $gameEditionView }) => $gameEditionView && 'left'};
 
   text-transform: capitalize;
 `;
 
 export const BoldLabel = styled.span`
-  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
-  color: ${({ $gameEditionView, withShade, theme: { colors } }) => ($gameEditionView ? colors.black : `${colors.white} !important`)};
+  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pixeboy : fontFamily.bold)};
+  color: ${({ $gameEditionView, withShade, theme: { colors } }) => ($gameEditionView ? colors.white : `${colors.white} !important`)};
   font-size: 13px;
   text-align: ${({ $gameEditionView }) => $gameEditionView && 'left'};
   text-transform: capitalize;
 `;
 
 export const Value = styled.span`
-  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  font-size: ${({ $gameEditionView }) => ($gameEditionView ? '10px' : '16px')};
+  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pixeboy : fontFamily.regular)};
+  font-size: ${({ $gameEditionView }) => ($gameEditionView ? '18px' : '16px')};
   line-height: 20px;
-  color: ${({ $gameEditionView, withShade, theme: { colors } }) => ($gameEditionView ? colors.black : `${colors.white} !important`)};
+  color: ${({ $gameEditionView, withShade, theme: { colors } }) => ($gameEditionView ? colors.white : `${colors.white} !important`)};
   text-align: ${({ $gameEditionView }) => $gameEditionView && 'left'};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     /* margin-bottom: 5px; */
@@ -77,8 +77,8 @@ export const TitleContainer = styled.div`
 
 export const Title = styled.span`
   font: ${({ theme: { fontFamily }, $gameEditionView }) =>
-    $gameEditionView ? `normal normal normal 16px/19px ${fontFamily.pressStartRegular}` : `normal normal bold 32px/57px ${fontFamily.bold}`};
+    $gameEditionView ? `normal normal normal 40px ${fontFamily.pixeboy}` : `normal normal bold 32px/57px ${fontFamily.bold}`};
   letter-spacing: 0px;
-  color: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? colors.black : colors.white)};
+  color: ${({ $gameEditionView, theme: { colors } }) => colors.white};
   text-transform: ${({ $gameEditionView }) => ($gameEditionView ? `uppercase` : ` capitalize`)};
 `;

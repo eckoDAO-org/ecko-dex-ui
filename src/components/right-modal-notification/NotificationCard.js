@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { CloseIcon, NotificationCautionBlueIcon, NotificationErrorIcon, NotificationSuccessIcon, NotificationWarningIcon } from '../../assets';
 
 const Container = styled.div`

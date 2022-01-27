@@ -1,15 +1,19 @@
 import React from 'react';
 import { Divider } from 'semantic-ui-react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { PowerIcon } from '../../../assets';
-import { useAccountContext } from '../../../contexts';
-import HeaderItem from '../../../shared/HeaderItem';
-import LightModeToggle from '../../../shared/LightModeToggle';
-import theme from '../../../styles/theme';
+import { useAccountContext, useGameEditionContext, useModalContext } from '../../../contexts';
+import HeaderItem from '../../../components/shared/HeaderItem';
+import LightModeToggle from '../../../components/shared/LightModeToggle';
+import theme, { commonTheme } from '../../../styles/theme';
+import AccountInfo from './AccountInfo';
+import AccountModal from '../../modals/kdaModals/AccountModal';
+import reduceToken from '../../../utils/reduceToken';
+import { reduceBalance } from '../../../utils/reduceBalance';
+import useWindowSize from '../../../hooks/useWindowSize';
 
 const ListContainer = styled.div`
   border-radius: 10px;
-  padding: 32px;
   z-index: 1;
   background: transparent;
   & > *:not(:last-child) {
@@ -35,8 +39,11 @@ const HeaderItemContent = styled.div`
   align-items: center;
 `;
 
-const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContentListStyle }) => {
+const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContentListStyle, withoutAccountInfo }) => {
   const { account, logout } = useAccountContext();
+  const { gameEditionView, openModal } = useGameEditionContext();
+  const modalContext = useModalContext();
+  const [width] = useWindowSize();
   return (
     <ListContainer style={PopupContentListStyle}>
       {items.map((item, index) => (
@@ -61,9 +68,30 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
       {viewOtherComponents && (
         <>
           <CustomDivider />
-          <LightModeToggle />
+          <LightModeToggle style={{ justifyContent: 'flex-start' }} />
         </>
       )}
+
+      {!withoutAccountInfo && account?.account && width < commonTheme.mediaQueries.desktopPixel && (
+        <AccountInfo
+          onClick={() => {
+            if (gameEditionView) {
+              return openModal({
+                title: 'Account',
+                content: <AccountModal />,
+              });
+            } else {
+              modalContext.openModal({
+                title: 'Account',
+                content: <AccountModal />,
+              });
+            }
+          }}
+          account={account.account ? `${reduceToken(account.account)}` : 'KDA'}
+          balance={account.account ? `${reduceBalance(account.balance)} KDA` : ''}
+        />
+      )}
+
       {account.account && withLogout && (
         <HeaderItem
           headerItemStyle={{

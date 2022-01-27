@@ -1,4 +1,4 @@
-const commonTheme = {
+export const commonTheme = {
   layout: {
     desktopWidth: '80%',
     mobileWidth: '95%',
@@ -6,6 +6,7 @@ const commonTheme = {
   },
   header: {
     height: 65,
+    mobileHeight: 81,
   },
   footer: {
     modalFooter: 57,
@@ -16,18 +17,34 @@ const commonTheme = {
     bold: 'montserrat-bold',
     boldItalic: 'montserrat-bold-italic',
     pressStartRegular: 'press-start-regular',
+    pixeboy: 'pixeboy',
   },
   mediaQueries: {
     mobileBreakpoint: '48rem',
     mobileSmallPixel: 320,
     mobilePixel: 768,
     desktopPixel: 1024,
+    gameEditionDesktopHeightPixel: 768,
     footerMinWidth: '50rem',
   },
   inputTokenWidth: 78,
   inputSelectButtonWidth: 81,
 };
 
+export const commonColors = {
+  pink: '#D20790',
+  purple: '#240B2F',
+  black: '#000000',
+  yellow: '#FEDE75',
+  green: '#41CC41',
+  error: '#DB2828',
+  gameEditionYellow: '#FFC107',
+  gameEditionBlue: '#6D99E4',
+  gameEditionPink: '#F2248D',
+  gameEditionWhiteGrey: '#FFFFFF80',
+  gameEditionBlackGrey: '#00000080',
+  gameEditionBlueGrey: '#5F7498',
+};
 export const lightTheme = {
   ...commonTheme,
   backgroundBody:
@@ -37,34 +54,24 @@ export const lightTheme = {
   colors: {
     primary: '#FFFFFF',
     border: '#240B2F',
-    pink: '#D20790',
-    purple: '#240B2F',
-    black: '#15081F',
-    yellow: '#FEDE75',
-    white: '#4C125A',
-    green: '#69C549',
-    error: '#DB2828',
+    white: '#212750',
+    ...commonColors,
   },
-  buttonBackgroundGradient: '#4C125A',
+  buttonBackgroundGradient: '#212750',
   backgroundRightModal: '#FFFFFF',
-  backgroundInput: '#4C125A1A',
+  backgroundInput: '#2127501A',
   backgroundContainer: '#FFFFFF',
 };
 
 export const darkTheme = {
   ...commonTheme,
-  backgroundBody: 'transparent linear-gradient(122deg, #070610 0%, #4C125A 100%) 0% 0% no-repeat padding-box',
-  backgroundBodySafari: 'transparent linear-gradient(122deg, #070610 0%, #4C125A 100%) 0% 0% no-repeat padding-box',
+  backgroundBody: 'transparent linear-gradient(122deg, #070610 0%, #212750 100%) 0% 0% no-repeat padding-box',
+  backgroundBodySafari: 'transparent linear-gradient(122deg, #070610 0%, #212750 100%) 0% 0% no-repeat padding-box',
   colors: {
-    primary: '#4C125A',
+    primary: '#212750',
     border: '#ECEBEC',
-    pink: '#D20790',
-    purple: '#240B2F',
-    black: '#15081F',
-    yellow: '#FEDE75',
     white: '#FFFFFF',
-    green: '#69C549',
-    error: '#DB2828',
+    ...commonColors,
   },
   buttonBackgroundGradient: '#FFFFFF',
   backgroundInput: 'transparent',

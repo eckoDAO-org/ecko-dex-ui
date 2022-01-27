@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components/macro';
 import GlobalStyle from './styles/globalStyle';
 import Router from './router/router';
 import NotificationRender from './components/notification/NotificationRender';
@@ -21,7 +21,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme(themeMode)}>
-      <GlobalStyle />
+      <GlobalStyle themeMode={themeMode} />
       <GameEditionProvider>
         <NotificationRender>
           <AccountProvider>

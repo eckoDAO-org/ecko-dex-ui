@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { useHistory } from 'react-router';
 import { ROUTE_GAME_EDITION_MENU, ROUTE_SWAP } from '../../router/routes';
 import { GameEditionWrapper } from './GameEditionWrapper';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
-import { FadeIn } from '../shared/animations';
+import { FadeIn } from '../components/shared/animations';
 import theme from '../../styles/theme';
 import GameEditionMobileWrapper from './GameEditionMobileWrapper';
 import menuItems from '../menuItems';

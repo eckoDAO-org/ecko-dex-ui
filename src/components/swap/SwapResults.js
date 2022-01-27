@@ -1,25 +1,22 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { PactContext } from '../../contexts/PactContext';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { reduceBalance } from '../../utils/reduceBalance';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
+import Label from '../shared/Label';
 
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 16px 0px`)};
-  padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : ` 0px`)};
+  margin: 16px 0px;
   flex-flow: column;
   width: 100%;
-  /* position: ${({ gameEditionView }) => gameEditionView && 'absolute'}; */
-  margin-top: ${({ gameEditionView }) => gameEditionView && '20px'};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    margin: ${({ gameEditionView }) => (gameEditionView ? `5px 0px` : ` 10px 0px`)};
+    margin: 10px 0px;
     flex-flow: column;
   }
   & > *:not(:last-child) {
-    margin-bottom: ${({ gameEditionView }) => !gameEditionView && `10px`};
+    margin-bottom: 10px;
   }
 `;
 
@@ -27,61 +24,38 @@ const RowContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-flow: row;
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: ${({ gameEditionView }) => (gameEditionView ? 'column' : 'row')};
-  }
-`;
-
-const Label = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
-  text-transform: capitalize;
-  display: flex;
-  align-items: center;
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    text-align: left;
-  }
-`;
-
-const Value = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
-  line-height: 20px;
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    text-align: ${({ gameEditionView }) => (gameEditionView ? 'left' : 'right')};
-    margin-bottom: ${({ gameEditionView }) => gameEditionView && '5px'};
-  }
 `;
 
 const SwapResults = ({ priceImpact, fromValues, toValues }) => {
   const pact = useContext(PactContext);
   const liquidity = useContext(LiquidityContext);
-  const { gameEditionView } = useContext(GameEditionContext);
   return (
-    <ResultContainer gameEditionView={gameEditionView}>
-      <RowContainer gameEditionView={gameEditionView}>
-        <Label gameEditionView={gameEditionView}>price</Label>
-        <Value gameEditionView={gameEditionView}>{`${reduceBalance(pact.ratio * (1 + priceImpact))} ${fromValues.coin} per ${toValues.coin}`}</Value>
+    <ResultContainer>
+      <RowContainer>
+        <Label fontSize={13}>Price</Label>
+        <Label fontSize={13} fontFamily="bold">
+          {reduceBalance(pact.ratio * (1 + priceImpact))} {fromValues.coin}/{toValues.coin}
+        </Label>
       </RowContainer>
-      <RowContainer gameEditionView={gameEditionView}>
-        <Label gameEditionView={gameEditionView}>Price Impact</Label>
-        <Value gameEditionView={gameEditionView}>
+      <RowContainer>
+        <Label fontSize={13}>Price Impact</Label>
+        <Label fontSize={13} fontFamily="bold">
           {pact.priceImpactWithoutFee(priceImpact) < 0.0001 && pact.priceImpactWithoutFee(priceImpact)
             ? '< 0.01%'
             : `${reduceBalance(pact.priceImpactWithoutFee(priceImpact) * 100, 4)}%`}
-        </Value>
+        </Label>
       </RowContainer>
-      <RowContainer gameEditionView={gameEditionView}>
-        <Label gameEditionView={gameEditionView}>max slippage</Label>
-        <Value gameEditionView={gameEditionView}>{`${pact.slippage * 100}%`}</Value>
+      <RowContainer>
+        <Label fontSize={13}>Max Slippage</Label>
+        <Label fontSize={13} fontFamily="bold">
+          {pact.slippage * 100}%
+        </Label>
       </RowContainer>
-      <RowContainer gameEditionView={gameEditionView}>
-        <Label gameEditionView={gameEditionView}>liquidity provider fee</Label>
-        <Value gameEditionView={gameEditionView}>
-          {`${(liquidity.liquidityProviderFee * parseFloat(fromValues.amount)).toFixed(fromValues.precision)} ${fromValues.coin}`}
-        </Value>
+      <RowContainer>
+        <Label fontSize={13}>Liquidity Provider Fee</Label>
+        <Label fontSize={13} fontFamily="bold">
+          {(liquidity.liquidityProviderFee * parseFloat(fromValues.amount)).toFixed(fromValues.precision)} {fromValues.coin}
+        </Label>
       </RowContainer>
     </ResultContainer>
   );

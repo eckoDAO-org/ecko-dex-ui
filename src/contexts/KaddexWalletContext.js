@@ -44,10 +44,13 @@ export const KaddexWalletProvider = (props) => {
       });
       if (result?.result?.status === 'success' && result?.result?.message === 'Disconnected') {
         logout();
+        setKaddexWalletState({
+          ...kaddexWalletState,
+          isConnected: false,
+        });
       }
     }
   };
-
   useEffect(() => {
     if (kaddexWalletState.isConnected && (!wallet || !account?.account)) {
       console.log('!!!DISCONNECTING');
@@ -128,7 +131,8 @@ export const KaddexWalletProvider = (props) => {
 
   const checkCorrectChain = async () => {
     const selectedChainId = await getSelectedChain();
-    if (selectedChainId !== chainId) {
+
+    if (selectedChainId !== Number(chainId)) {
       showChainError(selectedChainId);
     }
   };
@@ -150,7 +154,7 @@ export const KaddexWalletProvider = (props) => {
           if (response?.result?.status === 'fail' && response?.result?.message === 'Invalid network') {
             showNetworkError();
           } else {
-            if (selectedChainId !== chainId) {
+            if (selectedChainId !== Number(chainId)) {
               showChainError(selectedChainId);
             } else if (!kaddexWalletState.isConnected && acc.status === 'fail') {
               connectWallet();
@@ -188,12 +192,15 @@ export const KaddexWalletProvider = (props) => {
     });
   };
 
-  const initializeKaddexWallet = async () => {
+  const initializeKaddexWallet = async (clb) => {
     const networkInfo = await getNetworkInfo();
     if (networkInfo.networkId !== NETWORKID) {
       showNetworkError();
     } else {
       await connectWallet();
+      if (clb) {
+        await clb();
+      }
     }
   };
 
