@@ -25,6 +25,9 @@ const ItemsContainer = styled.div`
   width: ${GE_DESKTOP_CONFIGURATION.displayWidth}px;
   overflow-x: auto;
   scroll-behavior: smooth;
+  ::-webkit-scrollbar {
+    display: none;
+  }
   & > div:first-child {
     margin-left: ${SCROLL_OFFSET}px;
   }

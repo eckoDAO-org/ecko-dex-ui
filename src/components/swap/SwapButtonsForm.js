@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
-import pwError from '../alerts/pwError';
 import CustomButton from '../../components/shared/CustomButton';
 import { AccountContext } from '../../contexts/AccountContext';
 import reduceToken from '../../utils/reduceToken';
@@ -11,6 +10,7 @@ import { SwapContext } from '../../contexts/SwapContext';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
 import LogoLoader from '../shared/LogoLoader';
+import Label from '../shared/Label';
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -24,16 +24,6 @@ const LabelContainer = styled.div`
   justify-content: center;
   width: 100%;
   z-index: ${({ gameEditionView }) => !gameEditionView && '1'};
-`;
-
-const Label = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.regular)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '20px' : '13px')};
-  color: ${({ theme: { colors }, gameEditionView }) => colors.yellow};
-  text-transform: capitalize;
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    text-align: left;
-  }
 `;
 
 const SwapButtonsForm = ({
@@ -116,7 +106,16 @@ const SwapButtonsForm = ({
       if (res === -1) {
         setLoading(false);
         //error alert
-        if (swap.localRes) pwError();
+        if (swap.localRes) {
+          openModal({
+            title: 'Error',
+            content: (
+              <Label geColor="yellow" geCenter>
+                Transaction Error! please try again.
+              </Label>
+            ),
+          });
+        }
         return;
       } else {
         setShowTxModal(true);
@@ -175,7 +174,7 @@ const SwapButtonsForm = ({
           ) : getButtonLabel() === 'SWAP' ? (
             <PressButtonToActionLabel button="B" actionLabel="swap" />
           ) : (
-            <Label gameEditionView={gameEditionView}>{getButtonLabel()}</Label>
+            <Label geColor="yellow">{getButtonLabel()}</Label>
           )}
         </LabelContainer>
       ) : (
