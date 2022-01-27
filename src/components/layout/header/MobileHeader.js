@@ -17,6 +17,7 @@ const Container = styled.div`
   min-height: ${({ theme: { header } }) => `${header.mobileHeight}px`};
   width: 100%;
   padding: 0 1.5em;
+  padding-top: 16px;
 `;
 const RowContainer = styled.div`
   display: flex;
@@ -67,7 +68,7 @@ const MobileHeader = ({ className }) => {
           <RightHeaderItems />
         </RightContainer>
       </RowContainer>
-      <span className="mainnet-chain-2 desktop-none">Mainnet Chain 2</span>
+      <span className="mainnet-chain-2 mobile-only">Mainnet Chain 2</span>
     </Container>
   );
 };

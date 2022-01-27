@@ -22,7 +22,6 @@ import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION } from '../../route
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
 
 const DesktopMainContainer = styled.div`
-  transform: scale(0.8);
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -131,7 +130,7 @@ const DisplayContent = styled.div`
     border-radius: 19px;
   }
 
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel * GE_DESKTOP_CONFIGURATION.scaleValue - 1}px`}) {
     width: 280px;
     height: 357px;
     margin-left: 2px;
@@ -255,7 +254,7 @@ const GameEditionContainer = ({ children }) => {
       ? true
       : false;
 
-  return width < theme.mediaQueries.desktopPixel ? (
+  return width < theme.mediaQueries.desktopPixel * GE_DESKTOP_CONFIGURATION.scaleValue ? (
     <MobileMainContainer>
       <GameboyMobileContainer style={{ backgroundImage: `url(${gameboyMobile})` }}>
         <DisplayContent>

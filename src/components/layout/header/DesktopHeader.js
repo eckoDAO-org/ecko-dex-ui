@@ -11,6 +11,7 @@ import { useGameEditionContext } from '../../../contexts';
 import GameEditionModeButton from './GameEditionModeButton';
 import useWindowSize from '../../../hooks/useWindowSize';
 import { commonTheme } from '../../../styles/theme';
+import { GE_DESKTOP_CONFIGURATION } from '../../../contexts/GameEditionContext';
 
 const Container = styled.div`
   display: flex;
@@ -87,9 +88,8 @@ const DesktopHeader = ({ className }) => {
         </AnimatedDiv>
       </LeftContainer>
 
-      {width >= commonTheme.mediaQueries.desktopPixel && height >= commonTheme.mediaQueries.gameEditionDesktopHeightPixel && (
-        <GameEditionModeButton />
-      )}
+      {width >= commonTheme.mediaQueries.desktopPixel * GE_DESKTOP_CONFIGURATION.scaleValue &&
+        height >= commonTheme.mediaQueries.gameEditionDesktopHeightPixel * GE_DESKTOP_CONFIGURATION.scaleValue && <GameEditionModeButton />}
 
       <RightContainer>
         <RightHeaderItems />

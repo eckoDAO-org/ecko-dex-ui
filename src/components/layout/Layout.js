@@ -8,11 +8,13 @@ import { ReactComponent as Stripes } from '../../assets/images/shared/stripes.sv
 import GameEditionContainer from '../game-edition-v2/GameEditionContainer';
 import { useHistory } from 'react-router';
 import { ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from '../../router/routes';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
 import browserDetection from '../../utils/browserDetection';
 import centerBackground from '../../assets/images/game-edition/center-background.png';
 import useWindowSize from '../../hooks/useWindowSize';
 import { commonTheme } from '../../styles/theme';
+import CacheBackgroundImages from '../game-edition-v2/components/CacheBackgroundImages';
+import TabletHeader from './header/TabletHeader';
 
 const MainContainer = styled.div`
   display: flex;
@@ -28,7 +30,7 @@ const WrapperContainer = styled(Wrapper)`
     text-align: center;
     font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
     color: ${({ theme: { colors } }) => colors.white};
-    @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {
+    @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
       padding-top: 10px;
     }
   }
@@ -60,26 +62,37 @@ const StripesContainer = styled.div`
 
 const Layout = ({ children }) => {
   const history = useHistory();
-  const game = useContext(GameEditionContext);
+  const { gameEditionView, setGameEditionView, closeModal } = useContext(GameEditionContext);
 
   useEffect(() => {
-    game.gameEditionView ? history.push(ROUTE_GAME_START_ANIMATION) : history.push(ROUTE_SWAP);
-  }, [game.gameEditionView]);
+    gameEditionView ? history.push(ROUTE_GAME_START_ANIMATION) : history.push(ROUTE_SWAP);
+  }, [gameEditionView]);
 
   const [width, height] = useWindowSize();
 
+  useEffect(() => {
+    if (
+      width < commonTheme.mediaQueries.desktopPixel * GE_DESKTOP_CONFIGURATION.scaleValue ||
+      height < commonTheme.mediaQueries.gameEditionDesktopHeightPixel * GE_DESKTOP_CONFIGURATION.scaleValue
+    ) {
+      setGameEditionView(false);
+      closeModal();
+    }
+  }, [width, height]);
+
   return (
     <MainContainer>
-      {/* <CustomParticles /> */}
+      <CacheBackgroundImages />
       <WrapperContainer>
         <div>
           <MobileHeader className="mobile-only" />
+          <TabletHeader className="desktop-none mobile-none" />
 
-          <DesktopHeader className="mobile-none" gameEditionView={game.gameEditionView} />
+          <DesktopHeader className="desktop-only" gameEditionView={gameEditionView} />
         </div>
-        {game.gameEditionView &&
-        width >= commonTheme.mediaQueries.desktopPixel &&
-        height >= commonTheme.mediaQueries.gameEditionDesktopHeightPixel ? (
+        {gameEditionView &&
+        width >= commonTheme.mediaQueries.desktopPixel * GE_DESKTOP_CONFIGURATION.scaleValue &&
+        height >= commonTheme.mediaQueries.gameEditionDesktopHeightPixel * GE_DESKTOP_CONFIGURATION.scaleValue ? (
           <>
             <img src={centerBackground} style={{ position: 'absolute', width: '100%', top: 0, zIndex: -1 }} alt="" />
             <GameEditionContainer>{children}</GameEditionContainer>

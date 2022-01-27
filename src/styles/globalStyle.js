@@ -98,11 +98,13 @@ export default createGlobalStyle`
       }
     }
 
-    .tablet-none {
+    .desktop-only {
       @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
         display: none !important;
       }
     }
+   
+
     .mobile-none {
       @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel - 1}px`}) {
         display: none !important;

@@ -12,6 +12,7 @@ const initialModalState = {
 export const GE_DESKTOP_CONFIGURATION = {
   displayWidth: 455,
   displayHeight: 335,
+  scaleValue: 0.8,
 };
 
 export const PROGRESS_BAR_MAX_VALUE = 89;
