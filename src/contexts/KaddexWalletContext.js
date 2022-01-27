@@ -44,10 +44,13 @@ export const KaddexWalletProvider = (props) => {
       });
       if (result?.result?.status === 'success' && result?.result?.message === 'Disconnected') {
         logout();
+        setKaddexWalletState({
+          ...kaddexWalletState,
+          isConnected: false,
+        });
       }
     }
   };
-
   useEffect(() => {
     if (kaddexWalletState.isConnected && (!wallet || !account?.account)) {
       console.log('!!!DISCONNECTING');
