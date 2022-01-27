@@ -25,7 +25,7 @@ export const GameEditionProvider = (props) => {
     Right: null,
     Left: null,
   });
-  const [gameEditionView, setGameEditionView] = useState(true);
+  const [gameEditionView, setGameEditionView] = useState(false);
   const [modalState, setModalState] = useState(initialModalState);
 
   // loading bar

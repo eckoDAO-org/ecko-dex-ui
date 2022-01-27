@@ -118,6 +118,7 @@ const TokenPair = (props) => {
                 <Label fontSize={13} withShade>
                   Your pool share:
                 </Label>
+
                 <Label fontSize={16}>{reduceBalance((extractDecimal(balance) / extractDecimal(supply)) * 100)}%</Label>
               </RowContainer>
             </ResultContainer>
@@ -166,7 +167,7 @@ const TokenPair = (props) => {
                     Your pool share:
                   </Label>
                   <Label geLabelStyle={{ justifyContent: 'end' }} geFontSize={18}>
-                    {reduceBalance((extractDecimal(balance) / extractDecimal(supply)) * 100)}%
+                    {((extractDecimal(balance) / extractDecimal(supply)) * 100).toPrecision(4)}%
                   </Label>
                 </ColumnContainer>
               </RowContainer>

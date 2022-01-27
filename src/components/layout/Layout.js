@@ -28,9 +28,6 @@ const WrapperContainer = styled(Wrapper)`
     text-align: center;
     font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
     color: ${({ theme: { colors } }) => colors.white};
-    @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
-      padding-top: 10px;
-    }
   }
 `;
 
@@ -71,9 +68,9 @@ const Layout = ({ children }) => {
       {/* <CustomParticles /> */}
       <WrapperContainer>
         <div>
-          <MobileHeader className="desktop-none" />
+          <MobileHeader className="mobile-only" />
 
-          <DesktopHeader className="tablet-none" gameEditionView={game.gameEditionView} />
+          <DesktopHeader className="mobile-none" gameEditionView={game.gameEditionView} />
         </div>
         {game.gameEditionView &&
         width >= commonTheme.mediaQueries.desktopPixel &&

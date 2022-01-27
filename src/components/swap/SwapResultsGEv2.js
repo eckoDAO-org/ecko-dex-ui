@@ -19,9 +19,10 @@ const SwapResultsGEv2 = ({ priceImpact, fromValues, toValues }) => {
         }
       />
       <PixeledBlueContainer label="max slippage" value={`${pact.slippage * 100}%`} />
+
       <PixeledBlueContainer
         label="lpf"
-        value={`${(liquidity.liquidityProviderFee * parseFloat(fromValues.amount)).toFixed(fromValues.precision)} ${fromValues.coin}`}
+        value={`${(liquidity.liquidityProviderFee * parseFloat(fromValues.amount)).toExponential(4)} ${fromValues.coin}`}
       />
     </InfoContainer>
   );

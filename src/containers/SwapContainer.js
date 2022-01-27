@@ -548,7 +548,6 @@ const SwapContainer = () => {
           setInputSide={setInputSide}
           swapValues={swapValues}
           setShowTxModal={setShowTxModal}
-          /* handleTokenSelectorType={handleTokenSelectorType} */
         />
         {!isNaN(pact.ratio) && fromValues.amount && fromValues.coin && toValues.amount && toValues.coin ? (
           gameEditionView ? (

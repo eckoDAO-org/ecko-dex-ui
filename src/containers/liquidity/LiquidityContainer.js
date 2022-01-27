@@ -697,7 +697,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
                   />
                   <PixeledBlueContainer
                     label="share of pool"
-                    value={`${!pact.share(fromValues.amount) ? 0 : reduceBalance(pact.share(fromValues.amount) * 100)}%`}
+                    value={`${!pact.share(fromValues.amount) ? 0 : (pact.share(fromValues.amount) * 100).toPrecision(4)}%`}
                   />
                 </InfoContainer>
               </>

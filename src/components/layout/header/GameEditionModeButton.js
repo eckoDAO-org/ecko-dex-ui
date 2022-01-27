@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { GameModeIcon } from '../../../assets';
 import { useGameEditionContext } from '../../../contexts';
@@ -51,12 +51,12 @@ const GameEditionModeButton = () => {
   const { gameEditionView, closeModal, setGameEditionView } = useGameEditionContext();
   const [width, height] = useWindowSize();
 
-  // useEffect(() => {
-  //   if (width < commonTheme.mediaQueries.desktopPixel || height < commonTheme.mediaQueries.gameEditionDesktopHeightPixel) {
-  //     setGameEditionView(false);
-  //     closeModal();
-  //   }
-  // }, [width, height]);
+  useEffect(() => {
+    if (width < commonTheme.mediaQueries.desktopPixel || height < commonTheme.mediaQueries.gameEditionDesktopHeightPixel) {
+      setGameEditionView(false);
+      closeModal();
+    }
+  }, [width, height]);
   return (
     <Button
       gameEditionView={gameEditionView}
