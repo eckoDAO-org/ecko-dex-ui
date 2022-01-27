@@ -28,6 +28,7 @@ const ItemsContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+  scrollbar-width: none;
   & > div:first-child {
     margin-left: ${SCROLL_OFFSET}px;
   }

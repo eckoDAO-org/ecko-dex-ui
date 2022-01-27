@@ -22,20 +22,21 @@ import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION } from '../../route
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
 
 const DesktopMainContainer = styled.div`
+  transform: scale(0.8);
   display: flex;
   flex-direction: column;
   width: 100%;
   height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
   align-items: center;
   transition: transform 0.5s;
-  transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
+  transform: ${({ showWires, selectedWire, showTokens }) => {
     if (showTokens) {
-      return 'translate(-30%, 442px)';
+      return 'translate(-30%, 442px) scale(0.8)';
     }
     if (showWires && !selectedWire && !showTokens) {
-      return 'translateY(0px)';
+      return 'translateY(88px) scale(0.8)';
     } else {
-      return 'translateY(442px)';
+      return 'translateY(442px) scale(0.8)';
     }
   }};
   /* transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
@@ -70,6 +71,16 @@ const GameboyDesktopContainer = styled.div`
   flex-direction: column;
   position: relative;
   z-index: 2;
+  transition: transform 0.5s;
+
+  transform: ${({ showWires }) => {
+    if (showWires) {
+      return 'translateY(-85px)';
+    } else {
+      return 'translateY(0px)';
+    }
+  }};
+
   .kaddex-logo {
     margin-top: 20px;
     margin-left: 24px;

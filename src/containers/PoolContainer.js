@@ -27,6 +27,7 @@ const Container = styled.div`
         ::-webkit-scrollbar {
           display: none;
         }
+        scrollbar-width: none;
       `;
     } else {
       if (selectedView === LIQUIDITY_VIEW.LIQUIDITY_LIST) {

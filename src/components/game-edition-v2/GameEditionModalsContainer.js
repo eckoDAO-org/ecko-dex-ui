@@ -40,6 +40,7 @@ const GEModalContainer = styled(FadeIn)`
   ::-webkit-scrollbar {
     display: none;
   }
+  scrollbar-width: none;
 `;
 
 const TitleContainer = styled.div`

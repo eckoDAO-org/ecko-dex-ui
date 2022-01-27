@@ -48,7 +48,7 @@ const Button = styled.div`
 `;
 
 const GameEditionModeButton = () => {
-  const { gameEditionView, closeModal, setGameEditionView } = useGameEditionContext();
+  const { gameEditionView, closeModal, setGameEditionView, showWires } = useGameEditionContext();
   const [width, height] = useWindowSize();
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const GameEditionModeButton = () => {
       closeModal();
     }
   }, [width, height]);
-  return (
+  return !showWires ? (
     <Button
       gameEditionView={gameEditionView}
       onClick={() => {
@@ -78,6 +78,8 @@ const GameEditionModeButton = () => {
            </>
          ) */}
     </Button>
+  ) : (
+    <></>
   );
 };
 

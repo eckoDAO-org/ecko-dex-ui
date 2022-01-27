@@ -17,6 +17,7 @@ export const InfoContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+  scrollbar-width: none;
 `;
 
 export const PixeledInfoContainerBlue = styled.div`

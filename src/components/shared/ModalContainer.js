@@ -30,6 +30,7 @@ const Container = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+  scrollbar-width: none;
 
   ${({ withoutRainbowBackground }) => {
     if (browserDetection() === 'FIREFOX' && !withoutRainbowBackground) {

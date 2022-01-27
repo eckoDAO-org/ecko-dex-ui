@@ -35,6 +35,7 @@ const WrapperContainer = styled(Wrapper)`
 `;
 
 const MainContent = styled.div`
+  transform: scale(0.8);
   height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
     padding: 0 16px;
@@ -43,6 +44,7 @@ const MainContent = styled.div`
     ::-webkit-scrollbar {
       display: none;
     }
+    scrollbar-width: none;
   }
 `;
 

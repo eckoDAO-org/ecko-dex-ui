@@ -9,6 +9,7 @@ export const PartialScrollableScrollSection = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+  scrollbar-width: none;
 `;
 
 export const Container = styled.div`
