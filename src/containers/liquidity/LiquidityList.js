@@ -96,9 +96,20 @@ const LiquidityList = (props) => {
   return (
     <Container $gameEditionView={gameEditionView}>
       {gameEditionView && (
-        <Label geFontSize={52} geCenter geLabelStyle={{ textTransform: 'uppercase' }}>
-          Pool
-        </Label>
+        <>
+          <Label geFontSize={52} geCenter geLabelStyle={{ textTransform: 'uppercase' }}>
+            Pool
+          </Label>
+          {!account?.account && (
+            <>
+              <Label geFontSize={18} geColor={'blue'} geCenter geLabelStyle={{ padding: '10px' }}>
+                Liquidity providers earn a 0.3% fee on all trades proportional to their share of the pool.
+                <br />
+                Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.
+              </Label>
+            </>
+          )}
+        </>
       )}
       {!gameEditionView && (
         <>
@@ -238,30 +249,42 @@ const LiquidityList = (props) => {
             ))}
         </BottomContainer>
       ) : (
-        <Button.Group fluid={gameEditionView} style={!gameEditionView ? { marginTop: 24, width: 214 } : {}}>
-          <CustomButton
-            type="secondary"
-            buttonStyle={{
-              padding: !gameEditionView && '10px 16px',
-              width: !gameEditionView && '214px',
-              height: !gameEditionView && '40px',
-            }}
-            fontSize={14}
-            onClick={() => {
-              if (gameEditionView) {
-                setShowWires(true);
-              } else {
-                modalContext.openModal({
-                  title: account?.account ? 'wallet connected' : 'connect wallet',
-                  description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
-                  content: <ConnectWalletModal />,
-                });
-              }
-            }}
-          >
-            Connect Wallet
-          </CustomButton>
-        </Button.Group>
+        <>
+          {gameEditionView ? (
+            <div style={{ height: '100%', display: 'flex', alignItems: 'flex-end' }}>
+              <Label geCenter geColor="yellow">
+                Connect wallet
+              </Label>
+            </div>
+          ) : (
+            <Button.Group fluid={gameEditionView} style={!gameEditionView ? { marginTop: 24, width: 214 } : {}}>
+              <CustomButton
+                type="secondary"
+                buttonStyle={{
+                  padding: !gameEditionView && '10px 16px',
+                  width: !gameEditionView && '214px',
+                  height: !gameEditionView && '40px',
+                }}
+                fontSize={14}
+                onClick={() => {
+                  if (gameEditionView) {
+                    setShowWires(true);
+                  } else {
+                    modalContext.openModal({
+                      title: account?.account ? 'wallet connected' : 'connect wallet',
+                      description: account?.account
+                        ? `Account ID: ${reduceToken(account.account)}`
+                        : 'Connect a wallet using one of the methods below',
+                      content: <ConnectWalletModal />,
+                    });
+                  }
+                }}
+              >
+                Connect Wallet
+              </CustomButton>
+            </Button.Group>
+          )}
+        </>
       )}
     </Container>
   );

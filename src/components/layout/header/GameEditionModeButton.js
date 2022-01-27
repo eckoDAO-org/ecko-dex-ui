@@ -67,20 +67,16 @@ const GameEditionModeButton = () => {
         }
       }}
     >
-      {
-        width >= commonTheme.mediaQueries.desktopPixel && height >= commonTheme.mediaQueries.gameEditionDesktopHeightPixel && (
-          <>
-            {!gameEditionView && <GameModeIcon style={{ marginRight: 9.4 }} />}
-            <span style={{ fontFamily: commonTheme.fontFamily.bold, whiteSpace: 'nowrap' }}>{gameEditionView ? 'Exit Game Mode' : 'Game Mode'}</span>
-          </>
-        )
-        // : (
-        //   <>
-        //     {gameEditionView && <ObliqueStrokeIcon style={{ position: 'absolute' }} />}
-        //     <GameModeIcon />
-        //   </>
-        // )
-      }
+      {!gameEditionView && <GameModeIcon style={{ marginRight: 9.4 }} />}
+      <span style={{ fontFamily: commonTheme.fontFamily.bold, whiteSpace: 'nowrap' }}>{gameEditionView ? 'Exit Game Mode' : 'Game Mode'}</span>
+
+      {/* 
+         : (
+           <>
+             {gameEditionView && <ObliqueStrokeIcon style={{ position: 'absolute' }} />}
+             <GameModeIcon />
+           </>
+         ) */}
     </Button>
   );
 };

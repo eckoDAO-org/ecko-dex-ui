@@ -1,5 +1,4 @@
 import { createGlobalStyle, css } from 'styled-components/macro';
-import browserDetection from '../utils/browserDetection';
 import appBackground from '../assets/images/shared/app-background.png';
 
 export default createGlobalStyle`
@@ -30,7 +29,6 @@ export default createGlobalStyle`
       font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
       color: ${({ theme: { colors } }) => colors.primary};
       ${({ themeMode, theme: { backgroundBody, backgroundBodySafari } }) => {
-        console.log('themeMode', themeMode);
         return themeMode === 'light'
           ? css`
               background: ${backgroundBody};
@@ -40,9 +38,6 @@ export default createGlobalStyle`
             `;
       }};
       
-      /* background-image: url(${appBackground}); */
-      /* background: ${({ theme: { backgroundBody, backgroundBodySafari } }) =>
-        browserDetection() === 'SAFARI' ? backgroundBodySafari : backgroundBody}; */
       opacity: 1;
       background-size: cover;
       background-repeat: no-repeat;
@@ -58,10 +53,7 @@ export default createGlobalStyle`
         height: 100%;
       }
     }
-/* 
-    .ui.dimmer {
-      background-color: rgba(0,0,0,.40) !important;
-    } */
+
     .game-edition-input.ui.input>input{
       font-weight: 400;
       text-align: center;

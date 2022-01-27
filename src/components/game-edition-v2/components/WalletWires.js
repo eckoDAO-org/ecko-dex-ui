@@ -124,7 +124,7 @@ export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
 };
 
 const WalletWires = () => {
-  const { wallet } = useWalletContext();
+  const { wallet, removeWallet, removeSigning } = useWalletContext();
   const { showWires, onWireSelect, selectedWire } = useContext(GameEditionContext);
   const { logout } = useAccountContext();
 
@@ -135,7 +135,7 @@ const WalletWires = () => {
           style={{ bottom: 30 }}
           onClick={() => {
             let oldWire = null;
-            if (wallet?.id) {
+            if (wallet && !selectedWire && wallet?.id !== selectedWire?.id) {
               oldWire = WALLET[wallet.id];
             }
             onWireSelect(oldWire);
@@ -155,6 +155,8 @@ const WalletWires = () => {
             oldWire = WALLET[wallet.id];
           } else {
             logout();
+            removeWallet();
+            removeSigning();
           }
           onWireSelect(oldWire);
         }}
