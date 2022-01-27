@@ -108,11 +108,12 @@ const ButtonGroup = styled(Button.Group)`
 const AccountModal = () => {
   const { account, logout } = useContext(AccountContext);
   const modalContext = useContext(ModalContext);
-  const { gameEditionView, setSelectedWire, setShowWires, setButtons } = useContext(GameEditionContext);
+  const { gameEditionView, setSelectedWire, setShowWires, setButtons, buttons } = useContext(GameEditionContext);
   const { wallet } = useContext(WalletContext);
   const { disconnectWallet } = useContext(KaddexWalletContext);
 
   useEffect(() => {
+    const oldButtons = buttons;
     if (gameEditionView) {
       setButtons({
         B: () => {
@@ -122,7 +123,7 @@ const AccountModal = () => {
       });
     }
     return () => {
-      setButtons({ B: null });
+      setButtons({ ...oldButtons });
     };
   }, [gameEditionView]);
 
