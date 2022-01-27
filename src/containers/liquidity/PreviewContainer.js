@@ -96,7 +96,7 @@ const PreviewContainer = (props) => {
           </RowContainer2>
           <RowContainer2>
             <Label>Share of Pool</Label>
-            <Value>{reduceBalance(pact.share(fromValues?.amount) * 100)}%</Value>
+            <Value>{(pact.share(fromValues?.amount) * 100).toPrecision(4)} %</Value>
           </RowContainer2>
         </ResultContainer>
       ) : (

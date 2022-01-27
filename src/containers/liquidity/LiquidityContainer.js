@@ -697,7 +697,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
                   />
                   <PixeledBlueContainer
                     label="share of pool"
-                    value={`${!pact.share(fromValues.amount) ? 0 : (pact.share(fromValues.amount) * 100).toPrecision(4)}%`}
+                    value={`${!pact.share(fromValues.amount) ? 0 : (pact.share(fromValues.amount) * 100).toPrecision(4)} %`}
                   />
                 </InfoContainer>
               </>
@@ -719,7 +719,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
                   <InnerRowContainer>
                     <Label fontSize={13}>Share of Pool</Label>
                     <Label fontSize={13} fontFamily="bold">
-                      {!pact.share(fromValues.amount) ? 0 : reduceBalance(pact.share(fromValues.amount) * 100)}%
+                      {!pact.share(fromValues.amount) ? 0 : (pact.share(fromValues.amount) * 100).toPrecision(4)} %
                     </Label>
                   </InnerRowContainer>
                 </DesktopInfoContainer>

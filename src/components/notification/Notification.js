@@ -18,6 +18,8 @@ const Container = styled.div`
   .Toastify__toast-container--bottom-right {
     display: flex;
     justify-content: flex-end;
+    flex-direction: column;
+    width: auto;
   }
   .Toastify__toast--game-edition {
     background-color: #000000;

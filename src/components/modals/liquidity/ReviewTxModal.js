@@ -151,7 +151,7 @@ const ReviewTxModal = ({ fromValues, toValues, supply }) => {
         infoItems={[
           {
             label: 'Share of Pool',
-            value: `${reduceBalance(pact.share(fromValues?.amount) * 100)}%`,
+            value: `${(pact.share(fromValues?.amount) * 100).toPrecision(4)} %`,
           },
         ]}
       />
