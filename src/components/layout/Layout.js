@@ -28,6 +28,9 @@ const WrapperContainer = styled(Wrapper)`
     text-align: center;
     font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
     color: ${({ theme: { colors } }) => colors.white};
+    @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {
+      padding-top: 10px;
+    }
   }
 `;
 

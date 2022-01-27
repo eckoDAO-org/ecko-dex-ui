@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 import { Accordion } from 'semantic-ui-react';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
-import { reduceBalance, extractDecimal, pairUnit } from '../../utils/reduceBalance';
+import { extractDecimal, pairUnit } from '../../utils/reduceBalance';
 import CustomButton from '../../components/shared/CustomButton';
 import { theme } from '../../styles/theme';
 import { ColumnContainer, Container, RowContainer, Value } from '../../components/layout/Containers';
@@ -119,37 +119,39 @@ const TokenPair = (props) => {
                   Your pool share:
                 </Label>
 
-                <Label fontSize={16}>{reduceBalance((extractDecimal(balance) / extractDecimal(supply)) * 100)}%</Label>
+                <Label fontSize={16}>{((extractDecimal(balance) / extractDecimal(supply)) * 100).toPrecision(4)} %</Label>
               </RowContainer>
             </ResultContainer>
           ) : width <= theme().mediaQueries.mobilePixel ? (
             <ResultContainer style={{ flexFlow: 'column' }} active={props.activeIndex === props.index} $gameEditionView={$gameEditionView}>
               <ColumnContainer>
-                <Label>Your pool tokens:</Label>
+                <Label geColor="yellow">Your pool tokens:</Label>
                 <Value>{pairUnit(extractDecimal(balance))}</Value>
               </ColumnContainer>
               <ColumnContainer>
-                <Label>Pooled {token0}:</Label>
+                <Label geColor="yellow">Pooled {token0}:</Label>
                 <Value>{pairUnit(extractDecimal(pooledAmount[0]))}</Value>
               </ColumnContainer>
               <ColumnContainer>
-                <Label>Pooled {token1}:</Label>
+                <Label geColor="yellow">Pooled {token1}:</Label>
                 <Value>{pairUnit(extractDecimal(pooledAmount[1]))}</Value>
               </ColumnContainer>
               <ColumnContainer>
-                <Label>Your pool share:</Label>
-                <Value>{reduceBalance((extractDecimal(balance) / extractDecimal(supply)) * 100)}%</Value>
+                <Label geColor="yellow">Your pool share:</Label>
+                <Value>{((extractDecimal(balance) / extractDecimal(supply)) * 100).toPrecision(4)} %</Value>
               </ColumnContainer>
             </ResultContainer>
           ) : (
             <ResultContainer style={{ flexFlow: 'column' }} active={props.activeIndex === props.index} $gameEditionView={$gameEditionView}>
               <RowContainer $gameEditionView={$gameEditionView}>
                 <ColumnContainer>
-                  <Label geFontSize={16}>Your pool tokens:</Label>
+                  <Label geColor="yellow" geFontSize={16}>
+                    Your pool tokens:
+                  </Label>
                   <Label geFontSize={18}>{pairUnit(extractDecimal(balance))}</Label>
                 </ColumnContainer>
                 <ColumnContainer>
-                  <Label geLabelStyle={{ justifyContent: 'end' }} geFontSize={16}>
+                  <Label geColor="yellow" geLabelStyle={{ justifyContent: 'end' }} geFontSize={16}>
                     Pooled {token0}:
                   </Label>
                   <Label geLabelStyle={{ justifyContent: 'end' }} geFontSize={18}>
@@ -159,15 +161,17 @@ const TokenPair = (props) => {
               </RowContainer>
               <RowContainer $gameEditionView={$gameEditionView}>
                 <ColumnContainer>
-                  <Label geFontSize={16}>Pooled {token1}:</Label>
+                  <Label geColor="yellow" geFontSize={16}>
+                    Pooled {token1}:
+                  </Label>
                   <Label geFontSize={18}>{pairUnit(extractDecimal(pooledAmount[1]))}</Label>
                 </ColumnContainer>
                 <ColumnContainer>
-                  <Label geLabelStyle={{ justifyContent: 'end' }} geFontSize={16}>
+                  <Label geColor="yellow" geLabelStyle={{ justifyContent: 'end' }} geFontSize={16}>
                     Your pool share:
                   </Label>
                   <Label geLabelStyle={{ justifyContent: 'end' }} geFontSize={18}>
-                    {((extractDecimal(balance) / extractDecimal(supply)) * 100).toPrecision(4)}%
+                    {((extractDecimal(balance) / extractDecimal(supply)) * 100).toPrecision(4)} %
                   </Label>
                 </ColumnContainer>
               </RowContainer>

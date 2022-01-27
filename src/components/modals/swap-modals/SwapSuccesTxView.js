@@ -1,18 +1,19 @@
 import React, { useContext } from 'react';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { PactContext } from '../../../contexts/PactContext';
-import { extractDecimal, gasUnit, reduceBalance } from '../../../utils/reduceBalance';
+import { extractDecimal, reduceBalance } from '../../../utils/reduceBalance';
 import reduceToken from '../../../utils/reduceToken';
 import { getTokenIcon, showTicker } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import { Row, SuccessViewContainerGE, SuccesViewContainer } from './common-result-components';
 import { ChainIcon } from '../../../assets';
 import { ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
-import { Divider, Icon, Label } from 'semantic-ui-react';
+import { Divider, Icon } from 'semantic-ui-react';
 import PopupTxView from './PopupTxView';
 import { theme } from '../../../styles/theme';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { LightModeContext } from '../../../contexts/LightModeContext';
+import Label from '../../shared/Label';
 
 export const SwapSuccessViewGE = ({ swap }) => {
   const { account } = useContext(AccountContext);
@@ -66,19 +67,19 @@ export const SwapSuccessViewGE = ({ swap }) => {
       infoItems={[
         {
           label: `${showTicker(swap?.localRes?.result?.data[0]?.token)}/${showTicker(swap?.localRes?.result?.data[1]?.token)}`,
-          value: `1 = ${reduceBalance(pact?.computeOut(1), 12)}`,
+          value: `1 = ${reduceBalance(pact?.computeOut(1), 6)}`,
         },
         {
           label: 'gas cost KDA',
           value: ENABLE_GAS_STATION ? (
             <>
-              <GameEditionLabel geColor="white">{gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA</GameEditionLabel>
+              <GameEditionLabel geColor="white">{(GAS_PRICE * swap?.localRes?.gas).toPrecision(4)} KDA</GameEditionLabel>
               <GameEditionLabel geColor="white" labelStyle={{ marginLeft: 5 }}>
                 FREE!
               </GameEditionLabel>
             </>
           ) : (
-            <GameEditionLabel geColor="white">{gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA</GameEditionLabel>
+            <GameEditionLabel geColor="white">{(GAS_PRICE * swap?.localRes?.gas).toPrecision(4)} KDA</GameEditionLabel>
           ),
         },
       ]}

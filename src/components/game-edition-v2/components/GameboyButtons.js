@@ -44,8 +44,8 @@ const GameboyButtons = () => {
           if (buttons?.Menu) {
             buttons.Menu();
           } else {
-            history.push(ROUTE_GAME_EDITION_MENU);
             closeModal();
+            history.push(ROUTE_GAME_EDITION_MENU);
           }
         }}
       />
@@ -55,8 +55,8 @@ const GameboyButtons = () => {
           if (buttons?.Swap) {
             buttons.Swap();
           } else {
-            history.push(ROUTE_SWAP);
             closeModal();
+            history.push(ROUTE_SWAP);
           }
         }}
       />

@@ -5,7 +5,6 @@ import { ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstan
 import { useGameEditionContext } from '../../../contexts';
 import { GE_DESKTOP_CONFIGURATION } from '../../../contexts/GameEditionContext';
 import { commonColors } from '../../../styles/theme';
-import { gasUnit } from '../../../utils/reduceBalance';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import PixeledBlueContainer, { InfoContainer } from '../../game-edition-v2/components/PixeledInfoContainerBlue';
 import { PixeledInfoContainerWhite } from '../../game-edition-v2/components/PixeledInfoContainerWhite';
@@ -43,7 +42,7 @@ export const GasCost = ({ swap }) => {
         {ENABLE_GAS_STATION ? (
           <>
             <Label fontSize={13} color={commonColors.green} geColor="green">
-              {gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA
+              {(GAS_PRICE * swap?.localRes?.gas).toPrecision(4)} KDA
             </Label>
             <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ marginLeft: 5 }}>
               FREE!
@@ -51,7 +50,7 @@ export const GasCost = ({ swap }) => {
           </>
         ) : (
           <Label fontSize={13} color={commonColors.green} geColor="green">
-            {gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA
+            {(GAS_PRICE * swap?.localRes?.gas).toPrecision(4)} KDA
           </Label>
         )}
         {ENABLE_GAS_STATION && <PopupTxView popupStyle={{ maxWidth: '400px' }} />}

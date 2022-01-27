@@ -47,7 +47,7 @@ const PixeledBlueContainer = ({ label, value, style }) => {
       <Label geFontSize={18} geColor="blue">
         {label}
       </Label>
-      <Label geFontSize={24}>{value}</Label>
+      <Label geFontSize={20}>{value}</Label>
     </PixeledInfoContainerBlue>
   );
 };

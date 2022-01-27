@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
+import { useGameEditionContext } from '../../../contexts';
 import { ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
-import { extractDecimal, gasUnit } from '../../../utils/reduceBalance';
+import { extractDecimal } from '../../../utils/reduceBalance';
 import { getTokenIcon, showTicker } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import Label from '../../shared/Label';
 import { Row, SuccessViewContainerGE, SuccesViewContainer } from '../../modals/swap-modals/common-result-components';
-import { useGameEditionContext } from '../../../contexts';
 
 export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }) => {
   const { setButtons } = useGameEditionContext();
@@ -50,13 +50,13 @@ export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }
           label: 'gas cost KDA',
           value: ENABLE_GAS_STATION ? (
             <>
-              <GameEditionLabel geColor="white">{gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA</GameEditionLabel>
+              <GameEditionLabel geColor="white">{(GAS_PRICE * swap?.localRes?.gas).toPrecision(4)} KDA</GameEditionLabel>
               <GameEditionLabel geColor="white" labelStyle={{ marginLeft: 5 }}>
                 FREE!
               </GameEditionLabel>
             </>
           ) : (
-            <GameEditionLabel geColor="white">{gasUnit(GAS_PRICE * swap?.localRes?.gas)} KDA</GameEditionLabel>
+            <GameEditionLabel geColor="white">{(GAS_PRICE * swap?.localRes?.gas).toPrecision(4)} KDA</GameEditionLabel>
           ),
         },
       ]}
