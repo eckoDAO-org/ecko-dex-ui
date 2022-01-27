@@ -22,6 +22,7 @@ import { ArrowBack } from '../../assets';
 import { theme } from '../../styles/theme';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import PixeledBlueContainer from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
+import LogoLoader from '../../components/shared/LogoLoader';
 
 const Container = styled.div`
   display: flex;
@@ -62,6 +63,12 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
+  & > button:not(:last-child) {
+    margin-right: 8px;
+  }
+  & > button:last-child {
+    margin-right: 0px;
+  }
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {
     & > button {
       padding: 0px !important;
@@ -236,7 +243,11 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
         footer={
           <ButtonContainer gameEditionView={gameEditionView}>
             {gameEditionView ? (
-              <PressButtonToActionLabel button="B" actionLabel="remove liquidity" />
+              loading ? (
+                <LogoLoader />
+              ) : (
+                <PressButtonToActionLabel button="B" actionLabel="remove liquidity" />
+              )
             ) : (
               <CustomButton
                 fluid
@@ -308,9 +319,9 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
 
         {gameEditionView ? (
           <InfoContainer style={{ marginTop: 32 }}>
-            <PixeledBlueContainer label={`${token0}/${token1}`} value={pairUnit(extractDecimal(pooled))} />
-            <PixeledBlueContainer label={`Pooled ${token0}`} value={pairUnit(extractDecimal(pooledToken0))} />
-            <PixeledBlueContainer label={`Pooled ${token1}`} value={pairUnit(extractDecimal(pooledToken1))} />
+            <PixeledBlueContainer label={`${token0}/${token1}`} value={extractDecimal(pooled).toPrecision(4)} />
+            <PixeledBlueContainer label={`Pooled ${token0}`} value={extractDecimal(pooledToken0).toPrecision(4)} />
+            <PixeledBlueContainer label={`Pooled ${token1}`} value={extractDecimal(pooledToken1).toPrecision(4)} />
           </InfoContainer>
         ) : (
           <DesktopInfoContainer>

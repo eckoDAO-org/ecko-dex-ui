@@ -11,6 +11,7 @@ import { PixeledInfoContainerWhite } from '../../game-edition-v2/components/Pixe
 import PressButtonToActionLabel from '../../game-edition-v2/components/PressButtonToActionLabel';
 import CustomButton from '../../shared/CustomButton';
 import Label from '../../shared/Label';
+import LogoLoader from '../../shared/LogoLoader';
 import PopupTxView from './PopupTxView';
 
 export const Message = ({ color, children }) => {
@@ -91,7 +92,7 @@ export const SuccesViewContainer = ({ swap, onClick, loading, children }) => {
   );
 };
 
-export const SuccessViewContainerGE = ({ leftItem, rightItem, infoItems, hideIcon, title, containerStyle }) => {
+export const SuccessViewContainerGE = ({ leftItem, rightItem, infoItems, hideIcon, title, containerStyle, loading }) => {
   const { gameEditionView } = useGameEditionContext();
   return (
     <PreviewContainer gameEditionView={gameEditionView} style={containerStyle}>
@@ -116,9 +117,7 @@ export const SuccessViewContainerGE = ({ leftItem, rightItem, infoItems, hideIco
           ))}
         </InfoContainer>
       </div>
-      <Row className="c">
-        <PressButtonToActionLabel actionLabel="send" />
-      </Row>
+      <Row className="c">{loading ? <LogoLoader /> : <PressButtonToActionLabel actionLabel="send" />}</Row>
     </PreviewContainer>
   );
 };

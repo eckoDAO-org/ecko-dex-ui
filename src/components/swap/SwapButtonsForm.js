@@ -10,6 +10,7 @@ import { WalletContext } from '../../contexts/WalletContext';
 import { SwapContext } from '../../contexts/SwapContext';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
+import LogoLoader from '../shared/LogoLoader';
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -68,7 +69,7 @@ const SwapButtonsForm = ({
   };
 
   useEffect(() => {
-    if (gameEditionView) {
+    if (gameEditionView && !loading) {
       setButtons({
         B: () => {
           if (showTxModal) {
@@ -90,9 +91,10 @@ const SwapButtonsForm = ({
           }
         },
       });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showTxModal, account.account, gameEditionView, fromValues, toValues]);
+    } else {
+      setButtons({ B: null });
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showTxModal, account.account, gameEditionView, fromValues, toValues, loading]);
 
   const handleClick = async () => {
     setLoading(true);
@@ -168,7 +170,9 @@ const SwapButtonsForm = ({
     <ButtonContainer gameEditionView={gameEditionView}>
       {gameEditionView ? (
         <LabelContainer>
-          {getButtonLabel() === 'SWAP' ? (
+          {loading ? (
+            <LogoLoader />
+          ) : getButtonLabel() === 'SWAP' ? (
             <PressButtonToActionLabel button="B" actionLabel="swap" />
           ) : (
             <Label gameEditionView={gameEditionView}>{getButtonLabel()}</Label>

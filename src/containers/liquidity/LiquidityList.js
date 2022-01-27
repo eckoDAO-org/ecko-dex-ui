@@ -230,7 +230,7 @@ const LiquidityList = (props) => {
                         }}
                       />
                     ) : (
-                      <LogoLoader />
+                      <LogoLoader withTopMargin />
                     )}
                   </>
                 )}

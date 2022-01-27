@@ -18,7 +18,7 @@ const Content = styled.div`
   svg {
     display: ${({ gameEditionView }) => gameEditionView && 'none '};
     path {
-      fill: ${({ theme: { colors } }) => colors.white};
+      fill: ${({ gameEditionView, theme: { colors } }) => !gameEditionView && colors.white};
     }
   }
   width: 100%;
@@ -76,7 +76,7 @@ const ReviewTxModal = ({ fromValues, toValues, supply }) => {
         </Row>
         {/* FIRST RATE */}
         <Row className="fe">
-          <Label fontSize={10}>{`1 ${fromValues?.coin} =  ${reduceBalance(1 / pact.ratio)} ${toValues?.coin}`}</Label>
+          <Label fontSize={13}>{`1 ${fromValues?.coin} =  ${reduceBalance(1 / pact.ratio)} ${toValues?.coin}`}</Label>
         </Row>
         {/* SECOND COIN */}
         <Row className="sb" style={{ marginBottom: 8 }}>
@@ -92,30 +92,33 @@ const ReviewTxModal = ({ fromValues, toValues, supply }) => {
         </Row>
         {/* SECOND RATE */}
         <Row className="fe">
-          <Label fontSize={10}>{`1 ${toValues?.coin} =  ${reduceBalance(pact.ratio)} ${fromValues?.coin}`}</Label>
+          <Label fontSize={13}>{`1 ${toValues?.coin} =  ${reduceBalance(pact.ratio)} ${fromValues?.coin}`}</Label>
         </Row>
         <Row className="sb">
-          <Label fontSize={10}>Share of Pool:</Label>
-          <Label fontSize={10}>{reduceBalance(pact.share(fromValues?.amount) * 100)}%</Label>
+          <Label fontSize={13}>Share of Pool:</Label>
+          <Label fontSize={13}>{(pact.share(fromValues?.amount) * 100).toPrecision(4)} %</Label>
         </Row>
       </TransactionsDetails>
     );
   };
 
-  const ContentViewGe = () => {
+  const ContentViewGe = ({ loading }) => {
     const { setButtons } = useGameEditionContext();
     useEffect(() => {
       setButtons({
-        B: () => {
-          setLoading(true);
-          supply();
-        },
+        B: !loading
+          ? () => {
+              setLoading(true);
+              supply();
+            }
+          : null,
       });
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [loading]);
     return (
       <SuccessViewContainerGE
         hideIcon
+        loading={loading}
         title="Deposit Desired"
         leftItem={
           <>
@@ -166,7 +169,7 @@ const ReviewTxModal = ({ fromValues, toValues, supply }) => {
         </Label>
       )}
       <SuccessfullIcon />
-      {gameEditionView ? <ContentViewGe /> : <ContentView />}
+      {gameEditionView ? <ContentViewGe loading={loading} /> : <ContentView />}
       {!gameEditionView && (
         <CustomButton
           type="secondary"
