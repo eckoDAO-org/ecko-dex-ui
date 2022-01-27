@@ -15,6 +15,9 @@ const Container = styled.div`
       width: 520px;
     }
   }
+  .Toastify__close-button {
+    padding: 10px;
+  }
   .Toastify__toast-container--bottom-right {
     display: flex;
     justify-content: flex-end;
