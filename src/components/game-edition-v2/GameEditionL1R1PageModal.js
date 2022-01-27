@@ -65,32 +65,30 @@ const GameEditionL1R1PageModal = ({ direction }) => {
 
   // init index based on the current route when this page is rendered
   useEffect(() => {
-    let index = null;
     const routeIndex = menuItems.findIndex((r) => r.route === location.pathname);
-    console.log('routeIndex', routeIndex);
     if (routeIndex < 0) {
       if (direction === 'left') {
-        index = 0;
+        onSwitch(direction, 0);
       } else {
-        index = 1;
+        onSwitch(direction, 1);
       }
-      onSwitch(direction, index);
     } else {
-      if (routeIndex === menuItems.length - 1 && direction === 'right') {
-        setSelectedItemIndex(routeIndex);
-        setTranslateX(routeIndex * 274);
-      } else if (routeIndex <= menuItems.length - 1 && direction === 'left') {
-        setSelectedItemIndex(routeIndex - 1);
-        setTranslateX((routeIndex - 1) * 274);
-      } else if (routeIndex >= 0 && direction === 'right') {
-        setSelectedItemIndex(routeIndex + 1);
-        setTranslateX((routeIndex + 1) * 274);
-      } else if (routeIndex === 0 && direction === 'left') {
-        setSelectedItemIndex(0);
-        setTranslateX(0);
+      if (direction === 'right') {
+        if (routeIndex === menuItems.length - 1) {
+          setSelectedItemIndex(routeIndex);
+          setTranslateX(routeIndex * 274);
+        } else if (routeIndex >= 0) {
+          setSelectedItemIndex(routeIndex + 1);
+          setTranslateX((routeIndex + 1) * 274);
+        }
       } else {
-        setSelectedItemIndex(routeIndex);
-        setTranslateX(routeIndex * 274);
+        if (routeIndex === 0) {
+          setSelectedItemIndex(0);
+          setTranslateX(0);
+        } else if (routeIndex <= menuItems.length - 1) {
+          setSelectedItemIndex(routeIndex - 1);
+          setTranslateX((routeIndex - 1) * 274);
+        }
       }
     }
   }, []);
