@@ -121,6 +121,9 @@ const AccountModal = () => {
         },
       });
     }
+    return () => {
+      setButtons({ B: null });
+    };
   }, [gameEditionView]);
 
   return (

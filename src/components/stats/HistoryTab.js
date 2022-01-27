@@ -12,6 +12,7 @@ import { PartialScrollableScrollSection } from '../layout/Containers';
 import HistoryCard from './HistoryCard';
 import LogoLoader from '../../components/shared/LogoLoader';
 import Label from '../shared/Label';
+import useButtonScrollEvent from '../../hooks/useButtonScrollEvent';
 
 export const CardContainer = styled.div`
   display: flex;
@@ -68,11 +69,12 @@ const HistoryTab = () => {
 
   useEffect(() => {}, [account.sendRes]);
 
+  useButtonScrollEvent(gameEditionView && 'history-list');
   return (
     <CardContainer gameEditionView={gameEditionView}>
       {!gameEditionView && <GradientBorder />}
 
-      <PartialScrollableScrollSection className="scrollbar-none" style={{ width: '100%' }}>
+      <PartialScrollableScrollSection id="history-list" className="scrollbar-none" style={{ width: '100%' }}>
         {!pact.swapList?.error ? (
           pact.swapList[0] ? (
             <InfiniteScroll

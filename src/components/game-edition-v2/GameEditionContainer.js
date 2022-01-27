@@ -26,6 +26,9 @@ const DesktopMainContainer = styled.div`
   flex-direction: column;
   width: 100%;
   height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
+    height: ${({ theme: { header } }) => `calc(100% - ${header.mobileHeight}px)`};
+  }
   align-items: center;
   transition: transform 0.5s;
   transform: ${({ showWires, selectedWire, showTokens }) => {
