@@ -13,7 +13,7 @@ const Container = styled.div`
       return css`
         position: absolute;
         right: 26px;
-        top: ${({ coin }) => (coin ? 9 : 0)}px;
+        top: ${({ coin }) => (coin ? 9 : 4)}px;
       `;
     }
   }}
@@ -46,7 +46,7 @@ const ElementsContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-right: 6px;
+  margin-right: 12px;
   svg {
     path {
       fill: ${({ theme: { colors } }) => colors.white};
