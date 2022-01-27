@@ -54,6 +54,8 @@ export const WalletProvider = (props) => {
     storePrivKey,
     setSigningMethod,
     signingWallet,
+    removeWallet,
+    removeSigning,
   };
   return <WalletContext.Provider value={contextValues}>{props.children}</WalletContext.Provider>;
 };

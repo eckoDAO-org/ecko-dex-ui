@@ -59,7 +59,7 @@ const SwapButtonsForm = ({
   };
 
   useEffect(() => {
-    if (gameEditionView && !loading) {
+    if (gameEditionView && !loading && account?.account) {
       setButtons({
         B: () => {
           if (showTxModal) {
@@ -69,14 +69,6 @@ const SwapButtonsForm = ({
             closeModal();
             setLoading(false);
           } else {
-            if (!account.account) {
-              openModal({
-                isVisible: true,
-                title: account?.account ? 'wallet connected' : 'connect wallet',
-                description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
-                content: <ConnectWalletModal />,
-              });
-            }
             handleClick();
           }
         },

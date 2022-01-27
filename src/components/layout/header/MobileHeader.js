@@ -8,7 +8,6 @@ import { HamburgerIcon, KaddexLetterLogo } from '../../../assets';
 import menuItems from '../../menuItems';
 import { useHistory } from 'react-router';
 import { ROUTE_SWAP } from '../../../router/routes';
-import GameEditionModeButton from './GameEditionModeButton';
 
 const Container = styled.div`
   display: flex;
@@ -63,7 +62,7 @@ const MobileHeader = ({ className }) => {
           <KaddexLetterLogo onClick={() => history.push(ROUTE_SWAP)} />
         </LeftContainer>
 
-        <GameEditionModeButton />
+        {/* <GameEditionModeButton /> */}
         <RightContainer>
           <RightHeaderItems />
         </RightContainer>
