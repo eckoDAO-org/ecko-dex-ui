@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { MenuGEIcon } from '../../assets';
-import HeaderItem from '../../shared/HeaderItem';
 import theme from '../../styles/theme';
 import headerLinks from '../headerLinks';
 import menuItems from '../menuItems';
 import { FadeIn } from '../shared/animations';
+import HeaderItem from '../shared/HeaderItem';
 
 const Container = styled(FadeIn)`
   display: flex;

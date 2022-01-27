@@ -35,8 +35,12 @@ export const NotificationProvider = ({ children }) => {
     onClick = undefined,
     onOpen = undefined,
     onClose = undefined,
+    icon = undefined,
+    titleStyle,
+    className,
   }) => {
-    return toast(<NotificationContainer message={message} type={type} title={title} />, {
+    return toast(<NotificationContainer message={message} type={type} title={title} icon={icon} titleStyle={titleStyle} />, {
+      className,
       title,
       message,
       autoClose,
@@ -53,6 +57,7 @@ export const NotificationProvider = ({ children }) => {
       onClick,
       onOpen,
       onClose,
+      icon,
     });
   };
 

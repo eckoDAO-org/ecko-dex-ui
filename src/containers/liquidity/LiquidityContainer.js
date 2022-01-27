@@ -2,59 +2,56 @@
 import React, { useEffect, useState, useContext } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { throttle, debounce } from 'throttle-debounce';
-import { PactContext } from '../../contexts/PactContext';
-import { reduceBalance, getCorrectBalance } from '../../utils/reduceBalance';
-import WalletRequestView from '../../components/swap/swap-modals/WalletRequestView';
-import { ReactComponent as ArrowBack } from '../../assets/images/shared/arrow-back.svg';
-import { ReactComponent as CloseGE } from '../../assets/images/shared/close-ge.svg';
-import { Button } from 'semantic-ui-react';
-import CustomLabel from '../../shared/CustomLabel';
-import CustomButton from '../../shared/CustomButton';
-import ReviewTxModal from '../../components/modals/liquidity/ReviewTxModal';
-import TxView from '../../components/swap/swap-modals/TxView';
 import { ModalContext } from '../../contexts/ModalContext';
 import { AccountContext } from '../../contexts/AccountContext';
 import { WalletContext } from '../../contexts/WalletContext';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
-import { theme } from '../../styles/theme';
+import { PactContext } from '../../contexts/PactContext';
+import { LightModeContext } from '../../contexts/LightModeContext';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { reduceBalance, getCorrectBalance } from '../../utils/reduceBalance';
+import WalletRequestView from '../../components/modals/swap-modals/WalletRequestView';
+import { ArrowBack, CogIcon } from '../../assets';
+import Label from '../../components/shared/Label';
+import CustomButton from '../../components/shared/CustomButton';
+import ReviewTxModal from '../../components/modals/liquidity/ReviewTxModal';
+import TxView from '../../components/modals/swap-modals/TxView';
 import tokenData from '../../constants/cryptoCurrencies';
 import SwapForm from '../../components/swap/SwapForm';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
-import TokenSelectorModalContent from '../../components/swap/swap-modals/TokenSelectorModalContent';
-import { CogIcon } from '../../assets';
-import { FadeIn } from '../../components/shared/animations';
-import FormContainer from '../../shared/FormContainer';
-import GradientBorder from '../../shared/GradientBorder';
-import { LightModeContext } from '../../contexts/LightModeContext';
-import HeaderItem from '../../shared/HeaderItem';
-import CustomPopup from '../../shared/CustomPopup';
+import TokenSelectorModalContent from '../../components/modals/swap-modals/TokenSelectorModalContent';
+import TokenSelectorModalContentGE from '../../components/modals/swap-modals/TokenSelectorModalContentGE';
+import FormContainer from '../../components/shared/FormContainer';
+import GradientBorder from '../../components/shared/GradientBorder';
+import HeaderItem from '../../components/shared/HeaderItem';
+import CustomPopup from '../../components/shared/CustomPopup';
 import SlippagePopupContent from '../../components/layout/header/SlippagePopupContent';
-import BackgroundLogo from '../../shared/BackgroundLogo';
+import BackgroundLogo from '../../components/shared/BackgroundLogo';
 import browserDetection from '../../utils/browserDetection';
+import { theme } from '../../styles/theme';
+import { InfoContainer } from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
+import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
+import PressButtonToActionLabel from '../../components/game-edition-v2/components/PressButtonToActionLabel';
+import PixeledBlueContainer from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
 
-const Container = styled(FadeIn)`
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  overflow: auto;
-  position: relative;
+const Container = styled.div`
   display: flex;
   flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
   height: 100%;
-  justify-content: center;
-
-  ${({ gameEditionView }) => {
-    if (gameEditionView) {
+  justify-content: ${({ $gameEditionView }) => ($gameEditionView ? 'space-between' : 'center')};
+  ${({ $gameEditionView }) => {
+    if ($gameEditionView) {
       return css`
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-      `;
-    } else {
-      return css`
-        max-width: 550px;
+        justify-content: space-between;
+        width: 100%;
       `;
     }
+    return css`
+      justify-content: center;
+      max-width: 550px;
+      width: 550px;
+    `;
   }}
 `;
 
@@ -64,65 +61,27 @@ const TitleContainer = styled.div`
   justify-content: space-between;
   margin-bottom: 14px;
   width: 100%;
-  margin-top: 16px;
-`;
-
-const Title = styled.span`
-  font: ${({ theme: { fontFamily }, gameEditionView }) =>
-    gameEditionView ? `normal normal normal 16px/19px ${fontFamily.pressStartRegular}` : 'normal normal bold 32px/57px Montserrat'};
-  letter-spacing: 0px;
-  color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.black : colors.white)};
-  text-transform: capitalize;
-  svg {
-    path {
-      fill: ${({ theme: { colors } }) => colors.white};
-    }
-  }
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: ${({ gameEditionView }) => (gameEditionView && browserDetection() === 'SAFARI' ? '0px' : '16px')};
+  margin-top: ${browserDetection() === 'SAFARI' ? '0px' : '16px'};
   width: 100%;
 `;
 
-const ResultContainer = styled.div`
+const DesktopInfoContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  margin: ${({ gameEditionView }) => (gameEditionView ? `0px` : ` 16px 0px 0px 0px`)};
-  flex-flow: column;
-  width: 100%;
-  padding: ${({ gameEditionView }) => (gameEditionView ? `0 10px` : 0)};
-  margin-top: ${({ gameEditionView }) => gameEditionView && '30px'};
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    margin: ${({ gameEditionView }) => gameEditionView && `10px 0px 5px 0px`};
-    flex-flow: column;
-  }
-
-  & > *:not(:last-child) {
-    margin-bottom: ${({ gameEditionView }) => !gameEditionView && `10px`};
+  flex-direction: column;
+  margin-top: 16px;
+  & > div:not(:last-child) {
+    margin-bottom: 10px;
   }
 `;
-
 const InnerRowContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  flex-flow: row;
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: ${({ gameEditionView }) => (gameEditionView ? 'column' : `row`)};
-  }
-`;
-
-const Value = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
-  font-size: ${({ gameEditionView }) => (gameEditionView ? '10px' : '13px')};
-  line-height: 20px;
-  color: ${({ theme: { colors }, gameEditionView }) => (gameEditionView ? colors.black : colors.white)};
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    text-align: ${({ gameEditionView }) => gameEditionView && 'left'};
-    margin-bottom: ${({ gameEditionView }) => gameEditionView && '5px'};
-  }
+  width: 100%;
 `;
 
 const initialStateValue = {
@@ -139,17 +98,26 @@ const GameEditionTokenSelectorContainer = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 `;
 
-const LiquidityContainer = (props) => {
+const LabelContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  z-index: ${({ gameEditionView }) => !gameEditionView && '1'};
+`;
+
+const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidity }) => {
   const pact = useContext(PactContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const liquidity = useContext(LiquidityContext);
   const modalContext = useContext(ModalContext);
   const { themeMode } = useContext(LightModeContext);
-  const { gameEditionView, openModal, closeModal, isSwapping, setIsSwapping } = useContext(GameEditionContext);
-  const { selectedView, setSelectedView } = props;
+  const { gameEditionView, openModal, closeModal, setButtons, outsideToken } = useContext(GameEditionContext);
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
   const [inputSide, setInputSide] = useState('');
@@ -184,13 +152,6 @@ const LiquidityContainer = (props) => {
     }
   }, [showTxModal]);
 
-  useEffect(() => {
-    if (gameEditionView && isSwapping) {
-      swapValues();
-      setIsSwapping(false);
-    }
-  }, [isSwapping]);
-
   /////// when pass pair by the container, set the token on InputToken
   const handleTokenValue = async (by, crypto) => {
     let balance;
@@ -223,17 +184,17 @@ const LiquidityContainer = (props) => {
 
   useEffect(() => {
     setInputSide('from');
-    if (props?.pair?.token0 && fromValues === initialStateValue) {
-      handleTokenValue('from', tokenData[props?.pair?.token0]);
+    if (pair?.token0 && fromValues === initialStateValue) {
+      handleTokenValue('from', tokenData[pair?.token0]);
     }
-  }, [props?.pair?.token0]);
+  }, [pair?.token0]);
 
   useEffect(() => {
     setInputSide('to');
-    if (props?.pair?.token1 && toValues === initialStateValue) {
-      handleTokenValue('to', tokenData[props?.pair?.token1]);
+    if (pair?.token1 && toValues === initialStateValue) {
+      handleTokenValue('to', tokenData[pair?.token1]);
     }
-  }, [props?.pair?.token1]);
+  }, [pair?.token1]);
   ////////
 
   useEffect(async () => {
@@ -315,7 +276,7 @@ const LiquidityContainer = (props) => {
       }
     }
     if (isNaN(pact.ratio) || fromValues.amount === '') {
-      if (selectedView === 'Add Liquidity') {
+      if (selectedView === LIQUIDITY_VIEW.ADD_LIQUIDITY) {
         setToValues((prev) => ({ ...prev, amount: '' }));
       }
     }
@@ -345,33 +306,11 @@ const LiquidityContainer = (props) => {
       }
     }
     if (isNaN(pact.ratio) || toValues.amount === '') {
-      if (selectedView === 'Add Liquidity') {
+      if (selectedView === LIQUIDITY_VIEW.ADD_LIQUIDITY) {
         setFromValues((prev) => ({ ...prev, amount: '' }));
       }
     }
   }, [toValues.amount]);
-
-  useEffect(() => {
-    if (wallet.walletSuccess) {
-      setFromValues({
-        coin: '',
-        account: null,
-        guard: null,
-        balance: null,
-        amount: '',
-        precision: 0,
-      });
-      setToValues({
-        coin: '',
-        account: null,
-        guard: null,
-        balance: null,
-        amount: '',
-        precision: 0,
-      });
-      wallet.setWalletSuccess(false);
-    }
-  }, [wallet.walletSuccess]);
 
   useEffect(() => {
     if (!isNaN(pact.ratio)) {
@@ -410,9 +349,9 @@ const LiquidityContainer = (props) => {
       6: { msg: 'Select different tokens', status: false },
     };
     if (!account.account.account) return status[0];
-    if (selectedView === 'Create A Pair') {
+    if (selectedView === LIQUIDITY_VIEW.CREATE_A_PAIR) {
       if (pairExist) {
-        setSelectedView('Add Liquidity');
+        setSelectedView(LIQUIDITY_VIEW.ADD_LIQUIDITY);
       } else return status[4];
     } else if (isNaN(pact.ratio)) {
       return status[4];
@@ -428,7 +367,7 @@ const LiquidityContainer = (props) => {
   };
 
   const supply = async () => {
-    if (selectedView === 'Create A Pair') {
+    if (selectedView === LIQUIDITY_VIEW.CREATE_A_PAIR) {
       if (wallet.signing.method !== 'sign') {
         const res = await liquidity.createTokenPairLocal(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
         if (res === -1) {
@@ -453,7 +392,6 @@ const LiquidityContainer = (props) => {
         }
       } else {
         setShowReview(false);
-        console.log('param,', tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
         const res = await liquidity.addLiquidityWallet(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
         if (!res) {
           wallet.setIsWaitingForWalletAuth(true);
@@ -461,24 +399,9 @@ const LiquidityContainer = (props) => {
           /* walletError(); */
         } else {
           wallet.setWalletError(null);
-          setSelectedView('Add Liquidity');
+          setSelectedView(LIQUIDITY_VIEW.ADD_LIQUIDITY);
           setShowTxModal(true);
         }
-        /* setShowTxModal(true) */
-        setFromValues({
-          account: null,
-          guard: null,
-          balance: null,
-          amount: '',
-          coin: '',
-        });
-        setToValues({
-          account: null,
-          guard: null,
-          balance: null,
-          amount: '',
-          coin: '',
-        });
       }
     }
   };
@@ -516,6 +439,21 @@ const LiquidityContainer = (props) => {
     setTokenSelectorType(null);
   }, [toValues, fromValues]);
 
+  // to handle token for game edition from token list
+  useEffect(() => {
+    if (outsideToken?.token && gameEditionView) {
+      if (outsideToken?.tokenSelectorType === 'from' && fromValues.coin === outsideToken?.token.name) return;
+      if (outsideToken?.tokenSelectorType === 'to' && toValues?.coin === outsideToken?.token.name) return;
+      if (
+        (outsideToken.tokenSelectorType === 'from' && fromValues.coin !== outsideToken?.token.name) ||
+        (outsideToken.tokenSelectorType === 'to' && toValues?.coin !== outsideToken?.token.name)
+      ) {
+        onTokenClick({ crypto: outsideToken?.token });
+        closeModal();
+      }
+    }
+  }, [outsideToken, gameEditionView]);
+
   useEffect(() => {
     if (tokenSelectorType !== null) {
       handleTokenSelectorType();
@@ -525,14 +463,16 @@ const LiquidityContainer = (props) => {
   const handleTokenSelectorType = () => {
     if (gameEditionView) {
       openModal({
+        titleFontSize: 32,
         title: 'Select a Token',
-        closeModal: () => {
+        type: 'arcade-dark',
+        onClose: () => {
           setTokenSelectorType(null);
           closeModal();
         },
         content: (
           <GameEditionTokenSelectorContainer>
-            <TokenSelectorModalContent
+            <TokenSelectorModalContentGE
               selectedToken={selectedToken}
               tokenSelectorType={tokenSelectorType}
               onTokenClick={onTokenClick}
@@ -577,8 +517,14 @@ const LiquidityContainer = (props) => {
     if (showTxModal) {
       if (gameEditionView) {
         openModal({
+          titleFontSize: 32,
+          containerStyle: { padding: 0 },
+          titleContainerStyle: {
+            padding: 16,
+            paddingBottom: 0,
+          },
           title: 'transaction details',
-          closeModal: () => {
+          onClose: () => {
             setShowTxModal(false);
             closeModal();
           },
@@ -629,12 +575,18 @@ const LiquidityContainer = (props) => {
     if (showReview) {
       if (gameEditionView) {
         openModal({
+          titleFontSize: 32,
+          containerStyle: { padding: 0 },
+          titleContainerStyle: {
+            padding: 16,
+            paddingBottom: 0,
+          },
           title: 'transaction details',
-          closeModal: () => {
+          onClose: () => {
             setShowReview(false);
             closeModal();
           },
-          content: <ReviewTxModal fromValues={fromValues} toValues={toValues} supply={supply} liquidityView={selectedView} />,
+          content: <ReviewTxModal fromValues={fromValues} toValues={toValues} supply={supply} />,
         });
       } else {
         modalContext.openModal({
@@ -644,25 +596,30 @@ const LiquidityContainer = (props) => {
             setShowReview(false);
             modalContext.closeModal();
           },
-          content: <ReviewTxModal fromValues={fromValues} toValues={toValues} supply={supply} liquidityView={selectedView} />,
+          content: <ReviewTxModal fromValues={fromValues} toValues={toValues} supply={supply} />,
         });
       }
     }
   }, [showReview]);
 
+  useEffect(() => {
+    setButtons({
+      B: async () => {
+        if (buttonStatus().status && !showReview && !showTxModal) {
+          setShowReview(true);
+        }
+      },
+    });
+  }, [buttonStatus().status, showReview, showTxModal]);
+
   return (
-    <Container gameEditionView={gameEditionView} onAnimationEnd={() => setIsLogoVisible(true)} className="scrollbar-none">
+    <Container $gameEditionView={gameEditionView} onAnimationEnd={() => setIsLogoVisible(true)} className="scrollbar-none">
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
 
       {!gameEditionView && isLogoVisible && <BackgroundLogo />}
 
       <TitleContainer gameEditionView={gameEditionView}>
-        <Title
-          gameEditionView={gameEditionView}
-          style={{
-            fontFamily: gameEditionView ? theme(themeMode).fontFamily.pressStartRegular : theme(themeMode).fontFamily.bold,
-          }}
-        >
+        <Label fontSize={32} geCenter fontFamily="bold" geFontSize={32} geLabelStyle={{ lineHeight: '32px' }} onClose={() => closeLiquidity()}>
           {!gameEditionView && (
             <ArrowBack
               style={{
@@ -671,12 +628,12 @@ const LiquidityContainer = (props) => {
                 marginRight: '15px',
                 justifyContent: 'center',
               }}
-              onClick={() => props.closeLiquidity()}
+              onClick={() => closeLiquidity()}
             />
           )}
           Add Liquidity
-        </Title>
-        {gameEditionView && <CloseGE style={{ cursor: 'pointer' }} onClick={() => props.closeLiquidity()} />}
+        </Label>
+        {/* {gameEditionView && <CloseGE style={{ cursor: 'pointer' }} onClick={() => props.closeLiquidity()} />} */}
         {!gameEditionView && (
           <HeaderItem headerItemStyle={{ alignItems: 'center', display: 'flex' }}>
             <CustomPopup trigger={<CogIcon />} on="click" offset={[10, 10]} position="bottom right">
@@ -686,15 +643,31 @@ const LiquidityContainer = (props) => {
         )}
       </TitleContainer>
       <FormContainer
+        style={{ justifyContent: 'space-between' }}
         gameEditionView={gameEditionView}
         footer={
-          <ButtonContainer gameEditionView={gameEditionView}>
-            <Button.Group fluid>
-              <CustomButton disabled={!buttonStatus().status} onClick={() => setShowReview(true)}>
+          gameEditionView ? (
+            <LabelContainer gameEditionView={gameEditionView}>
+              {buttonStatus().status === true ? (
+                <PressButtonToActionLabel button="B" actionLabel="add liquidity" />
+              ) : (
+                <Label geCenter geColor="yellow" geFontSize={20}>
+                  {buttonStatus().msg}
+                </Label>
+              )}
+            </LabelContainer>
+          ) : (
+            <ButtonContainer>
+              <CustomButton
+                fluid
+                type={buttonStatus().status === true ? 'secondary' : 'primary'}
+                disabled={!buttonStatus().status}
+                onClick={() => setShowReview(true)}
+              >
                 {buttonStatus().msg}
               </CustomButton>
-            </Button.Group>
-          </ButtonContainer>
+            </ButtonContainer>
+          )
         }
       >
         {!gameEditionView && <GradientBorder />}
@@ -711,24 +684,47 @@ const LiquidityContainer = (props) => {
 
         {fromValues.coin && toValues.coin && (
           <>
-            <ResultContainer gameEditionView={gameEditionView}>
-              <InnerRowContainer gameEditionView={gameEditionView}>
-                <CustomLabel textAlign={gameEditionView && 'start'} fontSize="13px">{`${toValues.coin} per ${fromValues.coin}`}</CustomLabel>
-                <Value gameEditionView={gameEditionView}>{reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}</Value>
-              </InnerRowContainer>
-              <InnerRowContainer gameEditionView={gameEditionView}>
-                <CustomLabel textAlign={gameEditionView && 'start'} fontSize="13px">{`${fromValues.coin} per ${toValues.coin}`}</CustomLabel>
-                <Value gameEditionView={gameEditionView}>{reduceBalance(pact.getRatio1(toValues.coin, fromValues.coin)) ?? '-'}</Value>
-              </InnerRowContainer>
-              <InnerRowContainer gameEditionView={gameEditionView}>
-                <CustomLabel textAlign={gameEditionView && 'start'} fontSize="13px">
-                  Share of Pool
-                </CustomLabel>
-                <Value gameEditionView={gameEditionView}>
-                  {!pact.share(fromValues.amount) ? 0 : reduceBalance(pact.share(fromValues.amount) * 100)}%
-                </Value>
-              </InnerRowContainer>
-            </ResultContainer>
+            {gameEditionView ? (
+              <>
+                <InfoContainer style={{ marginTop: 16 }}>
+                  <PixeledBlueContainer
+                    label={`${toValues.coin}/${fromValues.coin}`}
+                    value={reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}
+                  />
+                  <PixeledBlueContainer
+                    label={`${fromValues.coin}/${toValues.coin}`}
+                    value={reduceBalance(pact.getRatio1(fromValues.coin, toValues.coin)) ?? '-'}
+                  />
+                  <PixeledBlueContainer
+                    label="share of pool"
+                    value={`${!pact.share(fromValues.amount) ? 0 : (pact.share(fromValues.amount) * 100).toPrecision(4)} %`}
+                  />
+                </InfoContainer>
+              </>
+            ) : (
+              <>
+                <DesktopInfoContainer>
+                  <InnerRowContainer>
+                    <Label fontSize={13}>{`${toValues.coin}/${fromValues.coin}`}</Label>
+                    <Label fontSize={13} fontFamily="bold">
+                      {reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}
+                    </Label>
+                  </InnerRowContainer>
+                  <InnerRowContainer>
+                    <Label fontSize={13}>{`${fromValues.coin}/${toValues.coin}`}</Label>
+                    <Label fontSize={13} fontFamily="bold">
+                      {reduceBalance(pact.getRatio1(fromValues.coin, toValues.coin)) ?? '-'}
+                    </Label>
+                  </InnerRowContainer>
+                  <InnerRowContainer>
+                    <Label fontSize={13}>Share of Pool</Label>
+                    <Label fontSize={13} fontFamily="bold">
+                      {!pact.share(fromValues.amount) ? 0 : (pact.share(fromValues.amount) * 100).toPrecision(4)} %
+                    </Label>
+                  </InnerRowContainer>
+                </DesktopInfoContainer>
+              </>
+            )}
           </>
         )}
       </FormContainer>

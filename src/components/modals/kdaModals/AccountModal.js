@@ -1,27 +1,35 @@
-import React, { useContext } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useContext, useEffect } from 'react';
 import { Button } from 'semantic-ui-react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { ExplorerIcon } from '../../../assets';
 import { NETWORK_TYPE } from '../../../constants/contextConstants';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import { LightModeContext } from '../../../contexts/LightModeContext';
 import { ModalContext } from '../../../contexts/ModalContext';
 import { WalletContext } from '../../../contexts/WalletContext';
 import { KaddexWalletContext } from '../../../contexts/KaddexWalletContext';
-import CopyPopup from '../../../shared/CopyPopup';
-import CustomButton from '../../../shared/CustomButton';
-import { theme } from '../../../styles/theme';
+import CopyPopup from '../../../components/shared/CopyPopup';
+import CustomButton from '../../../components/shared/CustomButton';
 import reduceToken from '../../../utils/reduceToken';
-import { BoldLabel, Container } from '../../layout/Containers';
+import { Container } from '../../layout/Containers';
 import ConnectWalletModal from './ConnectWalletModal';
+import Label from '../../shared/Label';
+import PressButtonToActionLabel from '../../game-edition-v2/components/PressButtonToActionLabel';
 
 const AccountModalContainer = styled(Container)`
-  margin-top: 24px;
-  & > *:not(:last-child) {
-    margin-bottom: 24px;
-  }
+  justify-content: space-between;
   height: 100%;
+`;
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  & > *:not(:last-child) {
+    margin-bottom: 16px;
+  }
 `;
 
 const AccountIdContainer = styled.div`
@@ -29,13 +37,13 @@ const AccountIdContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  border: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? `2px dashed ${colors.black}` : `1px solid ${colors.white}99`)};
+  border: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? `2px dashed #ffffff` : `1px solid ${colors.white}99`)};
   padding: 14px 10px;
   align-items: center;
   font-size: ${({ $gameEditionView }) => ($gameEditionView ? '13px' : '16px')};
   font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
   & > *:not(:last-child) {
-    margin-bottom: 16px;
+    margin-bottom: ${({ $gameEditionView }) => ($gameEditionView ? '8px' : '16px')};
   }
 `;
 
@@ -44,14 +52,6 @@ const RowContainer = styled.div`
   justify-content: space-between;
   width: 100%;
   flex-flow: row;
-`;
-
-const SubTitle = styled.span`
-  width: 100%;
-  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  color: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? colors.black : colors.white)};
-  font-size: ${({ fontSize }) => (fontSize ? fontSize : '16px')};
-  text-align: left;
 `;
 
 const RightContainer = styled.div`
@@ -77,20 +77,18 @@ const RightContainer = styled.div`
   svg {
     height: 24px;
     height: 24px;
-    path {
-      fill: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? colors.black : colors.white)};
-    }
   }
 `;
 
 const ActionContainer = styled.div`
   display: flex;
   flex-flow: row;
-  align-items: ${({ $gameEditionView }) => ($gameEditionView ? 'flex-end !important' : 'center')};
+  align-items: center;
   width: 100%;
-  justify-content: ${({ $gameEditionView }) => ($gameEditionView ? 'flex-end' : 'space-between')};
+  justify-content: space-between;
   width: 100%;
   height: 100%;
+  margin-top: 16px;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
   }
@@ -110,81 +108,95 @@ const ButtonGroup = styled(Button.Group)`
 const AccountModal = () => {
   const { account, logout } = useContext(AccountContext);
   const modalContext = useContext(ModalContext);
-  const { gameEditionView, openModal } = useContext(GameEditionContext);
-  const { themeMode } = useContext(LightModeContext);
+  const { gameEditionView, setSelectedWire, setShowWires, setButtons } = useContext(GameEditionContext);
   const { wallet } = useContext(WalletContext);
   const { disconnectWallet } = useContext(KaddexWalletContext);
 
+  useEffect(() => {
+    if (gameEditionView) {
+      setButtons({
+        B: () => {
+          setSelectedWire(null);
+          setShowWires(true);
+        },
+      });
+    }
+  }, [gameEditionView]);
+
   return (
     <AccountModalContainer>
-      <SubTitle $gameEditionView={gameEditionView}>Connected with {wallet?.name}</SubTitle>
+      <Content>
+        <Label geFontSize={20} geCenter geColor="yellow" geLabelStyle={{ textAlign: 'center' }} labelStyle={{ marginTop: 16, width: '100%' }}>
+          Connected with {wallet?.name}
+        </Label>
 
-      {account?.account && (
-        <AccountIdContainer $gameEditionView={gameEditionView}>
-          <RowContainer>
-            <span>Account</span>
-            <RightContainer
-              $gameEditionView={gameEditionView}
-              onClick={() =>
-                window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/eventsearch?q=${account.account}`, '_blank', 'noopener,noreferrer')
-              }
-            >
-              <ExplorerIcon />
-              <span>View in Explorer</span>
-            </RightContainer>
-          </RowContainer>
-          <RowContainer>
-            <span>{reduceToken(account.account)}</span>
-            <span>
+        {account?.account && (
+          <AccountIdContainer $gameEditionView={gameEditionView}>
+            <RowContainer>
+              <Label fontFamily="bold" geFontSize={20}>
+                Account
+              </Label>
+
+              <RightContainer
+                $gameEditionView={gameEditionView}
+                onClick={() =>
+                  window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/eventsearch?q=${account.account}`, '_blank', 'noopener,noreferrer')
+                }
+              >
+                <ExplorerIcon />
+                <Label fontFamily="bold" geFontSize={20}>
+                  View in Explorer
+                </Label>
+              </RightContainer>
+            </RowContainer>
+            <RowContainer>
+              <Label fontFamily="bold" geFontSize={20}>
+                {reduceToken(account.account)}
+              </Label>
+
               <CopyPopup textToCopy={account.account} title="Copy Address" containerStyle={{ textAlign: 'right' }} />
-            </span>
-          </RowContainer>
-        </AccountIdContainer>
+            </RowContainer>
+          </AccountIdContainer>
+        )}
+        <RowContainer>
+          <Label fontSize={14} geFontSize={24}>
+            Balance
+          </Label>
+          <Label fontFamily="bold" fontSize={14} geFontSize={24}>
+            {account.balance}
+          </Label>
+        </RowContainer>
+      </Content>
+      {!gameEditionView ? (
+        <ActionContainer>
+          <ButtonGroup fluid>
+            <CustomButton
+              type="basic"
+              onClick={() => {
+                modalContext.openModal({
+                  title: account?.account ? 'wallet connected' : 'connect wallet',
+                  description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
+                  content: <ConnectWalletModal />,
+                });
+              }}
+            >
+              Change Method
+            </CustomButton>
+
+            <CustomButton
+              type="primary"
+              onClick={() => {
+                disconnectWallet();
+                logout();
+              }}
+            >
+              Disconnect Wallet
+            </CustomButton>
+          </ButtonGroup>
+        </ActionContainer>
+      ) : (
+        <PressButtonToActionLabel actionLabel="change method" />
       )}
-      <RowContainer>
-        <SubTitle $gameEditionView={gameEditionView} fontSize="13px">
-          Balance
-        </SubTitle>
-        <BoldLabel $gameEditionView={gameEditionView}>{account.balance}</BoldLabel>
-      </RowContainer>
-      <ActionContainer $gameEditionView={gameEditionView}>
-        <ButtonGroup $gameEditionView={gameEditionView} fluid>
-          <CustomButton
-            border="none"
-            color={gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white}
-            background="transparent"
-            onClick={() => {
-              if (gameEditionView) {
-                return openModal({
-                  isVisible: true,
-                  title: account?.account ? 'wallet connected' : 'connect wallet',
-                  description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
-                  content: <ConnectWalletModal />,
-                });
-              } else {
-                return modalContext.openModal({
-                  title: account?.account ? 'wallet connected' : 'connect wallet',
-                  description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
-                  content: <ConnectWalletModal />,
-                });
-              }
-            }}
-          >
-            Change Method
-          </CustomButton>
-          <CustomButton
-            border={gameEditionView ? `2px dashed ${theme(themeMode).colors.black}` : `1px solid ${theme(themeMode).colors.white}99`}
-            color={gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white}
-            background="transparent"
-            onClick={() => {
-              disconnectWallet();
-              logout();
-            }}
-          >
-            Disconnect Wallet
-          </CustomButton>
-        </ButtonGroup>
-      </ActionContainer>
     </AccountModalContainer>
   );
 };

@@ -1,0 +1,126 @@
+import React, { useContext } from 'react';
+import PropTypes from 'prop-types';
+import styled, { css } from 'styled-components/macro';
+import { ArrowDown, PixeledArrowDownIcon } from '../../assets';
+import CustomButton from './CustomButton';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
+import tokenData from '../../constants/cryptoCurrencies';
+import Label from './Label';
+
+const Container = styled.div`
+  ${({ $gameEditionView, coin }) => {
+    if ($gameEditionView) {
+      return css`
+        position: absolute;
+        right: 26px;
+        top: ${({ coin }) => (coin ? 9 : 0)}px;
+      `;
+    }
+  }}
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  min-width: ${({ theme: { inputTokenWidth } }) => `${inputTokenWidth}px`};
+  svg {
+    path {
+      fill: ${({ $gameEditionView, theme: { colors }, geColor }) => {
+        if ($gameEditionView && geColor) return geColor;
+        if (!$gameEditionView) return colors.white;
+      }};
+    }
+  }
+
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
+    top: ${({ $gameEditionView }) => $gameEditionView && '0px'};
+  }
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
+    button {
+      padding: 12px 4px !important;
+    }
+  }
+`;
+
+const ElementsContainer = styled.div`
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 6px;
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
+
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
+    img {
+      margin-right: 4px !important;
+    }
+    span {
+      margin-right: 4px;
+    }
+  }
+`;
+
+const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor }) => {
+  const { gameEditionView } = useContext(GameEditionContext);
+  return (
+    <Container $gameEditionView={gameEditionView} geColor={geColor} coin={values?.coin}>
+      {values?.coin ? (
+        <>
+          {!gameEditionView && (
+            <CustomButton
+              buttonStyle={{
+                padding: '12px 8px',
+              }}
+              labelStyle={{ textTransform: 'uppercase' }}
+              type="basic"
+              fontSize={13}
+              onClick={onMaxClickButton}
+              disabled={disabledButton}
+            >
+              Max
+            </CustomButton>
+          )}
+          <ElementsContainer $gameEditionView={gameEditionView} geColor={geColor} onClick={onClick}>
+            {tokenData[values.coin].icon}
+            <Label geFontSize={24} geColor={geColor}>
+              {tokenData[values.coin].name}
+            </Label>
+          </ElementsContainer>
+          {gameEditionView ? <PixeledArrowDownIcon /> : <ArrowDown />}
+        </>
+      ) : (
+        <>
+          <CustomButton
+            type="basic"
+            geBasic
+            geColor={geColor}
+            onClick={onClick}
+            geFontSize={24}
+            buttonStyle={{
+              padding: 0,
+              marginRight: gameEditionView && 10,
+            }}
+          >
+            Select
+          </CustomButton>
+          {gameEditionView ? <PixeledArrowDownIcon /> : <ArrowDown style={{ marginRight: 0, marginLeft: 8 }} />}
+        </>
+      )}
+    </Container>
+  );
+};
+
+InputToken.propTypes = {
+  icon: PropTypes.element,
+  code: PropTypes.string,
+};
+
+InputToken.defaultProps = {
+  icon: null,
+  code: '',
+};
+
+export default InputToken;

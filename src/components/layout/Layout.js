@@ -1,15 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
-import Wrapper from '../../shared/Wrapper';
+import Wrapper from '../../components/shared/Wrapper';
 import DesktopHeader from './header/DesktopHeader';
 import MobileHeader from './header/MobileHeader';
 import { ReactComponent as Stripes } from '../../assets/images/shared/stripes.svg';
-import GameEditionContainer from '../game-edition/GameEditionContainer';
+import GameEditionContainer from '../game-edition-v2/GameEditionContainer';
 import { useHistory } from 'react-router';
 import { ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from '../../router/routes';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import browserDetection from '../../utils/browserDetection';
+import centerBackground from '../../assets/images/game-edition/center-background.png';
+import useWindowSize from '../../hooks/useWindowSize';
+import { commonTheme } from '../../styles/theme';
 
 const MainContainer = styled.div`
   display: flex;
@@ -19,18 +22,28 @@ const MainContainer = styled.div`
 
 const WrapperContainer = styled(Wrapper)`
   height: 100%;
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
-    padding: 0 1.5em;
-  }
+
   .mainnet-chain-2 {
-    font-size: 16px;
+    font-size: 13px;
+    text-align: center;
     font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
     color: ${({ theme: { colors } }) => colors.white};
+    @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {
+      padding-top: 10px;
+    }
   }
 `;
 
 const MainContent = styled.div`
   height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
+    padding: 0 16px;
+    height: ${({ theme: { header } }) => `calc(100% - ${header.mobileHeight}px)`};
+    overflow-x: auto;
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
 `;
 
 const StripesContainer = styled.div`
@@ -51,14 +64,27 @@ const Layout = ({ children }) => {
     game.gameEditionView ? history.push(ROUTE_GAME_START_ANIMATION) : history.push(ROUTE_SWAP);
   }, [game.gameEditionView]);
 
+  const [width, height] = useWindowSize();
+
   return (
     <MainContainer>
       {/* <CustomParticles /> */}
       <WrapperContainer>
-        <MobileHeader className="desktop-none" />
-        <span className="mainnet-chain-2 desktop-none">Mainnet Chain 2</span>
-        <DesktopHeader className="mobile-none" gameEditionView={game.gameEditionView} />
-        {game.gameEditionView ? <GameEditionContainer>{children}</GameEditionContainer> : <MainContent>{children}</MainContent>}
+        <div>
+          <MobileHeader className="mobile-only" />
+
+          <DesktopHeader className="mobile-none" gameEditionView={game.gameEditionView} />
+        </div>
+        {game.gameEditionView &&
+        width >= commonTheme.mediaQueries.desktopPixel &&
+        height >= commonTheme.mediaQueries.gameEditionDesktopHeightPixel ? (
+          <>
+            <img src={centerBackground} style={{ position: 'absolute', width: '100%', top: 0, zIndex: -1 }} alt="" />
+            <GameEditionContainer>{children}</GameEditionContainer>
+          </>
+        ) : (
+          <MainContent>{children}</MainContent>
+        )}
       </WrapperContainer>
       <StripesContainer>
         <Stripes />

@@ -1,6 +1,6 @@
 import React from 'react';
-import styled from 'styled-components';
-import HeaderItem from '../../../../shared/HeaderItem';
+import styled from 'styled-components/macro';
+import HeaderItem from '../../../../components/shared/HeaderItem';
 import menuItems from '../../../menuItems';
 
 const StyledMenu = styled.nav`

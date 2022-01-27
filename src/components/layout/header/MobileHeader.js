@@ -2,18 +2,28 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import RightHeaderItems from './RightHeaderItems';
 import PopupContentList from './PopupContentList';
-import HeaderItem from '../../../shared/HeaderItem';
-import CustomPopup from '../../../shared/CustomPopup';
+import HeaderItem from '../../../components/shared/HeaderItem';
+import CustomPopup from '../../../components/shared/CustomPopup';
 import { HamburgerIcon, KaddexLetterLogo } from '../../../assets';
 import menuItems from '../../menuItems';
 import { useHistory } from 'react-router';
 import { ROUTE_SWAP } from '../../../router/routes';
+import GameEditionModeButton from './GameEditionModeButton';
 
 const Container = styled.div`
   display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: start;
+  min-height: ${({ theme: { header } }) => `${header.mobileHeight}px`};
+  width: 100%;
+  padding: 0 1.5em;
+`;
+const RowContainer = styled.div`
+  display: flex;
   flex-flow: row;
   justify-content: space-between;
-  min-height: ${({ theme: { header } }) => `${header.height}px`};
+  align-items: center;
   width: 100%;
 `;
 
@@ -43,19 +53,22 @@ const MobileHeader = ({ className }) => {
 
   return (
     <Container className={className}>
-      <LeftContainer>
-        <HeaderItem headerItemStyle={{ marginTop: '4px' }}>
-          <CustomPopup basic trigger={<HamburgerIcon />} on="click" offset={[0, 14]} position="bottom left">
-            <PopupContentList items={menuItems} />
-          </CustomPopup>
-        </HeaderItem>
-        <KaddexLetterLogo onClick={() => history.push(ROUTE_SWAP)} />
+      <RowContainer>
+        <LeftContainer>
+          <HeaderItem headerItemStyle={{ marginTop: '4px' }}>
+            <CustomPopup basic trigger={<HamburgerIcon />} on="click" offset={[-10, -8]} position="bottom left">
+              <PopupContentList withoutAccountInfo items={menuItems} />
+            </CustomPopup>
+          </HeaderItem>
+          <KaddexLetterLogo onClick={() => history.push(ROUTE_SWAP)} />
+        </LeftContainer>
 
-        {/* <GameEditionToggle /> */}
-      </LeftContainer>
-      <RightContainer>
-        <RightHeaderItems />
-      </RightContainer>
+        <GameEditionModeButton />
+        <RightContainer>
+          <RightHeaderItems />
+        </RightContainer>
+      </RowContainer>
+      <span className="mainnet-chain-2 desktop-none">Mainnet Chain 2</span>
     </Container>
   );
 };

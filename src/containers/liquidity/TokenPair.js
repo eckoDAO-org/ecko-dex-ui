@@ -1,15 +1,14 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
-import { Accordion, Button } from 'semantic-ui-react';
-
-import { reduceBalance, extractDecimal, pairUnit } from '../../utils/reduceBalance';
-import CustomButton from '../../shared/CustomButton';
+import { Accordion } from 'semantic-ui-react';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { extractDecimal, pairUnit } from '../../utils/reduceBalance';
+import CustomButton from '../../components/shared/CustomButton';
 import { theme } from '../../styles/theme';
-import { ButtonContainer, ColumnContainer, Container, Label, RowContainer, Value } from '../../components/layout/Containers';
-import { LightModeContext } from '../../contexts/LightModeContext';
-import { ArrowDown, DropdownGe } from '../../assets';
+import { ColumnContainer, Container, RowContainer, Value } from '../../components/layout/Containers';
+import { ArrowDown, PixeledArrowDownIcon } from '../../assets';
 import useWindowSize from '../../hooks/useWindowSize';
+import Label from '../../components/shared/Label';
 
 const ResultContainer = styled.div`
   display: flex !important;
@@ -39,12 +38,6 @@ const HeaderContainer = styled(Accordion.Title)`
   text-align: left;
   justify-content: space-between;
   padding: 0px !important;
-
-  font-family: ${({ $gameEditionView, theme: { fontFamily } }) =>
-    $gameEditionView ? `${fontFamily.pressStartRegular} !important` : `${fontFamily.bold} !important`};
-  color: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? `${colors.black} !important` : `${colors.white} !important`)};
-  font-size: ${({ $gameEditionView }) => ($gameEditionView ? '10px' : '16px !important')};
-
   svg {
     path {
       fill: ${({ theme: { colors } }) => colors.white};
@@ -57,11 +50,24 @@ const IconContainer = styled.div`
   justify-content: center;
   align-items: center;
   transform: ${({ active }) => (active ? 'rotate(0deg)' : 'rotate(-90deg)')};
+
+  svg {
+    path {
+      fill: ${({ $gameEditionView, theme: { colors } }) => ($gameEditionView ? '#fff' : colors.white)};
+    }
+  }
+`;
+
+const ActionContainer = styled.div`
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0;
 `;
 
 const TokenPair = (props) => {
   const { gameEditionView: $gameEditionView } = useContext(GameEditionContext);
-  const { themeMode } = useContext(LightModeContext);
   let { token0, token1, balance, supply, pooledAmount } = props.pair;
 
   const handleActiveIndex = (index) => {
@@ -80,107 +86,126 @@ const TokenPair = (props) => {
           $gameEditionView={$gameEditionView}
           onClick={() => handleActiveIndex(props.index)}
         >
-          {token0} / {token1}
-          <IconContainer active={props.activeIndex === props.index}>{$gameEditionView ? <DropdownGe /> : <ArrowDown />}</IconContainer>
+          <Label fontFamily="bold" geFontSize={20}>
+            {token0} / {token1}
+          </Label>
+          <IconContainer $gameEditionView={$gameEditionView} active={props.activeIndex === props.index}>
+            {$gameEditionView ? <PixeledArrowDownIcon /> : <ArrowDown />}
+          </IconContainer>
         </HeaderContainer>
         <Accordion.Content style={{ flexFlow: 'column', padding: 0 }} active={props.activeIndex === props.index}>
           {!$gameEditionView ? (
             <ResultContainer>
               <RowContainer>
-                <Label>Your pool tokens:</Label>
-                <Value>{pairUnit(extractDecimal(balance))}</Value>
+                <Label fontSize={13} withShade>
+                  Your pool tokens:
+                </Label>
+                <Label fontSize={16}>{pairUnit(extractDecimal(balance))}</Label>
               </RowContainer>
               <RowContainer>
-                <Label>Pooled {token0}:</Label>
-                <Value>{pairUnit(extractDecimal(pooledAmount[0]))}</Value>
+                <Label fontSize={13} withShade>
+                  Pooled {token0}:
+                </Label>
+                <Label fontSize={16}>{pairUnit(extractDecimal(pooledAmount[0]))}</Label>
               </RowContainer>
               <RowContainer>
-                <Label>Pooled {token1}:</Label>
-                <Value>{pairUnit(extractDecimal(pooledAmount[1]))}</Value>
+                <Label fontSize={13} withShade>
+                  Pooled {token1}:
+                </Label>
+                <Label fontSize={16}>{pairUnit(extractDecimal(pooledAmount[1]))}</Label>
               </RowContainer>
               <RowContainer>
-                <Label>Your pool share:</Label>
-                <Value>{reduceBalance((extractDecimal(balance) / extractDecimal(supply)) * 100)}%</Value>
+                <Label fontSize={13} withShade>
+                  Your pool share:
+                </Label>
+
+                <Label fontSize={16}>{((extractDecimal(balance) / extractDecimal(supply)) * 100).toPrecision(4)} %</Label>
               </RowContainer>
             </ResultContainer>
           ) : width <= theme().mediaQueries.mobilePixel ? (
             <ResultContainer style={{ flexFlow: 'column' }} active={props.activeIndex === props.index} $gameEditionView={$gameEditionView}>
               <ColumnContainer>
-                <Label $gameEditionView={$gameEditionView}>Your pool tokens:</Label>
-                <Value $gameEditionView={$gameEditionView}>{pairUnit(extractDecimal(balance))}</Value>
+                <Label geColor="yellow">Your pool tokens:</Label>
+                <Value>{pairUnit(extractDecimal(balance))}</Value>
               </ColumnContainer>
               <ColumnContainer>
-                <Label $gameEditionView={$gameEditionView}>Pooled {token0}:</Label>
-                <Value $gameEditionView={$gameEditionView}>{pairUnit(extractDecimal(pooledAmount[0]))}</Value>
+                <Label geColor="yellow">Pooled {token0}:</Label>
+                <Value>{pairUnit(extractDecimal(pooledAmount[0]))}</Value>
               </ColumnContainer>
               <ColumnContainer>
-                <Label $gameEditionView={$gameEditionView}>Pooled {token1}:</Label>
-                <Value $gameEditionView={$gameEditionView}>{pairUnit(extractDecimal(pooledAmount[1]))}</Value>
+                <Label geColor="yellow">Pooled {token1}:</Label>
+                <Value>{pairUnit(extractDecimal(pooledAmount[1]))}</Value>
               </ColumnContainer>
               <ColumnContainer>
-                <Label $gameEditionView={$gameEditionView}>Your pool share:</Label>
-                <Value $gameEditionView={$gameEditionView}>{reduceBalance((extractDecimal(balance) / extractDecimal(supply)) * 100)}%</Value>
+                <Label geColor="yellow">Your pool share:</Label>
+                <Value>{((extractDecimal(balance) / extractDecimal(supply)) * 100).toPrecision(4)} %</Value>
               </ColumnContainer>
             </ResultContainer>
           ) : (
             <ResultContainer style={{ flexFlow: 'column' }} active={props.activeIndex === props.index} $gameEditionView={$gameEditionView}>
               <RowContainer $gameEditionView={$gameEditionView}>
                 <ColumnContainer>
-                  <Label $gameEditionView={$gameEditionView}>Your pool tokens:</Label>
-                  <Value $gameEditionView={$gameEditionView}>{pairUnit(extractDecimal(balance))}</Value>
+                  <Label geColor="yellow" geFontSize={16}>
+                    Your pool tokens:
+                  </Label>
+                  <Label geFontSize={18}>{pairUnit(extractDecimal(balance))}</Label>
                 </ColumnContainer>
                 <ColumnContainer>
-                  <Label $gameEditionView={$gameEditionView}>Pooled {token0}:</Label>
-                  <Value $gameEditionView={$gameEditionView}>{pairUnit(extractDecimal(pooledAmount[0]))}</Value>
+                  <Label geColor="yellow" geLabelStyle={{ justifyContent: 'end' }} geFontSize={16}>
+                    Pooled {token0}:
+                  </Label>
+                  <Label geLabelStyle={{ justifyContent: 'end' }} geFontSize={18}>
+                    {pairUnit(extractDecimal(pooledAmount[0]))}
+                  </Label>
                 </ColumnContainer>
               </RowContainer>
               <RowContainer $gameEditionView={$gameEditionView}>
                 <ColumnContainer>
-                  <Label $gameEditionView={$gameEditionView}>Pooled {token1}:</Label>
-                  <Value $gameEditionView={$gameEditionView}>{pairUnit(extractDecimal(pooledAmount[1]))}</Value>
+                  <Label geColor="yellow" geFontSize={16}>
+                    Pooled {token1}:
+                  </Label>
+                  <Label geFontSize={18}>{pairUnit(extractDecimal(pooledAmount[1]))}</Label>
                 </ColumnContainer>
                 <ColumnContainer>
-                  <Label $gameEditionView={$gameEditionView}>Your pool share:</Label>
-                  <Value $gameEditionView={$gameEditionView}>{reduceBalance((extractDecimal(balance) / extractDecimal(supply)) * 100)}%</Value>
+                  <Label geColor="yellow" geLabelStyle={{ justifyContent: 'end' }} geFontSize={16}>
+                    Your pool share:
+                  </Label>
+                  <Label geLabelStyle={{ justifyContent: 'end' }} geFontSize={18}>
+                    {((extractDecimal(balance) / extractDecimal(supply)) * 100).toPrecision(4)} %
+                  </Label>
                 </ColumnContainer>
               </RowContainer>
             </ResultContainer>
           )}
 
-          <ButtonContainer id="token-pair-button-container">
-            <Button.Group fluid style={{ flexDirection: $gameEditionView && width <= theme().mediaQueries.mobilePixel ? 'column' : 'row' }}>
-              <CustomButton
-                buttonStyle={{
-                  marginRight: $gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '30px',
-                  width: $gameEditionView && width <= theme().mediaQueries.mobilePixel ? '100%' : '48%',
-                  height: '40px',
-                  marginBottom: $gameEditionView && width <= theme().mediaQueries.mobilePixel && '10px',
-                }}
-                background="transparent"
-                color={$gameEditionView ? theme(themeMode).colors.black : theme(themeMode).colors.white}
-                border={!$gameEditionView && `1px solid ${theme(themeMode).colors.white}99`}
-                onClick={() => {
-                  props.selectRemoveLiquidity();
-                  props.setTokenPair(props.pair);
-                }}
-              >
-                Remove
-              </CustomButton>
-              <CustomButton
-                buttonStyle={{
-                  marginLeft: $gameEditionView && width <= theme().mediaQueries.mobilePixel ? '0px' : '-20px',
-                  width: $gameEditionView && width <= theme().mediaQueries.mobilePixel ? '100%' : '48%',
-                  height: '40px',
-                }}
-                onClick={() => {
-                  props.selectAddLiquidity();
-                  props.setTokenPair(props.pair);
-                }}
-              >
-                Add
-              </CustomButton>
-            </Button.Group>
-          </ButtonContainer>
+          <ActionContainer>
+            <CustomButton
+              fluid
+              geType="cancel"
+              type="primary"
+              buttonStyle={{
+                marginRight: 10,
+              }}
+              onClick={() => {
+                props.selectRemoveLiquidity();
+                props.setTokenPair(props.pair);
+              }}
+            >
+              Remove
+            </CustomButton>
+
+            <CustomButton
+              fluid
+              geType="confirm"
+              type="secondary"
+              onClick={() => {
+                props.selectAddLiquidity();
+                props.setTokenPair(props.pair);
+              }}
+            >
+              Add
+            </CustomButton>
+          </ActionContainer>
         </Accordion.Content>
       </Accordion>
     </Container>

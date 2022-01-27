@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="34" height="34" viewBox="0 0 34 34">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#023b94"/>
+      <stop offset="1" stop-color="#0b4cb5"/>
+    </linearGradient>
+  </defs>
+  <g id="Torus" transform="translate(9661.5 -4184.054)">
+    <circle id="Ellipse_5902" data-name="Ellipse 5902" cx="16.5" cy="16.5" r="16.5" transform="translate(-9661 4217.554) rotate(-90)" fill="#fff" stroke="rgba(0,0,0,0)" stroke-width="1"/>
+    <circle id="Ellipse_964" data-name="Ellipse 964" cx="15.81" cy="15.81" r="15.81" transform="translate(-9660.31 4185.245)" fill="url(#linear-gradient)"/>
+    <g id="Group_70372" data-name="Group 70372" transform="translate(58.835 -93.344)">
+      <path id="Path_42974" data-name="Path 42974" d="M1.954,27A1.95,1.95,0,0,0,0,28.947v2.268a1.95,1.95,0,0,0,1.954,1.947H5.412V45.847a1.95,1.95,0,0,0,1.954,1.947H9.643A1.951,1.951,0,0,0,11.6,45.847v-16.9A1.95,1.95,0,0,0,9.643,27H1.954Z" transform="translate(-9713 4257.552)" fill="#fff" fill-rule="evenodd"/>
+      <path id="Path_42975" data-name="Path 42975" d="M35.049,33.161a3.081,3.081,0,1,0-3.093-3.08A3.086,3.086,0,0,0,35.049,33.161Z" transform="translate(-9731.812 4257.552)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

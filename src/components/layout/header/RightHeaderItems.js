@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
-import HeaderItem from '../../../shared/HeaderItem';
+import styled from 'styled-components/macro';
+import HeaderItem from '../../../components/shared/HeaderItem';
 import AccountInfo from './AccountInfo';
-import Button from '../../../shared/CustomButton';
-import CustomPopup from '../../../shared/CustomPopup';
+import Button from '../../../components/shared/CustomButton';
+import CustomPopup from '../../../components/shared/CustomPopup';
 import { CogIcon, ThreeDotsIcon } from '../../../assets';
 import headerLinks from '../../headerLinks';
 import PopupContentList from './PopupContentList';
@@ -18,21 +18,14 @@ import BellNotification from '../../right-modal-notification/BellNotification';
 import { NotificationContext } from '../../../contexts/NotificationContext';
 import AccountModal from '../../modals/kdaModals/AccountModal';
 import { NotificationModalContext } from '../../../contexts/NotificationModalContext';
-import PowerIconWrapper from './PowerIconWrapper';
+import useWindowSize from '../../../hooks/useWindowSize';
+import { commonTheme } from '../../../styles/theme';
 
 const RightContainerHeader = styled.div`
   display: flex;
   align-items: center;
-  & > *:first-child {
-    margin-right: 13px;
-  }
-  & > *:not(:first-child):not(:last-child) {
+  & > *:not(first-child) {
     margin-right: 14px;
-  }
-  @media (min-width: ${({ theme: { mediaQueries } }) => mediaQueries.mobileBreakpoint}) {
-    & > *:not(:first-child):not(:last-child) {
-      margin-right: 16px;
-    }
   }
 
   .fadeOut {
@@ -45,33 +38,28 @@ const RightContainerHeader = styled.div`
     opacity: 1;
     transition: opacity 1s linear;
   }
-
-  .mainnet-chain-2 {
-    font-size: 16px;
-    font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
-    color: ${({ theme: { colors } }) => colors.white};
-  }
 `;
 
 const FadeContainer = styled.div``;
 
 const RightHeaderItems = () => {
+  const [width] = useWindowSize();
+
   const { account } = useContext(AccountContext);
   const modalContext = useContext(ModalContext);
-  const { gameEditionView, openModal, setGameEditionView, closeModal } = useContext(GameEditionContext);
+  const { gameEditionView, openModal } = useContext(GameEditionContext);
   const notificationModalContext = useContext(NotificationModalContext);
   const notification = useContext(NotificationContext);
 
   return (
     <RightContainerHeader>
       <span className="mainnet-chain-2 mobile-none">Mainnet Chain 2</span>
-      {account?.account ? (
+      {account?.account && width >= commonTheme.mediaQueries.desktopPixel && (
         <HeaderItem>
           <AccountInfo
             onClick={() => {
               if (gameEditionView) {
                 return openModal({
-                  isVisible: true,
                   title: 'Account',
                   content: <AccountModal />,
                 });
@@ -86,8 +74,6 @@ const RightHeaderItems = () => {
             balance={account.account ? `${reduceBalance(account.balance)} KDA` : ''}
           />
         </HeaderItem>
-      ) : (
-        <></>
       )}
 
       {!account.account && (
@@ -100,7 +86,6 @@ const RightHeaderItems = () => {
               onClick={() => {
                 if (gameEditionView) {
                   return openModal({
-                    isVisible: true,
                     title: account?.account ? 'wallet connected' : 'connect wallet',
                     description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
                     content: <ConnectWalletModal />,
@@ -119,14 +104,15 @@ const RightHeaderItems = () => {
           </HeaderItem>
         </FadeContainer>
       )}
-      <HeaderItem disableHover>
-        <PowerIconWrapper
-          onClick={() => {
-            setGameEditionView(!gameEditionView);
-            closeModal();
-          }}
-        />
-      </HeaderItem>
+
+      {gameEditionView && (
+        <HeaderItem headerItemStyle={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '4px' }}>
+          <CustomPopup containerStyle={{ padding: 32 }} trigger={<CogIcon />} on="click" offset={[30, 10]} position="bottom right">
+            <SlippagePopupContent />
+          </CustomPopup>
+        </HeaderItem>
+      )}
+
       <HeaderItem>
         <BellNotification
           hasNotification={notification.notificationList?.some((notif) => notif.isReaded === false)}
@@ -137,7 +123,7 @@ const RightHeaderItems = () => {
                   onClick={() => {
                     notification.removeAllItem();
                   }}
-                  label=" Remove All Notification"
+                  label="Remove All Notification"
                   fontSize="12px"
                   buttonStyle={{ width: '100%' }}
                   outGameEditionView
@@ -147,16 +133,10 @@ const RightHeaderItems = () => {
           }}
         />
       </HeaderItem>
-      {gameEditionView && (
-        <HeaderItem headerItemStyle={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '4px' }}>
-          <CustomPopup trigger={<CogIcon />} on="click" offset={[30, 10]} position="bottom right">
-            <SlippagePopupContent />
-          </CustomPopup>
-        </HeaderItem>
-      )}
 
       <HeaderItem headerItemStyle={{ height: '100%', display: 'flex' }}>
         <CustomPopup
+          containerStyle={{ padding: 32 }}
           basic
           trigger={
             <div style={{ height: '100%', display: 'flex' }}>
@@ -164,10 +144,10 @@ const RightHeaderItems = () => {
             </div>
           }
           on="click"
-          offset={[0, -14]}
+          offset={[14, -14]}
           position="bottom right"
         >
-          <PopupContentList items={headerLinks} viewOtherComponents withLogout PopupContentListStyle={{ minWidth: 170 }} />
+          <PopupContentList items={headerLinks} viewOtherComponents withLogout PopupContentListStyle={{ minWidth: 100 }} />
         </CustomPopup>
       </HeaderItem>
     </RightContainerHeader>

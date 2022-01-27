@@ -35,3 +35,5 @@ export { ReactComponent as TelegramIcon } from './images/header/telegram.svg';
 export { ReactComponent as ThreeDotsIcon } from './images/header/three_dots.svg';
 export { ReactComponent as TorusLogo } from './images/shared/torus-logo.svg';
 export { ReactComponent as ZelcoreLogo } from './images/shared/zelcore-logo.svg';
+
+export * from '../assets/images/game-edition';

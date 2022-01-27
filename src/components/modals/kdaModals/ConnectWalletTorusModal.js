@@ -2,35 +2,14 @@ import React, { useState, useEffect, useContext } from 'react';
 /* import "./App.css"; */
 import TorusSdk from '@toruslabs/torus-direct-web-sdk';
 import Pact from 'pact-lang-api';
-import styled from 'styled-components/macro';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { WalletContext } from '../../../contexts/WalletContext';
-import CustomButton from '../../../shared/CustomButton';
+import CustomButton from '../../../components/shared/CustomButton';
 import { ModalContext } from '../../../contexts/ModalContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { WALLET } from '../../../constants/wallet';
-import { theme } from '../../../styles/theme';
-import { LightModeContext } from '../../../contexts/LightModeContext';
-import LogoLoader from '../../../shared/LogoLoader';
-
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-flow: column;
-  gap: 24px;
-  margin-top: 30px;
-`;
-
-const TopText = styled.span`
-  font-size: 13px;
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  text-align: left;
-`;
-
-const BottomText = styled.span`
-  font-size: 13px;
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pressStartRegular : fontFamily.regular)};
-  text-align: left;
-`;
+import LogoLoader from '../../../components/shared/LogoLoader';
+import Label from '../../shared/Label';
 
 const GOOGLE = 'google';
 
@@ -44,14 +23,12 @@ const verifierMap = {
 };
 /* const createAPIHost = (network, chainId) => `https://${network}.testnet.chainweb.com/chainweb/0.0/testnet02/chain/${chainId}/pact` */
 
-function Login({ onClose, onBack }) {
+function ConnectWalletTorusModal({ onClose, onConnectionSuccess }) {
   const modalContext = useContext(ModalContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
-  const { themeMode } = useContext(LightModeContext);
 
   const { gameEditionView, closeModal } = useContext(GameEditionContext);
-  const [selectedVerifier] = useState(GOOGLE);
   const [torusdirectsdk, setTorusdirectsdk] = useState(null);
   const [, setConsoleText] = useState('');
   const [, setPublicKey] = useState('');
@@ -89,7 +66,7 @@ function Login({ onClose, onBack }) {
     const { selectedVerifier, torusdirectsdk } = state; */
 
     try {
-      const { typeOfLogin, clientId, verifier } = verifierMap[selectedVerifier];
+      const { typeOfLogin, clientId, verifier } = verifierMap[GOOGLE];
       const loginDetails = await torusdirectsdk.triggerLogin({
         typeOfLogin,
         verifier,
@@ -104,7 +81,7 @@ function Login({ onClose, onBack }) {
       setPublicKey(keyPair.publicKey);
       setPrivateKey(keyPair.secretKey);
 
-      await account.setVerifiedAccount(keyPair.publicKey);
+      await account.setVerifiedAccount(keyPair.publicKey, onConnectionSuccess);
 
       await wallet.storePrivKey(keyPair.secretKey);
       await wallet.setSelectedWallet(WALLET.TORUS);
@@ -124,31 +101,31 @@ function Login({ onClose, onBack }) {
 
   return (
     <>
-      <TopText gameEditionView={gameEditionView}>Please press 'Connect with Torus' in order to access your wallet with Torus.</TopText>
-      <BottomText gameEditionView={gameEditionView}>When submitting a transaction, you will sign it through Torus.</BottomText>
-      <ButtonContainer gameEditionView={gameEditionView}>
-        <CustomButton disabled={loading} onClick={login}>
-          Connect with Torus
-        </CustomButton>
-      </ButtonContainer>
+      <Label fontSize={13} geFontSize={20} geColor="yellow" geLabelStyle={{ textAlign: 'center' }}>
+        Please press 'Connect with Torus' in order to access your wallet with Torus.
+      </Label>
+      <Label fontSize={13} geFontSize={16} geColor="blue" geLabelStyle={{ textAlign: 'center', marginBottom: 30, padding: '0 16px' }}>
+        When submitting a transaction, you will sign it through Torus.
+      </Label>
+
+      <CustomButton geType="pink" geLabel="CONNECT WITH TORUS" disabled={loading} onClick={login}>
+        Connect with Torus
+      </CustomButton>
+
       {!gameEditionView && (
-        <ButtonContainer style={{ marginTop: '10px' }}>
-          <CustomButton
-            disabled={loading}
-            border="none"
-            color={theme(themeMode).colors.white}
-            background="transparent"
-            onClick={() => {
-              modalContext.onBackModal();
-            }}
-          >
-            Cancel
-          </CustomButton>
-        </ButtonContainer>
+        <CustomButton
+          disabled={loading}
+          type="basic"
+          onClick={() => {
+            modalContext.onBackModal();
+          }}
+        >
+          Cancel
+        </CustomButton>
       )}
       {loading && <LogoLoader />}
     </>
   );
 }
 
-export default Login;
+export default ConnectWalletTorusModal;

@@ -15,7 +15,7 @@ const TextContainer = styled.div`
 
 const Text = styled.span`
   margin-left: 16px;
-  margin-bottom: ${({ marginBottom }) => `${marginBottom}px` || '0px'};
+
   font-size: 16px;
   font-family: ${({ fontWeight }) => (fontWeight ? theme.fontFamily.bold : theme.fontFamily.regular)};
 `;
@@ -24,12 +24,12 @@ const capitalizeFirstLetter = (string) => {
   return typeof string === 'string' ? string.charAt(0).toUpperCase() + string.slice(1) : null;
 };
 
-const NotificationContent = ({ icon, type, message, title }) => {
+const NotificationContent = ({ icon, type, message, title, titleStyle }) => {
   return (
     <Container>
       {icon}
-      <TextContainer>
-        <Text marginBottom={8} fontWeight="bold">
+      <TextContainer className={type}>
+        <Text fontWeight="bold" style={titleStyle}>
           {capitalizeFirstLetter(title) || capitalizeFirstLetter(type)}
         </Text>
         <Text>{capitalizeFirstLetter(message)}</Text>

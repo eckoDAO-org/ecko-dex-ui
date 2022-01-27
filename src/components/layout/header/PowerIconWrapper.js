@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import React, { useContext } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 
 const IconWrapper = styled.div`
