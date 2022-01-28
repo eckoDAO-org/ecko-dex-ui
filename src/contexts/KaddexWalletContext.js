@@ -132,7 +132,7 @@ export const KaddexWalletProvider = (props) => {
   const checkCorrectChain = async () => {
     const selectedChainId = await getSelectedChain();
 
-    if (selectedChainId !== Number(chainId)) {
+    if (selectedChainId?.toString() !== chainId?.toString()) {
       showChainError(selectedChainId);
     }
   };
@@ -154,7 +154,7 @@ export const KaddexWalletProvider = (props) => {
           if (response?.result?.status === 'fail' && response?.result?.message === 'Invalid network') {
             showNetworkError();
           } else {
-            if (selectedChainId !== Number(chainId)) {
+            if (selectedChainId?.toString() !== chainId?.toString()) {
               showChainError(selectedChainId);
             } else if (!kaddexWalletState.isConnected && acc.status === 'fail') {
               connectWallet();
