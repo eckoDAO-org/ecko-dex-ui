@@ -57,7 +57,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
   const wallet = useContext(WalletContext);
 
   useEffect(() => {
-    if (show && wallet.wallet.name === WALLET.ZELCORE.name) {
+    if (show && wallet?.wallet?.name === WALLET.ZELCORE.name) {
       openZelcore();
     }
   }, [show]);

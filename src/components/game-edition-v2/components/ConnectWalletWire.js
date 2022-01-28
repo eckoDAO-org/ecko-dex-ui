@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 import { useLocation } from 'react-router-dom';
+import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../../contexts/GameEditionContext';
+import { useLightModeContext } from '../../../contexts';
 import { ROUTE_GAME_START_ANIMATION } from '../../../router/routes';
 import { FadeIn } from '../../shared/animations';
 import { ConnectWalletIcon, WireConnectionLightIcon, WireConnectionDarkIcon } from '../../../assets';
-import { GameEditionContext, WIRE_CONTAINER_WIDTH } from '../../../contexts/GameEditionContext';
-import { useLightModeContext } from '../../../contexts';
 
 const WireConnectionContainer = styled.div`
   margin-top: 8px;
-  width: ${WIRE_CONTAINER_WIDTH}px;
+  width: ${GE_DESKTOP_CONFIGURATION.WIRE_CONTAINER_WIDTH}px;
   display: flex;
   justify-content: center;
   position: relative;

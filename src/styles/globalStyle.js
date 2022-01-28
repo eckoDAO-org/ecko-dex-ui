@@ -16,6 +16,7 @@ export default createGlobalStyle`
       width: 100%;
       height: 100%;
       box-sizing: border-box;
+     
 
     };
 
@@ -48,6 +49,7 @@ export default createGlobalStyle`
       height: 100%;
 
       & > div:first-child {
+        
         display: flex;
         flex-flow: column;
         height: 100%;
@@ -96,11 +98,13 @@ export default createGlobalStyle`
       }
     }
 
-    .tablet-none {
+    .desktop-only {
       @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
         display: none !important;
       }
     }
+   
+
     .mobile-none {
       @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel - 1}px`}) {
         display: none !important;
@@ -118,7 +122,8 @@ export default createGlobalStyle`
 
       ::-webkit-scrollbar {
       display: none;
-    }
+      }
+      
     }
 
 `;

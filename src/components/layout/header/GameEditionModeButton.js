@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components/macro';
 import { GameModeIcon } from '../../../assets';
 import { useGameEditionContext } from '../../../contexts';
@@ -20,7 +20,7 @@ const Button = styled.div`
 
   color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.white : colors.primary)};
 
-  @media (min-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
+  @media (min-width: ${({ theme: { mediaQueries }, layoutConfiguration }) => `${mediaQueries.desktopPixel * layoutConfiguration.scale}px`}) {
     svg {
       path {
         fill: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.white : colors.primary)};
@@ -38,7 +38,7 @@ const Button = styled.div`
       `}
   }
 
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries }, layoutConfiguration }) => `${mediaQueries.desktopPixel * layoutConfiguration.scale - 1}px`}) {
     svg {
       path {
         fill: ${({ themeMode, theme: { colors } }) => (themeMode === 'light' ? colors.primary : colors.white)};
@@ -48,20 +48,15 @@ const Button = styled.div`
 `;
 
 const GameEditionModeButton = () => {
-  const { gameEditionView, closeModal, setGameEditionView } = useGameEditionContext();
+  const { gameEditionView, closeModal, setGameEditionView, showWires, layoutConfiguration } = useGameEditionContext();
   const [width, height] = useWindowSize();
 
-  useEffect(() => {
-    if (width < commonTheme.mediaQueries.desktopPixel || height < commonTheme.mediaQueries.gameEditionDesktopHeightPixel) {
-      setGameEditionView(false);
-      closeModal();
-    }
-  }, [width, height]);
-  return (
+  return !showWires ? (
     <Button
+      layoutConfiguration={layoutConfiguration}
       gameEditionView={gameEditionView}
       onClick={() => {
-        if (width >= commonTheme.mediaQueries.desktopPixel && height >= commonTheme.mediaQueries.gameEditionDesktopHeightPixel) {
+        if (width >= layoutConfiguration.minimumWidth && height >= layoutConfiguration.minimumHeight) {
           setGameEditionView(!gameEditionView);
           closeModal();
         }
@@ -78,6 +73,8 @@ const GameEditionModeButton = () => {
            </>
          ) */}
     </Button>
+  ) : (
+    <></>
   );
 };
 

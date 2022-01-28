@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { useAccountContext, useWalletContext } from '../../../contexts';
-import { GameEditionContext, WIRE_CONTAINER_WIDTH } from '../../../contexts/GameEditionContext';
+import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../../contexts/GameEditionContext';
 import { FadeIn } from '../../shared/animations';
 import { HideWiresIcon } from '../../../assets';
 import { WALLET } from '../../../constants/wallet';
@@ -10,7 +10,7 @@ const WiresContainer = styled.div`
   display: flex;
   align-items: flex-end;
   position: relative;
-  width: ${WIRE_CONTAINER_WIDTH}px;
+  width: ${GE_DESKTOP_CONFIGURATION.WIRE_CONTAINER_WIDTH}px;
   padding: 0 50px;
   justify-content: space-between;
 `;
@@ -72,7 +72,7 @@ const ConnectionWireContainer = styled.div`
     }}
   }
 
-  ${({ isSelected, translateX }) => {
+  ${({ isSelected, translateX, layoutConfiguration }) => {
     if (isSelected) {
       return css`
         transition: transform 0.5s;
@@ -82,7 +82,7 @@ const ConnectionWireContainer = styled.div`
       return css`
         transition: transform 0.3s;
         :hover {
-          transform: scale(1.3);
+          transform: scale(calc(${layoutConfiguration.scale} + 0.3));
         }
       `;
     }
@@ -96,7 +96,7 @@ const BlurWire = styled(FadeIn)`
 `;
 
 export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
-  const { selectedWire, showWires } = useContext(GameEditionContext);
+  const { selectedWire, showWires, layoutConfiguration } = useContext(GameEditionContext);
   const { account } = useAccountContext();
 
   const [translateX, setTranslateX] = useState(0);
@@ -104,7 +104,7 @@ export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
     if (selectedWire) {
       const wireElement = document.getElementById(selectedWire.id);
 
-      setTranslateX((WIRE_CONTAINER_WIDTH - 50) / 2 - wireElement.offsetLeft - wireElement.offsetWidth / 2 + 20);
+      setTranslateX((GE_DESKTOP_CONFIGURATION.WIRE_CONTAINER_WIDTH - 50) / 2 - wireElement.offsetLeft - wireElement.offsetWidth / 2 + 20);
     }
   }, [selectedWire]);
   return (
@@ -115,6 +115,7 @@ export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
       onClick={onClick}
       isSelected={selectedWire?.id === wire.id}
       selectedWire={selectedWire}
+      layoutConfiguration={layoutConfiguration}
     >
       <span>{wire.name}</span>
       {wire.wireIcon}
@@ -132,7 +133,7 @@ const WalletWires = () => {
     <WiresContainer showWires={showWires}>
       {showWires && (
         <HideWiresContainer
-          style={{ bottom: 30 }}
+          style={{ bottom: '30%' }}
           onClick={() => {
             let oldWire = null;
             if (wallet && !selectedWire && wallet?.id !== selectedWire?.id) {

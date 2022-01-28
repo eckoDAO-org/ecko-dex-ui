@@ -3,14 +3,11 @@ import styled from 'styled-components/macro';
 import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
 import { useAccountContext, useKaddexWalletContext, useNotificationContext, useWalletContext } from '../../contexts';
 import { STATUSES } from '../../contexts/NotificationContext';
-import useWindowSize from '../../hooks/useWindowSize';
 import WalletWires from './components/WalletWires';
 import ConnectWalletWire from './components/ConnectWalletWire';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
 import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.svg';
-import gameboyMobile from '../../assets/images/game-edition/gameboy-mobile.png';
 import { KaddexLogo } from '../../assets';
-import theme from '../../styles/theme';
 import { WALLET } from '../../constants/wallet';
 import ConnectWalletZelcoreModal from '../modals/kdaModals/ConnectWalletZelcoreModal';
 import ConnectWalletTorusModal from '../modals/kdaModals/ConnectWalletTorusModal';
@@ -26,16 +23,19 @@ const DesktopMainContainer = styled.div`
   flex-direction: column;
   width: 100%;
   height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
+    height: ${({ theme: { header } }) => `calc(100% - ${header.mobileHeight}px)`};
+  }
   align-items: center;
   transition: transform 0.5s;
-  transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
+  transform: ${({ showWires, selectedWire, showTokens, layoutConfiguration }) => {
     if (showTokens) {
-      return 'translate(-30%, 442px)';
+      return `translate(-30%, ${layoutConfiguration.geTranslateY}px) scale(${layoutConfiguration.scale})`;
     }
     if (showWires && !selectedWire && !showTokens) {
-      return 'translateY(0px)';
+      return `translateY(${layoutConfiguration.wiresTranslateY}px) scale(${layoutConfiguration.scale})`;
     } else {
-      return 'translateY(442px)';
+      return `translateY(${layoutConfiguration.geTranslateY}px) scale(${layoutConfiguration.scale})`;
     }
   }};
   /* transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
@@ -50,15 +50,6 @@ const DesktopMainContainer = styled.div`
   }}; */
 `;
 
-const MobileMainContainer = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
-  align-items: center;
-  overflow: hidden;
-`;
-
 const GameboyDesktopContainer = styled.div`
   background-repeat: no-repeat;
   background-size: contain;
@@ -70,6 +61,16 @@ const GameboyDesktopContainer = styled.div`
   flex-direction: column;
   position: relative;
   z-index: 2;
+  transition: transform 0.5s;
+
+  transform: ${({ showWires }) => {
+    if (showWires) {
+      return 'translateY(-85px)';
+    } else {
+      return 'translateY(0px)';
+    }
+  }};
+
   .kaddex-logo {
     margin-top: 20px;
     margin-left: 24px;
@@ -79,35 +80,12 @@ const GameboyDesktopContainer = styled.div`
   }
   opacity: ${({ showWires, showTokens }) => (showWires || showTokens ? 0.5 : 1)};
 `;
-const GameboyMobileContainer = styled.div`
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 540px;
-  width: 930px;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  transition: all 1s ease-in-out;
-  transition-delay: 1s;
-  .kaddex-logo {
-    margin-top: 8px;
-    svg {
-      height: 6px;
-    }
-    margin-left: 24px;
-    margin-top: 8px;
-    svg {
-      height: 6px;
-    }
-  }
-`;
 
 const DisplayContent = styled.div`
-  width: ${GE_DESKTOP_CONFIGURATION.displayWidth}px;
+  width: ${GE_DESKTOP_CONFIGURATION.DISPLAY_WIDTH}px;
   margin-left: 6px;
   margin-top: 90px;
-  height: ${GE_DESKTOP_CONFIGURATION.displayHeight}px;
+  height: ${GE_DESKTOP_CONFIGURATION.DISPLAY_HEIGHT}px;
   background: rgba(0, 0, 0, 0.02);
   box-shadow: inset 0px 0px 20px rgba(0, 0, 0, 0.75);
   display: flex;
@@ -120,7 +98,7 @@ const DisplayContent = styled.div`
     border-radius: 19px;
   }
 
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries }, layoutConfiguration }) => `${mediaQueries.desktopPixel * layoutConfiguration.scale - 1}px`}) {
     width: 280px;
     height: 357px;
     margin-left: 2px;
@@ -152,12 +130,12 @@ const WiresContainer = styled.div`
 
 const GameEditionContainer = ({ children }) => {
   const location = useLocation();
-  const [width] = useWindowSize();
   const { showNotification } = useNotificationContext();
   const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
   const { wallet, signingWallet, setSelectedWallet } = useWalletContext();
 
-  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens } = useContext(GameEditionContext);
+  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens, layoutConfiguration } =
+    useContext(GameEditionContext);
   const { account } = useAccountContext();
 
   const onConnectionSuccess = async (wallet) => {
@@ -244,42 +222,19 @@ const GameEditionContainer = ({ children }) => {
       ? true
       : false;
 
-  return width < theme.mediaQueries.desktopPixel ? (
-    <MobileMainContainer>
-      <GameboyMobileContainer style={{ backgroundImage: `url(${gameboyMobile})` }}>
-        <DisplayContent>
-          {children}
-          {modalState.open && (
-            <GameEditionModalsContainer
-              hideOnClose={modalState.hideOnClose}
-              title={modalState.title}
-              titleFontSize={modalState.titleFontSize}
-              containerStyle={modalState.containerStyle}
-              titleContainerStyle={modalState.titleContainerStyle}
-              description={modalState.description}
-              type={modalState.type}
-              content={modalState.content}
-              onClose={modalState.onClose}
-            />
-          )}
-        </DisplayContent>
-        <div className="kaddex-logo">
-          <KaddexLogo />
-        </div>
-      </GameboyMobileContainer>
-    </MobileMainContainer>
-  ) : (
+  return (
     <DesktopMainContainer
       showWires={showWires}
       selectedWire={selectedWire}
       showTokens={showTokens}
       $scale={scale}
       style={{ justifyContent: 'flex-end' }}
+      layoutConfiguration={layoutConfiguration}
     >
       <div style={{ display: 'flex' }}>
         <GameboyDesktopContainer showWires={showWires} showTokens={showTokens} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
           <GameboyButtons />
-          <DisplayContent>
+          <DisplayContent layoutConfiguration={layoutConfiguration}>
             {children}
             {modalState.open && (
               <GameEditionModalsContainer

@@ -22,12 +22,13 @@ const Content = styled.div`
 const ItemsContainer = styled.div`
   display: flex;
   flex-flow: row;
-  width: ${GE_DESKTOP_CONFIGURATION.displayWidth}px;
+  width: ${GE_DESKTOP_CONFIGURATION.DISPLAY_WIDTH}px;
   overflow-x: auto;
   scroll-behavior: smooth;
   ::-webkit-scrollbar {
     display: none;
   }
+  scrollbar-width: none;
   & > div:first-child {
     margin-left: ${SCROLL_OFFSET}px;
   }

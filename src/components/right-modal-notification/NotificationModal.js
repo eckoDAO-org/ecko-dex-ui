@@ -23,6 +23,7 @@ const Container = styled.div`
   ::-webkit-scrollbar {
     width: 0px;
   }
+  scrollbar-width: none;
 `;
 
 const Title = styled.div`

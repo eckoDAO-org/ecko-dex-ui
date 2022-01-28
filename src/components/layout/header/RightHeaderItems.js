@@ -24,7 +24,7 @@ import { commonTheme } from '../../../styles/theme';
 const RightContainerHeader = styled.div`
   display: flex;
   align-items: center;
-  & > *:not(first-child) {
+  & > *:not(:last-child) {
     margin-right: 14px;
   }
 
@@ -53,7 +53,7 @@ const RightHeaderItems = () => {
 
   return (
     <RightContainerHeader>
-      <span className="mainnet-chain-2 mobile-none">Mainnet Chain 2</span>
+      <span className="mainnet-chain-2 desktop-only">Mainnet Chain 2</span>
       {account?.account && width >= commonTheme.mediaQueries.desktopPixel && (
         <HeaderItem>
           <AccountInfo
