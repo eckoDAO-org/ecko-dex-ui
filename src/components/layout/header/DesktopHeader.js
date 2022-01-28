@@ -10,8 +10,6 @@ import { LightModeContext } from '../../../contexts/LightModeContext';
 import { useGameEditionContext } from '../../../contexts';
 import GameEditionModeButton from './GameEditionModeButton';
 import useWindowSize from '../../../hooks/useWindowSize';
-import { commonTheme } from '../../../styles/theme';
-import { GE_DESKTOP_CONFIGURATION } from '../../../contexts/GameEditionContext';
 
 const Container = styled.div`
   display: flex;
@@ -57,7 +55,7 @@ const AnimatedDiv = styled.div`
 const DesktopHeader = ({ className }) => {
   const history = useHistory();
   const [buttonHover, setButtonHover] = useState(null);
-  const { gameEditionView } = useGameEditionContext();
+  const { gameEditionView, layoutConfiguration } = useGameEditionContext();
 
   const [width, height] = useWindowSize();
   const { themeMode } = useContext(LightModeContext);
@@ -88,8 +86,7 @@ const DesktopHeader = ({ className }) => {
         </AnimatedDiv>
       </LeftContainer>
 
-      {width >= commonTheme.mediaQueries.desktopPixel * GE_DESKTOP_CONFIGURATION.scaleValue &&
-        height >= commonTheme.mediaQueries.gameEditionDesktopHeightPixel * GE_DESKTOP_CONFIGURATION.scaleValue && <GameEditionModeButton />}
+      {width >= layoutConfiguration.minimumWidth && height >= layoutConfiguration.minimumHeight && <GameEditionModeButton />}
 
       <RightContainer>
         <RightHeaderItems />

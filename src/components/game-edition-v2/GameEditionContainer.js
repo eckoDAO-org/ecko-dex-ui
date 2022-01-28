@@ -31,14 +31,14 @@ const DesktopMainContainer = styled.div`
   }
   align-items: center;
   transition: transform 0.5s;
-  transform: ${({ showWires, selectedWire, showTokens }) => {
+  transform: ${({ showWires, selectedWire, showTokens, layoutConfiguration }) => {
     if (showTokens) {
-      return 'translate(-30%, 442px) scale(0.8)';
+      return `translate(-30%, ${layoutConfiguration.geTranslateY}px) scale(${layoutConfiguration.scale})`;
     }
     if (showWires && !selectedWire && !showTokens) {
-      return 'translateY(88px) scale(0.8)';
+      return `translateY(${layoutConfiguration.wiresTranslateY}px) scale(${layoutConfiguration.scale})`;
     } else {
-      return 'translateY(442px) scale(0.8)';
+      return `translateY(${layoutConfiguration.geTranslateY}px) scale(${layoutConfiguration.scale})`;
     }
   }};
   /* transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
@@ -117,10 +117,10 @@ const GameboyMobileContainer = styled.div`
 `;
 
 const DisplayContent = styled.div`
-  width: ${GE_DESKTOP_CONFIGURATION.displayWidth}px;
+  width: ${GE_DESKTOP_CONFIGURATION.DISPLAY_WIDTH}px;
   margin-left: 6px;
   margin-top: 90px;
-  height: ${GE_DESKTOP_CONFIGURATION.displayHeight}px;
+  height: ${GE_DESKTOP_CONFIGURATION.DISPLAY_HEIGHT}px;
   background: rgba(0, 0, 0, 0.02);
   box-shadow: inset 0px 0px 20px rgba(0, 0, 0, 0.75);
   display: flex;
@@ -133,7 +133,7 @@ const DisplayContent = styled.div`
     border-radius: 19px;
   }
 
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel * GE_DESKTOP_CONFIGURATION.scaleValue - 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries }, layoutConfiguration }) => `${mediaQueries.desktopPixel * layoutConfiguration.scale - 1}px`}) {
     width: 280px;
     height: 357px;
     margin-left: 2px;
@@ -170,7 +170,8 @@ const GameEditionContainer = ({ children }) => {
   const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
   const { wallet, signingWallet, setSelectedWallet } = useWalletContext();
 
-  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens } = useContext(GameEditionContext);
+  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens, layoutConfiguration } =
+    useContext(GameEditionContext);
   const { account } = useAccountContext();
 
   const onConnectionSuccess = async (wallet) => {
@@ -257,42 +258,19 @@ const GameEditionContainer = ({ children }) => {
       ? true
       : false;
 
-  return width < theme.mediaQueries.desktopPixel * GE_DESKTOP_CONFIGURATION.scaleValue ? (
-    <MobileMainContainer>
-      <GameboyMobileContainer style={{ backgroundImage: `url(${gameboyMobile})` }}>
-        <DisplayContent>
-          {children}
-          {modalState.open && (
-            <GameEditionModalsContainer
-              hideOnClose={modalState.hideOnClose}
-              title={modalState.title}
-              titleFontSize={modalState.titleFontSize}
-              containerStyle={modalState.containerStyle}
-              titleContainerStyle={modalState.titleContainerStyle}
-              description={modalState.description}
-              type={modalState.type}
-              content={modalState.content}
-              onClose={modalState.onClose}
-            />
-          )}
-        </DisplayContent>
-        <div className="kaddex-logo">
-          <KaddexLogo />
-        </div>
-      </GameboyMobileContainer>
-    </MobileMainContainer>
-  ) : (
+  return (
     <DesktopMainContainer
       showWires={showWires}
       selectedWire={selectedWire}
       showTokens={showTokens}
       $scale={scale}
       style={{ justifyContent: 'flex-end' }}
+      layoutConfiguration={layoutConfiguration}
     >
       <div style={{ display: 'flex' }}>
         <GameboyDesktopContainer showWires={showWires} showTokens={showTokens} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
           <GameboyButtons />
-          <DisplayContent>
+          <DisplayContent layoutConfiguration={layoutConfiguration}>
             {children}
             {modalState.open && (
               <GameEditionModalsContainer

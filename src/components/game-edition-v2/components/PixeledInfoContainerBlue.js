@@ -9,7 +9,7 @@ export const InfoContainer = styled.div`
   overflow-y: hidden;
   display: flex;
   align-items: center;
-  width: ${GE_DESKTOP_CONFIGURATION.displayWidth}px;
+  width: ${GE_DESKTOP_CONFIGURATION.DISPLAY_WIDTH}px;
   padding: 0 16px;
   & > div:not(:last-child) {
     margin-right: 16px;

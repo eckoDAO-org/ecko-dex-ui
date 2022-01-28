@@ -2,11 +2,9 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { HamburgerIcon, KaddexLightModeLogo, KaddexLogoWhite } from '../../../assets';
-import { useLightModeContext } from '../../../contexts';
-import { GE_DESKTOP_CONFIGURATION } from '../../../contexts/GameEditionContext';
+import { useGameEditionContext, useLightModeContext } from '../../../contexts';
 import useWindowSize from '../../../hooks/useWindowSize';
 import { ROUTE_INDEX } from '../../../router/routes';
-import { commonTheme } from '../../../styles/theme';
 import menuItems from '../../menuItems';
 import CustomPopup from '../../shared/CustomPopup';
 import HeaderItem from '../../shared/HeaderItem';
@@ -50,6 +48,7 @@ const TabletHeader = ({ className }) => {
   const history = useHistory();
   const { themeMode } = useLightModeContext();
   const [width, height] = useWindowSize();
+  const { layoutConfiguration } = useGameEditionContext();
   return (
     <Container className={className}>
       <RowContainer>
@@ -66,8 +65,7 @@ const TabletHeader = ({ className }) => {
           )}
         </LeftContainer>
 
-        {width >= commonTheme.mediaQueries.desktopPixel * GE_DESKTOP_CONFIGURATION.scaleValue &&
-          height >= commonTheme.mediaQueries.gameEditionDesktopHeightPixel * GE_DESKTOP_CONFIGURATION.scaleValue && <GameEditionModeButton />}
+        {width >= layoutConfiguration.minimumWidth && height >= layoutConfiguration.minimumHeight && <GameEditionModeButton />}
 
         <RightContainer>
           <RightHeaderItems />
