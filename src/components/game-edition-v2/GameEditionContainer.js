@@ -3,14 +3,11 @@ import styled from 'styled-components/macro';
 import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
 import { useAccountContext, useKaddexWalletContext, useNotificationContext, useWalletContext } from '../../contexts';
 import { STATUSES } from '../../contexts/NotificationContext';
-import useWindowSize from '../../hooks/useWindowSize';
 import WalletWires from './components/WalletWires';
 import ConnectWalletWire from './components/ConnectWalletWire';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
 import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.svg';
-import gameboyMobile from '../../assets/images/game-edition/gameboy-mobile.png';
 import { KaddexLogo } from '../../assets';
-import theme from '../../styles/theme';
 import { WALLET } from '../../constants/wallet';
 import ConnectWalletZelcoreModal from '../modals/kdaModals/ConnectWalletZelcoreModal';
 import ConnectWalletTorusModal from '../modals/kdaModals/ConnectWalletTorusModal';
@@ -53,15 +50,6 @@ const DesktopMainContainer = styled.div`
   }}; */
 `;
 
-const MobileMainContainer = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
-  align-items: center;
-  overflow: hidden;
-`;
-
 const GameboyDesktopContainer = styled.div`
   background-repeat: no-repeat;
   background-size: contain;
@@ -91,29 +79,6 @@ const GameboyDesktopContainer = styled.div`
     }
   }
   opacity: ${({ showWires, showTokens }) => (showWires || showTokens ? 0.5 : 1)};
-`;
-const GameboyMobileContainer = styled.div`
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 540px;
-  width: 930px;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  transition: all 1s ease-in-out;
-  transition-delay: 1s;
-  .kaddex-logo {
-    margin-top: 8px;
-    svg {
-      height: 6px;
-    }
-    margin-left: 24px;
-    margin-top: 8px;
-    svg {
-      height: 6px;
-    }
-  }
 `;
 
 const DisplayContent = styled.div`
@@ -165,7 +130,6 @@ const WiresContainer = styled.div`
 
 const GameEditionContainer = ({ children }) => {
   const location = useLocation();
-  const [width] = useWindowSize();
   const { showNotification } = useNotificationContext();
   const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
   const { wallet, signingWallet, setSelectedWallet } = useWalletContext();
