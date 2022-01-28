@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
-import { GameEditionContext, GE_DESKTOP_CONFIGURATION, SCALED_VALUE } from '../../contexts/GameEditionContext';
+import { GameEditionContext, GE_DESKTOP_CONFIGURATION, scaleValue } from '../../contexts/GameEditionContext';
 import { useAccountContext, useKaddexWalletContext, useNotificationContext, useWalletContext } from '../../contexts';
 import { STATUSES } from '../../contexts/NotificationContext';
 import useWindowSize from '../../hooks/useWindowSize';
@@ -66,8 +66,8 @@ const GameboyDesktopContainer = styled.div`
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
-  min-height: calc(534 * ${SCALED_VALUE}px);
-  width: calc(930 * ${SCALED_VALUE}px);
+  min-height: ${scaleValue(534)}px;
+  width: ${scaleValue(930)}px;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -84,8 +84,8 @@ const GameboyDesktopContainer = styled.div`
   }};
 
   .kaddex-logo {
-    margin-top: calc(20 * ${SCALED_VALUE}px);
-    margin-left: calc(24 * ${SCALED_VALUE}px);
+    margin-top: ${scaleValue(20)}px;
+    margin-left: ${scaleValue(24)}px;
     svg {
       height: 14.5px;
     }
@@ -117,10 +117,10 @@ const GameboyMobileContainer = styled.div`
 `;
 
 const DisplayContent = styled.div`
-  width: ${GE_DESKTOP_CONFIGURATION.displayWidth * SCALED_VALUE}px;
-  margin-left: calc(6 * ${SCALED_VALUE}px);
-  margin-top: calc(90 * ${SCALED_VALUE}px);
-  height: ${GE_DESKTOP_CONFIGURATION.displayHeight * SCALED_VALUE}px;
+  width: ${scaleValue(GE_DESKTOP_CONFIGURATION.displayWidth)}px;
+  margin-left: ${scaleValue(6)}px;
+  margin-top: ${scaleValue(90)}px;
+  height: ${scaleValue(GE_DESKTOP_CONFIGURATION.displayHeight)}px;
   background: rgba(0, 0, 0, 0.02);
   box-shadow: inset 0px 0px 20px rgba(0, 0, 0, 0.75);
   display: flex;
@@ -133,7 +133,7 @@ const DisplayContent = styled.div`
     border-radius: 19px;
   }
 
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel * SCALED_VALUE - 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
     width: 280px;
     height: 357px;
     margin-left: 2px;
@@ -153,7 +153,7 @@ const SearchTokenList = styled(FadeIn)`
 `;
 
 const WiresContainer = styled.div`
-  width: calc(930 * ${SCALED_VALUE}px);
+  width: ${scaleValue(930)}px;
   transition: transform 0s;
   transform: ${({ showTokens }) => {
     if (showTokens) {

@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
 import { CloseGe } from '../../assets';
-import { GameEditionContext, SCALED_VALUE } from '../../contexts/GameEditionContext';
+import { GameEditionContext, scaleValue } from '../../contexts/GameEditionContext';
 import { FadeIn } from '../shared/animations';
 import modalBackground from '../../assets/images/game-edition/modal-background.png';
 import arcadeBackground from '../../assets/images/game-edition/arcade-background.png';
@@ -35,7 +35,7 @@ const GEModalContainer = styled(FadeIn)`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  padding: calc(16 * ${SCALED_VALUE}px);
+  padding: ${scaleValue(16)}px;
   overflow: auto;
   ::-webkit-scrollbar {
     display: none;
@@ -54,7 +54,7 @@ const ContentModalContainer = styled.div`
   display: flex;
 
   & > *:not(:last-child) {
-    margin-bottom: calc(16 * ${SCALED_VALUE}px);
+    margin-bottom: ${scaleValue(16)}px;
   }
 
   flex-direction: column;

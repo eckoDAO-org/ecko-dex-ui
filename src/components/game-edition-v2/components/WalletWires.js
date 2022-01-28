@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { useAccountContext, useWalletContext } from '../../../contexts';
-import { GameEditionContext, SCALED_VALUE, WIRE_CONTAINER_WIDTH } from '../../../contexts/GameEditionContext';
+import { GameEditionContext, SCALED_VALUE, scaleValue, WIRE_CONTAINER_WIDTH } from '../../../contexts/GameEditionContext';
 import { FadeIn } from '../../shared/animations';
 import { HideWiresIcon } from '../../../assets';
 import { WALLET } from '../../../constants/wallet';
@@ -11,7 +11,7 @@ const WiresContainer = styled.div`
   align-items: flex-end;
   position: relative;
   width: 100%;
-  padding: 0 calc(50 * ${SCALED_VALUE}px);
+  padding: 0 ${scaleValue(50)}px;
   justify-content: space-between;
 `;
 
@@ -49,6 +49,7 @@ const ConnectionWireContainer = styled.div`
   cursor: ${({ onClick }) => (onClick ? 'pointer' : 'default')};
   flex-direction: column;
   align-items: center;
+  transform: scale(${SCALED_VALUE});
   svg {
     margin-top: 20px;
   }
@@ -76,12 +77,11 @@ const ConnectionWireContainer = styled.div`
     if (isSelected) {
       return css`
         transition: transform 0.5s;
-        transform: translate(${translateX}px, -260px);
+        transform: translate(${translateX}px, -260px) scale(${SCALED_VALUE});
       `;
     } else {
       return css`
         transition: transform 0.3s;
-        transform: scale(${SCALED_VALUE});
         :hover {
           transform: scale(calc(${SCALED_VALUE} + 0.3));
         }
@@ -101,11 +101,12 @@ export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
   const { account } = useAccountContext();
 
   const [translateX, setTranslateX] = useState(0);
+  console.log('translateX', translateX);
   useEffect(() => {
     if (selectedWire) {
       const wireElement = document.getElementById(selectedWire.id);
 
-      setTranslateX((WIRE_CONTAINER_WIDTH - 50) / 2 - wireElement.offsetLeft - wireElement.offsetWidth / 2 + 20);
+      setTranslateX(scaleValue((WIRE_CONTAINER_WIDTH - 50) / 2) - wireElement.offsetLeft - wireElement.offsetWidth / 2 + scaleValue(20));
     }
   }, [selectedWire]);
   return (
@@ -149,7 +150,7 @@ const WalletWires = () => {
       <DisconnectButton
         showWires={showWires}
         selectedWire={selectedWire}
-        style={{ top: '-20%' }}
+        style={{ top: '-14%' }}
         onClick={() => {
           let oldWire = null;
           if (wallet && selectedWire && wallet?.id !== selectedWire?.id) {

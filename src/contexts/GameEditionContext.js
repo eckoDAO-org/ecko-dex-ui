@@ -9,11 +9,15 @@ const initialModalState = {
   content: null,
 };
 
-export const SCALED_VALUE = 0.8;
+export const SCALED_VALUE = 1.3;
 export const GE_DESKTOP_CONFIGURATION = {
   displayWidth: 455,
   displayHeight: 335,
   scaleValue: 0.8,
+};
+
+export const scaleValue = (value) => {
+  return value * SCALED_VALUE;
 };
 
 export const PROGRESS_BAR_MAX_VALUE = 89;

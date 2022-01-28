@@ -4,13 +4,13 @@ import { useLocation } from 'react-router-dom';
 import { ROUTE_GAME_START_ANIMATION } from '../../../router/routes';
 import { FadeIn } from '../../shared/animations';
 import { ConnectWalletIcon, WireConnectionLightIcon, WireConnectionDarkIcon } from '../../../assets';
-import { GameEditionContext, SCALED_VALUE } from '../../../contexts/GameEditionContext';
+import { GameEditionContext, SCALED_VALUE, scaleValue } from '../../../contexts/GameEditionContext';
 import { useLightModeContext } from '../../../contexts';
 
 const WireConnectionContainer = styled.div`
-  margin-top: calc(8 * ${SCALED_VALUE}px);
+  margin-top: ${scaleValue(8)}px;
   width: 100%;
-  height: calc(161 * ${SCALED_VALUE}px);
+  height: ${scaleValue(161)}px;
   display: flex;
   justify-content: center;
   position: relative;
@@ -20,6 +20,7 @@ const WireConnectionContainer = styled.div`
   z-index: 10;
   svg {
     height: 100%;
+    width: 100%;
   }
 `;
 
