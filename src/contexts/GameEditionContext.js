@@ -9,6 +9,7 @@ const initialModalState = {
   content: null,
 };
 
+export const SCALED_VALUE = 0.8;
 export const GE_DESKTOP_CONFIGURATION = {
   displayWidth: 455,
   displayHeight: 335,

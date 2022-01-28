@@ -3,6 +3,7 @@ import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
 import { commonColors } from '../../../styles/theme';
 import { CloseGe } from '../../../assets';
+import { SCALED_VALUE } from '../../../contexts/GameEditionContext';
 
 const STYText = styled.span`
   display: flex;
@@ -10,7 +11,7 @@ const STYText = styled.span`
   align-items: center;
   cursor: ${({ onClick }) => onClick && 'pointer'};
   color: ${({ color }) => color} !important;
-  font-size: ${({ fontSize }) => fontSize}px;
+  font-size: ${({ fontSize }) => `calc(${fontSize}* ${SCALED_VALUE}px)`};
   font-family: ${({ theme: { fontFamily } }) => fontFamily.pixeboy};
   font-weight: ${({ fontWeight }) => fontWeight};
 `;

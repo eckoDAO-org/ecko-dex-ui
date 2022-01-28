@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { useAccountContext, useWalletContext } from '../../../contexts';
-import { GameEditionContext, WIRE_CONTAINER_WIDTH } from '../../../contexts/GameEditionContext';
+import { GameEditionContext, SCALED_VALUE, WIRE_CONTAINER_WIDTH } from '../../../contexts/GameEditionContext';
 import { FadeIn } from '../../shared/animations';
 import { HideWiresIcon } from '../../../assets';
 import { WALLET } from '../../../constants/wallet';
@@ -10,8 +10,8 @@ const WiresContainer = styled.div`
   display: flex;
   align-items: flex-end;
   position: relative;
-  width: ${WIRE_CONTAINER_WIDTH}px;
-  padding: 0 50px;
+  width: 100%;
+  padding: 0 calc(50 * ${SCALED_VALUE}px);
   justify-content: space-between;
 `;
 
@@ -81,8 +81,9 @@ const ConnectionWireContainer = styled.div`
     } else {
       return css`
         transition: transform 0.3s;
+        transform: scale(${SCALED_VALUE});
         :hover {
-          transform: scale(1.3);
+          transform: scale(calc(${SCALED_VALUE} + 0.3));
         }
       `;
     }
@@ -148,7 +149,7 @@ const WalletWires = () => {
       <DisconnectButton
         showWires={showWires}
         selectedWire={selectedWire}
-        style={{ top: -77 }}
+        style={{ top: '-20%' }}
         onClick={() => {
           let oldWire = null;
           if (wallet && selectedWire && wallet?.id !== selectedWire?.id) {

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
-import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
+import { GameEditionContext, GE_DESKTOP_CONFIGURATION, SCALED_VALUE } from '../../contexts/GameEditionContext';
 import { useAccountContext, useKaddexWalletContext, useNotificationContext, useWalletContext } from '../../contexts';
 import { STATUSES } from '../../contexts/NotificationContext';
 import useWindowSize from '../../hooks/useWindowSize';
@@ -33,12 +33,12 @@ const DesktopMainContainer = styled.div`
   transition: transform 0.5s;
   transform: ${({ showWires, selectedWire, showTokens }) => {
     if (showTokens) {
-      return 'translate(-30%, 442px) scale(0.8)';
+      return 'translate(-30%, 442px) ';
     }
     if (showWires && !selectedWire && !showTokens) {
-      return 'translateY(88px) scale(0.8)';
+      return 'translateY(11%) ';
     } else {
-      return 'translateY(442px) scale(0.8)';
+      return 'translateY(442px) ';
     }
   }};
   /* transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
@@ -66,8 +66,8 @@ const GameboyDesktopContainer = styled.div`
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
-  min-height: 534px;
-  width: 930px;
+  min-height: calc(534 * ${SCALED_VALUE}px);
+  width: calc(930 * ${SCALED_VALUE}px);
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -84,8 +84,8 @@ const GameboyDesktopContainer = styled.div`
   }};
 
   .kaddex-logo {
-    margin-top: 20px;
-    margin-left: 24px;
+    margin-top: calc(20 * ${SCALED_VALUE}px);
+    margin-left: calc(24 * ${SCALED_VALUE}px);
     svg {
       height: 14.5px;
     }
@@ -117,10 +117,10 @@ const GameboyMobileContainer = styled.div`
 `;
 
 const DisplayContent = styled.div`
-  width: ${GE_DESKTOP_CONFIGURATION.displayWidth}px;
-  margin-left: 6px;
-  margin-top: 90px;
-  height: ${GE_DESKTOP_CONFIGURATION.displayHeight}px;
+  width: ${GE_DESKTOP_CONFIGURATION.displayWidth * SCALED_VALUE}px;
+  margin-left: calc(6 * ${SCALED_VALUE}px);
+  margin-top: calc(90 * ${SCALED_VALUE}px);
+  height: ${GE_DESKTOP_CONFIGURATION.displayHeight * SCALED_VALUE}px;
   background: rgba(0, 0, 0, 0.02);
   box-shadow: inset 0px 0px 20px rgba(0, 0, 0, 0.75);
   display: flex;
@@ -133,7 +133,7 @@ const DisplayContent = styled.div`
     border-radius: 19px;
   }
 
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel * GE_DESKTOP_CONFIGURATION.scaleValue - 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel * SCALED_VALUE - 1}px`}) {
     width: 280px;
     height: 357px;
     margin-left: 2px;
@@ -153,6 +153,7 @@ const SearchTokenList = styled(FadeIn)`
 `;
 
 const WiresContainer = styled.div`
+  width: calc(930 * ${SCALED_VALUE}px);
   transition: transform 0s;
   transform: ${({ showTokens }) => {
     if (showTokens) {
