@@ -15,7 +15,7 @@ export const GE_DESKTOP_CONFIGURATION = {
   DISPLAY_HEIGHT: 335,
   WIRE_CONTAINER_WIDTH: 930,
   layouts: {
-    'scale-1.2': { id: 'scale-1.2', minimumHeight: 940, minimumWidth: 1400, scale: 1.2, geTranslateY: 442, wiresTranslateY: -85 },
+    'scale-1.2': { id: 'scale-1.2', minimumHeight: 1024, minimumWidth: 1400, scale: 1.2, geTranslateY: 442, wiresTranslateY: -85 },
     'scale-1': { id: 'scale-1', minimumHeight: 960, minimumWidth: 1024, scale: 1, geTranslateY: 442, wiresTranslateY: 88 },
     'scale-0.8': {
       id: 'scale-0.8',
