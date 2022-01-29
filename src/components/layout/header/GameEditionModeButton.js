@@ -17,11 +17,12 @@ const Button = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
 
   color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.white : colors.primary)};
 
   @media (min-width: ${({ theme: { mediaQueries }, resolutionConfiguration }) =>
-      `${mediaQueries.desktopPixel * resolutionConfiguration['game-edition'].scale}px`}) {
+      `${mediaQueries.desktopPixel * resolutionConfiguration['game-mode'].scale}px`}) {
     svg {
       path {
         fill: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.white : colors.primary)};
@@ -40,7 +41,7 @@ const Button = styled.div`
   }
 
   @media (max-width: ${({ theme: { mediaQueries }, resolutionConfiguration }) =>
-      `${mediaQueries.desktopPixel * resolutionConfiguration['game-edition'].scale - 1}px`}) {
+      `${mediaQueries.desktopPixel * resolutionConfiguration['game-mode'].scale - 1}px`}) {
     svg {
       path {
         fill: ${({ themeMode, theme: { colors } }) => (themeMode === 'light' ? colors.primary : colors.white)};

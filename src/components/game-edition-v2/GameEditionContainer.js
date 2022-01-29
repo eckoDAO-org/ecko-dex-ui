@@ -31,12 +31,12 @@ const DesktopMainContainer = styled.div`
   transition: transform 0.5s;
   transform: ${({ showWires, selectedWire, showTokens, resolutionConfiguration }) => {
     if (showTokens) {
-      return `translate(-30%, ${resolutionConfiguration['game-edition'].geTranslateY}px) scale(${resolutionConfiguration['game-edition'].scale})`;
+      return `translate(-30%, ${resolutionConfiguration['game-mode'].geTranslateY}px) scale(${resolutionConfiguration['game-mode'].scale})`;
     }
     if (showWires && !selectedWire && !showTokens) {
-      return `translateY(${resolutionConfiguration['game-edition'].wiresTranslateY}px) scale(${resolutionConfiguration['game-edition'].scale})`;
+      return `translateY(${resolutionConfiguration['game-mode'].wiresTranslateY}px) scale(${resolutionConfiguration['game-mode'].scale})`;
     } else {
-      return `translateY(${resolutionConfiguration['game-edition'].geTranslateY}px) scale(${resolutionConfiguration['game-edition'].scale})`;
+      return `translateY(${resolutionConfiguration['game-mode'].geTranslateY}px) scale(${resolutionConfiguration['game-mode'].scale})`;
     }
   }};
   /* transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
@@ -100,7 +100,7 @@ const DisplayContent = styled.div`
   }
 
   @media (max-width: ${({ theme: { mediaQueries }, resolutionConfiguration }) =>
-      `${mediaQueries.desktopPixel * resolutionConfiguration['game-edition'].scale - 1}px`}) {
+      `${mediaQueries.desktopPixel * resolutionConfiguration['game-mode'].scale - 1}px`}) {
     width: 280px;
     height: 357px;
     margin-left: 2px;
@@ -146,7 +146,7 @@ const GameEditionContainer = ({ children }) => {
     closeModal();
     showNotification({
       title: `${wallet.name}  was successfully connected`,
-      type: 'game-edition',
+      type: 'game-mode',
       icon: wallet.notificationLogo,
       closeButton: false,
       titleStyle: { fontSize: 13 },
@@ -216,7 +216,7 @@ const GameEditionContainer = ({ children }) => {
 
       showNotification({
         title: `${WALLET.KADDEX_WALLET.name}  was successfully connected`,
-        type: 'game-edition',
+        type: 'game-mode',
         icon: WALLET.KADDEX_WALLET.notificationLogo,
         closeButton: false,
         titleStyle: { fontSize: 13 },

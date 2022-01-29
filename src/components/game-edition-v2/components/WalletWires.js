@@ -82,7 +82,7 @@ const ConnectionWireContainer = styled.div`
       return css`
         transition: transform 0.3s;
         :hover {
-          transform: scale(calc(${resolutionConfiguration['game-edition'].scale} + 0.3));
+          transform: scale(calc(${resolutionConfiguration['game-mode'].scale} + 0.3));
         }
       `;
     }

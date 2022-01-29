@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import Wrapper from '../../components/shared/Wrapper';
 import DesktopHeader from './header/DesktopHeader';
 import MobileHeader from './header/MobileHeader';
@@ -12,7 +12,6 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 import browserDetection from '../../utils/browserDetection';
 import centerBackground from '../../assets/images/game-edition/center-background.png';
 import useWindowSize from '../../hooks/useWindowSize';
-import CacheBackgroundImages from './CacheBackgroundImages';
 import TabletHeader from './header/TabletHeader';
 import { useApplicationContext } from '../../contexts';
 
@@ -37,8 +36,32 @@ const WrapperContainer = styled(Wrapper)`
 `;
 
 const MainContent = styled.div`
-  transform: scale(0.8);
-  height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
+  /* transform: ${({ resolutionConfiguration }) => `scale(${resolutionConfiguration['normal-mode'].scale})`}; */
+
+  ${() => {
+    const browser = browserDetection();
+    switch (browser) {
+      case 'CHROME':
+        return css`
+          zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
+        `;
+      case 'FIREFOX':
+        return css`
+          & > :first-child {
+            -ms-zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
+            -webkit-zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
+            -moz-transform: ${({ resolutionConfiguration }) => `scale(${resolutionConfiguration['normal-mode'].scale})`};
+            -moz-transform-origin: center;
+          }
+        `;
+      default:
+        return css`
+          transform: ${({ resolutionConfiguration }) => `scale(${resolutionConfiguration['normal-mode'].scale})`};
+        `;
+    }
+  }}
+
+  height: 100%;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
     padding: 0 16px;
     height: ${({ theme: { header } }) => `calc(100% - ${header.mobileHeight}px)`};
@@ -86,7 +109,7 @@ const Layout = ({ children }) => {
             <GameEditionContainer>{children}</GameEditionContainer>
           </>
         ) : (
-          <MainContent>{children}</MainContent>
+          <MainContent resolutionConfiguration={resolutionConfiguration}>{children}</MainContent>
         )}
       </WrapperContainer>
       <StripesContainer>

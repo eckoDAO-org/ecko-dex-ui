@@ -9,6 +9,7 @@ const Item = styled(NavLink)`
   text-decoration: none;
   text-transform: capitalize;
   background: transparent;
+  z-index: 1;
 
   svg {
     path {

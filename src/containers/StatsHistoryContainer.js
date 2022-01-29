@@ -13,9 +13,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
   padding: ${({ gameEditionView }) => (gameEditionView ? '16px' : '32px')};
   justify-content: flex-start;
+  align-items: center;
 
   ${({ gameEditionView }) => {
     if (gameEditionView) {

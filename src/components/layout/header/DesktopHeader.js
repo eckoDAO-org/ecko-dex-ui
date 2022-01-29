@@ -60,14 +60,13 @@ const DesktopHeader = ({ className }) => {
 
   const [width, height] = useWindowSize();
   const { themeMode } = useContext(ApplicationContext);
-  console.log('resolutionConfiguration', resolutionConfiguration);
   return (
     <Container className={className}>
       <LeftContainer>
         {themeMode === 'dark' ? (
-          <KaddexLogoWhite style={{ cursor: 'pointer' }} onClick={() => history.push(ROUTE_INDEX)} />
+          <KaddexLogoWhite style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
         ) : (
-          <KaddexLightModeLogo style={{ cursor: 'pointer' }} onClick={() => history.push(ROUTE_INDEX)} />
+          <KaddexLightModeLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
         )}
 
         <AnimatedDiv className={gameEditionView ? 'fadeOut' : 'fadeIn'}>
