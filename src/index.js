@@ -4,14 +4,14 @@ import 'semantic-ui-css/semantic.min.css';
 import './styles/styles.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { LightModeProvider } from './contexts/LightModeContext';
+import { ApplicationProvider } from './contexts/ApplicationContext';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <LightModeProvider>
+    <ApplicationProvider>
       <App />
-    </LightModeProvider>
+    </ApplicationProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

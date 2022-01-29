@@ -7,7 +7,7 @@ import { AccountContext } from '../../contexts/AccountContext';
 import { WalletContext } from '../../contexts/WalletContext';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { PactContext } from '../../contexts/PactContext';
-import { LightModeContext } from '../../contexts/LightModeContext';
+import { ApplicationContext } from '../../contexts/ApplicationContext';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { reduceBalance, getCorrectBalance } from '../../utils/reduceBalance';
 import WalletRequestView from '../../components/modals/swap-modals/WalletRequestView';
@@ -116,7 +116,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
   const wallet = useContext(WalletContext);
   const liquidity = useContext(LiquidityContext);
   const modalContext = useContext(ModalContext);
-  const { themeMode } = useContext(LightModeContext);
+  const { themeMode } = useContext(ApplicationContext);
   const { gameEditionView, openModal, closeModal, setButtons, outsideToken } = useContext(GameEditionContext);
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);

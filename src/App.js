@@ -12,13 +12,13 @@ import RightModalRender from './components/right-modal-notification/RightModalRe
 import { SwapProvider } from './contexts/SwapContext';
 import { LiquidityProvider } from './contexts/LiquidityContext';
 import { GameEditionProvider } from './contexts/GameEditionContext';
-import { LightModeContext } from './contexts/LightModeContext';
+import { ApplicationContext } from './contexts/ApplicationContext';
 import { KaddexWalletProvider } from './contexts/KaddexWalletContext';
 import NotificationModalRender from './components/right-modal-notification/NotificationModalRender';
 import CacheBackgroundImages from './components/layout/CacheBackgroundImages';
 
 function App() {
-  const { themeMode } = useContext(LightModeContext);
+  const { themeMode } = useContext(ApplicationContext);
 
   return (
     <ThemeProvider theme={theme(themeMode)}>

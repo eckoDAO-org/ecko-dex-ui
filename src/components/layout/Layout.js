@@ -14,6 +14,7 @@ import centerBackground from '../../assets/images/game-edition/center-background
 import useWindowSize from '../../hooks/useWindowSize';
 import CacheBackgroundImages from './CacheBackgroundImages';
 import TabletHeader from './header/TabletHeader';
+import { useApplicationContext } from '../../contexts';
 
 const MainContainer = styled.div`
   display: flex;
@@ -61,7 +62,8 @@ const StripesContainer = styled.div`
 
 const Layout = ({ children }) => {
   const history = useHistory();
-  const { gameEditionView, layoutConfiguration } = useContext(GameEditionContext);
+  const { gameEditionView } = useContext(GameEditionContext);
+  const { resolutionConfiguration } = useApplicationContext();
 
   useEffect(() => {
     gameEditionView ? history.push(ROUTE_GAME_START_ANIMATION) : history.push(ROUTE_SWAP);
@@ -69,30 +71,30 @@ const Layout = ({ children }) => {
 
   const [width, height] = useWindowSize();
 
-  return (
-    layoutConfiguration && (
-      <MainContainer>
-        <WrapperContainer>
-          <div>
-            <MobileHeader className="mobile-only" />
-            <TabletHeader className="desktop-none mobile-none" />
+  return resolutionConfiguration ? (
+    <MainContainer>
+      <WrapperContainer>
+        <div>
+          <MobileHeader className="mobile-only" />
+          <TabletHeader className="desktop-none mobile-none" />
 
-            <DesktopHeader className="desktop-only" gameEditionView={gameEditionView} />
-          </div>
-          {gameEditionView && width >= layoutConfiguration.minimumWidth && height >= layoutConfiguration.minimumHeight ? (
-            <>
-              <img src={centerBackground} style={{ position: 'absolute', width: '100%', top: 0, zIndex: -1 }} alt="" />
-              <GameEditionContainer>{children}</GameEditionContainer>
-            </>
-          ) : (
-            <MainContent>{children}</MainContent>
-          )}
-        </WrapperContainer>
-        <StripesContainer>
-          <Stripes />
-        </StripesContainer>
-      </MainContainer>
-    )
+          <DesktopHeader className="desktop-only" gameEditionView={gameEditionView} />
+        </div>
+        {gameEditionView && width >= resolutionConfiguration.width && height >= resolutionConfiguration.height ? (
+          <>
+            <img src={centerBackground} style={{ position: 'absolute', width: '100%', top: 0, zIndex: -1 }} alt="" />
+            <GameEditionContainer>{children}</GameEditionContainer>
+          </>
+        ) : (
+          <MainContent>{children}</MainContent>
+        )}
+      </WrapperContainer>
+      <StripesContainer>
+        <Stripes />
+      </StripesContainer>
+    </MainContainer>
+  ) : (
+    <></>
   );
 };
 

@@ -6,8 +6,8 @@ import { ROUTE_INDEX } from '../../../router/routes';
 import menuItems from '../../menuItems';
 import RightHeaderItems from './RightHeaderItems';
 import HeaderItem from '../../../components/shared/HeaderItem';
-import { LightModeContext } from '../../../contexts/LightModeContext';
-import { useGameEditionContext } from '../../../contexts';
+import { ApplicationContext } from '../../../contexts/ApplicationContext';
+import { useApplicationContext, useGameEditionContext } from '../../../contexts';
 import GameEditionModeButton from './GameEditionModeButton';
 import useWindowSize from '../../../hooks/useWindowSize';
 
@@ -55,11 +55,12 @@ const AnimatedDiv = styled.div`
 const DesktopHeader = ({ className }) => {
   const history = useHistory();
   const [buttonHover, setButtonHover] = useState(null);
-  const { gameEditionView, layoutConfiguration } = useGameEditionContext();
+  const { gameEditionView } = useGameEditionContext();
+  const { resolutionConfiguration } = useApplicationContext();
 
   const [width, height] = useWindowSize();
-  const { themeMode } = useContext(LightModeContext);
-
+  const { themeMode } = useContext(ApplicationContext);
+  console.log('resolutionConfiguration', resolutionConfiguration);
   return (
     <Container className={className}>
       <LeftContainer>
@@ -86,7 +87,7 @@ const DesktopHeader = ({ className }) => {
         </AnimatedDiv>
       </LeftContainer>
 
-      {width >= layoutConfiguration.minimumWidth && height >= layoutConfiguration.minimumHeight && <GameEditionModeButton />}
+      {width >= resolutionConfiguration.width && height >= resolutionConfiguration.height && <GameEditionModeButton />}
 
       <RightContainer>
         <RightHeaderItems />

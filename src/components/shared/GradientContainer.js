@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components/macro';
-import { useLightModeContext } from '../../contexts';
+import { useApplicationContext } from '../../contexts';
 
 const STYContainer = styled.div`
   position: relative;
@@ -44,7 +44,7 @@ export const STYGradientBorder = styled.div`
 `;
 
 const GradientContainer = ({ className, children, padding, gap, style, hideGradient }) => {
-  const { themeMode } = useLightModeContext();
+  const { themeMode } = useApplicationContext();
   return (
     <STYContainer className={className} padding={padding} gap={gap} style={style} themeMode={themeMode}>
       {!hideGradient && <STYGradientBorder />}

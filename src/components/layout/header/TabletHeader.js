@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { HamburgerIcon, KaddexLightModeLogo, KaddexLogoWhite } from '../../../assets';
-import { useGameEditionContext, useLightModeContext } from '../../../contexts';
+import { useApplicationContext } from '../../../contexts';
 import useWindowSize from '../../../hooks/useWindowSize';
 import { ROUTE_INDEX } from '../../../router/routes';
 import menuItems from '../../menuItems';
@@ -46,9 +46,8 @@ const RowContainer = styled.div`
 
 const TabletHeader = ({ className }) => {
   const history = useHistory();
-  const { themeMode } = useLightModeContext();
+  const { themeMode, resolutionConfiguration } = useApplicationContext();
   const [width, height] = useWindowSize();
-  const { layoutConfiguration } = useGameEditionContext();
   return (
     <Container className={className}>
       <RowContainer>
@@ -65,7 +64,7 @@ const TabletHeader = ({ className }) => {
           )}
         </LeftContainer>
 
-        {width >= layoutConfiguration.minimumWidth && height >= layoutConfiguration.minimumHeight && <GameEditionModeButton />}
+        {width >= resolutionConfiguration.width && height >= resolutionConfiguration.height && <GameEditionModeButton />}
 
         <RightContainer>
           <RightHeaderItems />

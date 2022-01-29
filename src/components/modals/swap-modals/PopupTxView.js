@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Icon } from 'semantic-ui-react';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import { LightModeContext } from '../../../contexts/LightModeContext';
+import { ApplicationContext } from '../../../contexts/ApplicationContext';
 import CopyPopup from '../../../components/shared/CopyPopup';
 import CustomPopup from '../../../components/shared/CustomPopup';
 import { theme } from '../../../styles/theme';
@@ -11,7 +11,7 @@ import Label from '../../shared/Label';
 const PopupTxView = ({ isAccountPopup, popupStyle, offset }) => {
   const { gameEditionView } = useContext(GameEditionContext);
   const { account } = useContext(AccountContext);
-  const { themeMode } = useContext(LightModeContext);
+  const { themeMode } = useContext(ApplicationContext);
 
   const containerStyle = gameEditionView
     ? {

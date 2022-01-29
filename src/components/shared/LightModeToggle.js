@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Checkbox } from 'semantic-ui-react';
 import styled from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
-import { LightModeContext } from '../../contexts/LightModeContext';
+import { ApplicationContext } from '../../contexts/ApplicationContext';
 
 const ToggleContainer = styled.div`
   display: flex;
@@ -63,7 +63,7 @@ const GameLabel = styled.div`
 
 const LightModeToggle = ({ animation, style }) => {
   const game = useContext(GameEditionContext);
-  const { themeMode, themeToggler } = useContext(LightModeContext);
+  const { themeMode, themeToggler } = useContext(ApplicationContext);
 
   const getModeLabel = () => {
     return themeMode === 'light' ? 'dark' : 'light';

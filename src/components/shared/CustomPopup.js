@@ -1,7 +1,7 @@
 import React from 'react';
 import { Popup as SUIPopup } from 'semantic-ui-react';
 import styled, { css } from 'styled-components/macro';
-import { useLightModeContext } from '../../contexts';
+import { useApplicationContext } from '../../contexts';
 import browserDetection from '../../utils/browserDetection';
 import GradientContainer from './GradientContainer';
 
@@ -34,7 +34,7 @@ const PopupContainer = styled(({ hideGradient, ...rest }) => <GradientContainer 
 `;
 
 const CustomPopup = ({ popupStyle, position, trigger, on, offset, children, containerStyle, hideGradient, ...props }) => {
-  const { themeMode } = useLightModeContext();
+  const { themeMode } = useApplicationContext();
   return (
     <Popup
       basic

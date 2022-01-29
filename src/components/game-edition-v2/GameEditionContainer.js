@@ -2,7 +2,7 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
-import { useAccountContext, useKaddexWalletContext, useNotificationContext, useWalletContext } from '../../contexts';
+import { useAccountContext, useApplicationContext, useKaddexWalletContext, useNotificationContext, useWalletContext } from '../../contexts';
 import { STATUSES } from '../../contexts/NotificationContext';
 import WalletWires from './components/WalletWires';
 import ConnectWalletWire from './components/ConnectWalletWire';
@@ -29,14 +29,14 @@ const DesktopMainContainer = styled.div`
   }
   align-items: center;
   transition: transform 0.5s;
-  transform: ${({ showWires, selectedWire, showTokens, layoutConfiguration }) => {
+  transform: ${({ showWires, selectedWire, showTokens, resolutionConfiguration }) => {
     if (showTokens) {
-      return `translate(-30%, ${layoutConfiguration.geTranslateY}px) scale(${layoutConfiguration.scale})`;
+      return `translate(-30%, ${resolutionConfiguration['game-edition'].geTranslateY}px) scale(${resolutionConfiguration['game-edition'].scale})`;
     }
     if (showWires && !selectedWire && !showTokens) {
-      return `translateY(${layoutConfiguration.wiresTranslateY}px) scale(${layoutConfiguration.scale})`;
+      return `translateY(${resolutionConfiguration['game-edition'].wiresTranslateY}px) scale(${resolutionConfiguration['game-edition'].scale})`;
     } else {
-      return `translateY(${layoutConfiguration.geTranslateY}px) scale(${layoutConfiguration.scale})`;
+      return `translateY(${resolutionConfiguration['game-edition'].geTranslateY}px) scale(${resolutionConfiguration['game-edition'].scale})`;
     }
   }};
   /* transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
@@ -99,7 +99,8 @@ const DisplayContent = styled.div`
     border-radius: 19px;
   }
 
-  @media (max-width: ${({ theme: { mediaQueries }, layoutConfiguration }) => `${mediaQueries.desktopPixel * layoutConfiguration.scale - 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries }, resolutionConfiguration }) =>
+      `${mediaQueries.desktopPixel * resolutionConfiguration['game-edition'].scale - 1}px`}) {
     width: 280px;
     height: 357px;
     margin-left: 2px;
@@ -134,11 +135,11 @@ const GameEditionContainer = ({ children }) => {
   const { showNotification } = useNotificationContext();
   const { initializeKaddexWallet, isConnected, isInstalled } = useKaddexWalletContext();
   const { wallet, signingWallet, setSelectedWallet } = useWalletContext();
+  const { resolutionConfiguration } = useApplicationContext();
 
-  const { gameEditionView, showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens, layoutConfiguration } =
+  const { gameEditionView, showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens } =
     useContext(GameEditionContext);
   const { account } = useAccountContext();
-
   const onConnectionSuccess = async (wallet) => {
     await signingWallet();
     await setSelectedWallet(wallet);
@@ -245,13 +246,13 @@ const GameEditionContainer = ({ children }) => {
       showTokens={showTokens}
       $scale={scale}
       style={{ justifyContent: 'flex-end' }}
-      layoutConfiguration={layoutConfiguration}
+      resolutionConfiguration={resolutionConfiguration}
     >
       <div style={{ display: 'flex' }}>
         <GameboyDesktopContainer showWires={showWires} showTokens={showTokens} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
           <GameboyButtons />
 
-          <DisplayContent layoutConfiguration={layoutConfiguration}>
+          <DisplayContent resolutionConfiguration={resolutionConfiguration}>
             {gameEditionView && children}
             {modalState.open && (
               <GameEditionModalsContainer

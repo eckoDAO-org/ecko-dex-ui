@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
-import { useAccountContext, useWalletContext } from '../../../contexts';
+import { useAccountContext, useApplicationContext, useWalletContext } from '../../../contexts';
 import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../../contexts/GameEditionContext';
 import { FadeIn } from '../../shared/animations';
 import { HideWiresIcon } from '../../../assets';
@@ -72,7 +72,7 @@ const ConnectionWireContainer = styled.div`
     }}
   }
 
-  ${({ isSelected, translateX, layoutConfiguration }) => {
+  ${({ isSelected, translateX, resolutionConfiguration }) => {
     if (isSelected) {
       return css`
         transition: transform 0.5s;
@@ -82,7 +82,7 @@ const ConnectionWireContainer = styled.div`
       return css`
         transition: transform 0.3s;
         :hover {
-          transform: scale(calc(${layoutConfiguration.scale} + 0.3));
+          transform: scale(calc(${resolutionConfiguration['game-edition'].scale} + 0.3));
         }
       `;
     }
@@ -96,7 +96,8 @@ const BlurWire = styled(FadeIn)`
 `;
 
 export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
-  const { selectedWire, showWires, layoutConfiguration } = useContext(GameEditionContext);
+  const { selectedWire, showWires } = useContext(GameEditionContext);
+  const { resolutionConfiguration } = useApplicationContext();
   const { account } = useAccountContext();
 
   const [translateX, setTranslateX] = useState(0);
@@ -115,7 +116,7 @@ export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
       onClick={onClick}
       isSelected={selectedWire?.id === wire.id}
       selectedWire={selectedWire}
-      layoutConfiguration={layoutConfiguration}
+      resolutionConfiguration={resolutionConfiguration}
     >
       <span>{wire.name}</span>
       {wire.wireIcon}

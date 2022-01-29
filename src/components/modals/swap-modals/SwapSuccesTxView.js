@@ -12,7 +12,7 @@ import { Divider, Icon } from 'semantic-ui-react';
 import PopupTxView from './PopupTxView';
 import { theme } from '../../../styles/theme';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import { LightModeContext } from '../../../contexts/LightModeContext';
+import { ApplicationContext } from '../../../contexts/ApplicationContext';
 import Label from '../../shared/Label';
 
 export const SwapSuccessViewGE = ({ swap }) => {
@@ -91,7 +91,7 @@ export const SwapSuccessView = ({ swap, loading, sendTransaction }) => {
   const { account } = useContext(AccountContext);
   const pact = useContext(PactContext);
   const { gameEditionView } = useContext(GameEditionContext);
-  const { themeMode } = useContext(LightModeContext);
+  const { themeMode } = useContext(ApplicationContext);
 
   return (
     <SuccesViewContainer

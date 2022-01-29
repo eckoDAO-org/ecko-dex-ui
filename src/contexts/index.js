@@ -6,7 +6,7 @@ import { AccountContext } from './AccountContext';
 import { ModalContext } from './ModalContext';
 import { WalletContext } from './WalletContext';
 import { NotificationContext } from './NotificationContext';
-import { LightModeContext } from './LightModeContext';
+import { ApplicationContext } from './ApplicationContext';
 import { GameEditionContext } from './GameEditionContext';
 
 export function useKaddexWalletContext() {
@@ -30,8 +30,8 @@ export function useNotificationContext() {
 export function usePactContext() {
   return useContext(PactContext);
 }
-export function useLightModeContext() {
-  return useContext(LightModeContext);
+export function useApplicationContext() {
+  return useContext(ApplicationContext);
 }
 export function useGameEditionContext() {
   return useContext(GameEditionContext);
