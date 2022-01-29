@@ -46,12 +46,15 @@ const GameEditionStartAnimation = () => {
     }
   }, [wallet]);
 
-  return (
+  // check to not render this component when exit from game edition
+  return gameEditionView ? (
     <Container style={{ backgroundImage: `url(${loadingBackground})` }}>
       <KaddexLoadingIcon />
       <GameEditionProgressBar loadingValue={loadingValue} />
       <GameEditionLabel style={{ marginTop: 50 }}>V 1.0.0</GameEditionLabel>
     </Container>
+  ) : (
+    <></>
   );
 };
 

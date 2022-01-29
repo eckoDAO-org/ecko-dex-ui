@@ -17,7 +17,7 @@ import GameboyButtons from './components/GameboyButtons';
 import { useLocation } from 'react-router-dom';
 import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION } from '../../router/routes';
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
-import { gameboyDesktop } from '../layout/CacheBackgroundImages';
+import { ImagesContext } from '../../contexts/ImagesContext';
 
 const DesktopMainContainer = styled.div`
   display: flex;
@@ -84,9 +84,9 @@ const GameboyDesktopContainer = styled.div`
 
 const DisplayContent = styled.div`
   width: ${GE_DESKTOP_CONFIGURATION.DISPLAY_WIDTH}px;
+  height: ${GE_DESKTOP_CONFIGURATION.DISPLAY_HEIGHT}px;
   margin-left: 6px;
   margin-top: 90px;
-  height: ${GE_DESKTOP_CONFIGURATION.DISPLAY_HEIGHT}px;
   background: rgba(0, 0, 0, 0.02);
   box-shadow: inset 0px 0px 20px rgba(0, 0, 0, 0.75);
   display: flex;
@@ -136,9 +136,8 @@ const GameEditionContainer = ({ children }) => {
   const { initializeKaddexWallet, isConnected, isInstalled } = useKaddexWalletContext();
   const { wallet, signingWallet, setSelectedWallet } = useWalletContext();
   const { resolutionConfiguration } = useApplicationContext();
-
-  const { gameEditionView, showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens } =
-    useContext(GameEditionContext);
+  const { images } = useContext(ImagesContext);
+  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens } = useContext(GameEditionContext);
   const { account } = useAccountContext();
   const onConnectionSuccess = async (wallet) => {
     await signingWallet();
@@ -249,11 +248,11 @@ const GameEditionContainer = ({ children }) => {
       resolutionConfiguration={resolutionConfiguration}
     >
       <div style={{ display: 'flex' }}>
-        <GameboyDesktopContainer showWires={showWires} showTokens={showTokens} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
+        <GameboyDesktopContainer showWires={showWires} showTokens={showTokens} style={{ backgroundImage: `url(${images.gameboyDesktop})` }}>
           <GameboyButtons />
 
           <DisplayContent resolutionConfiguration={resolutionConfiguration}>
-            {gameEditionView && children}
+            {children}
             {modalState.open && (
               <GameEditionModalsContainer
                 hideOnClose={modalState.hideOnClose}

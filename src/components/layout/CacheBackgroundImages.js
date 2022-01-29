@@ -15,24 +15,7 @@ import pixeledTokenSelectorBlueIcon from '../../assets/images/game-edition/pixel
 import pixeledTokenSelectorWhiteIcon from '../../assets/images/game-edition/pixeled-token-selector-white.svg';
 import centerBackground from '../../assets/images/game-edition/center-background.png';
 import appBackground from '../../assets/images/shared/app-background.png';
-export {
-  loadingBackground,
-  gameboyDesktop,
-  gameboyMobile,
-  menuBackground,
-  modalBackground,
-  arcadeBackground,
-  arcadeDarkBackground,
-  pixeledYellowBox,
-  pixeledPinkBox,
-  pixeledPurpleBox,
-  pixeledInfoContainerBlue,
-  pixeledInfoContainerWhite,
-  pixeledTokenSelectorBlueIcon,
-  pixeledTokenSelectorWhiteIcon,
-  centerBackground,
-  appBackground,
-};
+
 const backgroundImages = [
   loadingBackground,
   gameboyDesktop,

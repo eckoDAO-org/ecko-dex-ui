@@ -53,6 +53,7 @@ const RowMenuContainer = styled.div`
 const GameEditionMenuContainer = () => {
   const history = useHistory();
   const [arrowVisible, setArrowVisible] = useState(SWAP.label);
+  const { gameEditionView } = useGameEditionContext();
 
   const { setButtons } = useGameEditionContext();
 
@@ -88,7 +89,8 @@ const GameEditionMenuContainer = () => {
     });
   }, [arrowVisible]);
 
-  return (
+  // check to not render this component when exit from game edition
+  return gameEditionView ? (
     <Container style={{ backgroundImage: `url(${menuBackground})` }}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <GameEditionLabel fontSize={52} fontWeight={400} style={{ marginBottom: 30 }}>
@@ -140,6 +142,8 @@ const GameEditionMenuContainer = () => {
         ))}
       </RowMenuContainer>
     </Container>
+  ) : (
+    <></>
   );
 };
 

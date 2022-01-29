@@ -15,40 +15,47 @@ import { GameEditionProvider } from './contexts/GameEditionContext';
 import { ApplicationContext } from './contexts/ApplicationContext';
 import { KaddexWalletProvider } from './contexts/KaddexWalletContext';
 import NotificationModalRender from './components/right-modal-notification/NotificationModalRender';
-import CacheBackgroundImages from './components/layout/CacheBackgroundImages';
+import { ImagesProvider, ImagesConsumer } from './contexts/ImagesContext';
 
 function App() {
   const { themeMode } = useContext(ApplicationContext);
-
   return (
-    <ThemeProvider theme={theme(themeMode)}>
-      <CacheBackgroundImages />
-
-      <GlobalStyle themeMode={themeMode} />
-      <GameEditionProvider>
-        <NotificationRender>
-          <AccountProvider>
-            <WalletProvider>
-              <PactProvider>
-                <KaddexWalletProvider>
-                  <SwapProvider>
-                    <LiquidityProvider>
-                      <NotificationModalRender>
-                        <RightModalRender>
-                          <ModalRender>
-                            <Router />
-                          </ModalRender>
-                        </RightModalRender>
-                      </NotificationModalRender>
-                    </LiquidityProvider>
-                  </SwapProvider>
-                </KaddexWalletProvider>
-              </PactProvider>
-            </WalletProvider>
-          </AccountProvider>
-        </NotificationRender>
-      </GameEditionProvider>
-    </ThemeProvider>
+    <ImagesProvider>
+      <ImagesConsumer>
+        {({ allImagesLoaded }) =>
+          !allImagesLoaded ? (
+            <div>{allImagesLoaded}</div>
+          ) : (
+            <ThemeProvider theme={theme(themeMode)}>
+              <GlobalStyle themeMode={themeMode} />
+              <GameEditionProvider>
+                <NotificationRender>
+                  <AccountProvider>
+                    <WalletProvider>
+                      <PactProvider>
+                        <KaddexWalletProvider>
+                          <SwapProvider>
+                            <LiquidityProvider>
+                              <NotificationModalRender>
+                                <RightModalRender>
+                                  <ModalRender>
+                                    <Router />
+                                  </ModalRender>
+                                </RightModalRender>
+                              </NotificationModalRender>
+                            </LiquidityProvider>
+                          </SwapProvider>
+                        </KaddexWalletProvider>
+                      </PactProvider>
+                    </WalletProvider>
+                  </AccountProvider>
+                </NotificationRender>
+              </GameEditionProvider>
+            </ThemeProvider>
+          )
+        }
+      </ImagesConsumer>
+    </ImagesProvider>
   );
 }
 

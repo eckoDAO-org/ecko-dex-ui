@@ -61,7 +61,7 @@ const GameEditionModeButton = () => {
       gameEditionView={gameEditionView}
       onClick={() => {
         if (width >= resolutionConfiguration.width && height >= resolutionConfiguration.height) {
-          setGameEditionView(!gameEditionView);
+          setGameEditionView((prev) => !prev);
           closeModal();
         }
       }}

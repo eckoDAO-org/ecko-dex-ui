@@ -41,8 +41,6 @@ export const GameEditionProvider = (props) => {
   const [showTokens, setShowTokens] = useState(false);
   const [outsideToken, setOutsideToken] = useState({ tokenSelectorType: null, token: null, fromToken: null, toToken: null });
 
-  // gameboy layout configuration
-
   useEffect(() => {
     let interval = null;
     if (gameEditionView) {
