@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ThemeProvider } from 'styled-components/macro';
 import GlobalStyle from './styles/globalStyle';
 import Router from './router/router';
@@ -15,12 +15,15 @@ import { GameEditionProvider } from './contexts/GameEditionContext';
 import { LightModeContext } from './contexts/LightModeContext';
 import { KaddexWalletProvider } from './contexts/KaddexWalletContext';
 import NotificationModalRender from './components/right-modal-notification/NotificationModalRender';
+import CacheBackgroundImages from './components/layout/CacheBackgroundImages';
 
 function App() {
   const { themeMode } = useContext(LightModeContext);
 
   return (
     <ThemeProvider theme={theme(themeMode)}>
+      <CacheBackgroundImages />
+
       <GlobalStyle themeMode={themeMode} />
       <GameEditionProvider>
         <NotificationRender>

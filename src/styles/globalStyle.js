@@ -29,7 +29,7 @@ export default createGlobalStyle`
       min-width: 0;
       font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
       color: ${({ theme: { colors } }) => colors.primary};
-      ${({ themeMode, theme: { backgroundBody, backgroundBodySafari } }) => {
+      ${({ themeMode, theme: { backgroundBody } }) => {
         return themeMode === 'light'
           ? css`
               background: ${backgroundBody};

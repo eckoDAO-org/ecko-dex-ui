@@ -15,6 +15,9 @@ export const GE_DESKTOP_CONFIGURATION = {
   DISPLAY_HEIGHT: 335,
   WIRE_CONTAINER_WIDTH: 930,
   layouts: {
+    // 'scale-2.5': { id: 'scale-2.5', minimumHeight: 2160, minimumWidth: 3840, scale: 2.5, geTranslateY: -470, wiresTranslateY: -1570 },
+    // 'scale-1.6': { id: 'scale-1.6', minimumHeight: 1440, minimumWidth: 2560, scale: 1.6, geTranslateY: 290, wiresTranslateY: -410 },
+    // 'scale-1.2-1': { id: 'scale-1.2-1', minimumHeight: 1080, minimumWidth: 1920, scale: 1.2, geTranslateY: 430, wiresTranslateY: -85 },
     'scale-1.2': { id: 'scale-1.2', minimumHeight: 1024, minimumWidth: 1400, scale: 1.2, geTranslateY: 442, wiresTranslateY: -85 },
     'scale-1': { id: 'scale-1', minimumHeight: 780, minimumWidth: 1024, scale: 1, geTranslateY: 442, wiresTranslateY: 88 },
     'scale-0.8': {

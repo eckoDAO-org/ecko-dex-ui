@@ -12,7 +12,7 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 import browserDetection from '../../utils/browserDetection';
 import centerBackground from '../../assets/images/game-edition/center-background.png';
 import useWindowSize from '../../hooks/useWindowSize';
-import CacheBackgroundImages from '../game-edition-v2/components/CacheBackgroundImages';
+import CacheBackgroundImages from './CacheBackgroundImages';
 import TabletHeader from './header/TabletHeader';
 
 const MainContainer = styled.div`
@@ -72,7 +72,6 @@ const Layout = ({ children }) => {
   return (
     layoutConfiguration && (
       <MainContainer>
-        <CacheBackgroundImages />
         <WrapperContainer>
           <div>
             <MobileHeader className="mobile-only" />

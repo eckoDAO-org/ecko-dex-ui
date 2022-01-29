@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
@@ -6,7 +7,6 @@ import { STATUSES } from '../../contexts/NotificationContext';
 import WalletWires from './components/WalletWires';
 import ConnectWalletWire from './components/ConnectWalletWire';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
-import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.svg';
 import { KaddexLogo } from '../../assets';
 import { WALLET } from '../../constants/wallet';
 import ConnectWalletZelcoreModal from '../modals/kdaModals/ConnectWalletZelcoreModal';
@@ -17,6 +17,7 @@ import GameboyButtons from './components/GameboyButtons';
 import { useLocation } from 'react-router-dom';
 import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION } from '../../router/routes';
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
+import { gameboyDesktop } from '../layout/CacheBackgroundImages';
 
 const DesktopMainContainer = styled.div`
   display: flex;
@@ -131,10 +132,10 @@ const WiresContainer = styled.div`
 const GameEditionContainer = ({ children }) => {
   const location = useLocation();
   const { showNotification } = useNotificationContext();
-  const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
+  const { initializeKaddexWallet, isConnected, isInstalled } = useKaddexWalletContext();
   const { wallet, signingWallet, setSelectedWallet } = useWalletContext();
 
-  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens, layoutConfiguration } =
+  const { gameEditionView, showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens, layoutConfiguration } =
     useContext(GameEditionContext);
   const { account } = useAccountContext();
 
@@ -199,14 +200,29 @@ const GameEditionContainer = ({ children }) => {
             message: `Please install ${WALLET.KADDEX_WALLET.name}`,
             type: STATUSES.WARNING,
           });
+          onWireSelect(null);
         } else {
-          initializeKaddexWallet(async () => await onConnectionSuccess(WALLET.KADDEX_WALLET));
+          initializeKaddexWallet();
           closeModal();
         }
         break;
     }
   };
 
+  useEffect(() => {
+    if (account.account && isConnected) {
+      onWireSelect(WALLET.KADDEX_WALLET);
+
+      showNotification({
+        title: `${WALLET.KADDEX_WALLET.name}  was successfully connected`,
+        type: 'game-edition',
+        icon: WALLET.KADDEX_WALLET.notificationLogo,
+        closeButton: false,
+        titleStyle: { fontSize: 13 },
+        autoClose: 3000,
+      });
+    }
+  }, [account.account, isConnected]);
   useEffect(() => {
     if ((selectedWire && !account.account) || (selectedWire && selectedWire?.id !== wallet?.id)) {
       getWalletModal(selectedWire.name);
@@ -234,8 +250,9 @@ const GameEditionContainer = ({ children }) => {
       <div style={{ display: 'flex' }}>
         <GameboyDesktopContainer showWires={showWires} showTokens={showTokens} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
           <GameboyButtons />
+
           <DisplayContent layoutConfiguration={layoutConfiguration}>
-            {children}
+            {gameEditionView && children}
             {modalState.open && (
               <GameEditionModalsContainer
                 hideOnClose={modalState.hideOnClose}
@@ -250,6 +267,7 @@ const GameEditionContainer = ({ children }) => {
               />
             )}
           </DisplayContent>
+
           <div className="kaddex-logo">
             <KaddexLogo />
           </div>
