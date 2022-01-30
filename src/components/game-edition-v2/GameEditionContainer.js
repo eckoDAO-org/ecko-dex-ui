@@ -76,7 +76,6 @@ const GameboyDesktopContainer = styled.div`
 
   .kaddex-logo {
     margin-top: 20px;
-    margin-left: 24px;
     svg {
       height: 14.5px;
     }

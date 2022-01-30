@@ -1,4 +1,5 @@
-import React, { useContext } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
 import { CloseGe } from '../../assets';
@@ -74,9 +75,18 @@ const GameEditionModalsContainer = ({
   titleFontSize = 52,
   type,
 }) => {
-  const { closeModal } = useContext(GameEditionContext);
+  const { closeModal, buttons, setButtons } = useContext(GameEditionContext);
 
   useButtonScrollEvent('game-edition-modal-container');
+
+  useEffect(() => {
+    const oldButtons = buttons;
+
+    return () => {
+      setButtons({ ...oldButtons });
+    };
+  }, []);
+
   return (
     <GEModalContainer type={type} style={containerStyle} id="game-edition-modal-container">
       <TitleContainer style={titleContainerStyle}>

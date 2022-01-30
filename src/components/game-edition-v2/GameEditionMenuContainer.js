@@ -56,7 +56,6 @@ const GameEditionMenuContainer = () => {
   const { gameEditionView } = useGameEditionContext();
 
   const { setButtons } = useGameEditionContext();
-
   useEffect(() => {
     let route = '';
     switch (arrowVisible) {
@@ -79,10 +78,12 @@ const GameEditionMenuContainer = () => {
     setButtons({
       B: () => history.push(route),
       Up: () => {
+        console.log('here');
         const selectedIndex = menuItems.findIndex((i) => i.label === arrowVisible);
         setArrowVisible(menuItems[selectedIndex - 1 < 0 ? menuItems.length - 1 : (selectedIndex - 1) % menuItems.length].label);
       },
       Down: () => {
+        console.log('here1');
         const selectedIndex = menuItems.findIndex((i) => i.label === arrowVisible);
         setArrowVisible(menuItems[(selectedIndex + 1) % menuItems.length].label);
       },
