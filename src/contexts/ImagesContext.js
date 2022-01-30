@@ -35,47 +35,28 @@ const backgroundImages = [
   { name: 'appBackground', src: appBackground },
 ];
 
+const checkImage = (path) =>
+  new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(path);
+    img.onerror = () => reject();
+
+    img.src = path;
+  });
+
 export const ImagesContext = createContext(null);
 
 export const ImagesProvider = (props) => {
-  const [images, setImages] = useState({});
   const [allImagesLoaded, setAllImagesLoaded] = useState(false);
 
-  const onLoadEnd = async (imgs) => {
-    setImages(imgs);
-    setAllImagesLoaded(true);
-  };
-
-  const cacheImages = async () => {
-    let imgs = {};
-
-    backgroundImages.forEach((img) => {
-      const imageLoader = new Image();
-      imageLoader.src = img.src;
-      imageLoader.onload = () => {
-        imgs[img.name] = img.src;
-      };
-    });
-    return imgs;
-  };
-  const loadImages = async () => {
-    const imgs = await cacheImages();
-    await onLoadEnd(imgs);
-  };
-
   useEffect(() => {
-    loadImages();
+    Promise.all(backgroundImages.map((bg) => checkImage(bg.src))).then(
+      () => setAllImagesLoaded(true),
+      () => console.error('could not load images')
+    );
   }, []);
 
-  return (
-    <ImagesContext.Provider value={{ images, allImagesLoaded }}>
-      {Object.keys(images).map((imgKey, i) => (
-        <div key={i} style={{ display: 'none', backgroundImage: `url(${images[imgKey].src})` }} />
-      ))}
-
-      {props.children}
-    </ImagesContext.Provider>
-  );
+  return <ImagesContext.Provider value={{ allImagesLoaded, immages: backgroundImages }}>{props.children}</ImagesContext.Provider>;
 };
 
 export const ImagesConsumer = ImagesContext.Consumer;

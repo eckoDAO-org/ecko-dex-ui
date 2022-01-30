@@ -23,9 +23,7 @@ function App() {
     <ImagesProvider>
       <ImagesConsumer>
         {({ allImagesLoaded }) =>
-          !allImagesLoaded ? (
-            <div>{allImagesLoaded}</div>
-          ) : (
+          allImagesLoaded && (
             <ThemeProvider theme={theme(themeMode)}>
               <GlobalStyle themeMode={themeMode} />
               <GameEditionProvider>

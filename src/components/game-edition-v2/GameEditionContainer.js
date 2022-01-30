@@ -18,6 +18,7 @@ import { useLocation } from 'react-router-dom';
 import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION } from '../../router/routes';
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
 import { ImagesContext } from '../../contexts/ImagesContext';
+import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.svg';
 
 const DesktopMainContainer = styled.div`
   display: flex;
@@ -248,7 +249,7 @@ const GameEditionContainer = ({ children }) => {
       resolutionConfiguration={resolutionConfiguration}
     >
       <div style={{ display: 'flex' }}>
-        <GameboyDesktopContainer showWires={showWires} showTokens={showTokens} style={{ backgroundImage: `url(${images.gameboyDesktop})` }}>
+        <GameboyDesktopContainer showWires={showWires} showTokens={showTokens} style={{ backgroundImage: ` url(${gameboyDesktop})` }}>
           <GameboyButtons />
 
           <DisplayContent resolutionConfiguration={resolutionConfiguration}>
