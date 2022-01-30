@@ -52,18 +52,21 @@ const Container = styled.div`
           padding: 10px 2px;
           font-family: ${fontFamily.regular};
           color: ${color ? color : colors.white} !important;
+          font-size: 28px;
         }
         input::placeholder {
           color: ${colors.white} !important;
           text-transform: capitalize;
           font-family: 14px;
           font-family: ${fontFamily.regular};
+          font-size: 28px;
         }
         .ui.labeled.input > .label:not(.corner) {
           font-family: ${fontFamily.regular};
           padding-left: 0px;
           padding-right: 0px;
           color: ${colors.white} !important;
+          font-size: 28px;
         }
       `;
     }

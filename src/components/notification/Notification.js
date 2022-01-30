@@ -24,7 +24,7 @@ const Container = styled.div`
     flex-direction: column;
     width: auto;
   }
-  .Toastify__toast--game-edition {
+  .Toastify__toast--game-mode {
     background-color: #000000;
   }
   .Toastify__toast--success {

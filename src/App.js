@@ -25,7 +25,10 @@ function App() {
   return (
     <ThemeProvider theme={theme(themeMode)}>
       {!loaded ? (
-        <LogoLoader />
+        <LogoLoader
+          containerStyle={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+          logoStyle={{ height: 150 }}
+        />
       ) : (
         <>
           <GlobalStyle themeMode={themeMode} />

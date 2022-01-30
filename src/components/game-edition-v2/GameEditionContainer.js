@@ -241,7 +241,7 @@ const GameEditionContainer = ({ children }) => {
 
   const [loaded] = useLazyImage(gameboyDesktop);
   return !loaded ? (
-    <LogoLoader containerStyle={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} />
+    <LogoLoader containerStyle={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} logoStyle={{ height: 150 }} />
   ) : (
     <DesktopMainContainer
       showWires={showWires}
