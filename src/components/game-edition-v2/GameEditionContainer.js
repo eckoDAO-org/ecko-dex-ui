@@ -17,7 +17,6 @@ import GameboyButtons from './components/GameboyButtons';
 import { useLocation } from 'react-router-dom';
 import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION } from '../../router/routes';
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
-import { ImagesContext } from '../../contexts/ImagesContext';
 import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.svg';
 import useLazyImage from '../../hooks/useLazyImage';
 import LogoLoader from '../shared/LogoLoader';
@@ -139,9 +138,9 @@ const GameEditionContainer = ({ children }) => {
   const { initializeKaddexWallet, isConnected, isInstalled } = useKaddexWalletContext();
   const { wallet, signingWallet, setSelectedWallet } = useWalletContext();
   const { resolutionConfiguration } = useApplicationContext();
-  const { images } = useContext(ImagesContext);
   const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens } = useContext(GameEditionContext);
   const { account } = useAccountContext();
+
   const onConnectionSuccess = async (wallet) => {
     await signingWallet();
     await setSelectedWallet(wallet);

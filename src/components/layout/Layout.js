@@ -14,7 +14,6 @@ import centerBackground from '../../assets/images/game-edition/center-background
 import useWindowSize from '../../hooks/useWindowSize';
 import TabletHeader from './header/TabletHeader';
 import { useApplicationContext } from '../../contexts';
-import { ImagesContext } from '../../contexts/ImagesContext';
 
 const MainContainer = styled.div`
   display: flex;
@@ -90,9 +89,7 @@ const Layout = ({ children }) => {
   const history = useHistory();
   const { gameEditionView } = useContext(GameEditionContext);
   const { resolutionConfiguration } = useApplicationContext();
-  const { images, allImagesLoaded } = useContext(ImagesContext);
-  console.log('asdsa', images);
-  console.log('allImagesLoaded', allImagesLoaded);
+
   useEffect(() => {
     gameEditionView ? history.push(ROUTE_GAME_START_ANIMATION) : history.push(ROUTE_SWAP);
   }, [gameEditionView]);

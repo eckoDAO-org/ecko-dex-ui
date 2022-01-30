@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useLayoutEffect, useState } from 'react';
 
 const useLazyImage = (src) => {
