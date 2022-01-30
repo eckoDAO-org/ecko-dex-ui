@@ -19,6 +19,8 @@ import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION } from '../../route
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
 import { ImagesContext } from '../../contexts/ImagesContext';
 import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.svg';
+import useLazyImage from '../../hooks/useLazyImage';
+import LogoLoader from '../shared/LogoLoader';
 
 const DesktopMainContainer = styled.div`
   display: flex;
@@ -239,7 +241,10 @@ const GameEditionContainer = ({ children }) => {
       ? true
       : false;
 
-  return (
+  const [loaded] = useLazyImage(gameboyDesktop);
+  return !loaded ? (
+    <LogoLoader containerStyle={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} />
+  ) : (
     <DesktopMainContainer
       showWires={showWires}
       selectedWire={selectedWire}

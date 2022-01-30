@@ -32,9 +32,9 @@ const LogoLoaderContainer = styled.div`
   }
 `;
 
-const LogoLoader = ({ withTopMargin }) => {
+const LogoLoader = ({ withTopMargin, containerStyle }) => {
   return (
-    <LogoLoaderContainer withTopMargin={withTopMargin}>
+    <LogoLoaderContainer withTopMargin={withTopMargin} style={containerStyle}>
       <KaddexLetterLogo className="rotate" />
     </LogoLoaderContainer>
   );
