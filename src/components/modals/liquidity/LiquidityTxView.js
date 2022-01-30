@@ -6,7 +6,7 @@ import { extractDecimal } from '../../../utils/reduceBalance';
 import { getTokenIcon, showTicker } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import Label from '../../shared/Label';
-import { Row, SuccessViewContainerGE, SuccesViewContainer } from '../../modals/swap-modals/common-result-components';
+import { Row, SuccessViewContainerGE, SuccesViewContainer } from '../common-result-components';
 
 export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }) => {
   const { setButtons } = useGameEditionContext();

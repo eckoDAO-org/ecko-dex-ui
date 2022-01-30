@@ -2,17 +2,17 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { Transition } from 'react-spring/renderprops';
-import ModalContainer from '../../../components/shared/ModalContainer';
+import ModalContainer from '../shared/ModalContainer';
 import { Icon } from 'semantic-ui-react';
-import CustomButton from '../../../components/shared/CustomButton';
-import GameEditionModalsContainer from '../../game-edition-v2/GameEditionModalsContainer';
-import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import { WalletContext } from '../../../contexts/WalletContext';
-import { WALLET } from '../../../constants/wallet';
-import { openZelcore } from '../../../utils/zelcore';
-import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
-import Label from '../../shared/Label';
-import LogoLoader from '../../shared/LogoLoader';
+import CustomButton from '../shared/CustomButton';
+import GameEditionModalsContainer from '../game-edition-v2/GameEditionModalsContainer';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { WalletContext } from '../../contexts/WalletContext';
+import { WALLET } from '../../constants/wallet';
+import { openZelcore } from '../../utils/zelcore';
+import GameEditionLabel from '../game-edition-v2/components/GameEditionLabel';
+import Label from '../shared/Label';
+import LogoLoader from '../shared/LogoLoader';
 
 const Container = styled.div`
   position: absolute;

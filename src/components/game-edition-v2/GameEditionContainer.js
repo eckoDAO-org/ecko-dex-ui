@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
+import { useLocation } from 'react-router-dom';
 import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
 import { useAccountContext, useApplicationContext, useKaddexWalletContext, useNotificationContext, useWalletContext } from '../../contexts';
 import { STATUSES } from '../../contexts/NotificationContext';
@@ -14,12 +15,11 @@ import ConnectWalletTorusModal from '../modals/kdaModals/ConnectWalletTorusModal
 import ConnectWalletChainweaverModal from '../modals/kdaModals/ConnectWalletChainweaverModal';
 import { FadeIn } from '../shared/animations';
 import GameboyButtons from './components/GameboyButtons';
-import { useLocation } from 'react-router-dom';
-import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION } from '../../router/routes';
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
 import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.svg';
 import useLazyImage from '../../hooks/useLazyImage';
 import LogoLoader from '../shared/LogoLoader';
+import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION } from '../../router/routes';
 
 const DesktopMainContainer = styled.div`
   display: flex;

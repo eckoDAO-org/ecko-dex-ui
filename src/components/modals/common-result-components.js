@@ -1,17 +1,17 @@
 import React from 'react';
 import styled, { css } from 'styled-components/macro';
-import { PixeledCircleArrowIcon, SuccessfullIcon } from '../../../assets';
-import { ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
-import { useGameEditionContext } from '../../../contexts';
-import { GE_DESKTOP_CONFIGURATION } from '../../../contexts/GameEditionContext';
-import { commonColors } from '../../../styles/theme';
-import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
-import PixeledBlueContainer, { InfoContainer } from '../../game-edition-v2/components/PixeledInfoContainerBlue';
-import { PixeledInfoContainerWhite } from '../../game-edition-v2/components/PixeledInfoContainerWhite';
-import PressButtonToActionLabel from '../../game-edition-v2/components/PressButtonToActionLabel';
-import CustomButton from '../../shared/CustomButton';
-import Label from '../../shared/Label';
-import LogoLoader from '../../shared/LogoLoader';
+import { PixeledCircleArrowIcon, SuccessfullIcon } from '../../assets';
+import { ENABLE_GAS_STATION, GAS_PRICE } from '../../constants/contextConstants';
+import { useGameEditionContext } from '../../contexts';
+import { GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
+import { commonColors } from '../../styles/theme';
+import GameEditionLabel from '../game-edition-v2/components/GameEditionLabel';
+import PixeledBlueContainer, { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
+import { PixeledInfoContainerWhite } from '../game-edition-v2/components/PixeledInfoContainerWhite';
+import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
+import CustomButton from '../shared/CustomButton';
+import Label from '../shared/Label';
+import LogoLoader from '../shared/LogoLoader';
 import PopupTxView from './PopupTxView';
 
 export const Message = ({ color, children }) => {
