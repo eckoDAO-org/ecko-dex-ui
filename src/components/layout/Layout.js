@@ -30,14 +30,12 @@ const WrapperContainer = styled(Wrapper)`
     font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
     color: ${({ theme: { colors } }) => colors.white};
     @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
-      padding-top: 10px;
+      padding-top: 20px;
     }
   }
 `;
 
 const MainContent = styled.div`
-  /* transform: ${({ resolutionConfiguration }) => `scale(${resolutionConfiguration['normal-mode'].scale})`}; */
-
   ${({ resolutionConfiguration }) => {
     if (resolutionConfiguration) {
       const browser = browserDetection();
@@ -87,15 +85,19 @@ const StripesContainer = styled.div`
 
 const Layout = ({ children }) => {
   const history = useHistory();
-  const { gameEditionView } = useContext(GameEditionContext);
+  const [width, height] = useWindowSize();
+  const { gameEditionView, setGameEditionView } = useContext(GameEditionContext);
   const { resolutionConfiguration } = useApplicationContext();
 
   useEffect(() => {
     gameEditionView ? history.push(ROUTE_GAME_START_ANIMATION) : history.push(ROUTE_SWAP);
   }, [gameEditionView]);
 
-  const [width, height] = useWindowSize();
-
+  useEffect(() => {
+    if (!resolutionConfiguration || (gameEditionView && (width < resolutionConfiguration.width || height < resolutionConfiguration.heigt))) {
+      setGameEditionView(false);
+    }
+  }, [gameEditionView, width, height, resolutionConfiguration]);
   return (
     <MainContainer>
       <WrapperContainer>

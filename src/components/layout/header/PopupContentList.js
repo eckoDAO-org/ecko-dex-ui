@@ -17,7 +17,7 @@ const ListContainer = styled.div`
   z-index: 1;
   background: transparent;
   & > *:not(:last-child) {
-    margin-bottom: 8px;
+    margin-bottom: 16px;
   }
 
   & svg {
@@ -100,7 +100,6 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
             fontSize: 16,
             fontFamily: theme.fontFamily.regular,
             width: 42,
-            marginTop: 16,
           }}
         >
           <HeaderItemContent onClick={() => logout()}>

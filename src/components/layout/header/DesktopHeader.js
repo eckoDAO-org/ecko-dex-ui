@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { KaddexLightModeLogo, KaddexLogoWhite } from '../../../assets';
 import { ROUTE_INDEX } from '../../../router/routes';
 import menuItems from '../../menuItems';
@@ -10,6 +10,7 @@ import { ApplicationContext } from '../../../contexts/ApplicationContext';
 import { useApplicationContext, useGameEditionContext } from '../../../contexts';
 import GameEditionModeButton from './GameEditionModeButton';
 import useWindowSize from '../../../hooks/useWindowSize';
+import browserDetection from '../../../utils/browserDetection';
 
 const Container = styled.div`
   display: flex;
@@ -19,6 +20,7 @@ const Container = styled.div`
   min-height: ${({ theme: { header } }) => `${header.height}px`};
   padding: 0 48px;
   padding-top: 16px;
+  zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
 `;
 
 const LeftContainer = styled.div`
@@ -61,7 +63,7 @@ const DesktopHeader = ({ className }) => {
   const [width, height] = useWindowSize();
   const { themeMode } = useContext(ApplicationContext);
   return (
-    <Container className={className}>
+    <Container className={className} resolutionConfiguration={resolutionConfiguration}>
       <LeftContainer>
         {themeMode === 'dark' ? (
           <KaddexLogoWhite style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
