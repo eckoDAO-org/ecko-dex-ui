@@ -39,26 +39,28 @@ const WrapperContainer = styled(Wrapper)`
 const MainContent = styled.div`
   /* transform: ${({ resolutionConfiguration }) => `scale(${resolutionConfiguration['normal-mode'].scale})`}; */
 
-  ${() => {
-    const browser = browserDetection();
-    switch (browser) {
-      case 'CHROME':
-        return css`
-          zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
-        `;
-      case 'FIREFOX':
-        return css`
-          & > :first-child {
-            -ms-zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
-            -webkit-zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
-            -moz-transform: ${({ resolutionConfiguration }) => `scale(${resolutionConfiguration['normal-mode'].scale})`};
-            -moz-transform-origin: center;
-          }
-        `;
-      default:
-        return css`
-          transform: ${({ resolutionConfiguration }) => `scale(${resolutionConfiguration['normal-mode'].scale})`};
-        `;
+  ${({ resolutionConfiguration }) => {
+    if (resolutionConfiguration) {
+      const browser = browserDetection();
+      switch (browser) {
+        case 'CHROME':
+          return css`
+            zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
+          `;
+        case 'FIREFOX':
+          return css`
+            & > :first-child {
+              -ms-zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
+              -webkit-zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
+              -moz-transform: ${({ resolutionConfiguration }) => `scale(${resolutionConfiguration['normal-mode'].scale})`};
+              -moz-transform-origin: center;
+            }
+          `;
+        default:
+          return css`
+            transform: ${({ resolutionConfiguration }) => `scale(${resolutionConfiguration['normal-mode'].scale})`};
+          `;
+      }
     }
   }}
 
@@ -97,7 +99,7 @@ const Layout = ({ children }) => {
 
   const [width, height] = useWindowSize();
 
-  return resolutionConfiguration ? (
+  return (
     <MainContainer>
       <WrapperContainer>
         <div>
@@ -106,7 +108,7 @@ const Layout = ({ children }) => {
 
           <DesktopHeader className="desktop-only" gameEditionView={gameEditionView} />
         </div>
-        {gameEditionView && width >= resolutionConfiguration.width && height >= resolutionConfiguration.height ? (
+        {gameEditionView && resolutionConfiguration && width >= resolutionConfiguration.width && height >= resolutionConfiguration.height ? (
           <>
             <img src={centerBackground} style={{ position: 'absolute', width: '100%', top: 0, zIndex: -1 }} alt="" />
             <GameEditionContainer>{children}</GameEditionContainer>
@@ -119,8 +121,6 @@ const Layout = ({ children }) => {
         <Stripes />
       </StripesContainer>
     </MainContainer>
-  ) : (
-    <></>
   );
 };
 

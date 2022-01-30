@@ -44,7 +44,7 @@ export const ApplicationProvider = (props) => {
   const [width, height] = useWindowSize();
 
   useEffect(() => {
-    let resolution = RESOLUTIONS['1920x1080'];
+    let resolution = null;
     Object.keys(RESOLUTIONS).some((resolutionKey) => {
       const configuration = RESOLUTIONS[resolutionKey];
       if (width >= configuration.width && height >= configuration.height) {

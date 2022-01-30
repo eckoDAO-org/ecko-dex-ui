@@ -86,7 +86,7 @@ const DesktopHeader = ({ className }) => {
         </AnimatedDiv>
       </LeftContainer>
 
-      {width >= resolutionConfiguration.width && height >= resolutionConfiguration.height && <GameEditionModeButton />}
+      {width >= resolutionConfiguration?.width && height >= resolutionConfiguration?.height && <GameEditionModeButton />}
 
       <RightContainer>
         <RightHeaderItems />
