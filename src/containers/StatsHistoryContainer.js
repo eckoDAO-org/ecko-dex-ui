@@ -8,8 +8,9 @@ import { GameEditionContext } from '../contexts/GameEditionContext';
 import { TitleContainer } from '../components/layout/Containers';
 import Label from '../components/shared/Label';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
+import { FadeIn } from '../components/shared/animations';
 
-const Container = styled.div`
+const Container = styled(FadeIn)`
   display: flex;
   flex-direction: column;
   width: 100%;
