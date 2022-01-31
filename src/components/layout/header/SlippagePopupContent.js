@@ -17,7 +17,7 @@ const Wrapper = styled.div`
   height: 100%;
   display: flex;
   position: relative;
-  z-index: 10;
+  z-index: 2;
   svg {
     path {
       fill: ${({ theme: { colors } }) => colors.white};

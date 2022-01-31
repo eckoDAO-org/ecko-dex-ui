@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Divider } from 'semantic-ui-react';
 import styled, { css } from 'styled-components/macro';
-import { PowerIcon, ThreeDotsIcon } from '../../../assets';
+import { PowerIcon } from '../../../assets';
 import { useAccountContext, useApplicationContext, useGameEditionContext, useModalContext } from '../../../contexts';
 import HeaderItem from '../../../components/shared/HeaderItem';
 import LightModeToggle from '../../../components/shared/LightModeToggle';
@@ -15,6 +15,12 @@ import GradientContainer from '../../shared/GradientContainer';
 import browserDetection from '../../../utils/browserDetection';
 import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
 
+const Wrapper = styled.div`
+  height: 100%;
+  display: flex;
+  position: relative;
+`;
+
 const PopupContainer = styled(GradientContainer)`
   display: flex;
   align-items: center;
@@ -25,9 +31,12 @@ const PopupContainer = styled(GradientContainer)`
   position: absolute;
 
   top: 70px;
-  right: 48px;
+  right: 0px;
+  &.hamburger {
+    left: 0px;
+    right: unset;
+  }
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
-    right: 24px;
     top: 58px;
   }
 
@@ -68,7 +77,7 @@ const HeaderItemContent = styled.div`
   align-items: center;
 `;
 
-const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContentListStyle, withoutAccountInfo }) => {
+const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContentListStyle, withoutAccountInfo, icon, className }) => {
   const { account, logout } = useAccountContext();
   const { gameEditionView, openModal } = useGameEditionContext();
   const modalContext = useModalContext();
@@ -81,10 +90,13 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
   useOnClickOutside(ref, () => setShowThreeDotPopup(false));
 
   return (
-    <div ref={ref} style={{ height: '100%', display: 'flex' }}>
-      <ThreeDotsIcon style={{ height: '100%' }} onClick={() => setShowThreeDotPopup((prev) => !prev)} />
+    <Wrapper ref={ref}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => setShowThreeDotPopup((prev) => !prev)}>
+        {icon}
+      </div>
       {showThreeDotPopup && (
         <PopupContainer
+          className={className}
           style={{ width: 'unset' }}
           backgroundColor={
             (browserDetection() === 'BRAVE' || browserDetection() === 'FIREFOX') && themeMode === 'dark' && theme('dark').colors.primary
@@ -155,7 +167,7 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
           </ListContainer>
         </PopupContainer>
       )}
-    </div>
+    </Wrapper>
   );
 };
 

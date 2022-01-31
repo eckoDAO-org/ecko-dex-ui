@@ -3,7 +3,6 @@ import styled from 'styled-components/macro';
 import RightHeaderItems from './RightHeaderItems';
 import PopupContentList from './PopupContentList';
 import HeaderItem from '../../../components/shared/HeaderItem';
-import CustomPopup from '../../../components/shared/CustomPopup';
 import { HamburgerIcon, KaddexLetterLogo } from '../../../assets';
 import menuItems from '../../menuItems';
 import { useHistory } from 'react-router';
@@ -55,10 +54,8 @@ const MobileHeader = ({ className }) => {
     <Container className={className}>
       <RowContainer>
         <LeftContainer>
-          <HeaderItem headerItemStyle={{ marginTop: '4px' }}>
-            <CustomPopup basic trigger={<HamburgerIcon />} on="click" offset={[-10, -8]} position="bottom left">
-              <PopupContentList withoutAccountInfo items={menuItems} />
-            </CustomPopup>
+          <HeaderItem headerItemStyle={{ marginTop: '4px', zIndex: 30 }}>
+            <PopupContentList withoutAccountInfo items={menuItems} icon={<HamburgerIcon />} className="hamburger" />
           </HeaderItem>
           <KaddexLetterLogo onClick={() => history.push(ROUTE_SWAP)} />
         </LeftContainer>

@@ -18,6 +18,7 @@ import AccountModal from '../../modals/kdaModals/AccountModal';
 import { NotificationModalContext } from '../../../contexts/NotificationModalContext';
 import useWindowSize from '../../../hooks/useWindowSize';
 import { commonTheme } from '../../../styles/theme';
+import { ThreeDotsIcon } from '../../../assets';
 
 const RightContainerHeader = styled.div`
   display: flex;
@@ -130,8 +131,8 @@ const RightHeaderItems = () => {
         />
       </HeaderItem>
 
-      <HeaderItem headerItemStyle={{ height: '100%', display: 'flex' }}>
-        <PopupContentList items={headerLinks} viewOtherComponents withLogout PopupContentListStyle={{ minWidth: 100 }} />
+      <HeaderItem headerItemStyle={{ height: '100%', display: 'flex', zIndex: 30 }}>
+        <PopupContentList icon={<ThreeDotsIcon />} items={headerLinks} viewOtherComponents withLogout PopupContentListStyle={{ minWidth: 100 }} />
       </HeaderItem>
     </RightContainerHeader>
   );
