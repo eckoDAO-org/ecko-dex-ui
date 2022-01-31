@@ -21,14 +21,11 @@ import LogoLoader from './components/shared/LogoLoader';
 
 function App() {
   const { themeMode } = useContext(ApplicationContext);
-  const [loaded] = useLazyImage(appBackground);
+  const [loaded] = useLazyImage([appBackground]);
   return (
     <ThemeProvider theme={theme(themeMode)}>
       {!loaded ? (
-        <LogoLoader
-          containerStyle={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-          logoStyle={{ height: 150 }}
-        />
+        <LogoLoader containerStyle={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} logoStyle={{ height: 75 }} />
       ) : (
         <>
           <GlobalStyle themeMode={themeMode} />
