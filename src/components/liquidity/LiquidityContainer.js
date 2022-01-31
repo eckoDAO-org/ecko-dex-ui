@@ -24,7 +24,6 @@ import FormContainer from '../../components/shared/FormContainer';
 import GradientBorder from '../../components/shared/GradientBorder';
 import SlippagePopupContent from '../../components/layout/header/SlippagePopupContent';
 import BackgroundLogo from '../../components/shared/BackgroundLogo';
-import browserDetection from '../../utils/browserDetection';
 import { theme } from '../../styles/theme';
 import { InfoContainer } from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
@@ -64,7 +63,7 @@ const TitleContainer = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: ${browserDetection() === 'SAFARI' ? '0px' : '16px'};
+  margin-top: 16px;
   width: 100%;
 `;
 

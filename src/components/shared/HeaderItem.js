@@ -77,7 +77,15 @@ const HeaderItem = ({
       className={className}
       exact
       to={getTo()}
-      onClick={() => (link ? window.open(link, '_blank', 'noopener,noreferrer') : onClick)}
+      onClick={() => {
+        if (link) {
+          window.open(link, '_blank', 'noopener,noreferrer');
+        } else {
+          if (onClick) {
+            onClick();
+          }
+        }
+      }}
       style={headerItemStyle}
       onMouseOver={onMouseOver}
       onMouseLeave={onMouseLeave}

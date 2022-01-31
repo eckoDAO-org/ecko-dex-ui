@@ -84,17 +84,17 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
   const { themeMode } = useApplicationContext();
   const [width] = useWindowSize();
 
-  const [showThreeDotPopup, setShowThreeDotPopup] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   const ref = useRef();
-  useOnClickOutside(ref, () => setShowThreeDotPopup(false));
+  useOnClickOutside(ref, () => setShowPopup(false));
 
   return (
     <Wrapper ref={ref}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => setShowThreeDotPopup((prev) => !prev)}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => setShowPopup((prev) => !prev)}>
         {icon}
       </div>
-      {showThreeDotPopup && (
+      {showPopup && (
         <PopupContainer
           className={className}
           style={{ width: 'unset' }}
@@ -108,7 +108,9 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
                 className={item?.className}
                 route={item?.route}
                 key={index}
-                onClick={item?.onClick}
+                onClick={() => {
+                  setShowPopup(false);
+                }}
                 icon={item?.icon}
                 link={item?.link}
                 headerItemStyle={{

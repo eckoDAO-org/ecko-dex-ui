@@ -6,7 +6,6 @@ import { useApplicationContext } from '../../../contexts';
 import useWindowSize from '../../../hooks/useWindowSize';
 import { ROUTE_INDEX } from '../../../router/routes';
 import menuItems from '../../menuItems';
-import CustomPopup from '../../shared/CustomPopup';
 import HeaderItem from '../../shared/HeaderItem';
 import GameEditionModeButton from './GameEditionModeButton';
 import PopupContentList from './PopupContentList';
@@ -53,9 +52,7 @@ const TabletHeader = ({ className }) => {
       <RowContainer>
         <LeftContainer>
           <HeaderItem headerItemStyle={{ marginTop: '4px' }}>
-            <CustomPopup basic trigger={<HamburgerIcon />} on="click" offset={[-10, -8]} position="bottom left">
-              <PopupContentList withoutAccountInfo items={menuItems} />
-            </CustomPopup>
+            <PopupContentList withoutAccountInfo items={menuItems} icon={<HamburgerIcon />} className="hamburger" />
           </HeaderItem>
           {themeMode === 'dark' ? (
             <KaddexLogoWhite style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
