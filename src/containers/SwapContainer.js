@@ -507,11 +507,7 @@ const SwapContainer = () => {
         <Label fontSize={32} geCenter fontFamily="bold" geFontSize={52} geLabelStyle={{ lineHeight: '32px' }}>
           Swap
         </Label>
-        {!gameEditionView && (
-          <HeaderItem headerItemStyle={{ alignItems: 'center', display: 'flex' }}>
-            <SlippagePopupContent />
-          </HeaderItem>
-        )}
+        {!gameEditionView && <SlippagePopupContent />}
       </SwapTitleContainer>
       <FormContainer
         gameEditionView={gameEditionView}

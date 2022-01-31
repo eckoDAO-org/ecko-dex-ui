@@ -632,11 +632,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
           )}
           Add Liquidity
         </Label>
-        {!gameEditionView && (
-          <HeaderItem headerItemStyle={{ alignItems: 'center', display: 'flex' }}>
-            <SlippagePopupContent />
-          </HeaderItem>
-        )}
+        {!gameEditionView && <SlippagePopupContent />}
       </TitleContainer>
       <FormContainer
         style={{ justifyContent: 'space-between' }}

@@ -13,6 +13,17 @@ import { CogIcon } from '../../../assets';
 import { useApplicationContext } from '../../../contexts';
 import { theme } from '../../../styles/theme';
 
+const Wrapper = styled.div`
+  height: 100%;
+  display: flex;
+  position: relative;
+  z-index: 10;
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
+`;
 const PopupContainer = styled(GradientContainer)`
   display: flex;
   align-items: center;
@@ -101,7 +112,7 @@ const SlippagePopupContent = ({ className }) => {
     if (tl) (async () => pact.storeTtl(tl / 60))();
   }, [tl]);
   return (
-    <div ref={ref} style={{ height: '100%', display: 'flex', position: 'relative' }}>
+    <Wrapper ref={ref}>
       <CogIcon onClick={() => setShowSlippageContent((prev) => !prev)} />
       {showSplippageContent && (
         <PopupContainer
@@ -189,7 +200,7 @@ const SlippagePopupContent = ({ className }) => {
           </Container>
         </PopupContainer>
       )}
-    </div>
+    </Wrapper>
   );
 };
 
