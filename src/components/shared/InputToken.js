@@ -12,7 +12,7 @@ const Container = styled.div`
     if ($gameEditionView) {
       return css`
         position: absolute;
-        right: 26px;
+        right: 20px;
         top: ${({ coin }) => (coin ? 9 : 4)}px;
       `;
     }
@@ -21,7 +21,6 @@ const Container = styled.div`
   align-items: center;
   cursor: pointer;
 
-  min-width: ${({ theme: { inputTokenWidth } }) => `${inputTokenWidth}px`};
   svg {
     path {
       fill: ${({ $gameEditionView, theme: { colors }, geColor }) => {
@@ -46,16 +45,13 @@ const ElementsContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-right: 12px;
   svg {
-    path {
-      fill: ${({ theme: { colors } }) => colors.white};
-    }
+    margin-left: 8px;
   }
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
     img {
-      margin-right: 4px !important;
+      margin-right: 0px !important;
     }
     span {
       margin-right: 4px;
@@ -88,8 +84,8 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
             <Label geFontSize={24} geColor={geColor}>
               {tokenData[values.coin].name}
             </Label>
+            {gameEditionView ? <PixeledArrowDownIcon /> : <ArrowDown />}
           </ElementsContainer>
-          {gameEditionView ? <PixeledArrowDownIcon /> : <ArrowDown />}
         </>
       ) : (
         <>
@@ -101,12 +97,17 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
             geFontSize={24}
             buttonStyle={{
               padding: 0,
-              marginRight: gameEditionView && 10,
+              marginRight: 0,
+              boder: 'unset',
             }}
           >
             Select
+            {gameEditionView ? (
+              <PixeledArrowDownIcon style={{ marginLeft: 8, marginRight: 0 }} />
+            ) : (
+              <ArrowDown style={{ marginRight: 0, marginLeft: 8 }} />
+            )}
           </CustomButton>
-          {gameEditionView ? <PixeledArrowDownIcon /> : <ArrowDown style={{ marginRight: 0, marginLeft: 8 }} />}
         </>
       )}
     </Container>

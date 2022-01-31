@@ -15,6 +15,7 @@ export { ReactComponent as WireConnectionLightIcon } from './wire-connection-lig
 export { ReactComponent as WireConnectionDarkIcon } from './wire-connection-dark.svg';
 export { ReactComponent as ObliqueStrokeIcon } from './oblique-stroke.svg';
 export { ReactComponent as PixeledCircleArrowIcon } from './pixeled-circle-arrow.svg';
+export { ReactComponent as PixeledCircleDoubleArrowIcon } from './pixeled-circle-double-arrow.svg';
 export { ReactComponent as PixeledArrowDownIcon } from './pixeled-arrow-down.svg';
 export { ReactComponent as PixeledTokenSelectorBlueIcon } from './pixeled-token-selector-blue.svg';
 export { ReactComponent as PixeledTokenSelectorWhiteIcon } from './pixeled-token-selector-white.svg';

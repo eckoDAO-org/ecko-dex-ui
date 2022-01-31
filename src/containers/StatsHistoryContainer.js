@@ -9,6 +9,8 @@ import { TitleContainer } from '../components/layout/Containers';
 import Label from '../components/shared/Label';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
 import { FadeIn } from '../components/shared/animations';
+import useLazyImage from '../hooks/useLazyImage';
+import LogoLoader from '../components/shared/LogoLoader';
 
 const Container = styled(FadeIn)`
   display: flex;
@@ -46,7 +48,10 @@ const StatsHistoryContainer = () => {
     await pact.getPairList();
   }, []);
 
-  return (
+  const [loaded] = useLazyImage([modalBackground]);
+  return !loaded && gameEditionView ? (
+    <LogoLoader />
+  ) : (
     <Container gameEditionView={gameEditionView}>
       <TitleContainer
         $gameEditionView={gameEditionView}

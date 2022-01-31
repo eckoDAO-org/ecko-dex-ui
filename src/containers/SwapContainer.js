@@ -24,8 +24,12 @@ import FormContainer from '../components/shared/FormContainer';
 import GradientBorder from '../components/shared/GradientBorder';
 import BackgroundLogo from '../components/shared/BackgroundLogo';
 import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
+import yellowInputBox from '../assets/images/game-edition/pixeled-box-yellow.svg';
+import purpleInputBox from '../assets/images/game-edition/pixeled-box-purple.svg';
 import Label from '../components/shared/Label';
 import PixeledBlueContainer from '../components/game-edition-v2/components/PixeledInfoContainerBlue';
+import useLazyImage from '../hooks/useLazyImage';
+import LogoLoader from '../components/shared/LogoLoader';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -497,7 +501,11 @@ const SwapContainer = () => {
     }
   }, [showTxModal]);
 
-  return (
+  const [loaded] = useLazyImage([ArcadeBackground, yellowInputBox, purpleInputBox]);
+
+  return !loaded && gameEditionView ? (
+    <LogoLoader />
+  ) : (
     <Container gameEditionView={gameEditionView} onAnimationEnd={() => setIsLogoVisible(true)} className="scrollbar-none">
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
       {!gameEditionView && isLogoVisible && <BackgroundLogo />}

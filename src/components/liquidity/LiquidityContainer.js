@@ -696,19 +696,19 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
                 <DesktopInfoContainer>
                   <InnerRowContainer>
                     <Label fontSize={13}>{`${toValues.coin}/${fromValues.coin}`}</Label>
-                    <Label fontSize={13} fontFamily="bold">
+                    <Label fontSize={13} fontFamily="bold" labelStyle={{ textAlign: 'end' }}>
                       {reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}
                     </Label>
                   </InnerRowContainer>
                   <InnerRowContainer>
                     <Label fontSize={13}>{`${fromValues.coin}/${toValues.coin}`}</Label>
-                    <Label fontSize={13} fontFamily="bold">
+                    <Label fontSize={13} fontFamily="bold" labelStyle={{ textAlign: 'end' }}>
                       {reduceBalance(pact.getRatio1(fromValues.coin, toValues.coin)) ?? '-'}
                     </Label>
                   </InnerRowContainer>
                   <InnerRowContainer>
                     <Label fontSize={13}>Share of Pool</Label>
-                    <Label fontSize={13} fontFamily="bold">
+                    <Label fontSize={13} fontFamily="bold" labelStyle={{ textAlign: 'end' }}>
                       {!pact.share(fromValues.amount) ? 0 : (pact.share(fromValues.amount) * 100).toPrecision(4)} %
                     </Label>
                   </InnerRowContainer>

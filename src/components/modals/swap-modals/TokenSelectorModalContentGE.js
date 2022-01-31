@@ -82,7 +82,7 @@ const TokenItem = styled.div`
       `;
     }
   }}
-  cursor: pointer;
+
   flex-flow: column;
   align-items: center;
   font-size: 38px;
@@ -106,7 +106,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
 
   const [selectedToken, setSelectedToken] = useState(null);
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(1);
-  const { gameEditionView, setShowTokens, setButtons, setOutsideToken } = useContext(GameEditionContext);
+  const { gameEditionView, setShowTokens, setButtons, setOutsideToken, showTokens } = useContext(GameEditionContext);
 
   const cryptoCurrencies = Object.values(swap.tokenData)
     .filter((c) => {
@@ -150,12 +150,14 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
     }
   };
   const onTokenSelect = (crypto) => {
-    if (tokenSelectorType === 'from' && fromToken === crypto.name) return;
-    if (tokenSelectorType === 'to' && toToken === crypto.name) return;
-    if ((tokenSelectorType === 'from' && fromToken !== crypto.name) || (tokenSelectorType === 'to' && toToken !== crypto.name)) {
-      onTokenClick({ crypto });
-      setSearchValue('');
-      onClose();
+    if (!showTokens) {
+      if (tokenSelectorType === 'from' && fromToken === crypto.name) return;
+      if (tokenSelectorType === 'to' && toToken === crypto.name) return;
+      if ((tokenSelectorType === 'from' && fromToken !== crypto.name) || (tokenSelectorType === 'to' && toToken !== crypto.name)) {
+        onTokenClick({ crypto });
+        setSearchValue('');
+        onClose();
+      }
     }
   };
 
@@ -184,6 +186,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
           isVisible={selectedTokenIndex - 1 <= cryptoCurrencies.length && selectedTokenIndex + 1 >= cryptoCurrencies.length}
           key="MORE"
           selected={!selectedToken}
+          style={{ cursor: showTokens ? 'default' : 'pointer' }}
           onClick={() => {
             setOutsideToken({ token: null, tokenSelectorType, fromToken, toToken });
             setShowTokens(true);

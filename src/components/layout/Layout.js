@@ -25,12 +25,28 @@ const WrapperContainer = styled(Wrapper)`
   height: 100%;
 
   .mainnet-chain-2 {
-    font-size: 13px;
+    font-size: 14px;
     text-align: center;
     font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
     color: ${({ theme: { colors } }) => colors.white};
     @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
       padding-top: 20px;
+    }
+  }
+`;
+
+const CenterBackground = styled.img`
+  position: absolute;
+  width: 100%;
+  top: 0;
+  z-index: -1;
+  animation: fade-in 0.5s linear;
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
     }
   }
 `;
@@ -61,7 +77,7 @@ const MainContent = styled.div`
     }
   }}
 
-  height: 100%;
+  height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
   ${() => {
     if (browserDetection() === 'FIREFOX') {
       return css`
@@ -76,6 +92,7 @@ const MainContent = styled.div`
     ::-webkit-scrollbar {
       display: none;
     }
+
     scrollbar-width: none;
   }
 `;
@@ -93,12 +110,18 @@ const StripesContainer = styled.div`
 const Layout = ({ children }) => {
   const history = useHistory();
   const [width, height] = useWindowSize();
-  const { gameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView, setGameEditionView } = useContext(GameEditionContext);
   const { resolutionConfiguration } = useApplicationContext();
 
   useEffect(() => {
     gameEditionView ? history.push(ROUTE_GAME_START_ANIMATION) : history.push(ROUTE_SWAP);
   }, [gameEditionView]);
+
+  useEffect(() => {
+    if (!resolutionConfiguration || (gameEditionView && (width < resolutionConfiguration.width || height < resolutionConfiguration.heigt))) {
+      setGameEditionView(false);
+    }
+  }, [gameEditionView, width, height, resolutionConfiguration]);
 
   return (
     <MainContainer>
@@ -111,7 +134,7 @@ const Layout = ({ children }) => {
         </div>
         {gameEditionView && resolutionConfiguration && width >= resolutionConfiguration.width && height >= resolutionConfiguration.height ? (
           <>
-            <img src={centerBackground} style={{ position: 'absolute', width: '100%', top: 0, zIndex: -1 }} alt="" />
+            <CenterBackground src={centerBackground} alt="" />
             <GameEditionContainer>{children}</GameEditionContainer>
           </>
         ) : (

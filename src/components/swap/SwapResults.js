@@ -33,13 +33,13 @@ const SwapResults = ({ priceImpact, fromValues, toValues }) => {
     <ResultContainer>
       <RowContainer>
         <Label fontSize={13}>Price</Label>
-        <Label fontSize={13} fontFamily="bold">
+        <Label fontSize={13} fontFamily="bold" labelStyle={{ textAlign: 'end' }}>
           {reduceBalance(pact.ratio * (1 + priceImpact))} {fromValues.coin}/{toValues.coin}
         </Label>
       </RowContainer>
       <RowContainer>
         <Label fontSize={13}>Price Impact</Label>
-        <Label fontSize={13} fontFamily="bold">
+        <Label fontSize={13} fontFamily="bold" labelStyle={{ textAlign: 'end' }}>
           {pact.priceImpactWithoutFee(priceImpact) < 0.0001 && pact.priceImpactWithoutFee(priceImpact)
             ? '< 0.01%'
             : `${reduceBalance(pact.priceImpactWithoutFee(priceImpact) * 100, 4)}%`}
@@ -47,13 +47,13 @@ const SwapResults = ({ priceImpact, fromValues, toValues }) => {
       </RowContainer>
       <RowContainer>
         <Label fontSize={13}>Max Slippage</Label>
-        <Label fontSize={13} fontFamily="bold">
+        <Label fontSize={13} fontFamily="bold" labelStyle={{ textAlign: 'end' }}>
           {pact.slippage * 100}%
         </Label>
       </RowContainer>
       <RowContainer>
         <Label fontSize={13}>Liquidity Provider Fee</Label>
-        <Label fontSize={13} fontFamily="bold">
+        <Label fontSize={13} fontFamily="bold" labelStyle={{ textAlign: 'end' }}>
           {(liquidity.liquidityProviderFee * parseFloat(fromValues.amount)).toFixed(fromValues.precision)} {fromValues.coin}
         </Label>
       </RowContainer>

@@ -17,6 +17,13 @@ import { FadeIn } from '../shared/animations';
 import GameboyButtons from './components/GameboyButtons';
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
 import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.svg';
+import menuBackground from '../../assets/images/game-edition/menu-background.png';
+import loadingBackground from '../../assets/images/game-edition/loading-background.png';
+import arcadeBackground from '../../assets/images/game-edition/arcade-background.png';
+import arcadeDarkBackground from '../../assets/images/game-edition/arcade-dark-background.png';
+import modalBackground from '../../assets/images/game-edition/modal-background.png';
+import pixeledTokenSelectorBlueIcon from '../../assets/images/game-edition/pixeled-token-selector-blue.svg';
+import pixeledTokenSelectorWhiteIcon from '../../assets/images/game-edition/pixeled-token-selector-white.svg';
 import useLazyImage from '../../hooks/useLazyImage';
 import LogoLoader from '../shared/LogoLoader';
 import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION } from '../../router/routes';
@@ -239,9 +246,19 @@ const GameEditionContainer = ({ children }) => {
       ? true
       : false;
 
-  const [loaded] = useLazyImage(gameboyDesktop);
+  const [loaded] = useLazyImage([
+    gameboyDesktop,
+    menuBackground,
+    loadingBackground,
+    arcadeBackground,
+    arcadeDarkBackground,
+    modalBackground,
+    pixeledTokenSelectorBlueIcon,
+    pixeledTokenSelectorWhiteIcon,
+  ]);
+
   return !loaded ? (
-    <LogoLoader containerStyle={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} logoStyle={{ height: 150 }} />
+    <LogoLoader containerStyle={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} logoStyle={{ height: 75 }} />
   ) : (
     <DesktopMainContainer
       showWires={showWires}

@@ -10,6 +10,8 @@ import arcadeBackground from '../../assets/images/game-edition/arcade-background
 import arcadeDarkBackground from '../../assets/images/game-edition/arcade-dark-background.png';
 import GameEditionLabel from './components/GameEditionLabel';
 import useButtonScrollEvent from '../../hooks/useButtonScrollEvent';
+import LogoLoader from '../shared/LogoLoader';
+import useLazyImage from '../../hooks/useLazyImage';
 
 const getBackground = (type) => {
   switch (type) {
@@ -32,6 +34,7 @@ const GEModalContainer = styled(FadeIn)`
   background-image: ${({ type }) => `url(${getBackground(type)})`};
   position: absolute;
   display: flex;
+  justify-content: center;
   flex-flow: column;
   color: ${({ theme: { colors } }) => colors.white};
   background-size: cover;
@@ -75,7 +78,7 @@ const GameEditionModalsContainer = ({
   titleFontSize = 52,
   type,
 }) => {
-  const { closeModal, buttons, setButtons } = useContext(GameEditionContext);
+  const { closeModal, buttons, setButtons, showTokens } = useContext(GameEditionContext);
 
   useButtonScrollEvent('game-edition-modal-container');
 
@@ -87,26 +90,36 @@ const GameEditionModalsContainer = ({
     };
   }, []);
 
+  const [modalLoaded] = useLazyImage([arcadeBackground, arcadeDarkBackground, modalBackground]);
+
   return (
     <GEModalContainer type={type} style={containerStyle} id="game-edition-modal-container">
-      <TitleContainer style={titleContainerStyle}>
-        <GameEditionLabel fontSize={titleFontSize} style={{ textAlign: 'center', flex: 1, display: 'block' }}>
-          {title}
-        </GameEditionLabel>
-        {!hideOnClose && (
-          <CloseGe
-            style={{ cursor: 'pointer', position: 'absolute', right: 20, top: '62%', transform: 'translate(0px, -62%)' }}
-            onClick={() => {
-              if (onClose) {
-                onClose();
-              }
-              closeModal();
-            }}
-          />
-        )}
-      </TitleContainer>
-      {description && <GameEditionLabel fontSize={20}>{description}</GameEditionLabel>}
-      <ContentModalContainer>{content}</ContentModalContainer>
+      {!modalLoaded ? (
+        <LogoLoader />
+      ) : (
+        <>
+          <TitleContainer style={titleContainerStyle}>
+            <GameEditionLabel fontSize={titleFontSize} style={{ textAlign: 'center', flex: 1, display: 'block' }}>
+              {title}
+            </GameEditionLabel>
+            {!hideOnClose && (
+              <CloseGe
+                style={{ cursor: showTokens ? 'default' : 'pointer', position: 'absolute', right: 20, top: '62%', transform: 'translate(0px, -62%)' }}
+                onClick={() => {
+                  if (!showTokens) {
+                    if (onClose) {
+                      onClose();
+                    }
+                    closeModal();
+                  }
+                }}
+              />
+            )}
+          </TitleContainer>
+          {description && <GameEditionLabel fontSize={20}>{description}</GameEditionLabel>}
+          <ContentModalContainer>{content}</ContentModalContainer>
+        </>
+      )}
     </GEModalContainer>
   );
 };
