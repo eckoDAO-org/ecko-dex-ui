@@ -1,10 +1,8 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 import HeaderItem from '../../../components/shared/HeaderItem';
 import AccountInfo from './AccountInfo';
 import Button from '../../../components/shared/CustomButton';
-import CustomPopup from '../../../components/shared/CustomPopup';
-import { CogIcon, ThreeDotsIcon } from '../../../assets';
 import headerLinks from '../../headerLinks';
 import PopupContentList from './PopupContentList';
 import { AccountContext } from '../../../contexts/AccountContext';
@@ -20,7 +18,6 @@ import AccountModal from '../../modals/kdaModals/AccountModal';
 import { NotificationModalContext } from '../../../contexts/NotificationModalContext';
 import useWindowSize from '../../../hooks/useWindowSize';
 import { commonTheme } from '../../../styles/theme';
-import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
 
 const RightContainerHeader = styled.div`
   display: flex;

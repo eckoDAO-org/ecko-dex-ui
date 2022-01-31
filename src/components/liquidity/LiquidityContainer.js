@@ -11,7 +11,7 @@ import { ApplicationContext } from '../../contexts/ApplicationContext';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { reduceBalance, getCorrectBalance } from '../../utils/reduceBalance';
 import WalletRequestView from '../../components/modals/WalletRequestView';
-import { ArrowBack, CogIcon } from '../../assets';
+import { ArrowBack } from '../../assets';
 import Label from '../../components/shared/Label';
 import CustomButton from '../../components/shared/CustomButton';
 import ReviewTxModal from '../../components/modals/liquidity/ReviewTxModal';
@@ -23,7 +23,6 @@ import TokenSelectorModalContentGE from '../../components/modals/swap-modals/Tok
 import FormContainer from '../../components/shared/FormContainer';
 import GradientBorder from '../../components/shared/GradientBorder';
 import HeaderItem from '../../components/shared/HeaderItem';
-import CustomPopup from '../../components/shared/CustomPopup';
 import SlippagePopupContent from '../../components/layout/header/SlippagePopupContent';
 import BackgroundLogo from '../../components/shared/BackgroundLogo';
 import browserDetection from '../../utils/browserDetection';

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import styled, { css } from 'styled-components/macro';
+import styled from 'styled-components/macro';
 import { PactContext } from '../../../contexts/PactContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import Input from '../../../components/shared/Input';
@@ -10,6 +10,8 @@ import GradientContainer from '../../shared/GradientContainer';
 import browserDetection from '../../../utils/browserDetection';
 import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
 import { CogIcon } from '../../../assets';
+import { useApplicationContext } from '../../../contexts';
+import { theme } from '../../../styles/theme';
 
 const PopupContainer = styled(GradientContainer)`
   display: flex;
@@ -17,7 +19,6 @@ const PopupContainer = styled(GradientContainer)`
   flex-direction: column;
   width: 100%;
   border-radius: 10px;
-  background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
   position: absolute;
 
   right: 4px;
@@ -25,13 +26,6 @@ const PopupContainer = styled(GradientContainer)`
   &.header-item {
     top: 40px;
   }
-  ${({ themeMode }) => {
-    if ((browserDetection() === 'BRAVE' || browserDetection() === 'FIREFOX') && themeMode === 'dark') {
-      return css`
-        background: ${({ theme: { colors } }) => colors.primary};
-      `;
-    }
-  }}
 `;
 
 const Container = styled.div`
@@ -92,6 +86,7 @@ const Row = styled.div`
 const SlippagePopupContent = ({ className }) => {
   const pact = useContext(PactContext);
   const { gameEditionView } = useContext(GameEditionContext);
+  const { themeMode } = useApplicationContext();
   const [showSplippageContent, setShowSlippageContent] = useState(false);
 
   const ref = useRef();
@@ -109,7 +104,13 @@ const SlippagePopupContent = ({ className }) => {
     <div ref={ref} style={{ height: '100%', display: 'flex', position: 'relative' }}>
       <CogIcon onClick={() => setShowSlippageContent((prev) => !prev)} />
       {showSplippageContent && (
-        <PopupContainer className={className} style={{ width: 'unset' }}>
+        <PopupContainer
+          className={className}
+          style={{ width: 'unset', zIndex: 1 }}
+          backgroundColor={
+            (browserDetection() === 'BRAVE' || browserDetection() === 'FIREFOX') && themeMode === 'dark' && theme('dark').colors.primary
+          }
+        >
           <Container>
             <Label outGameEditionView fontSize={13} fontFamily="bold">
               Transactions Settings

@@ -62,6 +62,13 @@ const MainContent = styled.div`
   }}
 
   height: 100%;
+  ${() => {
+    if (browserDetection() === 'FIREFOX') {
+      return css`
+        height: 99%;
+      `;
+    }
+  }}
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
     padding: 0 16px;
     height: ${({ theme: { header } }) => `calc(100% - ${header.mobileHeight}px)`};

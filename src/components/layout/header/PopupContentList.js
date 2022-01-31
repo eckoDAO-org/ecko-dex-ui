@@ -2,10 +2,10 @@ import React, { useRef, useState } from 'react';
 import { Divider } from 'semantic-ui-react';
 import styled, { css } from 'styled-components/macro';
 import { PowerIcon, ThreeDotsIcon } from '../../../assets';
-import { useAccountContext, useGameEditionContext, useModalContext } from '../../../contexts';
+import { useAccountContext, useApplicationContext, useGameEditionContext, useModalContext } from '../../../contexts';
 import HeaderItem from '../../../components/shared/HeaderItem';
 import LightModeToggle from '../../../components/shared/LightModeToggle';
-import theme, { commonTheme } from '../../../styles/theme';
+import { theme, commonTheme } from '../../../styles/theme';
 import AccountInfo from './AccountInfo';
 import AccountModal from '../../modals/kdaModals/AccountModal';
 import reduceToken from '../../../utils/reduceToken';
@@ -72,6 +72,7 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
   const { account, logout } = useAccountContext();
   const { gameEditionView, openModal } = useGameEditionContext();
   const modalContext = useModalContext();
+  const { themeMode } = useApplicationContext();
   const [width] = useWindowSize();
 
   const [showThreeDotPopup, setShowThreeDotPopup] = useState(false);
@@ -83,7 +84,12 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
     <div ref={ref} style={{ height: '100%', display: 'flex' }}>
       <ThreeDotsIcon style={{ height: '100%' }} onClick={() => setShowThreeDotPopup((prev) => !prev)} />
       {showThreeDotPopup && (
-        <PopupContainer style={{ width: 'unset' }}>
+        <PopupContainer
+          style={{ width: 'unset' }}
+          backgroundColor={
+            (browserDetection() === 'BRAVE' || browserDetection() === 'FIREFOX') && themeMode === 'dark' && theme('dark').colors.primary
+          }
+        >
           <ListContainer style={PopupContentListStyle}>
             {items.map((item, index) => (
               <HeaderItem
@@ -97,7 +103,7 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
                   display: 'flex',
                   alignItems: 'center',
                   fontSize: 16,
-                  fontFamily: theme.fontFamily.regular,
+                  fontFamily: commonTheme.fontFamily.regular,
                   width: 42,
                 }}
               >
@@ -137,7 +143,7 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
                   display: 'flex',
                   alignItems: 'center',
                   fontSize: 16,
-                  fontFamily: theme.fontFamily.regular,
+                  fontFamily: commonTheme.fontFamily.regular,
                   width: 42,
                 }}
               >

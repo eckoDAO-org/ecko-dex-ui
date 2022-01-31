@@ -7,7 +7,7 @@ const STYContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: ${({ padding = 16 }) => padding}px;
-  background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
+  background: ${({ theme: { backgroundContainer }, backgroundColor }) => backgroundColor || backgroundContainer};
   border-radius: 10px;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     padding: 16px;
@@ -43,10 +43,11 @@ export const STYGradientBorder = styled.div`
   z-index: -10;
 `;
 
-const GradientContainer = ({ className, children, padding, gap, style, hideGradient }) => {
+const GradientContainer = ({ className, children, padding, gap, style, hideGradient, backgroundColor }) => {
   const { themeMode } = useApplicationContext();
+  console.log('backgroundColor', backgroundColor);
   return (
-    <STYContainer className={className} padding={padding} gap={gap} style={style} themeMode={themeMode}>
+    <STYContainer className={className} padding={padding} gap={gap} style={style} themeMode={themeMode} backgroundColor={backgroundColor}>
       {!hideGradient && <STYGradientBorder />}
       {children}
     </STYContainer>
