@@ -66,7 +66,7 @@ export const lightTheme = {
 export const darkTheme = {
   ...commonTheme,
   backgroundBody: 'transparent linear-gradient(122deg, #070610 0%, #212750 100%) 0% 0% no-repeat padding-box',
-  backgroundBodySafari: 'transparent linear-gradient(122deg, #070610 0%, #212750 100%) 0% 0% no-repeat padding-box',
+  backgroundBodySafari: 'transparent linear-gradient(122deg, #010718 0%, #1D1139 100%) 0% 0% no-repeat padding-box',
   colors: {
     primary: '#212750',
     border: '#ECEBEC',

@@ -31,14 +31,19 @@ export default createGlobalStyle`
       font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
       color: ${({ theme: { colors } }) => colors.primary};
       ${({ themeMode }) => {
-        return themeMode === 'light'
-          ? css`
-              background: ${({ theme: { backgroundBody, backgroundBodySafari } }) =>
-                browserDetection() === 'SAFARI' ? backgroundBodySafari : backgroundBody};
-            `
-          : css`
-              background-image: url(${appBackground});
-            `;
+        if (browserDetection() === 'SAFARI') {
+          return css`
+            background: ${({ theme: { backgroundBodySafari } }) => backgroundBodySafari};
+          `;
+        } else {
+          return themeMode === 'light'
+            ? css`
+                background: ${({ theme: { backgroundBody } }) => backgroundBody};
+              `
+            : css`
+                background-image: url(${appBackground});
+              `;
+        }
       }};
       
       opacity: 1;

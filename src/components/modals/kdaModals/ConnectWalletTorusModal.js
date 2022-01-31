@@ -10,6 +10,10 @@ import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { WALLET } from '../../../constants/wallet';
 import LogoLoader from '../../../components/shared/LogoLoader';
 import Label from '../../shared/Label';
+import browserDetection from '../../../utils/browserDetection';
+import { Loader } from 'semantic-ui-react';
+import { theme } from '../../../styles/theme';
+import { useApplicationContext } from '../../../contexts';
 
 const GOOGLE = 'google';
 
@@ -24,6 +28,7 @@ const verifierMap = {
 /* const createAPIHost = (network, chainId) => `https://${network}.testnet.chainweb.com/chainweb/0.0/testnet02/chain/${chainId}/pact` */
 
 function ConnectWalletTorusModal({ onClose, onConnectionSuccess }) {
+  const { themeMode } = useApplicationContext();
   const modalContext = useContext(ModalContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
@@ -123,7 +128,22 @@ function ConnectWalletTorusModal({ onClose, onConnectionSuccess }) {
           Cancel
         </CustomButton>
       )}
-      {loading && <LogoLoader />}
+      {loading && (
+        <>
+          {browserDetection() === 'SAFARI' ? (
+            <Loader
+              active
+              inline="centered"
+              style={{
+                color: theme(themeMode).colors.white,
+                fontFamily: gameEditionView ? theme(themeMode).fontFamily.pixeboy : theme(themeMode).fontFamily.regular,
+              }}
+            />
+          ) : (
+            <LogoLoader />
+          )}
+        </>
+      )}
     </>
   );
 }
