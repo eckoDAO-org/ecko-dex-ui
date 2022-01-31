@@ -511,9 +511,7 @@ const SwapContainer = () => {
         </Label>
         {!gameEditionView && (
           <HeaderItem headerItemStyle={{ alignItems: 'center', display: 'flex' }}>
-            <CustomPopup trigger={<CogIcon />} on="click" offset={[0, 0]} position="bottom right">
-              <SlippagePopupContent />
-            </CustomPopup>
+            <SlippagePopupContent />
           </HeaderItem>
         )}
       </SwapTitleContainer>

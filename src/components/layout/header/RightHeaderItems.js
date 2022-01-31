@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import styled from 'styled-components/macro';
 import HeaderItem from '../../../components/shared/HeaderItem';
 import AccountInfo from './AccountInfo';
@@ -20,6 +20,7 @@ import AccountModal from '../../modals/kdaModals/AccountModal';
 import { NotificationModalContext } from '../../../contexts/NotificationModalContext';
 import useWindowSize from '../../../hooks/useWindowSize';
 import { commonTheme } from '../../../styles/theme';
+import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
 
 const RightContainerHeader = styled.div`
   display: flex;
@@ -107,9 +108,7 @@ const RightHeaderItems = () => {
 
       {gameEditionView && (
         <HeaderItem headerItemStyle={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '4px' }}>
-          <CustomPopup containerStyle={{ padding: 32 }} trigger={<CogIcon />} on="click" offset={[30, 10]} position="bottom right">
-            <SlippagePopupContent />
-          </CustomPopup>
+          <SlippagePopupContent className="header-item" />
         </HeaderItem>
       )}
 
@@ -135,20 +134,7 @@ const RightHeaderItems = () => {
       </HeaderItem>
 
       <HeaderItem headerItemStyle={{ height: '100%', display: 'flex' }}>
-        <CustomPopup
-          containerStyle={{ padding: 32 }}
-          basic
-          trigger={
-            <div style={{ height: '100%', display: 'flex' }}>
-              <ThreeDotsIcon style={{ height: '100%' }} />
-            </div>
-          }
-          on="click"
-          offset={[14, -14]}
-          position="bottom right"
-        >
-          <PopupContentList items={headerLinks} viewOtherComponents withLogout PopupContentListStyle={{ minWidth: 100 }} />
-        </CustomPopup>
+        <PopupContentList items={headerLinks} viewOtherComponents withLogout PopupContentListStyle={{ minWidth: 100 }} />
       </HeaderItem>
     </RightContainerHeader>
   );

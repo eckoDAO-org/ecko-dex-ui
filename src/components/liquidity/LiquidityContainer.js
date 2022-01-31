@@ -633,12 +633,9 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
           )}
           Add Liquidity
         </Label>
-        {/* {gameEditionView && <CloseGE style={{ cursor: 'pointer' }} onClick={() => props.closeLiquidity()} />} */}
         {!gameEditionView && (
           <HeaderItem headerItemStyle={{ alignItems: 'center', display: 'flex' }}>
-            <CustomPopup trigger={<CogIcon />} on="click" offset={[10, 10]} position="bottom right">
-              <SlippagePopupContent />
-            </CustomPopup>
+            <SlippagePopupContent />
           </HeaderItem>
         )}
       </TitleContainer>
