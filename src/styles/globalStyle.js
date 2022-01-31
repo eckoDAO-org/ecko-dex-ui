@@ -1,5 +1,6 @@
 import { createGlobalStyle, css } from 'styled-components/macro';
 import appBackground from '../assets/images/shared/app-background.png';
+import browserDetection from '../utils/browserDetection';
 
 export default createGlobalStyle`
     *, *:before, *:after {
@@ -27,12 +28,14 @@ export default createGlobalStyle`
       line-height: inherit;
       overflow: auto;
       min-width: 0;
+      a;
       font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
       color: ${({ theme: { colors } }) => colors.primary};
       ${({ themeMode, theme: { backgroundBody } }) => {
         return themeMode === 'light'
           ? css`
-              background: ${backgroundBody};
+              background: ${({ theme: { backgroundBody, backgroundBodySafari } }) =>
+                browserDetection() === 'SAFARI' ? backgroundBodySafari : backgroundBody};
             `
           : css`
               background-image: url(${appBackground});
