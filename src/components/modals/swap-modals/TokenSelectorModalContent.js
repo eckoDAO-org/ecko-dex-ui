@@ -20,6 +20,15 @@ const Divider = styled.div`
 const Content = styled.div`
   display: flex;
   flex-flow: column;
+  .close-icon {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
+
+  input::placeholder {
+    color: ${({ theme: { colors } }) => colors.white} !important;
+  }
 `;
 
 const TokensContainer = styled.div`
@@ -91,6 +100,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
         />
         {gameEditionView && (
           <CloseIcon
+            className="close-icon"
             onClick={() => {
               onCloseTokensList();
             }}

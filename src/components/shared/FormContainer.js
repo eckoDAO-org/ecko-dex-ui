@@ -14,31 +14,19 @@ const Container = styled.div`
   height: ${({ $gameEditionView }) => $gameEditionView && `100%`};
   border-radius: ${({ $gameEditionView }) => !$gameEditionView && `10px`};
   border: ${({ $gameEditionView, withGameEditionBorder }) => $gameEditionView && withGameEditionBorder && `2px dashed #fff`};
-
+  z-index: 1;
   opacity: 1;
   background: ${({ $gameEditionView, theme: { backgroundContainer } }) => ($gameEditionView ? 'transparent' : backgroundContainer)};
   backdrop-filter: ${({ $gameEditionView }) => !$gameEditionView && `blur(50px)`};
   padding: ${({ $gameEditionView }) => !$gameEditionView && '32px'};
-  /* & > *:not(:last-child) {
-    margin-bottom: 32px;
-  }
- */
+
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
   }
 `;
 
 const Content = styled.div`
-  /* position: relative;
-  display: flex;
-  flex-flow: column;
-  width: 100%;  */
-
   height: ${({ gameEditionView }) => !gameEditionView && `100%`};
-
-  /* & > *:not(:last-child) {
-    margin-right: 32px;
-  } */
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
