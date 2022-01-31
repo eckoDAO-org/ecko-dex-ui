@@ -36,6 +36,7 @@ const RESOLUTIONS = {
     'normal-mode': { scale: 1 },
   },
   '1680x1050': { width: 1680, height: 1050, 'game-mode': { scale: 1, geTranslateY: 442, wiresTranslateY: 0 }, 'normal-mode': { scale: 1 } },
+  '1680x847': { width: 1680, height: 847, 'game-mode': { scale: 1, geTranslateY: 446, wiresTranslateY: 0 }, 'normal-mode': { scale: 1 } },
   '1600x900': { width: 1600, height: 900, 'game-mode': { scale: 1, geTranslateY: 442, wiresTranslateY: 0 }, 'normal-mode': { scale: 1 } },
   /*not standard*/ '1500x730': {
     width: 1500,
