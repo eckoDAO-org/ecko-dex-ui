@@ -45,7 +45,6 @@ export const STYGradientBorder = styled.div`
 
 const GradientContainer = ({ className, children, padding, gap, style, hideGradient, backgroundColor }) => {
   const { themeMode } = useApplicationContext();
-  console.log('backgroundColor', backgroundColor);
   return (
     <STYContainer className={className} padding={padding} gap={gap} style={style} themeMode={themeMode} backgroundColor={backgroundColor}>
       {!hideGradient && <STYGradientBorder />}
