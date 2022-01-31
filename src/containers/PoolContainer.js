@@ -8,6 +8,8 @@ import { useGameEditionContext } from '../contexts';
 import useButtonScrollEvent from '../hooks/useButtonScrollEvent';
 import { LIQUIDITY_VIEW } from '../constants/liquidityView';
 import { FadeIn } from '../components/shared/animations';
+import useLazyImage from '../hooks/useLazyImage';
+import LogoLoader from '../components/shared/LogoLoader';
 
 const Container = styled(FadeIn)`
   display: flex;
@@ -53,7 +55,11 @@ const PoolContainer = () => {
   const [pair, setPair] = useState(null);
   useButtonScrollEvent(gameEditionView && 'pool-scrolling-container');
 
-  return (
+  const [loaded] = useLazyImage([modalBackground]);
+
+  return !loaded && gameEditionView ? (
+    <LogoLoader />
+  ) : (
     <Container id="pool-scrolling-container" $gameEditionView={gameEditionView} selectedView={selectedView}>
       {selectedView === LIQUIDITY_VIEW.REMOVE_LIQUIDITY && (
         <RemoveLiqContainer
