@@ -93,18 +93,13 @@ const StripesContainer = styled.div`
 const Layout = ({ children }) => {
   const history = useHistory();
   const [width, height] = useWindowSize();
-  const { gameEditionView, setGameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView } = useContext(GameEditionContext);
   const { resolutionConfiguration } = useApplicationContext();
 
   useEffect(() => {
     gameEditionView ? history.push(ROUTE_GAME_START_ANIMATION) : history.push(ROUTE_SWAP);
   }, [gameEditionView]);
 
-  // useEffect(() => {
-  //   if (!resolutionConfiguration || (gameEditionView && (width < resolutionConfiguration.width || height < resolutionConfiguration.heigt))) {
-  //     setGameEditionView(false);
-  //   }
-  // }, [gameEditionView, width, height, resolutionConfiguration]);
   return (
     <MainContainer>
       <WrapperContainer>
