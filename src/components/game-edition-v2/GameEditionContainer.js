@@ -1,12 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
+import { useLocation } from 'react-router-dom';
 import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
-import { useAccountContext, useKaddexWalletContext, useNotificationContext, useWalletContext } from '../../contexts';
+import { useAccountContext, useApplicationContext, useKaddexWalletContext, useNotificationContext, useWalletContext } from '../../contexts';
 import { STATUSES } from '../../contexts/NotificationContext';
 import WalletWires from './components/WalletWires';
 import ConnectWalletWire from './components/ConnectWalletWire';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
-import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.svg';
 import { KaddexLogo } from '../../assets';
 import { WALLET } from '../../constants/wallet';
 import ConnectWalletZelcoreModal from '../modals/kdaModals/ConnectWalletZelcoreModal';
@@ -14,9 +15,11 @@ import ConnectWalletTorusModal from '../modals/kdaModals/ConnectWalletTorusModal
 import ConnectWalletChainweaverModal from '../modals/kdaModals/ConnectWalletChainweaverModal';
 import { FadeIn } from '../shared/animations';
 import GameboyButtons from './components/GameboyButtons';
-import { useLocation } from 'react-router-dom';
-import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION } from '../../router/routes';
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
+import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.svg';
+import useLazyImage from '../../hooks/useLazyImage';
+import LogoLoader from '../shared/LogoLoader';
+import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION } from '../../router/routes';
 
 const DesktopMainContainer = styled.div`
   display: flex;
@@ -28,14 +31,14 @@ const DesktopMainContainer = styled.div`
   }
   align-items: center;
   transition: transform 0.5s;
-  transform: ${({ showWires, selectedWire, showTokens, layoutConfiguration }) => {
+  transform: ${({ showWires, selectedWire, showTokens, resolutionConfiguration }) => {
     if (showTokens) {
-      return `translate(-30%, ${layoutConfiguration.geTranslateY}px) scale(${layoutConfiguration.scale})`;
+      return `translate(-30%, ${resolutionConfiguration['game-mode'].geTranslateY}px) scale(${resolutionConfiguration['game-mode'].scale})`;
     }
     if (showWires && !selectedWire && !showTokens) {
-      return `translateY(${layoutConfiguration.wiresTranslateY}px) scale(${layoutConfiguration.scale})`;
+      return `translateY(${resolutionConfiguration['game-mode'].wiresTranslateY}px) scale(${resolutionConfiguration['game-mode'].scale})`;
     } else {
-      return `translateY(${layoutConfiguration.geTranslateY}px) scale(${layoutConfiguration.scale})`;
+      return `translateY(${resolutionConfiguration['game-mode'].geTranslateY}px) scale(${resolutionConfiguration['game-mode'].scale})`;
     }
   }};
   /* transform: ${({ showWires, selectedWire, showTokens, $scale }) => {
@@ -73,7 +76,6 @@ const GameboyDesktopContainer = styled.div`
 
   .kaddex-logo {
     margin-top: 20px;
-    margin-left: 24px;
     svg {
       height: 14.5px;
     }
@@ -83,9 +85,9 @@ const GameboyDesktopContainer = styled.div`
 
 const DisplayContent = styled.div`
   width: ${GE_DESKTOP_CONFIGURATION.DISPLAY_WIDTH}px;
+  height: ${GE_DESKTOP_CONFIGURATION.DISPLAY_HEIGHT}px;
   margin-left: 6px;
   margin-top: 90px;
-  height: ${GE_DESKTOP_CONFIGURATION.DISPLAY_HEIGHT}px;
   background: rgba(0, 0, 0, 0.02);
   box-shadow: inset 0px 0px 20px rgba(0, 0, 0, 0.75);
   display: flex;
@@ -98,7 +100,8 @@ const DisplayContent = styled.div`
     border-radius: 19px;
   }
 
-  @media (max-width: ${({ theme: { mediaQueries }, layoutConfiguration }) => `${mediaQueries.desktopPixel * layoutConfiguration.scale - 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries }, resolutionConfiguration }) =>
+      `${mediaQueries.desktopPixel * resolutionConfiguration['game-mode'].scale - 1}px`}) {
     width: 280px;
     height: 357px;
     margin-left: 2px;
@@ -131,11 +134,10 @@ const WiresContainer = styled.div`
 const GameEditionContainer = ({ children }) => {
   const location = useLocation();
   const { showNotification } = useNotificationContext();
-  const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
+  const { initializeKaddexWallet, isConnected, isInstalled } = useKaddexWalletContext();
   const { wallet, signingWallet, setSelectedWallet } = useWalletContext();
-
-  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens, layoutConfiguration } =
-    useContext(GameEditionContext);
+  const { resolutionConfiguration } = useApplicationContext();
+  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens } = useContext(GameEditionContext);
   const { account } = useAccountContext();
 
   const onConnectionSuccess = async (wallet) => {
@@ -144,7 +146,7 @@ const GameEditionContainer = ({ children }) => {
     closeModal();
     showNotification({
       title: `${wallet.name}  was successfully connected`,
-      type: 'game-edition',
+      type: 'game-mode',
       icon: wallet.notificationLogo,
       closeButton: false,
       titleStyle: { fontSize: 13 },
@@ -199,14 +201,29 @@ const GameEditionContainer = ({ children }) => {
             message: `Please install ${WALLET.KADDEX_WALLET.name}`,
             type: STATUSES.WARNING,
           });
+          onWireSelect(null);
         } else {
-          initializeKaddexWallet(async () => await onConnectionSuccess(WALLET.KADDEX_WALLET));
+          initializeKaddexWallet();
           closeModal();
         }
         break;
     }
   };
 
+  useEffect(() => {
+    if (account.account && isConnected) {
+      onWireSelect(WALLET.KADDEX_WALLET);
+
+      showNotification({
+        title: `${WALLET.KADDEX_WALLET.name}  was successfully connected`,
+        type: 'game-mode',
+        icon: WALLET.KADDEX_WALLET.notificationLogo,
+        closeButton: false,
+        titleStyle: { fontSize: 13 },
+        autoClose: 3000,
+      });
+    }
+  }, [account.account, isConnected]);
   useEffect(() => {
     if ((selectedWire && !account.account) || (selectedWire && selectedWire?.id !== wallet?.id)) {
       getWalletModal(selectedWire.name);
@@ -222,19 +239,23 @@ const GameEditionContainer = ({ children }) => {
       ? true
       : false;
 
-  return (
+  const [loaded] = useLazyImage(gameboyDesktop);
+  return !loaded ? (
+    <LogoLoader containerStyle={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} logoStyle={{ height: 150 }} />
+  ) : (
     <DesktopMainContainer
       showWires={showWires}
       selectedWire={selectedWire}
       showTokens={showTokens}
       $scale={scale}
       style={{ justifyContent: 'flex-end' }}
-      layoutConfiguration={layoutConfiguration}
+      resolutionConfiguration={resolutionConfiguration}
     >
       <div style={{ display: 'flex' }}>
-        <GameboyDesktopContainer showWires={showWires} showTokens={showTokens} style={{ backgroundImage: `url(${gameboyDesktop})` }}>
+        <GameboyDesktopContainer showWires={showWires} showTokens={showTokens} style={{ backgroundImage: ` url(${gameboyDesktop})` }}>
           <GameboyButtons />
-          <DisplayContent layoutConfiguration={layoutConfiguration}>
+
+          <DisplayContent resolutionConfiguration={resolutionConfiguration}>
             {children}
             {modalState.open && (
               <GameEditionModalsContainer
@@ -250,6 +271,7 @@ const GameEditionContainer = ({ children }) => {
               />
             )}
           </DisplayContent>
+
           <div className="kaddex-logo">
             <KaddexLogo />
           </div>

@@ -2,11 +2,10 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { HamburgerIcon, KaddexLightModeLogo, KaddexLogoWhite } from '../../../assets';
-import { useGameEditionContext, useLightModeContext } from '../../../contexts';
+import { useApplicationContext } from '../../../contexts';
 import useWindowSize from '../../../hooks/useWindowSize';
 import { ROUTE_INDEX } from '../../../router/routes';
 import menuItems from '../../menuItems';
-import CustomPopup from '../../shared/CustomPopup';
 import HeaderItem from '../../shared/HeaderItem';
 import GameEditionModeButton from './GameEditionModeButton';
 import PopupContentList from './PopupContentList';
@@ -19,7 +18,7 @@ const Container = styled.div`
   align-items: start;
   min-height: ${({ theme: { header } }) => `${header.mobileHeight}px`};
   width: 100%;
-  padding: 0 1.5em;
+  padding: 0 24px;
   padding-top: 16px;
 `;
 
@@ -46,26 +45,23 @@ const RowContainer = styled.div`
 
 const TabletHeader = ({ className }) => {
   const history = useHistory();
-  const { themeMode } = useLightModeContext();
+  const { themeMode, resolutionConfiguration } = useApplicationContext();
   const [width, height] = useWindowSize();
-  const { layoutConfiguration } = useGameEditionContext();
   return (
     <Container className={className}>
       <RowContainer>
         <LeftContainer>
           <HeaderItem headerItemStyle={{ marginTop: '4px' }}>
-            <CustomPopup basic trigger={<HamburgerIcon />} on="click" offset={[-10, -8]} position="bottom left">
-              <PopupContentList withoutAccountInfo items={menuItems} />
-            </CustomPopup>
+            <PopupContentList withoutAccountInfo items={menuItems} icon={<HamburgerIcon />} className="hamburger" />
           </HeaderItem>
           {themeMode === 'dark' ? (
-            <KaddexLogoWhite style={{ cursor: 'pointer' }} onClick={() => history.push(ROUTE_INDEX)} />
+            <KaddexLogoWhite style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
           ) : (
-            <KaddexLightModeLogo style={{ cursor: 'pointer' }} onClick={() => history.push(ROUTE_INDEX)} />
+            <KaddexLightModeLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
           )}
         </LeftContainer>
 
-        {width >= layoutConfiguration.minimumWidth && height >= layoutConfiguration.minimumHeight && <GameEditionModeButton />}
+        {width >= resolutionConfiguration?.width && height >= resolutionConfiguration?.height && <GameEditionModeButton />}
 
         <RightContainer>
           <RightHeaderItems />

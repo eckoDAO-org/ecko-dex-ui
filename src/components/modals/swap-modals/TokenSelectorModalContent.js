@@ -3,7 +3,7 @@ import styled from 'styled-components/macro';
 import Search from '../../../components/shared/Search';
 import { SwapContext } from '../../../contexts/SwapContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import { LightModeContext } from '../../../contexts/LightModeContext';
+import { ApplicationContext } from '../../../contexts/ApplicationContext';
 import Label from '../../shared/Label';
 import { PartialScrollableScrollSection } from '../../layout/Containers';
 import useWindowSize from '../../../hooks/useWindowSize';
@@ -52,7 +52,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
   const [searchValue, setSearchValue] = useState('');
   const swap = useContext(SwapContext);
   const { gameEditionView, showTokens, setOutsideToken, setShowTokens, onCloseTokensList } = useContext(GameEditionContext);
-  const { themeMode } = useContext(LightModeContext);
+  const { themeMode } = useContext(ApplicationContext);
 
   const [width] = useWindowSize();
   const cryptoCurrencies = Object.values(swap.tokenData).filter((c) => {

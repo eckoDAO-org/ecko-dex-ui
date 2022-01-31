@@ -12,7 +12,7 @@ import ConnectWalletModal from '../../components/modals/kdaModals/ConnectWalletM
 import { ModalContext } from '../../contexts/ModalContext';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import GradientBorder from '../../components/shared/GradientBorder';
-import { LightModeContext } from '../../contexts/LightModeContext';
+import { ApplicationContext } from '../../contexts/ApplicationContext';
 import FormContainer from '../../components/shared/FormContainer';
 import browserDetection from '../../utils/browserDetection';
 import useWindowSize from '../../hooks/useWindowSize';
@@ -55,7 +55,7 @@ const LiquidityList = (props) => {
   const liquidity = useContext(LiquidityContext);
   const { account } = useContext(AccountContext);
   const { gameEditionView, setShowWires, setButtons, openModal } = useContext(GameEditionContext);
-  const { themeMode } = useContext(LightModeContext);
+  const { themeMode } = useContext(ApplicationContext);
   const [activeIndex, setActiveIndex] = useState(null);
   const [accordionHeight, setAccordionHeight] = useState(null);
 

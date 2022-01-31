@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { Icon, Popup } from 'semantic-ui-react';
 import { useGameEditionContext } from '../../contexts';
-import { LightModeContext } from '../../contexts/LightModeContext';
+import { ApplicationContext } from '../../contexts/ApplicationContext';
 import { theme } from '../../styles/theme';
 import CustomPopup from './CustomPopup';
 import Label from './Label';
 
 const CopyPopup = ({ textToCopy, title, containerStyle }) => {
-  const { themeMode } = useContext(LightModeContext);
+  const { themeMode } = useContext(ApplicationContext);
   const { gameEditionView } = useGameEditionContext();
   return (
     <CustomPopup

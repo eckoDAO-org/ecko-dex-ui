@@ -2,7 +2,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components/macro';
 import { GameModeIcon } from '../../../assets';
-import { useGameEditionContext } from '../../../contexts';
+import { useApplicationContext, useGameEditionContext } from '../../../contexts';
 import useWindowSize from '../../../hooks/useWindowSize';
 import { commonTheme } from '../../../styles/theme';
 
@@ -17,10 +17,12 @@ const Button = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
 
   color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.white : colors.primary)};
 
-  @media (min-width: ${({ theme: { mediaQueries }, layoutConfiguration }) => `${mediaQueries.desktopPixel * layoutConfiguration.scale}px`}) {
+  @media (min-width: ${({ theme: { mediaQueries }, resolutionConfiguration }) =>
+      `${mediaQueries.desktopPixel * resolutionConfiguration['game-mode'].scale}px`}) {
     svg {
       path {
         fill: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.white : colors.primary)};
@@ -38,7 +40,8 @@ const Button = styled.div`
       `}
   }
 
-  @media (max-width: ${({ theme: { mediaQueries }, layoutConfiguration }) => `${mediaQueries.desktopPixel * layoutConfiguration.scale - 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries }, resolutionConfiguration }) =>
+      `${mediaQueries.desktopPixel * resolutionConfiguration['game-mode'].scale - 1}px`}) {
     svg {
       path {
         fill: ${({ themeMode, theme: { colors } }) => (themeMode === 'light' ? colors.primary : colors.white)};
@@ -48,16 +51,17 @@ const Button = styled.div`
 `;
 
 const GameEditionModeButton = () => {
-  const { gameEditionView, closeModal, setGameEditionView, showWires, layoutConfiguration } = useGameEditionContext();
+  const { gameEditionView, closeModal, setGameEditionView, showWires } = useGameEditionContext();
+  const { resolutionConfiguration } = useApplicationContext();
   const [width, height] = useWindowSize();
 
   return !showWires ? (
     <Button
-      layoutConfiguration={layoutConfiguration}
+      resolutionConfiguration={resolutionConfiguration}
       gameEditionView={gameEditionView}
       onClick={() => {
-        if (width >= layoutConfiguration.minimumWidth && height >= layoutConfiguration.minimumHeight) {
-          setGameEditionView(!gameEditionView);
+        if (width >= resolutionConfiguration.width && height >= resolutionConfiguration.height) {
+          setGameEditionView((prev) => !prev);
           closeModal();
         }
       }}

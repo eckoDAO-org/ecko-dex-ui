@@ -3,8 +3,6 @@ import styled from 'styled-components/macro';
 import HeaderItem from '../../../components/shared/HeaderItem';
 import AccountInfo from './AccountInfo';
 import Button from '../../../components/shared/CustomButton';
-import CustomPopup from '../../../components/shared/CustomPopup';
-import { CogIcon, ThreeDotsIcon } from '../../../assets';
 import headerLinks from '../../headerLinks';
 import PopupContentList from './PopupContentList';
 import { AccountContext } from '../../../contexts/AccountContext';
@@ -20,6 +18,7 @@ import AccountModal from '../../modals/kdaModals/AccountModal';
 import { NotificationModalContext } from '../../../contexts/NotificationModalContext';
 import useWindowSize from '../../../hooks/useWindowSize';
 import { commonTheme } from '../../../styles/theme';
+import { ThreeDotsIcon } from '../../../assets';
 
 const RightContainerHeader = styled.div`
   display: flex;
@@ -107,9 +106,7 @@ const RightHeaderItems = () => {
 
       {gameEditionView && (
         <HeaderItem headerItemStyle={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '4px' }}>
-          <CustomPopup containerStyle={{ padding: 32 }} trigger={<CogIcon />} on="click" offset={[30, 10]} position="bottom right">
-            <SlippagePopupContent />
-          </CustomPopup>
+          <SlippagePopupContent className="header-item" />
         </HeaderItem>
       )}
 
@@ -134,21 +131,8 @@ const RightHeaderItems = () => {
         />
       </HeaderItem>
 
-      <HeaderItem headerItemStyle={{ height: '100%', display: 'flex' }}>
-        <CustomPopup
-          containerStyle={{ padding: 32 }}
-          basic
-          trigger={
-            <div style={{ height: '100%', display: 'flex' }}>
-              <ThreeDotsIcon style={{ height: '100%' }} />
-            </div>
-          }
-          on="click"
-          offset={[14, -14]}
-          position="bottom right"
-        >
-          <PopupContentList items={headerLinks} viewOtherComponents withLogout PopupContentListStyle={{ minWidth: 100 }} />
-        </CustomPopup>
+      <HeaderItem headerItemStyle={{ height: '100%', display: 'flex', zIndex: 30 }}>
+        <PopupContentList icon={<ThreeDotsIcon />} items={headerLinks} viewOtherComponents withLogout PopupContentListStyle={{ minWidth: 100 }} />
       </HeaderItem>
     </RightContainerHeader>
   );

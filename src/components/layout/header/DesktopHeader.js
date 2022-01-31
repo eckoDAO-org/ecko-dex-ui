@@ -6,8 +6,8 @@ import { ROUTE_INDEX } from '../../../router/routes';
 import menuItems from '../../menuItems';
 import RightHeaderItems from './RightHeaderItems';
 import HeaderItem from '../../../components/shared/HeaderItem';
-import { LightModeContext } from '../../../contexts/LightModeContext';
-import { useGameEditionContext } from '../../../contexts';
+import { ApplicationContext } from '../../../contexts/ApplicationContext';
+import { useApplicationContext, useGameEditionContext } from '../../../contexts';
 import GameEditionModeButton from './GameEditionModeButton';
 import useWindowSize from '../../../hooks/useWindowSize';
 
@@ -19,6 +19,7 @@ const Container = styled.div`
   min-height: ${({ theme: { header } }) => `${header.height}px`};
   padding: 0 48px;
   padding-top: 16px;
+  zoom: ${({ resolutionConfiguration }) => resolutionConfiguration && resolutionConfiguration['normal-mode'].scale};
 `;
 
 const LeftContainer = styled.div`
@@ -55,18 +56,18 @@ const AnimatedDiv = styled.div`
 const DesktopHeader = ({ className }) => {
   const history = useHistory();
   const [buttonHover, setButtonHover] = useState(null);
-  const { gameEditionView, layoutConfiguration } = useGameEditionContext();
+  const { gameEditionView } = useGameEditionContext();
+  const { resolutionConfiguration } = useApplicationContext();
 
   const [width, height] = useWindowSize();
-  const { themeMode } = useContext(LightModeContext);
-
+  const { themeMode } = useContext(ApplicationContext);
   return (
-    <Container className={className}>
+    <Container className={className} resolutionConfiguration={resolutionConfiguration}>
       <LeftContainer>
         {themeMode === 'dark' ? (
-          <KaddexLogoWhite style={{ cursor: 'pointer' }} onClick={() => history.push(ROUTE_INDEX)} />
+          <KaddexLogoWhite style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
         ) : (
-          <KaddexLightModeLogo style={{ cursor: 'pointer' }} onClick={() => history.push(ROUTE_INDEX)} />
+          <KaddexLightModeLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
         )}
 
         <AnimatedDiv className={gameEditionView ? 'fadeOut' : 'fadeIn'}>
@@ -86,7 +87,7 @@ const DesktopHeader = ({ className }) => {
         </AnimatedDiv>
       </LeftContainer>
 
-      {width >= layoutConfiguration.minimumWidth && height >= layoutConfiguration.minimumHeight && <GameEditionModeButton />}
+      {width >= resolutionConfiguration?.width && height >= resolutionConfiguration?.height && <GameEditionModeButton />}
 
       <RightContainer>
         <RightHeaderItems />

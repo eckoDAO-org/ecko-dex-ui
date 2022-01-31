@@ -9,6 +9,7 @@ const Item = styled(NavLink)`
   text-decoration: none;
   text-transform: capitalize;
   background: transparent;
+  z-index: 1;
 
   svg {
     path {
@@ -76,7 +77,15 @@ const HeaderItem = ({
       className={className}
       exact
       to={getTo()}
-      onClick={() => (link ? window.open(link, '_blank', 'noopener,noreferrer') : onClick)}
+      onClick={() => {
+        if (link) {
+          window.open(link, '_blank', 'noopener,noreferrer');
+        } else {
+          if (onClick) {
+            onClick();
+          }
+        }
+      }}
       style={headerItemStyle}
       onMouseOver={onMouseOver}
       onMouseLeave={onMouseLeave}

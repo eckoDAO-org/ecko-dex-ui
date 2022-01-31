@@ -14,7 +14,7 @@ export { ReactComponent as LogoZelcoreIcon } from './logo-zelcore.svg';
 export { ReactComponent as WireConnectionLightIcon } from './wire-connection-light.svg';
 export { ReactComponent as WireConnectionDarkIcon } from './wire-connection-dark.svg';
 export { ReactComponent as ObliqueStrokeIcon } from './oblique-stroke.svg';
-export { ReactComponent as PixeledCircleArrowIcon } from './input-circle-ge.svg';
+export { ReactComponent as PixeledCircleArrowIcon } from './pixeled-circle-arrow.svg';
 export { ReactComponent as PixeledArrowDownIcon } from './pixeled-arrow-down.svg';
 export { ReactComponent as PixeledTokenSelectorBlueIcon } from './pixeled-token-selector-blue.svg';
 export { ReactComponent as PixeledTokenSelectorWhiteIcon } from './pixeled-token-selector-white.svg';

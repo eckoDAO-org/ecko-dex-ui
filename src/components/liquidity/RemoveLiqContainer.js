@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useContext } from 'react';
 import styled, { css } from 'styled-components/macro';
-import { LightModeContext } from '../../contexts/LightModeContext';
+import { ApplicationContext } from '../../contexts/ApplicationContext';
 import { ModalContext } from '../../contexts/ModalContext';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { WalletContext } from '../../contexts/WalletContext';
-import TxView from '../../components/modals/swap-modals/TxView';
-import WalletRequestView from '../../components/modals/swap-modals/WalletRequestView';
+import TxView from '../../components/modals/TxView';
+import WalletRequestView from '../../components/modals/WalletRequestView';
 import CustomButton from '../../components/shared/CustomButton';
 import FormContainer from '../../components/shared/FormContainer';
 import Input from '../../components/shared/Input';
@@ -94,7 +94,7 @@ const InnerRowContainer = styled.div`
 const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
   const wallet = useContext(WalletContext);
   const liquidity = useContext(LiquidityContext);
-  const { themeMode } = useContext(LightModeContext);
+  const { themeMode } = useContext(ApplicationContext);
   const modalContext = useContext(ModalContext);
   const { gameEditionView, openModal, closeModal, setButtons } = useContext(GameEditionContext);
   const { token0, token1, balance, pooledAmount } = pair;

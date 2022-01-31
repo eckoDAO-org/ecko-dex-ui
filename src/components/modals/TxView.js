@@ -1,15 +1,15 @@
 import React, { useContext, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
-import { useGameEditionContext } from '../../../contexts';
-import { ErrorIcon } from '../../../assets';
-import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import { SwapContext } from '../../../contexts/SwapContext';
-import CustomButton from '../../../components/shared/CustomButton';
-import Label from '../../shared/Label';
-import { LIQUIDITY_VIEW } from '../../../constants/liquidityView';
-import { SuccessAddRemoveView, SuccessAddRemoveViewGE } from '../../modals/liquidity/LiquidityTxView';
-import { SwapSuccessView, SwapSuccessViewGE } from './SwapSuccesTxView';
-import { commonColors } from '../../../styles/theme';
+import { useGameEditionContext } from '../../contexts';
+import { ErrorIcon } from '../../assets';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { SwapContext } from '../../contexts/SwapContext';
+import CustomButton from '../shared/CustomButton';
+import Label from '../shared/Label';
+import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
+import { SuccessAddRemoveView, SuccessAddRemoveViewGE } from './liquidity/LiquidityTxView';
+import { SwapSuccessView, SwapSuccessViewGE } from './swap-modals/SwapSuccesTxView';
+import { commonColors } from '../../styles/theme';
 
 const Content = styled.div`
   display: flex;

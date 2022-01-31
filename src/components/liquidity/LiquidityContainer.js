@@ -7,26 +7,23 @@ import { AccountContext } from '../../contexts/AccountContext';
 import { WalletContext } from '../../contexts/WalletContext';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { PactContext } from '../../contexts/PactContext';
-import { LightModeContext } from '../../contexts/LightModeContext';
+import { ApplicationContext } from '../../contexts/ApplicationContext';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { reduceBalance, getCorrectBalance } from '../../utils/reduceBalance';
-import WalletRequestView from '../../components/modals/swap-modals/WalletRequestView';
-import { ArrowBack, CogIcon } from '../../assets';
+import WalletRequestView from '../../components/modals/WalletRequestView';
+import { ArrowBack } from '../../assets';
 import Label from '../../components/shared/Label';
 import CustomButton from '../../components/shared/CustomButton';
 import ReviewTxModal from '../../components/modals/liquidity/ReviewTxModal';
-import TxView from '../../components/modals/swap-modals/TxView';
+import TxView from '../../components/modals/TxView';
 import tokenData from '../../constants/cryptoCurrencies';
 import SwapForm from '../../components/swap/SwapForm';
 import TokenSelectorModalContent from '../../components/modals/swap-modals/TokenSelectorModalContent';
 import TokenSelectorModalContentGE from '../../components/modals/swap-modals/TokenSelectorModalContentGE';
 import FormContainer from '../../components/shared/FormContainer';
 import GradientBorder from '../../components/shared/GradientBorder';
-import HeaderItem from '../../components/shared/HeaderItem';
-import CustomPopup from '../../components/shared/CustomPopup';
 import SlippagePopupContent from '../../components/layout/header/SlippagePopupContent';
 import BackgroundLogo from '../../components/shared/BackgroundLogo';
-import browserDetection from '../../utils/browserDetection';
 import { theme } from '../../styles/theme';
 import { InfoContainer } from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
@@ -66,7 +63,7 @@ const TitleContainer = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: ${browserDetection() === 'SAFARI' ? '0px' : '16px'};
+  margin-top: 16px;
   width: 100%;
 `;
 
@@ -116,7 +113,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
   const wallet = useContext(WalletContext);
   const liquidity = useContext(LiquidityContext);
   const modalContext = useContext(ModalContext);
-  const { themeMode } = useContext(LightModeContext);
+  const { themeMode } = useContext(ApplicationContext);
   const { gameEditionView, openModal, closeModal, setButtons, outsideToken } = useContext(GameEditionContext);
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
@@ -633,14 +630,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
           )}
           Add Liquidity
         </Label>
-        {/* {gameEditionView && <CloseGE style={{ cursor: 'pointer' }} onClick={() => props.closeLiquidity()} />} */}
-        {!gameEditionView && (
-          <HeaderItem headerItemStyle={{ alignItems: 'center', display: 'flex' }}>
-            <CustomPopup trigger={<CogIcon />} on="click" offset={[10, 10]} position="bottom right">
-              <SlippagePopupContent />
-            </CustomPopup>
-          </HeaderItem>
-        )}
+        {!gameEditionView && <SlippagePopupContent />}
       </TitleContainer>
       <FormContainer
         style={{ justifyContent: 'space-between' }}

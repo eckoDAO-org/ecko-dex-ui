@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import Wrapper from '../../components/shared/Wrapper';
 import DesktopHeader from './header/DesktopHeader';
 import MobileHeader from './header/MobileHeader';
@@ -12,8 +12,8 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 import browserDetection from '../../utils/browserDetection';
 import centerBackground from '../../assets/images/game-edition/center-background.png';
 import useWindowSize from '../../hooks/useWindowSize';
-import CacheBackgroundImages from '../game-edition-v2/components/CacheBackgroundImages';
 import TabletHeader from './header/TabletHeader';
+import { useApplicationContext } from '../../contexts';
 
 const MainContainer = styled.div`
   display: flex;
@@ -30,14 +30,45 @@ const WrapperContainer = styled(Wrapper)`
     font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
     color: ${({ theme: { colors } }) => colors.white};
     @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
-      padding-top: 10px;
+      padding-top: 20px;
     }
   }
 `;
 
 const MainContent = styled.div`
-  transform: scale(0.8);
-  height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
+  ${({ resolutionConfiguration }) => {
+    if (resolutionConfiguration) {
+      const browser = browserDetection();
+      switch (browser) {
+        case 'CHROME':
+          return css`
+            zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
+          `;
+        case 'FIREFOX':
+          return css`
+            & > :first-child {
+              -ms-zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
+              -webkit-zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
+              -moz-transform: ${({ resolutionConfiguration }) => `scale(${resolutionConfiguration['normal-mode'].scale})`};
+              -moz-transform-origin: center;
+            }
+          `;
+        default:
+          return css`
+            transform: ${({ resolutionConfiguration }) => `scale(${resolutionConfiguration['normal-mode'].scale})`};
+          `;
+      }
+    }
+  }}
+
+  height: 100%;
+  ${() => {
+    if (browserDetection() === 'FIREFOX') {
+      return css`
+        height: 99%;
+      `;
+    }
+  }}
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
     padding: 0 16px;
     height: ${({ theme: { header } }) => `calc(100% - ${header.mobileHeight}px)`};
@@ -61,39 +92,36 @@ const StripesContainer = styled.div`
 
 const Layout = ({ children }) => {
   const history = useHistory();
-  const { gameEditionView, layoutConfiguration } = useContext(GameEditionContext);
+  const [width, height] = useWindowSize();
+  const { gameEditionView } = useContext(GameEditionContext);
+  const { resolutionConfiguration } = useApplicationContext();
 
   useEffect(() => {
     gameEditionView ? history.push(ROUTE_GAME_START_ANIMATION) : history.push(ROUTE_SWAP);
   }, [gameEditionView]);
 
-  const [width, height] = useWindowSize();
-
   return (
-    layoutConfiguration && (
-      <MainContainer>
-        <CacheBackgroundImages />
-        <WrapperContainer>
-          <div>
-            <MobileHeader className="mobile-only" />
-            <TabletHeader className="desktop-none mobile-none" />
+    <MainContainer>
+      <WrapperContainer>
+        <div>
+          <MobileHeader className="mobile-only" />
+          <TabletHeader className="desktop-none mobile-none" />
 
-            <DesktopHeader className="desktop-only" gameEditionView={gameEditionView} />
-          </div>
-          {gameEditionView && width >= layoutConfiguration.minimumWidth && height >= layoutConfiguration.minimumHeight ? (
-            <>
-              <img src={centerBackground} style={{ position: 'absolute', width: '100%', top: 0, zIndex: -1 }} alt="" />
-              <GameEditionContainer>{children}</GameEditionContainer>
-            </>
-          ) : (
-            <MainContent>{children}</MainContent>
-          )}
-        </WrapperContainer>
-        <StripesContainer>
-          <Stripes />
-        </StripesContainer>
-      </MainContainer>
-    )
+          <DesktopHeader className="desktop-only" gameEditionView={gameEditionView} />
+        </div>
+        {gameEditionView && resolutionConfiguration && width >= resolutionConfiguration.width && height >= resolutionConfiguration.height ? (
+          <>
+            <img src={centerBackground} style={{ position: 'absolute', width: '100%', top: 0, zIndex: -1 }} alt="" />
+            <GameEditionContainer>{children}</GameEditionContainer>
+          </>
+        ) : (
+          <MainContent resolutionConfiguration={resolutionConfiguration}>{children}</MainContent>
+        )}
+      </WrapperContainer>
+      <StripesContainer>
+        <Stripes />
+      </StripesContainer>
+    </MainContainer>
   );
 };
 

@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components/macro';
-import LiquidityContainer from './liquidity/LiquidityContainer';
-import LiquidityList from './liquidity/LiquidityList';
-import RemoveLiqContainer from './liquidity/RemoveLiqContainer';
+import LiquidityContainer from '../components/liquidity/LiquidityContainer';
+import LiquidityList from '../components/liquidity/LiquidityList';
+import RemoveLiqContainer from '../components/liquidity/RemoveLiqContainer';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
 import { useGameEditionContext } from '../contexts';
 import useButtonScrollEvent from '../hooks/useButtonScrollEvent';
 import { LIQUIDITY_VIEW } from '../constants/liquidityView';
+import { FadeIn } from '../components/shared/animations';
 
-const Container = styled.div`
+const Container = styled(FadeIn)`
   display: flex;
   width: 100%;
 

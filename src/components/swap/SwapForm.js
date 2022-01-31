@@ -32,6 +32,15 @@ const Container = styled.div`
       `;
     }
   }}
+
+  .pixeled-circle-arrow {
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    top: 37%;
+    left: 48%;
+    cursor: pointer;
+  }
 `;
 const FirstInputContainer = styled.div`
   width: 100%;
@@ -115,9 +124,11 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
       </div>
       {gameEditionView ? (
         <PixeledCircleArrowIcon
-          style={{ width: 40, position: 'absolute', top: '47%', left: '50%', transform: 'translate(-47%, -41%)' }}
+          className="pixeled-circle-arrow"
+          style={{ transform: `rotate(${rotation}deg)`, transition: 'width 0.3s, transform 0.3s' }}
           onClick={() => {
             swapValues();
+            setRotation((prev) => prev - 180);
           }}
         />
       ) : (

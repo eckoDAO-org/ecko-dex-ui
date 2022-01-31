@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, createContext, useEffect, useCallback } from 'react';
-import { useAccountContext, useWalletContext, useNotificationContext } from '.';
+import { useAccountContext, useWalletContext, useNotificationContext, useGameEditionContext } from '.';
 import { network, NETWORKID, chainId } from '../constants/contextConstants';
 import { WALLET } from '../constants/wallet';
 
@@ -19,6 +19,7 @@ export const KaddexWalletProvider = (props) => {
   const { setVerifiedAccount, logout, account } = useAccountContext();
   const { wallet, setSelectedWallet, signingWallet } = useWalletContext();
   const { showNotification, STATUSES } = useNotificationContext();
+  const { onWireSelect } = useGameEditionContext();
 
   const initialize = useCallback(() => {
     const { kadena } = window;
@@ -132,7 +133,7 @@ export const KaddexWalletProvider = (props) => {
   const checkCorrectChain = async () => {
     const selectedChainId = await getSelectedChain();
 
-    if (selectedChainId !== Number(chainId)) {
+    if (selectedChainId?.toString() !== chainId?.toString()) {
       showChainError(selectedChainId);
     }
   };
@@ -154,10 +155,11 @@ export const KaddexWalletProvider = (props) => {
           if (response?.result?.status === 'fail' && response?.result?.message === 'Invalid network') {
             showNetworkError();
           } else {
-            if (selectedChainId !== Number(chainId)) {
+            if (selectedChainId?.toString() !== chainId?.toString()) {
               showChainError(selectedChainId);
             } else if (!kaddexWalletState.isConnected && acc.status === 'fail') {
               connectWallet();
+              onWireSelect(null);
             }
           }
         });
@@ -192,15 +194,12 @@ export const KaddexWalletProvider = (props) => {
     });
   };
 
-  const initializeKaddexWallet = async (clb) => {
+  const initializeKaddexWallet = async () => {
     const networkInfo = await getNetworkInfo();
     if (networkInfo.networkId !== NETWORKID) {
       showNetworkError();
     } else {
       await connectWallet();
-      if (clb) {
-        await clb();
-      }
     }
   };
 

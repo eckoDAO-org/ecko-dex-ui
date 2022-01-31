@@ -3,7 +3,7 @@ import React, { useContext, useEffect } from 'react';
 import { Divider } from 'semantic-ui-react';
 import styled, { css } from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
-import { LightModeContext } from '../../contexts/LightModeContext';
+import { ApplicationContext } from '../../contexts/ApplicationContext';
 import { PactContext } from '../../contexts/PactContext';
 import GradientBorder from '../../components/shared/GradientBorder';
 import LogoLoader from '../../components/shared/LogoLoader';
@@ -50,7 +50,7 @@ export const CardContainer = styled.div`
 const StatsTab = ({ activeTabs, setActiveTabs }) => {
   const pact = useContext(PactContext);
   const { gameEditionView } = useContext(GameEditionContext);
-  const { themeMode } = useContext(LightModeContext);
+  const { themeMode } = useContext(ApplicationContext);
 
   useEffect(async () => {
     await pact.getPairList();

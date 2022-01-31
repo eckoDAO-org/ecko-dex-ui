@@ -53,9 +53,9 @@ const RowMenuContainer = styled.div`
 const GameEditionMenuContainer = () => {
   const history = useHistory();
   const [arrowVisible, setArrowVisible] = useState(SWAP.label);
+  const { gameEditionView } = useGameEditionContext();
 
   const { setButtons } = useGameEditionContext();
-
   useEffect(() => {
     let route = '';
     switch (arrowVisible) {
@@ -78,17 +78,20 @@ const GameEditionMenuContainer = () => {
     setButtons({
       B: () => history.push(route),
       Up: () => {
+        console.log('here');
         const selectedIndex = menuItems.findIndex((i) => i.label === arrowVisible);
         setArrowVisible(menuItems[selectedIndex - 1 < 0 ? menuItems.length - 1 : (selectedIndex - 1) % menuItems.length].label);
       },
       Down: () => {
+        console.log('here1');
         const selectedIndex = menuItems.findIndex((i) => i.label === arrowVisible);
         setArrowVisible(menuItems[(selectedIndex + 1) % menuItems.length].label);
       },
     });
   }, [arrowVisible]);
 
-  return (
+  // check to not render this component when exit from game edition
+  return gameEditionView ? (
     <Container style={{ backgroundImage: `url(${menuBackground})` }}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <GameEditionLabel fontSize={52} fontWeight={400} style={{ marginBottom: 30 }}>
@@ -140,6 +143,8 @@ const GameEditionMenuContainer = () => {
         ))}
       </RowMenuContainer>
     </Container>
+  ) : (
+    <></>
   );
 };
 

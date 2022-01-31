@@ -3,8 +3,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { throttle, debounce } from 'throttle-debounce';
 import { FadeIn } from '../components/shared/animations';
-import TxView from '../components/modals/swap-modals/TxView';
-import WalletRequestView from '../components/modals/swap-modals/WalletRequestView';
+import TxView from '../components/modals/TxView';
+import WalletRequestView from '../components/modals/WalletRequestView';
 import SwapButtonsForm from '../components/swap/SwapButtonsForm';
 import SwapForm from '../components/swap/SwapForm';
 import SwapResults from '../components/swap/SwapResults';
@@ -19,9 +19,6 @@ import { WalletContext } from '../contexts/WalletContext';
 import { getCorrectBalance, reduceBalance } from '../utils/reduceBalance';
 import TokenSelectorModalContent from '../components/modals/swap-modals/TokenSelectorModalContent';
 import TokenSelectorModalContentGE from '../components/modals/swap-modals/TokenSelectorModalContentGE';
-import HeaderItem from '../components/shared/HeaderItem';
-import CustomPopup from '../components/shared/CustomPopup';
-import { CogIcon } from '../assets';
 import SlippagePopupContent from '../components/layout/header/SlippagePopupContent';
 import FormContainer from '../components/shared/FormContainer';
 import GradientBorder from '../components/shared/GradientBorder';
@@ -509,13 +506,7 @@ const SwapContainer = () => {
         <Label fontSize={32} geCenter fontFamily="bold" geFontSize={52} geLabelStyle={{ lineHeight: '32px' }}>
           Swap
         </Label>
-        {!gameEditionView && (
-          <HeaderItem headerItemStyle={{ alignItems: 'center', display: 'flex' }}>
-            <CustomPopup trigger={<CogIcon />} on="click" offset={[0, 0]} position="bottom right">
-              <SlippagePopupContent />
-            </CustomPopup>
-          </HeaderItem>
-        )}
+        {!gameEditionView && <SlippagePopupContent />}
       </SwapTitleContainer>
       <FormContainer
         gameEditionView={gameEditionView}

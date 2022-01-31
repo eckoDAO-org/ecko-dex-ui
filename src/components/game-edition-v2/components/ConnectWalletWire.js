@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
 import { useLocation } from 'react-router-dom';
 import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../../contexts/GameEditionContext';
-import { useLightModeContext } from '../../../contexts';
+import { useApplicationContext } from '../../../contexts';
 import { ROUTE_GAME_START_ANIMATION } from '../../../router/routes';
 import { FadeIn } from '../../shared/animations';
 import { ConnectWalletIcon, WireConnectionLightIcon, WireConnectionDarkIcon } from '../../../assets';
@@ -29,7 +29,7 @@ const ConnectWalletContainer = styled.div`
 
 const ConnectWalletWire = ({ onClick }) => {
   const location = useLocation();
-  const { themeMode } = useLightModeContext();
+  const { themeMode } = useApplicationContext();
   const { showWires, selectedWire } = useContext(GameEditionContext);
 
   return (

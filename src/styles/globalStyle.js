@@ -1,5 +1,6 @@
 import { createGlobalStyle, css } from 'styled-components/macro';
 import appBackground from '../assets/images/shared/app-background.png';
+import browserDetection from '../utils/browserDetection';
 
 export default createGlobalStyle`
     *, *:before, *:after {
@@ -29,14 +30,20 @@ export default createGlobalStyle`
       min-width: 0;
       font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
       color: ${({ theme: { colors } }) => colors.primary};
-      ${({ themeMode, theme: { backgroundBody, backgroundBodySafari } }) => {
-        return themeMode === 'light'
-          ? css`
-              background: ${backgroundBody};
-            `
-          : css`
-              background-image: url(${appBackground});
-            `;
+      ${({ themeMode }) => {
+        if (browserDetection() === 'SAFARI') {
+          return css`
+            background: ${({ theme: { backgroundBodySafari } }) => backgroundBodySafari};
+          `;
+        } else {
+          return themeMode === 'light'
+            ? css`
+                background: ${({ theme: { backgroundBody } }) => backgroundBody};
+              `
+            : css`
+                background-image: url(${appBackground});
+              `;
+        }
       }};
       
       opacity: 1;

@@ -5,14 +5,14 @@ import { extractDecimal, reduceBalance } from '../../../utils/reduceBalance';
 import reduceToken from '../../../utils/reduceToken';
 import { getTokenIcon, showTicker } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
-import { Row, SuccessViewContainerGE, SuccesViewContainer } from './common-result-components';
+import { Row, SuccessViewContainerGE, SuccesViewContainer } from '../common-result-components';
 import { ChainIcon } from '../../../assets';
 import { ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
 import { Divider, Icon } from 'semantic-ui-react';
-import PopupTxView from './PopupTxView';
+import PopupTxView from '../PopupTxView';
 import { theme } from '../../../styles/theme';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import { LightModeContext } from '../../../contexts/LightModeContext';
+import { ApplicationContext } from '../../../contexts/ApplicationContext';
 import Label from '../../shared/Label';
 
 export const SwapSuccessViewGE = ({ swap }) => {
@@ -91,7 +91,7 @@ export const SwapSuccessView = ({ swap, loading, sendTransaction }) => {
   const { account } = useContext(AccountContext);
   const pact = useContext(PactContext);
   const { gameEditionView } = useContext(GameEditionContext);
-  const { themeMode } = useContext(LightModeContext);
+  const { themeMode } = useContext(ApplicationContext);
 
   return (
     <SuccesViewContainer

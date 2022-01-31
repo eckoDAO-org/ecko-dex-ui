@@ -74,27 +74,21 @@ const StatsCard = ({ pair }) => {
       <IconsContainer style={{ marginRight: '16px' }}>
         {tokenData[pair.token0].icon}
         {tokenData[pair.token1].icon}
-        <Label fontSize={13} fontFamily="bold">{`${pair.token0}-${pair.token1}`}</Label>
+        <Label fontFamily="bold">{`${pair.token0}-${pair.token1}`}</Label>
       </IconsContainer>
       {/* TR TOKEN 0 */}
       <ColumnContainer style={{ marginRight: '16px' }}>
-        <Label fontSize={13} withShade>
-          Total Reserve - Token0
-        </Label>
+        <Label withShade>Total Reserve - Token0</Label>
         <Label>{reduceBalance(pair.reserves[0])}0</Label>
       </ColumnContainer>
       {/* TR TOKEN 1 */}
       <ColumnContainer style={{ marginRight: '16px' }}>
-        <Label fontSize={13} withShade>
-          Total Reserve - Token1
-        </Label>
+        <Label withShade>Total Reserve - Token1</Label>
         <Label>{reduceBalance(pair.reserves[1])}0</Label>
       </ColumnContainer>
       {/* RATE */}
       <ColumnContainer style={{ marginRight: '16px' }}>
-        <Label fontSize={13} withShade>
-          Rate
-        </Label>
+        <Label withShade>Rate</Label>
         <Label>{`${reduceBalance(extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1]))} ${pair.token0}/${pair.token1}`}</Label>
       </ColumnContainer>
     </StatsCardContainer>

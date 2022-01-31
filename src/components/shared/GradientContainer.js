@@ -1,13 +1,13 @@
 import React from 'react';
 import styled, { css } from 'styled-components/macro';
-import { useLightModeContext } from '../../contexts';
+import { useApplicationContext } from '../../contexts';
 
 const STYContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
   padding: ${({ padding = 16 }) => padding}px;
-  background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
+  background: ${({ theme: { backgroundContainer }, backgroundColor }) => backgroundColor || backgroundContainer};
   border-radius: 10px;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     padding: 16px;
@@ -43,10 +43,10 @@ export const STYGradientBorder = styled.div`
   z-index: -10;
 `;
 
-const GradientContainer = ({ className, children, padding, gap, style, hideGradient }) => {
-  const { themeMode } = useLightModeContext();
+const GradientContainer = ({ className, children, padding, gap, style, hideGradient, backgroundColor }) => {
+  const { themeMode } = useApplicationContext();
   return (
-    <STYContainer className={className} padding={padding} gap={gap} style={style} themeMode={themeMode}>
+    <STYContainer className={className} padding={padding} gap={gap} style={style} themeMode={themeMode} backgroundColor={backgroundColor}>
       {!hideGradient && <STYGradientBorder />}
       {children}
     </STYContainer>

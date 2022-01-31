@@ -3,7 +3,7 @@ import { Divider } from 'semantic-ui-react';
 import styled, { css } from 'styled-components/macro';
 import InfiniteScroll from 'react-infinite-scroller';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
-import { LightModeContext } from '../../contexts/LightModeContext';
+import { ApplicationContext } from '../../contexts/ApplicationContext';
 import { PactContext } from '../../contexts/PactContext';
 import { AccountContext } from '../../contexts/AccountContext';
 import GradientBorder from '../../components/shared/GradientBorder';
@@ -65,7 +65,7 @@ const HistoryTab = () => {
   const pact = useContext(PactContext);
   const account = useContext(AccountContext);
   const { gameEditionView } = useContext(GameEditionContext);
-  const { themeMode } = useContext(LightModeContext);
+  const { themeMode } = useContext(ApplicationContext);
 
   useEffect(() => {}, [account.sendRes]);
 

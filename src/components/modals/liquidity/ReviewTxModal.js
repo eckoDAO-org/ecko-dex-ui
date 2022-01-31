@@ -7,7 +7,7 @@ import { PactContext } from '../../../contexts/PactContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import tokenData from '../../../constants/cryptoCurrencies';
 import Label from '../../shared/Label';
-import { Row, SuccessViewContainerGE } from '../../modals/swap-modals/common-result-components';
+import { Row, SuccessViewContainerGE } from '../common-result-components';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import { useGameEditionContext } from '../../../contexts';
 
