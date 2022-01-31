@@ -15,13 +15,13 @@ import { GameEditionProvider } from './contexts/GameEditionContext';
 import { ApplicationContext } from './contexts/ApplicationContext';
 import { KaddexWalletProvider } from './contexts/KaddexWalletContext';
 import NotificationModalRender from './components/right-modal-notification/NotificationModalRender';
-import appBackground from './assets/images/shared/app-background.png';
+import centerBackground from './assets/images/game-edition/center-background.png';
 import useLazyImage from './hooks/useLazyImage';
 import LogoLoader from './components/shared/LogoLoader';
 
 function App() {
   const { themeMode } = useContext(ApplicationContext);
-  const [loaded] = useLazyImage([appBackground]);
+  const [loaded] = useLazyImage([centerBackground]);
   return (
     <ThemeProvider theme={theme(themeMode)}>
       {!loaded ? (

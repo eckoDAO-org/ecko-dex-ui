@@ -9,7 +9,7 @@ import noExponents from '../../utils/noExponents';
 import FirstInput from '../../assets/images/game-edition/pixeled-box-yellow.svg';
 import SecondInput from '../../assets/images/game-edition/pixeled-box-purple.svg';
 import { GeArrowIcon } from '../../assets';
-import { PixeledCircleArrowIcon } from '../../assets';
+import { PixeledCircleDoubleArrowIcon } from '../../assets';
 import Input from '../shared/Input';
 
 const Container = styled.div`
@@ -123,7 +123,7 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
         </FirstInputContainer>
       </div>
       {gameEditionView ? (
-        <PixeledCircleArrowIcon
+        <PixeledCircleDoubleArrowIcon
           className="pixeled-circle-arrow"
           style={{ transform: `rotate(${rotation}deg)`, transition: 'width 0.3s, transform 0.3s' }}
           onClick={() => {

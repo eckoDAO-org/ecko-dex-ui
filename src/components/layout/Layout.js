@@ -35,6 +35,22 @@ const WrapperContainer = styled(Wrapper)`
   }
 `;
 
+const CenterBackground = styled.img`
+  position: absolute;
+  width: 100%;
+  top: 0;
+  z-index: -1;
+  animation: fade-in 0.5s linear;
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+`;
+
 const MainContent = styled.div`
   ${({ resolutionConfiguration }) => {
     if (resolutionConfiguration) {
@@ -117,7 +133,7 @@ const Layout = ({ children }) => {
         </div>
         {gameEditionView && resolutionConfiguration && width >= resolutionConfiguration.width && height >= resolutionConfiguration.height ? (
           <>
-            <img src={centerBackground} style={{ position: 'absolute', width: '100%', top: 0, zIndex: -1 }} alt="" />
+            <CenterBackground src={centerBackground} alt="" />
             <GameEditionContainer>{children}</GameEditionContainer>
           </>
         ) : (

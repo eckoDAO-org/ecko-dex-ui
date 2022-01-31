@@ -1,5 +1,4 @@
 import { createGlobalStyle, css } from 'styled-components/macro';
-import appBackground from '../assets/images/shared/app-background.png';
 import browserDetection from '../utils/browserDetection';
 
 export default createGlobalStyle`
@@ -36,13 +35,9 @@ export default createGlobalStyle`
             background: ${({ theme: { backgroundBodySafari } }) => backgroundBodySafari};
           `;
         } else {
-          return themeMode === 'light'
-            ? css`
-                background: ${({ theme: { backgroundBody } }) => backgroundBody};
-              `
-            : css`
-                background-image: url(${appBackground});
-              `;
+          return css`
+            background: ${({ theme: { backgroundBody } }) => backgroundBody};
+          `;
         }
       }};
       

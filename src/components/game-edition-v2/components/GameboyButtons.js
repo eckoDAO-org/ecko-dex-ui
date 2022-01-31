@@ -15,6 +15,7 @@ import AButton from '../../../assets/images/game-edition/pressed-buttons/A-BTN.p
 import BButton from '../../../assets/images/game-edition/pressed-buttons/B-BTN.png';
 import GameEditionL1R1PageModal from '../GameEditionL1R1PageModal';
 import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from '../../../router/routes';
+import { useEffect } from 'react';
 
 const GameboyButtons = () => {
   const history = useHistory();
@@ -36,6 +37,7 @@ const GameboyButtons = () => {
     }
     return buttons[buttonKey] ? buttons[buttonKey]() : openGameEditionL1R1Page(buttonKey);
   };
+
   return (
     <>
       <PressedButton
@@ -76,7 +78,7 @@ export default GameboyButtons;
 
 const ButtonContainer = styled.div`
   position: absolute;
-  cursor: pointer;
+  cursor: ${({ showTokens }) => (showTokens ? 'default' : 'pointer')};
   display:flex;
 
 
@@ -174,17 +176,33 @@ export const PressedButton = ({ type, onClick }) => {
 
   const button = getButton();
   const [className, setClassName] = useState('not-pressed');
+  const { showTokens } = useGameEditionContext();
+
+  useEffect(() => {
+    if (showTokens) {
+      setTimeout(() => {
+        setClassName('not-pressed');
+      }, 100);
+    }
+  }, [showTokens]);
   return (
     <ButtonContainer
       className={className}
       style={{ ...(className === 'pressed' ? button.pressed : button.notPressed) }}
+      disabled={showTokens}
       onMouseDown={() => {
-        setClassName('pressed');
-        if (onClick) {
-          onClick();
+        if (!showTokens) {
+          setClassName('pressed');
+          if (onClick) {
+            onClick();
+          }
         }
       }}
-      onMouseUp={() => setClassName('not-pressed')}
+      onMouseUp={() => {
+        if (!showTokens) {
+          setClassName('not-pressed');
+        }
+      }}
     >
       <img className={className} src={button.img} style={{ ...button.imgSize }} alt="btn" />
     </ButtonContainer>

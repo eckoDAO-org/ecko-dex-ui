@@ -14,7 +14,6 @@ const Container = styled.div`
   height: ${({ $gameEditionView }) => $gameEditionView && `100%`};
   border-radius: ${({ $gameEditionView }) => !$gameEditionView && `10px`};
   border: ${({ $gameEditionView, withGameEditionBorder }) => $gameEditionView && withGameEditionBorder && `2px dashed #fff`};
-  z-index: 1;
   opacity: 1;
   background: ${({ $gameEditionView, theme: { backgroundContainer } }) => ($gameEditionView ? 'transparent' : backgroundContainer)};
   backdrop-filter: ${({ $gameEditionView }) => !$gameEditionView && `blur(50px)`};
