@@ -28,10 +28,9 @@ export default createGlobalStyle`
       line-height: inherit;
       overflow: auto;
       min-width: 0;
-      a;
       font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
       color: ${({ theme: { colors } }) => colors.primary};
-      ${({ themeMode, theme: { backgroundBody } }) => {
+      ${({ themeMode }) => {
         return themeMode === 'light'
           ? css`
               background: ${({ theme: { backgroundBody, backgroundBodySafari } }) =>
