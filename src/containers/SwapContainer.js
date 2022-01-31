@@ -19,7 +19,6 @@ import { WalletContext } from '../contexts/WalletContext';
 import { getCorrectBalance, reduceBalance } from '../utils/reduceBalance';
 import TokenSelectorModalContent from '../components/modals/swap-modals/TokenSelectorModalContent';
 import TokenSelectorModalContentGE from '../components/modals/swap-modals/TokenSelectorModalContentGE';
-import HeaderItem from '../components/shared/HeaderItem';
 import SlippagePopupContent from '../components/layout/header/SlippagePopupContent';
 import FormContainer from '../components/shared/FormContainer';
 import GradientBorder from '../components/shared/GradientBorder';

@@ -22,7 +22,6 @@ import TokenSelectorModalContent from '../../components/modals/swap-modals/Token
 import TokenSelectorModalContentGE from '../../components/modals/swap-modals/TokenSelectorModalContentGE';
 import FormContainer from '../../components/shared/FormContainer';
 import GradientBorder from '../../components/shared/GradientBorder';
-import HeaderItem from '../../components/shared/HeaderItem';
 import SlippagePopupContent from '../../components/layout/header/SlippagePopupContent';
 import BackgroundLogo from '../../components/shared/BackgroundLogo';
 import browserDetection from '../../utils/browserDetection';
