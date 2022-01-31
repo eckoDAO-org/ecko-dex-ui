@@ -100,11 +100,11 @@ const Layout = ({ children }) => {
     gameEditionView ? history.push(ROUTE_GAME_START_ANIMATION) : history.push(ROUTE_SWAP);
   }, [gameEditionView]);
 
-  useEffect(() => {
-    if (!resolutionConfiguration || (gameEditionView && (width < resolutionConfiguration.width || height < resolutionConfiguration.heigt))) {
-      setGameEditionView(false);
-    }
-  }, [gameEditionView, width, height, resolutionConfiguration]);
+  // useEffect(() => {
+  //   if (!resolutionConfiguration || (gameEditionView && (width < resolutionConfiguration.width || height < resolutionConfiguration.heigt))) {
+  //     setGameEditionView(false);
+  //   }
+  // }, [gameEditionView, width, height, resolutionConfiguration]);
   return (
     <MainContainer>
       <WrapperContainer>

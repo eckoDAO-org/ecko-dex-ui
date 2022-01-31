@@ -53,6 +53,12 @@ const RESOLUTIONS = {
   '1280x800': { width: 1280, height: 800, 'game-mode': { scale: 0.8, geTranslateY: 428, wiresTranslateY: 88 }, 'normal-mode': { scale: 0.8 } },
   '1280x768': { width: 1280, height: 768, 'game-mode': { scale: 0.8, geTranslateY: 420, wiresTranslateY: 88 }, 'normal-mode': { scale: 0.8 } },
   '1280x720': { width: 1280, height: 720, 'game-mode': { scale: 0.8, geTranslateY: 420, wiresTranslateY: 88 }, 'normal-mode': { scale: 0.8 } },
+  /*not standard*/ '1280x660': {
+    width: 1280,
+    height: 660,
+    'game-mode': { scale: 0.8, geTranslateY: 428, wiresTranslateY: 76 },
+    'normal-mode': { scale: 0.8 },
+  },
   /*not standard*/ '1280x620': {
     width: 1280,
     height: 620,
