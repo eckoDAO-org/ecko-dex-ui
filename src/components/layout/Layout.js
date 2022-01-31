@@ -25,7 +25,7 @@ const WrapperContainer = styled(Wrapper)`
   height: 100%;
 
   .mainnet-chain-2 {
-    font-size: 13px;
+    font-size: 14px;
     text-align: center;
     font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
     color: ${({ theme: { colors } }) => colors.white};
@@ -77,7 +77,7 @@ const MainContent = styled.div`
     }
   }}
 
-  height: 100%;
+  height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
   ${() => {
     if (browserDetection() === 'FIREFOX') {
       return css`
@@ -92,6 +92,7 @@ const MainContent = styled.div`
     ::-webkit-scrollbar {
       display: none;
     }
+
     scrollbar-width: none;
   }
 `;
