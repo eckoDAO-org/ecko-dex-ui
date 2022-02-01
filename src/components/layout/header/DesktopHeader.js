@@ -19,7 +19,8 @@ const Container = styled.div`
   min-height: ${({ theme: { header } }) => `${header.height}px`};
   padding: 0 48px;
   padding-top: 16px;
-  zoom: ${({ resolutionConfiguration }) => resolutionConfiguration && resolutionConfiguration['normal-mode'].scale};
+  zoom: ${({ resolutionConfiguration }) =>
+    resolutionConfiguration && resolutionConfiguration['normal-mode'].scale > 1 ? resolutionConfiguration['normal-mode'].scale : 1};
 `;
 
 const LeftContainer = styled.div`

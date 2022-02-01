@@ -131,7 +131,7 @@ const RightHeaderItems = () => {
         />
       </HeaderItem>
 
-      <HeaderItem headerItemStyle={{ height: '100%', display: 'flex', zIndex: 30 }}>
+      <HeaderItem headerItemStyle={{ height: '100%', display: 'flex', zIndex: 5 }}>
         <PopupContentList icon={<ThreeDotsIcon />} items={headerLinks} viewOtherComponents withLogout PopupContentListStyle={{ minWidth: 100 }} />
       </HeaderItem>
     </RightContainerHeader>

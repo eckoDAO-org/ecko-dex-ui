@@ -138,6 +138,16 @@ const WiresContainer = styled.div`
   opacity: ${({ showTokens }) => (showTokens ? 0.5 : 1)};
 `;
 
+const LoaderContainer = styled.div`
+  height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
+    height: ${({ theme: { header } }) => `calc(100% - ${header.mobileHeight}px)`};
+  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const GameEditionContainer = ({ children }) => {
   const location = useLocation();
   const { showNotification } = useNotificationContext();
@@ -258,7 +268,9 @@ const GameEditionContainer = ({ children }) => {
   ]);
 
   return !loaded ? (
-    <LogoLoader containerStyle={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} logoStyle={{ height: 75 }} />
+    <LoaderContainer>
+      <LogoLoader logoStyle={{ height: 75 }} />
+    </LoaderContainer>
   ) : (
     <DesktopMainContainer
       showWires={showWires}

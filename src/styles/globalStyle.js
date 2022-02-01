@@ -29,7 +29,7 @@ export default createGlobalStyle`
       min-width: 0;
       font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
       color: ${({ theme: { colors } }) => colors.primary};
-      ${({ themeMode }) => {
+      ${() => {
         if (browserDetection() === 'SAFARI') {
           return css`
             background: ${({ theme: { backgroundBodySafari } }) => backgroundBodySafari};

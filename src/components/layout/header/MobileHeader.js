@@ -54,7 +54,7 @@ const MobileHeader = ({ className }) => {
     <Container className={className}>
       <RowContainer>
         <LeftContainer>
-          <HeaderItem headerItemStyle={{ marginTop: '4px', zIndex: 30 }}>
+          <HeaderItem headerItemStyle={{ marginTop: '4px', zIndex: 5 }}>
             <PopupContentList withoutAccountInfo items={menuItems} icon={<HamburgerIcon />} className="hamburger" />
           </HeaderItem>
           <KaddexLetterLogo onClick={() => history.push(ROUTE_SWAP)} />

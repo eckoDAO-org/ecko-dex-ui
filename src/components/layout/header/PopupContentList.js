@@ -30,14 +30,11 @@ const PopupContainer = styled(GradientContainer)`
   background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
   position: absolute;
 
-  top: 70px;
+  top: 40px;
   right: 0px;
   &.hamburger {
     left: 0px;
     right: unset;
-  }
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
-    top: 58px;
   }
 
   ${({ themeMode }) => {
