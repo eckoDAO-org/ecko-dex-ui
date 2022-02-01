@@ -28,7 +28,7 @@ const RESOLUTIONS = {
   },
   '2048x1080': { width: 2048, height: 1080, 'game-mode': { scale: 1.3, geTranslateY: 430, wiresTranslateY: -85 }, 'normal-mode': { scale: 1.3 } },
   '1920x1080': { width: 1920, height: 1080, 'game-mode': { scale: 1.2, geTranslateY: 430, wiresTranslateY: -85 }, 'normal-mode': { scale: 1.2 } },
-  '1920x936': { width: 1920, height: 936, 'game-mode': { scale: 1, geTranslateY: 442, wiresTranslateY: 0 }, 'normal-mode': { scale: 1 } },
+  '1920x936': { width: 1920, height: 936, 'game-mode': { scale: 1, geTranslateY: 445, wiresTranslateY: 0 }, 'normal-mode': { scale: 1 } },
   /*not standard*/ '1740x840': {
     width: 1740,
     height: 840,

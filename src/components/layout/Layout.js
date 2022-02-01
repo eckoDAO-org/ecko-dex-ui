@@ -29,7 +29,7 @@ const WrapperContainer = styled(Wrapper)`
     text-align: center;
     font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
     color: ${({ theme: { colors } }) => colors.white};
-    @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
+    @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
       padding-top: 20px;
     }
   }
@@ -38,7 +38,10 @@ const WrapperContainer = styled(Wrapper)`
 const CenterBackground = styled.img`
   position: absolute;
   width: 100%;
-  top: 0;
+  top: ${({ theme: { header } }) => header.height}px;
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
+    top: ${({ theme: { header } }) => header.mobileHeight}px;
+  }
   z-index: -1;
   animation: fade-in 0.5s linear;
   @keyframes fade-in {
@@ -126,12 +129,11 @@ const Layout = ({ children }) => {
   return (
     <MainContainer>
       <WrapperContainer>
-        <div>
-          <MobileHeader className="mobile-only" />
-          <TabletHeader className="desktop-none mobile-none" />
+        <MobileHeader className="mobile-only" />
+        <TabletHeader className="desktop-none mobile-none" />
 
-          <DesktopHeader className="desktop-only" gameEditionView={gameEditionView} />
-        </div>
+        <DesktopHeader className="desktop-only" gameEditionView={gameEditionView} />
+
         {gameEditionView && resolutionConfiguration && width >= resolutionConfiguration.width && height >= resolutionConfiguration.height ? (
           <>
             <CenterBackground src={centerBackground} alt="" />

@@ -15,6 +15,13 @@ import {
 } from '../assets';
 
 export const WALLET = {
+  KADDEX_WALLET: {
+    id: 'KADDEX_WALLET',
+    name: 'X Wallet',
+    logo: <KaddexLogoWhite style={{ width: 45 }} />,
+    wireIcon: <WireXwalletIcon />,
+    notificationLogo: <LogoXwalletIcon />,
+  },
   ZELCORE: {
     id: 'ZELCORE',
     name: 'Zelcore',
@@ -40,12 +47,5 @@ export const WALLET = {
     signMethod: 'sign_required',
     wireIcon: <WireTorusIcon />,
     notificationLogo: <LogoTorusIcon />,
-  },
-  KADDEX_WALLET: {
-    id: 'KADDEX_WALLET',
-    name: 'X Wallet',
-    logo: <KaddexLogoWhite style={{ width: 45 }} />,
-    wireIcon: <WireXwalletIcon />,
-    notificationLogo: <LogoXwalletIcon />,
   },
 };

@@ -4,11 +4,9 @@ import { getDate, NETWORK_TYPE } from '../../constants/contextConstants';
 import tokenData from '../../constants/cryptoCurrencies';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import useWindowSize from '../../hooks/useWindowSize';
-import ColumnContent from '../../components/shared/ColumnContent';
-import CustomLabel from '../../components/shared/CustomLabel';
 import theme from '../../styles/theme';
 import reduceToken from '../../utils/reduceToken';
-import { Container } from '../layout/Containers';
+import { ColumnContainer, Container } from '../layout/Containers';
 import Label from '../../components/shared/Label';
 
 const CustomGrid = styled.div`
@@ -45,12 +43,6 @@ const IconsContainer = styled.div`
   img:not(:first-child):not(:last-child) {
     margin-left: -15px;
   }
-`;
-
-const MobileRowContainer = styled.div`
-  display: flex;
-  flex: 1;
-  justify-content: space-between;
 `;
 
 const HistoryCard = ({ tx }) => {
@@ -107,40 +99,53 @@ const HistoryCard = ({ tx }) => {
       {/* ICONS */}
       {width >= theme.mediaQueries.mobilePixel ? (
         <>
-          <IconsContainer style={{ flex: 1 }}>
+          <IconsContainer>
             {getInfoCoin(3)?.icon}
             {getInfoCoin(5)?.icon}
-            <CustomLabel bold>{`${getInfoCoin(3)?.name}-${getInfoCoin(5)?.name}`}</CustomLabel>
+            <Label fontFamily="bold">{`${getInfoCoin(3)?.name}-${getInfoCoin(5)?.name}`}</Label>
           </IconsContainer>
-          <ColumnContent label="Date" value={`${getDate(tx?.blockTime)}`} />
-
-          <ColumnContent label="Request Key" value={reduceToken(tx?.requestKey)} />
-
-          <ColumnContent label="Amount" value={`${tx?.params[2]} ${getInfoCoin(3)?.name}`} containerStyle={{ flex: '0.5' }} />
+          <ColumnContainer style={{ marginRight: '16px' }}>
+            <Label withShade>Date</Label>
+            <Label>{getDate(tx?.blockTime)}</Label>
+          </ColumnContainer>
+          <ColumnContainer style={{ marginRight: '16px' }}>
+            <Label withShade>Request Key</Label>
+            <Label>{reduceToken(tx?.requestKey)}</Label>
+          </ColumnContainer>
+          <ColumnContainer style={{ marginRight: '16px' }}>
+            <Label withShade>Amount</Label>
+            <Label>
+              {tx?.params[2]} {getInfoCoin(3)?.name}
+            </Label>
+          </ColumnContainer>
         </>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, width: '100%' }}>
-          <MobileRowContainer>
+        <div style={{ display: 'flex', flex: 1, width: '100%', justifyContent: 'space-between' }}>
+          <ColumnContainer>
             <IconsContainer style={{ flex: 1 }}>
               {getInfoCoin(3)?.icon}
               {getInfoCoin(5)?.icon}
-              <CustomLabel bold>{`${getInfoCoin(3)?.name}-${getInfoCoin(5)?.name}`}</CustomLabel>
+              <Label fontFamily="bold">{`${getInfoCoin(3)?.name}-${getInfoCoin(5)?.name}`}</Label>
             </IconsContainer>
-            <ColumnContent
-              label="Request Key"
-              value={reduceToken(tx?.requestKey)}
-              containerStyle={{ flex: 'unset', width: 130 }}
-              onClick={() => {
-                window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${tx?.requestKey}`, '_blank', 'noopener,noreferrer');
-              }}
-            />
-          </MobileRowContainer>
 
-          <MobileRowContainer>
-            <ColumnContent label="Date" value={`${getDate(tx?.blockTime)}`} />
+            <ColumnContainer style={{ marginTop: 16 }}>
+              <Label withShade>Date</Label>
+              <Label>{getDate(tx?.blockTime)}</Label>
+            </ColumnContainer>
+          </ColumnContainer>
 
-            <ColumnContent label="Amount" value={`${tx?.params[2]} ${getInfoCoin(3)?.name}`} containerStyle={{ flex: 'unset', width: 130 }} />
-          </MobileRowContainer>
+          <ColumnContainer>
+            <ColumnContainer>
+              <Label withShade>Request Key</Label>
+              <Label>{reduceToken(tx?.requestKey)}</Label>
+            </ColumnContainer>
+            <ColumnContainer>
+              <Label withShade>Amount</Label>
+              <Label>
+                {tx?.params[2]} {getInfoCoin(3)?.name}
+              </Label>
+            </ColumnContainer>
+          </ColumnContainer>
         </div>
       )}
     </HistoryCardContainer>
