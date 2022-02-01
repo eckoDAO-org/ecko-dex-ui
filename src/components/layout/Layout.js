@@ -38,10 +38,7 @@ const WrapperContainer = styled(Wrapper)`
 const CenterBackground = styled.img`
   position: absolute;
   width: 100%;
-  top: ${({ theme: { header } }) => header.height}px;
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
-    top: ${({ theme: { header } }) => header.mobileHeight}px;
-  }
+  top: 0px;
   z-index: -1;
   animation: fade-in 0.5s linear;
   @keyframes fade-in {

@@ -65,7 +65,7 @@ export const lightTheme = {
 
 export const darkTheme = {
   ...commonTheme,
-  backgroundBody: 'transparent linear-gradient(122deg, #010718 0%, #1D1139 100%) 0% 0% no-repeat padding-box',
+  backgroundBody: 'linear-gradient(135.8deg, rgba(0,7,22,1) 0%, rgba(26,15,53,1) 46.31%, rgba(45,21,74,1) 100%)',
   backgroundBodySafari: 'transparent linear-gradient(122deg, #010718 0%, #1D1139 100%) 0% 0% no-repeat padding-box',
   colors: {
     primary: '#212750',
@@ -73,7 +73,7 @@ export const darkTheme = {
     white: '#FFFFFF',
     ...commonColors,
   },
-  buttonBackgroundGradient: '#FFFFFF',
+  buttonBackgroundGradient: 'rgb(17,8,23)',
   backgroundInput: 'transparent',
   backgroundContainer: 'transparent',
   backgroundRightModal: '#4E125A40',
