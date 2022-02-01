@@ -7,7 +7,7 @@ const RESOLUTIONS = {
     height: 2160,
     'game-mode': {
       scale: 2.3,
-      geTranslateY: -346,
+      geTranslateY: -420,
       wiresTranslateY: -1360,
     },
     'normal-mode': { scale: 2.3 },
@@ -18,15 +18,15 @@ const RESOLUTIONS = {
     'game-mode': { scale: 1.6, geTranslateY: 268, wiresTranslateY: -430 },
     'normal-mode': { scale: 1.6 },
   },
-  '2560x1600': { width: 2560, height: 1600, 'game-mode': { scale: 1.6, geTranslateY: 246, wiresTranslateY: -430 }, 'normal-mode': { scale: 1.6 } },
-  '2560x1440': { width: 2560, height: 1440, 'game-mode': { scale: 1.5, geTranslateY: 324, wiresTranslateY: -336 }, 'normal-mode': { scale: 1.5 } },
+  '2560x1600': { width: 2560, height: 1600, 'game-mode': { scale: 1.6, geTranslateY: 208, wiresTranslateY: -430 }, 'normal-mode': { scale: 1.6 } },
+  '2560x1440': { width: 2560, height: 1440, 'game-mode': { scale: 1.5, geTranslateY: 290, wiresTranslateY: -336 }, 'normal-mode': { scale: 1.5 } },
   /*not standard*/ '2400x1160': {
     width: 2400,
     height: 1160,
     'game-mode': { scale: 1.3, geTranslateY: 390, wiresTranslateY: -170 },
     'normal-mode': { scale: 1.3 },
   },
-  '2048x1080': { width: 2048, height: 1080, 'game-mode': { scale: 1.3, geTranslateY: 430, wiresTranslateY: -85 }, 'normal-mode': { scale: 1.3 } },
+  '2048x1080': { width: 2048, height: 1080, 'game-mode': { scale: 1.3, geTranslateY: 402, wiresTranslateY: -85 }, 'normal-mode': { scale: 1.3 } },
   '1920x1080': { width: 1920, height: 1080, 'game-mode': { scale: 1.2, geTranslateY: 430, wiresTranslateY: -85 }, 'normal-mode': { scale: 1.2 } },
   '1920x936': { width: 1920, height: 936, 'game-mode': { scale: 1, geTranslateY: 445, wiresTranslateY: 0 }, 'normal-mode': { scale: 1 } },
   /*not standard*/ '1740x840': {
