@@ -18,6 +18,13 @@ const CustomGrid = styled.div`
   cursor: pointer;
 `;
 
+const DesktopGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  width: 100%;
+  cursor: pointer;
+`;
+
 const HistoryCardContainer = styled(Container)`
   width: 100%;
   display: flex;
@@ -98,7 +105,7 @@ const HistoryCard = ({ tx }) => {
     >
       {/* ICONS */}
       {width >= theme.mediaQueries.mobilePixel ? (
-        <>
+        <DesktopGrid>
           <IconsContainer>
             {getInfoCoin(3)?.icon}
             {getInfoCoin(5)?.icon}
@@ -118,7 +125,7 @@ const HistoryCard = ({ tx }) => {
               {tx?.params[2]} {getInfoCoin(3)?.name}
             </Label>
           </ColumnContainer>
-        </>
+        </DesktopGrid>
       ) : (
         <div style={{ display: 'flex', flex: 1, width: '100%', justifyContent: 'space-between' }}>
           <ColumnContainer>
@@ -128,7 +135,7 @@ const HistoryCard = ({ tx }) => {
               <Label fontFamily="bold">{`${getInfoCoin(3)?.name}-${getInfoCoin(5)?.name}`}</Label>
             </IconsContainer>
 
-            <ColumnContainer style={{ marginTop: 16 }}>
+            <ColumnContainer style={{ marginTop: 32 }}>
               <Label withShade>Date</Label>
               <Label>{getDate(tx?.blockTime)}</Label>
             </ColumnContainer>
@@ -139,7 +146,7 @@ const HistoryCard = ({ tx }) => {
               <Label withShade>Request Key</Label>
               <Label>{reduceToken(tx?.requestKey)}</Label>
             </ColumnContainer>
-            <ColumnContainer>
+            <ColumnContainer style={{ marginTop: 16 }}>
               <Label withShade>Amount</Label>
               <Label>
                 {tx?.params[2]} {getInfoCoin(3)?.name}
