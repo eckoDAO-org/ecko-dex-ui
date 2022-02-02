@@ -10,7 +10,7 @@ import GradientBorder from '../../components/shared/GradientBorder';
 import { theme } from '../../styles/theme';
 import { PartialScrollableScrollSection } from '../layout/Containers';
 import HistoryCard from './HistoryCard';
-import LogoLoader from '../../components/shared/LogoLoader';
+import LogoLoader from '../shared/Loader';
 import Label from '../shared/Label';
 import useButtonScrollEvent from '../../hooks/useButtonScrollEvent';
 

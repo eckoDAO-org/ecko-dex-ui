@@ -10,8 +10,8 @@ import arcadeBackground from '../../assets/images/game-edition/arcade-background
 import arcadeDarkBackground from '../../assets/images/game-edition/arcade-dark-background.png';
 import GameEditionLabel from './components/GameEditionLabel';
 import useButtonScrollEvent from '../../hooks/useButtonScrollEvent';
-import LogoLoader from '../shared/LogoLoader';
 import useLazyImage from '../../hooks/useLazyImage';
+import { GameEditionLoader } from '../shared/Loader';
 
 const getBackground = (type) => {
   switch (type) {
@@ -95,7 +95,7 @@ const GameEditionModalsContainer = ({
   return (
     <GEModalContainer type={type} style={containerStyle} id="game-edition-modal-container">
       {!modalLoaded ? (
-        <LogoLoader />
+        <GameEditionLoader />
       ) : (
         <>
           <TitleContainer style={titleContainerStyle}>

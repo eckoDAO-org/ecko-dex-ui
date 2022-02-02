@@ -12,7 +12,7 @@ import { WALLET } from '../../constants/wallet';
 import { openZelcore } from '../../utils/zelcore';
 import GameEditionLabel from '../game-edition-v2/components/GameEditionLabel';
 import Label from '../shared/Label';
-import LogoLoader from '../shared/LogoLoader';
+import LogoLoader from '../shared/Loader';
 
 const Container = styled.div`
   position: absolute;

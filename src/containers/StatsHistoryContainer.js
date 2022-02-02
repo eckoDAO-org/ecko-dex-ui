@@ -10,7 +10,7 @@ import Label from '../components/shared/Label';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
 import { FadeIn } from '../components/shared/animations';
 import useLazyImage from '../hooks/useLazyImage';
-import LogoLoader from '../components/shared/LogoLoader';
+import LogoLoader from '../components/shared/Loader';
 
 const Container = styled(FadeIn)`
   display: flex;

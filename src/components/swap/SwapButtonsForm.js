@@ -9,7 +9,7 @@ import { WalletContext } from '../../contexts/WalletContext';
 import { SwapContext } from '../../contexts/SwapContext';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
-import LogoLoader from '../shared/LogoLoader';
+import LogoLoader from '../shared/Loader';
 import Label from '../shared/Label';
 
 const ButtonContainer = styled.div`

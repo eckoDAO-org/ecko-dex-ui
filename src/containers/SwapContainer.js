@@ -29,7 +29,7 @@ import purpleInputBox from '../assets/images/game-edition/pixeled-box-purple.svg
 import Label from '../components/shared/Label';
 import PixeledBlueContainer from '../components/game-edition-v2/components/PixeledInfoContainerBlue';
 import useLazyImage from '../hooks/useLazyImage';
-import LogoLoader from '../components/shared/LogoLoader';
+import LogoLoader from '../components/shared/Loader';
 
 const Container = styled(FadeIn)`
   width: 100%;

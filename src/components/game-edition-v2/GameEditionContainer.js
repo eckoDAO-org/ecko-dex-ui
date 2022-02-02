@@ -25,8 +25,9 @@ import modalBackground from '../../assets/images/game-edition/modal-background.p
 import pixeledTokenSelectorBlueIcon from '../../assets/images/game-edition/pixeled-token-selector-blue.svg';
 import pixeledTokenSelectorWhiteIcon from '../../assets/images/game-edition/pixeled-token-selector-white.svg';
 import useLazyImage from '../../hooks/useLazyImage';
-import LogoLoader from '../shared/LogoLoader';
 import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION } from '../../router/routes';
+import AppLoader from '../shared/AppLoader';
+import { theme } from '../../styles/theme';
 
 const DesktopMainContainer = styled.div`
   display: flex;
@@ -138,22 +139,12 @@ const WiresContainer = styled.div`
   opacity: ${({ showTokens }) => (showTokens ? 0.5 : 1)};
 `;
 
-const LoaderContainer = styled.div`
-  height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
-    height: ${({ theme: { header } }) => `calc(100% - ${header.mobileHeight}px)`};
-  }
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 const GameEditionContainer = ({ children }) => {
   const location = useLocation();
   const { showNotification } = useNotificationContext();
   const { initializeKaddexWallet, isConnected, isInstalled } = useKaddexWalletContext();
   const { wallet, signingWallet, setSelectedWallet } = useWalletContext();
-  const { resolutionConfiguration } = useApplicationContext();
+  const { resolutionConfiguration, themeMode } = useApplicationContext();
   const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens } = useContext(GameEditionContext);
   const { account } = useAccountContext();
 
@@ -268,9 +259,11 @@ const GameEditionContainer = ({ children }) => {
   ]);
 
   return !loaded ? (
-    <LoaderContainer>
-      <LogoLoader logoStyle={{ height: 75 }} />
-    </LoaderContainer>
+    <AppLoader
+      color={theme(themeMode).colors.white}
+      outOfGameEdition
+      containerStyle={{ height: '100%', justifyContent: 'center', alignItems: 'center' }}
+    />
   ) : (
     <DesktopMainContainer
       showWires={showWires}

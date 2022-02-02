@@ -6,7 +6,7 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { ApplicationContext } from '../../contexts/ApplicationContext';
 import { PactContext } from '../../contexts/PactContext';
 import GradientBorder from '../../components/shared/GradientBorder';
-import LogoLoader from '../../components/shared/LogoLoader';
+import LogoLoader from '../shared/Loader';
 import { theme } from '../../styles/theme';
 import { PartialScrollableScrollSection } from '../layout/Containers';
 import StatsCard from './StatsCard';

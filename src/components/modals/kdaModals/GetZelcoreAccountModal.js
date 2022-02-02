@@ -8,7 +8,7 @@ import { ModalContext } from '../../../contexts/ModalContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { commonTheme } from '../../../styles/theme';
 import { getAccounts, openZelcore } from '../../../utils/zelcore';
-import LogoLoader from '../../../components/shared/LogoLoader';
+import LogoLoader from '../../shared/Loader';
 import Label from '../../shared/Label';
 import { GeArrowIcon } from '../../../assets';
 

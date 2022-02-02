@@ -9,7 +9,7 @@ import useButtonScrollEvent from '../hooks/useButtonScrollEvent';
 import { LIQUIDITY_VIEW } from '../constants/liquidityView';
 import { FadeIn } from '../components/shared/animations';
 import useLazyImage from '../hooks/useLazyImage';
-import LogoLoader from '../components/shared/LogoLoader';
+import LogoLoader from '../components/shared/Loader';
 
 const Container = styled(FadeIn)`
   display: flex;

@@ -16,7 +16,7 @@ import { ApplicationContext } from '../../contexts/ApplicationContext';
 import FormContainer from '../../components/shared/FormContainer';
 import browserDetection from '../../utils/browserDetection';
 import useWindowSize from '../../hooks/useWindowSize';
-import LogoLoader from '../../components/shared/LogoLoader';
+import LogoLoader from '../shared/Loader';
 import Label from '../../components/shared/Label';
 import PressButtonToActionLabel from '../../components/game-edition-v2/components/PressButtonToActionLabel';
 import useButtonScrollEvent from '../../hooks/useButtonScrollEvent';

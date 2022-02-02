@@ -22,7 +22,7 @@ import { ArrowBack } from '../../assets';
 import { theme } from '../../styles/theme';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import PixeledBlueContainer from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
-import LogoLoader from '../../components/shared/LogoLoader';
+import LogoLoader from '../shared/Loader';
 
 const Container = styled.div`
   display: flex;

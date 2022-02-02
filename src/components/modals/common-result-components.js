@@ -11,7 +11,7 @@ import { PixeledInfoContainerWhite } from '../game-edition-v2/components/Pixeled
 import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
 import CustomButton from '../shared/CustomButton';
 import Label from '../shared/Label';
-import LogoLoader from '../shared/LogoLoader';
+import LogoLoader from '../shared/Loader';
 import PopupTxView from './PopupTxView';
 
 export const Message = ({ color, children }) => {
