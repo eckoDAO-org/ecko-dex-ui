@@ -106,7 +106,7 @@ const ReviewTxModal = ({ fromValues, toValues, supply }) => {
     const { setButtons } = useGameEditionContext();
     useEffect(() => {
       setButtons({
-        B: !loading
+        A: !loading
           ? () => {
               setLoading(true);
               supply();

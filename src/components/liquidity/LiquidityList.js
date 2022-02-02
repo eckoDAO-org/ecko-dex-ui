@@ -19,6 +19,7 @@ import useWindowSize from '../../hooks/useWindowSize';
 import LogoLoader from '../../components/shared/LogoLoader';
 import Label from '../../components/shared/Label';
 import PressButtonToActionLabel from '../../components/game-edition-v2/components/PressButtonToActionLabel';
+import useButtonScrollEvent from '../../hooks/useButtonScrollEvent';
 
 const Container = styled.div`
   display: flex;
@@ -30,6 +31,15 @@ const Container = styled.div`
       return css`
         padding: 0 16px;
         width: 100%;
+        flex: 1;
+        overflow: auto;
+        * {
+          -ms-overflow-style: none;
+        }
+        ::-webkit-scrollbar {
+          display: none;
+        }
+        scrollbar-width: none;
       `;
     } else {
       return css`
@@ -74,7 +84,7 @@ const LiquidityList = (props) => {
 
   useEffect(() => {
     setButtons({
-      A: () => {
+      B: () => {
         openModal({
           title: 'Details',
           content: (
@@ -93,8 +103,11 @@ const LiquidityList = (props) => {
       },
     });
   }, []);
+
+  useButtonScrollEvent(gameEditionView && 'liquidity-list');
+
   return (
-    <Container $gameEditionView={gameEditionView}>
+    <Container $gameEditionView={gameEditionView} id="liquidity-list" className="scrollbar-none">
       {gameEditionView && (
         <>
           <Label geFontSize={52} geCenter geLabelStyle={{ textTransform: 'uppercase' }}>
@@ -168,7 +181,7 @@ const LiquidityList = (props) => {
             </CustomButton>
           </Button.Group>
 
-          {gameEditionView && <PressButtonToActionLabel button="A" actionLabel="for more info" hideTo />}
+          {gameEditionView && <PressButtonToActionLabel button="B" actionLabel="for more info" hideTo />}
           {account.account !== null &&
             (liquidity.pairListAccount[0] ? (
               liquidity.pairListAccount[0]?.balance ? (
@@ -251,7 +264,7 @@ const LiquidityList = (props) => {
       ) : (
         <>
           {gameEditionView ? (
-            <div style={{ height: '100%', display: 'flex', alignItems: 'flex-end' }}>
+            <div style={{ height: '100%', display: 'flex', alignItems: 'flex-end', paddingBottom: '16px' }}>
               <Label geCenter geColor="yellow">
                 Connect wallet
               </Label>

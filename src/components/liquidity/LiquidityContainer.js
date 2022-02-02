@@ -601,7 +601,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
 
   useEffect(() => {
     setButtons({
-      B: async () => {
+      A: async () => {
         if (buttonStatus().status && !showReview && !showTxModal) {
           setShowReview(true);
         }

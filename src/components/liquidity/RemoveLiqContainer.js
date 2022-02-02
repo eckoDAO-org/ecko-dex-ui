@@ -117,12 +117,12 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
   useEffect(() => {
     if (!isNaN(amount) && reduceBalance(amount) !== 0) {
       setButtons({
-        B: () => {
+        A: () => {
           onRemoveLiquidity();
         },
       });
     } else {
-      setButtons({ B: null });
+      setButtons({ A: null });
     }
   }, [amount, pooled, pooledToken0, pooledToken1]);
 

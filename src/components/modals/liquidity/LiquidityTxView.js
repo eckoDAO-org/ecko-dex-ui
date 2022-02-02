@@ -11,7 +11,7 @@ import { Row, SuccessViewContainerGE, SuccesViewContainer } from '../common-resu
 export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }) => {
   const { setButtons } = useGameEditionContext();
   useEffect(() => {
-    setButtons({ B: onBPress });
+    setButtons({ A: onBPress });
   }, []);
 
   return (

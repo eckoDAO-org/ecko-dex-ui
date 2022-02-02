@@ -116,7 +116,7 @@ const AccountModal = () => {
     const oldButtons = buttons;
     if (gameEditionView) {
       setButtons({
-        B: () => {
+        A: () => {
           setSelectedWire(null);
           setShowWires(true);
         },

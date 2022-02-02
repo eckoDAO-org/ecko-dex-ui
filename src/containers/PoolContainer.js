@@ -19,7 +19,8 @@ const Container = styled(FadeIn)`
   ${({ $gameEditionView, selectedView }) => {
     if ($gameEditionView) {
       return css`
-        padding: 16px 0px;
+        padding-top: 16px;
+        padding-bottom: ${selectedView !== LIQUIDITY_VIEW.LIQUIDITY_LIST && '16px'};
         height: 100%;
         display: flex;
         background-repeat: no-repeat;

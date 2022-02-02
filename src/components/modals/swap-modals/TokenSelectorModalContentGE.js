@@ -120,7 +120,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
       setButtons({
         Right: () => onSelectToken('right'),
         Left: () => onSelectToken('left'),
-        B: () => {
+        A: () => {
           if (!selectedToken) {
             setOutsideToken({ token: null, tokenSelectorType, fromToken, toToken });
             setShowTokens(true);

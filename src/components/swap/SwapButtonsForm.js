@@ -61,7 +61,7 @@ const SwapButtonsForm = ({
   useEffect(() => {
     if (gameEditionView && !loading && account?.account) {
       setButtons({
-        B: () => {
+        A: () => {
           if (showTxModal) {
             setLoading(true);
             swap.swapSend();
@@ -74,7 +74,7 @@ const SwapButtonsForm = ({
         },
       });
     } else {
-      setButtons({ B: null });
+      setButtons({ A: null });
     } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showTxModal, account.account, gameEditionView, fromValues, toValues, loading]);
 

@@ -11,6 +11,7 @@ import GameEditionLabel from './components/GameEditionLabel';
 import menuBackground from '../../assets/images/game-edition/menu-background.png';
 import { useGameEditionContext } from '../../contexts';
 import { useHistory } from 'react-router-dom';
+import PressButtonToActionLabel from './components/PressButtonToActionLabel';
 
 const Container = styled(FadeIn)`
   display: flex;
@@ -76,7 +77,7 @@ const GameEditionMenuContainer = () => {
     }
 
     setButtons({
-      B: () => history.push(route),
+      A: () => history.push(route),
       Up: () => {
         console.log('here');
         const selectedIndex = menuItems.findIndex((i) => i.label === arrowVisible);
@@ -142,6 +143,7 @@ const GameEditionMenuContainer = () => {
           </HeaderItem>
         ))}
       </RowMenuContainer>
+      <PressButtonToActionLabel actionLabel="select" />
     </Container>
   ) : (
     <></>
