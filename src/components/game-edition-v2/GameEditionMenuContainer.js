@@ -95,7 +95,7 @@ const GameEditionMenuContainer = () => {
   return gameEditionView ? (
     <Container style={{ backgroundImage: `url(${menuBackground})` }}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <GameEditionLabel fontSize={52} fontWeight={400} style={{ marginBottom: 30 }}>
+        <GameEditionLabel fontSize={52} fontWeight={400} style={{ marginBottom: 10 }}>
           MENU
         </GameEditionLabel>
         <TopListContainer>
