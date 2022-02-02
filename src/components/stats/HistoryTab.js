@@ -73,7 +73,6 @@ const HistoryTab = () => {
   return (
     <CardContainer gameEditionView={gameEditionView}>
       {!gameEditionView && <GradientBorder />}
-      {console.log('pact.swapList', pact.swapList)}
       <PartialScrollableScrollSection id="history-list" className="scrollbar-none" style={{ width: '100%' }}>
         {!pact.swapList?.error ? (
           pact.swapList[0] ? (
@@ -83,7 +82,7 @@ const HistoryTab = () => {
                 pact.getMoreEventsSwapList();
               }}
               hasMore={pact.moreSwap}
-              loader={<LogoLoader withTopMargin />}
+              loader={<LogoLoader withTopMargin key="0" />}
               useWindow={false}
               initialLoad={false}
             >
