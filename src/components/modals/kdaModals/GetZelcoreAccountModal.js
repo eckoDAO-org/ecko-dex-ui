@@ -210,7 +210,7 @@ const GetZelcoreAccountModal = ({ onClose, onConnectionSuccess }) => {
             />
           )}
           <ActionContainer gameEditionView={gameEditionView}>
-            <CustomButton geType="cancel" fluid onClick={() => handleCancel()}>
+            <CustomButton type="basic" geType="cancel" fluid onClick={() => handleCancel()}>
               Cancel
             </CustomButton>
 
