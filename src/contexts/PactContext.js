@@ -93,14 +93,16 @@ export const PactProvider = (props) => {
 
     try {
       if (account.account.account) {
-        let response = await axios.get('https://estats.chainweb.com/txs/events', {
-          params: {
-            search: account.account.account,
-            name: 'kswap.exchange.SWAP',
-            offset: offsetSwapList,
-            limit: limit,
-          },
-        });
+        let response = await axios
+          .get('https://estats.chainweb.com/txs/events', {
+            params: {
+              search: account.account.account,
+              name: 'kswap.exchange.SWAP',
+              offset: offsetSwapList,
+              limit: limit,
+            },
+          })
+          .finally(() => setMoreSwap(false));
         // console.log('get events list response: ',response);
         if (Object.values(response?.data).length !== 0) {
           let swap = Object.values(response?.data);
