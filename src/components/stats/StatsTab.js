@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
 import { Divider } from 'semantic-ui-react';
+import axios from 'axios';
 import styled, { css } from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { ApplicationContext } from '../../contexts/ApplicationContext';
@@ -54,7 +55,28 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
 
   useEffect(async () => {
     await pact.getPairList();
+    await getTVL();
   }, []);
+
+  const getTVL = async () => {
+    let totalTVL = 0;
+    if (Array.isArray(pact?.pairList)) {
+      const allTokenNames = pact?.pairList?.flatMap((pair) => [pair.token0, pair.token1]);
+      axios
+        .get(`https://min-api.cryptocompare.com/data/pricemulti?tsyms=usd&fsyms=${allTokenNames.join(',')}`)
+        .then((res) => {
+          for (const pair of pact.pairList) {
+            const token0Balance = Number(pair.reserves[0]?.decimal) || pair.reserves[0] || 0;
+            const token1Balance = Number(pair.reserves[1]?.decimal) || pair.reserves[1] || 0;
+            let token0USD = token0Balance * (res?.data[pair.token0].USD || 0);
+            let token1USD = token1Balance * (res?.data[pair.token1].USD || 0);
+            totalTVL += token0USD += token1USD;
+          }
+          console.log('!!! ~ USD TVL', totalTVL);
+        })
+        .catch((err) => console.log('get usd price error, err'));
+    }
+  };
 
   return (
     <CardContainer gameEditionView={gameEditionView}>
