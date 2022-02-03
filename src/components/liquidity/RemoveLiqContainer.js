@@ -22,7 +22,7 @@ import { ArrowBack } from '../../assets';
 import { theme } from '../../styles/theme';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import PixeledBlueContainer from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
-import LogoLoader from '../../components/shared/LogoLoader';
+import LogoLoader from '../shared/Loader';
 
 const Container = styled.div`
   display: flex;
@@ -117,12 +117,12 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
   useEffect(() => {
     if (!isNaN(amount) && reduceBalance(amount) !== 0) {
       setButtons({
-        B: () => {
+        A: () => {
           onRemoveLiquidity();
         },
       });
     } else {
-      setButtons({ B: null });
+      setButtons({ A: null });
     }
   }, [amount, pooled, pooledToken0, pooledToken1]);
 

@@ -61,6 +61,6 @@ PressButtonToActionLabel.propTypes = {
 };
 
 PressButtonToActionLabel.defaultProps = {
-  button: 'B',
+  button: 'A',
   actionLabel: '',
 };

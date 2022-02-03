@@ -9,7 +9,7 @@ import useButtonScrollEvent from '../hooks/useButtonScrollEvent';
 import { LIQUIDITY_VIEW } from '../constants/liquidityView';
 import { FadeIn } from '../components/shared/animations';
 import useLazyImage from '../hooks/useLazyImage';
-import LogoLoader from '../components/shared/LogoLoader';
+import LogoLoader from '../components/shared/Loader';
 
 const Container = styled(FadeIn)`
   display: flex;
@@ -19,7 +19,8 @@ const Container = styled(FadeIn)`
   ${({ $gameEditionView, selectedView }) => {
     if ($gameEditionView) {
       return css`
-        padding: 16px 0px;
+        padding-top: 16px;
+        padding-bottom: ${selectedView !== LIQUIDITY_VIEW.LIQUIDITY_LIST && '16px'};
         height: 100%;
         display: flex;
         background-repeat: no-repeat;

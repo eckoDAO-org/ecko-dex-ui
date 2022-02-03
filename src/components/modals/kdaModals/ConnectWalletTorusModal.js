@@ -8,7 +8,7 @@ import CustomButton from '../../../components/shared/CustomButton';
 import { ModalContext } from '../../../contexts/ModalContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { WALLET } from '../../../constants/wallet';
-import LogoLoader from '../../../components/shared/LogoLoader';
+import LogoLoader from '../../shared/Loader';
 import Label from '../../shared/Label';
 import browserDetection from '../../../utils/browserDetection';
 import { Loader } from 'semantic-ui-react';

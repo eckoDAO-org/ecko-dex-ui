@@ -17,7 +17,7 @@ import { KaddexWalletProvider } from './contexts/KaddexWalletContext';
 import NotificationModalRender from './components/right-modal-notification/NotificationModalRender';
 import centerBackground from './assets/images/game-edition/center-background.png';
 import useLazyImage from './hooks/useLazyImage';
-import LogoLoader from './components/shared/LogoLoader';
+import AppLoader from './components/shared/AppLoader';
 
 function App() {
   const { themeMode } = useContext(ApplicationContext);
@@ -25,7 +25,7 @@ function App() {
   return (
     <ThemeProvider theme={theme(themeMode)}>
       {!loaded ? (
-        <LogoLoader containerStyle={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} logoStyle={{ height: 75 }} />
+        <AppLoader containerStyle={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} />
       ) : (
         <>
           <GlobalStyle themeMode={themeMode} />

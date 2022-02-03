@@ -10,7 +10,7 @@ import GradientBorder from '../../components/shared/GradientBorder';
 import { theme } from '../../styles/theme';
 import { PartialScrollableScrollSection } from '../layout/Containers';
 import HistoryCard from './HistoryCard';
-import LogoLoader from '../../components/shared/LogoLoader';
+import LogoLoader from '../shared/Loader';
 import Label from '../shared/Label';
 import useButtonScrollEvent from '../../hooks/useButtonScrollEvent';
 
@@ -73,7 +73,6 @@ const HistoryTab = () => {
   return (
     <CardContainer gameEditionView={gameEditionView}>
       {!gameEditionView && <GradientBorder />}
-
       <PartialScrollableScrollSection id="history-list" className="scrollbar-none" style={{ width: '100%' }}>
         {!pact.swapList?.error ? (
           pact.swapList[0] ? (
@@ -83,7 +82,7 @@ const HistoryTab = () => {
                 pact.getMoreEventsSwapList();
               }}
               hasMore={pact.moreSwap}
-              loader={<LogoLoader withTopMargin />}
+              loader={<LogoLoader withTopMargin key="0" />}
               useWindow={false}
               initialLoad={false}
             >

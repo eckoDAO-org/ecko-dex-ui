@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { PactContext } from '../../../contexts/PactContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import Input from '../../../components/shared/Input';
@@ -23,6 +23,14 @@ const Wrapper = styled.div`
       fill: ${({ theme: { colors } }) => colors.white};
     }
   }
+  ${({ resolutionConfiguration }) => {
+    if (resolutionConfiguration && resolutionConfiguration['normal-mode'].scale < 1) {
+      const zoomScaleDiff = 1 - resolutionConfiguration['normal-mode'].scale;
+      return css`
+        zoom: calc(1 + ${zoomScaleDiff});
+      `;
+    }
+  }};
 `;
 const PopupContainer = styled(GradientContainer)`
   display: flex;
@@ -32,8 +40,8 @@ const PopupContainer = styled(GradientContainer)`
   border-radius: 10px;
   position: absolute;
 
-  right: 4px;
-  top: 50px;
+  right: 28px;
+  top: -20px;
   &.header-item {
     top: 40px;
   }
@@ -97,7 +105,7 @@ const Row = styled.div`
 const SlippagePopupContent = ({ className }) => {
   const pact = useContext(PactContext);
   const { gameEditionView } = useContext(GameEditionContext);
-  const { themeMode } = useApplicationContext();
+  const { themeMode, resolutionConfiguration } = useApplicationContext();
   const [showSplippageContent, setShowSlippageContent] = useState(false);
 
   const ref = useRef();
@@ -112,8 +120,8 @@ const SlippagePopupContent = ({ className }) => {
     if (tl) (async () => pact.storeTtl(tl / 60))();
   }, [tl]);
   return (
-    <Wrapper ref={ref}>
-      <CogIcon onClick={() => setShowSlippageContent((prev) => !prev)} />
+    <Wrapper ref={ref} resolutionConfiguration={resolutionConfiguration}>
+      <CogIcon onClick={() => setShowSlippageContent((prev) => !prev)} style={{ cursor: 'pointer' }} />
       {showSplippageContent && (
         <PopupContainer
           className={className}
