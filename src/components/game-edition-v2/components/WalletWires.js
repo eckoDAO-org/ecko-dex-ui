@@ -166,7 +166,7 @@ const WalletWires = () => {
         <span>Disconnect</span>
       </DisconnectButton>
 
-      {[WALLET.KADDEX_WALLET, WALLET.ZELCORE, WALLET.CHAINWEAVER, WALLET.TORUS].map((wire, i) => (
+      {[WALLET.KADDEX_WALLET, WALLET.ZELCORE, WALLET.CHAINWEAVER].map((wire, i) => (
         <ConnectionWire key={i} wire={wire} onClick={selectedWire ? null : () => onWireSelect(wire)} />
       ))}
     </WiresContainer>

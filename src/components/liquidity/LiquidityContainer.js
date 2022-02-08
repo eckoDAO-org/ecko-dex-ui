@@ -639,7 +639,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
           gameEditionView ? (
             <LabelContainer gameEditionView={gameEditionView}>
               {buttonStatus().status === true ? (
-                <PressButtonToActionLabel button="B" actionLabel="add liquidity" />
+                <PressButtonToActionLabel actionLabel="add liquidity" />
               ) : (
                 <Label geCenter geColor="yellow" geFontSize={20}>
                   {buttonStatus().msg}
