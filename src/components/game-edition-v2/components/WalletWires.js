@@ -50,11 +50,12 @@ const ConnectionWireContainer = styled.div`
   flex-direction: column;
   align-items: center;
   svg {
-    margin-top: 20px;
+    margin-top: 40px;
   }
   span {
     transition: opacity 1s;
-
+    position: absolute;
+    white-space: nowrap;
     font-size: 20px;
     font-style: normal;
     font-weight: 700;
@@ -105,7 +106,7 @@ export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
     if (selectedWire) {
       const wireElement = document.getElementById(selectedWire.id);
 
-      setTranslateX((GE_DESKTOP_CONFIGURATION.WIRE_CONTAINER_WIDTH - 50) / 2 - wireElement.offsetLeft - wireElement.offsetWidth / 2 + 20);
+      setTranslateX((GE_DESKTOP_CONFIGURATION.WIRE_CONTAINER_WIDTH - 50) / 2 - wireElement.offsetLeft - 10);
     }
   }, [selectedWire]);
   return (
@@ -134,7 +135,7 @@ const WalletWires = () => {
     <WiresContainer showWires={showWires}>
       {showWires && (
         <HideWiresContainer
-          style={{ bottom: '30%' }}
+          style={{ top: -120 }}
           onClick={() => {
             let oldWire = null;
             if (wallet && !selectedWire && wallet?.id !== selectedWire?.id) {
