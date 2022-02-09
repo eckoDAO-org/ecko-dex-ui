@@ -14,9 +14,9 @@ export const WALLET = {
     signMethod: "wallet",
     getAccountsUrl: "http://127.0.0.1:9467/v1/accounts",
   },
-  TORUS: {
-    name: "Torus",
-    logo: <TorusLogo />,
-    signMethod: "sign_required",
-  },
+  // TORUS: {
+  //   name: "Torus",
+  //   logo: <TorusLogo />,
+  //   signMethod: "sign_required",
+  // },
 };
