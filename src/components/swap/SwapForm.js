@@ -166,7 +166,7 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
                 }}
                 onMaxClickButton={() => {
                   setInputSide('to');
-                  setFromValues((prev) => ({
+                  setToValues((prev) => ({
                     ...prev,
                     amount: reduceBalance(toValues.balance),
                   }));
