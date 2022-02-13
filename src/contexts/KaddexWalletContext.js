@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, createContext, useEffect, useCallback } from 'react';
-import { useAccountContext, useWalletContext, useNotificationContext, useGameEditionContext } from '.';
+import { useAccountContext, useWalletContext, useNotificationContext } from '.';
 import { network, NETWORKID, chainId } from '../constants/contextConstants';
 import { WALLET } from '../constants/wallet';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 export const KaddexWalletContext = createContext();
 
@@ -10,16 +11,16 @@ const initialKaddexWalletState = {
   isConnected: false,
   isInstalled: false,
   network,
+  account: null,
 };
 
 export const KaddexWalletProvider = (props) => {
   const [kadenaExt, setKadenaExt] = useState(null);
-  const [kaddexWalletState, setKaddexWalletState] = useState(initialKaddexWalletState);
+  const [kaddexWalletState, setKaddexWalletState] = useLocalStorage('kaddexWalletState', initialKaddexWalletState);
 
   const { setVerifiedAccount, logout, account } = useAccountContext();
   const { wallet, setSelectedWallet, signingWallet } = useWalletContext();
   const { showNotification, STATUSES } = useNotificationContext();
-  const { onWireSelect } = useGameEditionContext();
 
   const initialize = useCallback(() => {
     const { kadena } = window;
@@ -30,48 +31,94 @@ export const KaddexWalletProvider = (props) => {
     });
   }, [kaddexWalletState]);
 
-  const connectWallet = async () => {
-    await kadenaExt.request({
-      method: 'kda_connect',
-      networkId: NETWORKID,
-    });
-  };
+  useEffect(() => {
+    window.addEventListener('load', initialize);
+  }, [initialize]);
 
-  const disconnectWallet = async () => {
-    if (kadenaExt) {
-      const result = await kadenaExt.request({
-        method: 'kda_disconnect',
-        networkId: NETWORKID,
-      });
-      if (result?.result?.status === 'success' && result?.result?.message === 'Disconnected') {
-        logout();
-        setKaddexWalletState({
-          ...kaddexWalletState,
-          isConnected: false,
+  useEffect(() => {
+    const refreshAccountInterval = setInterval(async () => {
+      console.log('X-Wallet refreshing account');
+      await checkStatus();
+    }, 5000);
+    return () => clearInterval(refreshAccountInterval);
+  }, []);
+
+  useEffect(() => {
+    const registerEvents = async () => {
+      if (kadenaExt) {
+        kadenaExt.on('res_accountChange', async (response) => {
+          console.log('X-Wallet: LISTEN res_accountChange', response);
+          await checkStatus();
+        });
+        kadenaExt.on('res_checkStatus', onCheckStatusResponse);
+        kadenaExt.on('res_sendKadena', (response) => {
+          console.log('X-Wallet: LISTEN res_SendKadena', response);
         });
       }
+    };
+    registerEvents();
+    if (kadenaExt) {
+      setAccountData();
     }
-  };
+  }, [kadenaExt]);
+
   useEffect(() => {
     if (kaddexWalletState.isConnected && (!wallet || !account?.account)) {
-      console.log('!!!DISCONNECTING');
+      console.log('X-Wallet: DISCONNECTING AUTO');
       disconnectWallet();
     }
   }, [wallet, kaddexWalletState, account]);
 
-  const getNetworkInfo = async () => {
-    return await kadenaExt.request({
-      method: 'kda_getNetwork',
-    });
+  /**
+   * Used by ConnectModal
+   */
+  const initializeKaddexWallet = async () => {
+    const networkInfo = await getNetworkInfo();
+    if (networkInfo.networkId !== NETWORKID) {
+      showNetworkError();
+    } else {
+      const connectResponse = await connectWallet();
+      if (connectResponse?.status === 'success') {
+        await setAccountData();
+      }
+    }
   };
 
-  const getSelectedChain = async () => {
-    return await kadenaExt.request({
-      method: 'kda_getChain',
+  const connectWallet = async () => {
+    const connect = await kadenaExt.request({
+      method: 'kda_connect',
+      networkId: NETWORKID,
     });
+    console.log('X-Wallet: SEND kda_connect request', connect);
+    return connect;
+  };
+
+  const disconnectWallet = async () => {
+    if (kadenaExt) {
+      console.log('X-Wallet: SEND disconnect request');
+      setKaddexWalletState({
+        ...kaddexWalletState,
+        account: null,
+        isConnected: false,
+      });
+      await kadenaExt.request({
+        method: 'kda_disconnect',
+        networkId: NETWORKID,
+      });
+      logout();
+    }
+  };
+
+  const getNetworkInfo = async () => {
+    const network = await kadenaExt.request({
+      method: 'kda_getNetwork',
+    });
+    console.log('X-Wallet: SEND kda_getNetwork request', network);
+    return network;
   };
 
   const checkStatus = async () => {
+    console.log('X-Wallet: SEND kda_checkStatus request');
     await kadenaExt?.request({
       method: 'kda_checkStatus',
       networkId: NETWORKID,
@@ -79,10 +126,12 @@ export const KaddexWalletProvider = (props) => {
   };
 
   const getAccountInfo = async () => {
-    return await kadenaExt.request({
+    const account = await kadenaExt.request({
       method: 'kda_requestAccount',
       networkId: NETWORKID,
     });
+    console.log('X-Wallet: SEND kda_requestAccount request', account);
+    return account;
   };
 
   const requestSign = async (signingCmd) => {
@@ -90,6 +139,7 @@ export const KaddexWalletProvider = (props) => {
     if (account.status === 'fail') {
       alertDisconnect();
     } else {
+      console.log('X-Wallet: SEND kda_requestSign request');
       return await kadenaExt.request({
         method: 'kda_requestSign',
         data: {
@@ -101,24 +151,28 @@ export const KaddexWalletProvider = (props) => {
   };
 
   const setAccountData = async () => {
+    console.log('X-Wallet: SETTING ACCOUNT DATA');
     const acc = await getAccountInfo();
     if (acc.wallet) {
+      console.log('X-Wallet: SETTING ACCOUNT DATA - WALLET FOUNDED', acc);
       await setVerifiedAccount(acc.wallet.account);
       await signingWallet();
       await setSelectedWallet(WALLET.KADDEX_WALLET);
       setKaddexWalletState({
-        ...kaddexWalletState,
+        account: acc.wallet.account,
         isInstalled: true,
         isConnected: true,
       });
     } else if (kaddexWalletState.isConnected) {
-      checkCorrectChain();
+      console.log('X-Wallet: SETTING ACCOUNT DATA - WALLET NOT FOUND CONNECTING');
+      const connectRes = await connectWallet();
+      if (connectRes.status === 'success') {
+        await setAccountData();
+      }
+    } else {
+      console.log('X-Wallet: SETTING ACCOUNT DATA - NOT CONNECTED');
     }
   };
-
-  useEffect(() => {
-    window.addEventListener('load', initialize);
-  }, [initialize]);
 
   const alertDisconnect = () => {
     console.log('!!!DISCONNECTING');
@@ -130,49 +184,17 @@ export const KaddexWalletProvider = (props) => {
     logout();
   };
 
-  const checkCorrectChain = async () => {
-    const selectedChainId = await getSelectedChain();
-
-    if (selectedChainId?.toString() !== chainId?.toString()) {
-      showChainError(selectedChainId);
+  const onCheckStatusResponse = async (response) => {
+    console.log('X-Wallet: LISTEN res_checkStatus', response);
+    // I have to use local storage directly because of state is null on callback listener
+    const localState = localStorage.getItem('kaddexWalletState') && JSON.parse(localStorage.getItem('kaddexWalletState'));
+    if (localState?.isConnected && response?.result?.status === 'fail' && response?.result?.message === 'Not connected') {
+      const connectRes = await connectWallet();
+      if (connectRes.status === 'success') {
+        await setAccountData();
+      }
     }
   };
-
-  useEffect(() => {
-    const registerEvents = async () => {
-      if (kadenaExt) {
-        kadenaExt.on('res_accountChange', async (response) => {
-          console.log('!!!res_accountChange', response);
-          await checkStatus();
-        });
-        kadenaExt.on('res_checkStatus', async (response) => {
-          console.log('!!!res_checkStatus', response);
-          const selectedChainId = await getSelectedChain();
-          const acc = await getAccountInfo();
-          if (response?.result?.status === 'success' && !kaddexWalletState.isConnected) {
-            setAccountData();
-          }
-          if (response?.result?.status === 'fail' && response?.result?.message === 'Invalid network') {
-            showNetworkError();
-          } else {
-            if (selectedChainId?.toString() !== chainId?.toString()) {
-              showChainError(selectedChainId);
-            } else if (!kaddexWalletState.isConnected && acc.status === 'fail') {
-              connectWallet();
-              onWireSelect(null);
-            }
-          }
-        });
-        kadenaExt.on('res_sendKadena', (response) => {
-          console.log('!!!res_sendKadena ', response);
-        });
-      }
-    };
-    registerEvents();
-    if (kadenaExt) {
-      setAccountData();
-    }
-  }, [kadenaExt]);
 
   const showNetworkError = () => {
     showNotification({
@@ -184,24 +206,15 @@ export const KaddexWalletProvider = (props) => {
     });
   };
 
-  const showChainError = (selectedChain) => {
-    showNotification({
-      title: 'Wallet error',
-      message: `Please set chain ${chainId} ${selectedChain ? `(chain ${selectedChain} selected)` : ''}`,
-      type: STATUSES.WARNING,
-      autoClose: 5000,
-      hideProgressBar: false,
-    });
-  };
-
-  const initializeKaddexWallet = async () => {
-    const networkInfo = await getNetworkInfo();
-    if (networkInfo.networkId !== NETWORKID) {
-      showNetworkError();
-    } else {
-      await connectWallet();
-    }
-  };
+  // const showChainError = (selectedChain) => {
+  //   showNotification({
+  //     title: 'Wallet error',
+  //     message: `Please set chain ${chainId} ${selectedChain ? `(chain ${selectedChain} selected)` : ''}`,
+  //     type: STATUSES.WARNING,
+  //     autoClose: 5000,
+  //     hideProgressBar: false,
+  //   });
+  // };
 
   return (
     <KaddexWalletContext.Provider
