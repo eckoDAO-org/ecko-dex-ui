@@ -8,7 +8,7 @@ import { STATUSES } from '../../contexts/NotificationContext';
 import WalletWires from './components/WalletWires';
 import ConnectWalletWire from './components/ConnectWalletWire';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
-import { KaddexLogo } from '../../assets';
+import { KaddexWhite } from '../../assets';
 import { WALLET } from '../../constants/wallet';
 import ConnectWalletZelcoreModal from '../modals/kdaModals/ConnectWalletZelcoreModal';
 import ConnectWalletChainweaverModal from '../modals/kdaModals/ConnectWalletChainweaverModal';
@@ -285,7 +285,7 @@ const GameEditionContainer = ({ children }) => {
           </DisplayContent>
 
           <div className="kaddex-logo">
-            <KaddexLogo />
+            <KaddexWhite />
           </div>
         </GameboyDesktopContainer>
         {showTokens && (

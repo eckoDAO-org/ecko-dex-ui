@@ -2,7 +2,7 @@ import React from 'react';
 import {
   LockLogo,
   ZelcoreLogo,
-  KaddexLogoWhite,
+  KaddexWhite,
   WireChainweaverIcon,
   WireXwalletIcon,
   WireZelcoreIcon,
@@ -15,7 +15,7 @@ export const WALLET = {
   KADDEX_WALLET: {
     id: 'KADDEX_WALLET',
     name: 'X Wallet',
-    logo: <KaddexLogoWhite style={{ width: 45 }} />,
+    logo: <KaddexWhite style={{ width: 45 }} />,
     wireIcon: <WireXwalletIcon />,
     notificationLogo: <LogoXwalletIcon />,
   },
