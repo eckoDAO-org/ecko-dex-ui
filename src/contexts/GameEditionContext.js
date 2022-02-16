@@ -32,10 +32,10 @@ export const GameEditionProvider = (props) => {
   // loading bar
   const [loadingValue, setLoadingValue] = useState(1);
 
-  // show all wires below the gameboy
+  // show all wires below the game edition
   const [showWires, setShowWires] = useState(false);
 
-  // show the selected wire connected to gameboy
+  // show the selected wire connected to game edition
   const [selectedWire, setSelectedWire] = useState(false);
 
   const [showTokens, setShowTokens] = useState(false);

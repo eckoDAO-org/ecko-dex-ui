@@ -56,7 +56,7 @@ const GameEditionMobileWrapper = ({ startLabel, startOnClick, selectLabel, selec
             <stop offset="1" stopColor="#6cc34a" />
           </linearGradient>
         </defs>
-        <g id="Gameboy" transform="translate(-421.152 -8)">
+        <g id="game-edition" transform="translate(-421.152 -8)">
           <g id="Group_1" data-name="Group 1" transform="translate(421.152 8)">
             <path
               id="Rectangle_5782"
