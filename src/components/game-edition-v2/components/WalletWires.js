@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
-import { useAccountContext, useApplicationContext, useWalletContext } from '../../../contexts';
+import { useAccountContext, useApplicationContext, useKaddexWalletContext, useWalletContext } from '../../../contexts';
 import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../../contexts/GameEditionContext';
 import { FadeIn } from '../../shared/animations';
 import { HideWiresIcon } from '../../../assets';
@@ -128,6 +128,7 @@ export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
 
 const WalletWires = () => {
   const { wallet, removeWallet, removeSigning } = useWalletContext();
+  const { disconnectWallet } = useKaddexWalletContext();
   const { showWires, onWireSelect, selectedWire } = useContext(GameEditionContext);
   const { logout } = useAccountContext();
 
@@ -157,9 +158,13 @@ const WalletWires = () => {
           if (wallet && selectedWire && wallet?.id !== selectedWire?.id) {
             oldWire = WALLET[wallet.id];
           } else {
-            logout();
-            removeWallet();
-            removeSigning();
+            if (wallet.id === WALLET.KADDEX_WALLET) {
+              disconnectWallet();
+            } else {
+              logout();
+              removeWallet();
+              removeSigning();
+            }
           }
           onWireSelect(oldWire);
         }}
