@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, createContext, useEffect, useCallback } from 'react';
 import { useAccountContext, useWalletContext, useNotificationContext } from '.';
-import { network, NETWORKID, chainId } from '../constants/contextConstants';
+import { network, NETWORKID } from '../constants/contextConstants';
 import { WALLET } from '../constants/wallet';
 import useLocalStorage from '../hooks/useLocalStorage';
 
@@ -36,14 +36,6 @@ export const KaddexWalletProvider = (props) => {
   }, [initialize]);
 
   useEffect(() => {
-    const refreshAccountInterval = setInterval(async () => {
-      console.log('X-Wallet refreshing account');
-      await checkStatus();
-    }, 5000);
-    return () => clearInterval(refreshAccountInterval);
-  }, []);
-
-  useEffect(() => {
     const registerEvents = async () => {
       if (kadenaExt) {
         kadenaExt.on('res_accountChange', async (response) => {
@@ -54,17 +46,17 @@ export const KaddexWalletProvider = (props) => {
         kadenaExt.on('res_sendKadena', (response) => {
           console.log('X-Wallet: LISTEN res_SendKadena', response);
         });
+        kadenaExt.on('res_disconnect', () => {});
       }
     };
     registerEvents();
-    if (kadenaExt) {
+    if (kadenaExt && kaddexWalletState.isConnected) {
       setAccountData();
     }
   }, [kadenaExt]);
 
   useEffect(() => {
     if (kaddexWalletState.isConnected && (!wallet || !account?.account)) {
-      console.log('X-Wallet: DISCONNECTING AUTO');
       disconnectWallet();
     }
   }, [wallet, kaddexWalletState, account]);
@@ -89,7 +81,6 @@ export const KaddexWalletProvider = (props) => {
       method: 'kda_connect',
       networkId: NETWORKID,
     });
-    console.log('X-Wallet: SEND kda_connect request', connect);
     return connect;
   };
 
@@ -153,6 +144,7 @@ export const KaddexWalletProvider = (props) => {
   const setAccountData = async () => {
     console.log('X-Wallet: SETTING ACCOUNT DATA');
     const acc = await getAccountInfo();
+    console.log('!!! ~ acc', acc);
     if (acc.wallet) {
       console.log('X-Wallet: SETTING ACCOUNT DATA - WALLET FOUNDED', acc);
       await setVerifiedAccount(acc.wallet.account);
