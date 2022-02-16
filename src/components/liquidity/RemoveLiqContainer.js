@@ -246,7 +246,7 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
               loading ? (
                 <LogoLoader />
               ) : (
-                <PressButtonToActionLabel button="B" actionLabel="remove liquidity" />
+                <PressButtonToActionLabel actionLabel="remove liquidity" />
               )
             ) : (
               <CustomButton

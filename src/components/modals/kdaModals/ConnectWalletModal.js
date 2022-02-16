@@ -3,7 +3,6 @@ import CustomButton from '../../../components/shared/CustomButton';
 import { WALLET } from '../../../constants/wallet';
 import { useKaddexWalletContext, useNotificationContext, useModalContext, useGameEditionContext } from '../../../contexts';
 import ConnectWalletZelcoreModal from './ConnectWalletZelcoreModal';
-import ConnecWalletTorusModal from './ConnectWalletTorusModal';
 import ConnectWalletChainweaverModal from './ConnectWalletChainweaverModal';
 
 const ConnectWalletModal = () => {
@@ -32,22 +31,7 @@ const ConnectWalletModal = () => {
             content: <ConnectWalletZelcoreModal />,
           });
         }
-      case WALLET.TORUS.name:
-        if (gameEditionView) {
-          return openModal({
-            title: 'connect wallet',
-            description: 'Torus Signing',
-            content: <ConnecWalletTorusModal onClose={closeModal} />,
-          });
-        } else {
-          return modalContext.openModal({
-            id: 'TORUS',
-            title: 'connect wallet',
-            description: 'Torus Signing',
-            onBack: () => modalContext.onBackModal(),
-            content: <ConnecWalletTorusModal onClose={() => modalContext.closeModal()} />,
-          });
-        }
+
       case WALLET.CHAINWEAVER.name:
         if (gameEditionView) {
           return openModal({
