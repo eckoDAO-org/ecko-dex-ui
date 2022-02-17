@@ -164,7 +164,7 @@ const SwapButtonsForm = ({
           {loading ? (
             <LogoLoader />
           ) : getButtonLabel() === 'SWAP' ? (
-            <PressButtonToActionLabel button="B" actionLabel="swap" />
+            <PressButtonToActionLabel actionLabel="swap" />
           ) : (
             <Label geColor="yellow">{getButtonLabel()}</Label>
           )}
