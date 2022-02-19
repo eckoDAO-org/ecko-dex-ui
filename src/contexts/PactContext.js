@@ -148,7 +148,7 @@ export const PactProvider = (props) => {
             '',
             chainId,
             GAS_PRICE,
-            3000,
+            150000,
             creationTime(),
             600
           ),
@@ -198,7 +198,7 @@ export const PactProvider = (props) => {
             '',
             chainId,
             GAS_PRICE,
-            3000,
+            150000,
             creationTime(),
             600
           ),
@@ -256,7 +256,7 @@ export const PactProvider = (props) => {
             '',
             chainId,
             GAS_PRICE,
-            3000,
+            150000,
             creationTime(),
             600
           ),
@@ -368,7 +368,7 @@ export const PactProvider = (props) => {
             '',
             chainId,
             GAS_PRICE,
-            3000,
+            150000,
             creationTime(),
             600
           ),
@@ -422,7 +422,7 @@ export const PactProvider = (props) => {
             '',
             chainId,
             GAS_PRICE,
-            3000,
+            150000,
             creationTime(),
             600
           ),
@@ -449,7 +449,7 @@ export const PactProvider = (props) => {
             account.account.account,
             chainId,
             GAS_PRICE,
-            3000,
+            150000,
             creationTime(),
             600
           ),
@@ -481,7 +481,7 @@ export const PactProvider = (props) => {
             'account',
             chainId,
             GAS_PRICE,
-            3000,
+            150000,
             creationTime(),
             600
           ),
