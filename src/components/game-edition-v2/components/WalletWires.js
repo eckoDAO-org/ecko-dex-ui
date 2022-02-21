@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
-import { useAccountContext, useApplicationContext, useWalletContext } from '../../../contexts';
+import { useAccountContext, useApplicationContext, useKaddexWalletContext, useWalletContext } from '../../../contexts';
 import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../../contexts/GameEditionContext';
 import { FadeIn } from '../../shared/animations';
 import { HideWiresIcon } from '../../../assets';
@@ -50,11 +50,12 @@ const ConnectionWireContainer = styled.div`
   flex-direction: column;
   align-items: center;
   svg {
-    margin-top: 20px;
+    margin-top: 40px;
   }
   span {
     transition: opacity 1s;
-
+    position: absolute;
+    white-space: nowrap;
     font-size: 20px;
     font-style: normal;
     font-weight: 700;
@@ -105,7 +106,7 @@ export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
     if (selectedWire) {
       const wireElement = document.getElementById(selectedWire.id);
 
-      setTranslateX((GE_DESKTOP_CONFIGURATION.WIRE_CONTAINER_WIDTH - 50) / 2 - wireElement.offsetLeft - wireElement.offsetWidth / 2 + 20);
+      setTranslateX((GE_DESKTOP_CONFIGURATION.WIRE_CONTAINER_WIDTH - 50) / 2 - wireElement.offsetLeft - 10);
     }
   }, [selectedWire]);
   return (
@@ -127,6 +128,7 @@ export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
 
 const WalletWires = () => {
   const { wallet, removeWallet, removeSigning } = useWalletContext();
+  const { disconnectWallet } = useKaddexWalletContext();
   const { showWires, onWireSelect, selectedWire } = useContext(GameEditionContext);
   const { logout } = useAccountContext();
 
@@ -134,7 +136,7 @@ const WalletWires = () => {
     <WiresContainer showWires={showWires}>
       {showWires && (
         <HideWiresContainer
-          style={{ bottom: '30%' }}
+          style={{ top: -120 }}
           onClick={() => {
             let oldWire = null;
             if (wallet && !selectedWire && wallet?.id !== selectedWire?.id) {
@@ -156,9 +158,13 @@ const WalletWires = () => {
           if (wallet && selectedWire && wallet?.id !== selectedWire?.id) {
             oldWire = WALLET[wallet.id];
           } else {
-            logout();
-            removeWallet();
-            removeSigning();
+            if (wallet.id === WALLET.KADDEX_WALLET) {
+              disconnectWallet();
+            } else {
+              logout();
+              removeWallet();
+              removeSigning();
+            }
           }
           onWireSelect(oldWire);
         }}
@@ -166,7 +172,7 @@ const WalletWires = () => {
         <span>Disconnect</span>
       </DisconnectButton>
 
-      {[WALLET.KADDEX_WALLET, WALLET.ZELCORE, WALLET.CHAINWEAVER, WALLET.TORUS].map((wire, i) => (
+      {[WALLET.KADDEX_WALLET, WALLET.ZELCORE, WALLET.CHAINWEAVER].map((wire, i) => (
         <ConnectionWire key={i} wire={wire} onClick={selectedWire ? null : () => onWireSelect(wire)} />
       ))}
     </WiresContainer>

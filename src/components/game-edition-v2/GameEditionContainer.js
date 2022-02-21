@@ -8,15 +8,14 @@ import { STATUSES } from '../../contexts/NotificationContext';
 import WalletWires from './components/WalletWires';
 import ConnectWalletWire from './components/ConnectWalletWire';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
-import { KaddexLogo } from '../../assets';
+import { KaddexWhite } from '../../assets';
 import { WALLET } from '../../constants/wallet';
 import ConnectWalletZelcoreModal from '../modals/kdaModals/ConnectWalletZelcoreModal';
-import ConnectWalletTorusModal from '../modals/kdaModals/ConnectWalletTorusModal';
 import ConnectWalletChainweaverModal from '../modals/kdaModals/ConnectWalletChainweaverModal';
 import { FadeIn } from '../shared/animations';
-import GameboyButtons from './components/GameboyButtons';
+import GameEditionButtons from './components/GameEditionButtons';
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
-import gameboyDesktop from '../../assets/images/game-edition/gameboy-desktop.svg';
+import gameEditionDesktop from '../../assets/images/game-edition/game-edition-desktop.svg';
 import menuBackground from '../../assets/images/game-edition/menu-background.png';
 import loadingBackground from '../../assets/images/game-edition/loading-background.png';
 import arcadeBackground from '../../assets/images/game-edition/arcade-background.png';
@@ -61,7 +60,7 @@ const DesktopMainContainer = styled.div`
   }}; */
 `;
 
-const GameboyDesktopContainer = styled.div`
+const GameEditionDesktopContainer = styled.div`
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
@@ -184,15 +183,6 @@ const GameEditionContainer = ({ children }) => {
           content: <ConnectWalletZelcoreModal onConnectionSuccess={async () => await onConnectionSuccess(WALLET.ZELCORE)} />,
         });
 
-      case WALLET.TORUS.name:
-        return openModal({
-          title: WALLET.TORUS.name.toUpperCase(),
-          onClose: () => {
-            onCloseModal();
-          },
-          content: <ConnectWalletTorusModal onConnectionSuccess={async () => await onConnectionSuccess(WALLET.TORUS)} />,
-        });
-
       case WALLET.CHAINWEAVER.name:
         return openModal({
           title: WALLET.CHAINWEAVER.name.toUpperCase(),
@@ -248,7 +238,7 @@ const GameEditionContainer = ({ children }) => {
       : false;
 
   const [loaded] = useLazyImage([
-    gameboyDesktop,
+    gameEditionDesktop,
     menuBackground,
     loadingBackground,
     arcadeBackground,
@@ -274,8 +264,8 @@ const GameEditionContainer = ({ children }) => {
       resolutionConfiguration={resolutionConfiguration}
     >
       <div style={{ display: 'flex' }}>
-        <GameboyDesktopContainer showWires={showWires} showTokens={showTokens} style={{ backgroundImage: ` url(${gameboyDesktop})` }}>
-          <GameboyButtons />
+        <GameEditionDesktopContainer showWires={showWires} showTokens={showTokens} style={{ backgroundImage: ` url(${gameEditionDesktop})` }}>
+          <GameEditionButtons />
 
           <DisplayContent resolutionConfiguration={resolutionConfiguration}>
             {children}
@@ -295,9 +285,9 @@ const GameEditionContainer = ({ children }) => {
           </DisplayContent>
 
           <div className="kaddex-logo">
-            <KaddexLogo />
+            <KaddexWhite />
           </div>
-        </GameboyDesktopContainer>
+        </GameEditionDesktopContainer>
         {showTokens && (
           <SearchTokenList>
             <TokenSelectorModalContent />

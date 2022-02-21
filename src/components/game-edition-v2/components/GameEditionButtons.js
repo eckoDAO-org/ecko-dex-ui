@@ -17,7 +17,7 @@ import GameEditionL1R1PageModal from '../GameEditionL1R1PageModal';
 import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from '../../../router/routes';
 import { useEffect } from 'react';
 
-const GameboyButtons = () => {
+const GameEditionButtons = () => {
   const history = useHistory();
   const location = useLocation();
   const { buttons, openModal, closeModal } = useGameEditionContext();
@@ -74,7 +74,7 @@ const GameboyButtons = () => {
   );
 };
 
-export default GameboyButtons;
+export default GameEditionButtons;
 
 const ButtonContainer = styled.div`
   position: absolute;

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { KaddexLightModeLogo, KaddexLogoWhite } from '../../../assets';
+import { KaddexLightModeLogo, KaddexLogo } from '../../../assets';
 import { ROUTE_INDEX } from '../../../router/routes';
 import menuItems from '../../menuItems';
 import RightHeaderItems from './RightHeaderItems';
@@ -66,7 +66,7 @@ const DesktopHeader = ({ className }) => {
     <Container className={className} resolutionConfiguration={resolutionConfiguration}>
       <LeftContainer>
         {themeMode === 'dark' ? (
-          <KaddexLogoWhite style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
+          <KaddexLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
         ) : (
           <KaddexLightModeLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
         )}

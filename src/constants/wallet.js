@@ -2,15 +2,12 @@ import React from 'react';
 import {
   LockLogo,
   ZelcoreLogo,
-  TorusLogo,
-  KaddexLogoWhite,
+  KaddexWhite,
   WireChainweaverIcon,
-  WireTorusIcon,
   WireXwalletIcon,
   WireZelcoreIcon,
   LogoZelcoreIcon,
   LogoChainweaverIcon,
-  LogoTorusIcon,
   LogoXwalletIcon,
 } from '../assets';
 
@@ -18,7 +15,7 @@ export const WALLET = {
   KADDEX_WALLET: {
     id: 'KADDEX_WALLET',
     name: 'X Wallet',
-    logo: <KaddexLogoWhite style={{ width: 45 }} />,
+    logo: <KaddexWhite style={{ width: 45 }} />,
     wireIcon: <WireXwalletIcon />,
     notificationLogo: <LogoXwalletIcon />,
   },
@@ -39,13 +36,5 @@ export const WALLET = {
     getAccountsUrl: 'http://127.0.0.1:9467/v1/accounts',
     wireIcon: <WireChainweaverIcon />,
     notificationLogo: <LogoChainweaverIcon />,
-  },
-  TORUS: {
-    id: 'TORUS',
-    name: 'Torus',
-    logo: <TorusLogo />,
-    signMethod: 'sign_required',
-    wireIcon: <WireTorusIcon />,
-    notificationLogo: <LogoTorusIcon />,
   },
 };
