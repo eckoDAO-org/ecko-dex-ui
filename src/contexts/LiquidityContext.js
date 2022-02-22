@@ -60,7 +60,14 @@ export const LiquidityProvider = (props) => {
             )
             (map (kswap-read.pair-info) [${tokenPairList}])
              `,
-          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 3000, creationTime(), 600),
+          meta: Pact.lang.mkMeta(
+            "",
+            chainId,
+            GAS_PRICE,
+            150000,
+            creationTime(),
+            600
+          ),
         },
         network
       );
@@ -221,7 +228,14 @@ export const LiquidityProvider = (props) => {
           amountMinimum0: reduceBalance(amountDesired0 * (1 - parseFloat(pact.slippage)), tokenData[token0.name].precision),
           amountMinimum1: reduceBalance(amountDesired1 * (1 - parseFloat(pact.slippage)), tokenData[token1.name].precision),
         },
-        meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account, chainId, GAS_PRICE, 3000, creationTime(), 600),
+        meta: Pact.lang.mkMeta(
+          ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
+          chainId,
+          GAS_PRICE,
+          150000,
+          creationTime(),
+          600
+        ),
         networkId: NETWORKID,
       };
       let data = await Pact.fetch.local(cmd, network);
@@ -264,8 +278,8 @@ export const LiquidityProvider = (props) => {
           ]),
           ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : []),
         ],
-        sender: ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account,
-        gasLimit: 3000,
+        sender: ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
+        gasLimit: 150000,
         gasPrice: GAS_PRICE,
         chainId: chainId,
         ttl: 600,
@@ -369,7 +383,14 @@ export const LiquidityProvider = (props) => {
           'user-ks': account.guard,
           liquidity: reduceBalance(liquidity, PRECISION),
         },
-        meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account, chainId, GAS_PRICE, 3000, creationTime(), 600),
+        meta: Pact.lang.mkMeta(
+          ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
+          chainId,
+          GAS_PRICE,
+          150000,
+          creationTime(),
+          600
+        ),
       };
       swap.setCmd(cmd);
       let data = await Pact.fetch.local(cmd, network);
@@ -414,8 +435,8 @@ export const LiquidityProvider = (props) => {
           ]),
           ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : []),
         ],
-        sender: ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account,
-        gasLimit: 3000,
+        sender: ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
+        gasLimit: 150000,
         gasPrice: GAS_PRICE,
         chainId: chainId,
         ttl: 600,
