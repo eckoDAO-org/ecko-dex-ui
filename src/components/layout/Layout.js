@@ -95,6 +95,7 @@ const MainContent = styled.div`
 
     scrollbar-width: none;
   }
+  overflow: auto;
 `;
 
 const StripesContainer = styled.div`

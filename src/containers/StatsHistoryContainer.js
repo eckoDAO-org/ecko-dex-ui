@@ -7,6 +7,7 @@ import styled, { css } from 'styled-components/macro';
 import { GameEditionContext } from '../contexts/GameEditionContext';
 import { TitleContainer } from '../components/layout/Containers';
 import Label from '../components/shared/Label';
+import VolumeChart from '../components/charts/VolumeChart';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
 import { FadeIn } from '../components/shared/animations';
 import useLazyImage from '../hooks/useLazyImage';
@@ -75,6 +76,10 @@ const StatsHistoryContainer = () => {
       ) : (
         <HistoryTab activeTabs={activeTabs} setActiveTabs={setActiveTabs} />
       )}
+
+      <div style={{ marginTop: 50 }}>
+        <VolumeChart />
+      </div>
     </Container>
   );
 };
