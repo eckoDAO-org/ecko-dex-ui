@@ -26,8 +26,6 @@ const VolumeChart = () => {
                 return partialSum + (currVol.tokenFromName === 'coin' ? currVol.tokenFromVolume : currVol.tokenToVolume);
               }, 0)
               .toFixed(2),
-            pv: 4800,
-            amt: 2181,
           });
         }
         setVolume(allVolume);
@@ -38,9 +36,9 @@ const VolumeChart = () => {
   return (
     <CardContainer>
       <GradientBorder />
-      <Label>Volume</Label>
+      <Label>Volume KDA</Label>
       <BarChart
-        width={500}
+        width={800}
         height={300}
         data={volume}
         margin={{
@@ -53,7 +51,7 @@ const VolumeChart = () => {
         <XAxis dataKey="name" />
         {/* <YAxis /> */}
         <Tooltip label="Volume" />
-        <Bar dataKey="Volume KDA" fill="#82ca9d" />
+        <Bar dataKey="Volume KDA" fill="#39fffc" />
       </BarChart>
     </CardContainer>
   );

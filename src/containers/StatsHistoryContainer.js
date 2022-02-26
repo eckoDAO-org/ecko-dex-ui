@@ -8,6 +8,7 @@ import { GameEditionContext } from '../contexts/GameEditionContext';
 import { TitleContainer } from '../components/layout/Containers';
 import Label from '../components/shared/Label';
 import VolumeChart from '../components/charts/VolumeChart';
+import TVLChart from '../components/charts/TVLChart';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
 import { FadeIn } from '../components/shared/animations';
 import useLazyImage from '../hooks/useLazyImage';
@@ -78,7 +79,12 @@ const StatsHistoryContainer = () => {
       )}
 
       <div style={{ marginTop: 50 }}>
-        <VolumeChart />
+        <div>
+          <TVLChart />
+        </div>
+        <div style={{ marginTop: 10 }}>
+          <VolumeChart />
+        </div>
       </div>
     </Container>
   );

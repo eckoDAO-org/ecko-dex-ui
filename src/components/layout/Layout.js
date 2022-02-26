@@ -55,25 +55,25 @@ const MainContent = styled.div`
   ${({ resolutionConfiguration }) => {
     if (resolutionConfiguration) {
       const browser = browserDetection();
-      switch (browser) {
-        case 'CHROME':
-          return css`
-            zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
-          `;
-        case 'FIREFOX':
-          return css`
-            & > :first-child {
-              -ms-zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
-              -webkit-zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
-              -moz-transform: ${({ resolutionConfiguration }) => `scale(${resolutionConfiguration['normal-mode'].scale})`};
-              -moz-transform-origin: center;
-            }
-          `;
-        default:
-          return css`
-            transform: ${({ resolutionConfiguration }) => `scale(${resolutionConfiguration['normal-mode'].scale})`};
-          `;
-      }
+      // switch (browser) {
+      //   case 'CHROME':
+      //     return css`
+      //       zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
+      //     `;
+      //   case 'FIREFOX':
+      //     return css`
+      //       & > :first-child {
+      //         -ms-zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
+      //         -webkit-zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
+      //         -moz-transform: ${({ resolutionConfiguration }) => `scale(${resolutionConfiguration['normal-mode'].scale})`};
+      //         -moz-transform-origin: center;
+      //       }
+      //     `;
+      //   default:
+      //     return css`
+      //       transform: ${({ resolutionConfiguration }) => `scale(${resolutionConfiguration['normal-mode'].scale})`};
+      //     `;
+      // }
     }
   }}
 
