@@ -144,7 +144,6 @@ export const KaddexWalletProvider = (props) => {
   const setAccountData = async () => {
     console.log('X-Wallet: SETTING ACCOUNT DATA');
     const acc = await getAccountInfo();
-    console.log('!!! ~ acc', acc);
     if (acc.wallet) {
       console.log('X-Wallet: SETTING ACCOUNT DATA - WALLET FOUNDED', acc);
       await setVerifiedAccount(acc.wallet.account);
