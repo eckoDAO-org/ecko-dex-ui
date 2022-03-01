@@ -79,7 +79,6 @@ const FormContainer = styled.div`
 
 const TopContainer = styled.div``;
 
-
 const LiquidityList = (props) => {
   const modalContext = useContext(ModalContext);
   const liquidity = useContext(LiquidityContext);
@@ -118,8 +117,8 @@ const LiquidityList = (props) => {
             Liquidity provider rewards
           </h1>
           <p style={{ fontSize: 16 }}>
-            Liquidity providers earn a 0.3% fee on all trades proportional to
-            their share of the pool.
+            Liquidity providers earn a 0.25% fee back and 0.05% goes to stakers
+            on all trades proportional to their share of the pool.
             <br />
             Fees are added to the pool, accrue in real time and can be claimed
             by withdrawing your liquidity.
