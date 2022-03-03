@@ -1,5 +1,4 @@
-import { createGlobalStyle, css } from 'styled-components/macro';
-import browserDetection from '../utils/browserDetection';
+import { createGlobalStyle } from 'styled-components/macro';
 
 export default createGlobalStyle`
     *, *:before, *:after {
@@ -29,17 +28,7 @@ export default createGlobalStyle`
       min-width: 0;
       font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
       color: ${({ theme: { colors } }) => colors.primary};
-      ${() => {
-        if (browserDetection() === 'SAFARI') {
-          return css`
-            background: ${({ theme: { backgroundBodySafari } }) => backgroundBodySafari};
-          `;
-        } else {
-          return css`
-            background: ${({ theme: { backgroundBody } }) => backgroundBody};
-          `;
-        }
-      }};
+      background: ${({ theme: { backgroundBody } }) => backgroundBody};
       
       opacity: 1;
       background-size: cover;

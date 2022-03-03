@@ -17,22 +17,16 @@ const Item = styled(NavLink)`
     }
   }
 
-  &.active {
-    font-family: ${({ theme: { fontFamily } }) => fontFamily.syncopate};
-  }
-
   .underline {
     width: ${({ $isHover }) => ($isHover ? '100%' : 0)};
     transition: width 0.3s;
     background: ${({ theme: { colors } }) => colors.white};
-    height: 3px;
+    height: 1px;
   }
 
   &:hover {
-    font-family: ${({ theme: { fontFamily }, $notChangebleFontOnHover }) => !$notChangebleFontOnHover && `${fontFamily.syncopate} !important`};
-    color: ${({ theme: { colors }, $gameEditionView }) => colors.white};
+    color: ${({ theme: { colors } }) => colors.white};
 
-    /* text-shadow: ${({ theme: { colors }, $gameEditionView }) => ($gameEditionView ? 'none' : `0 0 5px ${colors.white}`)}; */
     cursor: pointer;
     & svg {
       & path {
@@ -98,7 +92,7 @@ const HeaderItem = ({
         {icon}
         {children}
       </HeaderItemContent>
-      <div className="underline"></div>
+      <div className="underline" />
     </Item>
   );
 };

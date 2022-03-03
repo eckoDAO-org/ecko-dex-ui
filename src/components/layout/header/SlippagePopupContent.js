@@ -17,6 +17,7 @@ const Wrapper = styled.div`
   height: 100%;
   display: flex;
   position: relative;
+  align-items: center;
   z-index: 2;
   svg {
     path {

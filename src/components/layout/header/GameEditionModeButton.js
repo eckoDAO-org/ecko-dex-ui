@@ -9,16 +9,20 @@ import { commonTheme } from '../../../styles/theme';
 const Button = styled.div`
   cursor: pointer;
   height: fit-content;
-  position: absolute;
+
   /* width: 168px; */
-  left: 50%;
-  transform: translate(-50%, 0);
+
   border-radius: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1;
 
+  .header {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
   color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.white : colors.primary)};
 
   @media (min-width: ${({ theme: { mediaQueries }, resolutionConfiguration }) =>
@@ -50,13 +54,14 @@ const Button = styled.div`
   }
 `;
 
-const GameEditionModeButton = () => {
+const GameEditionModeButton = ({ className }) => {
   const { gameEditionView, closeModal, setGameEditionView, showWires } = useGameEditionContext();
   const { resolutionConfiguration } = useApplicationContext();
   const [width, height] = useWindowSize();
 
   return !showWires ? (
     <Button
+      className={className}
       resolutionConfiguration={resolutionConfiguration}
       gameEditionView={gameEditionView}
       onClick={() => {

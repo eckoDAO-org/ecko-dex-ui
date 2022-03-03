@@ -30,6 +30,10 @@ import Label from '../components/shared/Label';
 import PixeledBlueContainer from '../components/game-edition-v2/components/PixeledInfoContainerBlue';
 import useLazyImage from '../hooks/useLazyImage';
 import LogoLoader from '../components/shared/Loader';
+import { FlexContainer } from '../components/shared/FlexContainer';
+import useWindowSize from '../hooks/useWindowSize';
+import { ApplicationContext } from '../contexts/ApplicationContext';
+import GameEditionModeButton from '../components/layout/header/GameEditionModeButton';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -64,43 +68,15 @@ const Container = styled(FadeIn)`
   }}
 `;
 
-const SwapTitleContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 14px;
-  ${({ gameEditionView }) => {
-    if (gameEditionView) {
-      return css`
-        justify-content: center;
-      `;
-    }
-  }}
-  width: 100%;
-`;
-
-const GameEditionTokenSelectorContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-`;
-
-const ResultContainer = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  margin: 16px 0px;
-`;
-
 const SwapContainer = () => {
+  const [width, height] = useWindowSize();
   const pact = useContext(PactContext);
   const swap = useContext(SwapContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const modalContext = useContext(ModalContext);
+  const { resolutionConfiguration } = useContext(ApplicationContext);
+
   const { gameEditionView, openModal, closeModal, outsideToken } = useContext(GameEditionContext);
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
 
@@ -414,7 +390,7 @@ const SwapContainer = () => {
           setTokenSelectorType(null);
         },
         content: (
-          <GameEditionTokenSelectorContainer>
+          <FlexContainer gameEditionClassName="column w-100 h-100 justify-ce align-ce text-ce">
             <TokenSelectorModalContentGE
               selectedToken={selectedToken}
               tokenSelectorType={tokenSelectorType}
@@ -425,7 +401,7 @@ const SwapContainer = () => {
               fromToken={fromValues.coin}
               toToken={toValues.coin}
             />
-          </GameEditionTokenSelectorContainer>
+          </FlexContainer>
         ),
       });
     } else {
@@ -510,12 +486,17 @@ const SwapContainer = () => {
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
       {!gameEditionView && isLogoVisible && <BackgroundLogo />}
 
-      <SwapTitleContainer gameEditionView={gameEditionView}>
+      <FlexContainer className="justify-sb w-100" gameEditionClassName="justify-ce" style={{ marginBottom: 24 }}>
         <Label fontSize={32} geCenter fontFamily="syncopate" geFontSize={52} geLabelStyle={{ lineHeight: '32px' }}>
           Swap
         </Label>
-        {!gameEditionView && <SlippagePopupContent />}
-      </SwapTitleContainer>
+        {!gameEditionView && (
+          <FlexContainer className="align-ce" gap={22}>
+            <SlippagePopupContent />
+            {width >= resolutionConfiguration?.width && height >= resolutionConfiguration?.height && <GameEditionModeButton />}
+          </FlexContainer>
+        )}
+      </FlexContainer>
       <FormContainer
         gameEditionView={gameEditionView}
         footer={
@@ -559,12 +540,12 @@ const SwapContainer = () => {
             {gameEditionView ? (
               <PixeledBlueContainer label="Max Slippage" value={`${pact.slippage * 100}%`} style={{ marginTop: 10 }} />
             ) : (
-              <ResultContainer gameEditionView={gameEditionView}>
+              <FlexContainer className="w-100 justify-sb" style={{ margin: '16px 0' }}>
                 <Label fontSize={13} geFontSize={20} geColor="blue">
                   Max slippage
                 </Label>
                 <Label fontSize={13} geFontSize={28}>{`${pact.slippage * 100}%`}</Label>
-              </ResultContainer>
+              </FlexContainer>
             )}
           </>
         )}

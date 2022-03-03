@@ -32,7 +32,7 @@ const AccountContainer = styled.div`
   justify-content: center;
   padding: 8px 16px;
   background: ${({ theme: { colors } }) => colors.white};
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.syncopate};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
   font-size: 13px;
   color: ${({ theme: { colors } }) => colors.primary};
   border-radius: 10px;
