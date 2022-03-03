@@ -72,7 +72,7 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
         <Label geCenter geColor="yellow">
           Preview Failed!
         </Label>
-        <Label fontFamily="bold" labelStyle={{ marginBottom: ' 12px', width: '100%' }}>
+        <Label fontFamily="syncopate" labelStyle={{ marginBottom: ' 12px', width: '100%' }}>
           Error Message
         </Label>
         <TransactionsDetails>
@@ -100,11 +100,11 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
   const localError = () => {
     return (
       <Content gameEditionView={gameEditionView}>
-        <Label fontFamily="bold" geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
+        <Label fontFamily="syncopate" geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
           Transaction Error!
         </Label>
         {!gameEditionView && <ErrorIcon style={{ width: '60px', height: ' 60px', margin: '16px 0' }} />}
-        <Label fontFamily="bold" labelStyle={{ marginBottom: ' 12px', width: '100%' }}>
+        <Label fontFamily="syncopate" labelStyle={{ marginBottom: ' 12px', width: '100%' }}>
           Error Message
         </Label>
         <TransactionsDetails>

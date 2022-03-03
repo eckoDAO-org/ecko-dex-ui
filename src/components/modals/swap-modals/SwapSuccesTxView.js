@@ -27,7 +27,7 @@ export const SwapSuccessViewGE = ({ swap }) => {
         <>
           <Row className="fs">
             {getTokenIcon(swap?.localRes?.result?.data[0]?.token)}
-            <GameEditionLabel fontSize={32} color="black" fontFamily="bold">
+            <GameEditionLabel fontSize={32} color="black" fontFamily="syncopate">
               {extractDecimal(swap?.localRes?.result?.data[0]?.amount)}
             </GameEditionLabel>
           </Row>
@@ -48,7 +48,7 @@ export const SwapSuccessViewGE = ({ swap }) => {
         <>
           <Row className="fs">
             {getTokenIcon(swap?.localRes?.result?.data[1]?.token)}
-            <GameEditionLabel fontSize={32} color="black" fontFamily="bold">
+            <GameEditionLabel fontSize={32} color="black" fontFamily="syncopate">
               {extractDecimal(swap?.localRes?.result?.data[1]?.amount)}
             </GameEditionLabel>
           </Row>
@@ -102,7 +102,7 @@ export const SwapSuccessView = ({ swap, loading, sendTransaction }) => {
       }}
     >
       <Row className="sb">
-        <Label fontFamily="bold">From</Label>
+        <Label fontFamily="syncopate">From</Label>
         <Label fontSize={13}></Label>
       </Row>
       <Row className="sb">
@@ -126,13 +126,13 @@ export const SwapSuccessView = ({ swap, loading, sendTransaction }) => {
 
       <Row className="sb">
         <Row className="fs">
-          <Label fontFamily="bold"> {getTokenIcon(swap?.localRes?.result?.data[0]?.token)}</Label>
-          <Label fontFamily="bold">{extractDecimal(swap?.localRes?.result?.data[0]?.amount)}</Label>
+          <Label fontFamily="syncopate"> {getTokenIcon(swap?.localRes?.result?.data[0]?.token)}</Label>
+          <Label fontFamily="syncopate">{extractDecimal(swap?.localRes?.result?.data[0]?.amount)}</Label>
         </Row>
-        <Label fontFamily="bold">{showTicker(swap?.localRes?.result?.data[0]?.token)}</Label>
+        <Label fontFamily="syncopate">{showTicker(swap?.localRes?.result?.data[0]?.token)}</Label>
       </Row>
       <Row className="sb">
-        <Label fontFamily="bold">
+        <Label fontFamily="syncopate">
           <Icon name="long arrow alternate down" style={{}} />
         </Label>
         <Label fontSize={13}>{`1 ${showTicker(swap?.localRes?.result?.data[0]?.token)} = ${reduceBalance(pact?.computeOut(1), 12)} ${showTicker(
@@ -141,10 +141,10 @@ export const SwapSuccessView = ({ swap, loading, sendTransaction }) => {
       </Row>
       <Row className="sb">
         <Row className="fs">
-          <Label fontFamily="bold"> {getTokenIcon(swap?.localRes?.result?.data[1]?.token)}</Label>
-          <Label fontFamily="bold">{`${extractDecimal(swap?.localRes?.result?.data[1]?.amount)} `}</Label>
+          <Label fontFamily="syncopate"> {getTokenIcon(swap?.localRes?.result?.data[1]?.token)}</Label>
+          <Label fontFamily="syncopate">{`${extractDecimal(swap?.localRes?.result?.data[1]?.amount)} `}</Label>
         </Row>
-        <Label fontFamily="bold">{` ${showTicker(swap?.localRes?.result?.data[1]?.token)}`}</Label>
+        <Label fontFamily="syncopate">{` ${showTicker(swap?.localRes?.result?.data[1]?.token)}`}</Label>
       </Row>
     </SuccesViewContainer>
   );

@@ -65,7 +65,7 @@ export const SuccesViewContainer = ({ swap, onClick, loading, children }) => {
   const { gameEditionView } = useGameEditionContext();
   return (
     <Content gameEditionView={gameEditionView}>
-      <Label fontFamily="bold" geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
+      <Label fontFamily="syncopate" geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
         Preview Successful!
       </Label>
       {!gameEditionView && <SuccessfullIcon />}

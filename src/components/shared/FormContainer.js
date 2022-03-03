@@ -49,7 +49,7 @@ const FooterContainer = styled.div`
 `;
 
 const Title = styled.span`
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.syncopate};
   font-size: 24px;
   text-transform: capitalize;
   color: ${theme.colors.white};

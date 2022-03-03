@@ -28,7 +28,7 @@ const Container = styled.div`
 
 const Title = styled.div`
   font-size: 16px;
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.syncopate};
   color: ${({ theme: { colors } }) => colors.white};
   margin-left: 10px;
   width: 100%;
@@ -42,7 +42,7 @@ const Header = styled.div`
   padding: 10px 22px 10px 26px;
   color: ${({ theme: { colors } }) => colors.white};
   min-height: 56px;
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.syncopate};
   font-size: 16px;
   border-radius: 0px !important;
   box-shadow: ${({ theme }) => theme.boxShadow};

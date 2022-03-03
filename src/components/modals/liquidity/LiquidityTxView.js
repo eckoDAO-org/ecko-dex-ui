@@ -68,24 +68,24 @@ export const SuccessAddRemoveView = ({ token0, token1, swap, loading, label, onC
   return (
     <SuccesViewContainer swap={swap} loading={loading} onClick={onClick}>
       <Row className="fs">
-        <Label fontFamily="bold">{label}</Label>
+        <Label fontFamily="syncopate">{label}</Label>
       </Row>
       <Row className="sb">
         <Row className="fs">
           {getTokenIcon(token0)}
-          <Label fontFamily="bold">{extractDecimal(swap?.localRes?.result?.data?.amount0)}</Label>
+          <Label fontFamily="syncopate">{extractDecimal(swap?.localRes?.result?.data?.amount0)}</Label>
         </Row>
-        <Label fontFamily="bold">{showTicker(token0)}</Label>
+        <Label fontFamily="syncopate">{showTicker(token0)}</Label>
       </Row>
       <Row className="fs">
-        <Label fontFamily="bold">{label}</Label>
+        <Label fontFamily="syncopate">{label}</Label>
       </Row>
       <Row className="sb">
         <Row className="fs">
           {getTokenIcon(token1)}
-          <Label fontFamily="bold">{extractDecimal(swap?.localRes?.result?.data?.amount1)}</Label>
+          <Label fontFamily="syncopate">{extractDecimal(swap?.localRes?.result?.data?.amount1)}</Label>
         </Row>
-        <Label fontFamily="bold">{showTicker(token1)}</Label>
+        <Label fontFamily="syncopate">{showTicker(token1)}</Label>
       </Row>
     </SuccesViewContainer>
   );

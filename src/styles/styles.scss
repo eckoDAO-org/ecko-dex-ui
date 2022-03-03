@@ -35,3 +35,15 @@
   src: url('../assets/fonts/pixeboy/Pixeboy-z8XGD.ttf') format('truetype');
   font-style: normal;
 }
+
+@font-face {
+  font-family: 'syncopate-bold';
+  src: local('syncopate-bold'), url('../assets/fonts/Syncopate-Bold.ttf') format('truetype');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'basier-square-mono-regular';
+  src: local('basier-square-mono-regular'), url('../assets/fonts/basier-square-mono-regular.woff') format('woff');
+  font-style: normal;
+}

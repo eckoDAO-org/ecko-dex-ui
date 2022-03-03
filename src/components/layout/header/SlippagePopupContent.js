@@ -58,7 +58,7 @@ const SlippageTolleranceValue = styled.div`
   border-radius: 16px;
   border: ${({ theme: { colors } }) => `1px solid ${colors.white}`};
   color: ${({ isSelected, theme: { colors } }) => (isSelected ? colors.primary : colors.white)};
-  font-family: ${({ isSelected, theme: { fontFamily } }) => (isSelected ? fontFamily.bold : fontFamily.regular)};
+  font-family: ${({ isSelected, theme: { fontFamily } }) => (isSelected ? fontFamily.syncopate : fontFamily.basier)};
   font-size: 14px;
   padding: 6.5px 8.5px;
   min-width: 48px;
@@ -131,7 +131,7 @@ const SlippagePopupContent = ({ className }) => {
           }
         >
           <Container>
-            <Label outGameEditionView fontSize={13} fontFamily="bold">
+            <Label outGameEditionView fontSize={13} fontFamily="syncopate">
               Transactions Settings
             </Label>
             {!gameEditionView && (

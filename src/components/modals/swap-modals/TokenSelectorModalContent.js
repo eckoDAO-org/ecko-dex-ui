@@ -46,7 +46,7 @@ const TokenItem = styled.div`
   display: flex;
   align-items: center;
   font-size: 16px;
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
   color: ${({ selected, theme: { colors } }) => (selected ? `${colors.white}99` : colors.white)};
   svg {
     margin-right: 8px;
@@ -85,7 +85,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
   return (
     <Content>
       {!gameEditionView && (
-        <Label fontSize={13} fontFamily="bold" labelStyle={{ marginTop: 12, marginBottom: 8 }}>
+        <Label fontSize={13} fontFamily="syncopate" labelStyle={{ marginTop: 12, marginBottom: 8 }}>
           Search token
         </Label>
       )}
@@ -109,7 +109,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
         )}
       </div>
       {!gameEditionView && (
-        <Label fontSize={13} fontFamily="bold">
+        <Label fontSize={13} fontFamily="syncopate">
           Token
         </Label>
       )}
@@ -142,7 +142,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
                     {crypto.name}
 
                     {((tokenSelectorType === 'from' && fromToken === crypto.name) || (tokenSelectorType === 'to' && toToken === crypto.name)) && (
-                      <Label fontSize={13} fontFamily="bold" labelStyle={{ marginLeft: 5 }}>
+                      <Label fontSize={13} fontFamily="syncopate" labelStyle={{ marginLeft: 5 }}>
                         (Selected)
                       </Label>
                     )}

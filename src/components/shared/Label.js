@@ -26,7 +26,7 @@ const STYText = styled.span`
 const Label = ({
   className,
   children,
-  fontFamily = 'regular',
+  fontFamily = 'basier',
   fontSize = 16,
   labelStyle,
   geFontSize,

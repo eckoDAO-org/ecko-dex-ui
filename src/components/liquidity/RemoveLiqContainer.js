@@ -218,7 +218,7 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
       <Label
         fontSize={32}
         geCenter
-        fontFamily="bold"
+        fontFamily="syncopate"
         geFontSize={32}
         labelStyle={{ marginBottom: 14, whiteSpace: 'nowrap' }}
         geLabelStyle={{ lineHeight: '32px', marginBottom: 16 }}
@@ -329,19 +329,19 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
               <Label fontSize={13}>
                 {token0} per {token1}
               </Label>
-              <Label fontSize={13} fontFamily="bold">
+              <Label fontSize={13} fontFamily="syncopate">
                 {pairUnit(extractDecimal(pooled))}
               </Label>
             </InnerRowContainer>
             <InnerRowContainer>
               <Label fontSize={13}>Pooled {token0}</Label>
-              <Label fontSize={13} fontFamily="bold">
+              <Label fontSize={13} fontFamily="syncopate">
                 {pairUnit(extractDecimal(pooledToken0))}
               </Label>
             </InnerRowContainer>
             <InnerRowContainer>
               <Label fontSize={13}>Pooled {token1}</Label>
-              <Label fontSize={13} fontFamily="bold">
+              <Label fontSize={13} fontFamily="syncopate">
                 {pairUnit(extractDecimal(pooledToken1))}
               </Label>
             </InnerRowContainer>

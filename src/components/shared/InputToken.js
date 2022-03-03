@@ -92,6 +92,7 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
           <CustomButton
             type="basic"
             geBasic
+            fontFamily="basier"
             geColor={geColor}
             onClick={onClick}
             geFontSize={24}

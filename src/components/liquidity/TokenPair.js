@@ -86,7 +86,7 @@ const TokenPair = (props) => {
           $gameEditionView={$gameEditionView}
           onClick={() => handleActiveIndex(props.index)}
         >
-          <Label fontFamily="bold" geFontSize={20}>
+          <Label fontFamily="syncopate" geFontSize={20}>
             {token0} / {token1}
           </Label>
           <IconContainer $gameEditionView={$gameEditionView} active={props.activeIndex === props.index}>

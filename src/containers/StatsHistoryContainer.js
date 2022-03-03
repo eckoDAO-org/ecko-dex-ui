@@ -62,10 +62,16 @@ const StatsHistoryContainer = () => {
           justifyContent: 'space-between',
         }}
       >
-        <Label fontSize={32} fontFamily="bold" geFontSize={40} withShade={activeTabs !== 'POOL_STATS'} onClick={() => setActiveTabs('POOL_STATS')}>
+        <Label
+          fontSize={32}
+          fontFamily="syncopate"
+          geFontSize={40}
+          withShade={activeTabs !== 'POOL_STATS'}
+          onClick={() => setActiveTabs('POOL_STATS')}
+        >
           Stats
         </Label>
-        <Label fontSize={32} fontFamily="bold" geFontSize={40} withShade={activeTabs !== 'HISTORY'} onClick={() => setActiveTabs('HISTORY')}>
+        <Label fontSize={32} fontFamily="syncopate" geFontSize={40} withShade={activeTabs !== 'HISTORY'} onClick={() => setActiveTabs('HISTORY')}>
           History
         </Label>
       </TitleContainer>

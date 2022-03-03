@@ -17,7 +17,7 @@ const Text = styled.span`
   margin-left: 16px;
 
   font-size: 16px;
-  font-family: ${({ fontWeight }) => (fontWeight ? theme.fontFamily.bold : theme.fontFamily.regular)};
+  font-family: ${({ fontWeight }) => (fontWeight ? theme.fontFamily.syncopate : theme.fontFamily.basier)};
 `;
 
 const capitalizeFirstLetter = (string) => {

@@ -75,7 +75,7 @@ const HeaderContainer = styled.div`
 `;
 
 const Title = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.bold)};
+  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.syncopate)};
 
   font-size: 32px;
 
@@ -89,7 +89,7 @@ const Title = styled.span`
 `;
 
 const Description = styled.span`
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
   font-size: 16px;
   margin: 24px 0px;
 `;

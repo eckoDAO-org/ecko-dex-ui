@@ -27,7 +27,7 @@ export default createGlobalStyle`
       line-height: inherit;
       overflow: auto;
       min-width: 0;
-      font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
+      font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
       color: ${({ theme: { colors } }) => colors.primary};
       ${() => {
         if (browserDetection() === 'SAFARI') {

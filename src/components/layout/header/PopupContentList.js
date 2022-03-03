@@ -114,7 +114,7 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
                   display: 'flex',
                   alignItems: 'center',
                   fontSize: 16,
-                  fontFamily: commonTheme.fontFamily.regular,
+                  fontFamily: commonTheme.fontFamily.basier,
                   width: 42,
                 }}
               >
@@ -154,7 +154,7 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
                   display: 'flex',
                   alignItems: 'center',
                   fontSize: 16,
-                  fontFamily: commonTheme.fontFamily.regular,
+                  fontFamily: commonTheme.fontFamily.basier,
                   width: 42,
                 }}
               >

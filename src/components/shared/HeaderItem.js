@@ -18,7 +18,7 @@ const Item = styled(NavLink)`
   }
 
   &.active {
-    font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+    font-family: ${({ theme: { fontFamily } }) => fontFamily.syncopate};
   }
 
   .underline {
@@ -29,7 +29,7 @@ const Item = styled(NavLink)`
   }
 
   &:hover {
-    font-family: ${({ theme: { fontFamily }, $notChangebleFontOnHover }) => !$notChangebleFontOnHover && `${fontFamily.bold} !important`};
+    font-family: ${({ theme: { fontFamily }, $notChangebleFontOnHover }) => !$notChangebleFontOnHover && `${fontFamily.syncopate} !important`};
     color: ${({ theme: { colors }, $gameEditionView }) => colors.white};
 
     /* text-shadow: ${({ theme: { colors }, $gameEditionView }) => ($gameEditionView ? 'none' : `0 0 5px ${colors.white}`)}; */

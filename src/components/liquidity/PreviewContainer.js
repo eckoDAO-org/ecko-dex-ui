@@ -45,13 +45,13 @@ const RowContainer2 = styled.div`
 `;
 
 const Label = styled.span`
-  font: normal normal normal 14px/15px ${theme.fontFamily.regular};
+  font: normal normal normal 14px/15px ${theme.fontFamily.basier};
   color: #ffffff;
   text-transform: capitalize;
 `;
 
 const Value = styled.span`
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.syncopate};
   font-size: 16px;
   line-height: 20px;
   color: #ffffff;
@@ -65,7 +65,7 @@ const PreviewContainer = (props) => {
     <Container>
       <TokenSelector />
       <TitleContainer>
-        <Title style={{ fontFamily: theme.fontFamily.regular }}>
+        <Title style={{ fontFamily: theme.fontFamily.basier }}>
           <ArrowBack
             style={{
               cursor: 'pointer',

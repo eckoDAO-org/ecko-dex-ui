@@ -23,7 +23,7 @@ const Container = styled.div`
         .ui.input > input {
           height: 22px;
           padding: 0px;
-          font-family: ${outGameEditionView ? fontFamily.regular : fontFamily.pixeboy};
+          font-family: ${outGameEditionView ? fontFamily.basier : fontFamily.pixeboy};
           color: ${geColor ? geColor : outGameEditionView ? colors.white : colors.black} !important;
           font-size: 26px;
         }
@@ -31,7 +31,7 @@ const Container = styled.div`
         input::placeholder {
           color: ${geColor ? geColor : `${colors.black}99`} !important;
           text-transform: capitalize;
-          font-family: ${outGameEditionView ? fontFamily.regular : fontFamily.pixeboy};
+          font-family: ${outGameEditionView ? fontFamily.basier : fontFamily.pixeboy};
           font-size: 26px;
         }
         .ui.labeled.input > .label:not(.corner) {
@@ -50,7 +50,7 @@ const Container = styled.div`
         border-radius: 4px;
         .ui.input > input {
           padding: 10px 2px;
-          font-family: ${fontFamily.regular};
+          font-family: ${fontFamily.basier};
           color: ${color ? color : colors.white} !important;
           font-size: 28px;
           @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
@@ -61,14 +61,14 @@ const Container = styled.div`
           color: ${colors.white} !important;
           text-transform: capitalize;
           font-family: 14px;
-          font-family: ${fontFamily.regular};
+          font-family: ${fontFamily.basier};
           font-size: 28px;
           @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
             font-size: 20px;
           }
         }
         .ui.labeled.input > .label:not(.corner) {
-          font-family: ${fontFamily.regular};
+          font-family: ${fontFamily.basier};
           padding-left: 0px;
           padding-right: 0px;
           color: ${colors.white} !important;
@@ -156,10 +156,10 @@ const Input = ({
     >
       {(topLeftLabel || topRightLabel) && !gameEditionView && (
         <TopLabelsContainer>
-          {topLeftLabel && <Label fontFamily="bold">{topLeftLabel}</Label>}
+          {topLeftLabel && <Label fontFamily="basier">{topLeftLabel}</Label>}
           {topRightLabel && (
             <Label
-              fontFamily="bold"
+              fontFamily="basier"
               style={{
                 marginLeft: !topLeftLabel ? 'auto' : 'unset',
                 textAlign: 'end',

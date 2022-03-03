@@ -72,7 +72,7 @@ const StatsCard = ({ pair }) => {
           <IconsContainer style={{ marginRight: '16px' }}>
             {tokenData[pair.token0].icon}
             {tokenData[pair.token1].icon}
-            <Label fontFamily="bold">{`${pair.token0}-${pair.token1}`}</Label>
+            <Label fontFamily="syncopate">{`${pair.token0}-${pair.token1}`}</Label>
           </IconsContainer>
           {/* TR TOKEN 0 */}
           <ColumnContainer style={{ marginRight: '16px' }}>
@@ -96,7 +96,7 @@ const StatsCard = ({ pair }) => {
             <IconsContainer>
               {tokenData[pair.token0].icon}
               {tokenData[pair.token1].icon}
-              <Label fontFamily="bold">{`${pair.token0}-${pair.token1}`}</Label>
+              <Label fontFamily="syncopate">{`${pair.token0}-${pair.token1}`}</Label>
             </IconsContainer>
 
             <ColumnContainer style={{ marginTop: 32 }}>

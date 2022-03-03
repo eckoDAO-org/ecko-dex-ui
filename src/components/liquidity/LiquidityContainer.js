@@ -616,7 +616,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
       {!gameEditionView && isLogoVisible && <BackgroundLogo />}
 
       <TitleContainer gameEditionView={gameEditionView}>
-        <Label fontSize={32} geCenter fontFamily="bold" geFontSize={32} geLabelStyle={{ lineHeight: '32px' }} onClose={() => closeLiquidity()}>
+        <Label fontSize={32} geCenter fontFamily="syncopate" geFontSize={32} geLabelStyle={{ lineHeight: '32px' }} onClose={() => closeLiquidity()}>
           {!gameEditionView && (
             <ArrowBack
               style={{
@@ -696,19 +696,19 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
                 <DesktopInfoContainer>
                   <InnerRowContainer>
                     <Label fontSize={13}>{`${toValues.coin}/${fromValues.coin}`}</Label>
-                    <Label fontSize={13} fontFamily="bold" labelStyle={{ textAlign: 'end' }}>
+                    <Label fontSize={13} fontFamily="syncopate" labelStyle={{ textAlign: 'end' }}>
                       {reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}
                     </Label>
                   </InnerRowContainer>
                   <InnerRowContainer>
                     <Label fontSize={13}>{`${fromValues.coin}/${toValues.coin}`}</Label>
-                    <Label fontSize={13} fontFamily="bold" labelStyle={{ textAlign: 'end' }}>
+                    <Label fontSize={13} fontFamily="syncopate" labelStyle={{ textAlign: 'end' }}>
                       {reduceBalance(pact.getRatio1(fromValues.coin, toValues.coin)) ?? '-'}
                     </Label>
                   </InnerRowContainer>
                   <InnerRowContainer>
                     <Label fontSize={13}>Share of Pool</Label>
-                    <Label fontSize={13} fontFamily="bold" labelStyle={{ textAlign: 'end' }}>
+                    <Label fontSize={13} fontFamily="syncopate" labelStyle={{ textAlign: 'end' }}>
                       {!pact.share(fromValues.amount) ? 0 : (pact.share(fromValues.amount) * 100).toPrecision(4)} %
                     </Label>
                   </InnerRowContainer>

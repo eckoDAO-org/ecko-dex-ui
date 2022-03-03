@@ -12,7 +12,7 @@ const ToggleContainer = styled.div`
   justify-content: center;
   flex-direction: row;
   border-radius: 20px;
-  font-family: ${({ theme: { fontFamily } }) => `${fontFamily.bold}`};
+  font-family: ${({ theme: { fontFamily } }) => `${fontFamily.syncopate}`};
 
   .ui.checkbox {
     margin-bottom: 4px;

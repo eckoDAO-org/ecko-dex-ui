@@ -18,6 +18,8 @@ export const commonTheme = {
     boldItalic: 'montserrat-bold-italic',
     pressStartRegular: 'press-start-regular',
     pixeboy: 'pixeboy',
+    syncopate: 'syncopate-bold',
+    basier: 'basier-square-mono-regular',
   },
   mediaQueries: {
     mobileBreakpoint: '48rem',

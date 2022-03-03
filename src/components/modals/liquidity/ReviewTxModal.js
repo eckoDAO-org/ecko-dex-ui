@@ -57,7 +57,7 @@ const ReviewTxModal = ({ fromValues, toValues, supply }) => {
     return (
       <TransactionsDetails>
         <Row className="fs">
-          <Label fontFamily="bold" fontSize={13}>
+          <Label fontFamily="syncopate" fontSize={13}>
             Deposit Desired
           </Label>
         </Row>
@@ -66,11 +66,11 @@ const ReviewTxModal = ({ fromValues, toValues, supply }) => {
         <Row className="sb" style={{ marginBottom: 8 }}>
           <Row className="fs">
             {getTokenIcon(fromValues.coin)}
-            <Label fontFamily="bold" fontSize={13}>
+            <Label fontFamily="syncopate" fontSize={13}>
               {fromValues.amount}
             </Label>
           </Row>
-          <Label fontFamily="bold" fontSize={13}>
+          <Label fontFamily="syncopate" fontSize={13}>
             {fromValues.coin}
           </Label>
         </Row>
@@ -82,11 +82,11 @@ const ReviewTxModal = ({ fromValues, toValues, supply }) => {
         <Row className="sb" style={{ marginBottom: 8 }}>
           <Row className="fs">
             {getTokenIcon(toValues.coin)}
-            <Label fontFamily="bold" fontSize={13}>
+            <Label fontFamily="syncopate" fontSize={13}>
               {toValues.amount}
             </Label>
           </Row>
-          <Label fontFamily="bold" fontSize={13}>
+          <Label fontFamily="syncopate" fontSize={13}>
             {toValues.coin}
           </Label>
         </Row>
@@ -164,7 +164,7 @@ const ReviewTxModal = ({ fromValues, toValues, supply }) => {
   return (
     <Content gameEditionView={gameEditionView}>
       {!gameEditionView && (
-        <Label fontFamily="bold" labelStyle={{ padding: '16px 0px' }}>
+        <Label fontFamily="syncopate" labelStyle={{ padding: '16px 0px' }}>
           Preview Succesful
         </Label>
       )}

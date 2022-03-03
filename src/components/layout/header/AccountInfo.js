@@ -15,7 +15,7 @@ const Container = styled.div`
 
 // const BalanceContainer = styled.div`
 //   padding: 7px 32px 7px 16px;
-//   font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+//   font-family: ${({ theme: { fontFamily } }) => fontFamily.syncopate};
 //   font-size: 14px;
 //   white-space: nowrap;
 //   color: ${({ theme: { colors } }) => colors.white};
@@ -32,7 +32,7 @@ const AccountContainer = styled.div`
   justify-content: center;
   padding: 8px 16px;
   background: ${({ theme: { colors } }) => colors.white};
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.syncopate};
   font-size: 13px;
   color: ${({ theme: { colors } }) => colors.primary};
   border-radius: 10px;

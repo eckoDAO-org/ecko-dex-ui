@@ -14,6 +14,9 @@ const StyledButton = styled(SUIButton)`
   align-items: center;
   border-radius: 10px !important;
   margin: 0px;
+  &.ui.button {
+    font-weight: unset;
+  }
   span {
     opacity: ${({ loading }) => (loading ? 0 : 1)};
   }
@@ -66,7 +69,7 @@ const CustomButton = ({
   disabled,
   buttonStyle,
   label,
-  fontFamily = 'bold',
+  fontFamily = 'syncopate',
   fontSize,
   labelStyle,
   geFontSize = 20,

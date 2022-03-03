@@ -511,7 +511,7 @@ const SwapContainer = () => {
       {!gameEditionView && isLogoVisible && <BackgroundLogo />}
 
       <SwapTitleContainer gameEditionView={gameEditionView}>
-        <Label fontSize={32} geCenter fontFamily="bold" geFontSize={52} geLabelStyle={{ lineHeight: '32px' }}>
+        <Label fontSize={32} geCenter fontFamily="syncopate" geFontSize={52} geLabelStyle={{ lineHeight: '32px' }}>
           Swap
         </Label>
         {!gameEditionView && <SlippagePopupContent />}
@@ -563,7 +563,7 @@ const SwapContainer = () => {
                 <Label fontSize={13} geFontSize={20} geColor="blue">
                   Max slippage
                 </Label>
-                <Label fontSize={13} fontFamily="bold" geFontSize={28}>{`${pact.slippage * 100}%`}</Label>
+                <Label fontSize={13} geFontSize={28}>{`${pact.slippage * 100}%`}</Label>
               </ResultContainer>
             )}
           </>

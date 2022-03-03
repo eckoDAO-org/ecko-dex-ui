@@ -31,7 +31,7 @@ const CopyPopup = ({ textToCopy, title, containerStyle }) => {
             }}
           />
           {title && (
-            <Label fontFamily="bold" geFontSize={20}>
+            <Label fontFamily="syncopate" geFontSize={20}>
               {title}
             </Label>
           )}

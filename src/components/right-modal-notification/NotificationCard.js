@@ -63,19 +63,19 @@ const DescriptionColumn = styled.div`
 `;
 
 const DateTimeText = styled.span`
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
   font-size: 12px;
   color: grey;
 `;
 const Title = styled.span`
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.syncopate};
   font-size: 16px;
 `;
 const Description = styled.span`
   word-wrap: break-word;
   overflow-wrap: anywhere;
   line-height: 18px;
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
   font-size: 14px;
 `;
 

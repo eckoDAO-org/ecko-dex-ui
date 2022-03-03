@@ -10,7 +10,7 @@ const Button = styled.div`
   cursor: pointer;
   height: fit-content;
   position: absolute;
-  width: 168px;
+  /* width: 168px; */
   left: 50%;
   transform: translate(-50%, 0);
   border-radius: 40px;
@@ -67,7 +67,7 @@ const GameEditionModeButton = () => {
       }}
     >
       {!gameEditionView && <GameModeIcon style={{ marginRight: 9.4 }} />}
-      <span style={{ fontFamily: commonTheme.fontFamily.bold, whiteSpace: 'nowrap' }}>{gameEditionView ? 'Exit Game Mode' : 'Game Mode'}</span>
+      <span style={{ fontFamily: commonTheme.fontFamily.syncopate, whiteSpace: 'nowrap' }}>{gameEditionView ? 'Exit Game Mode' : 'Game Mode'}</span>
 
       {/* 
          : (

@@ -7,7 +7,7 @@ const Label = styled.span`
   text-align: ${({ textAlign }) => textAlign};
   color: ${({ gameEditionView, theme: { colors } }) => (gameEditionView ? colors.gameEditionBlue : colors.white)};
   font-family: ${({ gameEditionView, bold, theme: { fontFamily } }) =>
-    gameEditionView ? fontFamily.pixeboy : bold ? fontFamily.bold : fontFamily.regular};
+    gameEditionView ? fontFamily.pixeboy : bold ? fontFamily.syncopate : fontFamily.basier};
   font-size: ${({ gameEditionView, fontSize }) => (fontSize ? (gameEditionView ? '20px' : fontSize) : '13px')};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     font-size: ${({ gameEditionView }) => gameEditionView && '10px'};
