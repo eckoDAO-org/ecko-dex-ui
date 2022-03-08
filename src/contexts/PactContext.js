@@ -5,7 +5,17 @@ import pairTokens from '../constants/pairs.json';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
-import { chainId, creationTime, FEE, GAS_PRICE, getCurrentDate, getCurrentTime, network, NETWORK_TYPE } from '../constants/contextConstants';
+import {
+  chainId,
+  creationTime,
+  FEE,
+  GAS_PRICE,
+  getCurrentDate,
+  getCurrentTime,
+  network,
+  NETWORK_TYPE,
+  NETWORKID,
+} from '../constants/contextConstants';
 import { extractDecimal } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
 import { AccountContext } from './AccountContext';
@@ -172,14 +182,7 @@ export const PactProvider = (props) => {
       let data = await Pact.fetch.local(
         {
           pactCode: tokenNames,
-          meta: Pact.lang.mkMeta(
-            '',
-            chainId,
-            GAS_PRICE,
-            150000,
-            creationTime(),
-            600
-          ),
+          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 150000, creationTime(), 600),
         },
         network
       );
@@ -217,14 +220,7 @@ export const PactProvider = (props) => {
       let data = await Pact.fetch.local(
         {
           pactCode: tokenNames,
-          meta: Pact.lang.mkMeta(
-            '',
-            chainId,
-            GAS_PRICE,
-            150000,
-            creationTime(),
-            600
-          ),
+          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 150000, creationTime(), 600),
         },
         network
       );
@@ -275,14 +271,7 @@ export const PactProvider = (props) => {
             )
             (map (kswap-read.pair-info) [${tokenPairList}])
              `,
-          meta: Pact.lang.mkMeta(
-            '',
-            chainId,
-            GAS_PRICE,
-            150000,
-            creationTime(),
-            600
-          ),
+          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 150000, creationTime(), 600),
         },
         network
       );
@@ -412,14 +401,7 @@ export const PactProvider = (props) => {
           pactCode: `
           (kswap.tokens.get-tokens)
            `,
-          meta: Pact.lang.mkMeta(
-            '',
-            chainId,
-            GAS_PRICE,
-            150000,
-            creationTime(),
-            600
-          ),
+          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 150000, creationTime(), 600),
         },
         network
       );
@@ -429,6 +411,24 @@ export const PactProvider = (props) => {
         await setPairReserve(null);
         console.log('Failed');
       }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const getCurrentKdaUSDPrice = async () => {
+    try {
+      let data = await Pact.fetch.local(
+        {
+          pactCode: `
+          (kaddex.public-sale.kda-current-usd-price)
+          `,
+          meta: Pact.lang.mkMeta('', '0', GAS_PRICE, 150000, creationTime(), 600),
+          chainId: 0,
+        },
+        `https://api.chainweb.com/chainweb/0.0/${NETWORKID}/chain/0/pact`
+      );
+      return data.result?.status === 'success' ? data.result?.data : null;
     } catch (e) {
       console.log(e);
     }
@@ -459,14 +459,7 @@ export const PactProvider = (props) => {
         {
           pactCode: `(kswap.exchange.get-pair ${token0} ${token1})`,
           keyPairs: Pact.crypto.genKeyPair(),
-          meta: Pact.lang.mkMeta(
-            '',
-            chainId,
-            GAS_PRICE,
-            150000,
-            creationTime(),
-            600
-          ),
+          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 150000, creationTime(), 600),
         },
         network
       );
@@ -486,14 +479,7 @@ export const PactProvider = (props) => {
       let data = await Pact.fetch.local(
         {
           pactCode: `(kswap.exchange.get-pair-key ${token0} ${token1})`,
-          meta: Pact.lang.mkMeta(
-            account.account.account,
-            chainId,
-            GAS_PRICE,
-            150000,
-            creationTime(),
-            600
-          ),
+          meta: Pact.lang.mkMeta(account.account.account, chainId, GAS_PRICE, 150000, creationTime(), 600),
         },
         network
       );
@@ -518,14 +504,7 @@ export const PactProvider = (props) => {
               (reserveB (reserve-for p ${token1}))
             )[reserveA reserveB])
            `,
-          meta: Pact.lang.mkMeta(
-            'account',
-            chainId,
-            GAS_PRICE,
-            150000,
-            creationTime(),
-            600
-          ),
+          meta: Pact.lang.mkMeta('account', chainId, GAS_PRICE, 150000, creationTime(), 600),
         },
         network
       );
@@ -639,6 +618,7 @@ export const PactProvider = (props) => {
     computeOut,
     computeIn,
     setMoreSwap,
+    getCurrentKdaUSDPrice,
   };
   return <PactContext.Provider value={contextValues}>{props.children}</PactContext.Provider>;
 };

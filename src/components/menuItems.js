@@ -1,4 +1,4 @@
-import { ROUTE_POOL, ROUTE_STATS, ROUTE_SWAP } from '../router/routes';
+import { ROUTE_POOL, ROUTE_STATS, ROUTE_SWAP, ROUTE_ANALYTICS } from '../router/routes';
 
 export const SWAP = {
   id: 0,
@@ -18,5 +18,11 @@ export const STATS = {
   route: ROUTE_STATS,
   className: '',
 };
+export const ANALYTICS = {
+  id: 3,
+  label: 'analytics',
+  route: ROUTE_ANALYTICS,
+  className: '',
+};
 
-export default [SWAP, POOL, STATS];
+export default [SWAP, POOL, STATS, ANALYTICS];
