@@ -19,7 +19,7 @@ export const STYGradientBorder = styled.div`
   bottom: 0px;
   width: 100%;
   height: 100%;
-  z-index: -10;
+  z-index: -1;
 `;
 
 export const FlexContainer = ({
@@ -259,5 +259,9 @@ const STYFlexContainer = styled.div`
       display: none;
     }
     scrollbar-width: none;
+  }
+
+  &.hidden {
+    overflow: hidden;
   }
 `;
