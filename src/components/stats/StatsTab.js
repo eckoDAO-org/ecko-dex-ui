@@ -1,7 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Divider } from 'semantic-ui-react';
-import axios from 'axios';
 import styled, { css } from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { ApplicationContext } from '../../contexts/ApplicationContext';
@@ -52,35 +50,6 @@ const StatsTab = ({ activeTabs, setActiveTabs }) => {
   const pact = useContext(PactContext);
   const { gameEditionView } = useContext(GameEditionContext);
   const { themeMode } = useContext(ApplicationContext);
-
-  useEffect(async () => {
-    await pact.getPairList();
-    await getTVL();
-  }, []);
-
-  const kdaPrice = 6.7;
-  const fluxPrice = 0.293426;
-
-  const getTVL = async () => {
-    let totalTVL = 0;
-    if (Array.isArray(pact?.pairList)) {
-      const allTokenNames = pact?.pairList?.flatMap((pair) => [pair.token0, pair.token1]);
-      // axios
-      //   .get(`https://api.coingecko.com/api/v3/simple/price?vs_currencies=usd&ids=kadena,${allTokenNames.join(',')}`)
-      //   .then((res) => {
-      for (const pair of pact.pairList) {
-        const token0Balance = Number(pair.reserves[0]?.decimal) || pair.reserves[0] || 0;
-        const token1Balance = Number(pair.reserves[1]?.decimal) || pair.reserves[1] || 0;
-
-        let token0USD = token0Balance * kdaPrice;
-        let token1USD = token1Balance * fluxPrice;
-        totalTVL += token0USD += token1USD;
-      }
-      console.log('!!! ~ USD TVL', totalTVL);
-      // })
-      // .catch((err) => console.log('get usd price error, err'));
-    }
-  };
 
   return (
     <CardContainer gameEditionView={gameEditionView}>

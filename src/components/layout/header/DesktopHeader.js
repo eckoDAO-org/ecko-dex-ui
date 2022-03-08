@@ -76,7 +76,7 @@ const DesktopHeader = ({ className }) => {
             <HeaderItem
               key={index}
               className={item.className}
-              headerItemStyle={{ width: 36 }}
+              headerItemStyle={{ width: 50 }}
               route={item.route}
               onMouseOver={() => setButtonHover(item.id)}
               onMouseLeave={() => setButtonHover(null)}

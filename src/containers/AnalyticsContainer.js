@@ -1,16 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { PactContext } from '../contexts/PactContext';
-import StatsTab from '../components/stats/StatsTab';
-import HistoryTab from '../components/stats/HistoryTab';
+import { CardContainer } from '../components/stats/StatsTab';
 import styled, { css } from 'styled-components/macro';
 import { GameEditionContext } from '../contexts/GameEditionContext';
-import { TitleContainer } from '../components/layout/Containers';
-import Label from '../components/shared/Label';
+import VolumeChart from '../components/charts/VolumeChart';
+import TVLChart from '../components/charts/TVLChart';
+import VestingScheduleChart from '../components/charts/VestingScheduleChart';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
 import { FadeIn } from '../components/shared/animations';
 import useLazyImage from '../hooks/useLazyImage';
 import LogoLoader from '../components/shared/Loader';
+
+const ChartsContainer = styled.div`
+  display: flex;
+`;
 
 const Container = styled(FadeIn)`
   display: flex;
@@ -39,10 +43,9 @@ const Container = styled(FadeIn)`
   }
 `;
 
-const StatsHistoryContainer = () => {
+const AnalyticsContainer = () => {
   const pact = useContext(PactContext);
   const { gameEditionView } = useContext(GameEditionContext);
-  const [activeTabs, setActiveTabs] = useState('POOL_STATS');
 
   useEffect(async () => {
     await pact.getPairList();
@@ -52,31 +55,20 @@ const StatsHistoryContainer = () => {
   return !loaded && gameEditionView ? (
     <LogoLoader />
   ) : (
-    <Container gameEditionView={gameEditionView}>
-      <TitleContainer
-        $gameEditionView={gameEditionView}
-        style={{
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          maxWidth: '1110px',
-          justifyContent: 'space-between',
-        }}
-      >
-        <Label fontSize={32} fontFamily="bold" geFontSize={40} withShade={activeTabs !== 'POOL_STATS'} onClick={() => setActiveTabs('POOL_STATS')}>
-          Stats
-        </Label>
-        <Label fontSize={32} fontFamily="bold" geFontSize={40} withShade={activeTabs !== 'HISTORY'} onClick={() => setActiveTabs('HISTORY')}>
-          History
-        </Label>
-      </TitleContainer>
-
-      {activeTabs === 'POOL_STATS' ? (
-        <StatsTab activeTabs={activeTabs} setActiveTabs={setActiveTabs} />
-      ) : (
-        <HistoryTab activeTabs={activeTabs} setActiveTabs={setActiveTabs} />
-      )}
-    </Container>
+    !gameEditionView && (
+      <Container gameEditionView={gameEditionView}>
+        <CardContainer>
+          <ChartsContainer>
+            <div style={{ marginRight: 25 }}>
+              <TVLChart width={480} height={300} />
+            </div>
+            <VolumeChart width={480} height={300} />
+          </ChartsContainer>
+        </CardContainer>
+        <VestingScheduleChart />
+      </Container>
+    )
   );
 };
 
-export default StatsHistoryContainer;
+export default AnalyticsContainer;

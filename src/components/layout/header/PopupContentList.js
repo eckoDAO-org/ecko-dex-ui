@@ -88,7 +88,10 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
 
   return (
     <Wrapper ref={ref}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => setShowPopup((prev) => !prev)}>
+      <div
+        style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        onClick={() => setShowPopup((prev) => !prev)}
+      >
         {icon}
       </div>
       {showPopup && (

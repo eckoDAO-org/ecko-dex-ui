@@ -9,3 +9,5 @@ export const showTicker = (ticker) => {
 export const getTokenIcon = (token) => {
   return tokenData[showTicker(token)]?.icon;
 };
+
+export const getKadenaTokenPrice = () => {};

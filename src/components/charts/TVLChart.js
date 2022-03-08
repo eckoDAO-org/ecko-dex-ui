@@ -1,49 +1,117 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
+import styled from 'styled-components';
 import moment from 'moment';
-import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
+import { PactContext } from '../../contexts/PactContext';
+import { LineChart, Line, Tooltip } from 'recharts';
 import GradientBorder from '../shared/GradientBorder';
 import Label from '../shared/Label';
+import { humanReadableNUmber } from '../../utils/reduceBalance';
 import { CardContainer } from '../stats/StatsTab';
 
-const TVLChart = () => {
-  const [tvl, setTVL] = useState([]);
+export const GraphCardHeader = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`;
 
-  const kdaPrice = 6.7;
-  const fluxPrice = 0.293426;
+const TVLChart = ({ width, height, containerStyle }) => {
+  const [viewedTVL, setViewedTVL] = useState(null);
+  const [currentTVL, setCurrentTVL] = useState(null);
+  const [currentDate, setCurrentDate] = useState(null);
+  const [tvlData, setTVLData] = useState([]);
+  const pact = useContext(PactContext);
+
+  useEffect(() => {
+    getTVL();
+  }, []);
+
+  const getTVL = async () => {
+    let totalTVL = 0;
+    await pact.getPairList();
+    const kdaPrice = await pact.getCurrentKdaUSDPrice();
+    if (Array.isArray(pact?.pairList)) {
+      for (const pair of pact.pairList) {
+        const token0Balance = Number(pair.reserves[0]?.decimal) || pair.reserves[0] || 0;
+        const token1Balance = Number(pair.reserves[1]?.decimal) || pair.reserves[1] || 0;
+        let token0price = 0;
+        if (pair.token0 === 'KDA') {
+          token0price = kdaPrice;
+        } else if (pair.token1 === 'KDA') {
+          token0price = (token0Balance / token1Balance) * kdaPrice;
+        }
+        let token1price = 0;
+        if (pair.token1 === 'KDA') {
+          token1price = kdaPrice;
+        } else if (pair.token0 === 'KDA') {
+          token1price = (token0Balance / token1Balance) * kdaPrice;
+        }
+
+        let token0USD = token0Balance * token0price;
+        let token1USD = token1Balance * token1price;
+        totalTVL += token0USD += token1USD;
+      }
+      setCurrentTVL(totalTVL);
+      setViewedTVL(totalTVL);
+    }
+  };
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/daily-tvl?eventName=kswap.exchange.UPDATE&dateStart=${'2021-10-30'}&dateEnd=${moment().format('YYYY-MM-DD')}`)
-      .then((res) => {
+      .get(
+        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/daily-tvl?dateStart=${moment()
+          .subtract(90, 'days')
+          .format('YYYY-MM-DD')}&dateEnd=${moment().format('YYYY-MM-DD')}`
+      )
+      .then(async (res) => {
         const allTVL = [];
+        const kdaPrice = await pact.getCurrentKdaUSDPrice();
         for (const day of res.data) {
           allTVL.push({
-            name: moment(day._id).format('MM/DD'),
+            name: moment(day._id).format('DD/MM/YYYY'),
             tvl: day.tvl
               .reduce((partialSum, currVol) => {
                 if (currVol.tokenFrom === 'coin') {
-                  return partialSum + currVol.tokenFromTVL * kdaPrice + currVol.tokenToTVL * fluxPrice;
+                  const tokenToPrice = (currVol.tokenFromTVL / currVol.tokenToTVL) * kdaPrice;
+                  return partialSum + currVol.tokenFromTVL * kdaPrice + currVol.tokenToTVL * tokenToPrice;
                 } else {
-                  return partialSum + currVol.tokenFromTVL * fluxPrice + currVol.tokenToTVL * kdaPrice;
+                  const tokenFromPrice = (currVol.tokenToTVL / currVol.tokenFromTVL) * kdaPrice;
+                  return partialSum + currVol.tokenFromTVL * tokenFromPrice + currVol.tokenToTVL * kdaPrice;
                 }
               }, 0)
               .toFixed(2),
           });
         }
-        setTVL(allTVL);
+        setTVLData(allTVL);
       })
       .catch((err) => console.log('get tvl error', err));
   }, []);
 
   return (
-    <CardContainer>
+    <CardContainer style={containerStyle}>
       <GradientBorder />
-      <Label>TVL $USD</Label>
+      <GraphCardHeader>
+        <div>
+          <Label fontSize={16}>TVL</Label>
+          <Label fontSize={24}>{humanReadableNUmber(Number(viewedTVL))} $</Label>
+          <Label fontSize={16}>{currentDate || moment().format('DD/MM/YYYY')}</Label>
+        </div>
+        <div></div>
+      </GraphCardHeader>
       <LineChart
-        width={800}
-        height={300}
-        data={tvl}
+        width={width}
+        height={height}
+        data={tvlData}
+        onMouseMove={({ activePayload }) => {
+          if (activePayload) {
+            setViewedTVL((activePayload && activePayload[0]?.payload?.tvl) || '');
+            setCurrentDate((activePayload && activePayload[0]?.payload?.name) || null);
+          }
+        }}
+        onMouseLeave={() => {
+          setViewedTVL(currentTVL);
+          setCurrentDate(null);
+        }}
         margin={{
           top: 5,
           right: 30,
@@ -51,13 +119,10 @@ const TVLChart = () => {
           bottom: 5,
         }}
       >
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip label="TVL" />
-        <Line type="monotone" dataKey="tvl" stroke="#ffa900" activeDot={{ r: 1 }} dot={{ r: 0 }} />
+        <Tooltip label="TVL" content={() => ''} />
+        <Line type="monotone" dataKey="tvl" stroke="#ED1CB5" activeDot={{ r: 5 }} dot={{ r: 0 }} />
       </LineChart>
     </CardContainer>
   );
 };
-
 export default TVLChart;

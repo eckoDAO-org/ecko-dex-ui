@@ -3,16 +3,20 @@ import axios from 'axios';
 import moment from 'moment';
 import GradientBorder from '../shared/GradientBorder';
 import Label from '../shared/Label';
+import { GraphCardHeader } from './TVLChart';
+import { humanReadableNUmber } from '../../utils/reduceBalance';
 import { CardContainer } from '../stats/StatsTab';
-import { BarChart, Bar, XAxis, Tooltip } from 'recharts';
+import { BarChart, Bar, Tooltip } from 'recharts';
 
-const VolumeChart = () => {
+const VolumeChart = ({ width, height, containerStyle }) => {
   const [volume, setVolume] = useState([]);
+  const [dailyVolume, setDailyVolume] = useState('');
+  const [currentDate, setCurrentDate] = useState(null);
 
   useEffect(() => {
     axios
       .get(
-        `http://localhost:5000/daily-volume?eventName=kswap.exchange.SWAP&dateStart=${moment()
+        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/daily-volume?dateStart=${moment()
           .subtract(60, 'days')
           .format('YYYY-MM-DD')}&dateEnd=${moment().format('YYYY-MM-DD')}`
       )
@@ -20,27 +24,65 @@ const VolumeChart = () => {
         const allVolume = [];
         for (const day of res.data) {
           allVolume.push({
-            name: moment(day._id).format('MM/DD'),
-            'Volume KDA': day.volumes
-              .reduce((partialSum, currVol) => {
-                return partialSum + (currVol.tokenFromName === 'coin' ? currVol.tokenFromVolume : currVol.tokenToVolume);
-              }, 0)
-              .toFixed(2),
+            name: moment(day._id).format('DD/MM/YYYY'),
+            Volume: Number(
+              day.volumes
+                .reduce((partialSum, currVol) => {
+                  return partialSum + (currVol.tokenFromName === 'coin' ? currVol.tokenFromVolume : currVol.tokenToVolume);
+                }, 0)
+                .toFixed(2)
+            ),
           });
         }
         setVolume(allVolume);
+        setDailyVolume(allVolume[allVolume.length - 1].Volume);
       })
       .catch((err) => console.log('get volume error', err));
   }, []);
 
   return (
-    <CardContainer>
+    <CardContainer style={containerStyle}>
       <GradientBorder />
-      <Label>Volume KDA</Label>
+      <GraphCardHeader>
+        <div>
+          <Label fontSize={16}>Volume 24h</Label>
+          <Label fontSize={24}>{humanReadableNUmber(Number(dailyVolume))} KDA</Label>
+          <Label>&nbsp;{currentDate || ''}</Label>
+        </div>
+        <div>
+          {/* <PopupContentList
+            items={[
+              {
+                id: 1,
+                label: '1D',
+              },
+              {
+                id: 2,
+                label: '1W',
+              },
+              {
+                id: 3,
+                label: '1M',
+              },
+            ]}
+            icon={<span style={{ color: 'white' }}>1D</span>}
+          /> */}
+        </div>
+      </GraphCardHeader>
       <BarChart
-        width={800}
-        height={300}
+        width={width}
+        height={height}
         data={volume}
+        onMouseMove={({ activePayload }) => {
+          if (activePayload) {
+            setDailyVolume((activePayload && activePayload[0]?.payload?.Volume) || '');
+            setCurrentDate((activePayload && activePayload[0]?.payload?.name) || null);
+          }
+        }}
+        onMouseLeave={() => {
+          setDailyVolume(volume[volume.length - 1]?.Volume ?? null);
+          setCurrentDate(null);
+        }}
         margin={{
           top: 5,
           right: 30,
@@ -48,10 +90,8 @@ const VolumeChart = () => {
           bottom: 5,
         }}
       >
-        <XAxis dataKey="name" />
-        {/* <YAxis /> */}
-        <Tooltip label="Volume" />
-        <Bar dataKey="Volume KDA" fill="#39fffc" />
+        <Tooltip label="Volume" content={() => ''} />
+        <Bar dataKey="Volume" fill="#F68862" radius={[10, 10, 10, 10]} />
       </BarChart>
     </CardContainer>
   );
