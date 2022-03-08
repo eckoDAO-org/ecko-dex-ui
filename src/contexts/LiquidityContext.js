@@ -13,7 +13,7 @@ export const LiquidityContext = createContext(null);
 export const LiquidityProvider = (props) => {
   const pact = usePactContext();
   const { account, setLocalRes } = useAccountContext();
-  const { isConnected: isKadenaWalletConnected, requestSign: kadenaRequestSign } = useKaddexWalletContext();
+  const { isConnected: isXWalletConnected, requestSign: xWalletRequestSign } = useKaddexWalletContext();
   const wallet = useWalletContext();
   const swap = useSwapContext();
   const [liquidityProviderFee, setLiquidityProviderFee] = useState(0.003);
@@ -60,14 +60,7 @@ export const LiquidityProvider = (props) => {
             )
             (map (kswap-read.pair-info) [${tokenPairList}])
              `,
-          meta: Pact.lang.mkMeta(
-            "",
-            chainId,
-            GAS_PRICE,
-            150000,
-            creationTime(),
-            600
-          ),
+          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 150000, creationTime(), 600),
         },
         network
       );
@@ -228,14 +221,7 @@ export const LiquidityProvider = (props) => {
           amountMinimum0: reduceBalance(amountDesired0 * (1 - parseFloat(pact.slippage)), tokenData[token0.name].precision),
           amountMinimum1: reduceBalance(amountDesired1 * (1 - parseFloat(pact.slippage)), tokenData[token1.name].precision),
         },
-        meta: Pact.lang.mkMeta(
-          ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
-          chainId,
-          GAS_PRICE,
-          150000,
-          creationTime(),
-          600
-        ),
+        meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account, chainId, GAS_PRICE, 150000, creationTime(), 600),
         networkId: NETWORKID,
       };
       let data = await Pact.fetch.local(cmd, network);
@@ -278,7 +264,7 @@ export const LiquidityProvider = (props) => {
           ]),
           ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : []),
         ],
-        sender: ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
+        sender: ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account,
         gasLimit: 150000,
         gasPrice: GAS_PRICE,
         chainId: chainId,
@@ -297,8 +283,8 @@ export const LiquidityProvider = (props) => {
       /* walletLoading(); */
       wallet.setIsWaitingForWalletAuth(true);
       let command = null;
-      if (isKadenaWalletConnected) {
-        const res = await kadenaRequestSign(signCmd);
+      if (isXWalletConnected) {
+        const res = await xWalletRequestSign(signCmd);
         command = res.signedCmd;
       } else {
         command = await Pact.wallet.sign(signCmd);
@@ -383,14 +369,7 @@ export const LiquidityProvider = (props) => {
           'user-ks': account.guard,
           liquidity: reduceBalance(liquidity, PRECISION),
         },
-        meta: Pact.lang.mkMeta(
-          ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
-          chainId,
-          GAS_PRICE,
-          150000,
-          creationTime(),
-          600
-        ),
+        meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account, chainId, GAS_PRICE, 150000, creationTime(), 600),
       };
       swap.setCmd(cmd);
       let data = await Pact.fetch.local(cmd, network);
@@ -435,7 +414,7 @@ export const LiquidityProvider = (props) => {
           ]),
           ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : []),
         ],
-        sender: ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
+        sender: ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account,
         gasLimit: 150000,
         gasPrice: GAS_PRICE,
         chainId: chainId,
@@ -450,7 +429,13 @@ export const LiquidityProvider = (props) => {
       //alert to sign tx
       /* walletLoading(); */
       wallet.setIsWaitingForWalletAuth(true);
-      const cmd = await Pact.wallet.sign(signCmd);
+      let cmd = null;
+      if (isXWalletConnected) {
+        const res = await xWalletRequestSign(signCmd);
+        cmd = res.signedCmd;
+      } else {
+        cmd = await Pact.wallet.sign(signCmd);
+      }
       //close alert programmatically
       /* swal.close(); */
       wallet.setIsWaitingForWalletAuth(false);
