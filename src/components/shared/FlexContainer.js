@@ -5,6 +5,23 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 import theme from '../../styles/theme';
 import browserDetection from '../../utils/browserDetection';
 
+export const STYGradientBorder = styled.div`
+  border-radius: 10px; /*1*/
+  border: 1px solid transparent; /*2*/
+  background: linear-gradient(90deg, #ed1cb5, #ffa900, #39fffc) border-box; /*3*/
+  -webkit-mask: /*4*/ linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: source-out !important; /*5'*/
+  mask-composite: exclude !important; /*5*/
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: -10;
+`;
+
 export const FlexContainer = ({
   reference,
   className,
@@ -19,6 +36,7 @@ export const FlexContainer = ({
   tabletStyle,
   mobileStyle,
   backgroundImage,
+  withGradient,
   ...rest
 }) => {
   const [width] = useWindowSize();
@@ -40,12 +58,14 @@ export const FlexContainer = ({
     }
     return classname;
   };
+
   return (
     <STYFlexContainer
       {...rest}
       ref={reference}
       className={getClassName()}
       backgroundImage={backgroundImage}
+      withGradient={withGradient}
       style={{
         ...style,
         ...(width >= (desktopPixel || theme.mediaQueries.desktopPixel) && desktopStyle),
@@ -53,6 +73,7 @@ export const FlexContainer = ({
         ...(width < theme.mediaQueries.mobilePixel && mobileStyle),
       }}
     >
+      {withGradient && <STYGradientBorder />}
       {children}
     </STYFlexContainer>
   );
@@ -60,6 +81,15 @@ export const FlexContainer = ({
 const STYFlexContainer = styled.div`
   display: flex;
 
+  ${({ withGradient }) => {
+    if (withGradient) {
+      return css`
+        backdrop-filter: blur(50px);
+        padding: 16px;
+        box-shadow: ${({ themeMode }) => themeMode === 'light' && ' 2px 5px 30px #00000029'};
+      `;
+    }
+  }}
   &.hide-scrollbar {
     scroll-behavior: smooth;
     ::-webkit-scrollbar {
