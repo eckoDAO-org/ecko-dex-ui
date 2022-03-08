@@ -65,11 +65,15 @@ export const KaddexWalletProvider = (props) => {
    * Used by ConnectModal
    */
   const initializeKaddexWallet = async () => {
+    console.log('!!!initializeKaddexWallet');
     const networkInfo = await getNetworkInfo();
+    console.log('🚀 !!! ~ networkInfo', networkInfo);
     if (networkInfo.networkId !== NETWORKID) {
       showNetworkError();
     } else {
+      console.log("🚀 !!! ~ i'm connecting");
       const connectResponse = await connectWallet();
+      console.log('🚀 !!! ~ connectResponse', connectResponse);
       if (connectResponse?.status === 'success') {
         await setAccountData();
       }
@@ -101,6 +105,7 @@ export const KaddexWalletProvider = (props) => {
   };
 
   const getNetworkInfo = async () => {
+    console.log('getNetworkInfo');
     const network = await kadenaExt.request({
       method: 'kda_getNetwork',
     });
