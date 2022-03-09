@@ -6,7 +6,7 @@ import Label from '../shared/Label';
 import { GraphCardHeader } from './TVLChart';
 import { humanReadableNUmber } from '../../utils/reduceBalance';
 import { CardContainer } from '../stats/StatsTab';
-import { BarChart, Bar, Tooltip } from 'recharts';
+import { BarChart, Bar, Tooltip, ResponsiveContainer } from 'recharts';
 
 const VolumeChart = ({ width, height, containerStyle }) => {
   const [volume, setVolume] = useState([]);
@@ -69,30 +69,34 @@ const VolumeChart = ({ width, height, containerStyle }) => {
           /> */}
         </div>
       </GraphCardHeader>
-      <BarChart
-        width={width}
-        height={height}
-        data={volume}
-        onMouseMove={({ activePayload }) => {
-          if (activePayload) {
-            setDailyVolume((activePayload && activePayload[0]?.payload?.Volume) || '');
-            setCurrentDate((activePayload && activePayload[0]?.payload?.name) || null);
-          }
-        }}
-        onMouseLeave={() => {
-          setDailyVolume(volume[volume.length - 1]?.Volume ?? null);
-          setCurrentDate(null);
-        }}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
-      >
-        <Tooltip label="Volume" content={() => ''} />
-        <Bar dataKey="Volume" fill="#F68862" radius={[10, 10, 10, 10]} />
-      </BarChart>
+      <div style={{ width: '100%', height }}>
+        <ResponsiveContainer>
+          <BarChart
+            width={width}
+            height={height}
+            data={volume}
+            onMouseMove={({ activePayload }) => {
+              if (activePayload) {
+                setDailyVolume((activePayload && activePayload[0]?.payload?.Volume) || '');
+                setCurrentDate((activePayload && activePayload[0]?.payload?.name) || null);
+              }
+            }}
+            onMouseLeave={() => {
+              setDailyVolume(volume[volume.length - 1]?.Volume ?? null);
+              setCurrentDate(null);
+            }}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+          >
+            <Tooltip label="Volume" content={() => ''} />
+            <Bar dataKey="Volume" fill="#F68862" radius={[10, 10, 10, 10]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </CardContainer>
   );
 };
