@@ -25,8 +25,13 @@ const STYText = styled.span`
   &.capitalize {
     text-transform: capitalize;
   }
+
   &.uppercase {
     text-transform: uppercase;
+  }
+
+  &.justify-fe {
+    justify-content: flex-end;
   }
 `;
 

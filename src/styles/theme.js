@@ -1,8 +1,7 @@
 export const commonTheme = {
   layout: {
-    desktopWidth: '80%',
-    mobileWidth: '95%',
-    mainContentPadding: 24,
+    desktopPadding: 88,
+    mobilePadding: 24,
   },
   header: {
     height: 65,
@@ -59,7 +58,6 @@ export const lightTheme = {
     ...commonColors,
   },
   buttonBackgroundGradient: '#212750',
-  backgroundRightModal: '#FFFFFF',
   backgroundInput: '#2127501A',
   backgroundContainer: '#FFFFFF',
 };
@@ -75,8 +73,7 @@ export const darkTheme = {
   },
   buttonBackgroundGradient: 'rgb(17,8,23)',
   backgroundInput: 'transparent',
-  backgroundContainer: 'transparent',
-  backgroundRightModal: '#4E125A40',
+  backgroundContainer: '#FFFFFF1A',
 };
 
 export const theme = (mode = 'light') => {

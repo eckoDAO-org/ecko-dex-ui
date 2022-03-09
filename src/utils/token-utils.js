@@ -11,3 +11,11 @@ export const getTokenIcon = (token) => {
 };
 
 export const getKadenaTokenPrice = () => {};
+
+export const getInfoCoin = (item, coinPositionArray) => {
+  let cryptoCode = item?.params[coinPositionArray]?.refName?.namespace
+    ? `${item?.params[coinPositionArray]?.refName?.namespace}.${item?.params[coinPositionArray]?.refName?.name}`
+    : item?.params[coinPositionArray]?.refName?.name;
+  const crypto = Object.values(tokenData).find(({ code }) => code === cryptoCode);
+  return crypto;
+};

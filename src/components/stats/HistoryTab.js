@@ -1,23 +1,15 @@
 import React, { useContext, useEffect } from 'react';
-import { Divider } from 'semantic-ui-react';
 import styled, { css } from 'styled-components/macro';
-import InfiniteScroll from 'react-infinite-scroller';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
-import { ApplicationContext } from '../../contexts/ApplicationContext';
 import { PactContext } from '../../contexts/PactContext';
 import { AccountContext } from '../../contexts/AccountContext';
-import GradientBorder from '../../components/shared/GradientBorder';
-import { theme } from '../../styles/theme';
-import { PartialScrollableScrollSection } from '../layout/Containers';
-import HistoryCard from './HistoryCard';
 import LogoLoader from '../shared/Loader';
 import Label from '../shared/Label';
 import useButtonScrollEvent from '../../hooks/useButtonScrollEvent';
-import Table from '../shared/Table';
+import Table from '../shared/CommonTable';
 import { FlexContainer } from '../shared/FlexContainer';
 import tokenData from '../../constants/cryptoCurrencies';
 import moment from 'moment';
-import GradientContainer from '../shared/GradientContainer';
 import reduceToken from '../../utils/reduceToken';
 
 export const CardContainer = styled.div`
@@ -71,7 +63,6 @@ const HistoryTab = () => {
   const pact = useContext(PactContext);
   const account = useContext(AccountContext);
   const { gameEditionView } = useContext(GameEditionContext);
-  const { themeMode } = useContext(ApplicationContext);
 
   useEffect(() => {}, [account.sendRes]);
 

@@ -8,7 +8,17 @@ import StatsHistoryContainer from '../containers/StatsHistoryContainer';
 import AnalyticsContainer from '../containers/AnalyticsContainer';
 import GameEditionMenuContainer from '../components/game-edition-v2/GameEditionMenuContainer';
 import GameEditionStartAnimation from '../components/game-edition-v2/GameEditionStartAnimation';
-import { ROUTE_INDEX, ROUTE_POOL, ROUTE_WRAP, ROUTE_STATS, ROUTE_GAME_START_ANIMATION, ROUTE_GAME_EDITION_MENU, ROUTE_ANALYTICS } from './routes';
+import {
+  ROUTE_INDEX,
+  ROUTE_POOL,
+  ROUTE_WRAP,
+  ROUTE_STATS,
+  ROUTE_GAME_START_ANIMATION,
+  ROUTE_GAME_EDITION_MENU,
+  ROUTE_ANALYTICS,
+  ROUTE_MY_SWAP,
+} from './routes';
+import SwapHistoryContainer from '../containers/SwapHistoryContainer';
 
 export default () => {
   if (window.location.pathname.includes('serviceworker')) {
@@ -19,6 +29,7 @@ export default () => {
         <Layout>
           <Switch>
             <Route exact path={ROUTE_INDEX} component={SwapContainer} />
+            <Route exact path={ROUTE_MY_SWAP} component={SwapHistoryContainer} />
             <Route exact path={ROUTE_GAME_START_ANIMATION} component={GameEditionStartAnimation} />
             <Route exact path={ROUTE_GAME_EDITION_MENU} component={GameEditionMenuContainer} />
             <Route exact path={ROUTE_POOL} component={PoolContainer} />

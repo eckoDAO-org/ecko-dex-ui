@@ -84,6 +84,7 @@ const STYFlexContainer = styled.div`
   ${({ withGradient }) => {
     if (withGradient) {
       return css`
+        border-radius: 10px;
         backdrop-filter: blur(50px);
         padding: 16px;
         box-shadow: ${({ themeMode }) => themeMode === 'light' && ' 2px 5px 30px #00000029'};
@@ -166,6 +167,9 @@ const STYFlexContainer = styled.div`
     height: fit-content;
   }
 
+  &.transparent {
+    background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
+  }
   &.f-wrap {
     flex-wrap: wrap;
 
@@ -255,10 +259,6 @@ const STYFlexContainer = styled.div`
 
   &.x-auto {
     overflow-x: auto;
-    ::-webkit-scrollbar {
-      display: none;
-    }
-    scrollbar-width: none;
   }
 
   &.hidden {

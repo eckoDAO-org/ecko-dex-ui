@@ -15,7 +15,8 @@ const Container = styled.div`
   align-items: start;
   min-height: ${({ theme: { header } }) => `${header.mobileHeight}px`};
   width: 100%;
-  padding: 0 24px;
+  padding: ${({ theme: { layout } }) => `0 ${layout.mobilePadding}px`};
+
   padding-top: 16px;
 `;
 const RowContainer = styled.div`

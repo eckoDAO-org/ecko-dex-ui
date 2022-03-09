@@ -112,9 +112,15 @@ export default createGlobalStyle`
       scrollbar-width: none;  /* Firefox */
 
       ::-webkit-scrollbar {
-      display: none;
+       display: none;
       }
       
     }
+
+  .scrollbar-y-none {
+    ::-webkit-scrollbar {
+      width: 0px;
+    }
+  }
 
 `;

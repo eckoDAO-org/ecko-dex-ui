@@ -17,7 +17,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   min-height: ${({ theme: { header } }) => `${header.height}px`};
-  padding: 0 48px;
+  padding: ${({ theme: { layout } }) => `0 ${layout.desktopPadding}px`};
   padding-top: 16px;
   zoom: ${({ resolutionConfiguration }) =>
     resolutionConfiguration && resolutionConfiguration['normal-mode'].scale > 1 ? resolutionConfiguration['normal-mode'].scale : 1};

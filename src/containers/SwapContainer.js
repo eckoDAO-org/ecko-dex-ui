@@ -2,7 +2,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { throttle, debounce } from 'throttle-debounce';
+import useWindowSize from '../hooks/useWindowSize';
+import { useHistory } from 'react-router-dom';
 import { FadeIn } from '../components/shared/animations';
+import { AccountContext } from '../contexts/AccountContext';
+import { GameEditionContext } from '../contexts/GameEditionContext';
+import { ApplicationContext } from '../contexts/ApplicationContext';
+import { ModalContext } from '../contexts/ModalContext';
+import { PactContext } from '../contexts/PactContext';
+import { SwapContext } from '../contexts/SwapContext';
+import { WalletContext } from '../contexts/WalletContext';
 import TxView from '../components/modals/TxView';
 import WalletRequestView from '../components/modals/WalletRequestView';
 import SwapButtonsForm from '../components/swap/SwapButtonsForm';
@@ -10,12 +19,6 @@ import SwapForm from '../components/swap/SwapForm';
 import SwapResults from '../components/swap/SwapResults';
 import SwapResultsGEv2 from '../components/swap/SwapResultsGEv2';
 import tokenData from '../constants/cryptoCurrencies';
-import { AccountContext } from '../contexts/AccountContext';
-import { GameEditionContext } from '../contexts/GameEditionContext';
-import { ModalContext } from '../contexts/ModalContext';
-import { PactContext } from '../contexts/PactContext';
-import { SwapContext } from '../contexts/SwapContext';
-import { WalletContext } from '../contexts/WalletContext';
 import { getCorrectBalance, reduceBalance } from '../utils/reduceBalance';
 import TokenSelectorModalContent from '../components/modals/swap-modals/TokenSelectorModalContent';
 import TokenSelectorModalContentGE from '../components/modals/swap-modals/TokenSelectorModalContentGE';
@@ -31,9 +34,9 @@ import PixeledBlueContainer from '../components/game-edition-v2/components/Pixel
 import useLazyImage from '../hooks/useLazyImage';
 import LogoLoader from '../components/shared/Loader';
 import { FlexContainer } from '../components/shared/FlexContainer';
-import useWindowSize from '../hooks/useWindowSize';
-import { ApplicationContext } from '../contexts/ApplicationContext';
 import GameEditionModeButton from '../components/layout/header/GameEditionModeButton';
+import { HistoryIcon } from '../assets';
+import { ROUTE_MY_SWAP } from '../router/routes';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -68,7 +71,23 @@ const Container = styled(FadeIn)`
   }}
 `;
 
+const SvgContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  width: 32px;
+  cursor: pointer;
+  svg {
+    height: 20px;
+    width: 20px;
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
+`;
 const SwapContainer = () => {
+  const history = useHistory();
   const [width, height] = useWindowSize();
   const pact = useContext(PactContext);
   const swap = useContext(SwapContext);
@@ -491,8 +510,13 @@ const SwapContainer = () => {
           Swap
         </Label>
         {!gameEditionView && (
-          <FlexContainer className="align-ce" gap={22}>
-            <SlippagePopupContent />
+          <FlexContainer className="align-ce" gap={10}>
+            <SvgContainer onClick={() => history.push(ROUTE_MY_SWAP)}>
+              <HistoryIcon />
+            </SvgContainer>
+            <SvgContainer>
+              <SlippagePopupContent />
+            </SvgContainer>
             {width >= resolutionConfiguration?.width && height >= resolutionConfiguration?.height && <GameEditionModeButton />}
           </FlexContainer>
         )}
