@@ -1,28 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
 import theme from '../../styles/theme';
 import browserDetection from '../../utils/browserDetection';
-
-const Container = styled.div`
-  position: relative;
-  display: flex;
-  flex-flow: column;
-  justify-content: space-between;
-  width: 100%;
-  height: ${({ $gameEditionView }) => $gameEditionView && `100%`};
-  border-radius: ${({ $gameEditionView }) => !$gameEditionView && `10px`};
-  border: ${({ $gameEditionView, withGameEditionBorder }) => $gameEditionView && withGameEditionBorder && `2px dashed #fff`};
-  opacity: 1;
-  background: ${({ $gameEditionView, theme: { backgroundContainer } }) => ($gameEditionView ? 'transparent' : backgroundContainer)};
-  backdrop-filter: ${({ $gameEditionView }) => !$gameEditionView && `blur(50px)`};
-  padding: ${({ $gameEditionView }) => !$gameEditionView && '32px'};
-
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: column;
-  }
-`;
+import { FlexContainer } from './FlexContainer';
 
 const Content = styled.div`
   height: ${({ gameEditionView }) => !gameEditionView && `100%`};
@@ -56,10 +37,14 @@ const Title = styled.span`
 `;
 
 const FormContainer = ({ id, containerStyle, title, titleStyle, children, footer, withGameEditionBorder }) => {
-  const { gameEditionView } = useContext(GameEditionContext);
-
   return (
-    <Container $gameEditionView={gameEditionView} style={containerStyle} withGameEditionBorder={withGameEditionBorder}>
+    <FlexContainer
+      withGradient
+      className="relative column justify-sb w-100 background-fill"
+      gameEditionClassName="relative column justify-sb w-100 h-100"
+      style={{ padding: 32, ...containerStyle }}
+      withGameEditionBorder={withGameEditionBorder}
+    >
       <>
         {title && (
           <HeaderContainer>
@@ -69,7 +54,7 @@ const FormContainer = ({ id, containerStyle, title, titleStyle, children, footer
         <Content id="form-container-content">{children}</Content>
       </>
       {footer && <FooterContainer>{footer}</FooterContainer>}
-    </Container>
+    </FlexContainer>
   );
 };
 

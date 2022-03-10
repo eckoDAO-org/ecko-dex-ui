@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 
-const Item = styled(NavLink)`
+const Item = styled.div`
   color: ${({ theme: { colors } }) => colors.white};
   font-size: 14px;
   text-decoration: none;
@@ -20,6 +20,11 @@ const Item = styled(NavLink)`
   .underline {
     width: ${({ $isHover }) => ($isHover ? '100%' : 0)};
     transition: width 0.3s;
+    background: ${({ theme: { colors } }) => colors.white};
+    height: 1px;
+  }
+  .active {
+    width: 100%;
     background: ${({ theme: { colors } }) => colors.white};
     height: 1px;
   }
@@ -45,35 +50,34 @@ const HeaderItemContent = styled.div`
 const HeaderItem = ({
   id,
   className,
-  route,
   children,
-  icon,
-  link,
+  disableUnderline,
+  hideIcon,
   onClick,
-  onMouseOver,
-  onMouseLeave,
-  isHover,
+  item,
   headerItemStyle,
   disableHover,
   notChangebleFontOnHover,
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
+  const history = useHistory();
 
-  const getTo = () => {
-    if (route) return route;
-    else if (link) return '/';
-    else return '#';
+  const [buttonHover, setButtonHover] = useState(null);
+
+  const isActive = () => {
+    const { pathname } = window.location;
+    return pathname === item?.route || item?.activeRoutes?.includes(pathname);
   };
 
   return (
     <Item
       id={id}
       className={className}
-      exact
-      to={getTo()}
       onClick={() => {
-        if (link) {
-          window.open(link, '_blank', 'noopener,noreferrer');
+        if (item.route) {
+          history.push(item.route);
+        } else if (item.link) {
+          window.open(item.link, '_blank', 'noopener,noreferrer');
         } else {
           if (onClick) {
             onClick();
@@ -81,18 +85,18 @@ const HeaderItem = ({
         }
       }}
       style={headerItemStyle}
-      onMouseOver={onMouseOver}
-      onMouseLeave={onMouseLeave}
+      onMouseOver={() => setButtonHover(item?.id)}
+      onMouseLeave={() => setButtonHover(null)}
       $gameEditionView={gameEditionView}
-      $isHover={isHover}
+      $isHover={buttonHover === item?.id}
       $disableHover={disableHover}
       $notChangebleFontOnHover={notChangebleFontOnHover}
     >
       <HeaderItemContent>
-        {icon}
+        {!hideIcon && item?.icon}
         {children}
       </HeaderItemContent>
-      <div className="underline" />
+      {!disableUnderline && <div className={`underline ${isActive() ? 'active' : ''}`} />}
     </Item>
   );
 };

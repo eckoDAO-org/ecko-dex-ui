@@ -46,7 +46,7 @@ const MobileMenu = ({ open, setOpen }) => {
   return (
     <StyledMenu open={open}>
       {menuItems.map((item, index) => (
-        <HeaderItem id={index} className={item.className} route={item.route} onClick={() => setOpen(!open)}>
+        <HeaderItem id={index} item={item} onClick={() => setOpen(!open)}>
           {item.label}
         </HeaderItem>
       ))}

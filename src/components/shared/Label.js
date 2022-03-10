@@ -21,6 +21,18 @@ const STYText = styled.span`
       fill: ${({ theme: { colors } }) => colors.white};
     }
   }
+
+  &.capitalize {
+    text-transform: capitalize;
+  }
+
+  &.uppercase {
+    text-transform: uppercase;
+  }
+
+  &.justify-fe {
+    justify-content: flex-end;
+  }
 `;
 
 const Label = ({

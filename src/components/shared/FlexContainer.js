@@ -19,7 +19,7 @@ export const STYGradientBorder = styled.div`
   bottom: 0px;
   width: 100%;
   height: 100%;
-  z-index: -10;
+  z-index: -1;
 `;
 
 export const FlexContainer = ({
@@ -35,30 +35,33 @@ export const FlexContainer = ({
   style,
   tabletStyle,
   mobileStyle,
+  gameEditionStyle,
   backgroundImage,
   withGradient,
+  outOfGameEdition,
   ...rest
 }) => {
   const [width] = useWindowSize();
   const { gameEditionView } = useContext(GameEditionContext);
 
   const getClassName = () => {
-    if (gameEditionView) {
-      return gameEditionClassName;
-    }
     let classname = className;
-    if (width >= (desktopPixel || theme.mediaQueries.desktopPixel) && desktopClassName) {
-      classname = `${classname} ${desktopClassName} `;
-    }
-    if (width < (desktopPixel || theme.mediaQueries.desktopPixel) && width >= theme.mediaQueries.mobilePixel && tabletClassName) {
-      classname = `${classname} ${tabletClassName} `;
-    }
-    if (width < theme.mediaQueries.mobilePixel && mobileClassName) {
-      classname = `${classname} ${mobileClassName} `;
+
+    if (gameEditionView && !outOfGameEdition) {
+      classname = `${className} ${gameEditionClassName}`;
+    } else {
+      if (width >= (desktopPixel || theme.mediaQueries.desktopPixel) && desktopClassName) {
+        classname = `${classname} ${desktopClassName} `;
+      }
+      if (width < (desktopPixel || theme.mediaQueries.desktopPixel) && width >= theme.mediaQueries.mobilePixel && tabletClassName) {
+        classname = `${classname} ${tabletClassName} `;
+      }
+      if (width < theme.mediaQueries.mobilePixel && mobileClassName) {
+        classname = `${classname} ${mobileClassName} `;
+      }
     }
     return classname;
   };
-
   return (
     <STYFlexContainer
       {...rest}
@@ -66,14 +69,20 @@ export const FlexContainer = ({
       className={getClassName()}
       backgroundImage={backgroundImage}
       withGradient={withGradient}
-      style={{
-        ...style,
-        ...(width >= (desktopPixel || theme.mediaQueries.desktopPixel) && desktopStyle),
-        ...(width < (desktopPixel || theme.mediaQueries.desktopPixel) && width >= theme.mediaQueries.mobilePixel && tabletStyle),
-        ...(width < theme.mediaQueries.mobilePixel && mobileStyle),
-      }}
+      gameEditionView={gameEditionView}
+      outOfGameEdition={outOfGameEdition}
+      style={
+        gameEditionView
+          ? { ...gameEditionStyle }
+          : {
+              ...style,
+              ...(width >= (desktopPixel || theme.mediaQueries.desktopPixel) && desktopStyle),
+              ...(width < (desktopPixel || theme.mediaQueries.desktopPixel) && width >= theme.mediaQueries.mobilePixel && tabletStyle),
+              ...(width < theme.mediaQueries.mobilePixel && mobileStyle),
+            }
+      }
     >
-      {withGradient && <STYGradientBorder />}
+      {withGradient && (!gameEditionView || outOfGameEdition) && <STYGradientBorder />}
       {children}
     </STYFlexContainer>
   );
@@ -81,15 +90,6 @@ export const FlexContainer = ({
 const STYFlexContainer = styled.div`
   display: flex;
 
-  ${({ withGradient }) => {
-    if (withGradient) {
-      return css`
-        backdrop-filter: blur(50px);
-        padding: 16px;
-        box-shadow: ${({ themeMode }) => themeMode === 'light' && ' 2px 5px 30px #00000029'};
-      `;
-    }
-  }}
   &.hide-scrollbar {
     scroll-behavior: smooth;
     ::-webkit-scrollbar {
@@ -165,6 +165,27 @@ const STYFlexContainer = styled.div`
   &.h-fit-content {
     height: fit-content;
   }
+  &.w-fit-content {
+    width: fit-content;
+  }
+  ${({ gameEditionView, outOfGameEdition }) => {
+    if (!gameEditionView || outOfGameEdition) {
+      return css`
+        &.background-fill {
+          backdrop-filter: blur(50px);
+          background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
+        }
+        ${({ withGradient }) =>
+          withGradient &&
+          css`
+            border-radius: 10px;
+            backdrop-filter: blur(50px);
+            padding: 16px;
+            box-shadow: ${({ themeMode }) => themeMode === 'light' && ' 2px 5px 30px #00000029'};
+          `}
+      `;
+    }
+  }}
 
   &.f-wrap {
     flex-wrap: wrap;
@@ -182,10 +203,6 @@ const STYFlexContainer = styled.div`
         }
       }
     }}
-  }
-
-  &.h-fit-content {
-    height: fit-content;
   }
 
   ${({ backgroundImage }) => {
@@ -255,9 +272,9 @@ const STYFlexContainer = styled.div`
 
   &.x-auto {
     overflow-x: auto;
-    ::-webkit-scrollbar {
-      display: none;
-    }
-    scrollbar-width: none;
+  }
+
+  &.hidden {
+    overflow: hidden;
   }
 `;

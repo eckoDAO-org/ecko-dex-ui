@@ -6,7 +6,6 @@ import { useApplicationContext } from '../../../contexts';
 import useWindowSize from '../../../hooks/useWindowSize';
 import { ROUTE_INDEX } from '../../../router/routes';
 import menuItems from '../../menuItems';
-import HeaderItem from '../../shared/HeaderItem';
 import GameEditionModeButton from './GameEditionModeButton';
 import PopupContentList from './PopupContentList';
 import RightHeaderItems from './RightHeaderItems';
@@ -51,9 +50,7 @@ const TabletHeader = ({ className }) => {
     <Container className={className}>
       <RowContainer>
         <LeftContainer>
-          <HeaderItem headerItemStyle={{ marginTop: '4px' }}>
-            <PopupContentList withoutAccountInfo items={menuItems} icon={<HamburgerIcon />} className="hamburger" />
-          </HeaderItem>
+          <PopupContentList withoutAccountInfo items={menuItems} icon={<HamburgerIcon />} className="hamburger" />
           {themeMode === 'dark' ? (
             <KaddexLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
           ) : (
@@ -67,7 +64,7 @@ const TabletHeader = ({ className }) => {
           <RightHeaderItems />
         </RightContainer>
       </RowContainer>
-      <span className="mainnet-chain-2 desktop-none mobile-none">Mainnet Chain 2</span>
+      <span className="mainnet-chain-2 desktop-none mobile-none">Chain 2</span>
     </Container>
   );
 };

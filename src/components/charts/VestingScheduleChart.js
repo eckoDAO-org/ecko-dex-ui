@@ -2,7 +2,7 @@ import React from 'react';
 import GradientBorder from '../shared/GradientBorder';
 import Label from '../shared/Label';
 import { CardContainer } from '../stats/StatsTab';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, Tooltip } from 'recharts';
 import moment from 'moment';
 
 const data = [

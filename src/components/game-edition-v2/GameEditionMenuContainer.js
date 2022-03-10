@@ -5,7 +5,7 @@ import { GeArrowIcon } from '../../assets';
 import HeaderItem from '../../components/shared/HeaderItem';
 import theme, { commonColors } from '../../styles/theme';
 import headerLinks from '../headerLinks';
-import menuItems, { POOL, STATS, SWAP } from '../menuItems';
+import { gameEditionRoutes } from '../menuItems';
 import { FadeIn } from '../shared/animations';
 import GameEditionLabel from './components/GameEditionLabel';
 import menuBackground from '../../assets/images/game-edition/menu-background.png';
@@ -53,43 +53,23 @@ const RowMenuContainer = styled.div`
 
 const GameEditionMenuContainer = () => {
   const history = useHistory();
-  const [arrowVisible, setArrowVisible] = useState(SWAP.label);
+  const [activeItem, setActiveItem] = useState(gameEditionRoutes[0]);
   const { gameEditionView } = useGameEditionContext();
 
   const { setButtons } = useGameEditionContext();
   useEffect(() => {
-    let route = '';
-    switch (arrowVisible) {
-      case SWAP.label:
-        route = SWAP.route;
-        break;
-
-      case POOL.label:
-        route = POOL.route;
-        break;
-
-      case STATS.label:
-        route = STATS.route;
-        break;
-      default:
-        route = '';
-        break;
-    }
-
     setButtons({
-      A: () => history.push(route),
+      A: () => history.push(activeItem.route),
       Up: () => {
-        console.log('here');
-        const selectedIndex = menuItems.findIndex((i) => i.label === arrowVisible);
-        setArrowVisible(menuItems[selectedIndex - 1 < 0 ? menuItems.length - 1 : (selectedIndex - 1) % menuItems.length].label);
+        const selectedIndex = gameEditionRoutes.findIndex((i) => i.id === activeItem.id);
+        setActiveItem(gameEditionRoutes[selectedIndex - 1 < 0 ? gameEditionRoutes.length - 1 : (selectedIndex - 1) % gameEditionRoutes.length]);
       },
       Down: () => {
-        console.log('here1');
-        const selectedIndex = menuItems.findIndex((i) => i.label === arrowVisible);
-        setArrowVisible(menuItems[(selectedIndex + 1) % menuItems.length].label);
+        const selectedIndex = gameEditionRoutes.findIndex((i) => i.id === activeItem.id);
+        setActiveItem(gameEditionRoutes[(selectedIndex + 1) % gameEditionRoutes.length]);
       },
     });
-  }, [arrowVisible]);
+  }, [activeItem]);
 
   // check to not render this component when exit from game edition
   return gameEditionView ? (
@@ -99,21 +79,19 @@ const GameEditionMenuContainer = () => {
           MENU
         </GameEditionLabel>
         <TopListContainer>
-          {menuItems.map((item, index) => (
-            <RowMenuContainer key={index} showArrow={arrowVisible === item.label}>
+          {gameEditionRoutes.map((item, index) => (
+            <RowMenuContainer key={index} showArrow={activeItem.id === item.id}>
               <GeArrowIcon label={item.label} style={{ marginRight: 5.5 }} />
               <HeaderItem
-                className={item.className}
-                route={item.route}
+                disableUnderline
+                item={item}
                 headerItemStyle={{
                   fontFamily: theme.fontFamily.pixeboy,
-                  color: arrowVisible === item.label ? commonColors.gameEditionYellow : '#ffffff',
+                  color: activeItem.id === item.id ? commonColors.gameEditionYellow : '#ffffff',
                   fontSize: 32,
                   fontWeight: 400,
                   textTransform: 'uppercase',
                 }}
-                // onMouseOver={() => setArrowVisible(item.label)}
-                notChangebleFontOnHover
               >
                 {item.label}
               </HeaderItem>
@@ -125,10 +103,9 @@ const GameEditionMenuContainer = () => {
         {headerLinks.map((item, index) => (
           <HeaderItem
             key={index}
-            className={item?.className}
-            route={item?.route}
-            onClick={item?.onClick}
-            link={item?.link}
+            disableUnderline
+            hideIcon
+            item={item}
             headerItemStyle={{
               fontFamily: theme.fontFamily.pixeboy,
               color: commonColors.gameEditionBlue,
@@ -137,7 +114,6 @@ const GameEditionMenuContainer = () => {
               fontWeight: 400,
               textTransform: 'uppercase',
             }}
-            notChangebleFontOnHover
           >
             {item.label}
           </HeaderItem>
