@@ -32,6 +32,7 @@ const DesktopMainContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  z-index: 2;
   height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
     height: ${({ theme: { header } }) => `calc(100% - ${header.mobileHeight}px)`};

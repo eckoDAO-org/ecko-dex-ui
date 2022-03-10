@@ -47,7 +47,6 @@ export const CardContainer = styled.div`
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     padding: ${({ gameEditionView }) => gameEditionView && `12px`};
     flex-flow: column;
-    max-height: ${({ gameEditionView }) => (gameEditionView ? 'unset' : '450px')};
     gap: 0px;
   }
 

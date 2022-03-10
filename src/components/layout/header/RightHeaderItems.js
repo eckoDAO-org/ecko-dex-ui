@@ -1,28 +1,30 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components/macro';
-import HeaderItem from '../../../components/shared/HeaderItem';
-import AccountInfo from './AccountInfo';
-import Button from '../../../components/shared/CustomButton';
-import headerLinks from '../../headerLinks';
-import PopupContentList from './PopupContentList';
-import { AccountContext } from '../../../contexts/AccountContext';
-import reduceToken from '../../../utils/reduceToken';
-import { reduceBalance } from '../../../utils/reduceBalance';
-import SlippagePopupContent from './SlippagePopupContent';
+import useWindowSize from '../../../hooks/useWindowSize';
 import { ModalContext } from '../../../contexts/ModalContext';
 import ConnectWalletModal from '../../modals/kdaModals/ConnectWalletModal';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import BellNotification from '../../right-modal-notification/BellNotification';
 import { NotificationContext } from '../../../contexts/NotificationContext';
-import AccountModal from '../../modals/kdaModals/AccountModal';
 import { NotificationModalContext } from '../../../contexts/NotificationModalContext';
-import useWindowSize from '../../../hooks/useWindowSize';
+import { AccountContext } from '../../../contexts/AccountContext';
+import AccountInfo from './AccountInfo';
+import Button from '../../../components/shared/CustomButton';
+import headerLinks from '../../headerLinks';
+import PopupContentList from './PopupContentList';
+import reduceToken from '../../../utils/reduceToken';
+import SlippagePopupContent from './SlippagePopupContent';
+import AccountModal from '../../modals/kdaModals/AccountModal';
 import { commonTheme } from '../../../styles/theme';
 import { ThreeDotsIcon } from '../../../assets';
+import { reduceBalance } from '../../../utils/reduceBalance';
 
 const RightContainerHeader = styled.div`
   display: flex;
   align-items: center;
+  & > * {
+    z-index: 2;
+  }
   & > *:not(:last-child) {
     margin-right: 14px;
   }
@@ -54,86 +56,81 @@ const RightHeaderItems = () => {
     <RightContainerHeader>
       <span className="mainnet-chain-2 desktop-only">Mainnet Chain 2</span>
       {account?.account && width >= commonTheme.mediaQueries.desktopPixel && (
-        <HeaderItem>
-          <AccountInfo
-            onClick={() => {
-              if (gameEditionView) {
-                return openModal({
-                  title: 'Account',
-                  content: <AccountModal />,
-                });
-              } else {
-                modalContext.openModal({
-                  title: 'Account',
-                  content: <AccountModal />,
-                });
-              }
-            }}
-            account={account.account ? `${reduceToken(account.account)}` : 'KDA'}
-            balance={account.account ? `${reduceBalance(account.balance)} KDA` : ''}
-          />
-        </HeaderItem>
+        <AccountInfo
+          onClick={() => {
+            if (gameEditionView) {
+              return openModal({
+                title: 'Account',
+                content: <AccountModal />,
+              });
+            } else {
+              modalContext.openModal({
+                title: 'Account',
+                content: <AccountModal />,
+              });
+            }
+          }}
+          account={account.account ? `${reduceToken(account.account)}` : 'KDA'}
+          balance={account.account ? `${reduceBalance(account.balance)} KDA` : ''}
+        />
       )}
 
       {!account.account && (
-        <FadeContainer style={{ display: gameEditionView && 'none' }}>
-          <HeaderItem className="mobile-none">
-            <Button
-              hover={true}
-              buttonStyle={{ padding: '10px 16px' }}
-              fontSize={14}
-              onClick={() => {
-                if (gameEditionView) {
-                  return openModal({
-                    title: account?.account ? 'wallet connected' : 'connect wallet',
-                    description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
-                    content: <ConnectWalletModal />,
-                  });
-                } else {
-                  return modalContext.openModal({
-                    title: account?.account ? 'wallet connected' : 'connect wallet',
-                    description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
-                    content: <ConnectWalletModal />,
-                  });
-                }
-              }}
-            >
-              Connect Wallet
-            </Button>
-          </HeaderItem>
+        <FadeContainer className="mobile-none" style={{ display: gameEditionView && 'none' }}>
+          <Button
+            hover={true}
+            buttonStyle={{ padding: '10px 16px' }}
+            fontSize={14}
+            onClick={() => {
+              if (gameEditionView) {
+                return openModal({
+                  title: account?.account ? 'wallet connected' : 'connect wallet',
+                  description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
+                  content: <ConnectWalletModal />,
+                });
+              } else {
+                return modalContext.openModal({
+                  title: account?.account ? 'wallet connected' : 'connect wallet',
+                  description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
+                  content: <ConnectWalletModal />,
+                });
+              }
+            }}
+          >
+            Connect Wallet
+          </Button>
         </FadeContainer>
       )}
 
-      {gameEditionView && (
-        <HeaderItem headerItemStyle={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '4px' }}>
-          <SlippagePopupContent className="header-item" />
-        </HeaderItem>
-      )}
+      {gameEditionView && <SlippagePopupContent className="header-item w-fit-content" />}
 
-      <HeaderItem>
-        <BellNotification
-          hasNotification={notification.notificationList?.some((notif) => notif.isReaded === false)}
-          onClick={() => {
-            notificationModalContext.openModal({
-              footer: (
-                <Button
-                  onClick={() => {
-                    notification.removeAllItem();
-                  }}
-                  label="Remove All Notification"
-                  fontSize="12px"
-                  buttonStyle={{ width: '100%' }}
-                  outGameEditionView
-                />
-              ),
-            });
-          }}
-        />
-      </HeaderItem>
+      <BellNotification
+        hasNotification={notification.notificationList?.some((notif) => notif.isReaded === false)}
+        onClick={() => {
+          notificationModalContext.openModal({
+            footer: (
+              <Button
+                onClick={() => {
+                  notification.removeAllItem();
+                }}
+                label="Remove All Notification"
+                fontSize="12px"
+                buttonStyle={{ width: '100%' }}
+                outGameEditionView
+              />
+            ),
+          });
+        }}
+      />
 
-      <HeaderItem headerItemStyle={{ height: '100%', display: 'flex', zIndex: 5 }}>
-        <PopupContentList icon={<ThreeDotsIcon />} items={headerLinks} viewOtherComponents withLogout PopupContentListStyle={{ minWidth: 100 }} />
-      </HeaderItem>
+      <PopupContentList
+        icon={<ThreeDotsIcon />}
+        items={headerLinks}
+        className="w-fit-content"
+        viewOtherComponents
+        withLogout
+        PopupContentListStyle={{ minWidth: 100 }}
+      />
     </RightContainerHeader>
   );
 };

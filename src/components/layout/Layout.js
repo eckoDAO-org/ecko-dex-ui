@@ -1,6 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
 import styled, { css } from 'styled-components/macro';
+import useWindowSize from '../../hooks/useWindowSize';
+import { useApplicationContext } from '../../contexts';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
 import Wrapper from '../../components/shared/Wrapper';
 import DesktopHeader from './header/DesktopHeader';
 import MobileHeader from './header/MobileHeader';
@@ -8,18 +11,11 @@ import { ReactComponent as Stripes } from '../../assets/images/shared/stripes.sv
 import GameEditionContainer from '../game-edition-v2/GameEditionContainer';
 import { useHistory } from 'react-router';
 import { ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from '../../router/routes';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
 import browserDetection from '../../utils/browserDetection';
-import centerBackground from '../../assets/images/game-edition/center-background.png';
-import useWindowSize from '../../hooks/useWindowSize';
+import gameEditionBackground from '../../assets/images/game-edition/game-edition-background.png';
+import appBackground from '../../assets/images/shared/app-background.png';
 import TabletHeader from './header/TabletHeader';
-import { useApplicationContext } from '../../contexts';
-
-const MainContainer = styled.div`
-  display: flex;
-  height: 100%;
-  width: 100%;
-`;
+import { FlexContainer } from '../shared/FlexContainer';
 
 const WrapperContainer = styled(Wrapper)`
   height: 100%;
@@ -38,8 +34,9 @@ const WrapperContainer = styled(Wrapper)`
 const CenterBackground = styled.img`
   position: absolute;
   width: 100%;
+  height: 100%;
   top: 0px;
-  z-index: -1;
+  z-index: 0;
   animation: fade-in 0.5s linear;
   @keyframes fade-in {
     from {
@@ -125,7 +122,7 @@ const Layout = ({ children }) => {
   }, [gameEditionView, width, height, resolutionConfiguration]);
 
   return (
-    <MainContainer>
+    <FlexContainer className="w-100 h-100" backgroundImage={appBackground}>
       <WrapperContainer>
         <MobileHeader className="mobile-only" />
         <TabletHeader className="desktop-none mobile-none" />
@@ -134,7 +131,7 @@ const Layout = ({ children }) => {
 
         {gameEditionView && resolutionConfiguration && width >= resolutionConfiguration.width && height >= resolutionConfiguration.height ? (
           <>
-            <CenterBackground src={centerBackground} alt="" />
+            <CenterBackground src={gameEditionBackground} alt="" />
             <GameEditionContainer>{children}</GameEditionContainer>
           </>
         ) : (
@@ -144,7 +141,7 @@ const Layout = ({ children }) => {
       <StripesContainer>
         <Stripes />
       </StripesContainer>
-    </MainContainer>
+    </FlexContainer>
   );
 };
 

@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import RightHeaderItems from './RightHeaderItems';
 import PopupContentList from './PopupContentList';
-import HeaderItem from '../../../components/shared/HeaderItem';
 import { HamburgerIcon, KaddexLetterLogo } from '../../../assets';
 import menuItems from '../../menuItems';
 import { useHistory } from 'react-router';
@@ -55,9 +54,7 @@ const MobileHeader = ({ className }) => {
     <Container className={className}>
       <RowContainer>
         <LeftContainer>
-          <HeaderItem headerItemStyle={{ marginTop: '4px', zIndex: 5 }}>
-            <PopupContentList withoutAccountInfo items={menuItems} icon={<HamburgerIcon />} className="hamburger" />
-          </HeaderItem>
+          <PopupContentList withoutAccountInfo items={menuItems} icon={<HamburgerIcon />} className="hamburger" />
           <KaddexLetterLogo onClick={() => history.push(ROUTE_SWAP)} />
         </LeftContainer>
 

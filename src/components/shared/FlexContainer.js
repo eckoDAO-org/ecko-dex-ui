@@ -35,15 +35,17 @@ export const FlexContainer = ({
   style,
   tabletStyle,
   mobileStyle,
+  gameEditionStyle,
   backgroundImage,
   withGradient,
+  outOfGameEdition,
   ...rest
 }) => {
   const [width] = useWindowSize();
   const { gameEditionView } = useContext(GameEditionContext);
 
   const getClassName = () => {
-    if (gameEditionView) {
+    if (gameEditionView && !outOfGameEdition) {
       return gameEditionClassName;
     }
     let classname = className;
@@ -66,14 +68,20 @@ export const FlexContainer = ({
       className={getClassName()}
       backgroundImage={backgroundImage}
       withGradient={withGradient}
-      style={{
-        ...style,
-        ...(width >= (desktopPixel || theme.mediaQueries.desktopPixel) && desktopStyle),
-        ...(width < (desktopPixel || theme.mediaQueries.desktopPixel) && width >= theme.mediaQueries.mobilePixel && tabletStyle),
-        ...(width < theme.mediaQueries.mobilePixel && mobileStyle),
-      }}
+      gameEditionView={gameEditionView}
+      outOfGameEdition={outOfGameEdition}
+      style={
+        gameEditionView
+          ? { ...gameEditionStyle }
+          : {
+              ...style,
+              ...(width >= (desktopPixel || theme.mediaQueries.desktopPixel) && desktopStyle),
+              ...(width < (desktopPixel || theme.mediaQueries.desktopPixel) && width >= theme.mediaQueries.mobilePixel && tabletStyle),
+              ...(width < theme.mediaQueries.mobilePixel && mobileStyle),
+            }
+      }
     >
-      {withGradient && <STYGradientBorder />}
+      {withGradient && (!gameEditionView || outOfGameEdition) && <STYGradientBorder />}
       {children}
     </STYFlexContainer>
   );
@@ -81,16 +89,6 @@ export const FlexContainer = ({
 const STYFlexContainer = styled.div`
   display: flex;
 
-  ${({ withGradient }) => {
-    if (withGradient) {
-      return css`
-        border-radius: 10px;
-        backdrop-filter: blur(50px);
-        padding: 16px;
-        box-shadow: ${({ themeMode }) => themeMode === 'light' && ' 2px 5px 30px #00000029'};
-      `;
-    }
-  }}
   &.hide-scrollbar {
     scroll-behavior: smooth;
     ::-webkit-scrollbar {
@@ -166,10 +164,28 @@ const STYFlexContainer = styled.div`
   &.h-fit-content {
     height: fit-content;
   }
-
-  &.transparent {
-    background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
+  &.w-fit-content {
+    width: fit-content;
   }
+  ${({ gameEditionView, outOfGameEdition }) => {
+    if (!gameEditionView || outOfGameEdition) {
+      return css`
+        &.background-fill {
+          backdrop-filter: blur(50px);
+          background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
+        }
+        ${({ withGradient }) =>
+          withGradient &&
+          css`
+            border-radius: 10px;
+            backdrop-filter: blur(50px);
+            padding: 16px;
+            box-shadow: ${({ themeMode }) => themeMode === 'light' && ' 2px 5px 30px #00000029'};
+          `}
+      `;
+    }
+  }}
+
   &.f-wrap {
     flex-wrap: wrap;
 
@@ -186,10 +202,6 @@ const STYFlexContainer = styled.div`
         }
       }
     }}
-  }
-
-  &.h-fit-content {
-    height: fit-content;
   }
 
   ${({ backgroundImage }) => {

@@ -73,7 +73,7 @@ export const darkTheme = {
   },
   buttonBackgroundGradient: 'rgb(17,8,23)',
   backgroundInput: 'transparent',
-  backgroundContainer: '#FFFFFF1A',
+  backgroundContainer: '#292A45',
 };
 
 export const theme = (mode = 'light') => {

@@ -5,10 +5,10 @@ import Label from './Label';
 import LogoLoader from './Loader';
 
 const Wrapper = styled(FlexContainer)`
-  /* background-color: ${({ theme: { backgroundContainer } }) => backgroundContainer}; */
-  /* *::-webkit-scrollbar-corner {
+  background-color: ${({ theme: { backgroundContainer } }) => backgroundContainer};
+  *::-webkit-scrollbar-corner {
     background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
-  } */
+  }
   table {
     border-collapse: collapse;
     border-spacing: 0px;
@@ -20,7 +20,6 @@ const Wrapper = styled(FlexContainer)`
     position: -webkit-sticky;
     position: sticky;
     left: 0px;
-    z-index: 2;
   }
   .tr-sticky:after {
     content: '';
@@ -36,10 +35,10 @@ const Wrapper = styled(FlexContainer)`
   th {
     font-weight: normal;
   }
-  /* td,
+  td,
   th {
     background-color: ${({ theme: { backgroundContainer } }) => backgroundContainer};
-  } */
+  }
   tbody {
     & > tr {
       border-bottom: 1px solid ${({ theme: { colors } }) => `${colors.white}66`};
@@ -49,13 +48,13 @@ const Wrapper = styled(FlexContainer)`
 
 const CommonTable = ({ columns, items, hasMore, loadMore, loading }) => {
   return (
-    <Wrapper withGradient className="w-100 relative hidden column transparent">
+    <Wrapper withGradient className="w-100 relative hidden column background-fill">
       <FlexContainer className="w-100 x-auto scrollbar-y-none">
         <table cellSpacing={0} cellPadding={24}>
           <thead>
-            <tr className="tr-sticky" style={{ position: 'sticky', zIndex: 3, top: 0 }}>
+            <tr className="tr-sticky" style={{ position: 'sticky', zIndex: 10, top: 0 }}>
               {columns.map((c, i) => (
-                <th colSpan={1} key={i} className={i === 0 ? 'sticky' : ''} style={{ minWidth: c.width, paddingTop: 0 }}>
+                <th colSpan={1} key={i} className={i === 0 ? 'sticky' : ''} style={{ minWidth: c.width, paddingTop: 0, zIndex: i === 0 ? 10 : 1 }}>
                   {typeof c.name === 'string' ? (
                     <Label fontSize={13} className={`capitalize ${c?.align === 'right' ? 'justify-fe' : ''}`}>
                       {c.name}
@@ -71,7 +70,7 @@ const CommonTable = ({ columns, items, hasMore, loadMore, loading }) => {
             {items.map((item, i) => (
               <tr key={i}>
                 {columns.map((c, j) => (
-                  <td key={j} className={j === 0 ? 'sticky' : ''} style={{ minWidth: c.width }}>
+                  <td key={j} className={j === 0 ? 'sticky' : ''} style={{ minWidth: c.width, zIndex: j === 0 ? 9 : 1 }}>
                     <Label fontSize={13} className={c?.align === 'right' ? 'justify-fe' : ''}>
                       {c.render({ item, column: c })}
                     </Label>

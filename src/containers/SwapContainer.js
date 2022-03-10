@@ -505,7 +505,12 @@ const SwapContainer = () => {
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
       {!gameEditionView && isLogoVisible && <BackgroundLogo />}
 
-      <FlexContainer className="justify-sb w-100" gameEditionClassName="justify-ce" style={{ marginBottom: 24 }}>
+      <FlexContainer
+        className="justify-sb w-100"
+        gameEditionClassName="justify-ce"
+        style={{ marginBottom: 24 }}
+        gameEditionStyle={{ marginBottom: 14 }}
+      >
         <Label fontSize={32} geCenter fontFamily="syncopate" geFontSize={52} geLabelStyle={{ lineHeight: '32px' }}>
           Swap
         </Label>
