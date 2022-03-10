@@ -23,7 +23,7 @@ const RightContainerHeader = styled.div`
   display: flex;
   align-items: center;
   & > * {
-    z-index: 2;
+    z-index: 10;
   }
   & > *:not(:last-child) {
     margin-right: 14px;

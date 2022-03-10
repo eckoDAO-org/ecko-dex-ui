@@ -28,7 +28,7 @@ const Wrapper = styled(FlexContainer)`
     height: 1px;
     width: 100%;
     position: absolute;
-    z-index: 10;
+    z-index: 3;
     bottom: 0px;
     left: 0px;
   }
@@ -52,9 +52,9 @@ const CommonTable = ({ columns, items, hasMore, loadMore, loading }) => {
       <FlexContainer className="w-100 x-auto scrollbar-y-none">
         <table cellSpacing={0} cellPadding={24}>
           <thead>
-            <tr className="tr-sticky" style={{ position: 'sticky', zIndex: 10, top: 0 }}>
+            <tr className="tr-sticky" style={{ position: 'sticky', zIndex: 3, top: 0 }}>
               {columns.map((c, i) => (
-                <th colSpan={1} key={i} className={i === 0 ? 'sticky' : ''} style={{ minWidth: c.width, paddingTop: 0, zIndex: i === 0 ? 10 : 1 }}>
+                <th colSpan={1} key={i} className={i === 0 ? 'sticky' : ''} style={{ minWidth: c.width, paddingTop: 0, zIndex: i === 0 ? 3 : 1 }}>
                   {typeof c.name === 'string' ? (
                     <Label fontSize={13} className={`capitalize ${c?.align === 'right' ? 'justify-fe' : ''}`}>
                       {c.name}
@@ -70,7 +70,7 @@ const CommonTable = ({ columns, items, hasMore, loadMore, loading }) => {
             {items.map((item, i) => (
               <tr key={i}>
                 {columns.map((c, j) => (
-                  <td key={j} className={j === 0 ? 'sticky' : ''} style={{ minWidth: c.width, zIndex: j === 0 ? 9 : 1 }}>
+                  <td key={j} className={j === 0 ? 'sticky' : ''} style={{ minWidth: c.width, zIndex: j === 0 ? 2 : 1 }}>
                     <Label fontSize={13} className={c?.align === 'right' ? 'justify-fe' : ''}>
                       {c.render({ item, column: c })}
                     </Label>
