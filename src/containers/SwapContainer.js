@@ -512,7 +512,7 @@ const SwapContainer = () => {
         gameEditionStyle={{ marginBottom: 14 }}
       >
         <Label fontSize={32} geCenter fontFamily="syncopate" geFontSize={52} geLabelStyle={{ lineHeight: '32px' }}>
-          Swap
+          SWAP
         </Label>
         {!gameEditionView && (
           <FlexContainer className="align-ce" gap={10}>

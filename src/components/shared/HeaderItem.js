@@ -47,7 +47,18 @@ const HeaderItemContent = styled.div`
   align-items: center;
 `;
 
-const HeaderItem = ({ id, className, children, disableUnderline, onClick, item, headerItemStyle, disableHover, notChangebleFontOnHover }) => {
+const HeaderItem = ({
+  id,
+  className,
+  children,
+  disableUnderline,
+  hideIcon,
+  onClick,
+  item,
+  headerItemStyle,
+  disableHover,
+  notChangebleFontOnHover,
+}) => {
   const { gameEditionView } = useContext(GameEditionContext);
   const history = useHistory();
 
@@ -82,7 +93,7 @@ const HeaderItem = ({ id, className, children, disableUnderline, onClick, item, 
       $notChangebleFontOnHover={notChangebleFontOnHover}
     >
       <HeaderItemContent>
-        {item?.icon}
+        {!hideIcon && item?.icon}
         {children}
       </HeaderItemContent>
       {!disableUnderline && <div className={`underline ${isActive() ? 'active' : ''}`} />}

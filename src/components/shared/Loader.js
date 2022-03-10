@@ -11,9 +11,9 @@ const LogoLoader = ({ withTopMargin, containerStyle, logoStyle }) => {
   );
 };
 
-export const GameEditionLoader = () => {
+export const GameEditionLoader = ({ style }) => {
   return (
-    <GeLoaderContainer>
+    <GeLoaderContainer style={style}>
       <GeLoader className="loader">
         <span></span>
       </GeLoader>
@@ -65,6 +65,7 @@ const GeLoaderContainer = styled.div`
   justify-content: center;
   height: fit-content;
   margin-bottom: 4px;
+  z-index: 1;
 `;
 const GeLoader = styled.div`
   &.loader {

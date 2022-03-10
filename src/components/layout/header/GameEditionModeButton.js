@@ -72,7 +72,7 @@ const GameEditionModeButton = ({ className }) => {
       }}
     >
       {!gameEditionView && <GameModeIcon style={{ marginRight: 9.4 }} />}
-      <span style={{ fontFamily: commonTheme.fontFamily.syncopate, whiteSpace: 'nowrap' }}>{gameEditionView ? 'Exit Game Mode' : 'Game Mode'}</span>
+      <span style={{ fontFamily: commonTheme.fontFamily.syncopate, whiteSpace: 'nowrap' }}>{gameEditionView ? 'EXIT GAME MODE' : 'GAME MODE'}</span>
 
       {/* 
          : (

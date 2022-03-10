@@ -83,6 +83,7 @@ const GameEditionMenuContainer = () => {
             <RowMenuContainer key={index} showArrow={activeItem.id === item.id}>
               <GeArrowIcon label={item.label} style={{ marginRight: 5.5 }} />
               <HeaderItem
+                disableUnderline
                 item={item}
                 headerItemStyle={{
                   fontFamily: theme.fontFamily.pixeboy,
@@ -102,10 +103,9 @@ const GameEditionMenuContainer = () => {
         {headerLinks.map((item, index) => (
           <HeaderItem
             key={index}
-            className={item?.className}
-            route={item?.route}
-            onClick={item?.onClick}
-            link={item?.link}
+            disableUnderline
+            hideIcon
+            item={item}
             headerItemStyle={{
               fontFamily: theme.fontFamily.pixeboy,
               color: commonColors.gameEditionBlue,
@@ -114,7 +114,6 @@ const GameEditionMenuContainer = () => {
               fontWeight: 400,
               textTransform: 'uppercase',
             }}
-            notChangebleFontOnHover
           >
             {item.label}
           </HeaderItem>

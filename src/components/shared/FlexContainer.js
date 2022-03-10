@@ -45,22 +45,23 @@ export const FlexContainer = ({
   const { gameEditionView } = useContext(GameEditionContext);
 
   const getClassName = () => {
-    if (gameEditionView && !outOfGameEdition) {
-      return gameEditionClassName;
-    }
     let classname = className;
-    if (width >= (desktopPixel || theme.mediaQueries.desktopPixel) && desktopClassName) {
-      classname = `${classname} ${desktopClassName} `;
-    }
-    if (width < (desktopPixel || theme.mediaQueries.desktopPixel) && width >= theme.mediaQueries.mobilePixel && tabletClassName) {
-      classname = `${classname} ${tabletClassName} `;
-    }
-    if (width < theme.mediaQueries.mobilePixel && mobileClassName) {
-      classname = `${classname} ${mobileClassName} `;
+
+    if (gameEditionView && !outOfGameEdition) {
+      classname = `${className} ${gameEditionClassName}`;
+    } else {
+      if (width >= (desktopPixel || theme.mediaQueries.desktopPixel) && desktopClassName) {
+        classname = `${classname} ${desktopClassName} `;
+      }
+      if (width < (desktopPixel || theme.mediaQueries.desktopPixel) && width >= theme.mediaQueries.mobilePixel && tabletClassName) {
+        classname = `${classname} ${tabletClassName} `;
+      }
+      if (width < theme.mediaQueries.mobilePixel && mobileClassName) {
+        classname = `${classname} ${mobileClassName} `;
+      }
     }
     return classname;
   };
-
   return (
     <STYFlexContainer
       {...rest}

@@ -150,6 +150,9 @@ export const PactProvider = (props) => {
         let swap = Object.values(response?.data);
         if (swap.length !== 0) {
           const newResults = [...swapList, ...swap];
+          if (swap.length < limit) {
+            setMoreSwap(false);
+          }
           setSwapList(newResults);
         } else {
           setMoreSwap(false);

@@ -90,7 +90,7 @@ const CommonTable = ({ columns, items, hasMore, loadMore, loading }) => {
           }}
         >
           <Label fontSize={13} fontFamily="syncopate">
-            Load more
+            LOAD MORE
           </Label>
         </FlexContainer>
       )}

@@ -107,7 +107,7 @@ export default createGlobalStyle`
       }
     }
 
-    .scrollbar-none{
+    .scrollbar-none {
       -ms-overflow-style: none;  /* IE and Edge */
       scrollbar-width: none;  /* Firefox */
 

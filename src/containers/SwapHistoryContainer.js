@@ -3,7 +3,6 @@ import React, { useContext, useEffect } from 'react';
 import styled, { css } from 'styled-components/macro';
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
-import useButtonScrollEvent from '../hooks/useButtonScrollEvent';
 import { GameEditionContext } from '../contexts/GameEditionContext';
 import { PactContext } from '../contexts/PactContext';
 import { FlexContainer } from '../components/shared/FlexContainer';
@@ -14,35 +13,38 @@ import reduceToken from '../utils/reduceToken';
 import { getInfoCoin } from '../utils/token-utils';
 import { ROUTE_INDEX } from '../router/routes';
 import { HistoryIcon } from '../assets';
+import SwapHistoryGameEdition from '../components/swap/SwapHistoryGameEdition';
+import modalBackground from '../assets/images/game-edition/modal-background.png';
+import PressButtonToActionLabel from '../components/game-edition-v2/components/PressButtonToActionLabel';
+import { FadeIn } from '../components/shared/animations';
 
-export const CardContainer = styled.div`
+export const CardContainer = styled(FadeIn)`
   display: flex;
   flex-flow: column;
   align-items: center;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-
+  height: 100%;
   ${({ gameEditionView }) => {
-    if (gameEditionView) {
-      return css`
-        background-color: #ffffff0d;
-        border: 2px dashed #fff;
-        padding: 24px;
-        max-height: 50vh;
-      `;
-    } else {
+    if (!gameEditionView) {
       return css`
         border-radius: 10px;
         position: relative;
-        height: 100%;
         z-index: 2;
         padding: ${({ theme: { layout } }) => `50px ${layout.desktopPadding}px`};
+      `;
+    } else {
+      return css`
+        padding: 16px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        background-image: ${`url(${modalBackground})`};
       `;
     }
   }}
 
-  opacity: 1;
   overflow: auto;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     padding: ${({ gameEditionView }) => gameEditionView && `12px`};
@@ -83,13 +85,11 @@ const CryptoContainer = styled.div`
 const SwapHistoryContainer = () => {
   const history = useHistory();
   const pact = useContext(PactContext);
-  const { gameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView, setButtons } = useContext(GameEditionContext);
 
   useEffect(() => {
     pact.getEventsSwapList();
   }, []);
-
-  useButtonScrollEvent(gameEditionView && 'history-list');
 
   const renderColumns = () => {
     return [
@@ -127,27 +127,47 @@ const SwapHistoryContainer = () => {
     ];
   };
 
+  useEffect(() => {
+    if (gameEditionView && pact?.swapList?.[0]) {
+      setButtons({
+        A: async () => await pact.getMoreEventsSwapList(),
+      });
+    } else {
+      setButtons({
+        A: null,
+      });
+    }
+  }, [gameEditionView, pact.swapList]);
+
   return (
     <CardContainer gameEditionView={gameEditionView}>
-      <FlexContainer className="w-100 justify-sb" style={{ marginBottom: 24 }}>
-        <Label fontSize={24} fontFamily="syncopate">
-          Swap
+      <FlexContainer className="w-100 justify-sb" style={{ marginBottom: 24 }} gameEditionStyle={{ marginBottom: 14 }}>
+        <Label fontSize={24} geFontSize={32} fontFamily="syncopate">
+          SWAP
         </Label>
-        <HistoryIconContainer className="justify-ce align-ce pointer" onClick={() => history.push(ROUTE_INDEX)}>
-          <HistoryIcon />
-        </HistoryIconContainer>
+        {gameEditionView ? (
+          pact.swapList[0] && pact.moreSwap && <PressButtonToActionLabel actionLabel="load more" />
+        ) : (
+          <HistoryIconContainer className="justify-ce align-ce pointer" onClick={() => history.push(ROUTE_INDEX)}>
+            <HistoryIcon />
+          </HistoryIconContainer>
+        )}
       </FlexContainer>
       {!pact.swapList?.error ? (
         pact.swapList[0] ? (
-          <CommonTable
-            items={pact.swapList}
-            columns={renderColumns()}
-            hasMore={pact.moreSwap}
-            loading={pact.loadingSwap}
-            loadMore={async () => {
-              await pact.getMoreEventsSwapList();
-            }}
-          />
+          gameEditionView ? (
+            <SwapHistoryGameEdition items={pact.swapList} loading={pact.loadingSwap} />
+          ) : (
+            <CommonTable
+              items={pact.swapList}
+              columns={renderColumns()}
+              hasMore={pact.moreSwap}
+              loading={pact.loadingSwap}
+              loadMore={async () => {
+                await pact.getMoreEventsSwapList();
+              }}
+            />
+          )
         ) : (
           <LogoLoader />
         )
