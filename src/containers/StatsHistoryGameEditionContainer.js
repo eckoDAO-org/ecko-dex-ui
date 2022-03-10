@@ -30,7 +30,7 @@ const StatsHistoryGameEditionContainer = () => {
   const pact = useContext(PactContext);
 
   useEffect(() => {
-    pact.getEventsSwapList();
+    pact.getPairList();
   }, []);
 
   const renderColumns = () => {
@@ -64,7 +64,7 @@ const StatsHistoryGameEditionContainer = () => {
       {pact.pairList[0] ? (
         <CommonTableGameEdition
           id="swap-history-list"
-          items={pact.pairList}
+          items={Object.values(pact.pairList)}
           columns={renderColumns()}
           onClick={(item) => {
             window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${item?.requestKey}`, '_blank', 'noopener,noreferrer');

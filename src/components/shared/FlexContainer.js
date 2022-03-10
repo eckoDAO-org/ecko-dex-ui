@@ -278,3 +278,10 @@ const STYFlexContainer = styled.div`
     overflow: hidden;
   }
 `;
+
+export const CryptoContainer = styled.div`
+  img {
+    width: 32px !important;
+    height: 32px !important;
+  }
+`;

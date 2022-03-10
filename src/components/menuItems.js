@@ -1,4 +1,13 @@
-import { ROUTE_POOL, ROUTE_STATS, ROUTE_SWAP, ROUTE_ANALYTICS, ROUTE_MY_SWAP } from '../router/routes';
+import {
+  ROUTE_STATS,
+  ROUTE_SWAP,
+  ROUTE_ANALYTICS,
+  ROUTE_MY_SWAP,
+  ROUTE_LIQUIDITY_TOKENS,
+  ROUTE_LIQUIDITY_POOLS,
+  ROUTE_LIQUIDITY_MY_LIQUIDITY,
+  ROUTE_LIQUIDITY_ADD_LIQUIDITY,
+} from '../router/routes';
 
 export const SWAP = {
   id: 0,
@@ -6,10 +15,11 @@ export const SWAP = {
   route: ROUTE_SWAP,
   activeRoutes: [ROUTE_MY_SWAP],
 };
-export const POOL = {
+export const LIQUIDITY = {
   id: 1,
-  label: 'pool',
-  route: ROUTE_POOL,
+  label: 'Liquidity',
+  route: ROUTE_LIQUIDITY_TOKENS,
+  activeRoutes: [ROUTE_LIQUIDITY_POOLS, ROUTE_LIQUIDITY_MY_LIQUIDITY, ROUTE_LIQUIDITY_ADD_LIQUIDITY],
 };
 export const STATS = {
   id: 2,
@@ -22,7 +32,7 @@ export const ANALYTICS = {
   route: ROUTE_ANALYTICS,
 };
 
-export default [SWAP, POOL, STATS, ANALYTICS];
+export default [SWAP, LIQUIDITY, STATS, ANALYTICS];
 
 export const gameEditionRoutes = [
   {

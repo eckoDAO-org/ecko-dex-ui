@@ -17,10 +17,14 @@ import {
   ROUTE_GAME_EDITION_MENU,
   ROUTE_ANALYTICS,
   ROUTE_MY_SWAP,
+  ROUTE_LIQUIDITY_TOKENS,
+  ROUTE_LIQUIDITY_MY_LIQUIDITY,
+  ROUTE_LIQUIDITY_POOLS,
 } from './routes';
 import SwapHistoryContainer from '../containers/SwapHistoryContainer';
 import { useGameEditionContext } from '../contexts';
 import StatsHistoryGameEditionContainer from '../containers/StatsHistoryGameEditionContainer';
+import LiquidityContainer from '../containers/LiquidityContainer';
 
 export default () => {
   const { gameEditionView } = useGameEditionContext();
@@ -34,13 +38,12 @@ export default () => {
             <Route exact path={ROUTE_INDEX} component={SwapContainer} />
             <Route exact path={ROUTE_MY_SWAP} component={SwapHistoryContainer} />
             <Route exact path={ROUTE_STATS} component={StatsHistoryGameEditionContainer} />
-
           </Switch>
         ) : (
           <Switch>
             <Route exact path={ROUTE_INDEX} component={SwapContainer} />
             <Route exact path={ROUTE_MY_SWAP} component={SwapHistoryContainer} />
-
+            <Route exact path={[ROUTE_LIQUIDITY_TOKENS, ROUTE_LIQUIDITY_POOLS, ROUTE_LIQUIDITY_MY_LIQUIDITY]} component={LiquidityContainer} />
             <Route exact path={ROUTE_POOL} component={PoolContainer} />
             <Route exact path={ROUTE_STATS} component={StatsHistoryContainer} />
             <Route exact path={ROUTE_ANALYTICS} component={AnalyticsContainer} />

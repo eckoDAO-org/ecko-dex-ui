@@ -5,7 +5,7 @@ import moment from 'moment';
 import { useHistory } from 'react-router-dom';
 import { GameEditionContext } from '../contexts/GameEditionContext';
 import { PactContext } from '../contexts/PactContext';
-import { FlexContainer } from '../components/shared/FlexContainer';
+import { CryptoContainer, FlexContainer } from '../components/shared/FlexContainer';
 import LogoLoader from '../components/shared/Loader';
 import Label from '../components/shared/Label';
 import CommonTable from '../components/shared/CommonTable';
@@ -77,13 +77,6 @@ const HistoryIconContainer = styled(FlexContainer)`
   }
 `;
 
-const CryptoContainer = styled.div`
-  img {
-    width: 32px !important;
-    height: 32px !important;
-  }
-`;
-
 const SwapHistoryContainer = () => {
   const history = useHistory();
   const pact = useContext(PactContext);
@@ -100,6 +93,7 @@ const SwapHistoryContainer = () => {
         width: 160,
         render: ({ item }) => (
           <FlexContainer className="align-ce">
+            {console.log('item', item)}
             <CryptoContainer style={{ zIndex: 2 }}>{getInfoCoin(item, 3)?.icon} </CryptoContainer>
             <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{getInfoCoin(item, 5)?.icon} </CryptoContainer>
             {getInfoCoin(item, 3)?.name}/{getInfoCoin(item, 5)?.name}

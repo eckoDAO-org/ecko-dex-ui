@@ -53,7 +53,7 @@ const CommonTable = ({ columns, items, hasMore, loadMore, loading, onClick }) =>
         <table cellSpacing={0} cellPadding={24}>
           <thead>
             <tr className="tr-sticky" style={{ position: 'sticky', zIndex: 3, top: 0 }}>
-              {columns.map((c, i) => (
+              {columns?.map((c, i) => (
                 <th colSpan={1} key={i} className={i === 0 ? 'sticky' : ''} style={{ minWidth: c.width, paddingTop: 0, zIndex: i === 0 ? 3 : 1 }}>
                   {typeof c.name === 'string' ? (
                     <Label fontSize={13} className={`capitalize ${c?.align === 'right' ? 'justify-fe' : ''}`}>
@@ -67,7 +67,7 @@ const CommonTable = ({ columns, items, hasMore, loadMore, loading, onClick }) =>
             </tr>
           </thead>
           <tbody>
-            {items.map((item, i) => (
+            {items?.map((item, i) => (
               <tr
                 key={i}
                 onClick={() => {
@@ -77,7 +77,7 @@ const CommonTable = ({ columns, items, hasMore, loadMore, loading, onClick }) =>
                 }}
                 style={{ cursor: onClick ? 'pointer' : 'default' }}
               >
-                {columns.map((c, j) => (
+                {columns?.map((c, j) => (
                   <td key={j} className={j === 0 ? 'sticky' : ''} style={{ minWidth: c.width, zIndex: j === 0 ? 2 : 1 }}>
                     <Label fontSize={13} className={c?.align === 'right' ? 'justify-fe' : ''}>
                       {c.render({ item, column: c })}

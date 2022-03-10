@@ -18,9 +18,11 @@ export const LiquidityProvider = (props) => {
   const swap = useSwapContext();
   const [liquidityProviderFee, setLiquidityProviderFee] = useState(0.003);
   const [pairListAccount, setPairListAccount] = useState(pairTokens);
+  const [loadingLiquidity, setLoadingLiquidity] = useState(true);
 
   const getPairListAccountBalance = async (account) => {
     try {
+      setLoadingLiquidity(true);
       let currentPair = pact.pairList.length ? pairTokens : pact.pairList;
       const tokenPairList = Object.keys(currentPair).reduce((accum, pair) => {
         accum += `[${pair.split(':').join(' ')}] `;
@@ -85,6 +87,7 @@ export const LiquidityProvider = (props) => {
       } else {
         setPairListAccount({ error: data.result.status });
       }
+      setLoadingLiquidity(false);
     } catch (e) {
       console.log(e);
     }
@@ -468,6 +471,7 @@ export const LiquidityProvider = (props) => {
 
   const contextValue = {
     liquidityProviderFee,
+    loadingLiquidity,
     setLiquidityProviderFee,
     pairListAccount,
     setPairListAccount,

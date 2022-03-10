@@ -300,6 +300,7 @@ export const PactProvider = (props) => {
             ...dataList[pair.name],
           };
         });
+        console.log('test', pairList);
         setPairList(pairList);
       }
     } catch (e) {

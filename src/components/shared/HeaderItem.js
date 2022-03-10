@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 
@@ -61,11 +61,11 @@ const HeaderItem = ({
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
   const history = useHistory();
+  const { pathname } = useLocation();
 
   const [buttonHover, setButtonHover] = useState(null);
 
   const isActive = () => {
-    const { pathname } = window.location;
     return pathname === item?.route || item?.activeRoutes?.includes(pathname);
   };
 
