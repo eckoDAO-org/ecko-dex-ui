@@ -18,6 +18,7 @@ import {
   ROUTE_GAME_EDITION_MENU,
   ROUTE_ANALYTICS,
   ROUTE_DAO,
+  ROUTE_DAO_PROPOSAL,
 } from './routes';
 
 export default () => {
@@ -32,7 +33,7 @@ export default () => {
             <Route exact path={ROUTE_GAME_START_ANIMATION} component={GameEditionStartAnimation} />
             <Route exact path={ROUTE_GAME_EDITION_MENU} component={GameEditionMenuContainer} />
             <Route exact path={ROUTE_POOL} component={PoolContainer} />
-            <Route exact path={ROUTE_DAO} component={DaoContainer} />
+            <Route exact path={[ROUTE_DAO, ROUTE_DAO_PROPOSAL]} component={DaoContainer} />
             <Route exact path={ROUTE_STATS} component={StatsHistoryContainer} />
             <Route exact path={ROUTE_ANALYTICS} component={AnalyticsContainer} />
             <Route exact path={ROUTE_WRAP} component={WrapContainer} />

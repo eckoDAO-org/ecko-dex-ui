@@ -5,6 +5,7 @@ export const ROUTE_GAME_EDITION_MENU = '/menu';
 export const ROUTE_POOL = '/pool';
 export const ROUTE_WRAP = '/wrap';
 export const ROUTE_DAO = '/dao';
+export const ROUTE_DAO_PROPOSAL = '/dao/:proposal_id';
 export const ROUTE_STATS = '/stats';
 export const ROUTE_ANALYTICS = '/analytics';
 export const ROUTE_STATIC = '/bountyswap';
