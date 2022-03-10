@@ -7,7 +7,13 @@ import LiquidityTokensTable from '../components/liquidity/LiquidityTokensTable';
 import CustomButton from '../components/shared/CustomButton';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import Label from '../components/shared/Label';
-import { ROUTE_LIQUIDITY_ADD_LIQUIDITY, ROUTE_LIQUIDITY_MY_LIQUIDITY, ROUTE_LIQUIDITY_POOLS, ROUTE_LIQUIDITY_TOKENS } from '../router/routes';
+import {
+  ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED,
+  ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED,
+  ROUTE_LIQUIDITY_MY_LIQUIDITY,
+  ROUTE_LIQUIDITY_POOLS,
+  ROUTE_LIQUIDITY_TOKENS,
+} from '../router/routes';
 
 const Container = styled(FlexContainer)`
   padding: ${({ theme: { layout } }) => `50px ${layout.desktopPadding}px`};
@@ -47,7 +53,18 @@ const LiquidityContainer = () => {
           >
             MY LIQUIDITY
           </CustomButton>
-          <CustomButton type="secondary" fontFamily="syncopate" onClick={() => history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY)}>
+          <CustomButton
+            type="secondary"
+            fontFamily="syncopate"
+            onClick={() =>
+              history.push(
+                (pathname === ROUTE_LIQUIDITY_TOKENS
+                  ? ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED
+                  : ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED
+                ).concat(`?back=${pathname}`)
+              )
+            }
+          >
             ADD LIQUIDITY
           </CustomButton>
         </FlexContainer>

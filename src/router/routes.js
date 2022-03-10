@@ -10,4 +10,5 @@ export const ROUTE_WRAP = '/wrap';
 export const ROUTE_LIQUIDITY_TOKENS = '/liquidity/tokens';
 export const ROUTE_LIQUIDITY_POOLS = '/liquidity/pools';
 export const ROUTE_LIQUIDITY_MY_LIQUIDITY = '/liquidity/my-liquidity';
-export const ROUTE_LIQUIDITY_ADD_LIQUIDITY = '/liquidity/add-liquidity';
+export const ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED = '/liquidity/add-liquidity-single-sided';
+export const ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED = '/liquidity/add-liquidity-double-sided';

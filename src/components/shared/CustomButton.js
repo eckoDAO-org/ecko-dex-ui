@@ -112,6 +112,7 @@ const CustomButton = ({
     >
       {
         <Label
+          className="uppercase"
           fontFamily={fontFamily}
           fontSize={fontSize}
           labelStyle={labelStyle}

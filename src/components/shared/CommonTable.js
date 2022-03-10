@@ -46,7 +46,7 @@ const Wrapper = styled(FlexContainer)`
   }
 `;
 
-const CommonTable = ({ columns, items, hasMore, loadMore, loading, onClick }) => {
+const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onClick }) => {
   return (
     <Wrapper withGradient className="w-100 relative hidden column background-fill">
       <FlexContainer className="w-100 x-auto scrollbar-y-none">
@@ -54,7 +54,7 @@ const CommonTable = ({ columns, items, hasMore, loadMore, loading, onClick }) =>
           <thead>
             <tr className="tr-sticky" style={{ position: 'sticky', zIndex: 3, top: 0 }}>
               {columns?.map((c, i) => (
-                <th colSpan={1} key={i} className={i === 0 ? 'sticky' : ''} style={{ minWidth: c.width, paddingTop: 0, zIndex: i === 0 ? 3 : 1 }}>
+                <th key={i} className={i === 0 ? 'sticky' : ''} style={{ minWidth: c.width, paddingTop: 0, zIndex: i === 0 ? 3 : 1 }}>
                   {typeof c.name === 'string' ? (
                     <Label fontSize={13} className={`capitalize ${c?.align === 'right' ? 'justify-fe' : ''}`}>
                       {c.name}
@@ -64,6 +64,7 @@ const CommonTable = ({ columns, items, hasMore, loadMore, loading, onClick }) =>
                   )}
                 </th>
               ))}
+              {actions && <th style={{ paddingTop: 0, zIndex: 1 }} />}
             </tr>
           </thead>
           <tbody>
@@ -84,6 +85,17 @@ const CommonTable = ({ columns, items, hasMore, loadMore, loading, onClick }) =>
                     </Label>
                   </td>
                 ))}
+                {actions && (
+                  <td style={{ zIndex: 1 }}>
+                    <FlexContainer gap={8}>
+                      {actions.map((action, i) => (
+                        <FlexContainer key={i} onClick={() => action.onClick(item)}>
+                          {action.icon}
+                        </FlexContainer>
+                      ))}
+                    </FlexContainer>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

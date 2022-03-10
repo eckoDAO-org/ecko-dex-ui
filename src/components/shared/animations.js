@@ -1,6 +1,7 @@
 import styled from 'styled-components/macro';
+import { FlexContainer } from './FlexContainer';
 
-export const FadeIn = styled.div`
+export const FadeIn = styled(FlexContainer)`
   animation: ${({ time = 0.5 }) => `fade-in ${time}s linear`};
   @keyframes fade-in {
     from {

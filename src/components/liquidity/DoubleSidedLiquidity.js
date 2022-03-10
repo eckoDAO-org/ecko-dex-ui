@@ -1,85 +1,28 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState, useContext } from 'react';
-import styled, { css } from 'styled-components/macro';
-import { throttle, debounce } from 'throttle-debounce';
-import { ModalContext } from '../../contexts/ModalContext';
-import { AccountContext } from '../../contexts/AccountContext';
-import { WalletContext } from '../../contexts/WalletContext';
-import { LiquidityContext } from '../../contexts/LiquidityContext';
-import { PactContext } from '../../contexts/PactContext';
-import { ApplicationContext } from '../../contexts/ApplicationContext';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
-import { reduceBalance, getCorrectBalance } from '../../utils/reduceBalance';
-import WalletRequestView from '../../components/modals/WalletRequestView';
-import { ArrowBack } from '../../assets';
-import Label from '../../components/shared/Label';
-import CustomButton from '../../components/shared/CustomButton';
-import ReviewTxModal from '../../components/modals/liquidity/ReviewTxModal';
-import TxView from '../../components/modals/TxView';
+import { debounce, throttle } from 'lodash';
+import React, { useContext, useEffect, useState } from 'react';
 import tokenData from '../../constants/cryptoCurrencies';
-import SwapForm from '../../components/swap/SwapForm';
-import TokenSelectorModalContent from '../../components/modals/swap-modals/TokenSelectorModalContent';
+import { AccountContext } from '../../contexts/AccountContext';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { LiquidityContext } from '../../contexts/LiquidityContext';
+import { ModalContext } from '../../contexts/ModalContext';
+import { PactContext } from '../../contexts/PactContext';
+import { WalletContext } from '../../contexts/WalletContext';
+import { getCorrectBalance, reduceBalance } from '../../utils/reduceBalance';
+import PixeledBlueContainer, { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
+import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
+import ReviewTxModal from '../modals/liquidity/ReviewTxModal';
+import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
+import TxView from '../modals/TxView';
+import CustomButton from '../shared/CustomButton';
+import { FlexContainer } from '../shared/FlexContainer';
+import FormContainer from '../shared/FormContainer';
+import GradientBorder from '../shared/GradientBorder';
+import Label from '../shared/Label';
+import SwapForm from '../swap/SwapForm';
 import TokenSelectorModalContentGE from '../../components/modals/swap-modals/TokenSelectorModalContentGE';
-import FormContainer from '../../components/shared/FormContainer';
-import GradientBorder from '../../components/shared/GradientBorder';
-import SlippagePopupContent from '../../components/layout/header/SlippagePopupContent';
-import BackgroundLogo from '../../components/shared/BackgroundLogo';
-import { theme } from '../../styles/theme';
-import { InfoContainer } from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
+import WalletRequestView from '../../components/modals/WalletRequestView';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
-import PressButtonToActionLabel from '../../components/game-edition-v2/components/PressButtonToActionLabel';
-import PixeledBlueContainer from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: auto;
-  margin-right: auto;
-  height: 100%;
-  justify-content: ${({ $gameEditionView }) => ($gameEditionView ? 'space-between' : 'center')};
-  ${({ $gameEditionView }) => {
-    if ($gameEditionView) {
-      return css`
-        justify-content: space-between;
-        width: 100%;
-      `;
-    }
-    return css`
-      justify-content: center;
-      max-width: 550px;
-      width: 550px;
-    `;
-  }}
-`;
-
-const TitleContainer = styled.div`
-  display: flex;
-  padding: ${({ gameEditionView }) => (gameEditionView ? '0px 10px' : '0px !important')};
-  justify-content: space-between;
-  margin-bottom: 14px;
-  width: 100%;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 16px;
-  width: 100%;
-`;
-
-const DesktopInfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 16px;
-  & > div:not(:last-child) {
-    margin-bottom: 10px;
-  }
-`;
-const InnerRowContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-`;
 
 const initialStateValue = {
   coin: '',
@@ -90,35 +33,17 @@ const initialStateValue = {
   precision: 0,
 };
 
-const GameEditionTokenSelectorContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-`;
-
-const LabelContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  z-index: ${({ gameEditionView }) => !gameEditionView && '1'};
-`;
-
-const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidity }) => {
+const DoubleSidedLiquidity = ({ pair, setSelectedView }) => {
   const pact = useContext(PactContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const liquidity = useContext(LiquidityContext);
   const modalContext = useContext(ModalContext);
-  const { themeMode } = useContext(ApplicationContext);
   const { gameEditionView, openModal, closeModal, setButtons, outsideToken } = useContext(GameEditionContext);
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
   const [inputSide, setInputSide] = useState('');
-  console.log('pair', pair);
+
   const [fromValues, setFromValues] = useState({
     coin: 'KDA',
     account: '',
@@ -133,7 +58,6 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
   const [pairExist, setPairExist] = useState(false);
   const [showTxModal, setShowTxModal] = useState(false);
   const [showReview, setShowReview] = useState(false);
-  const [isLogoVisible, setIsLogoVisible] = useState(false);
 
   useEffect(() => {
     if (showTxModal === false) {
@@ -273,9 +197,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
       }
     }
     if (isNaN(pact.ratio) || fromValues.amount === '') {
-      if (selectedView === LIQUIDITY_VIEW.ADD_LIQUIDITY) {
-        setToValues((prev) => ({ ...prev, amount: '' }));
-      }
+      setToValues((prev) => ({ ...prev, amount: '' }));
     }
   }, [fromValues.amount]);
 
@@ -303,9 +225,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
       }
     }
     if (isNaN(pact.ratio) || toValues.amount === '') {
-      if (selectedView === LIQUIDITY_VIEW.ADD_LIQUIDITY) {
-        setFromValues((prev) => ({ ...prev, amount: '' }));
-      }
+      setFromValues((prev) => ({ ...prev, amount: '' }));
     }
   }, [toValues.amount]);
 
@@ -346,11 +266,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
       6: { msg: 'Select different tokens', status: false },
     };
     if (!account.account.account) return status[0];
-    if (selectedView === LIQUIDITY_VIEW.CREATE_A_PAIR) {
-      if (pairExist) {
-        setSelectedView(LIQUIDITY_VIEW.ADD_LIQUIDITY);
-      } else return status[4];
-    } else if (isNaN(pact.ratio)) {
+    if (isNaN(pact.ratio)) {
       return status[4];
     } else if (!fromValues.amount || !toValues.amount) return status[1];
     else if (Number(fromValues.amount) > Number(fromValues.balance)) return { ...status[3], msg: status[3].msg(fromValues.coin) };
@@ -364,41 +280,26 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
   };
 
   const supply = async () => {
-    if (selectedView === LIQUIDITY_VIEW.CREATE_A_PAIR) {
-      if (wallet.signing.method !== 'sign') {
-        const res = await liquidity.createTokenPairLocal(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
-        if (res === -1) {
-          alert('Incorrect password. If forgotten, you can reset it with your private key');
-          return;
-        } else {
-          setShowReview(false);
-          setShowTxModal(true);
-        }
-      } else {
-        console.log('not signed');
-      }
-    } else {
-      if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
-        const res = await liquidity.addLiquidityLocal(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
-        if (res === -1) {
-          alert('Incorrect password. If forgotten, you can reset it with your private key');
-          return;
-        } else {
-          setShowReview(false);
-          setShowTxModal(true);
-        }
+    if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
+      const res = await liquidity.addLiquidityLocal(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
+      if (res === -1) {
+        alert('Incorrect password. If forgotten, you can reset it with your private key');
+        return;
       } else {
         setShowReview(false);
-        const res = await liquidity.addLiquidityWallet(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
-        if (!res) {
-          wallet.setIsWaitingForWalletAuth(true);
-          /* pact.setWalletError(true); */
-          /* walletError(); */
-        } else {
-          wallet.setWalletError(null);
-          setSelectedView(LIQUIDITY_VIEW.ADD_LIQUIDITY);
-          setShowTxModal(true);
-        }
+        setShowTxModal(true);
+      }
+    } else {
+      setShowReview(false);
+      const res = await liquidity.addLiquidityWallet(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
+      if (!res) {
+        wallet.setIsWaitingForWalletAuth(true);
+        /* pact.setWalletError(true); */
+        /* walletError(); */
+      } else {
+        wallet.setWalletError(null);
+        setSelectedView(LIQUIDITY_VIEW.ADD_LIQUIDITY);
+        setShowTxModal(true);
       }
     }
   };
@@ -468,7 +369,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
           closeModal();
         },
         content: (
-          <GameEditionTokenSelectorContainer>
+          <FlexContainer className="column w-100 h-100 justify-ce align-ce text-ce">
             <TokenSelectorModalContentGE
               selectedToken={selectedToken}
               tokenSelectorType={tokenSelectorType}
@@ -479,7 +380,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
               fromToken={fromValues.coin}
               toToken={toValues.coin}
             />
-          </GameEditionTokenSelectorContainer>
+          </FlexContainer>
         ),
       });
     } else {
@@ -531,7 +432,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
                 setShowTxModal(false);
                 closeModal();
               }}
-              view={selectedView}
+              view={LIQUIDITY_VIEW.ADD_LIQUIDITY}
               token0={fromValues.coin}
               token1={toValues.coin}
               createTokenPair={() =>
@@ -555,7 +456,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
                 setShowTxModal(false);
                 modalContext.closeModal();
               }}
-              view={selectedView}
+              view={LIQUIDITY_VIEW.ADD_LIQUIDITY}
               token0={fromValues.coin}
               token1={toValues.coin}
               createTokenPair={() =>
@@ -608,36 +509,16 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
       },
     });
   }, [buttonStatus().status, showReview, showTxModal]);
-
   return (
-    <Container $gameEditionView={gameEditionView} onAnimationEnd={() => setIsLogoVisible(true)} className="scrollbar-none">
+    <>
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
 
-      {!gameEditionView && isLogoVisible && <BackgroundLogo />}
-
-      <TitleContainer gameEditionView={gameEditionView}>
-        <Label fontSize={32} geCenter fontFamily="syncopate" geFontSize={32} geLabelStyle={{ lineHeight: '32px' }} onClose={() => closeLiquidity()}>
-          {!gameEditionView && (
-            <ArrowBack
-              style={{
-                cursor: 'pointer',
-                color: theme(themeMode).colors.white,
-                marginRight: '15px',
-                justifyContent: 'center',
-              }}
-              onClick={() => closeLiquidity()}
-            />
-          )}
-          Add Liquidity
-        </Label>
-        {!gameEditionView && <SlippagePopupContent />}
-      </TitleContainer>
       <FormContainer
         style={{ justifyContent: 'space-between' }}
         gameEditionView={gameEditionView}
         footer={
           gameEditionView ? (
-            <LabelContainer gameEditionView={gameEditionView}>
+            <FlexContainer className="justify-ce w-100" style={{ zIndex: 1 }}>
               {buttonStatus().status === true ? (
                 <PressButtonToActionLabel actionLabel="add liquidity" />
               ) : (
@@ -645,9 +526,9 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
                   {buttonStatus().msg}
                 </Label>
               )}
-            </LabelContainer>
+            </FlexContainer>
           ) : (
-            <ButtonContainer>
+            <FlexContainer className="justify-ce w-100" style={{ marginTop: 16 }}>
               <CustomButton
                 fluid
                 type={buttonStatus().status === true ? 'secondary' : 'primary'}
@@ -656,7 +537,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
               >
                 {buttonStatus().msg}
               </CustomButton>
-            </ButtonContainer>
+            </FlexContainer>
           )
         }
       >
@@ -693,33 +574,33 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
               </>
             ) : (
               <>
-                <DesktopInfoContainer>
-                  <InnerRowContainer>
+                <FlexContainer className="column" style={{ marginTop: 16 }} gap={16}>
+                  <FlexContainer className="justify-sb w-100">
                     <Label fontSize={13}>{`${toValues.coin}/${fromValues.coin}`}</Label>
                     <Label fontSize={13} fontFamily="syncopate" labelStyle={{ textAlign: 'end' }}>
                       {reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}
                     </Label>
-                  </InnerRowContainer>
-                  <InnerRowContainer>
+                  </FlexContainer>
+                  <FlexContainer className="justify-sb w-100">
                     <Label fontSize={13}>{`${fromValues.coin}/${toValues.coin}`}</Label>
                     <Label fontSize={13} fontFamily="syncopate" labelStyle={{ textAlign: 'end' }}>
                       {reduceBalance(pact.getRatio1(fromValues.coin, toValues.coin)) ?? '-'}
                     </Label>
-                  </InnerRowContainer>
-                  <InnerRowContainer>
+                  </FlexContainer>
+                  <FlexContainer className="justify-sb w-100">
                     <Label fontSize={13}>Share of Pool</Label>
                     <Label fontSize={13} fontFamily="syncopate" labelStyle={{ textAlign: 'end' }}>
                       {!pact.share(fromValues.amount) ? 0 : (pact.share(fromValues.amount) * 100).toPrecision(4)} %
                     </Label>
-                  </InnerRowContainer>
-                </DesktopInfoContainer>
+                  </FlexContainer>
+                </FlexContainer>
               </>
             )}
           </>
         )}
       </FormContainer>
-    </Container>
+    </>
   );
 };
 
-export default LiquidityContainer;
+export default DoubleSidedLiquidity;

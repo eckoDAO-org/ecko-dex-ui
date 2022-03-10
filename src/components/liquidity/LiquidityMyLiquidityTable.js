@@ -1,14 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { AddIcon } from '../../assets';
 import tokenData from '../../constants/cryptoCurrencies';
 import { AccountContext } from '../../contexts/AccountContext';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
-import { extractDecimal, pairUnit, reduceBalance } from '../../utils/reduceBalance';
+import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_MY_LIQUIDITY } from '../../router/routes';
+import { extractDecimal, pairUnit } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 
 const LiquidityMyLiquidityTable = () => {
+  const history = useHistory();
   const liquidity = useContext(LiquidityContext);
   const { account } = useContext(AccountContext);
 
@@ -59,7 +63,19 @@ const LiquidityMyLiquidityTable = () => {
   };
 
   return !liquidity.loadingLiquidity ? (
-    <CommonTable items={Object.values(liquidity.pairListAccount)} columns={renderColumns()} />
+    <CommonTable
+      items={Object.values(liquidity.pairListAccount)}
+      columns={renderColumns()}
+      actions={[
+        {
+          icon: <AddIcon />,
+          onClick: (item) =>
+            history.push(
+              ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${item.token0}&token1=${item.token1}&back=${ROUTE_LIQUIDITY_MY_LIQUIDITY}`)
+            ),
+        },
+      ]}
+    />
   ) : (
     <AppLoader containerStyle={{ height: '100%', alignItems: 'center', justifyContent: 'center' }} />
   );

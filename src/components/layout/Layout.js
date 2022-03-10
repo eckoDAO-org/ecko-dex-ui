@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
 import styled, { css } from 'styled-components/macro';
+import { useHistory, useLocation } from 'react-router';
 import useWindowSize from '../../hooks/useWindowSize';
 import { useApplicationContext } from '../../contexts';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
@@ -9,8 +10,7 @@ import DesktopHeader from './header/DesktopHeader';
 import MobileHeader from './header/MobileHeader';
 import { ReactComponent as Stripes } from '../../assets/images/shared/stripes.svg';
 import GameEditionContainer from '../game-edition-v2/GameEditionContainer';
-import { useHistory } from 'react-router';
-import { ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from '../../router/routes';
+import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION, ROUTE_INDEX } from '../../router/routes';
 import browserDetection from '../../utils/browserDetection';
 import gameEditionBackground from '../../assets/images/game-edition/game-edition-background.png';
 import TabletHeader from './header/TabletHeader';
@@ -106,13 +106,18 @@ const StripesContainer = styled.div`
 `;
 
 const Layout = ({ children }) => {
+  const { pathname } = useLocation();
   const history = useHistory();
   const [width, height] = useWindowSize();
   const { gameEditionView, setGameEditionView } = useContext(GameEditionContext);
   const { resolutionConfiguration } = useApplicationContext();
 
   useEffect(() => {
-    gameEditionView ? history.push(ROUTE_GAME_START_ANIMATION) : history.push(ROUTE_SWAP);
+    if (gameEditionView) {
+      history.push(ROUTE_GAME_START_ANIMATION);
+    } else if (pathname === ROUTE_GAME_EDITION_MENU || pathname === ROUTE_GAME_START_ANIMATION) {
+      history.push(ROUTE_INDEX);
+    }
   }, [gameEditionView]);
 
   useEffect(() => {

@@ -1,5 +1,6 @@
 export { ReactComponent as AboutBigIcon } from './images/header/about-big.svg';
 export { ReactComponent as AboutIcon } from './images/header/about.svg';
+export { ReactComponent as AddIcon } from './images/shared/add.svg';
 export { ReactComponent as ArrowBack } from './images/shared/arrow-back.svg';
 export { ReactComponent as ArrowDown } from './images/shared/arrow-down-white.svg';
 export { ReactComponent as CodeIcon } from './images/header/code.svg';
@@ -28,6 +29,7 @@ export { ReactComponent as NotificationSuccessIcon } from './images/shared/ic_su
 export { ReactComponent as NotificationWarningIcon } from './images/shared/ic_caution_orange.svg';
 export { ReactComponent as OnOffIcon } from './images/shared/on-off.svg';
 export { ReactComponent as PowerIcon } from './images/header/power.svg';
+export { ReactComponent as RemoveIcon } from './images/shared/remove.svg';
 export { ReactComponent as SearchGEIcon } from './images/shared/search-ge.svg';
 export { ReactComponent as SuccessfullIcon } from './images/shared/successful-circle.svg';
 export { ReactComponent as SwapArrowsIcon } from './images/shared/invert.svg';
