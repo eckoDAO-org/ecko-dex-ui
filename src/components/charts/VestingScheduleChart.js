@@ -1,9 +1,9 @@
 import React from 'react';
 import GradientBorder from '../shared/GradientBorder';
 import Label from '../shared/Label';
-import { CardContainer } from '../stats/StatsTab';
 import { AreaChart, Area, XAxis, YAxis, Tooltip } from 'recharts';
 import moment from 'moment';
+import { FlexContainer } from '../shared/FlexContainer';
 
 const data = [
   {
@@ -130,7 +130,7 @@ const data = [
 
 const VestingScheduleChart = () => {
   return (
-    <CardContainer>
+    <FlexContainer withGradient className="column w-100 h-100">
       <GradientBorder />
       <Label>KDX Release Schedule</Label>
       <AreaChart
@@ -155,7 +155,7 @@ const VestingScheduleChart = () => {
         <Area type="monotone" dataKey="VCS" stackId="1" stroke="#8884d8" fill="#8884d8" />
         'Liquidity Mining': 200,
       </AreaChart>
-    </CardContainer>
+    </FlexContainer>
   );
 };
 

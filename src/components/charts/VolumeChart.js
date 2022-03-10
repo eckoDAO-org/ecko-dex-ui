@@ -5,8 +5,8 @@ import GradientBorder from '../shared/GradientBorder';
 import Label from '../shared/Label';
 import { GraphCardHeader } from './TVLChart';
 import { humanReadableNUmber } from '../../utils/reduceBalance';
-import { CardContainer } from '../stats/StatsTab';
 import { BarChart, Bar, Tooltip } from 'recharts';
+import { FlexContainer } from '../shared/FlexContainer';
 
 const VolumeChart = ({ width, height, containerStyle }) => {
   const [volume, setVolume] = useState([]);
@@ -41,7 +41,7 @@ const VolumeChart = ({ width, height, containerStyle }) => {
   }, []);
 
   return (
-    <CardContainer style={containerStyle}>
+    <FlexContainer withGradient className="column align-ce w-100 h-100" style={containerStyle}>
       <GradientBorder />
       <GraphCardHeader>
         <div>
@@ -93,7 +93,7 @@ const VolumeChart = ({ width, height, containerStyle }) => {
         <Tooltip label="Volume" content={() => ''} />
         <Bar dataKey="Volume" fill="#F68862" radius={[10, 10, 10, 10]} />
       </BarChart>
-    </CardContainer>
+    </FlexContainer>
   );
 };
 

@@ -5,10 +5,9 @@ import styled from 'styled-components';
 import moment from 'moment';
 import { PactContext } from '../../contexts/PactContext';
 import { LineChart, Line, Tooltip } from 'recharts';
-import GradientBorder from '../shared/GradientBorder';
 import Label from '../shared/Label';
 import { humanReadableNUmber } from '../../utils/reduceBalance';
-import { CardContainer } from '../stats/StatsTab';
+import { FlexContainer } from '../shared/FlexContainer';
 
 export const GraphCardHeader = styled.div`
   width: 100%;
@@ -89,8 +88,7 @@ const TVLChart = ({ width, height, containerStyle }) => {
   }, []);
 
   return (
-    <CardContainer style={containerStyle}>
-      <GradientBorder />
+    <FlexContainer className="column align-ce w-100 h-100" withGradient style={containerStyle}>
       <GraphCardHeader>
         <div>
           <Label fontSize={16}>TVL</Label>
@@ -123,7 +121,7 @@ const TVLChart = ({ width, height, containerStyle }) => {
         <Tooltip label="TVL" content={() => ''} />
         <Line type="monotone" dataKey="tvl" stroke="#ED1CB5" activeDot={{ r: 5 }} dot={{ r: 0 }} />
       </LineChart>
-    </CardContainer>
+    </FlexContainer>
   );
 };
 export default TVLChart;

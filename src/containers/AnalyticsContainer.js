@@ -1,42 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
+import styled from 'styled-components/macro';
+import useLazyImage from '../hooks/useLazyImage';
 import { PactContext } from '../contexts/PactContext';
-import { CardContainer } from '../components/stats/StatsTab';
-import styled, { css } from 'styled-components/macro';
 import { GameEditionContext } from '../contexts/GameEditionContext';
 import VolumeChart from '../components/charts/VolumeChart';
 import TVLChart from '../components/charts/TVLChart';
 import VestingScheduleChart from '../components/charts/VestingScheduleChart';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
 import { FadeIn } from '../components/shared/animations';
-import useLazyImage from '../hooks/useLazyImage';
 import LogoLoader from '../components/shared/Loader';
-
-const ChartsContainer = styled.div`
-  display: flex;
-`;
+import { FlexContainer } from '../components/shared/FlexContainer';
 
 const Container = styled(FadeIn)`
   display: flex;
   flex-direction: column;
   width: 100%;
-  /* height: 100%; */
-  padding: ${({ gameEditionView }) => (gameEditionView ? '16px' : '32px')};
+  height: 100%;
   justify-content: flex-start;
   align-items: center;
-
-  ${({ gameEditionView }) => {
-    if (gameEditionView) {
-      return css`
-        height: 100%;
-        display: flex;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        background-image: ${`url(${modalBackground})`};
-      `;
-    }
-  }}
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {
     padding: ${({ gameEditionView }) => !gameEditionView && '32px 11px'};
@@ -56,16 +38,15 @@ const AnalyticsContainer = () => {
     <LogoLoader />
   ) : (
     !gameEditionView && (
-      <Container gameEditionView={gameEditionView}>
-        <CardContainer>
-          <ChartsContainer>
-            <div style={{ marginRight: 25 }}>
-              <TVLChart width={480} height={300} />
-            </div>
+      <Container>
+        <FlexContainer className="column" gap={24} style={{ padding: '50px 0' }}>
+          <FlexContainer gap={24}>
+            <TVLChart width={480} height={300} />
+
             <VolumeChart width={480} height={300} />
-          </ChartsContainer>
-        </CardContainer>
-        <VestingScheduleChart />
+          </FlexContainer>
+          <VestingScheduleChart />
+        </FlexContainer>
       </Container>
     )
   );
