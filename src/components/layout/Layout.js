@@ -13,7 +13,6 @@ import { useHistory } from 'react-router';
 import { ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from '../../router/routes';
 import browserDetection from '../../utils/browserDetection';
 import gameEditionBackground from '../../assets/images/game-edition/game-edition-background.png';
-import appBackground from '../../assets/images/shared/app-background.png';
 import TabletHeader from './header/TabletHeader';
 import { FlexContainer } from '../shared/FlexContainer';
 
@@ -123,7 +122,7 @@ const Layout = ({ children }) => {
   }, [gameEditionView, width, height, resolutionConfiguration]);
 
   return (
-    <FlexContainer className="w-100 h-100" backgroundImage={appBackground}>
+    <FlexContainer className="w-100 h-100">
       <WrapperContainer>
         <MobileHeader className="mobile-only" />
         <TabletHeader className="desktop-none mobile-none" />
