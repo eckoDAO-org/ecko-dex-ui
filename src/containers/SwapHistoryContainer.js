@@ -13,10 +13,12 @@ import reduceToken from '../utils/reduceToken';
 import { getInfoCoin } from '../utils/token-utils';
 import { ROUTE_INDEX } from '../router/routes';
 import { HistoryIcon } from '../assets';
-import SwapHistoryGameEdition from '../components/swap/SwapHistoryGameEdition';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
 import PressButtonToActionLabel from '../components/game-edition-v2/components/PressButtonToActionLabel';
 import { FadeIn } from '../components/shared/animations';
+import CommonTableGameEdition from '../components/shared/CommonTableGameEdition';
+import { NETWORK_TYPE } from '../constants/contextConstants';
+import AppLoader from '../components/shared/AppLoader';
 
 export const CardContainer = styled(FadeIn)`
   display: flex;
@@ -103,6 +105,8 @@ const SwapHistoryContainer = () => {
             {getInfoCoin(item, 3)?.name}/{getInfoCoin(item, 5)?.name}
           </FlexContainer>
         ),
+        geName: 'Swap pair',
+        geRender: ({ item }) => `${getInfoCoin(item, 3)?.name}/${getInfoCoin(item, 5)?.name}`,
       },
       {
         name: 'date',
@@ -129,13 +133,15 @@ const SwapHistoryContainer = () => {
 
   useEffect(() => {
     if (gameEditionView && pact?.swapList?.[0]) {
-      setButtons({
+      setButtons((prev) => ({
+        ...prev,
         A: async () => await pact.getMoreEventsSwapList(),
-      });
+      }));
     } else {
-      setButtons({
+      setButtons((prev) => ({
+        ...prev,
         A: null,
-      });
+      }));
     }
   }, [gameEditionView, pact.swapList]);
 
@@ -143,7 +149,7 @@ const SwapHistoryContainer = () => {
     <CardContainer gameEditionView={gameEditionView}>
       <FlexContainer className="w-100 justify-sb" style={{ marginBottom: 24 }} gameEditionStyle={{ marginBottom: 14 }}>
         <Label fontSize={24} geFontSize={32} fontFamily="syncopate">
-          SWAP
+          {gameEditionView ? 'HISTORY' : 'SWAP'}
         </Label>
         {gameEditionView ? (
           pact.swapList[0] && pact.moreSwap && <PressButtonToActionLabel actionLabel="load more" />
@@ -156,7 +162,15 @@ const SwapHistoryContainer = () => {
       {!pact.swapList?.error ? (
         pact.swapList[0] ? (
           gameEditionView ? (
-            <SwapHistoryGameEdition items={pact.swapList} loading={pact.loadingSwap} />
+            <CommonTableGameEdition
+              id="swap-history-list"
+              items={pact.swapList}
+              columns={renderColumns()}
+              loading={pact.loadingSwap}
+              onClick={(item) => {
+                window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${item?.requestKey}`, '_blank', 'noopener,noreferrer');
+              }}
+            />
           ) : (
             <CommonTable
               items={pact.swapList}
@@ -166,13 +180,18 @@ const SwapHistoryContainer = () => {
               loadMore={async () => {
                 await pact.getMoreEventsSwapList();
               }}
+              onClick={(item) => {
+                window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${item?.requestKey}`, '_blank', 'noopener,noreferrer');
+              }}
             />
           )
-        ) : (
+        ) : gameEditionView ? (
           <LogoLoader />
+        ) : (
+          <AppLoader containerStyle={{ height: '100%', alignItems: 'center' }} />
         )
       ) : (
-        <Label gameEditionView={gameEditionView}>{pact.swapList?.error}</Label>
+        <Label>{pact.swapList?.error}</Label>
       )}
     </CardContainer>
   );

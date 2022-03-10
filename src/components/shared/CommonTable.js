@@ -46,7 +46,7 @@ const Wrapper = styled(FlexContainer)`
   }
 `;
 
-const CommonTable = ({ columns, items, hasMore, loadMore, loading }) => {
+const CommonTable = ({ columns, items, hasMore, loadMore, loading, onClick }) => {
   return (
     <Wrapper withGradient className="w-100 relative hidden column background-fill">
       <FlexContainer className="w-100 x-auto scrollbar-y-none">
@@ -68,7 +68,15 @@ const CommonTable = ({ columns, items, hasMore, loadMore, loading }) => {
           </thead>
           <tbody>
             {items.map((item, i) => (
-              <tr key={i}>
+              <tr
+                key={i}
+                onClick={() => {
+                  if (onClick) {
+                    onClick(item);
+                  }
+                }}
+                style={{ cursor: onClick ? 'pointer' : 'default' }}
+              >
                 {columns.map((c, j) => (
                   <td key={j} className={j === 0 ? 'sticky' : ''} style={{ minWidth: c.width, zIndex: j === 0 ? 2 : 1 }}>
                     <Label fontSize={13} className={c?.align === 'right' ? 'justify-fe' : ''}>

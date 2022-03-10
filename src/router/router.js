@@ -20,6 +20,7 @@ import {
 } from './routes';
 import SwapHistoryContainer from '../containers/SwapHistoryContainer';
 import { useGameEditionContext } from '../contexts';
+import StatsHistoryGameEditionContainer from '../containers/StatsHistoryGameEditionContainer';
 
 export default () => {
   const { gameEditionView } = useGameEditionContext();
@@ -32,6 +33,8 @@ export default () => {
             <Route exact path={ROUTE_GAME_EDITION_MENU} component={GameEditionMenuContainer} />
             <Route exact path={ROUTE_INDEX} component={SwapContainer} />
             <Route exact path={ROUTE_MY_SWAP} component={SwapHistoryContainer} />
+            <Route exact path={ROUTE_STATS} component={StatsHistoryGameEditionContainer} />
+
           </Switch>
         ) : (
           <Switch>

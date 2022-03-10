@@ -63,7 +63,7 @@ const MobileHeader = ({ className }) => {
           <RightHeaderItems />
         </RightContainer>
       </RowContainer>
-      <span className="mainnet-chain-2 mobile-only">Mainnet Chain 2</span>
+      <span className="mainnet-chain-2 mobile-only">Chain 2</span>
     </Container>
   );
 };

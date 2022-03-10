@@ -64,7 +64,7 @@ const TabletHeader = ({ className }) => {
           <RightHeaderItems />
         </RightContainer>
       </RowContainer>
-      <span className="mainnet-chain-2 desktop-none mobile-none">Mainnet Chain 2</span>
+      <span className="mainnet-chain-2 desktop-none mobile-none">Chain 2</span>
     </Container>
   );
 };

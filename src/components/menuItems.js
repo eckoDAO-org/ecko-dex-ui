@@ -32,6 +32,11 @@ export const gameEditionRoutes = [
   },
   {
     id: 1,
+    label: 'stats',
+    route: ROUTE_STATS,
+  },
+  {
+    id: 2,
     label: 'history',
     route: ROUTE_MY_SWAP,
   },

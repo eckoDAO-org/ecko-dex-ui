@@ -11,7 +11,7 @@ const Container = styled.div`
 const LoaderContainer = styled.div`
   height: 50px;
   width: 14px;
-  background: ${({ color }) => color};
+  background: ${({ color, theme: { colors } }) => color || colors.white};
   -webkit-animation-delay: ${({ delay = 0 }) => delay}s !important;
   animation: load 0.8s infinite;
   @-webkit-keyframes load {
@@ -47,9 +47,9 @@ const LoaderContainer = styled.div`
 export const AppLoader = ({ containerStyle, color }) => {
   return (
     <Container style={containerStyle}>
-      <LoaderContainer color={color || '#22274D'} />
-      <LoaderContainer color={color || '#22274D'} delay={0.1} />
-      <LoaderContainer color={color || '#22274D'} delay={0.2} />
+      <LoaderContainer color={color} />
+      <LoaderContainer color={color} delay={0.1} />
+      <LoaderContainer color={color} delay={0.2} />
     </Container>
   );
 };
