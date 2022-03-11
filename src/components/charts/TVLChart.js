@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import moment from 'moment';
@@ -13,20 +13,19 @@ export const GraphCardHeader = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    padding: 15px 0px 0px 15px;
+  }
 `;
 
-const TVLChart = ({ width, height, containerStyle }) => {
+const TVLChart = ({ height, containerStyle }) => {
   const [viewedTVL, setViewedTVL] = useState(null);
   const [currentTVL, setCurrentTVL] = useState(null);
   const [currentDate, setCurrentDate] = useState(null);
   const [tvlData, setTVLData] = useState([]);
   const pact = useContext(PactContext);
 
-  useEffect(() => {
-    getTVL();
-  }, []);
-
-  const getTVL = async () => {
+  const getTVL = useCallback(async () => {
     let totalTVL = 0;
     await pact.getPairList();
     const kdaPrice = await pact.getCurrentKdaUSDPrice();
@@ -54,7 +53,11 @@ const TVLChart = ({ width, height, containerStyle }) => {
       setCurrentTVL(totalTVL);
       setViewedTVL(totalTVL);
     }
-  };
+  }, [pact]);
+
+  useEffect(() => {
+    getTVL();
+  }, [getTVL]);
 
   useEffect(() => {
     axios
@@ -85,7 +88,7 @@ const TVLChart = ({ width, height, containerStyle }) => {
         setTVLData(allTVL);
       })
       .catch((err) => console.log('get tvl error', err));
-  }, []);
+  }, [pact]);
 
   return (
     <CardContainer style={containerStyle}>
@@ -113,7 +116,7 @@ const TVLChart = ({ width, height, containerStyle }) => {
               setCurrentDate(null);
             }}
             margin={{
-              top: 50,
+              top: 10,
               right: 30,
               left: 20,
               bottom: 0,

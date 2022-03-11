@@ -7,6 +7,19 @@ import { GraphCardHeader } from './TVLChart';
 import { humanReadableNUmber } from '../../utils/reduceBalance';
 import { CardContainer } from '../stats/StatsTab';
 import { BarChart, Bar, Tooltip, ResponsiveContainer } from 'recharts';
+import styled from 'styled-components';
+
+export const TimeRangeBar = styled.div`
+  display: flex;
+  width: 90px;
+  justify-content: space-around;
+`;
+export const TimeRangeBtn = styled(Label)`
+  cursor: pointer;
+  &.active {
+    font-weight: bold;
+  }
+`;
 
 const VolumeChart = ({ width, height, containerStyle }) => {
   const [volume, setVolume] = useState([]);
@@ -49,25 +62,13 @@ const VolumeChart = ({ width, height, containerStyle }) => {
           <Label fontSize={24}>{humanReadableNUmber(Number(dailyVolume))} KDA</Label>
           <Label>&nbsp;{currentDate || ''}</Label>
         </div>
-        <div>
-          {/* <PopupContentList
-            items={[
-              {
-                id: 1,
-                label: '1D',
-              },
-              {
-                id: 2,
-                label: '1W',
-              },
-              {
-                id: 3,
-                label: '1M',
-              },
-            ]}
-            icon={<span style={{ color: 'white' }}>1D</span>}
-          /> */}
-        </div>
+        <TimeRangeBar>
+          <TimeRangeBtn className="active" fontSize={16}>
+            D
+          </TimeRangeBtn>
+          <TimeRangeBtn fontSize={16}>W</TimeRangeBtn>
+          <TimeRangeBtn fontSize={16}>M</TimeRangeBtn>
+        </TimeRangeBar>
       </GraphCardHeader>
       <div style={{ width: '100%', height }}>
         <ResponsiveContainer>
