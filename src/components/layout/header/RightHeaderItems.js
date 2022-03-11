@@ -39,6 +39,12 @@ const RightContainerHeader = styled.div`
     opacity: 1;
     transition: opacity 1s linear;
   }
+
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
 `;
 
 const FadeContainer = styled.div``;

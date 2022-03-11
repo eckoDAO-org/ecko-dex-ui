@@ -6,47 +6,33 @@ import { ModalContext } from '../../contexts/ModalContext';
 import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { WalletContext } from '../../contexts/WalletContext';
-import TxView from '../../components/modals/TxView';
-import WalletRequestView from '../../components/modals/WalletRequestView';
-import CustomButton from '../../components/shared/CustomButton';
-import FormContainer from '../../components/shared/FormContainer';
-import Input from '../../components/shared/Input';
+import TxView from '../modals/TxView';
+import WalletRequestView from '../modals/WalletRequestView';
+import CustomButton from '../shared/CustomButton';
+import FormContainer from '../shared/FormContainer';
+import Input from '../shared/Input';
 import tokenData from '../../constants/cryptoCurrencies';
-import GradientBorder from '../../components/shared/GradientBorder';
-import Label from '../../components/shared/Label';
-import PressButtonToActionLabel from '../../components/game-edition-v2/components/PressButtonToActionLabel';
-import { InfoContainer } from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
+import GradientBorder from '../shared/GradientBorder';
+import Label from '../shared/Label';
+import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
+import { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
 import { PRECISION } from '../../constants/contextConstants';
 import { extractDecimal, limitDecimalPlaces, pairUnit, reduceBalance } from '../../utils/reduceBalance';
 import { ArrowBack } from '../../assets';
 import { theme } from '../../styles/theme';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
-import PixeledBlueContainer from '../../components/game-edition-v2/components/PixeledInfoContainerBlue';
+import PixeledBlueContainer from '../game-edition-v2/components/PixeledInfoContainerBlue';
 import LogoLoader from '../shared/Loader';
+import { FadeIn } from '../shared/animations';
+import { FlexContainer } from '../shared/FlexContainer';
+import InputRange from '../shared/InputRange';
 
-const Container = styled.div`
-  display: flex;
-  height: 100%;
-  flex-direction: column;
+const Container = styled(FadeIn)`
+  margin-top: 0px;
 
-  margin-left: auto;
-  margin-right: auto;
-  justify-content: ${({ $gameEditionView }) => ($gameEditionView ? 'space-between' : 'center')};
-  ${({ $gameEditionView }) => {
-    if ($gameEditionView) {
-      return css`
-        justify-content: space-between;
-        width: 100%;
-      `;
-    }
-    return css`
-      justify-content: center;
-      max-width: 550px;
-      width: 100%;
-    `;
-  }}
+  overflow: auto;
+  max-width: 550px;
 `;
-
 const SubContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -76,22 +62,7 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const DesktopInfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 16px 0;
-  & > div:not(:last-child) {
-    margin-bottom: 10px;
-  }
-`;
-
-const InnerRowContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-`;
-
-const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
+const RemoveLiquidityContent = ({ pair }) => {
   const wallet = useContext(WalletContext);
   const liquidity = useContext(LiquidityContext);
   const { themeMode } = useContext(ApplicationContext);
@@ -102,9 +73,9 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
   const [amount, setAmount] = useState(100);
   const [loading, setLoading] = useState(false);
   const [pooled, setPooled] = useState(balance);
-  const [pooledToken0, setPooledToken0] = useState(reduceBalance(pooledAmount[0], 12));
+  const [pooledToken0, setPooledToken0] = useState(reduceBalance(pooledAmount?.[0], 12));
 
-  const [pooledToken1, setPooledToken1] = useState(reduceBalance(pooledAmount[1], 12));
+  const [pooledToken1, setPooledToken1] = useState(reduceBalance(pooledAmount?.[1], 12));
 
   useEffect(() => {
     if (!isNaN(amount)) {
@@ -215,28 +186,6 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
   return (
     <Container $gameEditionView={gameEditionView}>
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
-      <Label
-        fontSize={32}
-        geCenter
-        fontFamily="syncopate"
-        geFontSize={32}
-        labelStyle={{ marginBottom: 14, whiteSpace: 'nowrap' }}
-        geLabelStyle={{ lineHeight: '32px', marginBottom: 16 }}
-        onClose={() => closeLiquidity()}
-      >
-        {!gameEditionView && (
-          <ArrowBack
-            style={{
-              cursor: 'pointer',
-              color: theme(themeMode).colors.white,
-              marginRight: '15px',
-              justifyContent: 'center',
-            }}
-            onClick={() => closeLiquidity()}
-          />
-        )}
-        Remove Liquidity
-      </Label>
 
       <FormContainer
         containerStyle={gameEditionView ? { border: 'none', padding: 0 } : {}}
@@ -281,6 +230,8 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
               }
             }}
           />
+
+          <InputRange value={amount} setValue={setAmount} />
           <ButtonContainer>
             <CustomButton
               fluid
@@ -324,32 +275,26 @@ const RemoveLiqContainer = ({ pair, closeLiquidity }) => {
             <PixeledBlueContainer label={`Pooled ${token1}`} value={extractDecimal(pooledToken1).toPrecision(4)} />
           </InfoContainer>
         ) : (
-          <DesktopInfoContainer>
-            <InnerRowContainer>
+          <FlexContainer className="column" gap={12} style={{ margin: '16px 0' }}>
+            <FlexContainer className="justify-sb w-100">
               <Label fontSize={13}>
                 {token0} per {token1}
               </Label>
-              <Label fontSize={13} fontFamily="syncopate">
-                {pairUnit(extractDecimal(pooled))}
-              </Label>
-            </InnerRowContainer>
-            <InnerRowContainer>
+              <Label fontSize={13}>{pairUnit(extractDecimal(pooled))}</Label>
+            </FlexContainer>
+            <FlexContainer className="justify-sb w-100">
               <Label fontSize={13}>Pooled {token0}</Label>
-              <Label fontSize={13} fontFamily="syncopate">
-                {pairUnit(extractDecimal(pooledToken0))}
-              </Label>
-            </InnerRowContainer>
-            <InnerRowContainer>
+              <Label fontSize={13}>{pairUnit(extractDecimal(pooledToken0))}</Label>
+            </FlexContainer>
+            <FlexContainer className="justify-sb w-100">
               <Label fontSize={13}>Pooled {token1}</Label>
-              <Label fontSize={13} fontFamily="syncopate">
-                {pairUnit(extractDecimal(pooledToken1))}
-              </Label>
-            </InnerRowContainer>
-          </DesktopInfoContainer>
+              <Label fontSize={13}>{pairUnit(extractDecimal(pooledToken1))}</Label>
+            </FlexContainer>
+          </FlexContainer>
         )}
       </FormContainer>
     </Container>
   );
 };
 
-export default RemoveLiqContainer;
+export default RemoveLiquidityContent;

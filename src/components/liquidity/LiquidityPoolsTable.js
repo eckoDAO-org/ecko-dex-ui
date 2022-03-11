@@ -10,8 +10,12 @@ import { reduceBalance } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
+import { AddIcon } from '../../assets';
+import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS } from '../../router/routes';
+import { useHistory } from 'react-router-dom';
 
 const LiquidityPoolsTable = () => {
+  const history = useHistory();
   const [pairList, setPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(false);
 
@@ -50,6 +54,15 @@ const LiquidityPoolsTable = () => {
       onClick={(item) => {
         window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${item?.requestKey}`, '_blank', 'noopener,noreferrer');
       }}
+      actions={[
+        {
+          icon: <AddIcon />,
+          onClick: (item) =>
+            history.push(
+              ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${item.token0}&token1=${item.token1}&back=${ROUTE_LIQUIDITY_POOLS}`)
+            ),
+        },
+      ]}
     />
   ) : (
     <AppLoader containerStyle={{ height: '100%', alignItems: 'center', justifyContent: 'center' }} />

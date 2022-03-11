@@ -12,3 +12,4 @@ export const ROUTE_LIQUIDITY_POOLS = '/liquidity/pools';
 export const ROUTE_LIQUIDITY_MY_LIQUIDITY = '/liquidity/my-liquidity';
 export const ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED = '/liquidity/add-liquidity-single-sided';
 export const ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED = '/liquidity/add-liquidity-double-sided';
+export const ROUTE_LIQUIDITY_REMOVE_LIQUIDITY = '/liquidity/remove-liquidity';

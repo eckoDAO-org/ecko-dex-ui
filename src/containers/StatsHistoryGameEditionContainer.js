@@ -41,27 +41,6 @@ const StatsHistoryGameEditionContainer = () => {
     fetchData();
   }, []);
 
-  const renderColumns = () => {
-    return [
-      {
-        name: 'pair',
-        render: ({ item }) => `${item.token0}/${item.token1}`,
-      },
-      {
-        renderName: ({ item }) => item.token0,
-        render: ({ item }) => reduceBalance(item.reserves[0]),
-      },
-      {
-        renderName: ({ item }) => item.token1,
-        render: ({ item }) => reduceBalance(item.reserves[1]),
-      },
-      {
-        name: 'rate',
-        width: 160,
-        render: ({ item }) => `${reduceBalance(extractDecimal(item.reserves[0]) / extractDecimal(item.reserves[1]))} ${item.token0}/${item.token1}`,
-      },
-    ];
-  };
   return (
     <CardContainer>
       <FlexContainer className="w-100 justify-sb" style={{ marginBottom: 24 }} gameEditionStyle={{ marginBottom: 14 }}>
@@ -86,3 +65,25 @@ const StatsHistoryGameEditionContainer = () => {
 };
 
 export default StatsHistoryGameEditionContainer;
+
+const renderColumns = () => {
+  return [
+    {
+      name: 'pair',
+      render: ({ item }) => `${item.token0}/${item.token1}`,
+    },
+    {
+      renderName: ({ item }) => item.token0,
+      render: ({ item }) => reduceBalance(item.reserves[0]),
+    },
+    {
+      renderName: ({ item }) => item.token1,
+      render: ({ item }) => reduceBalance(item.reserves[1]),
+    },
+    {
+      name: 'rate',
+      width: 160,
+      render: ({ item }) => `${reduceBalance(extractDecimal(item.reserves[0]) / extractDecimal(item.reserves[1]))} ${item.token0}/${item.token1}`,
+    },
+  ];
+};

@@ -89,7 +89,14 @@ const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onCl
                   <td style={{ zIndex: 1 }}>
                     <FlexContainer gap={8}>
                       {actions.map((action, i) => (
-                        <FlexContainer className="pointer" key={i} onClick={() => action.onClick(item)}>
+                        <FlexContainer
+                          className="pointer"
+                          key={i}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            action.onClick(item);
+                          }}
+                        >
                           {action.icon}
                         </FlexContainer>
                       ))}

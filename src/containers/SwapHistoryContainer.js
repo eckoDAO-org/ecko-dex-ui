@@ -86,45 +86,6 @@ const SwapHistoryContainer = () => {
     pact.getEventsSwapList();
   }, []);
 
-  const renderColumns = () => {
-    return [
-      {
-        name: 'name',
-        width: 160,
-        render: ({ item }) => (
-          <FlexContainer className="align-ce">
-            {console.log('item', item)}
-            <CryptoContainer style={{ zIndex: 2 }}>{getInfoCoin(item, 3)?.icon} </CryptoContainer>
-            <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{getInfoCoin(item, 5)?.icon} </CryptoContainer>
-            {getInfoCoin(item, 3)?.name}/{getInfoCoin(item, 5)?.name}
-          </FlexContainer>
-        ),
-        geName: 'Swap pair',
-        geRender: ({ item }) => `${getInfoCoin(item, 3)?.name}/${getInfoCoin(item, 5)?.name}`,
-      },
-      {
-        name: 'date',
-        width: 160,
-        render: ({ item }) => <FlexContainer>{moment(item?.blockTime).format('DD/MM/YYYY HH:mm:ss')}</FlexContainer>,
-      },
-      {
-        name: 'request key',
-        width: 160,
-        render: ({ item }) => <FlexContainer>{reduceToken(item?.requestKey)}</FlexContainer>,
-      },
-      {
-        name: 'amount',
-        width: 160,
-        align: 'right',
-        render: ({ item }) => (
-          <FlexContainer>
-            {item?.params[2]} {getInfoCoin(item, 3)?.name}
-          </FlexContainer>
-        ),
-      },
-    ];
-  };
-
   useEffect(() => {
     if (gameEditionView && pact?.swapList?.[0]) {
       setButtons((prev) => ({
@@ -192,3 +153,42 @@ const SwapHistoryContainer = () => {
 };
 
 export default SwapHistoryContainer;
+
+const renderColumns = () => {
+  return [
+    {
+      name: 'name',
+      width: 160,
+      render: ({ item }) => (
+        <FlexContainer className="align-ce">
+          {console.log('item', item)}
+          <CryptoContainer style={{ zIndex: 2 }}>{getInfoCoin(item, 3)?.icon} </CryptoContainer>
+          <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{getInfoCoin(item, 5)?.icon} </CryptoContainer>
+          {getInfoCoin(item, 3)?.name}/{getInfoCoin(item, 5)?.name}
+        </FlexContainer>
+      ),
+      geName: 'Swap pair',
+      geRender: ({ item }) => `${getInfoCoin(item, 3)?.name}/${getInfoCoin(item, 5)?.name}`,
+    },
+    {
+      name: 'date',
+      width: 160,
+      render: ({ item }) => <FlexContainer>{moment(item?.blockTime).format('DD/MM/YYYY HH:mm:ss')}</FlexContainer>,
+    },
+    {
+      name: 'request key',
+      width: 160,
+      render: ({ item }) => <FlexContainer>{reduceToken(item?.requestKey)}</FlexContainer>,
+    },
+    {
+      name: 'amount',
+      width: 160,
+      align: 'right',
+      render: ({ item }) => (
+        <FlexContainer>
+          {item?.params[2]} {getInfoCoin(item, 3)?.name}
+        </FlexContainer>
+      ),
+    },
+  ];
+};

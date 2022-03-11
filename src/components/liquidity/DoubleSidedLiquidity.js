@@ -11,7 +11,6 @@ import { WalletContext } from '../../contexts/WalletContext';
 import { getCorrectBalance, reduceBalance } from '../../utils/reduceBalance';
 import PixeledBlueContainer, { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
 import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
-import ReviewTxModal from '../modals/liquidity/ReviewTxModal';
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
 import TxView from '../modals/TxView';
 import CustomButton from '../shared/CustomButton';
@@ -33,13 +32,13 @@ const initialStateValue = {
   precision: 0,
 };
 
-const DoubleSidedLiquidity = ({ pair, setSelectedView }) => {
+const DoubleSidedLiquidity = ({ pair }) => {
   const pact = useContext(PactContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const liquidity = useContext(LiquidityContext);
   const modalContext = useContext(ModalContext);
-  const { gameEditionView, openModal, closeModal, setButtons, outsideToken } = useContext(GameEditionContext);
+  const { gameEditionView, openModal, closeModal, outsideToken } = useContext(GameEditionContext);
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
   const [inputSide, setInputSide] = useState('');

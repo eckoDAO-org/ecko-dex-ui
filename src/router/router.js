@@ -21,12 +21,14 @@ import {
   ROUTE_LIQUIDITY_POOLS,
   ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED,
   ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED,
+  ROUTE_LIQUIDITY_REMOVE_LIQUIDITY,
 } from './routes';
 import SwapHistoryContainer from '../containers/SwapHistoryContainer';
 import { useGameEditionContext } from '../contexts';
 import StatsHistoryGameEditionContainer from '../containers/StatsHistoryGameEditionContainer';
 import LiquidityContainer from '../containers/LiquidityContainer';
 import AddLiquidityContainer from '../components/liquidity/AddLiquidityContainer';
+import RemoveLiquidityContainer from '../containers/RemoveLiquidityContainer';
 
 export default () => {
   const { gameEditionView } = useGameEditionContext();
@@ -51,6 +53,7 @@ export default () => {
               path={[ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED]}
               component={AddLiquidityContainer}
             />
+            <Route exact path={ROUTE_LIQUIDITY_REMOVE_LIQUIDITY} component={RemoveLiquidityContainer} />
             <Route exact path={ROUTE_POOL} component={PoolContainer} />
             <Route exact path={ROUTE_ANALYTICS} component={AnalyticsContainer} />
             <Route exact path={ROUTE_WRAP} component={WrapContainer} />
