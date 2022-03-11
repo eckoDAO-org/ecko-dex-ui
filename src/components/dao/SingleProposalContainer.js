@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import moment from 'moment';
 import { PartialScrollableScrollSection } from '../layout/Containers';
 import { FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
 import VotingPowerContainer from './VotingPowerContainer';
 import { ArrowBack } from '../../assets';
-import { theme } from '../../styles/theme';
+import { commonColors, theme } from '../../styles/theme';
 import { ApplicationContext } from '../../contexts/ApplicationContext';
 import { ROUTE_DAO } from '../../router/routes';
 import { useHistory } from 'react-router-dom';
@@ -90,8 +91,21 @@ const SingleProposalContainer = ({ proposal_id }) => {
   const { themeMode } = useContext(ApplicationContext);
   const history = useHistory();
 
+  const [fakeButtonSelect, setFakeButtonSelect] = useState('');
+  console.log('LOG / file: SingleProposalContainer.js / line 95 / SingleProposalContainer / fakeButtonSelect', fakeButtonSelect);
+
   const fakeProposal = fakeData.find((data) => data.id === proposal_id);
-  console.log('fakeProposal', fakeProposal);
+  // console.log('fakeProposal', fakeProposal);
+
+  const ColumnLabels = ({ title, description }) => (
+    <FlexContainer className="column">
+      <Label fontSize={13} labelStyle={{ opacity: 0.7 }}>
+        {title}
+      </Label>
+      <Label fontSize={13}>{description}</Label>
+    </FlexContainer>
+  );
+
   return (
     <>
       <Label fontSize={24} fontFamily="syncopate">
@@ -107,15 +121,37 @@ const SingleProposalContainer = ({ proposal_id }) => {
         back to proposals
       </Label>
 
-      <FlexContainer className="row" gap={16}>
+      <FlexContainer className="row" gap={16} mobileClassName="column">
         <FlexContainer className="column" withGradient desktopStyle={{ flex: 1, maxHeight: 550, height: 'min-content', zIndex: 10 }}>
           <PartialScrollableScrollSection id="proposals-list" className="scrollbar-none" style={{ width: '100%' }}>
-            {proposal_id}
+            <FlexContainer className="column" gap={16}>
+              <FlexContainer className="justify-sb align-ce w-100">
+                <Label fontSize={24}>{fakeProposal?.title}</Label>
+                <Label
+                  fontFamily="basier"
+                  fontSize={10}
+                  labelStyle={{
+                    backgroundColor: fakeProposal?.status === 'active' ? commonColors.active : commonColors.closed,
+                    borderRadius: 100,
+                    padding: '2px 8px',
+                  }}
+                >
+                  {fakeProposal?.status}
+                </Label>
+              </FlexContainer>
+              <FlexContainer className="justify-sb align-ce w-100" mobileClassName="grid" columns={2}>
+                <ColumnLabels title="Author" description={fakeProposal?.account} />
+                <ColumnLabels title="Start Date" description={moment(fakeProposal['start-date']).format('LLL')} />
+                <ColumnLabels title="End Date" description={moment(fakeProposal['end-date']).format('LLL')} />
+                <ColumnLabels title="Voting System" description="Single choice voting" />
+              </FlexContainer>
+              <ColumnLabels title="Description" description={fakeProposal?.description} />
+            </FlexContainer>
           </PartialScrollableScrollSection>
         </FlexContainer>
         <FlexContainer className="column" gap={16}>
           <VotingPowerContainer />
-          <VoteResultsContainer />
+          <VoteResultsContainer onClickYes={() => setFakeButtonSelect('YES')} onClickNo={() => setFakeButtonSelect('NO')} />
         </FlexContainer>
       </FlexContainer>
     </>
