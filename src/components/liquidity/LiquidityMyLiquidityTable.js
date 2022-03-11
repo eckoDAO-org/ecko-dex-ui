@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useErrorState } from '../../hooks/useErrorState';
 import { getPairListAccountBalance } from '../../api/pact-pair';
+import { AccountContext } from '../../contexts/AccountContext';
 import { AddIcon } from '../../assets';
 import tokenData from '../../constants/cryptoCurrencies';
-import { AccountContext } from '../../contexts/AccountContext';
-import { useErrorState } from '../../hooks/useErrorState';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_MY_LIQUIDITY } from '../../router/routes';
 import { extractDecimal, pairUnit } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';

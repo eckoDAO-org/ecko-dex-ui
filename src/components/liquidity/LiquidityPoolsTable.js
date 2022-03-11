@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { useErrorState } from '../../hooks/useErrorState';
 import { getDailyVolume } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact-pair';
 import { chainId, NETWORK_TYPE } from '../../constants/contextConstants';
 import tokenData from '../../constants/cryptoCurrencies';
-import { useErrorState } from '../../hooks/useErrorState';
 import { reduceBalance } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
@@ -14,49 +14,6 @@ import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 const LiquidityPoolsTable = () => {
   const [pairList, setPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(false);
-  const renderColumns = () => {
-    return [
-      {
-        name: 'name',
-        width: 160,
-        render: ({ item }) => (
-          <FlexContainer className="align-ce">
-            <CryptoContainer style={{ zIndex: 2 }}> {tokenData[item.token0].icon}</CryptoContainer>
-            <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{tokenData[item.token1].icon} </CryptoContainer>
-            {item.token0}/{item.token1}
-          </FlexContainer>
-        ),
-      },
-      {
-        name: 'liquidity',
-        width: 160,
-
-        render: ({ item }) => reduceBalance(item.reserves[0]),
-      },
-      {
-        name: '24h Volume',
-        width: 160,
-        render: ({ item }) => console.log('item', item),
-      },
-
-      {
-        name: 'Fees',
-        width: 160,
-        render: ({ item }) => '',
-      },
-
-      {
-        name: 'Rewards Booster',
-        width: 160,
-        render: ({ item }) => 'Coming Soon',
-      },
-      {
-        name: 'APR',
-        width: 160,
-        render: ({ item }) => 'Coming Soon',
-      },
-    ];
-  };
 
   const fetchData = async () => {
     const resultPairList = await getPairList();
@@ -100,3 +57,47 @@ const LiquidityPoolsTable = () => {
 };
 
 export default LiquidityPoolsTable;
+
+const renderColumns = () => {
+  return [
+    {
+      name: 'name',
+      width: 160,
+      render: ({ item }) => (
+        <FlexContainer className="align-ce">
+          <CryptoContainer style={{ zIndex: 2 }}> {tokenData[item.token0].icon}</CryptoContainer>
+          <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{tokenData[item.token1].icon} </CryptoContainer>
+          {item.token0}/{item.token1}
+        </FlexContainer>
+      ),
+    },
+    {
+      name: 'liquidity',
+      width: 160,
+
+      render: ({ item }) => reduceBalance(item.reserves[0]),
+    },
+    {
+      name: '24h Volume',
+      width: 160,
+      render: ({ item }) => console.log('item', item),
+    },
+
+    {
+      name: 'Fees',
+      width: 160,
+      render: ({ item }) => '',
+    },
+
+    {
+      name: 'Rewards Booster',
+      width: 160,
+      render: ({ item }) => 'Coming Soon',
+    },
+    {
+      name: 'APR',
+      width: 160,
+      render: ({ item }) => 'Coming Soon',
+    },
+  ];
+};
