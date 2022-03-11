@@ -109,23 +109,17 @@ const AllProposalsContainer = () => {
                   {data?.description}
                 </Label>
                 <FlexContainer>
-                  {data.status === 'active' ? (
-                    <Label
-                      fontFamily="basier"
-                      fontSize={10}
-                      labelStyle={{ backgroundColor: commonColors.active, borderRadius: 100, padding: '2px 8px' }}
-                    >
-                      active
-                    </Label>
-                  ) : (
-                    <Label
-                      fontFamily="basier"
-                      fontSize={10}
-                      labelStyle={{ backgroundColor: commonColors.closed, borderRadius: 100, padding: '2px 8px' }}
-                    >
-                      closed
-                    </Label>
-                  )}
+                  <Label
+                    fontFamily="basier"
+                    fontSize={10}
+                    labelStyle={{
+                      backgroundColor: data.status === 'active' ? commonColors.active : commonColors.closed,
+                      borderRadius: 100,
+                      padding: '2px 8px',
+                    }}
+                  >
+                    {data?.status}
+                  </Label>
                 </FlexContainer>
                 {index < fakeData.length - 1 && <Divider />}
               </FlexContainer>
