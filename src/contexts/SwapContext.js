@@ -136,7 +136,7 @@ export const SwapProvider = (props) => {
         date: getCurrentDate(),
         title: 'Transaction Pending',
         description: data.requestKeys[0],
-        isReaded: false,
+        isRead: false,
         isCompleted: false,
       });
 
@@ -157,7 +157,7 @@ export const SwapProvider = (props) => {
         date: getCurrentDate(),
         title: 'Transaction Error',
         description: 'Insufficient funds - attempt to buy gas failed.',
-        isReaded: false,
+        isRead: false,
         isCompleted: false,
       });
       console.log('error', e);

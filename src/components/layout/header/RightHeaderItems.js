@@ -105,21 +105,9 @@ const RightHeaderItems = () => {
       {gameEditionView && <SlippagePopupContent className="header-item w-fit-content" />}
 
       <BellNotification
-        hasNotification={notification.notificationList?.some((notif) => notif.isReaded === false)}
+        hasNotification={notification.notificationList?.some((notif) => notif.isRead === false)}
         onClick={() => {
-          notificationModalContext.openModal({
-            footer: (
-              <Button
-                onClick={() => {
-                  notification.removeAllItem();
-                }}
-                label="Remove All Notification"
-                fontSize="12px"
-                buttonStyle={{ width: '100%' }}
-                outGameEditionView
-              />
-            ),
-          });
+          notificationModalContext.openModal();
         }}
       />
 

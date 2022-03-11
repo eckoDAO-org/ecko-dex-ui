@@ -8,7 +8,6 @@ import { AccountProvider } from './contexts/AccountContext';
 import { WalletProvider } from './contexts/WalletContext';
 import { PactProvider } from './contexts/PactContext';
 import ModalRender from './components/modals/ModalRender';
-import RightModalRender from './components/right-modal-notification/RightModalRender';
 import { SwapProvider } from './contexts/SwapContext';
 import { LiquidityProvider } from './contexts/LiquidityContext';
 import { GameEditionProvider } from './contexts/GameEditionContext';
@@ -38,11 +37,9 @@ function App() {
                       <SwapProvider>
                         <LiquidityProvider>
                           <NotificationModalRender>
-                            <RightModalRender>
-                              <ModalRender>
-                                <Router />
-                              </ModalRender>
-                            </RightModalRender>
+                            <ModalRender>
+                              <Router />
+                            </ModalRender>
                           </NotificationModalRender>
                         </LiquidityProvider>
                       </SwapProvider>
