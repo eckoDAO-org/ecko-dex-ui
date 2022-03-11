@@ -1,44 +1,39 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
+import { Divider } from 'semantic-ui-react';
+import { AccountContext } from '../../../contexts/AccountContext';
+import { PactContext } from '../../../contexts/PactContext';
+import { useGameEditionContext } from '../../../contexts';
+import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { reduceBalance } from '../../../utils/reduceBalance';
 import CustomButton from '../../../components/shared/CustomButton';
 import { SuccessfullIcon } from '../../../assets';
-import { PactContext } from '../../../contexts/PactContext';
-import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import tokenData from '../../../constants/cryptoCurrencies';
 import Label from '../../shared/Label';
 import { Row, SuccessViewContainerGE } from '../common-result-components';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
-import { useGameEditionContext } from '../../../contexts';
+import { CryptoContainer, FlexContainer } from '../../shared/FlexContainer';
+import CopyPopup from '../../shared/CopyPopup';
+import reduceToken from '../../../utils/reduceToken';
+import { chainId } from '../../../constants/contextConstants';
 
-const Content = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+const Content = styled(FlexContainer)`
   svg {
     display: ${({ gameEditionView }) => gameEditionView && 'none '};
     path {
       fill: ${({ gameEditionView, theme: { colors } }) => !gameEditionView && colors.white};
     }
   }
-  width: 100%;
-  height: ${({ gameEditionView }) => gameEditionView && '100% '};
-  justify-content: ${({ gameEditionView }) => gameEditionView && 'space-between '};
 `;
 
-const TransactionsDetails = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+const TransactionsDetails = styled(FlexContainer)`
   padding: 24px 0px;
   padding-top: 5px;
-  & > *:not(:last-child) {
-    margin-bottom: 16px;
-  }
 `;
 
 const ReviewTxModal = ({ fromValues, toValues, supply }) => {
   const pact = useContext(PactContext);
+  const { account } = useContext(AccountContext);
   const { gameEditionView } = useContext(GameEditionContext);
 
   const [loading, setLoading] = useState(false);
@@ -55,49 +50,67 @@ const ReviewTxModal = ({ fromValues, toValues, supply }) => {
 
   const ContentView = () => {
     return (
-      <TransactionsDetails>
-        <Row className="fs">
-          <Label fontFamily="syncopate" fontSize={13}>
-            Deposit Desired
-          </Label>
-        </Row>
+      <TransactionsDetails className="w-100 column" gap={12}>
+        <Label>From</Label>
 
-        {/* FIRST COIN */}
-        <Row className="sb" style={{ marginBottom: 8 }}>
-          <Row className="fs">
-            {getTokenIcon(fromValues.coin)}
-            <Label fontFamily="syncopate" fontSize={13}>
-              {fromValues.amount}
-            </Label>
-          </Row>
-          <Label fontFamily="syncopate" fontSize={13}>
-            {fromValues.coin}
+        {/* ACCOUNT */}
+        <FlexContainer className="align-ce justify-sb">
+          <Label fontSize={13}>Account</Label>
+          <Label fontSize={13}>
+            {reduceToken(account.account)}
+            <CopyPopup textToCopy={account.account} />
           </Label>
-        </Row>
-        {/* FIRST RATE */}
-        <Row className="fe">
-          <Label fontSize={13}>{`1 ${fromValues?.coin} =  ${reduceBalance(1 / pact.ratio)} ${toValues?.coin}`}</Label>
-        </Row>
-        {/* SECOND COIN */}
-        <Row className="sb" style={{ marginBottom: 8 }}>
-          <Row className="fs">
-            {getTokenIcon(toValues.coin)}
-            <Label fontFamily="syncopate" fontSize={13}>
-              {toValues.amount}
+        </FlexContainer>
+        {/* CHAIN */}
+        <FlexContainer className="align-ce justify-sb">
+          <Label fontSize={13}>Chain Id</Label>
+          <Label fontSize={13}>{chainId}</Label>
+        </FlexContainer>
+        {/* POOL */}
+        <FlexContainer className="align-ce justify-sb">
+          <Label fontSize={13}>Pool</Label>
+          <FlexContainer>
+            <CryptoContainer size={24} style={{ zIndex: 2 }}>
+              {getTokenIcon(fromValues.coin)}
+            </CryptoContainer>
+            <CryptoContainer size={24} style={{ marginLeft: -12, zIndex: 1 }}>
+              {getTokenIcon(toValues.coin)}
+            </CryptoContainer>
+
+            <Label fontSize={13}>
+              {fromValues.coin}/{toValues.coin}
             </Label>
-          </Row>
-          <Label fontFamily="syncopate" fontSize={13}>
-            {toValues.coin}
-          </Label>
-        </Row>
-        {/* SECOND RATE */}
-        <Row className="fe">
-          <Label fontSize={13}>{`1 ${toValues?.coin} =  ${reduceBalance(pact.ratio)} ${fromValues?.coin}`}</Label>
-        </Row>
-        <Row className="sb">
-          <Label fontSize={13}>Pool Share:</Label>
+          </FlexContainer>
+        </FlexContainer>
+        {/* POOL SHARE*/}
+        <FlexContainer className="align-ce justify-sb">
+          <Label fontSize={13}>Pool Share</Label>
           <Label fontSize={13}>{(pact.share(fromValues?.amount) * 100).toPrecision(4)} %</Label>
-        </Row>
+        </FlexContainer>
+
+        <Divider />
+
+        <Label>Amount</Label>
+
+        {/* FROM VALUES */}
+        <FlexContainer className="align-ce justify-sb">
+          <FlexContainer>
+            <CryptoContainer size={30}>{getTokenIcon(fromValues.coin)}</CryptoContainer>
+            <Label>{fromValues.amount}</Label>
+          </FlexContainer>
+          <Label>{fromValues.coin}</Label>
+        </FlexContainer>
+        <Label fontSize={13}>{`1 ${fromValues?.coin} =  ${reduceBalance(1 / pact.ratio)} ${toValues?.coin}`}</Label>
+
+        {/* TO VALUES */}
+        <FlexContainer className="align-ce justify-sb">
+          <FlexContainer>
+            <CryptoContainer size={30}>{getTokenIcon(toValues.coin)}</CryptoContainer>
+            <Label>{toValues.amount}</Label>
+          </FlexContainer>
+          <Label>{toValues.coin}</Label>
+        </FlexContainer>
+        <Label fontSize={13}>{`1 ${toValues?.coin} =  ${reduceBalance(pact.ratio)} ${fromValues?.coin}`}</Label>
       </TransactionsDetails>
     );
   };
@@ -162,12 +175,8 @@ const ReviewTxModal = ({ fromValues, toValues, supply }) => {
   };
 
   return (
-    <Content gameEditionView={gameEditionView}>
-      {!gameEditionView && (
-        <Label fontFamily="syncopate" labelStyle={{ padding: '16px 0px' }}>
-          Preview Succesful
-        </Label>
-      )}
+    <Content gap={16} className="align-ce column w-100" gameEditionClassName="justify-sb h-100" gameEditionView={gameEditionView}>
+      {!gameEditionView && <Label fontFamily="syncopate">Preview Succesful</Label>}
       <SuccessfullIcon />
       {gameEditionView ? <ContentViewGe loading={loading} /> : <ContentView />}
       {!gameEditionView && (

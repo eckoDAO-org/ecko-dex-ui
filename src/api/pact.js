@@ -6,11 +6,12 @@ export const handleError = (error) => {
   return { errorMessage: 'Unhandled Exception' };
 };
 
-export const pactFetchLocal = async (pactCode) => {
+export const pactFetchLocal = async (pactCode, options) => {
   let data = await Pact.fetch.local(
     {
       pactCode,
       meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 150000, creationTime(), 600),
+      ...options,
     },
     network
   );

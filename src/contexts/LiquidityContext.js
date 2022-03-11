@@ -7,6 +7,7 @@ import { reduceBalance } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
 import pwPrompt from '../components/alerts/pwPrompt';
 import { decryptKey } from '../utils/keyUtils';
+import { pactFetchLocal } from '../api/pact';
 
 export const LiquidityContext = createContext(null);
 
@@ -183,18 +184,19 @@ export const LiquidityProvider = (props) => {
         return;
       }
       let pair = await swap.getPairAccount(token0.code, token1.code);
+      const pactCode = `(kswap.exchange.add-liquidity
+  ${token0.code}
+  ${token1.code}
+  (read-decimal 'amountDesired0)
+  (read-decimal 'amountDesired1)
+  (read-decimal 'amountMinimum0)
+  (read-decimal 'amountMinimum1)
+  ${JSON.stringify(account.account)}
+  ${JSON.stringify(account.account)}
+  (read-keyset 'user-ks)
+)`;
+
       let cmd = {
-        pactCode: `(kswap.exchange.add-liquidity
-              ${token0.code}
-              ${token1.code}
-              (read-decimal 'amountDesired0)
-              (read-decimal 'amountDesired1)
-              (read-decimal 'amountMinimum0)
-              (read-decimal 'amountMinimum1)
-              ${JSON.stringify(account.account)}
-              ${JSON.stringify(account.account)}
-              (read-keyset 'user-ks)
-            )`,
         keyPairs: {
           publicKey: account.guard.keys[0],
           secretKey: privKey,
@@ -225,9 +227,8 @@ export const LiquidityProvider = (props) => {
           amountMinimum1: reduceBalance(amountDesired1 * (1 - parseFloat(pact.slippage)), tokenData[token1.name].precision),
         },
         meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account, chainId, GAS_PRICE, 150000, creationTime(), 600),
-        networkId: NETWORKID,
       };
-      let data = await Pact.fetch.local(cmd, network);
+      let data = await pactFetchLocal(pactCode, cmd);
       swap.setCmd(cmd);
       setLocalRes(data);
       return data;

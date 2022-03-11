@@ -27,18 +27,14 @@ export const LIQUIDITY = {
     ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED,
   ],
 };
-export const STATS = {
-  id: 2,
-  label: 'stats',
-  route: ROUTE_STATS,
-};
+
 export const ANALYTICS = {
   id: 3,
   label: 'analytics',
   route: ROUTE_ANALYTICS,
 };
 
-export default [SWAP, LIQUIDITY, STATS, ANALYTICS];
+export default [SWAP, LIQUIDITY, ANALYTICS];
 
 export const gameEditionRoutes = [
   {

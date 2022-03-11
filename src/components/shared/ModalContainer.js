@@ -5,6 +5,7 @@ import { ArrowBack, CloseIcon } from '../../assets';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import GradientBorder from './GradientBorder';
 import browserDetection from '../../utils/browserDetection';
+import Label from './Label';
 
 const Container = styled.div`
   position: relative;
@@ -66,26 +67,12 @@ const HeaderContainer = styled.div`
   /* margin-bottom: ${({ gameEditionView }) => !gameEditionView && '12px'}; */
   align-items: center;
   width: 100%;
-
+  margin-bottom: 24px;
   svg {
     path {
       fill: ${({ theme: { colors } }) => colors.white};
     }
   }
-`;
-
-const Title = styled.span`
-  font-family: ${({ theme: { fontFamily }, gameEditionView }) => (gameEditionView ? fontFamily.pixeboy : fontFamily.syncopate)};
-
-  font-size: 32px;
-
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {
-    width: min-content;
-    font-size: 22px;
-  }
-  text-transform: capitalize;
-  white-space: nowrap;
-  ${({ theme: { colors } }) => colors.white};
 `;
 
 const Description = styled.span`
@@ -129,12 +116,18 @@ const ModalContainer = ({
         )}
 
         {title && (
-          <Title style={titleStyle} gameEditionView={gameEditionView}>
+          <Label
+            fontFamily="syncopate"
+            className="capitalize"
+            fontSize={24}
+            labelStyle={{ marginRight: 84, ...titleStyle }}
+            gameEditionView={gameEditionView}
+          >
             {title}
-          </Title>
+          </Label>
         )}
 
-        {onClose ? (
+        {onClose && (
           <CloseIcon
             style={{
               cursor: 'pointer',
@@ -142,8 +135,6 @@ const ModalContainer = ({
             }}
             onClick={onClose}
           />
-        ) : (
-          <div></div>
         )}
       </HeaderContainer>
 

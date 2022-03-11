@@ -16,6 +16,7 @@ import {
   getCurrentDate,
   getCurrentTime,
 } from '../constants/contextConstants';
+import { pactFetchLocal } from '../api/pact';
 
 export const SwapContext = createContext();
 
@@ -54,20 +55,12 @@ export const SwapProvider = (props) => {
   };
 
   const getPairAccount = async (token0, token1) => {
-    try {
-      let data = await Pact.fetch.local(
-        {
-          pactCode: `(at 'account (kswap.exchange.get-pair ${token0} ${token1}))`,
-          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 3000, creationTime(), 600),
-        },
-        network
-      );
-      if (data.result.status === 'success') {
-        setPairAccount(data.result.data);
-        return data.result.data;
-      }
-    } catch (e) {
-      console.log(e);
+    const result = await pactFetchLocal(`(at 'account (kswap.exchange.get-pair ${token0} ${token1}))`);
+    if (result.errorMessage) {
+      return result.errorMessage;
+    } else {
+      setPairAccount(result);
+      return result;
     }
   };
 

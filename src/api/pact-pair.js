@@ -120,3 +120,14 @@ export const getPairListAccountBalance = async (account) => {
     return handleError(e);
   }
 };
+
+export const getPairAccount = async (token0, token1) => {
+  try {
+    let data = await pactFetchLocal(`(at 'account (kswap.exchange.get-pair ${token0} ${token1}))`);
+    if (data.result.status === 'success') {
+      return data.result.data;
+    }
+  } catch (e) {
+    return e;
+  }
+};

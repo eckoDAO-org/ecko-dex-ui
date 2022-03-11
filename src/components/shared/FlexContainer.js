@@ -281,7 +281,7 @@ const STYFlexContainer = styled.div`
 
 export const CryptoContainer = styled.div`
   img {
-    width: 32px !important;
-    height: 32px !important;
+    width: ${({ size = 32 }) => `${size}px`}!important;
+    height: ${({ size = 32 }) => `${size}px`}!important;
   }
 `;

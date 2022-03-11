@@ -38,7 +38,6 @@ const LiquidityMyLiquidityTable = () => {
         width: 160,
         render: ({ item }) => (
           <FlexContainer className="align-ce">
-            {console.log('item', item)}
             <CryptoContainer style={{ zIndex: 2 }}>{tokenData[item.token0].icon} </CryptoContainer>
             <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}> {tokenData[item.token1].icon}</CryptoContainer>
             {item.token0}/{item.token1}

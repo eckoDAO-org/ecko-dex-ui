@@ -4,7 +4,6 @@ import Layout from '../components/layout/Layout';
 import PoolContainer from '../containers/PoolContainer';
 import SwapContainer from '../containers/SwapContainer';
 import WrapContainer from '../containers/WrapContainer';
-import StatsHistoryContainer from '../containers/StatsHistoryContainer';
 import AnalyticsContainer from '../containers/AnalyticsContainer';
 import GameEditionMenuContainer from '../components/game-edition-v2/GameEditionMenuContainer';
 import GameEditionStartAnimation from '../components/game-edition-v2/GameEditionStartAnimation';
@@ -53,7 +52,6 @@ export default () => {
               component={AddLiquidityContainer}
             />
             <Route exact path={ROUTE_POOL} component={PoolContainer} />
-            <Route exact path={ROUTE_STATS} component={StatsHistoryContainer} />
             <Route exact path={ROUTE_ANALYTICS} component={AnalyticsContainer} />
             <Route exact path={ROUTE_WRAP} component={WrapContainer} />
           </Switch>

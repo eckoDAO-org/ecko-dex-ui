@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { debounce, throttle } from 'lodash';
+import { throttle, debounce } from 'throttle-debounce';
 import React, { useContext, useEffect, useState } from 'react';
 import tokenData from '../../constants/cryptoCurrencies';
 import { AccountContext } from '../../contexts/AccountContext';
@@ -57,7 +57,6 @@ const DoubleSidedLiquidity = ({ pair, setSelectedView }) => {
 
   const [pairExist, setPairExist] = useState(false);
   const [showTxModal, setShowTxModal] = useState(false);
-  const [showReview, setShowReview] = useState(false);
 
   useEffect(() => {
     if (showTxModal === false) {
@@ -286,11 +285,9 @@ const DoubleSidedLiquidity = ({ pair, setSelectedView }) => {
         alert('Incorrect password. If forgotten, you can reset it with your private key');
         return;
       } else {
-        setShowReview(false);
         setShowTxModal(true);
       }
     } else {
-      setShowReview(false);
       const res = await liquidity.addLiquidityWallet(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
       if (!res) {
         wallet.setIsWaitingForWalletAuth(true);
@@ -298,7 +295,6 @@ const DoubleSidedLiquidity = ({ pair, setSelectedView }) => {
         /* walletError(); */
       } else {
         wallet.setWalletError(null);
-        setSelectedView(LIQUIDITY_VIEW.ADD_LIQUIDITY);
         setShowTxModal(true);
       }
     }
@@ -469,46 +465,6 @@ const DoubleSidedLiquidity = ({ pair, setSelectedView }) => {
     }
   }, [showTxModal]);
 
-  useEffect(() => {
-    if (showReview) {
-      if (gameEditionView) {
-        openModal({
-          titleFontSize: 32,
-          containerStyle: { padding: 0 },
-          titleContainerStyle: {
-            padding: 16,
-            paddingBottom: 0,
-          },
-          title: 'transaction details',
-          onClose: () => {
-            setShowReview(false);
-            closeModal();
-          },
-          content: <ReviewTxModal fromValues={fromValues} toValues={toValues} supply={supply} />,
-        });
-      } else {
-        modalContext.openModal({
-          title: 'transaction details',
-          description: '',
-          onClose: () => {
-            setShowReview(false);
-            modalContext.closeModal();
-          },
-          content: <ReviewTxModal fromValues={fromValues} toValues={toValues} supply={supply} />,
-        });
-      }
-    }
-  }, [showReview]);
-
-  useEffect(() => {
-    setButtons({
-      A: async () => {
-        if (buttonStatus().status && !showReview && !showTxModal) {
-          setShowReview(true);
-        }
-      },
-    });
-  }, [buttonStatus().status, showReview, showTxModal]);
   return (
     <>
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
@@ -533,7 +489,7 @@ const DoubleSidedLiquidity = ({ pair, setSelectedView }) => {
                 fluid
                 type={buttonStatus().status === true ? 'secondary' : 'primary'}
                 disabled={!buttonStatus().status}
-                onClick={() => setShowReview(true)}
+                onClick={() => supply()}
               >
                 {buttonStatus().msg}
               </CustomButton>

@@ -42,7 +42,7 @@ export const GasCost = ({ swap }) => {
       <div style={{ display: 'flex' }}>
         {ENABLE_GAS_STATION ? (
           <>
-            <Label fontSize={13} color={commonColors.green} geColor="green">
+            <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ textDecoration: 'line-through' }}>
               {(GAS_PRICE * swap?.localRes?.gas).toPrecision(4)} KDA
             </Label>
             <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ marginLeft: 5 }}>

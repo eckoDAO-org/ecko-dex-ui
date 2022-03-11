@@ -69,7 +69,7 @@ const Label = ({
     </GameEditionLabel>
   ) : (
     <STYText
-      className={className}
+      className={`${fontFamily === 'syncopate' ? 'uppercase' : ''} ${className}`}
       inverted={inverted}
       color={color}
       fontSize={fontSize}
