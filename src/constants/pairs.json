@@ -1,9 +1,9 @@
 {
   "coin:runonflux.flux": {
     "name": "coin:runonflux.flux",
+    "token0Name": "coin",
+    "token1Name": "flux",
     "token0": "KDA",
     "token1": "FLUX"
   }
-
-
 }

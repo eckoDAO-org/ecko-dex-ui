@@ -255,7 +255,7 @@ const DoubleSidedLiquidity = ({ pair, setSelectedView }) => {
   const buttonStatus = () => {
     let status = {
       0: { msg: 'Connect your KDA wallet', status: false },
-      1: { msg: 'Enter An Amount', status: false },
+      1: { msg: 'Enter Amount', status: false },
       2: { msg: 'Supply', status: true },
       3: {
         msg: (token) => `Insufficient ${token} Balance`,
@@ -362,7 +362,7 @@ const DoubleSidedLiquidity = ({ pair, setSelectedView }) => {
     if (gameEditionView) {
       openModal({
         titleFontSize: 32,
-        title: 'Select a Token',
+        title: 'Select Token',
         type: 'arcade-dark',
         onClose: () => {
           setTokenSelectorType(null);
@@ -385,7 +385,7 @@ const DoubleSidedLiquidity = ({ pair, setSelectedView }) => {
       });
     } else {
       modalContext.openModal({
-        title: 'select a token',
+        title: 'Select Token',
         description: '',
         containerStyle: {
           minWidth: '0px',
@@ -567,7 +567,7 @@ const DoubleSidedLiquidity = ({ pair, setSelectedView }) => {
                     value={reduceBalance(pact.getRatio1(fromValues.coin, toValues.coin)) ?? '-'}
                   />
                   <PixeledBlueContainer
-                    label="share of pool"
+                    label="pool share"
                     value={`${!pact.share(fromValues.amount) ? 0 : (pact.share(fromValues.amount) * 100).toPrecision(4)} %`}
                   />
                 </InfoContainer>
@@ -588,7 +588,7 @@ const DoubleSidedLiquidity = ({ pair, setSelectedView }) => {
                     </Label>
                   </FlexContainer>
                   <FlexContainer className="justify-sb w-100">
-                    <Label fontSize={13}>Share of Pool</Label>
+                    <Label fontSize={13}>Pool Share</Label>
                     <Label fontSize={13} fontFamily="syncopate" labelStyle={{ textAlign: 'end' }}>
                       {!pact.share(fromValues.amount) ? 0 : (pact.share(fromValues.amount) * 100).toPrecision(4)} %
                     </Label>

@@ -403,7 +403,7 @@ const SwapContainer = () => {
     if (gameEditionView) {
       openModal({
         titleFontSize: 32,
-        title: 'Select a Token',
+        title: 'Select Token',
         type: 'arcade-dark',
         onClose: () => {
           setTokenSelectorType(null);
@@ -425,7 +425,7 @@ const SwapContainer = () => {
       });
     } else {
       modalContext.openModal({
-        title: 'select a token',
+        title: 'Select Token',
         description: '',
         containerStyle: {
           minWidth: '0px',

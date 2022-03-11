@@ -84,13 +84,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
   };
   return (
     <Content>
-      {!gameEditionView && (
-        <Label fontSize={13} fontFamily="syncopate" labelStyle={{ marginTop: 12, marginBottom: 8 }}>
-          Search token
-        </Label>
-      )}
-
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex', marginTop: 16 }}>
         <Search
           gameEditionView={gameEditionView}
           fluid
@@ -110,7 +104,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
       </div>
       {!gameEditionView && (
         <Label fontSize={13} fontFamily="syncopate">
-          Token
+          Tokens
         </Label>
       )}
       {!gameEditionView && <Divider />}

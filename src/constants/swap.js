@@ -20,7 +20,7 @@ export const SWAP_BUTTON_NOT_LIQUIDITY = {
 };
 export const SWAP_BUTTON_ENTER_AMOUNT = {
   id: 'ENTER_AMOUNT',
-  label: 'Enter an amount',
+  label: 'Enter amount',
 };
 export const SWAP_BUTTON_SWAP = {
   id: 'SWAP',

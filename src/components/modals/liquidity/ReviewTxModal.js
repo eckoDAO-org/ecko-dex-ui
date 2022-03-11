@@ -95,7 +95,7 @@ const ReviewTxModal = ({ fromValues, toValues, supply }) => {
           <Label fontSize={13}>{`1 ${toValues?.coin} =  ${reduceBalance(pact.ratio)} ${fromValues?.coin}`}</Label>
         </Row>
         <Row className="sb">
-          <Label fontSize={13}>Share of Pool:</Label>
+          <Label fontSize={13}>Pool Share:</Label>
           <Label fontSize={13}>{(pact.share(fromValues?.amount) * 100).toPrecision(4)} %</Label>
         </Row>
       </TransactionsDetails>
@@ -153,7 +153,7 @@ const ReviewTxModal = ({ fromValues, toValues, supply }) => {
         }
         infoItems={[
           {
-            label: 'Share of Pool',
+            label: 'Pool Share',
             value: `${(pact.share(fromValues?.amount) * 100).toPrecision(4)} %`,
           },
         ]}

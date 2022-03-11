@@ -254,6 +254,7 @@ export const PactProvider = (props) => {
         accum += `[${pair.split(':').join(' ')}] `;
         return accum;
       }, '');
+      console.log('tokenPairList', tokenPairList);
       let data = await Pact.fetch.local(
         {
           pactCode: `
@@ -300,7 +301,6 @@ export const PactProvider = (props) => {
             ...dataList[pair.name],
           };
         });
-        console.log('test', pairList);
         setPairList(pairList);
       }
     } catch (e) {
