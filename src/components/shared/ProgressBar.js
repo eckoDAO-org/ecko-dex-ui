@@ -12,7 +12,8 @@ const STYMaxSupplyContainer = styled.div`
 
 const STYMaxSupply = styled.div`
   height: 8px;
-  background: linear-gradient(to right, #39fffc, #ed1cb5, #ffa900);
+  background: ${({ darkBar }) =>
+    darkBar ? 'linear-gradient(to right, #E0E0E0, #5C5C5C99, #E0E0E0)' : 'linear-gradient(to right, #5dcbe5, #e37480, #f6cc7d)'};
   border-radius: 10px;
   width: ${({ width }) => width}%;
 `;
@@ -30,7 +31,7 @@ const PercetageIndicator = styled(FlexContainer)`
   }
 `;
 
-const ProgressBar = ({ currentValue, maxValue }) => {
+const ProgressBar = ({ currentValue, maxValue, topLabelLeft, withBottomLabel, darkBar }) => {
   const getPercentage = (current, max) => {
     if (current <= maxValue) return (100 * current) / max;
     else return 100;
@@ -38,21 +39,29 @@ const ProgressBar = ({ currentValue, maxValue }) => {
 
   return (
     <>
+      {topLabelLeft && (
+        <FlexContainer className="justify-sb align-ce w-100">
+          <Label fontSize={13}>{topLabelLeft}</Label>
+          <Label fontSize={13}>{getPercentage(currentValue, maxValue).toFixed(1)}%</Label>
+        </FlexContainer>
+      )}
       <STYMaxSupplyContainer>
-        <STYMaxSupply width={getPercentage(currentValue, maxValue)} />
+        <STYMaxSupply darkBar={darkBar} width={getPercentage(currentValue, maxValue)} />
       </STYMaxSupplyContainer>
-      <FlexContainer className="justify-sb align-ce w-100" gap={16}>
-        <PercetageIndicator>
-          <Label>0</Label>
-        </PercetageIndicator>
-        <PercetageIndicator>
-          <Label labelStyle={{ position: 'absolute', bottom: 17 }}>|</Label>
-          <Label>1.5</Label>
-        </PercetageIndicator>
-        <PercetageIndicator>
-          <Label>3</Label>
-        </PercetageIndicator>
-      </FlexContainer>
+      {withBottomLabel && (
+        <FlexContainer className="justify-sb align-ce w-100" gap={16}>
+          <PercetageIndicator>
+            <Label>0</Label>
+          </PercetageIndicator>
+          <PercetageIndicator>
+            <Label labelStyle={{ position: 'absolute', bottom: 17 }}>|</Label>
+            <Label>1.5</Label>
+          </PercetageIndicator>
+          <PercetageIndicator>
+            <Label>3</Label>
+          </PercetageIndicator>
+        </FlexContainer>
+      )}
     </>
   );
 };
