@@ -58,10 +58,8 @@ const LiquidityContainer = () => {
             fontFamily="syncopate"
             onClick={() =>
               history.push(
-                (pathname === ROUTE_LIQUIDITY_TOKENS
-                  ? ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED
-                  : ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED
-                ).concat(`?back=${pathname}`)
+                pathname === ROUTE_LIQUIDITY_TOKENS ? ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED : ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED,
+                { from: pathname }
               )
             }
           >

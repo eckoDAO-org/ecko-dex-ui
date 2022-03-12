@@ -89,14 +89,14 @@ const DoubleSidedLiquidity = ({ pair }) => {
         ...prev,
         balance: balance,
         coin: crypto?.name,
-        precision: crypto.precision,
+        precision: crypto?.precision,
       }));
     if (by === 'to')
       return setToValues((prev) => ({
         ...prev,
         balance: balance,
         coin: crypto?.name,
-        precision: crypto.precision,
+        precision: crypto?.precision,
       }));
     else return null;
   };
@@ -117,21 +117,21 @@ const DoubleSidedLiquidity = ({ pair }) => {
   ////////
 
   useEffect(async () => {
-    if (tokenSelectorType === 'from') setSelectedToken(fromValues.coin);
-    if (tokenSelectorType === 'to') setSelectedToken(toValues.coin);
+    if (tokenSelectorType === 'from') setSelectedToken(fromValues?.coin);
+    if (tokenSelectorType === 'to') setSelectedToken(toValues?.coin);
     else setSelectedToken(null);
   }, [tokenSelectorType]);
 
   useEffect(async () => {
-    if (fromValues.coin !== '') {
-      await account.getTokenAccount(tokenData[fromValues.coin].code, account.account.account, true);
+    if (fromValues?.coin !== '') {
+      await account.getTokenAccount(tokenData?.[fromValues?.coin]?.code, account.account.account, true);
     }
-    if (toValues.coin !== '') {
-      await account.getTokenAccount(tokenData[toValues.coin].code, account.account.account, false);
+    if (toValues?.coin !== '') {
+      await account.getTokenAccount(tokenData?.[toValues?.coin]?.code, account.account.account, false);
     }
-    if (fromValues.coin !== '' && toValues.coin !== '') {
-      await pact.getPair(tokenData[fromValues.coin].code, tokenData[toValues.coin].code);
-      await pact.getReserves(tokenData[fromValues.coin].code, tokenData[toValues.coin].code);
+    if (fromValues?.coin !== '' && toValues?.coin !== '') {
+      await pact.getPair(tokenData?.[fromValues?.coin]?.code, tokenData?.[toValues?.coin]?.code);
+      await pact.getReserves(tokenData?.[fromValues?.coin]?.code, tokenData?.[toValues?.coin]?.code);
       if (pact.pair) {
         setPairExist(true);
       }

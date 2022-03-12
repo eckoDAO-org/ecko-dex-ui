@@ -22,7 +22,7 @@ const Container = styled(FadeIn)`
   max-width: 550px;
 `;
 
-const AddLiquidityContainer = () => {
+const AddLiquidityContainer = (props) => {
   const history = useHistory();
 
   const { pathname } = useLocation();
@@ -42,7 +42,7 @@ const AddLiquidityContainer = () => {
               justifyContent: 'center',
             }}
             onClick={() => {
-              history.push(query.get('back') || ROUTE_LIQUIDITY_TOKENS);
+              history.push(props?.location?.state?.from || ROUTE_LIQUIDITY_TOKENS);
             }}
           />
           <Label fontSize={24} fontFamily="syncopate">
@@ -57,14 +57,14 @@ const AddLiquidityContainer = () => {
         <Label
           fontFamily="syncopate"
           withShade={pathname !== ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED}
-          onClick={() => history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED)}
+          onClick={() => history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, { from: props?.location?.state?.from })}
         >
           SINGLE-SIDED
         </Label>
         <Label
           fontFamily="syncopate"
           withShade={pathname !== ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED}
-          onClick={() => history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED)}
+          onClick={() => history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, { from: props?.location?.state?.from })}
         >
           DOUBLE-SIDED
         </Label>

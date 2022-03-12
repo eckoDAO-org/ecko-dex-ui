@@ -6,20 +6,23 @@ import { getDailyVolume } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact-pair';
 import { chainId, NETWORK_TYPE } from '../../constants/contextConstants';
 import tokenData from '../../constants/cryptoCurrencies';
-import { reduceBalance } from '../../utils/reduceBalance';
+import { humanReadableNUmber, reduceBalance } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import { AddIcon } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS } from '../../router/routes';
 import { useHistory } from 'react-router-dom';
+import { usePactContext } from '../../contexts';
 
 const LiquidityPoolsTable = () => {
   const history = useHistory();
+  const pact = usePactContext();
   const [pairList, setPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
+    const kdaPrice = await pact.getCurrentKdaUSDPrice();
     const resultPairList = await getPairList();
     const data = await getDailyVolume();
     const last24hDailyVolume = data.find((d) => d._id === moment().subtract(1, 'day').format('YYYY-MM-DD'));
@@ -35,7 +38,7 @@ const LiquidityPoolsTable = () => {
           }
           return total;
         }, 0);
-      return { ...pair, volume24H: volume };
+      return { ...pair, volume24H: volume * kdaPrice };
     });
     setPairList(result);
 
@@ -58,9 +61,9 @@ const LiquidityPoolsTable = () => {
         {
           icon: <AddIcon />,
           onClick: (item) =>
-            history.push(
-              ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${item.token0}&token1=${item.token1}&back=${ROUTE_LIQUIDITY_POOLS}`)
-            ),
+            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${item.token0}&token1=${item.token1}`), {
+              from: ROUTE_LIQUIDITY_POOLS,
+            }),
         },
       ]}
     />
@@ -93,7 +96,7 @@ const renderColumns = () => {
     {
       name: '24h Volume',
       width: 160,
-      render: ({ item }) => item.volume24H,
+      render: ({ item }) => `${humanReadableNUmber(Number(item.volume24H))} $`,
     },
 
     {

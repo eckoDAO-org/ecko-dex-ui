@@ -39,9 +39,9 @@ const LiquidityMyLiquidityTable = () => {
         {
           icon: <AddIcon />,
           onClick: (item) =>
-            history.push(
-              ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${item.token0}&token1=${item.token1}&back=${ROUTE_LIQUIDITY_MY_LIQUIDITY}`)
-            ),
+            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${item.token0}&token1=${item.token1}`), {
+              from: ROUTE_LIQUIDITY_MY_LIQUIDITY,
+            }),
         },
         {
           icon: <RemoveIcon />,
@@ -50,8 +50,9 @@ const LiquidityMyLiquidityTable = () => {
             const { token0, token1, balance, pooledAmount } = item;
             history.push(
               ROUTE_LIQUIDITY_REMOVE_LIQUIDITY.concat(
-                `?token0=${token0}&token1=${token1}&balance=${balance}&pooled0=${pooledAmount?.[0].decimal}&pooled1=${pooledAmount?.[1].decimal}&back=${ROUTE_LIQUIDITY_MY_LIQUIDITY}`
-              )
+                `?token0=${token0}&token1=${token1}&balance=${balance}&pooled0=${pooledAmount?.[0].decimal}&pooled1=${pooledAmount?.[1].decimal}`
+              ),
+              { from: ROUTE_LIQUIDITY_MY_LIQUIDITY }
             );
           },
         },
