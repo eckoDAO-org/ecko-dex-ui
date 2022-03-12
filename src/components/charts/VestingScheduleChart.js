@@ -38,10 +38,10 @@ const VestingScheduleChart = ({ height }) => {
         <Label>KDX Vesting</Label>
 
         <TimeRangeBar>
-          <TimeRangeBtn className={endDate === endDate3Years ? 'active' : ''} fontSize={16} onClick={() => setEndDate(endDate3Years)}>
+          <TimeRangeBtn className={endDate === endDate3Years ? 'active' : ''} onClick={() => setEndDate(endDate3Years)}>
             3y
           </TimeRangeBtn>
-          <TimeRangeBtn className={endDate === endDate10Years ? 'active' : ''} fontSize={16} onClick={() => setEndDate(endDate10Years)}>
+          <TimeRangeBtn className={endDate === endDate10Years ? 'active' : ''} onClick={() => setEndDate(endDate10Years)}>
             10y
           </TimeRangeBtn>
         </TimeRangeBar>

@@ -16,31 +16,60 @@ export const TimeRangeBar = styled.div`
 `;
 export const TimeRangeBtn = styled(Label)`
   cursor: pointer;
+  font-size: 16px;
   &.active {
     font-weight: bold;
     font-size: 20px;
   }
 `;
 
+const DAILY_VOLUME_RANGE = 'daily';
+const WEEKLY_VOLUME_RANGE = 'weekly';
+const MONTHLY_VOLUME_RANGE = 'monthly';
+
+const volumeRanges = {
+  [DAILY_VOLUME_RANGE]: {
+    name: (_id) => moment(_id).format('DD/MM/YYYY'),
+    dateStart: moment().subtract(60, 'days').format('YYYY-MM-DD'),
+    title: (payload) => moment(payload._id).format('DD/MM/YYYY'),
+  },
+  [WEEKLY_VOLUME_RANGE]: {
+    name: (_id) => _id,
+    dateStart: moment()
+      .subtract(7 * 40, 'days')
+      .format('YYYY-MM-DD'),
+    title: (payload) => moment(payload.volumes[0]?.startDay).format('DD/MM/YYYY'),
+  },
+  [MONTHLY_VOLUME_RANGE]: {
+    name: (_id) => _id,
+    dateStart: moment()
+      .subtract(30 * 12, 'days')
+      .format('YYYY-MM-DD'),
+    title: (payload) => moment(payload.volumes[0]?.startDay).format('MMM YY'),
+  },
+};
+
 const VolumeChart = ({ width, height, containerStyle }) => {
   const [volume, setVolume] = useState([]);
   const [dailyVolume, setDailyVolume] = useState('');
   const [currentDate, setCurrentDate] = useState(null);
+  const [volumeRange, setVolumeRange] = useState(DAILY_VOLUME_RANGE);
 
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/volume/daily?dateStart=${moment()
-          .subtract(60, 'days')
-          .format('YYYY-MM-DD')}&dateEnd=${moment().format('YYYY-MM-DD')}`
+        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/volume/${volumeRange}?dateStart=${
+          volumeRanges[volumeRange]?.startDate ?? moment().subtract(60, 'days').format('YYYY-MM-DD')
+        }&dateEnd=${moment().format('YYYY-MM-DD')}`
       )
       .then((res) => {
         const allVolume = [];
-        for (const day of res.data) {
+        for (const timeRange of res.data) {
           allVolume.push({
-            name: moment(day._id).format('DD/MM/YYYY'),
+            name: timeRange._id,
+            title: volumeRanges[volumeRange]?.title(timeRange),
             Volume: Number(
-              day.volumes
+              timeRange.volumes
                 .reduce((partialSum, currVol) => {
                   return partialSum + (currVol.tokenFromName === 'coin' ? currVol.tokenFromVolume : currVol.tokenToVolume);
                 }, 0)
@@ -52,7 +81,7 @@ const VolumeChart = ({ width, height, containerStyle }) => {
         setDailyVolume(allVolume[allVolume.length - 1].Volume);
       })
       .catch((err) => console.log('get volume error', err));
-  }, []);
+  }, [volumeRange]);
 
   return (
     <CardContainer style={containerStyle}>
@@ -63,13 +92,17 @@ const VolumeChart = ({ width, height, containerStyle }) => {
           <Label fontSize={24}>{humanReadableNUmber(Number(dailyVolume))} KDA</Label>
           <Label>&nbsp;{currentDate || ''}</Label>
         </div>
-        {/* <TimeRangeBar>
-          <TimeRangeBtn className="active" fontSize={16}>
+        <TimeRangeBar>
+          <TimeRangeBtn className={volumeRange === DAILY_VOLUME_RANGE ? 'active' : ''} onClick={() => setVolumeRange(DAILY_VOLUME_RANGE)}>
             D
           </TimeRangeBtn>
-          <TimeRangeBtn fontSize={16}>W</TimeRangeBtn>
-          <TimeRangeBtn fontSize={16}>M</TimeRangeBtn>
-        </TimeRangeBar> */}
+          <TimeRangeBtn className={volumeRange === WEEKLY_VOLUME_RANGE ? 'active' : ''} onClick={() => setVolumeRange(WEEKLY_VOLUME_RANGE)}>
+            W
+          </TimeRangeBtn>
+          <TimeRangeBtn className={volumeRange === MONTHLY_VOLUME_RANGE ? 'active' : ''} onClick={() => setVolumeRange(MONTHLY_VOLUME_RANGE)}>
+            M
+          </TimeRangeBtn>
+        </TimeRangeBar>
       </GraphCardHeader>
       <div style={{ width: '100%', height }}>
         <ResponsiveContainer>
@@ -80,7 +113,7 @@ const VolumeChart = ({ width, height, containerStyle }) => {
             onMouseMove={({ activePayload }) => {
               if (activePayload) {
                 setDailyVolume((activePayload && activePayload[0]?.payload?.Volume) || '');
-                setCurrentDate((activePayload && activePayload[0]?.payload?.name) || null);
+                setCurrentDate((activePayload && activePayload[0]?.payload?.title) || null);
               }
             }}
             onMouseLeave={() => {
