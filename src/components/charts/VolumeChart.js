@@ -59,7 +59,7 @@ const VolumeChart = ({ width, height, containerStyle }) => {
     axios
       .get(
         `${process.env.REACT_APP_KADDEX_STATS_API_URL}/volume/${volumeRange}?dateStart=${
-          volumeRanges[volumeRange]?.startDate ?? moment().subtract(60, 'days').format('YYYY-MM-DD')
+          volumeRanges[volumeRange]?.dateStart ?? moment().subtract(60, 'days').format('YYYY-MM-DD')
         }&dateEnd=${moment().format('YYYY-MM-DD')}`
       )
       .then((res) => {
