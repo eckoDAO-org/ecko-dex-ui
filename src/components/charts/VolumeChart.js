@@ -18,6 +18,7 @@ export const TimeRangeBtn = styled(Label)`
   cursor: pointer;
   &.active {
     font-weight: bold;
+    font-size: 20px;
   }
 `;
 
@@ -29,7 +30,7 @@ const VolumeChart = ({ width, height, containerStyle }) => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/daily-volume?dateStart=${moment()
+        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/volume/daily?dateStart=${moment()
           .subtract(60, 'days')
           .format('YYYY-MM-DD')}&dateEnd=${moment().format('YYYY-MM-DD')}`
       )
@@ -62,13 +63,13 @@ const VolumeChart = ({ width, height, containerStyle }) => {
           <Label fontSize={24}>{humanReadableNUmber(Number(dailyVolume))} KDA</Label>
           <Label>&nbsp;{currentDate || ''}</Label>
         </div>
-        <TimeRangeBar>
+        {/* <TimeRangeBar>
           <TimeRangeBtn className="active" fontSize={16}>
             D
           </TimeRangeBtn>
           <TimeRangeBtn fontSize={16}>W</TimeRangeBtn>
           <TimeRangeBtn fontSize={16}>M</TimeRangeBtn>
-        </TimeRangeBar>
+        </TimeRangeBar> */}
       </GraphCardHeader>
       <div style={{ width: '100%', height }}>
         <ResponsiveContainer>

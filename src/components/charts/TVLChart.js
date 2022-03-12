@@ -62,7 +62,7 @@ const TVLChart = ({ height, containerStyle }) => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/daily-tvl?dateStart=${moment()
+        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/tvl/daily?dateStart=${moment()
           .subtract(90, 'days')
           .format('YYYY-MM-DD')}&dateEnd=${moment().format('YYYY-MM-DD')}`
       )

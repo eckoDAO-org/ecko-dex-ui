@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import GradientBorder from '../shared/GradientBorder';
 import Label from '../shared/Label';
@@ -25,7 +25,11 @@ const VestingPopup = styled.div`
   }
 `;
 
+const endDate3Years = '2024-07-01';
+const endDate10Years = '2031-07-01';
+
 const VestingScheduleChart = ({ height }) => {
+  const [endDate, setEndDate] = useState(endDate3Years);
   return (
     <CardContainer>
       <GradientBorder />
@@ -34,16 +38,18 @@ const VestingScheduleChart = ({ height }) => {
         <Label>KDX Vesting</Label>
 
         <TimeRangeBar>
-          <TimeRangeBtn className="active" fontSize={16}>
+          <TimeRangeBtn className={endDate === endDate3Years ? 'active' : ''} fontSize={16} onClick={() => setEndDate(endDate3Years)}>
             3y
           </TimeRangeBtn>
-          <TimeRangeBtn fontSize={16}>10y</TimeRangeBtn>
+          <TimeRangeBtn className={endDate === endDate10Years ? 'active' : ''} fontSize={16} onClick={() => setEndDate(endDate10Years)}>
+            10y
+          </TimeRangeBtn>
         </TimeRangeBar>
       </VestingHeader>
       <div style={{ width: '100%', height }}>
         <ResponsiveContainer>
           <AreaChart
-            data={getVestingScheduleData('2021-07-01', '2024-07-01')}
+            data={getVestingScheduleData('2021-07-01', endDate)}
             margin={{
               top: 10,
               right: 30,
@@ -51,7 +57,6 @@ const VestingScheduleChart = ({ height }) => {
               bottom: 0,
             }}
           >
-            {/* <CartesianGrid strokeDasharray="3 3" /> */}
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip
@@ -72,7 +77,6 @@ const VestingScheduleChart = ({ height }) => {
             <Area type="monotone" dataKey="Community Sales" stackId="1" stroke="#ffc658" fill="#ffc658" />
             <Area type="monotone" dataKey="Team" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
             <Area type="monotone" dataKey="DAO" stackId="1" stroke="#8884d8" fill="#8884d8" />
-            'Liquidity Mining': 200,
           </AreaChart>
         </ResponsiveContainer>
       </div>
