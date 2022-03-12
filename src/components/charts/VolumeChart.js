@@ -6,7 +6,21 @@ import Label from '../shared/Label';
 import { GraphCardHeader } from './TVLChart';
 import { humanReadableNUmber } from '../../utils/reduceBalance';
 import { CardContainer } from '../stats/StatsTab';
-import { BarChart, Bar, Tooltip } from 'recharts';
+import { BarChart, Bar, Tooltip, ResponsiveContainer } from 'recharts';
+import styled from 'styled-components';
+
+export const TimeRangeBar = styled.div`
+  display: flex;
+  width: 90px;
+  justify-content: space-around;
+`;
+export const TimeRangeBtn = styled(Label)`
+  cursor: pointer;
+  &.active {
+    font-weight: bold;
+    font-size: 20px;
+  }
+`;
 
 const VolumeChart = ({ width, height, containerStyle }) => {
   const [volume, setVolume] = useState([]);
@@ -16,7 +30,7 @@ const VolumeChart = ({ width, height, containerStyle }) => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/daily-volume?dateStart=${moment()
+        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/volume/daily?dateStart=${moment()
           .subtract(60, 'days')
           .format('YYYY-MM-DD')}&dateEnd=${moment().format('YYYY-MM-DD')}`
       )
@@ -49,50 +63,42 @@ const VolumeChart = ({ width, height, containerStyle }) => {
           <Label fontSize={24}>{humanReadableNUmber(Number(dailyVolume))} KDA</Label>
           <Label>&nbsp;{currentDate || ''}</Label>
         </div>
-        <div>
-          {/* <PopupContentList
-            items={[
-              {
-                id: 1,
-                label: '1D',
-              },
-              {
-                id: 2,
-                label: '1W',
-              },
-              {
-                id: 3,
-                label: '1M',
-              },
-            ]}
-            icon={<span style={{ color: 'white' }}>1D</span>}
-          /> */}
-        </div>
+        {/* <TimeRangeBar>
+          <TimeRangeBtn className="active" fontSize={16}>
+            D
+          </TimeRangeBtn>
+          <TimeRangeBtn fontSize={16}>W</TimeRangeBtn>
+          <TimeRangeBtn fontSize={16}>M</TimeRangeBtn>
+        </TimeRangeBar> */}
       </GraphCardHeader>
-      <BarChart
-        width={width}
-        height={height}
-        data={volume}
-        onMouseMove={({ activePayload }) => {
-          if (activePayload) {
-            setDailyVolume((activePayload && activePayload[0]?.payload?.Volume) || '');
-            setCurrentDate((activePayload && activePayload[0]?.payload?.name) || null);
-          }
-        }}
-        onMouseLeave={() => {
-          setDailyVolume(volume[volume.length - 1]?.Volume ?? null);
-          setCurrentDate(null);
-        }}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
-      >
-        <Tooltip label="Volume" content={() => ''} />
-        <Bar dataKey="Volume" fill="#F68862" radius={[10, 10, 10, 10]} />
-      </BarChart>
+      <div style={{ width: '100%', height }}>
+        <ResponsiveContainer>
+          <BarChart
+            width={width}
+            height={height}
+            data={volume}
+            onMouseMove={({ activePayload }) => {
+              if (activePayload) {
+                setDailyVolume((activePayload && activePayload[0]?.payload?.Volume) || '');
+                setCurrentDate((activePayload && activePayload[0]?.payload?.name) || null);
+              }
+            }}
+            onMouseLeave={() => {
+              setDailyVolume(volume[volume.length - 1]?.Volume ?? null);
+              setCurrentDate(null);
+            }}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+          >
+            <Tooltip label="Volume" content={() => ''} />
+            <Bar dataKey="Volume" fill="#F68862" radius={[10, 10, 10, 10]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </CardContainer>
   );
 };
