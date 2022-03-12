@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components/macro';
-import bg from '../../assets/images/game-edition/empty-button.png';
 import { useApplicationContext } from '../../contexts';
 import { theme } from '../../styles/theme';
-import Label from './Label';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -66,14 +64,6 @@ const InputRange = ({ value, setValue }) => {
     });
   }, [themeMode]);
 
-  useEffect(() => {
-    const rangeText = document.querySelector('.percentage');
-    let newVal = value;
-    let negNewVal = -1 * newVal;
-
-    rangeText.style.left = newVal + '%'; //Set range left position
-    rangeText.style.transform = 'translate(' + negNewVal + '%, 2px)'; //Set range translate to correct
-  }, [value]);
   return (
     <Wrapper>
       <input
@@ -88,9 +78,6 @@ const InputRange = ({ value, setValue }) => {
           setValue(event.target.valueAsNumber);
         }}
       />
-      <Label inverted className="percentage">
-        %
-      </Label>
     </Wrapper>
   );
 };

@@ -93,7 +93,7 @@ const renderColumns = () => {
     {
       name: '24h Volume',
       width: 160,
-      render: ({ item }) => console.log('item', item),
+      render: ({ item }) => item.volume24H,
     },
 
     {
