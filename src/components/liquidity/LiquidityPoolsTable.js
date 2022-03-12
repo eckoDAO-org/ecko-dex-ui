@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useErrorState } from '../../hooks/useErrorState';
 import { getDailyVolume } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact-pair';
-import { chainId, NETWORK_TYPE } from '../../constants/contextConstants';
+import { chainId, FEE, NETWORK_TYPE } from '../../constants/contextConstants';
 import tokenData from '../../constants/cryptoCurrencies';
 import { humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
@@ -38,7 +38,13 @@ const LiquidityPoolsTable = () => {
           }
           return total;
         }, 0);
-      return { ...pair, volume24H: volume * kdaPrice };
+      const volume24Husd = volume * kdaPrice;
+      const percentageOnVolume = (volume24Husd / 100) * FEE;
+      const percentagePerYear = percentageOnVolume * 365;
+      const liquidity = reduceBalance(pair.reserves[0]) + pair.reserves[1];
+      const apr = (percentagePerYear * 100) / liquidity;
+
+      return { ...pair, volume24Husd, apr };
     });
     setPairList(result);
 
@@ -91,12 +97,14 @@ const renderColumns = () => {
       name: 'liquidity',
       width: 160,
 
-      render: ({ item }) => reduceBalance(item.reserves[0]),
+      render: ({ item }) => {
+        return humanReadableNumber(reduceBalance(item.reserves[0]) + item.reserves[1]);
+      },
     },
     {
       name: '24h Volume',
       width: 160,
-      render: ({ item }) => `${humanReadableNumber(Number(item.volume24H))} $`,
+      render: ({ item }) => `$ ${humanReadableNumber(Number(item.volume24Husd))}`,
     },
 
     {
@@ -113,7 +121,7 @@ const renderColumns = () => {
     {
       name: 'APR',
       width: 160,
-      render: ({ item }) => 'Coming Soon',
+      render: ({ item }) => `${item.apr.toFixed(2)} %`,
     },
   ];
 };
