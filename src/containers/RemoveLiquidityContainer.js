@@ -1,7 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import useQueryParams from '../hooks/useQueryParams';
 import { useApplicationContext } from '../contexts';
 import RemoveLiquidityContent from '../components/liquidity/RemoveLiquidityContent';
 import SlippagePopupContent from '../components/layout/header/SlippagePopupContent';
@@ -11,7 +10,7 @@ import { ArrowBack } from '../assets';
 import { theme } from '../styles/theme';
 import Label from '../components/shared/Label';
 import RewardBooster from '../components/liquidity/RewardBooster';
-import { ROUTE_LIQUIDITY_TOKENS } from '../router/routes';
+import { ROUTE_LIQUIDITY_MY_LIQUIDITY } from '../router/routes';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -26,8 +25,6 @@ const RemoveLiquidityContainer = () => {
 
   const { themeMode } = useApplicationContext();
 
-  const query = useQueryParams();
-
   return (
     <Container className="column w-100 relative justify-ce h-100" gap={24}>
       <FlexContainer className="w-100 justify-sb">
@@ -40,7 +37,7 @@ const RemoveLiquidityContainer = () => {
               justifyContent: 'center',
             }}
             onClick={() => {
-              history.push(query.get('back') || ROUTE_LIQUIDITY_TOKENS);
+              history.push(ROUTE_LIQUIDITY_MY_LIQUIDITY);
             }}
           />
           <Label fontSize={24} fontFamily="syncopate">
@@ -50,14 +47,7 @@ const RemoveLiquidityContainer = () => {
         <SlippagePopupContent />
       </FlexContainer>
       <RewardBooster />
-      <RemoveLiquidityContent
-        pair={{
-          token0: query.get('token0'),
-          token1: query.get('token1'),
-          balance: query.get('balance'),
-          pooledAmount: [query.get('pooled0'), query.get('pooled1')],
-        }}
-      />
+      <RemoveLiquidityContent />
     </Container>
   );
 };

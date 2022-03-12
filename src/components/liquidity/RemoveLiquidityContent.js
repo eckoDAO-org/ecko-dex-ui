@@ -26,6 +26,9 @@ import LogoLoader from '../shared/Loader';
 import { FadeIn } from '../shared/animations';
 import { FlexContainer } from '../shared/FlexContainer';
 import InputRange from '../shared/InputRange';
+import { getPairList, getPairListAccountBalance } from '../../api/pact-pair';
+import useQueryParams from '../../hooks/useQueryParams';
+import { useAccountContext } from '../../contexts';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -62,28 +65,50 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const RemoveLiquidityContent = ({ pair }) => {
+const RemoveLiquidityContent = () => {
+  const query = useQueryParams();
+  const { account } = useAccountContext();
   const wallet = useContext(WalletContext);
   const liquidity = useContext(LiquidityContext);
   const { themeMode } = useContext(ApplicationContext);
   const modalContext = useContext(ModalContext);
   const { gameEditionView, openModal, closeModal, setButtons } = useContext(GameEditionContext);
-  const { token0, token1, balance, pooledAmount } = pair;
+  const [pair, setPair] = useState(null);
 
   const [amount, setAmount] = useState(100);
   const [loading, setLoading] = useState(false);
-  const [pooled, setPooled] = useState(balance);
-  const [pooledToken0, setPooledToken0] = useState(reduceBalance(pooledAmount?.[0], 12));
+  const [loadingPair, setLoadingPair] = useState(true);
+  const [pooled, setPooled] = useState(pair?.balance);
+  const [pooledToken0, setPooledToken0] = useState(reduceBalance(pair?.pooledAmount?.[0], 12));
 
-  const [pooledToken1, setPooledToken1] = useState(reduceBalance(pooledAmount?.[1], 12));
+  const [pooledToken1, setPooledToken1] = useState(reduceBalance(pair?.pooledAmount?.[1], 12));
+
+  const fetchData = async () => {
+    const token0 = query.get('token0');
+    const token1 = query.get('token1');
+    const resultPairList = await getPairListAccountBalance(account.account);
+    const currentPair = resultPairList.find((p) => p.token0 === token0 && p.token1 === token1);
+    setPair(currentPair);
+
+    setLoadingPair(false);
+  };
 
   useEffect(() => {
-    if (!isNaN(amount)) {
-      setPooled(reduceBalance((extractDecimal(balance) * amount) / 100, PRECISION));
-      setPooledToken0(reduceBalance((extractDecimal(pooledAmount[0]) * amount) / 100, PRECISION));
-      setPooledToken1(reduceBalance((extractDecimal(pooledAmount[1]) * amount) / 100, PRECISION));
+    if (account.account) {
+      setLoadingPair(true);
+      fetchData();
+    } else {
+      setLoading(false);
     }
-  }, [amount]);
+  }, [account]);
+
+  useEffect(() => {
+    if (!isNaN(amount) && pair) {
+      setPooled(reduceBalance((extractDecimal(pair?.balance) * amount) / 100, PRECISION));
+      setPooledToken0(reduceBalance((extractDecimal(pair?.pooledAmount[0]) * amount) / 100, PRECISION));
+      setPooledToken1(reduceBalance((extractDecimal(pair?.pooledAmount[1]) * amount) / 100, PRECISION));
+    }
+  }, [amount && pair]);
 
   useEffect(() => {
     if (!isNaN(amount) && reduceBalance(amount) !== 0) {
@@ -126,11 +151,11 @@ const RemoveLiquidityContent = ({ pair }) => {
         content: (
           <TxView
             view={LIQUIDITY_VIEW.REMOVE_LIQUIDITY}
-            token0={token0}
+            token0={pair?.token0}
             onClose={() => {
               closeModal();
             }}
-            token1={token1}
+            token1={pair?.token1}
           />
         ),
       });
@@ -144,11 +169,11 @@ const RemoveLiquidityContent = ({ pair }) => {
         content: (
           <TxView
             view={LIQUIDITY_VIEW.REMOVE_LIQUIDITY}
-            token0={token0}
+            token0={pair?.token0}
             onClose={() => {
               modalContext.closeModal();
             }}
-            token1={token1}
+            token1={pair?.token1}
           />
         ),
       });
@@ -158,7 +183,7 @@ const RemoveLiquidityContent = ({ pair }) => {
   const onRemoveLiquidity = async () => {
     if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
       setLoading(true);
-      const res = await liquidity.removeLiquidityLocal(tokenData[token0].code, tokenData[token1].code, reduceBalance(pooled, PRECISION));
+      const res = await liquidity.removeLiquidityLocal(tokenData[pair?.token0].code, tokenData[pair?.token1].code, reduceBalance(pooled, PRECISION));
       if (res === -1) {
         setLoading(false);
         alert('Incorrect password. If forgotten, you can reset it with your private key');
@@ -169,7 +194,7 @@ const RemoveLiquidityContent = ({ pair }) => {
       }
     } else {
       setLoading(true);
-      const res = await liquidity.removeLiquidityWallet(tokenData[token0].code, tokenData[token1].code, reduceBalance(pooled, PRECISION));
+      const res = await liquidity.removeLiquidityWallet(tokenData[pair?.token0].code, tokenData[pair?.token1].code, reduceBalance(pooled, PRECISION));
       if (!res) {
         wallet.setIsWaitingForWalletAuth(true);
         setLoading(false);
@@ -183,7 +208,7 @@ const RemoveLiquidityContent = ({ pair }) => {
     }
   };
 
-  return (
+  return !loadingPair ? (
     <Container $gameEditionView={gameEditionView}>
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
 
@@ -270,30 +295,32 @@ const RemoveLiquidityContent = ({ pair }) => {
 
         {gameEditionView ? (
           <InfoContainer style={{ marginTop: 32 }}>
-            <PixeledBlueContainer label={`${token0}/${token1}`} value={extractDecimal(pooled).toPrecision(4)} />
-            <PixeledBlueContainer label={`Pooled ${token0}`} value={extractDecimal(pooledToken0).toPrecision(4)} />
-            <PixeledBlueContainer label={`Pooled ${token1}`} value={extractDecimal(pooledToken1).toPrecision(4)} />
+            <PixeledBlueContainer label={`${pair?.token0}/${pair?.token1}`} value={extractDecimal(pooled).toPrecision(4)} />
+            <PixeledBlueContainer label={`Pooled ${pair?.token0}`} value={extractDecimal(pooledToken0).toPrecision(4)} />
+            <PixeledBlueContainer label={`Pooled ${pair?.token1}`} value={extractDecimal(pooledToken1).toPrecision(4)} />
           </InfoContainer>
         ) : (
           <FlexContainer className="column" gap={12} style={{ margin: '16px 0' }}>
             <FlexContainer className="justify-sb w-100">
               <Label fontSize={13}>
-                {token0} per {token1}
+                {pair?.token0} per {pair?.token1}
               </Label>
               <Label fontSize={13}>{pairUnit(extractDecimal(pooled))}</Label>
             </FlexContainer>
             <FlexContainer className="justify-sb w-100">
-              <Label fontSize={13}>Pooled {token0}</Label>
+              <Label fontSize={13}>Pooled {pair?.token0}</Label>
               <Label fontSize={13}>{pairUnit(extractDecimal(pooledToken0))}</Label>
             </FlexContainer>
             <FlexContainer className="justify-sb w-100">
-              <Label fontSize={13}>Pooled {token1}</Label>
+              <Label fontSize={13}>Pooled {pair?.token1}</Label>
               <Label fontSize={13}>{pairUnit(extractDecimal(pooledToken1))}</Label>
             </FlexContainer>
           </FlexContainer>
         )}
       </FormContainer>
     </Container>
+  ) : (
+    <></>
   );
 };
 

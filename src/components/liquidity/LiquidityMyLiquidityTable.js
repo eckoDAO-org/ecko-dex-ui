@@ -46,14 +46,8 @@ const LiquidityMyLiquidityTable = () => {
         {
           icon: <RemoveIcon />,
           onClick: (item) => {
-            console.log('item', item);
-            const { token0, token1, balance, pooledAmount } = item;
-            history.push(
-              ROUTE_LIQUIDITY_REMOVE_LIQUIDITY.concat(
-                `?token0=${token0}&token1=${token1}&balance=${balance}&pooled0=${pooledAmount?.[0].decimal}&pooled1=${pooledAmount?.[1].decimal}`
-              ),
-              { from: ROUTE_LIQUIDITY_MY_LIQUIDITY }
-            );
+            const { token0, token1 } = item;
+            history.push(ROUTE_LIQUIDITY_REMOVE_LIQUIDITY.concat(`?token0=${token0}&token1=${token1}`), { from: ROUTE_LIQUIDITY_MY_LIQUIDITY });
           },
         },
       ]}
