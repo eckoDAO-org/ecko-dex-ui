@@ -19,6 +19,7 @@ import { FadeIn } from '../components/shared/animations';
 import CommonTableGameEdition from '../components/shared/CommonTableGameEdition';
 import { NETWORK_TYPE } from '../constants/contextConstants';
 import AppLoader from '../components/shared/AppLoader';
+import theme from '../styles/theme';
 
 export const CardContainer = styled(FadeIn)`
   display: flex;
@@ -34,7 +35,6 @@ export const CardContainer = styled(FadeIn)`
         border-radius: 10px;
         position: relative;
         z-index: 2;
-        padding: ${({ theme: { layout } }) => `50px ${layout.desktopPadding}px`};
       `;
     } else {
       return css`
@@ -101,7 +101,11 @@ const SwapHistoryContainer = () => {
   }, [gameEditionView, pact.swapList]);
 
   return (
-    <CardContainer gameEditionView={gameEditionView}>
+    <CardContainer
+      gameEditionView={gameEditionView}
+      desktopStyle={{ padding: `50px ${theme.layout.desktopPadding}px` }}
+      mobileStyle={{ paddingBottom: 40 }}
+    >
       <FlexContainer className="w-100 justify-sb" style={{ marginBottom: 24 }} gameEditionStyle={{ marginBottom: 14 }}>
         <Label fontSize={24} geFontSize={32} fontFamily="syncopate">
           {gameEditionView ? 'HISTORY' : 'SWAP'}

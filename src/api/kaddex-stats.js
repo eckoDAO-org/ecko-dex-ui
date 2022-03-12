@@ -1,12 +1,10 @@
 import axios from 'axios';
 import moment from 'moment';
 
-const BASE_URL = 'https://stage.swap.kaddex.com:5011';
-
 const kaddexStatsRequest = async (url) => {
   try {
     return await axios
-      .get(`${BASE_URL}/${url}`, {
+      .get(`${process.env.REACT_APP_KADDEX_STATS_API_URL}/${url}`, {
         headers: { accept: 'application/json' },
       })
       .then(async (res) => {

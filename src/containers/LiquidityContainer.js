@@ -1,6 +1,5 @@
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import styled from 'styled-components';
 import LiquidityMyLiquidityTable from '../components/liquidity/LiquidityMyLiquidityTable';
 import LiquidityPoolsTable from '../components/liquidity/LiquidityPoolsTable';
 import LiquidityTokensTable from '../components/liquidity/LiquidityTokensTable';
@@ -14,17 +13,18 @@ import {
   ROUTE_LIQUIDITY_POOLS,
   ROUTE_LIQUIDITY_TOKENS,
 } from '../router/routes';
-
-const Container = styled(FlexContainer)`
-  padding: ${({ theme: { layout } }) => `50px ${layout.desktopPadding}px`};
-`;
+import theme from '../styles/theme';
 
 const LiquidityContainer = () => {
   const { pathname } = useLocation();
   const history = useHistory();
   return (
-    <Container className="column w-100 h-100">
-      <FlexContainer className="w-100 justify-sb" style={{ marginBottom: 24 }}>
+    <FlexContainer
+      className="column w-100 h-100"
+      desktopStyle={{ padding: `50px ${theme.layout.desktopPadding}px` }}
+      mobileStyle={{ paddingBottom: 40 }}
+    >
+      <FlexContainer className="w-100 justify-sb" mobileClassName="column" style={{ marginBottom: 24 }}>
         <FlexContainer gap={16}>
           <Label
             withShade={pathname !== ROUTE_LIQUIDITY_TOKENS}
@@ -70,7 +70,7 @@ const LiquidityContainer = () => {
       {pathname === ROUTE_LIQUIDITY_TOKENS && <LiquidityTokensTable />}
       {pathname === ROUTE_LIQUIDITY_POOLS && <LiquidityPoolsTable />}
       {pathname === ROUTE_LIQUIDITY_MY_LIQUIDITY && <LiquidityMyLiquidityTable />}
-    </Container>
+    </FlexContainer>
   );
 };
 
