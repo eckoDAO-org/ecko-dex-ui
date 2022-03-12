@@ -12,6 +12,20 @@ import { FadeIn } from '../components/shared/animations';
 import LogoLoader from '../components/shared/Loader';
 import { FlexContainer } from '../components/shared/FlexContainer';
 
+const ChartsContainer = styled.div`
+  display: flex;
+  width: 100%;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const SingleChartContainer = styled.div`
+  display: flex;
+  width: 100%;
+  padding: 5px;
+`;
+
 const Container = styled(FadeIn)`
   display: flex;
   flex-direction: column;
@@ -38,14 +52,19 @@ const AnalyticsContainer = () => {
     <LogoLoader />
   ) : (
     !gameEditionView && (
-      <Container>
-        <FlexContainer className="column" gap={24} style={{ padding: '50px 0' }}>
-          <FlexContainer gap={24}>
-            <TVLChart width={480} height={300} />
-
-            <VolumeChart width={480} height={300} />
-          </FlexContainer>
-          <VestingScheduleChart />
+      <Container gameEditionView={gameEditionView}>
+        <FlexContainer className="column w-100" gap={24} style={{ padding: '50px 0', maxWidth: 1100 }}>
+          <ChartsContainer>
+            <SingleChartContainer>
+              <TVLChart height={300} />
+            </SingleChartContainer>
+            <SingleChartContainer>
+              <VolumeChart height={300} />
+            </SingleChartContainer>
+          </ChartsContainer>
+          <ChartsContainer style={{ padding: 5, marginTop: 20 }}>
+            <VestingScheduleChart height={300} />
+          </ChartsContainer>
         </FlexContainer>
       </Container>
     )

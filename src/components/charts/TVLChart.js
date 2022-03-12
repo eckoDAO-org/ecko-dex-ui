@@ -1,10 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import moment from 'moment';
 import { PactContext } from '../../contexts/PactContext';
-import { LineChart, Line, Tooltip } from 'recharts';
+import { LineChart, Line, Tooltip, ResponsiveContainer } from 'recharts';
 import Label from '../shared/Label';
 import { humanReadableNumber } from '../../utils/reduceBalance';
 import { FlexContainer } from '../shared/FlexContainer';
@@ -13,20 +12,19 @@ export const GraphCardHeader = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    padding: 15px 0px 0px 15px;
+  }
 `;
 
-const TVLChart = ({ width, height, containerStyle }) => {
+const TVLChart = ({ height, containerStyle }) => {
   const [viewedTVL, setViewedTVL] = useState(null);
   const [currentTVL, setCurrentTVL] = useState(null);
   const [currentDate, setCurrentDate] = useState(null);
   const [tvlData, setTVLData] = useState([]);
   const pact = useContext(PactContext);
 
-  useEffect(() => {
-    getTVL();
-  }, []);
-
-  const getTVL = async () => {
+  const getTVL = useCallback(async () => {
     let totalTVL = 0;
     await pact.getPairList();
     const kdaPrice = await pact.getCurrentKdaUSDPrice();
@@ -54,12 +52,16 @@ const TVLChart = ({ width, height, containerStyle }) => {
       setCurrentTVL(totalTVL);
       setViewedTVL(totalTVL);
     }
-  };
+  }, [pact]);
+
+  useEffect(() => {
+    getTVL();
+  }, [getTVL]);
 
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/daily-tvl?dateStart=${moment()
+        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/tvl/daily?dateStart=${moment()
           .subtract(90, 'days')
           .format('YYYY-MM-DD')}&dateEnd=${moment().format('YYYY-MM-DD')}`
       )
@@ -69,7 +71,7 @@ const TVLChart = ({ width, height, containerStyle }) => {
         for (const day of res.data) {
           allTVL.push({
             name: moment(day._id).format('DD/MM/YYYY'),
-            tvl: day.tvl
+            tvl: +day.tvl
               .reduce((partialSum, currVol) => {
                 if (currVol.tokenFrom === 'coin') {
                   const tokenToPrice = (currVol.tokenFromTVL / currVol.tokenToTVL) * kdaPrice;
@@ -85,7 +87,7 @@ const TVLChart = ({ width, height, containerStyle }) => {
         setTVLData(allTVL);
       })
       .catch((err) => console.log('get tvl error', err));
-  }, []);
+  }, [pact]);
 
   return (
     <FlexContainer className="column align-ce w-100 h-100" withGradient style={containerStyle}>
@@ -97,30 +99,32 @@ const TVLChart = ({ width, height, containerStyle }) => {
         </div>
         <div></div>
       </GraphCardHeader>
-      <LineChart
-        width={width}
-        height={height}
-        data={tvlData}
-        onMouseMove={({ activePayload }) => {
-          if (activePayload) {
-            setViewedTVL((activePayload && activePayload[0]?.payload?.tvl) || '');
-            setCurrentDate((activePayload && activePayload[0]?.payload?.name) || null);
-          }
-        }}
-        onMouseLeave={() => {
-          setViewedTVL(currentTVL);
-          setCurrentDate(null);
-        }}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
-      >
-        <Tooltip label="TVL" content={() => ''} />
-        <Line type="monotone" dataKey="tvl" stroke="#ED1CB5" activeDot={{ r: 5 }} dot={{ r: 0 }} />
-      </LineChart>
+      <div style={{ width: '100%', height }}>
+        <ResponsiveContainer>
+          <LineChart
+            data={tvlData}
+            onMouseMove={({ activePayload }) => {
+              if (activePayload) {
+                setViewedTVL((activePayload && activePayload[0]?.payload?.tvl) || '');
+                setCurrentDate((activePayload && activePayload[0]?.payload?.name) || null);
+              }
+            }}
+            onMouseLeave={() => {
+              setViewedTVL(currentTVL);
+              setCurrentDate(null);
+            }}
+            margin={{
+              top: 10,
+              right: 30,
+              left: 20,
+              bottom: 0,
+            }}
+          >
+            <Tooltip label="TVL" content={() => ''} />
+            <Line type="monotone" dataKey="tvl" stroke="#ED1CB5" activeDot={{ r: 5 }} dot={{ r: 0 }} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </FlexContainer>
   );
 };
