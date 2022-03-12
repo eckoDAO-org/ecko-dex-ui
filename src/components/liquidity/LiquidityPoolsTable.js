@@ -6,7 +6,7 @@ import { getDailyVolume } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact-pair';
 import { chainId, NETWORK_TYPE } from '../../constants/contextConstants';
 import tokenData from '../../constants/cryptoCurrencies';
-import { humanReadableNUmber, reduceBalance } from '../../utils/reduceBalance';
+import { humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
@@ -96,7 +96,7 @@ const renderColumns = () => {
     {
       name: '24h Volume',
       width: 160,
-      render: ({ item }) => `${humanReadableNUmber(Number(item.volume24H))} $`,
+      render: ({ item }) => `${humanReadableNumber(Number(item.volume24H))} $`,
     },
 
     {

@@ -6,7 +6,7 @@ import moment from 'moment';
 import { PactContext } from '../../contexts/PactContext';
 import { LineChart, Line, Tooltip } from 'recharts';
 import Label from '../shared/Label';
-import { humanReadableNUmber } from '../../utils/reduceBalance';
+import { humanReadableNumber } from '../../utils/reduceBalance';
 import { FlexContainer } from '../shared/FlexContainer';
 
 export const GraphCardHeader = styled.div`
@@ -92,7 +92,7 @@ const TVLChart = ({ width, height, containerStyle }) => {
       <GraphCardHeader>
         <div>
           <Label fontSize={16}>TVL</Label>
-          <Label fontSize={24}>{humanReadableNUmber(Number(viewedTVL))} $</Label>
+          <Label fontSize={24}>{humanReadableNumber(Number(viewedTVL))} $</Label>
           <Label fontSize={16}>{currentDate || moment().format('DD/MM/YYYY')}</Label>
         </div>
         <div></div>

@@ -141,6 +141,7 @@ const Input = ({
   noInputBackground,
   geColor,
   inputStyle,
+  topComponent,
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
 
@@ -170,6 +171,7 @@ const Input = ({
           )}
         </TopLabelsContainer>
       )}
+      {topComponent}
       <SUIInput
         inverted
         fluid={fluid}

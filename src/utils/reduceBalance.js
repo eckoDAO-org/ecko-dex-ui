@@ -50,4 +50,4 @@ export const getCorrectBalance = (balance) => {
   return balanceClean;
 };
 
-export const humanReadableNUmber = (num) => num?.toFixed(2)?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') ?? '';
+export const humanReadableNumber = (num, toFixed = 2) => num?.toFixed(toFixed)?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') ?? '';

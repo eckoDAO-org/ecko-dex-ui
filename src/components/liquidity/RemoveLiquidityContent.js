@@ -26,6 +26,12 @@ const Container = styled(FadeIn)`
 
   overflow: auto;
   max-width: 550px;
+  .ui.input > input {
+    padding: 0px;
+    padding-bottom: 16px;
+    font-size: 13px;
+    height: fit-content;
+  }
 `;
 const SubContainer = styled.div`
   display: flex;
@@ -209,14 +215,35 @@ const RemoveLiquidityContent = ({ pair }) => {
           <Input
             value={amount}
             error={isNaN(amount)}
-            topLeftLabel="Pool Tokens to Remove"
             placeholder="Enter Amount"
-            size="large"
             geColor="white"
             withBorder
             numberOnly
-            label={{ content: '%' }}
-            inputStyle={{ marginBottom: 5 }}
+            inputStyle={{ fontSize: 13, padding: 0 }}
+            topComponent={
+              <FlexContainer className="justify-sb align-ce" style={{ marginBottom: 16 }}>
+                <Label fontSize={13}>Amount</Label>
+                <Label fontSize={13}>Balance: </Label>
+              </FlexContainer>
+            }
+            inputRightComponent={
+              <FlexContainer className="align-ce h-fit-content">
+                <CustomButton
+                  buttonStyle={{
+                    padding: 0,
+                    height: 'fit-content',
+                  }}
+                  fontFamily="basier"
+                  labelStyle={{ textTransform: 'uppercase' }}
+                  type="basic"
+                  fontSize={13}
+                  onClick={() => setAmount(100)}
+                >
+                  Max
+                </CustomButton>
+                <Label fontSize={13}>%</Label>
+              </FlexContainer>
+            }
             onChange={(e) => {
               if (Number(e.target.value) <= 100 && Number(e.target.value) >= 0) {
                 setAmount(limitDecimalPlaces(e.target.value, 2));
@@ -236,18 +263,18 @@ const RemoveLiquidityContent = ({ pair }) => {
         ) : (
           <FlexContainer className="column" gap={12} style={{ margin: '16px 0' }}>
             <FlexContainer className="justify-sb w-100">
-              <Label fontSize={13}>
-                {pair?.token0} per {pair?.token1}
-              </Label>
-              <Label fontSize={13}>{pairUnit(extractDecimal(pooled))}</Label>
-            </FlexContainer>
-            <FlexContainer className="justify-sb w-100">
               <Label fontSize={13}>Pooled {pair?.token0}</Label>
               <Label fontSize={13}>{pairUnit(extractDecimal(pooledToken0))}</Label>
             </FlexContainer>
             <FlexContainer className="justify-sb w-100">
               <Label fontSize={13}>Pooled {pair?.token1}</Label>
               <Label fontSize={13}>{pairUnit(extractDecimal(pooledToken1))}</Label>
+            </FlexContainer>
+            <FlexContainer className="justify-sb w-100">
+              <Label fontSize={13}>
+                {pair?.token0}/{pair?.token1} Rate
+              </Label>
+              <Label fontSize={13}>{pairUnit(extractDecimal(pooled))}</Label>
             </FlexContainer>
           </FlexContainer>
         )}

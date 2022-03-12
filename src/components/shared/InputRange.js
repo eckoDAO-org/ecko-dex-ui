@@ -62,7 +62,7 @@ const InputRange = ({ value, setValue }) => {
       };
       el.oninput();
     });
-  }, [themeMode]);
+  }, [themeMode, value]);
 
   return (
     <Wrapper>

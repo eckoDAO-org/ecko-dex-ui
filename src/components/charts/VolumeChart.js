@@ -4,7 +4,7 @@ import moment from 'moment';
 import GradientBorder from '../shared/GradientBorder';
 import Label from '../shared/Label';
 import { GraphCardHeader } from './TVLChart';
-import { humanReadableNUmber } from '../../utils/reduceBalance';
+import { humanReadableNumber } from '../../utils/reduceBalance';
 import { BarChart, Bar, Tooltip } from 'recharts';
 import { FlexContainer } from '../shared/FlexContainer';
 
@@ -46,7 +46,7 @@ const VolumeChart = ({ width, height, containerStyle }) => {
       <GraphCardHeader>
         <div>
           <Label fontSize={16}>Volume 24h</Label>
-          <Label fontSize={24}>{humanReadableNUmber(Number(dailyVolume))} KDA</Label>
+          <Label fontSize={24}>{humanReadableNumber(Number(dailyVolume))} KDA</Label>
           <Label>&nbsp;{currentDate || ''}</Label>
         </div>
         <div>
