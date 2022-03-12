@@ -44,9 +44,9 @@ const LoaderContainer = styled.div`
   }
 `;
 
-export const AppLoader = ({ containerStyle, color }) => {
+export const AppLoader = ({ className, containerStyle, color }) => {
   return (
-    <Container style={containerStyle}>
+    <Container className={className} style={containerStyle}>
       <LoaderContainer color={color} />
       <LoaderContainer color={color} delay={0.1} />
       <LoaderContainer color={color} delay={0.2} />

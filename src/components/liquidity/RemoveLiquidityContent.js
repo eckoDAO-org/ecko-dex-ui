@@ -1,11 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState, useContext } from 'react';
-import styled, { css } from 'styled-components/macro';
-import { ApplicationContext } from '../../contexts/ApplicationContext';
-import { ModalContext } from '../../contexts/ModalContext';
-import { LiquidityContext } from '../../contexts/LiquidityContext';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
-import { WalletContext } from '../../contexts/WalletContext';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components/macro';
+import { useGameEditionContext, useLiquidityContext, useModalContext, useWalletContext } from '../../contexts';
 import TxView from '../modals/TxView';
 import WalletRequestView from '../modals/WalletRequestView';
 import CustomButton from '../shared/CustomButton';
@@ -18,17 +14,12 @@ import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonT
 import { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
 import { PRECISION } from '../../constants/contextConstants';
 import { extractDecimal, limitDecimalPlaces, pairUnit, reduceBalance } from '../../utils/reduceBalance';
-import { ArrowBack } from '../../assets';
-import { theme } from '../../styles/theme';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import PixeledBlueContainer from '../game-edition-v2/components/PixeledInfoContainerBlue';
 import LogoLoader from '../shared/Loader';
 import { FadeIn } from '../shared/animations';
 import { FlexContainer } from '../shared/FlexContainer';
 import InputRange from '../shared/InputRange';
-import { getPairList, getPairListAccountBalance } from '../../api/pact-pair';
-import useQueryParams from '../../hooks/useQueryParams';
-import { useAccountContext } from '../../contexts';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -65,42 +56,19 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const RemoveLiquidityContent = () => {
-  const query = useQueryParams();
-  const { account } = useAccountContext();
-  const wallet = useContext(WalletContext);
-  const liquidity = useContext(LiquidityContext);
-  const { themeMode } = useContext(ApplicationContext);
-  const modalContext = useContext(ModalContext);
-  const { gameEditionView, openModal, closeModal, setButtons } = useContext(GameEditionContext);
-  const [pair, setPair] = useState(null);
+const RemoveLiquidityContent = ({ pair }) => {
+  const wallet = useWalletContext();
+  const liquidity = useLiquidityContext();
+  const modalContext = useModalContext();
+  const { gameEditionView, openModal, closeModal, setButtons } = useGameEditionContext();
 
   const [amount, setAmount] = useState(100);
   const [loading, setLoading] = useState(false);
-  const [loadingPair, setLoadingPair] = useState(true);
+
   const [pooled, setPooled] = useState(pair?.balance);
   const [pooledToken0, setPooledToken0] = useState(reduceBalance(pair?.pooledAmount?.[0], 12));
 
   const [pooledToken1, setPooledToken1] = useState(reduceBalance(pair?.pooledAmount?.[1], 12));
-
-  const fetchData = async () => {
-    const token0 = query.get('token0');
-    const token1 = query.get('token1');
-    const resultPairList = await getPairListAccountBalance(account.account);
-    const currentPair = resultPairList.find((p) => p.token0 === token0 && p.token1 === token1);
-    setPair(currentPair);
-
-    setLoadingPair(false);
-  };
-
-  useEffect(() => {
-    if (account.account) {
-      setLoadingPair(true);
-      fetchData();
-    } else {
-      setLoading(false);
-    }
-  }, [account]);
 
   useEffect(() => {
     if (!isNaN(amount) && pair) {
@@ -108,7 +76,7 @@ const RemoveLiquidityContent = () => {
       setPooledToken0(reduceBalance((extractDecimal(pair?.pooledAmount[0]) * amount) / 100, PRECISION));
       setPooledToken1(reduceBalance((extractDecimal(pair?.pooledAmount[1]) * amount) / 100, PRECISION));
     }
-  }, [amount && pair]);
+  }, [amount, pair]);
 
   useEffect(() => {
     if (!isNaN(amount) && reduceBalance(amount) !== 0) {
@@ -208,7 +176,7 @@ const RemoveLiquidityContent = () => {
     }
   };
 
-  return !loadingPair ? (
+  return (
     <Container $gameEditionView={gameEditionView}>
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
 
@@ -257,40 +225,6 @@ const RemoveLiquidityContent = () => {
           />
 
           <InputRange value={amount} setValue={setAmount} />
-          <ButtonContainer>
-            <CustomButton
-              fluid
-              type={amount === 25 ? 'secondary' : 'primary'}
-              background={gameEditionView && amount === 25 && '#6D99E4'}
-              onClick={() => setAmount(25)}
-            >
-              25%
-            </CustomButton>
-            <CustomButton
-              fluid
-              type={amount === 50 ? 'secondary' : 'primary'}
-              background={gameEditionView && amount === 50 && '#6D99E4'}
-              onClick={() => setAmount(50)}
-            >
-              50%
-            </CustomButton>
-            <CustomButton
-              fluid
-              type={amount === 75 ? 'secondary' : 'primary'}
-              background={gameEditionView && amount === 75 && '#6D99E4'}
-              onClick={() => setAmount(75)}
-            >
-              75%
-            </CustomButton>
-            <CustomButton
-              fluid
-              type={amount === 100 ? 'secondary' : 'primary'}
-              background={gameEditionView && amount === 100 && '#6D99E4'}
-              onClick={() => setAmount(100)}
-            >
-              100%
-            </CustomButton>
-          </ButtonContainer>
         </SubContainer>
 
         {gameEditionView ? (
@@ -319,8 +253,6 @@ const RemoveLiquidityContent = () => {
         )}
       </FormContainer>
     </Container>
-  ) : (
-    <></>
   );
 };
 
