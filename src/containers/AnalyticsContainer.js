@@ -12,20 +12,6 @@ import { FadeIn } from '../components/shared/animations';
 import LogoLoader from '../components/shared/Loader';
 import { FlexContainer } from '../components/shared/FlexContainer';
 
-const ChartsContainer = styled.div`
-  display: flex;
-  width: 100%;
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
-`;
-
-const SingleChartContainer = styled.div`
-  display: flex;
-  width: 100%;
-  padding: 5px;
-`;
-
 const Container = styled(FadeIn)`
   display: flex;
   flex-direction: column;
@@ -54,17 +40,12 @@ const AnalyticsContainer = () => {
     !gameEditionView && (
       <Container gameEditionView={gameEditionView}>
         <FlexContainer className="column w-100" gap={24} style={{ padding: '50px 0', maxWidth: 1100 }}>
-          <ChartsContainer>
-            <SingleChartContainer>
-              <TVLChart height={300} />
-            </SingleChartContainer>
-            <SingleChartContainer>
-              <VolumeChart height={300} />
-            </SingleChartContainer>
-          </ChartsContainer>
-          <ChartsContainer style={{ padding: 5, marginTop: 20 }}>
-            <VestingScheduleChart height={300} />
-          </ChartsContainer>
+          <FlexContainer mobileClassName="column" gap={24}>
+            <TVLChart height={300} />
+
+            <VolumeChart height={300} />
+          </FlexContainer>
+          <VestingScheduleChart height={300} />
         </FlexContainer>
       </Container>
     )
