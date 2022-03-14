@@ -24,8 +24,8 @@ const LiquidityContainer = () => {
       desktopStyle={{ padding: `50px ${theme.layout.desktopPadding}px` }}
       mobileStyle={{ paddingBottom: 40 }}
     >
-      <FlexContainer className="w-100 justify-sb" mobileClassName="column" style={{ marginBottom: 24 }}>
-        <FlexContainer gap={16}>
+      <FlexContainer className="w-100 justify-sb" mobileClassName="column" style={{ marginBottom: 24 }} mobileStyle={{ marginTop: 24 }}>
+        <FlexContainer gap={16} mobileClassName="justify-sa" mobileStyle={{ marginBottom: 16 }}>
           <Label
             withShade={pathname !== ROUTE_LIQUIDITY_TOKENS}
             className="pointer"

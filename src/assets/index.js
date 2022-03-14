@@ -12,6 +12,7 @@ export { ReactComponent as DiscordIcon } from './images/header/discord.svg';
 export { ReactComponent as DropdownGe } from './images/shared/dropdown-ge.svg';
 export { ReactComponent as ErrorIcon } from './images/shared/error-circle.svg';
 export { ReactComponent as ExplorerIcon } from './images/shared/ic_explorer.svg';
+export { ReactComponent as GasIcon } from './images/shared/gas.svg';
 export { ReactComponent as HamburgerIcon } from './images/header/hamburger.svg';
 export { ReactComponent as HistoryIcon } from './images/shared/history.svg';
 export { ReactComponent as KaddexLightModeLogo } from './images/header/kaddex_logo_light_mode.svg';

@@ -16,11 +16,11 @@ const STYText = styled.span`
       color: ${colors.primary};
     `}
   font-size: ${({ fontSize }) => fontSize}px;
-  svg {
+  /* svg {
     path {
       fill: ${({ theme: { colors } }) => colors.white};
     }
-  }
+  } */
 
   &.capitalize {
     text-transform: capitalize;

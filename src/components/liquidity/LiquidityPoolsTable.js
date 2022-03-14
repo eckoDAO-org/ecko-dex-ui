@@ -10,10 +10,11 @@ import { humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
-import { AddIcon } from '../../assets';
+import { AddIcon, GasIcon } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS } from '../../router/routes';
 import { useHistory } from 'react-router-dom';
 import { usePactContext } from '../../contexts';
+import Label from '../shared/Label';
 
 const LiquidityPoolsTable = () => {
   const history = useHistory();
@@ -110,7 +111,14 @@ const renderColumns = () => {
     {
       name: 'Fees',
       width: 160,
-      render: ({ item }) => '',
+      render: () => (
+        <FlexContainer className="align-ce">
+          <GasIcon />
+          <Label color="#41CC41" labelStyle={{ textDecoration: 'line-through', marginLeft: 12 }}>
+            ${FEE}
+          </Label>
+        </FlexContainer>
+      ),
     },
 
     {
