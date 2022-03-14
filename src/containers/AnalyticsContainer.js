@@ -14,6 +14,16 @@ import LogoLoader from '../components/shared/Loader';
 
 const ChartsContainer = styled.div`
   display: flex;
+  width: 100%;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const SingleChartContainer = styled.div`
+  display: flex;
+  width: 100%;
+  padding: 5px;
 `;
 
 const Container = styled(FadeIn)`
@@ -24,7 +34,6 @@ const Container = styled(FadeIn)`
   padding: ${({ gameEditionView }) => (gameEditionView ? '16px' : '32px')};
   justify-content: flex-start;
   align-items: center;
-
   ${({ gameEditionView }) => {
     if (gameEditionView) {
       return css`
@@ -37,7 +46,6 @@ const Container = styled(FadeIn)`
       `;
     }
   }}
-
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {
     padding: ${({ gameEditionView }) => !gameEditionView && '32px 11px'};
   }
@@ -57,15 +65,19 @@ const AnalyticsContainer = () => {
   ) : (
     !gameEditionView && (
       <Container gameEditionView={gameEditionView}>
-        <CardContainer>
+        <CardContainer style={{ background: 'transparent' }}>
           <ChartsContainer>
-            <div style={{ marginRight: 25 }}>
-              <TVLChart width={480} height={300} />
-            </div>
-            <VolumeChart width={480} height={300} />
+            <SingleChartContainer>
+              <TVLChart height={300} />
+            </SingleChartContainer>
+            <SingleChartContainer>
+              <VolumeChart height={300} />
+            </SingleChartContainer>
+          </ChartsContainer>
+          <ChartsContainer style={{ padding: 5, marginTop: 20 }}>
+            <VestingScheduleChart height={300} />
           </ChartsContainer>
         </CardContainer>
-        <VestingScheduleChart />
       </Container>
     )
   );

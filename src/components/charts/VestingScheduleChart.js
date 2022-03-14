@@ -1,160 +1,85 @@
-import React from 'react';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 import GradientBorder from '../shared/GradientBorder';
 import Label from '../shared/Label';
+import { TimeRangeBar, TimeRangeBtn } from './VolumeChart';
 import { CardContainer } from '../stats/StatsTab';
-import { AreaChart, Area, XAxis, YAxis, Tooltip } from 'recharts';
-import moment from 'moment';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { getVestingScheduleData } from './data/vestingSchedule';
 
-const data = [
-  {
-    name: moment('2022-01-01').format('DD MMM'),
-    VCS: 0,
-    Team: 0,
-    'DAO Treasury': 5,
-    'Community Sales': 10,
-    'Liquidity Mining': 10,
-  },
-  {
-    name: moment('2022-02-01').format('DD MMM'),
-    VCS: 0,
-    Team: 0,
-    'DAO Treasury': 5,
-    'Community Sales': 10,
-    'Liquidity Mining': 10,
-  },
-  {
-    name: moment('2022-03-01').format('DD MMM'),
-    VCS: 0,
-    Team: 0,
-    'DAO Treasury': 5,
-    'Community Sales': 10,
-    'Liquidity Mining': 10,
-  },
-  {
-    name: moment('2022-04-01').format('DD MMM'),
-    VCS: 0,
-    Team: 2,
-    'DAO Treasury': 10,
-    'Community Sales': 15,
-    'Liquidity Mining': 10,
-  },
-  {
-    name: moment('2022-05-01').format('DD MMM'),
-    VCS: 0,
-    Team: 2,
-    'DAO Treasury': 10,
-    'Community Sales': 15,
-    'Liquidity Mining': 10,
-  },
-  {
-    name: moment('2022-06-01').format('DD MMM'),
-    VCS: 0,
-    Team: 2,
-    'DAO Treasury': 10,
-    'Community Sales': 15,
-    'Liquidity Mining': 10,
-  },
-  {
-    name: moment('2022-07-01').format('DD MMM'),
-    VCS: 0,
-    Team: 3,
-    'DAO Treasury': 15,
-    'Community Sales': 20,
-    'Liquidity Mining': 15,
-  },
-  {
-    name: moment('2022-08-01').format('DD MMM'),
-    VCS: 0,
-    Team: 3,
-    'DAO Treasury': 15,
-    'Community Sales': 20,
-    'Liquidity Mining': 15,
-  },
-  {
-    name: moment('2022-09-01').format('DD MMM'),
-    VCS: 0,
-    Team: 3,
-    'DAO Treasury': 15,
-    'Community Sales': 20,
-    'Liquidity Mining': 15,
-  },
-  {
-    name: moment('2022-10-01').format('DD MMM'),
-    VCS: 0,
-    Team: 4,
-    'DAO Treasury': 20,
-    'Community Sales': 25,
-    'Liquidity Mining': 15,
-  },
-  {
-    name: moment('2022-11-01').format('DD MMM'),
-    VCS: 0,
-    Team: 4,
-    'DAO Treasury': 20,
-    'Community Sales': 25,
-    'Liquidity Mining': 15,
-  },
-  {
-    name: moment('2022-12-01').format('DD MMM'),
-    VCS: 0,
-    Team: 4,
-    'DAO Treasury': 20,
-    'Community Sales': 25,
-    'Liquidity Mining': 15,
-  },
-  {
-    name: moment('2023-01-01').format('DD MMM'),
-    VCS: 0,
-    Team: 5,
-    'DAO Treasury': 25,
-    'Community Sales': 30,
-    'Liquidity Mining': 40,
-  },
-  {
-    name: moment('2023-02-01').format('DD MMM'),
-    VCS: 0,
-    Team: 5,
-    'DAO Treasury': 25,
-    'Community Sales': 30,
-    'Liquidity Mining': 40,
-  },
-  {
-    name: moment('2023-03-01').format('DD MMM'),
-    VCS: 0,
-    Team: 5,
-    'DAO Treasury': 25,
-    'Community Sales': 30,
-    'Liquidity Mining': 40,
-  },
-];
+const VestingHeader = styled.div`
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    padding: 15px;
+  }
+  width: 100%;
+  display: flex;
+  padding: 0 22px;
+  justify-content: space-between;
+`;
 
-const VestingScheduleChart = () => {
+const VestingPopup = styled.div`
+  background-color: #0a0d30;
+  padding: 15px;
+  span {
+    color: white;
+  }
+`;
+
+const endDate3Years = '2024-07-01';
+const endDate10Years = '2031-07-01';
+
+const VestingScheduleChart = ({ height }) => {
+  const [endDate, setEndDate] = useState(endDate3Years);
   return (
     <CardContainer>
       <GradientBorder />
-      <Label>KDX Release Schedule</Label>
-      <AreaChart
-        width={1000}
-        height={400}
-        data={data}
-        margin={{
-          top: 10,
-          right: 30,
-          left: 0,
-          bottom: 0,
-        }}
-      >
-        {/* <CartesianGrid strokeDasharray="3 3" /> */}
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Area type="monotone" dataKey="Liquidity Mining" stackId="1" stroke="#ed1cb5" fill="#ed1cb5" />
-        <Area type="monotone" dataKey="Community Sales" stackId="1" stroke="#ffc658" fill="#ffc658" />
-        <Area type="monotone" dataKey="DAO Treasury" stackId="1" stroke="#828cec" fill="#828cec" />
-        <Area type="monotone" dataKey="Team" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
-        <Area type="monotone" dataKey="VCS" stackId="1" stroke="#8884d8" fill="#8884d8" />
-        'Liquidity Mining': 200,
-      </AreaChart>
+      <VestingHeader>
+        <Label></Label>
+        <Label>KDX Vesting</Label>
+
+        <TimeRangeBar>
+          <TimeRangeBtn className={endDate === endDate3Years ? 'active' : ''} onClick={() => setEndDate(endDate3Years)}>
+            3y
+          </TimeRangeBtn>
+          <TimeRangeBtn className={endDate === endDate10Years ? 'active' : ''} onClick={() => setEndDate(endDate10Years)}>
+            10y
+          </TimeRangeBtn>
+        </TimeRangeBar>
+      </VestingHeader>
+      <div style={{ width: '100%', height }}>
+        <ResponsiveContainer>
+          <AreaChart
+            data={getVestingScheduleData('2021-07-01', endDate)}
+            margin={{
+              top: 10,
+              right: 30,
+              left: -10,
+              bottom: 0,
+            }}
+          >
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip
+              content={(data) => {
+                return (
+                  <VestingPopup>
+                    <span className="popupTitle">{data.payload[0]?.payload?.name}</span>
+                    {data.payload?.map((p) => (
+                      <div style={{ color: p.color, marginTop: 10 }}>
+                        {p.name}: {p.value}%
+                      </div>
+                    ))}
+                  </VestingPopup>
+                );
+              }}
+            />
+            <Area type="monotone" dataKey="Liquidity Mining" stackId="1" stroke="#ed1cb5" fill="#ed1cb5" />
+            <Area type="monotone" dataKey="Community Sales" stackId="1" stroke="#ffc658" fill="#ffc658" />
+            <Area type="monotone" dataKey="Team" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
+            <Area type="monotone" dataKey="DAO" stackId="1" stroke="#8884d8" fill="#8884d8" />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
     </CardContainer>
   );
 };

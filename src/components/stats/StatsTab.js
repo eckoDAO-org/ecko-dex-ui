@@ -43,6 +43,7 @@ export const CardContainer = styled.div`
     padding: ${({ gameEditionView }) => gameEditionView && `12px`};
     flex-flow: column;
     gap: 0px;
+    padding: 0px;
   }
 `;
 

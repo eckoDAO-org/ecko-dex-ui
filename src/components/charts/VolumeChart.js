@@ -6,27 +6,70 @@ import Label from '../shared/Label';
 import { GraphCardHeader } from './TVLChart';
 import { humanReadableNUmber } from '../../utils/reduceBalance';
 import { CardContainer } from '../stats/StatsTab';
-import { BarChart, Bar, Tooltip } from 'recharts';
+import { BarChart, Bar, Tooltip, ResponsiveContainer } from 'recharts';
+import styled from 'styled-components';
+
+export const TimeRangeBar = styled.div`
+  display: flex;
+  width: 90px;
+  justify-content: space-around;
+`;
+export const TimeRangeBtn = styled(Label)`
+  cursor: pointer;
+  font-size: 16px;
+  &.active {
+    font-weight: bold;
+    font-size: 20px;
+  }
+`;
+
+const DAILY_VOLUME_RANGE = 'daily';
+const WEEKLY_VOLUME_RANGE = 'weekly';
+const MONTHLY_VOLUME_RANGE = 'monthly';
+
+const volumeRanges = {
+  [DAILY_VOLUME_RANGE]: {
+    name: (_id) => moment(_id).format('DD/MM/YYYY'),
+    dateStart: moment().subtract(60, 'days').format('YYYY-MM-DD'),
+    title: (payload) => moment(payload._id).format('DD/MM/YYYY'),
+  },
+  [WEEKLY_VOLUME_RANGE]: {
+    name: (_id) => _id,
+    dateStart: moment()
+      .subtract(7 * 40, 'days')
+      .format('YYYY-MM-DD'),
+    title: (payload) => moment(payload.volumes[0]?.startDay).format('DD/MM/YYYY'),
+  },
+  [MONTHLY_VOLUME_RANGE]: {
+    name: (_id) => _id,
+    dateStart: moment()
+      .subtract(30 * 6, 'days')
+      .format('YYYY-MM-DD'),
+    title: (payload) => moment(payload.volumes[0]?.startDay).format('MMM YY'),
+  },
+};
 
 const VolumeChart = ({ width, height, containerStyle }) => {
   const [volume, setVolume] = useState([]);
   const [dailyVolume, setDailyVolume] = useState('');
   const [currentDate, setCurrentDate] = useState(null);
+  const [volumeRange, setVolumeRange] = useState(DAILY_VOLUME_RANGE);
 
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/daily-volume?dateStart=${moment()
-          .subtract(60, 'days')
-          .format('YYYY-MM-DD')}&dateEnd=${moment().format('YYYY-MM-DD')}`
+        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/volume/${volumeRange}?dateStart=${
+          volumeRanges[volumeRange]?.dateStart ?? moment().subtract(60, 'days').format('YYYY-MM-DD')
+        }&dateEnd=${moment().format('YYYY-MM-DD')}`
       )
       .then((res) => {
         const allVolume = [];
-        for (const day of res.data) {
+        for (const timeRange of res.data) {
           allVolume.push({
-            name: moment(day._id).format('DD/MM/YYYY'),
+            name: timeRange._id,
+            title: volumeRanges[volumeRange]?.title(timeRange),
             Volume: Number(
-              day.volumes
+              timeRange.volumes
                 .reduce((partialSum, currVol) => {
                   return partialSum + (currVol.tokenFromName === 'coin' ? currVol.tokenFromVolume : currVol.tokenToVolume);
                 }, 0)
@@ -38,7 +81,7 @@ const VolumeChart = ({ width, height, containerStyle }) => {
         setDailyVolume(allVolume[allVolume.length - 1].Volume);
       })
       .catch((err) => console.log('get volume error', err));
-  }, []);
+  }, [volumeRange]);
 
   return (
     <CardContainer style={containerStyle}>
@@ -49,50 +92,46 @@ const VolumeChart = ({ width, height, containerStyle }) => {
           <Label fontSize={24}>{humanReadableNUmber(Number(dailyVolume))} KDA</Label>
           <Label>&nbsp;{currentDate || ''}</Label>
         </div>
-        <div>
-          {/* <PopupContentList
-            items={[
-              {
-                id: 1,
-                label: '1D',
-              },
-              {
-                id: 2,
-                label: '1W',
-              },
-              {
-                id: 3,
-                label: '1M',
-              },
-            ]}
-            icon={<span style={{ color: 'white' }}>1D</span>}
-          /> */}
-        </div>
+        <TimeRangeBar>
+          <TimeRangeBtn className={volumeRange === DAILY_VOLUME_RANGE ? 'active' : ''} onClick={() => setVolumeRange(DAILY_VOLUME_RANGE)}>
+            D
+          </TimeRangeBtn>
+          <TimeRangeBtn className={volumeRange === WEEKLY_VOLUME_RANGE ? 'active' : ''} onClick={() => setVolumeRange(WEEKLY_VOLUME_RANGE)}>
+            W
+          </TimeRangeBtn>
+          <TimeRangeBtn className={volumeRange === MONTHLY_VOLUME_RANGE ? 'active' : ''} onClick={() => setVolumeRange(MONTHLY_VOLUME_RANGE)}>
+            M
+          </TimeRangeBtn>
+        </TimeRangeBar>
       </GraphCardHeader>
-      <BarChart
-        width={width}
-        height={height}
-        data={volume}
-        onMouseMove={({ activePayload }) => {
-          if (activePayload) {
-            setDailyVolume((activePayload && activePayload[0]?.payload?.Volume) || '');
-            setCurrentDate((activePayload && activePayload[0]?.payload?.name) || null);
-          }
-        }}
-        onMouseLeave={() => {
-          setDailyVolume(volume[volume.length - 1]?.Volume ?? null);
-          setCurrentDate(null);
-        }}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
-      >
-        <Tooltip label="Volume" content={() => ''} />
-        <Bar dataKey="Volume" fill="#F68862" radius={[10, 10, 10, 10]} />
-      </BarChart>
+      <div style={{ width: '100%', height }}>
+        <ResponsiveContainer>
+          <BarChart
+            width={width}
+            height={height}
+            data={volume}
+            onMouseMove={({ activePayload }) => {
+              if (activePayload) {
+                setDailyVolume((activePayload && activePayload[0]?.payload?.Volume) || '');
+                setCurrentDate((activePayload && activePayload[0]?.payload?.title) || null);
+              }
+            }}
+            onMouseLeave={() => {
+              setDailyVolume(volume[volume.length - 1]?.Volume ?? null);
+              setCurrentDate(null);
+            }}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+          >
+            <Tooltip label="Volume" content={() => ''} />
+            <Bar dataKey="Volume" fill="#F68862" radius={[10, 10, 10, 10]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </CardContainer>
   );
 };
