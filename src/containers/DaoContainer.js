@@ -9,7 +9,7 @@ const DaoContainer = () => {
   const { proposal_id } = useParams();
 
   return (
-    <FlexContainer className="column" gap={16} desktopStyle={{ padding: '60px 88px 0px' }}>
+    <FlexContainer className="column" gap={16} desktopStyle={{ padding: '60px 88px 30px' }}>
       {proposal_id ? <SingleProposalContainer proposal_id={proposal_id} /> : <AllProposalsContainer />}
     </FlexContainer>
   );
