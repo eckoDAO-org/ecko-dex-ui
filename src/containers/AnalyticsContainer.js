@@ -5,6 +5,7 @@ import styled, { css } from 'styled-components/macro';
 import { GameEditionContext } from '../contexts/GameEditionContext';
 import VolumeChart from '../components/charts/VolumeChart';
 import TVLChart from '../components/charts/TVLChart';
+import BurnChart from '../components/charts/BurnChart';
 import VestingScheduleChart from '../components/charts/VestingScheduleChart';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
 import { FadeIn } from '../components/shared/animations';
