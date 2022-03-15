@@ -11,6 +11,7 @@ import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_LIQUIDITY_TOKENS } fr
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
 import { get24HTokenVolume, getAllApr, getUsdTokenLiquidity, getUsdTokenPrice } from '../../utils/token-utils';
+import { getCoingeckoUsdPrice } from '../../api/coingecko';
 
 const LiquidityTokensTable = () => {
   const history = useHistory();
@@ -29,7 +30,7 @@ const LiquidityTokensTable = () => {
 
     // calculate sum of liquidity in usd and volumes in usd for each token in each pair
     for (const token of tokens) {
-      let tokenUsdPrice = await getUsdTokenPrice(token.coingeckoName);
+      let tokenUsdPrice = await getCoingeckoUsdPrice(token.coingeckoName);
 
       const tokenPairs = resultPairList.filter((p) => p.token0 === token.name || p.token1 === token.name);
       let volume24HUsd = 0;
@@ -39,7 +40,7 @@ const LiquidityTokensTable = () => {
         liquidity += token.name === tokenPair.token0 ? reduceBalance(tokenPair.reserves[0]) : tokenPair.reserves[1];
       }
 
-      const liquidityUSD = await getUsdTokenLiquidity(token.coingeckoName, liquidity, tokenUsdPrice);
+      const liquidityUSD = getUsdTokenLiquidity(liquidity, tokenUsdPrice);
 
       // filter all apr that contains the token in at least one side of the pair
       const filteredApr = aprs.filter((a) => a.token0 === token.name || a.token1 === token.name);

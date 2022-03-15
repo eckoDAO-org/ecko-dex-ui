@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const getCoingeckoPrice = async (tokenName) => {
+export const getCoingeckoUsdPrice = async (tokenName) => {
   const API = `https://api.coingecko.com/api/v3/simple/price?ids=${tokenName}&vs_currencies=usd`;
 
   return await axios

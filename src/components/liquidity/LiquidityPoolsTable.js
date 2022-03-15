@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useErrorState } from '../../hooks/useErrorState';
 import { getDailyVolume } from '../../api/kaddex-stats';
-import { getCoingeckoPrice } from '../../api/coingecko';
+import { getCoingeckoUsdPrice } from '../../api/coingecko';
 import { getPairList } from '../../api/pact-pair';
 import { NETWORK_TYPE } from '../../constants/contextConstants';
 import { humanReadableNumber } from '../../utils/reduceBalance';
@@ -30,7 +30,7 @@ const LiquidityPoolsTable = () => {
     for (const pair of resultPairList) {
       const token0 = Object.values(tokenData).find((t) => t.name === pair.token0);
 
-      const token0UsdPrice = await getCoingeckoPrice(token0.coingeckoName);
+      const token0UsdPrice = await getCoingeckoUsdPrice(token0.coingeckoName);
 
       const { volume24HUsd } = get24HTokenVolume(data, token0.tokenNameKaddexStats, token0UsdPrice);
 
