@@ -1,7 +1,6 @@
 import { createGlobalStyle, css } from 'styled-components/macro';
 import appDarkBackground from '../assets/images/shared/app-dark-background.png';
 import appLightBackground from '../assets/images/shared/app-light-background.png';
-import browserDetection from '../utils/browserDetection';
 
 export default createGlobalStyle`
     *, *:before, *:after {

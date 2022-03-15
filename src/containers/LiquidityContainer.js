@@ -45,7 +45,7 @@ const LiquidityContainer = () => {
             POOLS
           </Label>
         </FlexContainer>
-        <FlexContainer gap={16}>
+        <FlexContainer gap={16} mobileClassName="justify-sa">
           <CustomButton
             type={pathname === ROUTE_LIQUIDITY_MY_LIQUIDITY ? 'secondary' : 'primary'}
             fontFamily="syncopate"

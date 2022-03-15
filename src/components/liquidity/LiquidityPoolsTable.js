@@ -1,52 +1,46 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useErrorState } from '../../hooks/useErrorState';
 import { getDailyVolume } from '../../api/kaddex-stats';
+import { getCoingeckoPrice } from '../../api/coingecko';
 import { getPairList } from '../../api/pact-pair';
-import { chainId, FEE, NETWORK_TYPE } from '../../constants/contextConstants';
-import tokenData from '../../constants/cryptoCurrencies';
-import { humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
+import { NETWORK_TYPE } from '../../constants/contextConstants';
+import { humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import { AddIcon, GasIcon } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS } from '../../router/routes';
-import { useHistory } from 'react-router-dom';
-import { usePactContext } from '../../contexts';
 import Label from '../shared/Label';
+import tokenData from '../../constants/cryptoCurrencies';
+import { get24HTokenVolume, getApr, getUsdPoolLiquidity } from '../../utils/token-utils';
 
 const LiquidityPoolsTable = () => {
   const history = useHistory();
-  const pact = usePactContext();
   const [pairList, setPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
-    const kdaPrice = await pact.getCurrentKdaUSDPrice();
     const resultPairList = await getPairList();
     const data = await getDailyVolume();
-    const last24hDailyVolume = data.find((d) => d._id === moment().subtract(1, 'day').format('YYYY-MM-DD'));
-    const result = resultPairList.map((pair) => {
-      const tokenName = pair.token0Name;
-      const volume = last24hDailyVolume.volumes
-        ?.filter((v) => v.chain === Number(chainId))
-        .reduce((total, v) => {
-          if (v.tokenFromName === tokenName) {
-            total += v.tokenFromVolume;
-          } else {
-            total += v.tokenToVolume;
-          }
-          return total;
-        }, 0);
-      const volume24Husd = volume * kdaPrice;
-      const percentageOnVolume = (volume24Husd / 100) * FEE;
-      const percentagePerYear = percentageOnVolume * 365;
-      const liquidity = reduceBalance(pair.reserves[0]) + pair.reserves[1];
-      const apr = (percentagePerYear * 100) / liquidity;
 
-      return { ...pair, volume24Husd, apr };
-    });
+    const result = [];
+    // calculate liquidity in usd and volume in usd for each pair
+    for (const pair of resultPairList) {
+      const token0 = Object.values(tokenData).find((t) => t.name === pair.token0);
+
+      const token0UsdPrice = await getCoingeckoPrice(token0.coingeckoName);
+
+      const { volume24HUsd } = get24HTokenVolume(data, token0.tokenNameKaddexStats, token0UsdPrice);
+
+      const liquidityUsd = await getUsdPoolLiquidity(pair);
+
+      const apr = getApr(volume24HUsd, liquidityUsd);
+
+      result.push({ ...pair, liquidityUsd, volume24HUsd, apr });
+    }
+
     setPairList(result);
 
     setLoading(false);
@@ -99,13 +93,13 @@ const renderColumns = () => {
       width: 160,
 
       render: ({ item }) => {
-        return humanReadableNumber(reduceBalance(item.reserves[0]) + item.reserves[1]);
+        return `$ ${humanReadableNumber(item.liquidityUsd)}`;
       },
     },
     {
       name: '24h Volume',
       width: 160,
-      render: ({ item }) => `$ ${humanReadableNumber(Number(item.volume24Husd))}`,
+      render: ({ item }) => `$ ${humanReadableNumber(Number(item.volume24HUsd))}`,
     },
 
     {
@@ -114,8 +108,8 @@ const renderColumns = () => {
       render: () => (
         <FlexContainer className="align-ce">
           <GasIcon />
-          <Label color="#41CC41" labelStyle={{ textDecoration: 'line-through', marginLeft: 12 }}>
-            ${FEE}
+          <Label fontSize={13} color="#41CC41" labelStyle={{ marginLeft: 12 }}>
+            Gasless
           </Label>
         </FlexContainer>
       ),
