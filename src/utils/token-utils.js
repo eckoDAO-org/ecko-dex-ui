@@ -87,8 +87,7 @@ export const getUsdPoolLiquidity = async (pool, usdPrice) => {
 };
 
 export const get24HTokenVolume = (volumes, tokenNameKaddexStats, usdPrice) => {
-  const last24hDailyVolume = volumes.find((d) => d._id === moment().subtract(1, 'day').format('YYYY-MM-DD'));
-
+  const last24hDailyVolume = volumes.slice(-1)[0];
   const volume24H = last24hDailyVolume.volumes
     ?.filter((v) => v.chain === Number(chainId))
     .reduce((total, v) => {
@@ -99,6 +98,7 @@ export const get24HTokenVolume = (volumes, tokenNameKaddexStats, usdPrice) => {
       }
       return total;
     }, 0);
+  console.log('volume24H', volume24H);
   const volume24HUsd = volume24H * usdPrice;
   return { volume24H, volume24HUsd };
 };
