@@ -52,8 +52,9 @@ const RightHeaderItems = () => {
 
   return (
     <RightContainerHeader>
+      {/* TODO: make kdx price dynamic after mint */}
       <span className="mainnet-chain-2 desktop-only">KDX $0.16</span>
-      <span className="mainnet-chain-2 desktop-only">Chain 2</span>
+      <span class1Name="mainnet-chain-2 desktop-only">Chain 2</span>
       {account?.account && width >= commonTheme.mediaQueries.desktopPixel && (
         <HeaderItem>
           <AccountInfo
