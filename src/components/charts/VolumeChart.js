@@ -43,7 +43,7 @@ const volumeRanges = {
   [MONTHLY_VOLUME_RANGE]: {
     name: (_id) => _id,
     dateStart: moment()
-      .subtract(30 * 12, 'days')
+      .subtract(30 * 6, 'days')
       .format('YYYY-MM-DD'),
     title: (payload) => moment(payload.volumes[0]?.startDay).format('MMM YY'),
   },
