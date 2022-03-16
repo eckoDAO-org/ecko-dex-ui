@@ -22,6 +22,12 @@ const Container = styled(FadeIn)`
   margin-right: auto;
   overflow: auto;
   max-width: 550px;
+
+  .arrow-back {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
 `;
 
 const RemoveLiquidityContainer = () => {
@@ -29,8 +35,6 @@ const RemoveLiquidityContainer = () => {
   const query = useQueryParams();
 
   const { account } = useAccountContext();
-
-  const { themeMode } = useApplicationContext();
 
   const [loading, setLoading] = useState(false);
   const [pair, setPair] = useState(null);
@@ -65,9 +69,10 @@ const RemoveLiquidityContainer = () => {
           <FlexContainer className="w-100 justify-sb">
             <FlexContainer>
               <ArrowBack
+                className="arrow-back"
                 style={{
                   cursor: 'pointer',
-                  color: theme(themeMode).colors.white,
+
                   marginRight: '15px',
                   justifyContent: 'center',
                 }}

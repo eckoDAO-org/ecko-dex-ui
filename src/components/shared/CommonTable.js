@@ -44,6 +44,14 @@ const Wrapper = styled(FlexContainer)`
       border-bottom: 1px solid ${({ theme: { colors } }) => `${colors.white}66`};
     }
   }
+
+  .action {
+    svg {
+      path {
+        fill: ${({ theme: { colors } }) => colors.white};
+      }
+    }
+  }
 `;
 
 const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onClick }) => {
@@ -90,7 +98,7 @@ const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onCl
                     <FlexContainer gap={8}>
                       {actions.map((action, i) => (
                         <FlexContainer
-                          className="pointer"
+                          className="pointer action"
                           key={i}
                           onClick={(e) => {
                             e.stopPropagation();

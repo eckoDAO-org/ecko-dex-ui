@@ -182,7 +182,7 @@ const SwapButtonsForm = ({
       ) : (
         <CustomButton
           fluid
-          type={getButtonLabel() === SWAP_BUTTON_SWAP.label || getButtonLabel() === SWAP_BUTTON_CONNECT_WALLET.label ? 'secondary' : 'primary'}
+          type="gradient"
           disabled={account.account && (getButtonLabel() !== SWAP_BUTTON_SWAP.label || isNaN(fromValues.amount) || isNaN(toValues.amount))}
           loading={loading}
           onClick={async () => {

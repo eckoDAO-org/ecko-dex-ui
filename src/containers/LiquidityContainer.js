@@ -25,7 +25,7 @@ const LiquidityContainer = () => {
       mobileStyle={{ paddingBottom: 40 }}
     >
       <FlexContainer className="w-100 justify-sb" mobileClassName="column" style={{ marginBottom: 24 }} mobileStyle={{ marginTop: 24 }}>
-        <FlexContainer gap={16} mobileClassName="justify-sa" mobileStyle={{ marginBottom: 16 }}>
+        <FlexContainer gap={16} mobileStyle={{ marginBottom: 16 }}>
           <Label
             withShade={pathname !== ROUTE_LIQUIDITY_TOKENS}
             className="pointer"
@@ -45,8 +45,10 @@ const LiquidityContainer = () => {
             POOLS
           </Label>
         </FlexContainer>
-        <FlexContainer gap={16} mobileClassName="justify-sa">
+        <FlexContainer gap={16}>
           <CustomButton
+            fontSize={13}
+            buttonStyle={{ height: 33 }}
             type={pathname === ROUTE_LIQUIDITY_MY_LIQUIDITY ? 'secondary' : 'primary'}
             fontFamily="syncopate"
             onClick={() => history.push(ROUTE_LIQUIDITY_MY_LIQUIDITY)}
@@ -54,7 +56,9 @@ const LiquidityContainer = () => {
             MY LIQUIDITY
           </CustomButton>
           <CustomButton
-            type="secondary"
+            fontSize={13}
+            buttonStyle={{ height: 33 }}
+            type="gradient"
             fontFamily="syncopate"
             onClick={() =>
               history.push(

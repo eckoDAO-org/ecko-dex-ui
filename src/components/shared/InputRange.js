@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { useApplicationContext } from '../../contexts';
 import { theme } from '../../styles/theme';
+import percentageDark from '../../assets/images/shared/percentage-dark.svg';
+import percentageLight from '../../assets/images/shared/percentage-light.svg';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -22,6 +24,9 @@ const Wrapper = styled.div`
     height: 24px;
     width: 24px;
     cursor: grab;
+    background-image: ${({ themeMode }) => `url(${themeMode === 'light' ? percentageLight : percentageDark})`};
+    background-repeat: no-repeat;
+    background-position: center;
   }
 
   input[type='range']::-moz-range-thumb {
@@ -65,7 +70,7 @@ const InputRange = ({ value, setValue }) => {
   }, [themeMode, value]);
 
   return (
-    <Wrapper>
+    <Wrapper themeMode={themeMode}>
       <input
         className="__range"
         style={{ width: '100%', marginBottom: 16 }}

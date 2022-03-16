@@ -33,6 +33,14 @@ const STYText = styled.span`
   &.justify-fe {
     justify-content: flex-end;
   }
+
+  &.gradient {
+    display: block;
+    background-image: linear-gradient(90deg, #10c4df 0%, #f04ca9 51%, #edba31 100%);
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
 `;
 
 const Label = ({

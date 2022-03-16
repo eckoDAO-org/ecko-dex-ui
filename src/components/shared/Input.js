@@ -44,7 +44,6 @@ const Container = styled.div`
       `;
     } else {
       return css`
-        background-color: ${noInputBackground ? 'transparent' : backgroundInput};
         border: 1px solid ${colors.white}99;
         padding: 10px 10px 0px 10px;
         border-radius: 4px;

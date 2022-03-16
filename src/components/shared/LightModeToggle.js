@@ -3,6 +3,7 @@ import { Checkbox } from 'semantic-ui-react';
 import styled from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { ApplicationContext } from '../../contexts/ApplicationContext';
+import Label from './Label';
 
 const ToggleContainer = styled.div`
   display: flex;
@@ -44,23 +45,6 @@ const ToggleContainer = styled.div`
   }
 `;
 
-const GameLabel = styled.div`
-  white-space: nowrap;
-  text-transform: capitalize;
-  font-size: 16px;
-
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
-    width: min-content;
-  }
-
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {
-    white-space: normal;
-  }
-
-  vertical-align: text-bottom !important;
-  margin-right: 8px;
-`;
-
 const LightModeToggle = ({ animation, style }) => {
   const game = useContext(GameEditionContext);
   const { themeMode, themeToggler } = useContext(ApplicationContext);
@@ -70,7 +54,7 @@ const LightModeToggle = ({ animation, style }) => {
   };
   return (
     <ToggleContainer animation={animation} style={style}>
-      <GameLabel gameEditionView={game.gameEditionView}>{`${getModeLabel()}`}</GameLabel>
+      <Label className="capitalize" labelStyle={{ marginRight: 8 }} gameEditionView={game.gameEditionView}>{`${getModeLabel()}`}</Label>
       <Checkbox
         toggle
         onChange={() => {

@@ -6,54 +6,58 @@ import PropTypes from 'prop-types';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import Label from './Label';
 import GameEditionButton from '../game-edition-v2/components/GameEditionButton';
+import { FlexContainer } from './FlexContainer';
 
-const StyledButton = styled(SUIButton)`
+const StyledButton = styled(FlexContainer)`
   cursor: pointer;
-  display: flex !important;
+  width: 100%;
   justify-content: center;
   align-items: center;
-  border-radius: 10px !important;
+  border-radius: 20px;
   margin: 0px;
-  &.ui.button {
-    font-weight: unset;
-  }
+  padding: 0 16px;
   span {
     opacity: ${({ loading }) => (loading ? 0 : 1)};
+    white-space: nowrap;
   }
-  ${({ type, $outGameEditionView, $gameEditionView, theme: { colors }, buttonBackgroundGradient, $geBasic }) => {
+  ${({ gradientColors, type, $outGameEditionView, $gameEditionView, theme: { colors }, buttonBackgroundGradient, $geBasic }) => {
     if ($gameEditionView && !$outGameEditionView) {
       return css`
-        border: ${$geBasic ? 'none' : '2px dashed #ffffff'} !important;
-        padding: ${$geBasic ? '0px' : '10px'} !important;
-        border-radius: 0px !important;
-        min-height: 38px !important;
-        background: ${({ $background }) => $background || 'transparent'} !important;
+        border: ${$geBasic ? 'none' : '2px dashed #ffffff'};
+        padding: ${$geBasic ? '0px' : '10px'};
+        border-radius: 0px;
+        min-height: 38px;
+        background: ${({ $background }) => $background || 'transparent'};
       `;
     } else {
       switch (type) {
+        case 'gradient':
+          return css`
+            height: 42px;
+          `;
         case 'primary':
           return css`
-          height: 42px;
-        border: 1px solid ${colors.white}99 !important};
-        background: transparent !important;
-      `;
+            height: 42px;
+            border: 1px solid ${colors.white}99;
+            background: transparent;
+          `;
         case 'secondary':
           return css`
-          height: 42px;
-        border: 1px solid ${colors.white}99 !important};
-        background: ${colors.white} !important;
-      `;
+            height: 42px;
+            border: 1px solid ${colors.white}99;
+            background: ${colors.white};
+          `;
         case 'basic':
           return css`
           height: 42px;
-        border: 1px solid transparent !important};
-        background: transparent !important;
+        border: 1px solid transparent};
+        background: transparent;
       `;
         default:
           return css`
             height: 42px;
-            border: ${({ hideBorder }) => !hideBorder && `1px solid ${colors.white} !important`};
-            background: ${buttonBackgroundGradient} !important;
+            border: ${({ hideBorder }) => !hideBorder && `1px solid ${colors.white}`};
+            background: ${buttonBackgroundGradient};
           `;
       }
     }
@@ -89,6 +93,7 @@ const CustomButton = ({
   background,
   geBasic,
   geButtonStyle,
+  withGradient,
 }) => {
   const { gameEditionView: $gameEditionView } = useContext(GameEditionContext);
 
@@ -99,11 +104,17 @@ const CustomButton = ({
   ) : (
     <StyledButton
       {...props}
+      // gradientColors={withGradient && ['#10c4df', '#f04ca9', '#edba31']}
+      onClick={() => {
+        if (!disabled && onClick) {
+          onClick();
+        }
+      }}
+      className={type === 'gradient' ? 'gradient-button' : ''}
       fluid={fluid}
       $gameEditionView={$gameEditionView}
       disabled={disabled}
       style={buttonStyle}
-      onClick={onClick}
       loading={loading}
       type={type}
       $geBasic={geBasic}
@@ -112,7 +123,7 @@ const CustomButton = ({
     >
       {
         <Label
-          className="uppercase"
+          className={`uppercase ${type === 'gradient' ? 'gradient' : ''}`}
           fontFamily={fontFamily}
           fontSize={fontSize}
           labelStyle={labelStyle}
@@ -137,7 +148,7 @@ export default CustomButton;
 CustomButton.propTypes = {
   children: PropTypes.any.isRequired,
   onClick: PropTypes.func.isRequired,
-  type: PropTypes.oneOf(['primary', 'secondary', 'basic']),
+  type: PropTypes.oneOf(['primary', 'secondary', 'basic', 'gradient']),
   geType: PropTypes.oneOf(['confirm', 'cancel', 'retry', 'pink']),
   disabled: PropTypes.bool,
 };
