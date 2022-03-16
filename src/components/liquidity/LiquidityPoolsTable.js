@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useErrorState } from '../../hooks/useErrorState';
 import { getDailyVolume } from '../../api/kaddex-stats';
-import { getCoingeckoUsdPrice } from '../../api/coingecko';
 import { getPairList } from '../../api/pact-pair';
 import { NETWORK_TYPE } from '../../constants/contextConstants';
 import { humanReadableNumber } from '../../utils/reduceBalance';
@@ -14,7 +13,7 @@ import { AddIcon, GasIcon } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS } from '../../router/routes';
 import Label from '../shared/Label';
 import tokenData from '../../constants/cryptoCurrencies';
-import { get24HTokenVolume, getApr, getUsdPoolLiquidity } from '../../utils/token-utils';
+import { getAllPairValues } from '../../utils/token-utils';
 
 const LiquidityPoolsTable = () => {
   const history = useHistory();
@@ -22,24 +21,10 @@ const LiquidityPoolsTable = () => {
   const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
-    const resultPairList = await getPairList();
-    const data = await getDailyVolume();
+    const pools = await getPairList();
+    const volumes = await getDailyVolume();
 
-    const result = [];
-    // calculate liquidity in usd and volume in usd for each pair
-    for (const pair of resultPairList) {
-      const token0 = Object.values(tokenData).find((t) => t.name === pair.token0);
-
-      const token0UsdPrice = await getCoingeckoUsdPrice(token0.coingeckoId);
-
-      const { volume24HUsd } = get24HTokenVolume(data, token0.tokenNameKaddexStats, token0UsdPrice);
-
-      const liquidityUsd = await getUsdPoolLiquidity(pair);
-
-      const apr = getApr(volume24HUsd, liquidityUsd);
-
-      result.push({ ...pair, liquidityUsd, volume24HUsd, apr });
-    }
+    const result = await getAllPairValues(pools, volumes);
 
     setPairList(result);
 
@@ -93,13 +78,21 @@ const renderColumns = () => {
       width: 160,
 
       render: ({ item }) => {
-        return `$ ${humanReadableNumber(item.liquidityUsd)}`;
+        if (item.liquidityUsd) {
+          return `$ ${humanReadableNumber(item.liquidityUsd)}`;
+        }
+        return humanReadableNumber(item.liquidity);
       },
     },
     {
       name: '24h Volume',
       width: 160,
-      render: ({ item }) => `$ ${humanReadableNumber(Number(item.volume24HUsd))}`,
+      render: ({ item }) => {
+        if (item.volume24HUsd) {
+          return `$ ${humanReadableNumber(item.volume24HUsd)}`;
+        }
+        return humanReadableNumber(item.volume24H);
+      },
     },
 
     {
@@ -123,7 +116,7 @@ const renderColumns = () => {
     {
       name: 'APR',
       width: 160,
-      render: ({ item }) => `${item.apr.toFixed(2)} %`,
+      render: ({ item }) => `${item.apr?.value.toFixed(2)} %`,
     },
   ];
 };

@@ -10,46 +10,44 @@ import { AddIcon, GasIcon } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_LIQUIDITY_TOKENS } from '../../router/routes';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
-import { get24HTokenVolume, getAllApr, getUsdTokenLiquidity, getUsdTokenPrice } from '../../utils/token-utils';
-import { getCoingeckoUsdPrice } from '../../api/coingecko';
-
+import { get24HVolumeSingleSided, getAllPairValues, getTokenUsdPrice } from '../../utils/token-utils';
 const LiquidityTokensTable = () => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [tokens, setTokens] = useState([]);
 
   const fetchData = async () => {
-    const resultPairList = await getPairList();
+    const pairsList = await getPairList();
     const volumes = await getDailyVolume();
 
     const tokens = Object.values(tokenData);
 
-    // calculate all apr for each pair
-    const aprs = await getAllApr(resultPairList, volumes);
+    // get all aprs from pairs list
+    const aprs = (await getAllPairValues(pairsList, volumes)).map((pair) => pair.apr);
     const result = [];
 
     // calculate sum of liquidity in usd and volumes in usd for each token in each pair
     for (const token of tokens) {
-      let tokenUsdPrice = await getCoingeckoUsdPrice(token.coingeckoId);
-
-      const tokenPairs = resultPairList.filter((p) => p.token0 === token.name || p.token1 === token.name);
+      const tokenPairs = pairsList.filter((p) => p.token0 === token.name || p.token1 === token.name);
+      const tokenUsdPrice = await getTokenUsdPrice(token, pairsList);
       let volume24HUsd = 0;
+      let volume24H = 0;
       let liquidity = 0;
       for (const tokenPair of tokenPairs) {
-        volume24HUsd += get24HTokenVolume(volumes, token.tokenNameKaddexStats, tokenUsdPrice).volume24HUsd;
-        liquidity += token.name === tokenPair.token0 ? reduceBalance(tokenPair.reserves[0]) : tokenPair.reserves[1];
+        volume24H += get24HVolumeSingleSided(volumes, token.tokenNameKaddexStats, tokenUsdPrice);
+        volume24HUsd += volume24H * tokenUsdPrice;
+        liquidity += token.name === tokenPair.token0 ? reduceBalance(tokenPair.reserves[0]) : reduceBalance(tokenPair.reserves[1]);
       }
 
-      const liquidityUSD = getUsdTokenLiquidity(liquidity, tokenUsdPrice);
+      const liquidityUSD = tokenUsdPrice ? liquidity * tokenUsdPrice : null;
 
       // filter all apr that contains the token in at least one side of the pair
       const filteredApr = aprs.filter((a) => a.token0 === token.name || a.token1 === token.name);
       // get the highest apr for filtered apr
       const highestApr = Math.max([...filteredApr].map((apr) => apr.value));
 
-      result.push({ ...token, volume24HUsd, apr: highestApr, liquidityUSD });
+      result.push({ ...token, volume24HUsd, volume24H, apr: highestApr, liquidityUSD, liquidity });
     }
-    console.log('aprs', aprs);
     setTokens(result);
     setLoading(false);
   };
@@ -96,13 +94,21 @@ const renderColumns = () => {
       width: 160,
 
       render: ({ item }) => {
-        return `$ ${humanReadableNumber(item.liquidityUSD)}`;
+        if (item.liquidityUSD) {
+          return `$ ${humanReadableNumber(item.liquidityUSD)}`;
+        }
+        return humanReadableNumber(item.liquidity);
       },
     },
     {
       name: '24h Volume',
       width: 160,
-      render: ({ item }) => `$ ${humanReadableNumber(item.volume24HUsd)}`,
+      render: ({ item }) => {
+        if (item.volume24HUsd) {
+          return `$ ${humanReadableNumber(item.volume24HUsd)}`;
+        }
+        return humanReadableNumber(item.volume24H);
+      },
     },
 
     {
