@@ -30,7 +30,7 @@ const LiquidityTokensTable = () => {
 
     // calculate sum of liquidity in usd and volumes in usd for each token in each pair
     for (const token of tokens) {
-      let tokenUsdPrice = await getCoingeckoUsdPrice(token.coingeckoName);
+      let tokenUsdPrice = await getCoingeckoUsdPrice(token.coingeckoId);
 
       const tokenPairs = resultPairList.filter((p) => p.token0 === token.name || p.token1 === token.name);
       let volume24HUsd = 0;

@@ -30,7 +30,7 @@ const LiquidityPoolsTable = () => {
     for (const pair of resultPairList) {
       const token0 = Object.values(tokenData).find((t) => t.name === pair.token0);
 
-      const token0UsdPrice = await getCoingeckoUsdPrice(token0.coingeckoName);
+      const token0UsdPrice = await getCoingeckoUsdPrice(token0.coingeckoId);
 
       const { volume24HUsd } = get24HTokenVolume(data, token0.tokenNameKaddexStats, token0UsdPrice);
 

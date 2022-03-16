@@ -60,8 +60,8 @@ export const getUsdPoolLiquidity = async (pool, usdPrice) => {
   const token0 = Object.values(tokenData).find((t) => t.name === pool.token0);
   const token1 = Object.values(tokenData).find((t) => t.name === pool.token1);
 
-  const token0Usd = await getCoingeckoUsdPrice(token0.coingeckoName);
-  const token1Usd = await getCoingeckoUsdPrice(token1.coingeckoName);
+  const token0Usd = await getCoingeckoUsdPrice(token0.coingeckoId);
+  const token1Usd = await getCoingeckoUsdPrice(token1.coingeckoId);
 
   let liquidity0Usd = 0;
   let liquidity1Usd = 0;
