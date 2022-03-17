@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
+import axios from 'axios';
 import { PactContext } from '../contexts/PactContext';
 import { CardContainer } from '../components/stats/StatsTab';
 import styled, { css } from 'styled-components/macro';
 import { GameEditionContext } from '../contexts/GameEditionContext';
 import VolumeChart from '../components/charts/VolumeChart';
 import TVLChart from '../components/charts/TVLChart';
-import BurnChart from '../components/charts/BurnChart';
 import VestingScheduleChart from '../components/charts/VestingScheduleChart';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
 import { FadeIn } from '../components/shared/animations';
@@ -62,11 +62,20 @@ const AnalyticsContainer = () => {
   const { gameEditionView } = useContext(GameEditionContext);
 
   useEffect(() => {
-    async function getKdaUsdPrice() {
-      const kdaUSDPrice = await pact.getCurrentKdaUSDPrice();
-      setKdaPrice(kdaUSDPrice);
-    }
-    getKdaUsdPrice();
+    const getKdaUSDPrice = async () => {
+      const kdaPactPrice = await pact.getCurrentKdaUSDPrice();
+      // TODO: make generic price data
+      axios
+        .get('https://api.coingecko.com/api/v3/simple/price?ids=kadena&vs_currencies=usd')
+        .then((res) => {
+          setKdaPrice(res.data?.kadena?.usd ?? kdaPactPrice);
+        })
+        .catch(async (err) => {
+          console.log('fetch kda price err', err);
+          setKdaPrice(kdaPactPrice);
+        });
+    };
+    getKdaUSDPrice();
   }, [pact]);
 
   const [loaded] = useLazyImage([modalBackground]);
