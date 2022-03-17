@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import useLazyImage from '../hooks/useLazyImage';
+import axios from 'axios';
 import { PactContext } from '../contexts/PactContext';
 import { GameEditionContext } from '../contexts/GameEditionContext';
 import VolumeChart from '../components/charts/VolumeChart';
@@ -9,8 +10,10 @@ import TVLChart from '../components/charts/TVLChart';
 import VestingScheduleChart from '../components/charts/VestingScheduleChart';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
 import { FadeIn } from '../components/shared/animations';
+import { humanReadableNumber } from '../utils/reduceBalance';
 import LogoLoader from '../components/shared/Loader';
 import { FlexContainer } from '../components/shared/FlexContainer';
+import AnalyticsSimpleWidget from '../components/shared/AnalyticsSimpleWidget';
 
 const Container = styled(FadeIn)`
   display: flex;
@@ -25,13 +28,30 @@ const Container = styled(FadeIn)`
   }
 `;
 
+const KDX_PRICE = 0.16;
+const KDX_TOTAL_SUPPLY = 1000000000;
+
 const AnalyticsContainer = () => {
   const pact = useContext(PactContext);
+  const [kdaPrice, setKdaPrice] = useState(null);
   const { gameEditionView } = useContext(GameEditionContext);
 
-  useEffect(async () => {
-    await pact.getPairList();
-  }, []);
+  useEffect(() => {
+    const getKdaUSDPrice = async () => {
+      const kdaPactPrice = await pact.getCurrentKdaUSDPrice();
+      // TODO: make generic price data
+      axios
+        .get('https://api.coingecko.com/api/v3/simple/price?ids=kadena&vs_currencies=usd')
+        .then((res) => {
+          setKdaPrice(res.data?.kadena?.usd ?? kdaPactPrice);
+        })
+        .catch(async (err) => {
+          console.log('fetch kda price err', err);
+          setKdaPrice(kdaPactPrice);
+        });
+    };
+    getKdaUSDPrice();
+  }, [pact]);
 
   const [loaded] = useLazyImage([modalBackground]);
   return !loaded && gameEditionView ? (
@@ -40,6 +60,14 @@ const AnalyticsContainer = () => {
     !gameEditionView && (
       <Container gameEditionView={gameEditionView}>
         <FlexContainer className="column w-100" gap={24} style={{ padding: '50px 0', maxWidth: 1100 }}>
+        
+        <FlexContainer mobileClassName="column" gap={24}>
+          <AnalyticsSimpleWidget title={'Kaddex price (KDX)'} mainText={`$ ${KDX_PRICE}`} subtitle={`${(KDX_PRICE / kdaPrice).toFixed(4)} KDA`} />
+              <AnalyticsSimpleWidget
+                title={'Marketcap'}
+                mainText={`$ ${humanReadableNUmber(Number(KDX_TOTAL_SUPPLY * KDX_PRICE))}`}
+                subtitle={null}
+              /></FlexContainer>
           <FlexContainer mobileClassName="column" gap={24}>
             <TVLChart height={300} />
 
@@ -47,6 +75,7 @@ const AnalyticsContainer = () => {
           </FlexContainer>
           <VestingScheduleChart height={300} />
         </FlexContainer>
+            
       </Container>
     )
   );

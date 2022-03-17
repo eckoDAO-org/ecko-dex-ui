@@ -17,7 +17,7 @@ export const GraphCardHeader = styled.div`
   }
 `;
 
-const TVLChart = ({ height, containerStyle }) => {
+const TVLChart = ({ kdaPrice, height, containerStyle }) => {
   const [viewedTVL, setViewedTVL] = useState(null);
   const [currentTVL, setCurrentTVL] = useState(null);
   const [currentDate, setCurrentDate] = useState(null);
@@ -27,7 +27,6 @@ const TVLChart = ({ height, containerStyle }) => {
   const getTVL = useCallback(async () => {
     let totalTVL = 0;
     await pact.getPairList();
-    const kdaPrice = await pact.getCurrentKdaUSDPrice();
     if (Array.isArray(pact?.pairList)) {
       for (const pair of pact.pairList) {
         const token0Balance = Number(pair.reserves[0]?.decimal) || pair.reserves[0] || 0;
@@ -52,7 +51,7 @@ const TVLChart = ({ height, containerStyle }) => {
       setCurrentTVL(totalTVL);
       setViewedTVL(totalTVL);
     }
-  }, [pact]);
+  }, [pact, kdaPrice]);
 
   useEffect(() => {
     getTVL();
@@ -94,7 +93,7 @@ const TVLChart = ({ height, containerStyle }) => {
       <GraphCardHeader>
         <div>
           <Label fontSize={16}>TVL</Label>
-          <Label fontSize={24}>{humanReadableNumber(Number(viewedTVL))} $</Label>
+          <Label fontSize={24}>$ {humanReadableNumber(Number(viewedTVL))}</Label>
           <Label fontSize={16}>{currentDate || moment().format('DD/MM/YYYY')}</Label>
         </div>
         <div></div>

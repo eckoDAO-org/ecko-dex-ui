@@ -44,12 +44,13 @@ const volumeRanges = {
     name: (_id) => _id,
     dateStart: moment()
       .subtract(30 * 6, 'days')
+      .days(0)
       .format('YYYY-MM-DD'),
     title: (payload) => moment(payload.volumes[0]?.startDay).format('MMM YY'),
   },
 };
 
-const VolumeChart = ({ width, height, containerStyle }) => {
+const VolumeChart = ({ kdaPrice, width, height, containerStyle }) => {
   const [volume, setVolume] = useState([]);
   const [dailyVolume, setDailyVolume] = useState('');
   const [currentDate, setCurrentDate] = useState(null);
@@ -62,7 +63,7 @@ const VolumeChart = ({ width, height, containerStyle }) => {
           volumeRanges[volumeRange]?.dateStart ?? moment().subtract(60, 'days').format('YYYY-MM-DD')
         }&dateEnd=${moment().format('YYYY-MM-DD')}`
       )
-      .then((res) => {
+      .then(async (res) => {
         const allVolume = [];
         for (const timeRange of res.data) {
           allVolume.push({
@@ -78,10 +79,10 @@ const VolumeChart = ({ width, height, containerStyle }) => {
           });
         }
         setVolume(allVolume);
-        setDailyVolume(allVolume[allVolume.length - 1].Volume);
+        setDailyVolume(allVolume[allVolume.length - 1].Volume * kdaPrice);
       })
       .catch((err) => console.log('get volume error', err));
-  }, [volumeRange]);
+  }, [volumeRange, kdaPrice]);
 
   return (
     <FlexContainer withGradient className="column align-ce w-100 h-100" style={containerStyle}>
@@ -89,7 +90,7 @@ const VolumeChart = ({ width, height, containerStyle }) => {
       <GraphCardHeader>
         <div>
           <Label fontSize={16}>Volume 24h</Label>
-          <Label fontSize={24}>{humanReadableNumber(Number(dailyVolume))} KDA</Label>
+          <Label fontSize={24}>$ {humanReadableNumber(Number(dailyVolume))}</Label>
           <Label>&nbsp;{currentDate || ''}</Label>
         </div>
         <TimeRangeBar>
@@ -117,7 +118,7 @@ const VolumeChart = ({ width, height, containerStyle }) => {
               }
             }}
             onMouseLeave={() => {
-              setDailyVolume(volume[volume.length - 1]?.Volume ?? null);
+              setDailyVolume(volume[volume.length - 1]?.Volume * kdaPrice ?? null);
               setCurrentDate(null);
             }}
             margin={{
