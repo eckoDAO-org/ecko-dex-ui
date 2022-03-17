@@ -1,5 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import axios from 'axios';
 import { PactContext } from '../contexts/PactContext';
 import { CardContainer } from '../components/stats/StatsTab';
 import styled, { css } from 'styled-components/macro';
@@ -10,7 +10,9 @@ import VestingScheduleChart from '../components/charts/VestingScheduleChart';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
 import { FadeIn } from '../components/shared/animations';
 import useLazyImage from '../hooks/useLazyImage';
+import { humanReadableNUmber } from '../utils/reduceBalance';
 import LogoLoader from '../components/shared/Loader';
+import AnalyticsSimpleWidget from '../components/shared/AnalyticsSimpleWidget';
 
 const ChartsContainer = styled.div`
   display: flex;
@@ -51,13 +53,30 @@ const Container = styled(FadeIn)`
   }
 `;
 
+const KDX_PRICE = 0.16;
+const KDX_TOTAL_SUPPLY = 1000000000;
+
 const AnalyticsContainer = () => {
   const pact = useContext(PactContext);
+  const [kdaPrice, setKdaPrice] = useState(null);
   const { gameEditionView } = useContext(GameEditionContext);
 
-  useEffect(async () => {
-    await pact.getPairList();
-  }, []);
+  useEffect(() => {
+    const getKdaUSDPrice = async () => {
+      const kdaPactPrice = await pact.getCurrentKdaUSDPrice();
+      // TODO: make generic price data
+      axios
+        .get('https://api.coingecko.com/api/v3/simple/price?ids=kadena&vs_currencies=usd')
+        .then((res) => {
+          setKdaPrice(res.data?.kadena?.usd ?? kdaPactPrice);
+        })
+        .catch(async (err) => {
+          console.log('fetch kda price err', err);
+          setKdaPrice(kdaPactPrice);
+        });
+    };
+    getKdaUSDPrice();
+  }, [pact]);
 
   const [loaded] = useLazyImage([modalBackground]);
   return !loaded && gameEditionView ? (
@@ -68,10 +87,22 @@ const AnalyticsContainer = () => {
         <CardContainer style={{ background: 'transparent' }}>
           <ChartsContainer>
             <SingleChartContainer>
-              <TVLChart height={300} />
+              <AnalyticsSimpleWidget title={'Kaddex price (KDX)'} mainText={`$ ${KDX_PRICE}`} subtitle={`${(KDX_PRICE / kdaPrice).toFixed(4)} KDA`} />
             </SingleChartContainer>
             <SingleChartContainer>
-              <VolumeChart height={300} />
+              <AnalyticsSimpleWidget
+                title={'Marketcap'}
+                mainText={`$ ${humanReadableNUmber(Number(KDX_TOTAL_SUPPLY * KDX_PRICE))}`}
+                subtitle={null}
+              />
+            </SingleChartContainer>
+          </ChartsContainer>
+          <ChartsContainer>
+            <SingleChartContainer>
+              <TVLChart height={300} kdaPrice={kdaPrice} />
+            </SingleChartContainer>
+            <SingleChartContainer>
+              <VolumeChart height={300} kdaPrice={kdaPrice} />
             </SingleChartContainer>
           </ChartsContainer>
           <ChartsContainer style={{ padding: 5, marginTop: 20 }}>
