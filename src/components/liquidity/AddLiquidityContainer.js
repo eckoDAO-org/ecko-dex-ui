@@ -3,12 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { ArrowBack } from '../../assets';
-import { useApplicationContext } from '../../contexts';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_LIQUIDITY_TOKENS } from '../../router/routes';
 import SlippagePopupContent from '../layout/header/SlippagePopupContent';
 import { FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
-import { theme } from '../../styles/theme';
 import { FadeIn } from '../shared/animations';
 import RewardBooster from './RewardBooster';
 import useQueryParams from '../../hooks/useQueryParams';
@@ -27,13 +25,19 @@ const Container = styled(FadeIn)`
   margin-right: auto;
   overflow: auto;
   max-width: 550px;
+  overflow: visible;
+
+  .arrow-back {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
 `;
 
 const AddLiquidityContainer = (props) => {
   const history = useHistory();
 
   const { pathname } = useLocation();
-  const { themeMode } = useApplicationContext();
 
   const query = useQueryParams();
 
@@ -76,9 +80,9 @@ const AddLiquidityContainer = (props) => {
       <FlexContainer className="w-100 justify-sb">
         <FlexContainer>
           <ArrowBack
+            className="arrow-back"
             style={{
               cursor: 'pointer',
-              color: theme(themeMode).colors.white,
               marginRight: '15px',
               justifyContent: 'center',
             }}

@@ -17,6 +17,12 @@ const Container = styled.div`
   padding: ${({ theme: { layout } }) => `0 ${layout.mobilePadding}px`};
 
   padding-top: 16px;
+
+  .hamburger-icon {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
 `;
 const RowContainer = styled.div`
   display: flex;
@@ -54,7 +60,7 @@ const MobileHeader = ({ className }) => {
     <Container className={className}>
       <RowContainer>
         <LeftContainer>
-          <PopupContentList withoutAccountInfo items={menuItems} icon={<HamburgerIcon />} className="hamburger" />
+          <PopupContentList withoutAccountInfo items={menuItems} icon={<HamburgerIcon className="hamburger-icon" />} className="hamburger" />
           <KaddexLetterLogo onClick={() => history.push(ROUTE_SWAP)} />
         </LeftContainer>
 

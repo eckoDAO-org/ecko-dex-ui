@@ -1,18 +1,16 @@
 import React, { useContext, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { useApplicationContext } from '../../contexts';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
 import InputToken from '../../components/shared/InputToken';
 import { SwapIcon } from '../../assets';
 import { limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
-import { Divider } from 'semantic-ui-react';
 import noExponents from '../../utils/noExponents';
 import FirstInput from '../../assets/images/game-edition/pixeled-box-yellow.svg';
 import SecondInput from '../../assets/images/game-edition/pixeled-box-purple.svg';
 import { GeArrowIcon } from '../../assets';
 import { PixeledCircleDoubleArrowIcon } from '../../assets';
 import Input from '../shared/Input';
-import { FlexContainer } from '../shared/FlexContainer';
 import CustomDivider from '../shared/CustomDivider';
 import { theme } from '../../styles/theme';
 

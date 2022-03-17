@@ -2,13 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { useAccountContext, useApplicationContext } from '../contexts';
+import { useAccountContext } from '../contexts';
 import RemoveLiquidityContent from '../components/liquidity/RemoveLiquidityContent';
 import SlippagePopupContent from '../components/layout/header/SlippagePopupContent';
 import { FadeIn } from '../components/shared/animations';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import { ArrowBack } from '../assets';
-import { theme } from '../styles/theme';
 import Label from '../components/shared/Label';
 import RewardBooster from '../components/liquidity/RewardBooster';
 import { ROUTE_LIQUIDITY_MY_LIQUIDITY } from '../router/routes';
@@ -22,6 +21,7 @@ const Container = styled(FadeIn)`
   margin-right: auto;
   overflow: auto;
   max-width: 550px;
+  overflow: visible;
 
   .arrow-back {
     path {

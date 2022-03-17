@@ -66,6 +66,7 @@ const Container = styled(FadeIn)`
     } else {
       return css`
         max-width: 550px;
+        overflow: visible;
       `;
     }
   }}
@@ -439,10 +440,6 @@ const SwapContainer = () => {
       modalContext.openModal({
         title: 'Select Token',
         description: '',
-        containerStyle: {
-          minWidth: '0px',
-          width: '75%',
-        },
         onClose: () => {
           setTokenSelectorType(null);
           modalContext.closeModal();
