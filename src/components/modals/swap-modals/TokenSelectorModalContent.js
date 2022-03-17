@@ -57,10 +57,10 @@ const TokenItem = styled.div`
     font-size: ${({ gameEditionView }) => gameEditionView && '13px'};
   }
 `;
-const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, fromToken, toToken }) => {
+const TokenSelectorModalContent = ({ onSelectToken, onClose, token }) => {
   const [searchValue, setSearchValue] = useState('');
   const swap = useContext(SwapContext);
-  const { gameEditionView, showTokens, setOutsideToken, setShowTokens, onCloseTokensList } = useContext(GameEditionContext);
+  const { gameEditionView, onCloseTokensList } = useContext(GameEditionContext);
   const { themeMode } = useContext(ApplicationContext);
 
   const [width] = useWindowSize();
@@ -69,19 +69,6 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
     return code.toLocaleLowerCase().includes(searchValue?.toLocaleLowerCase()) || c.name.toLowerCase().includes(searchValue?.toLowerCase());
   });
 
-  const onSelectToken = async (crypto) => {
-    if (gameEditionView && showTokens) {
-      await setOutsideToken((prev) => ({ ...prev, token: crypto }));
-      await setShowTokens(false);
-    }
-    if (tokenSelectorType === 'from' && fromToken === crypto.name) return;
-    if (tokenSelectorType === 'to' && toToken === crypto.name) return;
-    if ((tokenSelectorType === 'from' && fromToken !== crypto.name) || (tokenSelectorType === 'to' && toToken !== crypto.name)) {
-      onTokenClick({ crypto });
-      setSearchValue('');
-      onClose();
-    }
-  };
   return (
     <Content>
       <div style={{ display: 'flex', marginTop: 16 }}>
@@ -124,19 +111,21 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
                   <TokenItem
                     gameEditionView={gameEditionView}
                     key={crypto.name}
-                    selected={fromToken === crypto.name || toToken === crypto.name}
+                    selected={token === crypto.name}
                     style={{
-                      cursor: fromToken === crypto.name || toToken === crypto.name ? 'default' : 'pointer',
+                      cursor: token === crypto.name ? 'default' : 'pointer',
                     }}
                     onClick={async () => {
                       await onSelectToken(crypto);
+                      setSearchValue('');
+                      onClose();
                     }}
                   >
                     {crypto.icon}
                     {crypto.name}
 
-                    {((tokenSelectorType === 'from' && fromToken === crypto.name) || (tokenSelectorType === 'to' && toToken === crypto.name)) && (
-                      <Label fontSize={13} fontFamily="syncopate" labelStyle={{ marginLeft: 5 }}>
+                    {token === crypto.name && (
+                      <Label fontSize={13} fontFamily="syncopate" labelStyle={{ marginLeft: 5, lineHeight: 1 }}>
                         (Selected)
                       </Label>
                     )}

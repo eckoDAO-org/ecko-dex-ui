@@ -147,7 +147,7 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
               transition: 'width 0.3s, transform 0.3s',
               zIndex: 2,
               borderRadius: '50%',
-              backgroundColor: theme(themeMode).colors.primary,
+              backgroundColor: theme(themeMode).backgroundContainer,
             }}
             onClick={() => {
               swapValues();

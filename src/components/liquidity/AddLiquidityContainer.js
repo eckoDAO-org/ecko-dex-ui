@@ -19,6 +19,7 @@ import { getDailyVolume } from '../../api/kaddex-stats';
 import { getAllPairValues } from '../../utils/token-utils';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { isValidString } from '../../utils/string-utils';
+import { AppLoader } from '../../components/shared/AppLoader';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -36,13 +37,14 @@ const AddLiquidityContainer = (props) => {
 
   const query = useQueryParams();
 
-  const [data, setData] = useState({ pairs: [], volumes: [] });
-  const [pair, setPair] = useState({ token0: query.get('token0'), token1: query.get('token1') });
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState({ pools: [], volumes: [] });
+  const [pair, setPair] = useState({ token0: query?.get('token0'), token1: query.get('token1') });
 
   const [apr, setApr] = useState(null);
 
   const calculateApr = async () => {
-    const pool = data.pairs.find(
+    const pool = data.pools.find(
       (p) => (p.token0 === pair.token0 && p.token1 === pair.token1) || (p.token0 === pair.token1 && p.token1 === pair.token0)
     );
     const result = await getAllPairValues([pool], data.volumes);
@@ -50,14 +52,16 @@ const AddLiquidityContainer = (props) => {
   };
 
   const fetchData = async () => {
-    const pairs = await getPairList();
+    const pools = await getPairList();
     const volumes = await getDailyVolume();
 
-    setData({ pairs, volumes });
+    setData({ pools, volumes });
+
+    setLoading(false);
   };
 
   useEffect(() => {
-    if (data?.pairs?.length && data?.volumes?.length && isValidString(pair?.token0) && isValidString(pair.token1) && pair?.token0 !== pair.token1) {
+    if (data?.pools?.length && data?.volumes?.length && isValidString(pair?.token0) && isValidString(pair.token1) && pair?.token0 !== pair.token1) {
       calculateApr();
     }
   }, [pair, data]);
@@ -65,7 +69,9 @@ const AddLiquidityContainer = (props) => {
     fetchData();
   }, []);
 
-  return (
+  return loading ? (
+    <AppLoader className="h-100 w-100 align-ce justify-ce" />
+  ) : (
     <Container className="column w-100 relative justify-ce h-100" gap={24}>
       <FlexContainer className="w-100 justify-sb">
         <FlexContainer>
@@ -109,12 +115,23 @@ const AddLiquidityContainer = (props) => {
         </Label>
       </FlexContainer>
 
-      {pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED && <SingleSidedLiquidity pair={{ token0: query.get('token0') }} />}
+      {pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED && (
+        <SingleSidedLiquidity
+          pools={data.pools?.filter((p) => p.token0 === pair.token0 || p.token1 === pair.token0)}
+          pair={pair}
+          onPairChange={(token0) => {
+            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${token0}`));
+
+            setPair({ token0 });
+          }}
+        />
+      )}
       {pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED && (
         <DoubleSidedLiquidity
           pair={{ token0: query.get('token0'), token1: query.get('token1') }}
-          setPair={(token0, token1) => {
+          onPairChange={(token0, token1) => {
             setPair({ token0, token1 });
+            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${token0}&token1=${token1}`));
           }}
         />
       )}

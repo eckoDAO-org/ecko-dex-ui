@@ -96,7 +96,7 @@ const SwapContainer = () => {
   const modalContext = useContext(ModalContext);
   const { resolutionConfiguration } = useContext(ApplicationContext);
 
-  const { gameEditionView, openModal, closeModal, outsideToken } = useContext(GameEditionContext);
+  const { gameEditionView, openModal, closeModal, outsideToken, showTokens, setOutsideToken, setShowTokens } = useContext(GameEditionContext);
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
 
   const [selectedToken, setSelectedToken] = useState(null);
@@ -341,6 +341,18 @@ const SwapContainer = () => {
     }
   };
 
+  const onSelectToken = async (crypto) => {
+    if (gameEditionView && showTokens) {
+      await setOutsideToken((prev) => ({ ...prev, token: crypto }));
+      await setShowTokens(false);
+    }
+    if (tokenSelectorType === 'from' && fromValues.coin === crypto.name) return;
+    if (tokenSelectorType === 'to' && toValues.coin === crypto.name) return;
+    if ((tokenSelectorType === 'from' && fromValues.coin !== crypto.name) || (tokenSelectorType === 'to' && toValues.coin !== crypto.name)) {
+      onTokenClick({ crypto });
+    }
+  };
+
   useEffect(() => {
     if (tokenSelectorType === 'from') {
       if (fromValues.coin === toValues.coin) {
@@ -438,8 +450,8 @@ const SwapContainer = () => {
         content: (
           <TokenSelectorModalContent
             selectedToken={selectedToken}
-            tokenSelectorType={tokenSelectorType}
-            onTokenClick={onTokenClick}
+            token={tokenSelectorType === 'from' ? fromValues.coin : toValues.coin}
+            onSelectToken={onSelectToken}
             onClose={() => {
               modalContext.closeModal();
             }}
@@ -526,6 +538,7 @@ const SwapContainer = () => {
           </FlexContainer>
         )}
       </FlexContainer>
+
       <FormContainer
         gameEditionView={gameEditionView}
         footer={

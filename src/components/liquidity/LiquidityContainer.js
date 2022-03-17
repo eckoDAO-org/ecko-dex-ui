@@ -497,7 +497,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
         content: (
           <TokenSelectorModalContent
             selectedToken={selectedToken}
-            tokenSelectorType={tokenSelectorType}
+            token={tokenSelectorType === 'from' ? fromValues.coin : toValues.coin}
             onTokenClick={onTokenClick}
             onClose={() => {
               modalContext.closeModal();

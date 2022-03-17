@@ -34,14 +34,14 @@ const initialStateValue = {
   precision: 0,
 };
 
-const DoubleSidedLiquidity = ({ pair, setPair }) => {
+const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   const history = useHistory();
   const pact = useContext(PactContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const liquidity = useContext(LiquidityContext);
   const modalContext = useContext(ModalContext);
-  const { gameEditionView, openModal, closeModal, outsideToken } = useContext(GameEditionContext);
+  const { gameEditionView, openModal, closeModal, outsideToken, showTokens, setShowTokens, setOutsideToken } = useContext(GameEditionContext);
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
   const [inputSide, setInputSide] = useState('');
@@ -169,9 +169,20 @@ const DoubleSidedLiquidity = ({ pair, setPair }) => {
       }));
   };
 
+  const onSelectToken = async (crypto) => {
+    if (gameEditionView && showTokens) {
+      await setOutsideToken((prev) => ({ ...prev, token: crypto }));
+      await setShowTokens(false);
+    }
+    if (tokenSelectorType === 'from' && fromValues.coin === crypto.name) return;
+    if (tokenSelectorType === 'to' && toValues.coin === crypto.name) return;
+    if ((tokenSelectorType === 'from' && fromValues.coin !== crypto.name) || (tokenSelectorType === 'to' && toValues.coin !== crypto.name)) {
+      onTokenClick({ crypto });
+    }
+  };
+
   useEffect(() => {
-    setPair(fromValues.coin, toValues.coin);
-    history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${fromValues.coin}&token1=${toValues.coin}`));
+    onPairChange(fromValues.coin, toValues.coin);
   }, [fromValues.coin, toValues.coin]);
 
   const onWalletRequestViewModalClose = () => {
@@ -401,13 +412,11 @@ const DoubleSidedLiquidity = ({ pair, setPair }) => {
         content: (
           <TokenSelectorModalContent
             selectedToken={selectedToken}
-            tokenSelectorType={tokenSelectorType}
-            onTokenClick={onTokenClick}
+            token={tokenSelectorType === 'from' ? fromValues.coin : toValues.coin}
+            onSelectToken={onSelectToken}
             onClose={() => {
               modalContext.closeModal();
             }}
-            fromToken={fromValues.coin}
-            toToken={toValues.coin}
           />
         ),
       });

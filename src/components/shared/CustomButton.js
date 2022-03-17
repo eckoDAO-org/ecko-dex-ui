@@ -17,10 +17,10 @@ const StyledButton = styled(FlexContainer)`
   margin: 0px;
   padding: 0 16px;
   span {
-    opacity: ${({ loading }) => (loading ? 0 : 1)};
+    opacity: ${({ $loading }) => ($loading ? 0 : 1)};
     white-space: nowrap;
   }
-  ${({ gradientColors, type, $outGameEditionView, $gameEditionView, theme: { colors }, buttonBackgroundGradient, $geBasic }) => {
+  ${({ type, $outGameEditionView, $gameEditionView, theme: { colors }, buttonBackgroundGradient, $geBasic }) => {
     if ($gameEditionView && !$outGameEditionView) {
       return css`
         border: ${$geBasic ? 'none' : '2px dashed #ffffff'};
@@ -93,7 +93,6 @@ const CustomButton = ({
   background,
   geBasic,
   geButtonStyle,
-  withGradient,
 }) => {
   const { gameEditionView: $gameEditionView } = useContext(GameEditionContext);
 
@@ -104,7 +103,6 @@ const CustomButton = ({
   ) : (
     <StyledButton
       {...props}
-      // gradientColors={withGradient && ['#10c4df', '#f04ca9', '#edba31']}
       onClick={() => {
         if (!disabled && onClick) {
           onClick();
@@ -115,13 +113,13 @@ const CustomButton = ({
       $gameEditionView={$gameEditionView}
       disabled={disabled}
       style={buttonStyle}
-      loading={loading}
+      $loading={loading}
       type={type}
       $geBasic={geBasic}
       $outGameEditionView={outGameEditionView}
       $background={background}
     >
-      {
+      {typeof children === 'string' || typeof label === 'string' ? (
         <Label
           className={`uppercase ${type === 'gradient' ? 'gradient' : ''}`}
           fontFamily={fontFamily}
@@ -138,7 +136,9 @@ const CustomButton = ({
         >
           {children || label}
         </Label>
-      }
+      ) : (
+        children
+      )}
     </StyledButton>
   );
 };
@@ -146,6 +146,7 @@ const CustomButton = ({
 export default CustomButton;
 
 CustomButton.propTypes = {
+  loading: PropTypes.bool,
   children: PropTypes.any.isRequired,
   onClick: PropTypes.func.isRequired,
   type: PropTypes.oneOf(['primary', 'secondary', 'basic', 'gradient']),
@@ -154,6 +155,7 @@ CustomButton.propTypes = {
 };
 
 CustomButton.defaultProps = {
+  loading: false,
   type: 'primary',
   disabled: false,
 };
