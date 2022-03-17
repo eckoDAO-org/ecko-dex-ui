@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { ArrowBack } from '../../assets';
@@ -13,6 +14,11 @@ import RewardBooster from './RewardBooster';
 import useQueryParams from '../../hooks/useQueryParams';
 import DoubleSidedLiquidity from './DoubleSidedLiquidity';
 import SingleSidedLiquidity from './SingleSidedLiquidity';
+import { getPairList } from '../../api/pact-pair';
+import { getDailyVolume } from '../../api/kaddex-stats';
+import { getAllPairValues } from '../../utils/token-utils';
+import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
+import { isValidString } from '../../utils/string-utils';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -29,6 +35,35 @@ const AddLiquidityContainer = (props) => {
   const { themeMode } = useApplicationContext();
 
   const query = useQueryParams();
+
+  const [data, setData] = useState({ pairs: [], volumes: [] });
+  const [pair, setPair] = useState({ token0: query.get('token0'), token1: query.get('token1') });
+
+  const [apr, setApr] = useState(null);
+
+  const calculateApr = async () => {
+    const pool = data.pairs.find(
+      (p) => (p.token0 === pair.token0 && p.token1 === pair.token1) || (p.token0 === pair.token1 && p.token1 === pair.token0)
+    );
+    const result = await getAllPairValues([pool], data.volumes);
+    setApr(result[0]?.apr?.value);
+  };
+
+  const fetchData = async () => {
+    const pairs = await getPairList();
+    const volumes = await getDailyVolume();
+
+    setData({ pairs, volumes });
+  };
+
+  useEffect(() => {
+    if (data?.pairs?.length && data?.volumes?.length && isValidString(pair?.token0) && isValidString(pair.token1) && pair?.token0 !== pair.token1) {
+      calculateApr();
+    }
+  }, [pair, data]);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <Container className="column w-100 relative justify-ce h-100" gap={24}>
@@ -51,20 +86,24 @@ const AddLiquidityContainer = (props) => {
         </FlexContainer>
         <SlippagePopupContent />
       </FlexContainer>
-      <RewardBooster />
+      <RewardBooster apr={apr} type={LIQUIDITY_VIEW.ADD_LIQUIDITY} />
 
       <FlexContainer gap={24}>
         <Label
           fontFamily="syncopate"
           withShade={pathname !== ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED}
-          onClick={() => history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, { from: props?.location?.state?.from })}
+          onClick={() =>
+            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${query.get('token0')}`), { from: props?.location?.state?.from })
+          }
         >
           SINGLE-SIDED
         </Label>
         <Label
           fontFamily="syncopate"
           withShade={pathname !== ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED}
-          onClick={() => history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, { from: props?.location?.state?.from })}
+          onClick={() =>
+            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${query.get('token0')}`), { from: props?.location?.state?.from })
+          }
         >
           DOUBLE-SIDED
         </Label>
@@ -72,7 +111,12 @@ const AddLiquidityContainer = (props) => {
 
       {pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED && <SingleSidedLiquidity pair={{ token0: query.get('token0') }} />}
       {pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED && (
-        <DoubleSidedLiquidity pair={{ token0: query.get('token0'), token1: query.get('token1') }} />
+        <DoubleSidedLiquidity
+          pair={{ token0: query.get('token0'), token1: query.get('token1') }}
+          setPair={(token0, token1) => {
+            setPair({ token0, token1 });
+          }}
+        />
       )}
     </Container>
   );

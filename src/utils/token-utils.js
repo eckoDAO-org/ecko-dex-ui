@@ -55,11 +55,11 @@ export const getAllPairValues = async (pools, volumes) => {
         volume24H = get24HVolumeDoubleSided(volumes, token0.tokenNameKaddexStats, token1.tokenNameKaddexStats, token.tokenNameKaddexStats);
         volume24HUsd = volume24H * tokenUsdPrice;
         liquidityUsd += (token.name === token0.name ? liquidity0 : liquidity1) * tokenUsdPrice;
+        apr = getApr(volume24HUsd, liquidityUsd);
       } else {
+        apr = getApr(volume24H, liquidity);
         liquidityUsd = null;
       }
-
-      apr = getApr(volume24HUsd, liquidityUsd);
     }
     result.push({ ...pool, liquidityUsd, liquidity, volume24HUsd, volume24H, apr: { value: apr, token0: pool.token0, token1: pool.token1 } });
   }

@@ -133,7 +133,7 @@ export default createGlobalStyle`
       }
     }
 
-    .flex{
+    .flex {
       display: flex;
     }
 
@@ -142,8 +142,8 @@ export default createGlobalStyle`
       ::-webkit-scrollbar {
         display: none;
       }
-    scrollbar-width: none;
-   }
+      scrollbar-width: none;
+    }
     .pointer {
       cursor: pointer;
     }

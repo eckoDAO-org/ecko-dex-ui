@@ -7,6 +7,8 @@ export { ReactComponent as CodeIcon } from './images/header/code.svg';
 export { ReactComponent as CogIcon } from './images/header/cog.svg';
 export { ReactComponent as CopyIcon } from './images/shared/copy.svg';
 export { ReactComponent as CloseGe } from './images/shared/close-ge.svg';
+export { ReactComponent as CoinsIcon } from './images/shared/coins.svg';
+export { ReactComponent as CoinKaddexIcon } from './images/shared/coin-kaddex.svg';
 export { ReactComponent as CloseIcon } from './images/shared/cross.svg';
 export { ReactComponent as DiscordIcon } from './images/header/discord.svg';
 export { ReactComponent as DropdownGe } from './images/shared/dropdown-ge.svg';

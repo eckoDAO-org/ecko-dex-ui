@@ -125,7 +125,7 @@ const renderColumns = () => {
     },
 
     {
-      name: 'Rewards Booster',
+      name: 'APR Booster',
       width: 160,
       render: ({ item }) => 'Coming Soon',
     },

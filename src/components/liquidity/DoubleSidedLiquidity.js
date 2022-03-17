@@ -22,6 +22,8 @@ import SwapForm from '../swap/SwapForm';
 import TokenSelectorModalContentGE from '../../components/modals/swap-modals/TokenSelectorModalContentGE';
 import WalletRequestView from '../../components/modals/WalletRequestView';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
+import { useHistory } from 'react-router-dom';
+import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED } from '../../router/routes';
 
 const initialStateValue = {
   coin: '',
@@ -32,7 +34,8 @@ const initialStateValue = {
   precision: 0,
 };
 
-const DoubleSidedLiquidity = ({ pair }) => {
+const DoubleSidedLiquidity = ({ pair, setPair }) => {
+  const history = useHistory();
   const pact = useContext(PactContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
@@ -165,6 +168,11 @@ const DoubleSidedLiquidity = ({ pair }) => {
         precision: crypto?.precision,
       }));
   };
+
+  useEffect(() => {
+    setPair(fromValues.coin, toValues.coin);
+    history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${fromValues.coin}&token1=${toValues.coin}`));
+  }, [fromValues.coin, toValues.coin]);
 
   const onWalletRequestViewModalClose = () => {
     wallet.setIsWaitingForWalletAuth(false);
@@ -532,19 +540,19 @@ const DoubleSidedLiquidity = ({ pair }) => {
                 <FlexContainer className="column" style={{ marginTop: 16 }} gap={16}>
                   <FlexContainer className="justify-sb w-100">
                     <Label fontSize={13}>{`${toValues.coin}/${fromValues.coin}`}</Label>
-                    <Label fontSize={13} fontFamily="syncopate" labelStyle={{ textAlign: 'end' }}>
+                    <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
                       {reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}
                     </Label>
                   </FlexContainer>
                   <FlexContainer className="justify-sb w-100">
                     <Label fontSize={13}>{`${fromValues.coin}/${toValues.coin}`}</Label>
-                    <Label fontSize={13} fontFamily="syncopate" labelStyle={{ textAlign: 'end' }}>
+                    <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
                       {reduceBalance(pact.getRatio1(fromValues.coin, toValues.coin)) ?? '-'}
                     </Label>
                   </FlexContainer>
                   <FlexContainer className="justify-sb w-100">
                     <Label fontSize={13}>Pool Share</Label>
-                    <Label fontSize={13} fontFamily="syncopate" labelStyle={{ textAlign: 'end' }}>
+                    <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
                       {!pact.share(fromValues.amount) ? 0 : (pact.share(fromValues.amount) * 100).toPrecision(4)} %
                     </Label>
                   </FlexContainer>

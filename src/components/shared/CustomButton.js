@@ -126,7 +126,7 @@ const CustomButton = ({
           className={`uppercase ${type === 'gradient' ? 'gradient' : ''}`}
           fontFamily={fontFamily}
           fontSize={fontSize}
-          labelStyle={labelStyle}
+          labelStyle={{ lineHeight: 1, ...labelStyle }}
           geFontSize={geFontSize}
           geFontWeight={geFontWeight}
           geLabelStyle={geLabelStyle}
