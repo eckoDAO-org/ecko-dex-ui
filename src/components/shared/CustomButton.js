@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useContext } from 'react';
 import styled, { css } from 'styled-components/macro';
-import { Button as SUIButton } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import Label from './Label';
@@ -49,10 +48,10 @@ const StyledButton = styled(FlexContainer)`
           `;
         case 'basic':
           return css`
-          height: 42px;
-        border: 1px solid transparent};
-        background: transparent;
-      `;
+            height: 42px;
+            border: 1px solid transparent;
+            background: transparent;
+          `;
         default:
           return css`
             height: 42px;

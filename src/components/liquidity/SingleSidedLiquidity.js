@@ -1,27 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Dropdown } from 'semantic-ui-react';
 import { ArrowDown } from '../../assets';
 import tokenData from '../../constants/cryptoCurrencies';
-import { useAccountContext, useApplicationContext, useModalContext, usePactContext } from '../../contexts';
-import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED } from '../../router/routes';
-import theme from '../../styles/theme';
+import { useAccountContext, useModalContext, usePactContext } from '../../contexts';
 import noExponents from '../../utils/noExponents';
 import { limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
 import SelectPoolModal from '../modals/liquidity/SelectPoolModal';
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
-import AppLoader from '../shared/AppLoader';
 import CustomButton from '../shared/CustomButton';
-import CustomDropdown from '../shared/CustomDropdown';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Input from '../shared/Input';
 import InputToken from '../shared/InputToken';
 import Label from '../shared/Label';
 
 const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
-  const { themeMode } = useApplicationContext();
   const modalContext = useModalContext();
-  const history = useHistory();
 
   const pact = usePactContext();
   const { account } = useAccountContext();
@@ -73,11 +65,38 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
       ),
     });
   };
+
+  const buttonStatus = () => {
+    let status = {
+      0: { msg: 'Connect your KDA wallet', status: false },
+      1: { msg: 'Enter Amount', status: false },
+      2: { msg: 'Supply', status: true },
+      3: {
+        msg: (token) => `Insufficient ${token} Balance`,
+        status: false,
+      },
+      4: { msg: 'Pair does not exist yet', status: false },
+      5: { msg: 'Pair Already Exists', status: false },
+      6: { msg: 'Select different tokens', status: false },
+    };
+    if (!account.account) return status[0];
+    if (isNaN(pact.ratio)) {
+      return status[4];
+    } else if (!values.amount) return status[1];
+    else if (Number(values.amount) > Number(values.balance)) return { ...status[3], msg: status[3].msg(values.coin) };
+    else {
+      if (isNaN(pact.ratio)) {
+        return status[4];
+      } else return status[2];
+    }
+  };
+
   return (
-    <FlexContainer className="column background-fill" withGradient style={{ padding: 24 }}>
+    <FlexContainer className="column background-fill" gap={16} withGradient style={{ padding: 24 }}>
+      <Label fontSize={13}>Pool</Label>
       <CustomButton
         type="primary"
-        buttonStyle={{ borderRadius: 4, height: 40 }}
+        buttonStyle={{ borderRadius: 4, height: 40, marginBottom: 8 }}
         onClick={() => {
           modalContext.openModal({
             title: 'Select Pool',
@@ -155,12 +174,16 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
         }}
       />
 
-      <FlexContainer className="justify-sb w-100" style={{ marginTop: 16 }}>
+      <FlexContainer className="justify-sb w-100">
         <Label fontSize={13}>Pool Share</Label>
         <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
           {!pact.share(values.amount) ? 0 : (pact.share(values.amount) * 100).toPrecision(4)} %
         </Label>
       </FlexContainer>
+
+      <CustomButton fluid type="gradient" disabled={!buttonStatus().status} onClick={() => console.log('add')}>
+        {buttonStatus().msg}
+      </CustomButton>
     </FlexContainer>
   );
 };

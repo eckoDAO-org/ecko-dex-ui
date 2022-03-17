@@ -103,7 +103,7 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
               boder: 'unset',
             }}
           >
-            Select
+            <Label fontSize={13}>Select</Label>
             {gameEditionView ? (
               <PixeledArrowDownIcon style={{ marginLeft: 8, marginRight: 0 }} />
             ) : (

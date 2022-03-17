@@ -34,7 +34,7 @@ const LiquidityTokensTable = () => {
       let volume24H = 0;
       let liquidity = 0;
       for (const tokenPair of tokenPairs) {
-        volume24H += get24HVolumeSingleSided(volumes, token.tokenNameKaddexStats, tokenUsdPrice);
+        volume24H += get24HVolumeSingleSided(volumes, token.tokenNameKaddexStats);
         volume24HUsd += volume24H * tokenUsdPrice;
         liquidity += token.name === tokenPair.token0 ? reduceBalance(tokenPair.reserves[0]) : reduceBalance(tokenPair.reserves[1]);
       }

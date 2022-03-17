@@ -23,7 +23,6 @@ import TokenSelectorModalContentGE from '../../components/modals/swap-modals/Tok
 import WalletRequestView from '../../components/modals/WalletRequestView';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { useHistory } from 'react-router-dom';
-import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED } from '../../router/routes';
 
 const initialStateValue = {
   coin: '',
@@ -501,12 +500,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
             </FlexContainer>
           ) : (
             <FlexContainer className="justify-ce w-100" style={{ marginTop: 16 }}>
-              <CustomButton
-                fluid
-                type={buttonStatus().status === true ? 'secondary' : 'primary'}
-                disabled={!buttonStatus().status}
-                onClick={() => supply()}
-              >
+              <CustomButton fluid type="gradient" disabled={!buttonStatus().status} onClick={() => supply()}>
                 {buttonStatus().msg}
               </CustomButton>
             </FlexContainer>

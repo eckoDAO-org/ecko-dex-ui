@@ -47,7 +47,7 @@ const Label = ({
   className,
   children,
   fontFamily = 'basier',
-  fontSize = 16,
+  fontSize = 13,
   labelStyle,
   geFontSize,
   geFontWeight,

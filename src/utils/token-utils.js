@@ -24,13 +24,14 @@ export const getInfoCoin = (item, coinPositionArray) => {
   return crypto;
 };
 
-export const getApr = (usdVolume, usdLiquidity) => {
-  const percentageOnVolume = (usdVolume / 100) * FEE;
+export const getApr = (volume, liquidity) => {
+  const percentageOnVolume = (volume / 100) * FEE;
   const percentagePerYear = percentageOnVolume * 365;
-  const apr = (percentagePerYear * 100) / usdLiquidity;
+  const apr = (percentagePerYear * 100) / liquidity;
 
   return apr;
 };
+
 // calculate liquidity, volumes and apr for each pool
 export const getAllPairValues = async (pools, volumes) => {
   const result = [];
@@ -108,16 +109,14 @@ export const getTokenUsdPriceByLiquidity = (liquidity0, liquidity1, usdPrice) =>
 export const getTokenUsdPrice = async (token, pairsList) => {
   const filteredPairs = pairsList.filter((p) => p.token0 === token.name || p.token1 === token.name);
 
-  let tokenUsd = 0;
-  for (const pair of filteredPairs) {
-    const liquidity0 = reduceBalance(pair.reserves[0]);
-    const liquidity1 = reduceBalance(pair.reserves[1]);
+  let tokenUsd = await getCoingeckoUsdPrice(token.coingeckoId);
+  if (tokenUsd) {
+    return tokenUsd;
+  } else {
+    for (const pair of filteredPairs) {
+      const liquidity0 = reduceBalance(pair.reserves[0]);
+      const liquidity1 = reduceBalance(pair.reserves[1]);
 
-    tokenUsd = await getCoingeckoUsdPrice(token.coingeckoId);
-
-    if (tokenUsd) {
-      return tokenUsd;
-    } else {
       if (pair.token0 === token.name) {
         const token1 = Object.values(tokenData).find((t) => t.name === pair.token1);
         const token1Usd = await getCoingeckoUsdPrice(token1.coingeckoId);
@@ -134,8 +133,8 @@ export const getTokenUsdPrice = async (token, pairsList) => {
         }
         return getTokenUsdPriceByLiquidity(liquidity0, liquidity1, token0Usd);
       }
-    }
 
-    return tokenUsd;
+      return tokenUsd;
+    }
   }
 };
