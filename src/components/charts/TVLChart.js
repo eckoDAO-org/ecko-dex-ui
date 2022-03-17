@@ -17,7 +17,7 @@ export const GraphCardHeader = styled.div`
   }
 `;
 
-const TVLChart = ({ kdaPrice, height, containerStyle }) => {
+const TVLChart = ({ kdaPrice, height }) => {
   const [viewedTVL, setViewedTVL] = useState(null);
   const [currentTVL, setCurrentTVL] = useState(null);
   const [currentDate, setCurrentDate] = useState(null);
@@ -89,15 +89,13 @@ const TVLChart = ({ kdaPrice, height, containerStyle }) => {
   }, [pact]);
 
   return (
-    <FlexContainer className="column align-ce w-100 h-100" withGradient style={containerStyle}>
-      <GraphCardHeader>
-        <div>
-          <Label fontSize={16}>TVL</Label>
-          <Label fontSize={24}>$ {humanReadableNumber(Number(viewedTVL))}</Label>
-          <Label fontSize={16}>{currentDate || moment().format('DD/MM/YYYY')}</Label>
-        </div>
-        <div></div>
-      </GraphCardHeader>
+    <FlexContainer className="column align-ce w-100 h-100" withGradient style={{ padding: 32 }}>
+      <div className="column w-100">
+        <Label fontSize={16}>TVL</Label>
+        <Label fontSize={24}>$ {humanReadableNumber(Number(viewedTVL))}</Label>
+        <Label fontSize={16}>{currentDate || moment().format('DD/MM/YYYY')}</Label>
+      </div>
+
       <div style={{ width: '100%', height }}>
         <ResponsiveContainer>
           <LineChart

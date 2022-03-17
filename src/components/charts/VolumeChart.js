@@ -50,7 +50,7 @@ const volumeRanges = {
   },
 };
 
-const VolumeChart = ({ kdaPrice, width, height, containerStyle }) => {
+const VolumeChart = ({ kdaPrice, width, height }) => {
   const [volume, setVolume] = useState([]);
   const [dailyVolume, setDailyVolume] = useState('');
   const [currentDate, setCurrentDate] = useState(null);
@@ -85,9 +85,8 @@ const VolumeChart = ({ kdaPrice, width, height, containerStyle }) => {
   }, [volumeRange, kdaPrice]);
 
   return (
-    <FlexContainer withGradient className="column align-ce w-100 h-100" style={containerStyle}>
-      <GradientBorder />
-      <GraphCardHeader>
+    <FlexContainer withGradient className="column align-ce w-100 h-100" style={{ padding: 32 }}>
+      <div className="w-100 flex justify-sb">
         <div>
           <Label fontSize={16}>Volume 24h</Label>
           <Label fontSize={24}>$ {humanReadableNumber(Number(dailyVolume))}</Label>
@@ -104,7 +103,7 @@ const VolumeChart = ({ kdaPrice, width, height, containerStyle }) => {
             M
           </TimeRangeBtn>
         </TimeRangeBar>
-      </GraphCardHeader>
+      </div>
       <div style={{ width: '100%', height }}>
         <ResponsiveContainer>
           <BarChart

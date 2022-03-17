@@ -60,14 +60,10 @@ const AnalyticsContainer = () => {
     !gameEditionView && (
       <Container gameEditionView={gameEditionView}>
         <FlexContainer className="column w-100" gap={24} style={{ padding: '50px 0', maxWidth: 1100 }}>
-        
-        <FlexContainer mobileClassName="column" gap={24}>
-          <AnalyticsSimpleWidget title={'Kaddex price (KDX)'} mainText={`$ ${KDX_PRICE}`} subtitle={`${(KDX_PRICE / kdaPrice).toFixed(4)} KDA`} />
-              <AnalyticsSimpleWidget
-                title={'Marketcap'}
-                mainText={`$ ${humanReadableNUmber(Number(KDX_TOTAL_SUPPLY * KDX_PRICE))}`}
-                subtitle={null}
-              /></FlexContainer>
+          <FlexContainer mobileClassName="column" gap={24}>
+            <AnalyticsSimpleWidget title={'Kaddex price (KDX)'} mainText={`$ ${KDX_PRICE}`} subtitle={`${(KDX_PRICE / kdaPrice).toFixed(4)} KDA`} />
+            <AnalyticsSimpleWidget title={'Marketcap'} mainText={`$ ${humanReadableNumber(Number(KDX_TOTAL_SUPPLY * KDX_PRICE))}`} subtitle={null} />
+          </FlexContainer>
           <FlexContainer mobileClassName="column" gap={24}>
             <TVLChart height={300} />
 
@@ -75,7 +71,6 @@ const AnalyticsContainer = () => {
           </FlexContainer>
           <VestingScheduleChart height={300} />
         </FlexContainer>
-            
       </Container>
     )
   );
