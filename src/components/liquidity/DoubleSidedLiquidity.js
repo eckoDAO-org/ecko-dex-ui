@@ -402,10 +402,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
       modalContext.openModal({
         title: 'Select Token',
         description: '',
-        containerStyle: {
-          minWidth: '0px',
-          width: '75%',
-        },
+
         onClose: () => {
           setTokenSelectorType(null);
           modalContext.closeModal();

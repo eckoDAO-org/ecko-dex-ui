@@ -48,10 +48,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
     modalContext.openModal({
       title: 'Select Token',
       description: '',
-      containerStyle: {
-        minWidth: '0px',
-        width: '75%',
-      },
+
       onClose: () => {
         modalContext.closeModal();
       },

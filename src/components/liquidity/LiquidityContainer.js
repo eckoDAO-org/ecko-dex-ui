@@ -486,10 +486,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
       modalContext.openModal({
         title: 'Select Token',
         description: '',
-        containerStyle: {
-          minWidth: '0px',
-          width: '75%',
-        },
+
         onClose: () => {
           setTokenSelectorType(null);
           modalContext.closeModal();

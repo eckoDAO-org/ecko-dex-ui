@@ -21,6 +21,12 @@ const Container = styled.div`
   padding-top: 16px;
   zoom: ${({ resolutionConfiguration }) =>
     resolutionConfiguration && resolutionConfiguration['normal-mode'].scale > 1 ? resolutionConfiguration['normal-mode'].scale : 1};
+
+  .header {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 `;
 
 const LeftContainer = styled.div`
