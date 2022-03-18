@@ -6,14 +6,13 @@ import { extractDecimal, reduceBalance } from '../../../utils/reduceBalance';
 import reduceToken from '../../../utils/reduceToken';
 import { getTokenIcon, showTicker } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
-import { SuccessViewContainerGE, SuccesViewContainer } from '../common-result-components';
 import { ChainIcon } from '../../../assets';
 import { chainId, ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
-
 import Label from '../../shared/Label';
 import { CryptoContainer, FlexContainer } from '../../shared/FlexContainer';
 import CopyPopup from '../../shared/CopyPopup';
 import CustomDivider from '../../shared/CustomDivider';
+import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
 
 export const SwapSuccessViewGE = ({ swap }) => {
   const { account } = useContext(AccountContext);

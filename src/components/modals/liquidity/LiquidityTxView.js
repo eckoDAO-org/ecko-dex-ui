@@ -1,16 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import moment from 'moment';
+import styled from 'styled-components/macro';
 import { useAccountContext, useGameEditionContext, usePactContext, useSwapContext } from '../../../contexts';
 import { chainId, ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
 import { extractDecimal, reduceBalance } from '../../../utils/reduceBalance';
 import { getTokenIcon, showTicker } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import Label from '../../shared/Label';
-import { SuccessViewContainerGE, SuccesViewContainer } from '../common-result-components';
 import { CryptoContainer, FlexContainer } from '../../shared/FlexContainer';
 import reduceToken from '../../../utils/reduceToken';
 import CopyPopup from '../../shared/CopyPopup';
 import CustomDivider from '../../shared/CustomDivider';
+import { KaddexOutlineIcon } from '../../../assets';
+import { Checkbox } from 'semantic-ui-react';
+import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
 
 export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }) => {
   const { setButtons } = useGameEditionContext();
@@ -144,7 +148,7 @@ export const SuccessAddView = ({ token0, token1, loading, onClick }) => {
 export const SuccessRemoveView = ({ token0, token1, loading, onClick }) => {
   const swap = useSwapContext();
   return (
-    <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle>
+    <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle icon={<KaddexOutlineIcon />}>
       <FlexContainer className="w-100 column" gap={12}>
         <Label>Are you sure you want to remove your liquidity?</Label>
 
@@ -158,14 +162,18 @@ export const SuccessRemoveView = ({ token0, token1, loading, onClick }) => {
         <div className="flex align-ce justify-sb">
           <div className="flex align-ce">
             <CryptoContainer size={24}>{getTokenIcon(token0)}</CryptoContainer>
-            <Label>{swap?.localRes?.result?.data?.amount0}</Label>
+            <Label>
+              {swap?.localRes?.result?.data?.amount0} {token0}
+            </Label>
           </div>
           <Label>{token0}</Label>
         </div>
         <div className="flex align-ce justify-sb">
           <div className="flex align-ce">
             <CryptoContainer size={24}>{getTokenIcon(token1)}</CryptoContainer>
-            <Label>{swap?.localRes?.result?.data?.amount1}</Label>
+            <Label>
+              {swap?.localRes?.result?.data?.amount1} {token1}
+            </Label>
           </div>
 
           <Label>{token1}</Label>
@@ -174,3 +182,84 @@ export const SuccessRemoveView = ({ token0, token1, loading, onClick }) => {
     </SuccesViewContainer>
   );
 };
+export const SuccessRemoveWithBoosterView = ({ token0, token1, loading, onClick }) => {
+  const swap = useSwapContext();
+  const [checked, setChecked] = useState(false);
+  return (
+    <SuccesViewContainer
+      swap={swap}
+      loading={loading}
+      onClick={onClick}
+      hideSubtitle
+      icon={<KaddexOutlineIcon />}
+      footer={
+        <CheckboxContainer checked={checked}>
+          <Label fontFamily="syncopate" fontSize={16}>
+            stake my rewards
+          </Label>
+          <Checkbox checked={checked} onChange={() => setChecked((prev) => !prev)} />
+        </CheckboxContainer>
+      }
+    >
+      <FlexContainer className="w-100 column" gap={12}>
+        <Label labelStyle={{ lineHeight: '19px' }}>Booster rewards will unlock in 72 hours from the moment the user removes liquidity.</Label>
+
+        <div className="flex align-ce justify-sb">
+          <Label>Rewards Booster Unlock Date</Label>
+          <Label>{moment().add(72, 'hours').format('DD/MM/YYYY HH:mm')}</Label>
+        </div>
+
+        <CustomDivider style={{ margin: '16px 0' }} />
+
+        <Label fontSize={16}>Amount</Label>
+
+        <div className="flex align-ce justify-sb">
+          <div className="flex align-ce">
+            <CryptoContainer size={24}>{getTokenIcon(token0)}</CryptoContainer>
+            <Label>
+              {swap?.localRes?.result?.data?.amount0} {token0}
+            </Label>
+          </div>
+          <Label>{token0}</Label>
+        </div>
+        <div className="flex align-ce justify-sb">
+          <div className="flex align-ce">
+            <CryptoContainer size={24}>{getTokenIcon(token1)}</CryptoContainer>
+            <Label>
+              {swap?.localRes?.result?.data?.amount1} {token1}
+            </Label>
+          </div>
+
+          <Label>{token1}</Label>
+        </div>
+
+        <Label fontSize={16}>Rewards</Label>
+
+        <div className="flex align-ce justify-sb">
+          <div className="flex align-ce">
+            insert-token-logo-rewards
+            {/* <CryptoContainer size={24}>{getTokenIcon(token0)}</CryptoContainer> */}
+            <Label>insert-amount-rewards</Label>
+          </div>
+          <Label>insert-token-name-rewards</Label>
+        </div>
+      </FlexContainer>
+    </SuccesViewContainer>
+  );
+};
+
+const CheckboxContainer = styled.div`
+  border-radius: 10px;
+  margin-top: 24px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border: ${({ theme: { colors } }) => `1px solid ${colors.white}`};
+  background-color: ${({ theme: { colors }, checked }) => (checked ? colors.white : 'transparent')};
+
+  span {
+    color: ${({ theme: { colors }, checked }) => (checked ? colors.primary : colors.white)};
+  }
+`;

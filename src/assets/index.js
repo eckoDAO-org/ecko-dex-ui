@@ -22,6 +22,7 @@ export { ReactComponent as KaddexLetterLogo } from './images/header/Kaddex_A_log
 export { ReactComponent as KaddexLogo } from './images/header/kaddex_logo.svg';
 export { ReactComponent as KaddexWhite } from './images/header/KADDEX-white.svg';
 export { ReactComponent as KDALogo } from './images/header/kadena-logo.svg';
+export { ReactComponent as KaddexOutlineIcon } from './images/shared/kaddex-outline.svg';
 export { ReactComponent as LockLogo } from './images/shared/awesome-lock.svg';
 export { ReactComponent as Logo } from './images/shared/Logo.svg';
 export { ReactComponent as MenuGEIcon } from './images/shared/menu-ge.svg';

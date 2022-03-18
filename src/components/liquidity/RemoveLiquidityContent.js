@@ -237,10 +237,9 @@ const RemoveLiquidityContent = ({ pair }) => {
             numberOnly
             inputStyle={{ fontSize: 13, padding: 0 }}
             topComponent={
-              <FlexContainer className="justify-sb align-ce" style={{ marginBottom: 16 }}>
-                <Label fontSize={13}>Amount</Label>
-                <Label fontSize={13}>Balance: </Label>
-              </FlexContainer>
+              <Label fontSize={13} labelStyle={{ marginBottom: 16 }}>
+                Amount
+              </Label>
             }
             inputRightComponent={
               <FlexContainer className="align-ce h-fit-content">
@@ -257,7 +256,9 @@ const RemoveLiquidityContent = ({ pair }) => {
                 >
                   Max
                 </CustomButton>
-                <Label fontSize={13}>%</Label>
+                <Label labelStyle={{ marginLeft: 4 }} fontSize={13}>
+                  %
+                </Label>
               </FlexContainer>
             }
             onChange={(e) => {

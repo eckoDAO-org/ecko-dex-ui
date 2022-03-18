@@ -6,6 +6,7 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 import Label from './Label';
 import GameEditionButton from '../game-edition-v2/components/GameEditionButton';
 import { FlexContainer } from './FlexContainer';
+import Loader from './Loader';
 
 const StyledButton = styled(FlexContainer)`
   cursor: pointer;
@@ -95,6 +96,7 @@ const CustomButton = ({
 }) => {
   const { gameEditionView: $gameEditionView } = useContext(GameEditionContext);
 
+  console.log('loading', loading);
   return $gameEditionView && geType ? (
     <GameEditionButton type={geType} disabled={disabled} onClick={onClick} style={geButtonStyle}>
       {geLabel}
@@ -118,25 +120,31 @@ const CustomButton = ({
       $outGameEditionView={outGameEditionView}
       $background={background}
     >
-      {typeof children === 'string' || typeof label === 'string' ? (
-        <Label
-          className={`uppercase ${type === 'gradient' ? 'gradient' : ''}`}
-          fontFamily={fontFamily}
-          fontSize={fontSize}
-          labelStyle={{ lineHeight: 1, ...labelStyle }}
-          geFontSize={geFontSize}
-          geFontWeight={geFontWeight}
-          geLabelStyle={geLabelStyle}
-          geColor={geColor}
-          outGameEditionView={outGameEditionView}
-          inverted={type === 'secondary'}
-          withShade={withShade || disabled}
-          geCenter={geCenter}
-        >
-          {children || label}
-        </Label>
+      {loading ? (
+        <Loader />
       ) : (
-        children
+        <>
+          {typeof children === 'string' || typeof label === 'string' ? (
+            <Label
+              className={`uppercase ${type === 'gradient' ? 'gradient' : ''}`}
+              fontFamily={fontFamily}
+              fontSize={fontSize}
+              labelStyle={{ lineHeight: 1, ...labelStyle }}
+              geFontSize={geFontSize}
+              geFontWeight={geFontWeight}
+              geLabelStyle={geLabelStyle}
+              geColor={geColor}
+              outGameEditionView={outGameEditionView}
+              inverted={type === 'secondary'}
+              withShade={withShade || disabled}
+              geCenter={geCenter}
+            >
+              {children || label}
+            </Label>
+          ) : (
+            children
+          )}
+        </>
       )}
     </StyledButton>
   );
