@@ -46,6 +46,7 @@ const LayoutModal = ({ title, description, open, onClose, onBack, containerStyle
               description={description}
               containerStyle={{
                 maxWidth: '90vw',
+                width: 550,
                 ...containerStyle,
               }}
               onClose={() => {

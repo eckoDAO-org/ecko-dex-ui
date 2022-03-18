@@ -40,9 +40,6 @@ const LiquidityPoolsTable = () => {
     <CommonTable
       items={pairList}
       columns={renderColumns()}
-      onClick={(item) => {
-        window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${item?.requestKey}`, '_blank', 'noopener,noreferrer');
-      }}
       actions={[
         {
           icon: <AddIcon />,

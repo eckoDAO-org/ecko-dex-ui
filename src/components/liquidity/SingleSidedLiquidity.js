@@ -46,7 +46,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
 
   const openTokenSelectorModal = () => {
     modalContext.openModal({
-      title: 'Select Token',
+      title: 'Select',
       description: '',
 
       onClose: () => {
@@ -97,7 +97,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
         buttonStyle={{ borderRadius: 4, height: 40, marginBottom: 8 }}
         onClick={() => {
           modalContext.openModal({
-            title: 'Select Pool',
+            title: 'Select',
 
             onClose: () => {
               modalContext.closeModal();

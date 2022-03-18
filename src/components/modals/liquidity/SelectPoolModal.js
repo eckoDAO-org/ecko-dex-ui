@@ -11,7 +11,7 @@ const SelectPoolModal = ({ pools, onSelect }) => {
 
   return (
     <Content>
-      <Search fluid placeholder="Search Pool" value={searchValue} onChange={(e, { value }) => setSearchValue(value)} />
+      <Search fluid placeholder="Search" value={searchValue} onChange={(e, { value }) => setSearchValue(value)} />
 
       <Label fontSize={13} fontFamily="syncopate">
         Pools

@@ -96,7 +96,6 @@ const CustomButton = ({
 }) => {
   const { gameEditionView: $gameEditionView } = useContext(GameEditionContext);
 
-  console.log('loading', loading);
   return $gameEditionView && geType ? (
     <GameEditionButton type={geType} disabled={disabled} onClick={onClick} style={geButtonStyle}>
       {geLabel}

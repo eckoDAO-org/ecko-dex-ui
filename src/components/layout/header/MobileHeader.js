@@ -49,10 +49,6 @@ const LeftContainer = styled.div`
   }
 `;
 
-const RightContainer = styled.div`
-  display: flex;
-`;
-
 const MobileHeader = ({ className }) => {
   const history = useHistory();
 
@@ -65,9 +61,7 @@ const MobileHeader = ({ className }) => {
         </LeftContainer>
 
         {/* <GameEditionModeButton /> */}
-        <RightContainer>
-          <RightHeaderItems />
-        </RightContainer>
+        <RightHeaderItems />
       </RowContainer>
       <span className="mainnet-chain-2 mobile-only">Chain 2</span>
     </Container>

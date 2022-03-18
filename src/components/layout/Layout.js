@@ -5,7 +5,6 @@ import { useHistory, useLocation } from 'react-router';
 import useWindowSize from '../../hooks/useWindowSize';
 import { useApplicationContext } from '../../contexts';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
-import Wrapper from '../../components/shared/Wrapper';
 import DesktopHeader from './header/DesktopHeader';
 import MobileHeader from './header/MobileHeader';
 import { ReactComponent as Stripes } from '../../assets/images/shared/stripes.svg';
@@ -15,8 +14,11 @@ import browserDetection from '../../utils/browserDetection';
 import gameEditionBackground from '../../assets/images/game-edition/game-edition-background.png';
 import TabletHeader from './header/TabletHeader';
 import { FlexContainer } from '../shared/FlexContainer';
+import theme from '../../styles/theme';
 
-const WrapperContainer = styled(Wrapper)`
+const WrapperContainer = styled.div`
+  flex-direction: column;
+  display: flex;
   height: 100%;
 
   .mainnet-chain-2 {
@@ -129,8 +131,8 @@ const Layout = ({ children }) => {
   return (
     <FlexContainer className="w-100 h-100">
       <WrapperContainer>
-        <MobileHeader className="mobile-only" />
-        <TabletHeader className="desktop-none mobile-none" />
+        {width <= theme.mediaQueries.mobilePixel && <MobileHeader />}
+        {width > theme.mediaQueries.mobilePixel && width < theme.mediaQueries.desktopPixel && <TabletHeader className="desktop-none mobile-none" />}
 
         <DesktopHeader className="desktop-only" gameEditionView={gameEditionView} />
 

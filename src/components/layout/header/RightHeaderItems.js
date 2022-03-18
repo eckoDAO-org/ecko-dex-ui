@@ -16,7 +16,7 @@ import reduceToken from '../../../utils/reduceToken';
 import SlippagePopupContent from './SlippagePopupContent';
 import AccountModal from '../../modals/kdaModals/AccountModal';
 import { commonTheme } from '../../../styles/theme';
-import { ThreeDotsIcon } from '../../../assets';
+import { CoinKaddexIcon, ThreeDotsIcon } from '../../../assets';
 import { reduceBalance } from '../../../utils/reduceBalance';
 import Label from '../../shared/Label';
 
@@ -41,7 +41,7 @@ const RightContainerHeader = styled.div`
     transition: opacity 1s linear;
   }
 
-  svg {
+  svg:not(.kaddex-price) {
     path {
       fill: ${({ theme: { colors } }) => colors.white};
     }
@@ -62,9 +62,13 @@ const RightHeaderItems = () => {
   return (
     <RightContainerHeader>
       {/* TODO: make kdx price dynamic after mint */}
-      <Label fontSize={13} className="mainnet-chain-2 desktop-only">
-        KDX $0.16
-      </Label>
+      <div className="desktop-only flex align-ce">
+        <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 8 }} />
+        <Label fontSize={13} className="mainnet-chain-2">
+          $0.16
+        </Label>
+      </div>
+
       <Label fontSize={13} class1Name="mainnet-chain-2 desktop-only">
         Chain 2
       </Label>

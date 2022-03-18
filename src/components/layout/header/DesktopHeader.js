@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { KaddexLightModeLogo, KaddexLogo } from '../../../assets';
+import { CoinKaddexIcon, KaddexLightModeLogo, KaddexLogo } from '../../../assets';
 import { ROUTE_INDEX } from '../../../router/routes';
 import menuItems from '../../menuItems';
 import RightHeaderItems from './RightHeaderItems';
@@ -48,10 +48,6 @@ const LeftContainer = styled.div`
   }
 `;
 
-const RightContainer = styled.div`
-  display: flex;
-`;
-
 const AnimatedDiv = styled.div`
   display: flex;
   align-items: center;
@@ -89,9 +85,7 @@ const DesktopHeader = ({ className }) => {
         <GameEditionModeButton className="header" />
       )}
 
-      <RightContainer>
-        <RightHeaderItems />
-      </RightContainer>
+      <RightHeaderItems />
     </Container>
   );
 };
