@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import GradientBorder from '../shared/GradientBorder';
 import Label from '../shared/Label';
-import { GraphCardHeader } from './TVLChart';
 import { humanReadableNumber } from '../../utils/reduceBalance';
 import { BarChart, Bar, Tooltip, ResponsiveContainer } from 'recharts';
 import styled from 'styled-components';

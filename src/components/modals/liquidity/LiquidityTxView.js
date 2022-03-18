@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
-import { useAccountContext, useGameEditionContext, usePactContext } from '../../../contexts';
+import { useAccountContext, useGameEditionContext, usePactContext, useSwapContext } from '../../../contexts';
 import { chainId, ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
 import { extractDecimal, reduceBalance } from '../../../utils/reduceBalance';
 import { getTokenIcon, showTicker } from '../../../utils/token-utils';
@@ -10,7 +10,7 @@ import { Row, SuccessViewContainerGE, SuccesViewContainer } from '../common-resu
 import { CryptoContainer, FlexContainer } from '../../shared/FlexContainer';
 import reduceToken from '../../../utils/reduceToken';
 import CopyPopup from '../../shared/CopyPopup';
-import { Divider } from 'semantic-ui-react';
+import CustomDivider from '../../shared/CustomDivider';
 
 export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }) => {
   const { setButtons } = useGameEditionContext();
@@ -68,9 +68,10 @@ export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }
   );
 };
 
-export const SuccessAddRemoveView = ({ token0, token1, swap, loading, label, onClick }) => {
+export const SuccessAddView = ({ token0, token1, loading, onClick }) => {
   const { account } = useAccountContext();
   const pact = usePactContext();
+  const swap = useSwapContext();
 
   return (
     <SuccesViewContainer swap={swap} loading={loading} onClick={onClick}>
@@ -112,7 +113,7 @@ export const SuccessAddRemoveView = ({ token0, token1, swap, loading, label, onC
           <Label fontSize={13}>{(pact.share(swap?.localRes?.result?.data?.amount0) * 100).toPrecision(4)} %</Label>
         </FlexContainer>
 
-        <Divider />
+        <CustomDivider style={{ margin: '16px 0' }} />
 
         <Label>Amount</Label>
 
@@ -135,6 +136,40 @@ export const SuccessAddRemoveView = ({ token0, token1, swap, loading, label, onC
           <Label>{token1}</Label>
         </FlexContainer>
         <Label fontSize={13}>{`1 ${token1} =  ${reduceBalance(pact.ratio)} ${token0}`}</Label>
+      </FlexContainer>
+    </SuccesViewContainer>
+  );
+};
+
+export const SuccessRemoveView = ({ token0, token1, loading, onClick }) => {
+  const swap = useSwapContext();
+  return (
+    <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle>
+      <FlexContainer className="w-100 column" gap={12}>
+        <Label>Are you sure you want to remove your liquidity?</Label>
+
+        <CustomDivider style={{ margin: '16px 0' }} />
+
+        <div className="flex align-ce justify-sb">
+          <Label fontSize={16}>Amount</Label>
+          <Label fontSize={16}>Rewards</Label>
+        </div>
+
+        <div className="flex align-ce justify-sb">
+          <div className="flex align-ce">
+            <CryptoContainer size={24}>{getTokenIcon(token0)}</CryptoContainer>
+            <Label>{swap?.localRes?.result?.data?.amount0}</Label>
+          </div>
+          <Label>{token0}</Label>
+        </div>
+        <div className="flex align-ce justify-sb">
+          <div className="flex align-ce">
+            <CryptoContainer size={24}>{getTokenIcon(token1)}</CryptoContainer>
+            <Label>{swap?.localRes?.result?.data?.amount1}</Label>
+          </div>
+
+          <Label>{token1}</Label>
+        </div>
       </FlexContainer>
     </SuccesViewContainer>
   );

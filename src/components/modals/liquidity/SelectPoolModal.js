@@ -11,26 +11,28 @@ const SelectPoolModal = ({ pools, onSelect }) => {
 
   return (
     <Content>
-      <Search fluid placeholder="Search Token" value={searchValue} onChange={(e, { value }) => setSearchValue(value)} />
+      <Search fluid placeholder="Search Pool" value={searchValue} onChange={(e, { value }) => setSearchValue(value)} />
 
       <Label fontSize={13} fontFamily="syncopate">
         Pools
       </Label>
-      <CustomDivider />
+      <CustomDivider style={{ margin: '16px 0' }} />
       <FlexContainer gap={16}>
-        {pools.map((pool, i) => (
-          <div key={i} className="flex align-ce">
-            <CryptoContainer size={22} style={{ zIndex: 2 }}>
-              {tokenData[pool.token0].icon}
-            </CryptoContainer>
-            <CryptoContainer size={22} style={{ marginLeft: -12, zIndex: 1 }}>
-              {tokenData[pool.token1].icon}{' '}
-            </CryptoContainer>
-            <Label fontSize={13}>
-              {pool.token0}/{pool.token1}
-            </Label>
-          </div>
-        ))}
+        {pools
+          .filter((pool) => `${pool.token0}/${pool.token1}`?.toLowerCase().includes(searchValue.replaceAll(' ', '').toLowerCase()))
+          .map((pool, i) => (
+            <div key={i} className="flex align-ce">
+              <CryptoContainer size={22} style={{ zIndex: 2 }}>
+                {tokenData[pool.token0].icon}
+              </CryptoContainer>
+              <CryptoContainer size={22} style={{ marginLeft: -12, zIndex: 1 }}>
+                {tokenData[pool.token1].icon}{' '}
+              </CryptoContainer>
+              <Label fontSize={13}>
+                {pool.token0}/{pool.token1}
+              </Label>
+            </div>
+          ))}
       </FlexContainer>
     </Content>
   );

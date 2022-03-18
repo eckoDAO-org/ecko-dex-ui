@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { useGameEditionContext } from '../../contexts';
 import { ErrorIcon } from '../../assets';
@@ -6,10 +6,8 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { SwapContext } from '../../contexts/SwapContext';
 import CustomButton from '../shared/CustomButton';
 import Label from '../shared/Label';
-import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
-import { SuccessAddRemoveView, SuccessAddRemoveViewGE } from './liquidity/LiquidityTxView';
-import { SwapSuccessView, SwapSuccessViewGE } from './swap-modals/SwapSuccesTxView';
 import { commonColors } from '../../styles/theme';
+import Loader from '../shared/Loader';
 
 const Content = styled.div`
   display: flex;
@@ -52,18 +50,9 @@ const TransactionsDetails = styled.div`
   }
 `;
 
-const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
+const TxView = ({ loading, onClose, children, createTokenPair }) => {
   const swap = useContext(SwapContext);
   const { gameEditionView } = useContext(GameEditionContext);
-
-  const [loading, setLoading] = useState(false);
-
-  const sendTransaction = () => {
-    setLoading(true);
-    swap.swapSend();
-    onClose();
-    setLoading(false);
-  };
 
   const failView = () => {
     return (
@@ -127,43 +116,31 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
     );
   };
 
-  const onAddLiquidity = async () => {
-    setLoading(true);
-    if (view === LIQUIDITY_VIEW.ADD_LIQUIDITY) {
-      swap.swapSend();
-      onClose();
-    } else {
-      await createTokenPair();
-      await swap.swapSend();
-      onClose();
-    }
-    setLoading(false);
-  };
-
   const renderSwitch = () => {
     if (swap.localRes && swap.localRes.result && swap.localRes.result.status === 'success') {
-      switch (view) {
-        default:
-          return () => {};
-        case LIQUIDITY_VIEW.REMOVE_LIQUIDITY:
-          return gameEditionView ? (
-            <SuccessAddRemoveViewGE token0={token0} token1={token1} swap={swap} label="Remove Liquidity" onBPress={sendTransaction} />
-          ) : (
-            <SuccessAddRemoveView token0={token0} token1={token1} swap={swap} label="Remove Liquidity" loading={loading} onClick={sendTransaction} />
-          );
-        case LIQUIDITY_VIEW.ADD_LIQUIDITY:
-          return gameEditionView ? (
-            <SuccessAddRemoveViewGE token0={token0} token1={token1} swap={swap} label="Add Liquidity" onBPress={onAddLiquidity} />
-          ) : (
-            <SuccessAddRemoveView token0={token0} token1={token1} swap={swap} label="Add Liquidity" loading={loading} onClick={onAddLiquidity} />
-          );
-        case undefined:
-          return gameEditionView ? (
-            <SwapSuccessViewGE swap={swap} />
-          ) : (
-            <SwapSuccessView swap={swap} loading={loading} sendTransaction={sendTransaction} />
-          );
-      }
+      return loading ? <Loader /> : children || <></>;
+      // switch (view) {
+      //   default:
+      //     return () => {};
+      //   case LIQUIDITY_VIEW.REMOVE_LIQUIDITY:
+      //     return gameEditionView ? (
+      //       <SuccessAddRemoveViewGE token0={token0} token1={token1} swap={swap} label="Remove Liquidity" onBPress={sendTransaction} />
+      //     ) : (
+      //       <SuccessRemoveView token0={token0} token1={token1} swap={swap} label="Remove Liquidity" loading={loading} onClick={sendTransaction} />
+      //     );
+      //   case LIQUIDITY_VIEW.ADD_LIQUIDITY:
+      //     return gameEditionView ? (
+      //       <SuccessAddRemoveViewGE token0={token0} token1={token1} swap={swap} label="Add Liquidity" onBPress={onAddLiquidity} />
+      //     ) : (
+      //       <SuccessAddView token0={token0} token1={token1} swap={swap} label="Add Liquidity" loading={loading} onClick={onAddLiquidity} />
+      //     );
+      //   case undefined:
+      //     return gameEditionView ? (
+      //       <SwapSuccessViewGE swap={swap} />
+      //     ) : (
+      //       <SwapSuccessView swap={swap} loading={loading} sendTransaction={sendTransaction} />
+      //     );
+      // }
     } else return failView();
   };
   return typeof swap.localRes === 'string' ? localError() : renderSwitch();

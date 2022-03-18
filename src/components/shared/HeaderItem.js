@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { ROUTE_INDEX } from '../../router/routes';
 
 const Item = styled.div`
   color: ${({ theme: { colors } }) => colors.white};
@@ -75,7 +76,11 @@ const HeaderItem = ({
       className={className}
       onClick={() => {
         if (item.route) {
-          history.push(item.route);
+          if (item.route === ROUTE_INDEX) {
+            history.push(item.route?.concat(history?.location?.search));
+          } else {
+            history.push(item.route);
+          }
         } else if (item.link) {
           window.open(item.link, '_blank', 'noopener,noreferrer');
         } else {

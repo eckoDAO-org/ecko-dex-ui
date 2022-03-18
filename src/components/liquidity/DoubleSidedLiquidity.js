@@ -22,7 +22,8 @@ import SwapForm from '../swap/SwapForm';
 import TokenSelectorModalContentGE from '../../components/modals/swap-modals/TokenSelectorModalContentGE';
 import WalletRequestView from '../../components/modals/WalletRequestView';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
-import { useHistory } from 'react-router-dom';
+import { SuccessAddView } from '../modals/liquidity/LiquidityTxView';
+import { useSwapContext } from '../../contexts';
 
 const initialStateValue = {
   coin: '',
@@ -34,8 +35,8 @@ const initialStateValue = {
 };
 
 const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
-  const history = useHistory();
   const pact = useContext(PactContext);
+  const swap = useSwapContext();
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const liquidity = useContext(LiquidityContext);
@@ -44,6 +45,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
   const [inputSide, setInputSide] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const [fromValues, setFromValues] = useState({
     coin: 'KDA',
@@ -422,6 +424,16 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
     }
   };
 
+  const onAddLiquidity = async () => {
+    setLoading(true);
+
+    swap.swapSend();
+
+    setLoading(false);
+    modalContext.closeModal();
+    setShowTxModal(false);
+  };
+
   useEffect(() => {
     if (showTxModal) {
       if (gameEditionView) {
@@ -467,13 +479,13 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
                 setShowTxModal(false);
                 modalContext.closeModal();
               }}
-              view={LIQUIDITY_VIEW.ADD_LIQUIDITY}
-              token0={fromValues.coin}
-              token1={toValues.coin}
-              createTokenPair={() =>
-                liquidity.createTokenPairLocal(tokenData[fromValues.coin].name, tokenData[toValues.coin].name, fromValues.amount, toValues.amount)
-              }
-            />
+
+              // createTokenPair={() =>
+              //   liquidity.createTokenPairLocal(tokenData[fromValues.coin].name, tokenData[toValues.coin].name, fromValues.amount, toValues.amount)
+              // }
+            >
+              <SuccessAddView token0={pair.token0} token1={pair.token1} label="Add Liquidity" loading={loading} onClick={onAddLiquidity} />
+            </TxView>
           ),
         });
       }

@@ -14,6 +14,7 @@ import { ROUTE_LIQUIDITY_MY_LIQUIDITY } from '../router/routes';
 import { getPairListAccountBalance } from '../api/pact-pair';
 import useQueryParams from '../hooks/useQueryParams';
 import AppLoader from '../components/shared/AppLoader';
+import { LIQUIDITY_VIEW } from '../constants/liquidityView';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -86,7 +87,7 @@ const RemoveLiquidityContainer = () => {
             </FlexContainer>
             <SlippagePopupContent />
           </FlexContainer>
-          <RewardBooster />
+          <RewardBooster type={LIQUIDITY_VIEW.REMOVE_LIQUIDITY} />
           <RemoveLiquidityContent pair={pair} />
         </>
       )}

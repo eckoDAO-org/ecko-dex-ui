@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { FlexContainer } from './FlexContainer';
 import Label from './Label';
 import LogoLoader from './Loader';
+import InfoPopup from './InfoPopup';
 
 const Wrapper = styled(FlexContainer)`
   background-color: ${({ theme: { backgroundContainer } }) => backgroundContainer};
@@ -65,7 +66,7 @@ const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onCl
                 <th key={i} className={i === 0 ? 'sticky' : ''} style={{ minWidth: c.width, paddingTop: 0, zIndex: i === 0 ? 3 : 1 }}>
                   {typeof c.name === 'string' ? (
                     <Label fontSize={13} className={`capitalize ${c?.align === 'right' ? 'justify-fe' : ''}`}>
-                      {c.name}
+                      {c.name} {c.popup && <InfoPopup>{c.popup}</InfoPopup>}
                     </Label>
                   ) : (
                     c.name

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { ArrowDown } from '../../assets';
 import tokenData from '../../constants/cryptoCurrencies';

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
-import { useGameEditionContext, useLiquidityContext, useModalContext, useWalletContext } from '../../contexts';
+import { useGameEditionContext, useLiquidityContext, useModalContext, useSwapContext, useWalletContext } from '../../contexts';
 import TxView from '../modals/TxView';
 import WalletRequestView from '../modals/WalletRequestView';
 import CustomButton from '../shared/CustomButton';
@@ -20,6 +20,7 @@ import LogoLoader from '../shared/Loader';
 import { FadeIn } from '../shared/animations';
 import { FlexContainer } from '../shared/FlexContainer';
 import InputRange from '../shared/InputRange';
+import { SuccessRemoveView } from '../modals/liquidity/LiquidityTxView';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -63,6 +64,7 @@ const ButtonContainer = styled.div`
 `;
 
 const RemoveLiquidityContent = ({ pair }) => {
+  const swap = useSwapContext();
   const wallet = useWalletContext();
   const liquidity = useLiquidityContext();
   const modalContext = useModalContext();
@@ -104,6 +106,13 @@ const RemoveLiquidityContent = ({ pair }) => {
     }
   }, [wallet.walletSuccess]);
 
+  const sendTransaction = () => {
+    setLoading(true);
+    swap.swapSend();
+    // onClose();
+    setLoading(false);
+  };
+
   const onWalletRequestViewModalClose = () => {
     wallet.setIsWaitingForWalletAuth(false);
     wallet.setWalletError(null);
@@ -135,20 +144,27 @@ const RemoveLiquidityContent = ({ pair }) => {
       });
     } else {
       modalContext.openModal({
-        title: 'transaction details',
+        title: 'remove liquidity?',
         description: '',
         onClose: () => {
           modalContext.closeModal();
         },
         content: (
           <TxView
-            view={LIQUIDITY_VIEW.REMOVE_LIQUIDITY}
-            token0={pair?.token0}
             onClose={() => {
               modalContext.closeModal();
             }}
-            token1={pair?.token1}
-          />
+            loading={loading}
+          >
+            <SuccessRemoveView
+              token0={pair.token0}
+              token1={pair.token1}
+              swap={swap}
+              label="Remove Liquidity"
+              loading={loading}
+              onClick={sendTransaction}
+            />
+          </TxView>
         ),
       });
     }
@@ -204,7 +220,7 @@ const RemoveLiquidityContent = ({ pair }) => {
                 disabled={isNaN(amount) || reduceBalance(amount) === 0}
                 onClick={async () => await onRemoveLiquidity()}
               >
-                Remove Liquidity
+                Remove
               </CustomButton>
             )}
           </ButtonContainer>

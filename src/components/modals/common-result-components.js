@@ -61,21 +61,23 @@ export const GasCost = ({ swap }) => {
 };
 
 // CONTENT CONTAINER
-export const SuccesViewContainer = ({ swap, onClick, loading, children }) => {
+export const SuccesViewContainer = ({ swap, onClick, children, icon, hideSubtitle }) => {
   const { gameEditionView } = useGameEditionContext();
   return (
     <Content gameEditionView={gameEditionView}>
-      <Label fontFamily="syncopate" geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
-        Preview Successful!
-      </Label>
-      {!gameEditionView && <SuccessfullIcon />}
+      {!hideSubtitle && (
+        <Label fontFamily="syncopate" geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
+          Preview Successful!
+        </Label>
+      )}
+      {!gameEditionView && (icon || <SuccessfullIcon />)}
 
       <TransactionsDetails>
         {children}
         <GasCost swap={swap} />
       </TransactionsDetails>
       <CustomButton
-        type="secondary"
+        type="gradient"
         buttonStyle={{
           width: '100%',
           marginTop: !gameEditionView && '16px',
@@ -84,9 +86,8 @@ export const SuccesViewContainer = ({ swap, onClick, loading, children }) => {
         onClick={async () => {
           await onClick();
         }}
-        loading={loading}
       >
-        Send Transaction
+        confirm
       </CustomButton>
     </Content>
   );

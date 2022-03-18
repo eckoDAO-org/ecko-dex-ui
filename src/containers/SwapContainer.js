@@ -36,7 +36,8 @@ import LogoLoader from '../components/shared/Loader';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import GameEditionModeButton from '../components/layout/header/GameEditionModeButton';
 import { HistoryIcon } from '../assets';
-import { ROUTE_MY_SWAP } from '../router/routes';
+import { ROUTE_MY_SWAP, ROUTE_SWAP } from '../router/routes';
+import { SwapSuccessView } from '../components/modals/swap-modals/SwapSuccesTxView';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -235,7 +236,12 @@ const SwapContainer = () => {
     } else {
       setPriceImpact('');
     }
-  }, [fromValues.coin, toValues.coin, fromValues.amount, toValues.amount, pact.ratio]);
+  }, [fromValues.amount, toValues.amount, pact.ratio]);
+
+  useEffect(() => {
+    history.push(ROUTE_SWAP.concat(`?token0=${fromValues.coin}&token1=${toValues.coin}`));
+  }, [fromValues.coin, toValues.coin]);
+
   useEffect(() => {
     const getBalance = async () => {
       if (account.account) {
@@ -460,6 +466,14 @@ const SwapContainer = () => {
     }
   };
 
+  const sendTransaction = () => {
+    setLoading(true);
+    swap.swapSend();
+    setShowTxModal(false);
+    modalContext.closeModal();
+    setLoading(false);
+  };
+
   useEffect(() => {
     if (showTxModal) {
       if (gameEditionView) {
@@ -498,7 +512,9 @@ const SwapContainer = () => {
                 setShowTxModal(false);
                 modalContext.closeModal();
               }}
-            />
+            >
+              <SwapSuccessView loading={loading} sendTransaction={sendTransaction} />
+            </TxView>
           ),
         });
       }
