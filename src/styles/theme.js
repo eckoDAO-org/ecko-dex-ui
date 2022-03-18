@@ -38,6 +38,7 @@ export const commonColors = {
   black: '#000000',
   yellow: '#FEDE75',
   green: '#41CC41',
+  grey: '#5C5C5C',
   error: '#DB2828',
   gameEditionYellow: '#FFC107',
   gameEditionBlue: '#6D99E4',
