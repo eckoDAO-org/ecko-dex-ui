@@ -9,7 +9,7 @@ import DesktopHeader from './header/DesktopHeader';
 import MobileHeader from './header/MobileHeader';
 import { ReactComponent as Stripes } from '../../assets/images/shared/stripes.svg';
 import GameEditionContainer from '../game-edition-v2/GameEditionContainer';
-import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION, ROUTE_INDEX } from '../../router/routes';
+import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION, ROUTE_INDEX, ROUTE_STATS } from '../../router/routes';
 import browserDetection from '../../utils/browserDetection';
 import gameEditionBackground from '../../assets/images/game-edition/game-edition-background.png';
 import TabletHeader from './header/TabletHeader';
@@ -24,8 +24,6 @@ const WrapperContainer = styled.div`
   .mainnet-chain-2 {
     font-size: 14px;
     text-align: center;
-    font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
-    color: ${({ theme: { colors } }) => colors.white};
     @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
       padding-top: 20px;
     }
@@ -117,7 +115,7 @@ const Layout = ({ children }) => {
   useEffect(() => {
     if (gameEditionView) {
       history.push(ROUTE_GAME_START_ANIMATION);
-    } else if (pathname === ROUTE_GAME_EDITION_MENU || pathname === ROUTE_GAME_START_ANIMATION) {
+    } else if (pathname === ROUTE_GAME_EDITION_MENU || pathname === ROUTE_GAME_START_ANIMATION || pathname === ROUTE_STATS) {
       history.push(ROUTE_INDEX);
     }
   }, [gameEditionView]);

@@ -389,6 +389,7 @@ const SwapContainer = () => {
   const onWalletRequestViewModalClose = () => {
     wallet.setIsWaitingForWalletAuth(false);
     wallet.setWalletError(null);
+    setLoading(false);
   };
 
   useEffect(() => {

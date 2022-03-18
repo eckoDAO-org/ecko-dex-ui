@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import InfoPopup from '../components/shared/InfoPopup';
 import Label from '../components/shared/Label';
 import Analytics from '../components/stake/Analytics';
-import MyPosition from '../components/stake/MyPosition';
+import Position from '../components/stake/Position';
 import Rewards from '../components/stake/Rewards';
+import VotingPower from '../components/stake/VotingPower';
 import { ROUTE_STAKE, ROUTE_UNSTAKE } from '../router/routes';
 import theme from '../styles/theme';
 
 const StakeContainer = () => {
   const history = useHistory();
   const { pathname } = useLocation();
+
+  const [stakeKdxAmout, setStakeKdxAmount] = useState(0);
   return (
     <FlexContainer
       className="column w-100 h-100"
@@ -43,11 +46,18 @@ const StakeContainer = () => {
         <InfoPopup></InfoPopup>
       </FlexContainer>
 
-      <FlexContainer>
-        <MyPosition />
-        <Rewards />
-        <Analytics />
+      <FlexContainer gap={24}>
+        <Position
+          amount={231.3213}
+          stakeKdxAmout={stakeKdxAmout}
+          setStakeKdxAmount={setStakeKdxAmount}
+          buttonLabel={pathname === ROUTE_STAKE ? 'stake' : 'unstake'}
+        />
+        <Rewards amount={231.3213} rewardsPenality={2} stakedTime={32} />
+        <Analytics apr={32} volume={321232.231321} stakedShare={5.16} totalStaked={35.16} />
       </FlexContainer>
+
+      <VotingPower />
     </FlexContainer>
   );
 };

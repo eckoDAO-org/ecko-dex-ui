@@ -19,7 +19,7 @@ const SelectPoolModal = ({ pools, onSelect }) => {
       <CustomDivider style={{ margin: '16px 0' }} />
       <FlexContainer gap={16}>
         {pools
-          .filter((pool) => `${pool.token0}/${pool.token1}`?.toLowerCase().includes(searchValue.replaceAll(' ', '').toLowerCase()))
+          .filter((pool) => `${pool.token0}/${pool.token1}`?.toLowerCase()?.includes(searchValue?.replaceAll(' ', '')?.toLowerCase()))
           .map((pool, i) => (
             <div key={i} className="flex align-ce">
               <CryptoContainer size={22} style={{ zIndex: 2 }}>

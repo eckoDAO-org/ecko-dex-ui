@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom';
 import { useErrorState } from '../../hooks/useErrorState';
 import { getDailyVolume } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact-pair';
-import { NETWORK_TYPE } from '../../constants/contextConstants';
 import { humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';

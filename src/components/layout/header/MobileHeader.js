@@ -6,6 +6,7 @@ import { HamburgerIcon, KaddexLetterLogo } from '../../../assets';
 import menuItems from '../../menuItems';
 import { useHistory } from 'react-router';
 import { ROUTE_SWAP } from '../../../router/routes';
+import Label from '../../shared/Label';
 
 const Container = styled.div`
   display: flex;
@@ -63,7 +64,9 @@ const MobileHeader = ({ className }) => {
         {/* <GameEditionModeButton /> */}
         <RightHeaderItems />
       </RowContainer>
-      <span className="mainnet-chain-2 mobile-only">Chain 2</span>
+      <Label outGameEditionView className="mainnet-chain-2 mobile-only">
+        Chain 2
+      </Label>
     </Container>
   );
 };

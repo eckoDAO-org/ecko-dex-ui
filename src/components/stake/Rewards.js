@@ -2,28 +2,24 @@ import React from 'react';
 import { commonColors } from '../../styles/theme';
 import { humanReadableNumber } from '../../utils/reduceBalance';
 import CustomButton from '../shared/CustomButton';
-import { FlexContainer } from '../shared/FlexContainer';
 import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
+import CommonWrapper from './CommonWrapper';
 
 const Rewards = ({ amount, stakedTime, rewardsPenality }) => {
   return (
-    <div className="column w-100">
-      <Label fontSize={16} fontFamily="syncopate">
-        rewards
-      </Label>
-
-      <FlexContainer withGradient className="column background-fill">
+    <CommonWrapper gap={16} title="rewards">
+      <div>
         <Label>Rewards Collected</Label>
-        <Label fontSize={32} fontFamily="syncopate">
-          {humanReadableNumber(amount)}
-        </Label>
-
+        <Label fontSize={32}>{humanReadableNumber(amount)}</Label>
+      </div>
+      <div>
         <Label>Stake Time</Label>
-        <Label fontSize={24} colors={commonColors.green}>
+        <Label fontSize={24} color={commonColors.green}>
           {stakedTime} days
         </Label>
-
+      </div>
+      <div>
         <div className="flex align-ce">
           <Label>Rewards Penality</Label>
           <InfoPopup>
@@ -34,14 +30,13 @@ const Rewards = ({ amount, stakedTime, rewardsPenality }) => {
           </InfoPopup>
         </div>
 
-        <Label fontSize={24} colors={commonColors.green}>
+        <Label fontSize={24} color={commonColors.green}>
           {rewardsPenality} %
         </Label>
-
-        <CustomButton type="gradient">stake rewards</CustomButton>
-        <CustomButton type="primary">withdraw</CustomButton>
-      </FlexContainer>
-    </div>
+      </div>
+      <CustomButton type="gradient">stake rewards</CustomButton>
+      <CustomButton type="primary">withdraw</CustomButton>
+    </CommonWrapper>
   );
 };
 

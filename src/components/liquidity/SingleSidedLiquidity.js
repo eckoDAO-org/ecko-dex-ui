@@ -149,7 +149,6 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
             values={values}
             disabledButton={!values.balance}
             onClick={() => {
-              // setTokenSelectorType('from');
               openTokenSelectorModal();
             }}
             onMaxClickButton={() => {
@@ -161,9 +160,6 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
           />
         }
         value={noExponents(values.amount)}
-        onSelectButtonClick={() => {
-          // setTokenSelectorType('from');
-        }}
         onChange={async (e, { value }) => {
           setValues((prev) => ({
             ...prev,

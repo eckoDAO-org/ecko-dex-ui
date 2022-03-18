@@ -104,7 +104,7 @@ const CustomButton = ({
     <StyledButton
       {...props}
       onClick={() => {
-        if (!disabled && onClick) {
+        if (!disabled && !loading && onClick) {
           onClick();
         }
       }}

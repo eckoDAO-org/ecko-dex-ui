@@ -64,12 +64,12 @@ const RightHeaderItems = () => {
       {/* TODO: make kdx price dynamic after mint */}
       <div className="desktop-only flex align-ce">
         <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 8 }} />
-        <Label fontSize={13} className="mainnet-chain-2">
+        <Label outGameEditionView fontSize={13} className="mainnet-chain-2">
           $0.16
         </Label>
       </div>
 
-      <Label fontSize={13} class1Name="mainnet-chain-2 desktop-only">
+      <Label outGameEditionView fontSize={13} class1Name="mainnet-chain-2 desktop-only">
         Chain 2
       </Label>
       {account?.account && width >= commonTheme.mediaQueries.desktopPixel && (

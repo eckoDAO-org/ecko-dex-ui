@@ -4,6 +4,8 @@ import { WALLET } from '../../../constants/wallet';
 import { useKaddexWalletContext, useNotificationContext, useModalContext, useGameEditionContext } from '../../../contexts';
 import ConnectWalletZelcoreModal from './ConnectWalletZelcoreModal';
 import ConnectWalletChainweaverModal from './ConnectWalletChainweaverModal';
+import styled from 'styled-components';
+import { FlexContainer } from '../../shared/FlexContainer';
 
 const ConnectWalletModal = () => {
   const modalContext = useModalContext();
@@ -63,17 +65,44 @@ const ConnectWalletModal = () => {
     }
   };
 
-  return Object.values(WALLET).map((wallet, index) => (
-    <CustomButton
-      key={index}
-      onClick={() => {
-        openWalletModal(wallet.name);
-      }}
-    >
-      {!gameEditionView && wallet.logo}
-      {` ${wallet.name}`}
-    </CustomButton>
-  ));
+  return (
+    <Container className="column" gap={16}>
+      <CustomButton
+        type="gradient"
+        onClick={() => {
+          openWalletModal(WALLET.KADDEX_WALLET.name);
+        }}
+      >
+        {WALLET.KADDEX_WALLET.name}
+      </CustomButton>
+      <CustomButton
+        type="primary"
+        onClick={() => {
+          openWalletModal(WALLET.ZELCORE.name);
+        }}
+      >
+        {!gameEditionView && WALLET.ZELCORE.logo}
+        {WALLET.ZELCORE.name}
+      </CustomButton>
+      <CustomButton
+        type="primary"
+        onClick={() => {
+          openWalletModal(WALLET.CHAINWEAVER.name);
+        }}
+      >
+        {!gameEditionView && WALLET.CHAINWEAVER.logo}
+        {WALLET.CHAINWEAVER.name}
+      </CustomButton>
+    </Container>
+  );
 };
 
 export default ConnectWalletModal;
+
+const Container = styled(FlexContainer)`
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
+`;
