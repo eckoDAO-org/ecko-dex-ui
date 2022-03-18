@@ -25,7 +25,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
     coin: pair?.token0 || 'KDA',
     account: '',
     guard: null,
-    balance: account.account.balance,
+    balance: account?.account?.balance,
     amount: '',
     precision: 12,
   });
