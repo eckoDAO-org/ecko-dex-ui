@@ -1,19 +1,14 @@
 import React, { useContext } from 'react';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { PactContext } from '../../../contexts/PactContext';
-import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { useSwapContext } from '../../../contexts';
-import { ApplicationContext } from '../../../contexts/ApplicationContext';
 import { extractDecimal, reduceBalance } from '../../../utils/reduceBalance';
 import reduceToken from '../../../utils/reduceToken';
 import { getTokenIcon, showTicker } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
-import { Row, SuccessViewContainerGE, SuccesViewContainer } from '../common-result-components';
+import { SuccessViewContainerGE, SuccesViewContainer } from '../common-result-components';
 import { ChainIcon } from '../../../assets';
 import { chainId, ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
-import { Divider, Icon } from 'semantic-ui-react';
-import PopupTxView from '../PopupTxView';
-import { theme } from '../../../styles/theme';
 
 import Label from '../../shared/Label';
 import { CryptoContainer, FlexContainer } from '../../shared/FlexContainer';
@@ -30,15 +25,15 @@ export const SwapSuccessViewGE = ({ swap }) => {
       containerStyle={{ marginTop: 16 }}
       leftItem={
         <>
-          <Row className="fs">
+          <div className="flex justify-fs">
             {getTokenIcon(swap?.localRes?.result?.data[0]?.token)}
             <GameEditionLabel fontSize={32} color="black" fontFamily="syncopate">
               {extractDecimal(swap?.localRes?.result?.data[0]?.amount)}
             </GameEditionLabel>
-          </Row>
+          </div>
 
           <GameEditionLabel color="blue">From</GameEditionLabel>
-          <Row className="fs">
+          <div className="flex justify-fs">
             <GameEditionLabel fontSize={22} color="blue-grey">
               {reduceToken(account.account)}
             </GameEditionLabel>
@@ -46,19 +41,19 @@ export const SwapSuccessViewGE = ({ swap }) => {
             <GameEditionLabel fontSize={22} color="blue-grey">
               {swap?.localRes?.metaData?.publicMeta?.chainId}
             </GameEditionLabel>
-          </Row>
+          </div>
         </>
       }
       rightItem={
         <>
-          <Row className="fs">
+          <div className="flex justify-fs">
             {getTokenIcon(swap?.localRes?.result?.data[1]?.token)}
             <GameEditionLabel fontSize={32} color="black" fontFamily="syncopate">
               {extractDecimal(swap?.localRes?.result?.data[1]?.amount)}
             </GameEditionLabel>
-          </Row>
+          </div>
           <GameEditionLabel color="blue">From</GameEditionLabel>
-          <Row className="fs">
+          <div className="flex justify-fs">
             <GameEditionLabel fontSize={22} color="blue-grey">
               {reduceToken(account.account)}
             </GameEditionLabel>
@@ -66,7 +61,7 @@ export const SwapSuccessViewGE = ({ swap }) => {
             <GameEditionLabel fontSize={22} color="blue-grey">
               {swap?.localRes?.metaData?.publicMeta?.chainId}
             </GameEditionLabel>
-          </Row>
+          </div>
         </>
       }
       infoItems={[
@@ -95,8 +90,7 @@ export const SwapSuccessViewGE = ({ swap }) => {
 export const SwapSuccessView = ({ loading, sendTransaction }) => {
   const { account } = useContext(AccountContext);
   const pact = useContext(PactContext);
-  const { gameEditionView } = useContext(GameEditionContext);
-  const { themeMode } = useContext(ApplicationContext);
+
   const swap = useSwapContext();
   return (
     <SuccesViewContainer

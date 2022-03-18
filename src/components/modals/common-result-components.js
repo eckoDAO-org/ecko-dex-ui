@@ -37,7 +37,7 @@ export const Message = ({ color, children }) => {
 // GAS COST COMPONENT
 export const GasCost = ({ swap }) => {
   return (
-    <Row className="sb">
+    <div className="flex justify-sb">
       <Label fontSize={13}>Gas Cost</Label>
       <div style={{ display: 'flex' }}>
         {ENABLE_GAS_STATION ? (
@@ -56,7 +56,7 @@ export const GasCost = ({ swap }) => {
         )}
         {ENABLE_GAS_STATION && <PopupTxView popupStyle={{ maxWidth: '400px' }} />}
       </div>
-    </Row>
+    </div>
   );
 };
 
@@ -103,7 +103,7 @@ export const SuccessViewContainerGE = ({ leftItem, rightItem, infoItems, hideIco
             {title}
           </GameEditionLabel>
         )}
-        <Row className="sb" style={{ position: 'relative', paddingLeft: 16, paddingRight: 16 }}>
+        <div className="flex justify-sb relative" style={{ paddingLeft: 16, paddingRight: 16 }}>
           <PixeledInfoContainerWhite>{leftItem}</PixeledInfoContainerWhite>
           {!hideIcon && (
             <PixeledCircleArrowIcon
@@ -111,14 +111,14 @@ export const SuccessViewContainerGE = ({ leftItem, rightItem, infoItems, hideIco
             />
           )}
           <PixeledInfoContainerWhite>{rightItem}</PixeledInfoContainerWhite>
-        </Row>
+        </div>
         <InfoContainer style={{ width: GE_DESKTOP_CONFIGURATION.DISPLAY_WIDTH, marginTop: 16 }}>
           {infoItems?.map((item, i) => (
             <PixeledBlueContainer key={i} label={item.label} value={item.value} />
           ))}
         </InfoContainer>
       </div>
-      <Row className="c">{loading ? <LogoLoader /> : <PressButtonToActionLabel actionLabel="send" />}</Row>
+      <div className="flex justify-ce">{loading ? <LogoLoader /> : <PressButtonToActionLabel actionLabel="send" />}</div>
     </PreviewContainer>
   );
 };
@@ -169,20 +169,6 @@ const MessageContainer = styled.div`
   padding: 16px 24px;
   border-radius: ${({ gameEditionView }) => !gameEditionView && '4px'};
   background-color: ${({ gameEditionView, theme: { colors } }) => !gameEditionView && colors.black};
-`;
-
-export const Row = styled.div`
-  display: flex;
-  align-items: center;
-  &.sb {
-    justify-content: space-between;
-  }
-  &.fs {
-    justify-content: flex-start;
-  }
-  &.c {
-    justify-content: center;
-  }
 `;
 
 const PreviewContainer = styled.div`

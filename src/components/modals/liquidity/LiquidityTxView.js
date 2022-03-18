@@ -6,7 +6,7 @@ import { extractDecimal, reduceBalance } from '../../../utils/reduceBalance';
 import { getTokenIcon, showTicker } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import Label from '../../shared/Label';
-import { Row, SuccessViewContainerGE, SuccesViewContainer } from '../common-result-components';
+import { SuccessViewContainerGE, SuccesViewContainer } from '../common-result-components';
 import { CryptoContainer, FlexContainer } from '../../shared/FlexContainer';
 import reduceToken from '../../../utils/reduceToken';
 import CopyPopup from '../../shared/CopyPopup';
@@ -27,12 +27,12 @@ export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }
           <GameEditionLabel fontSize={32} color="blue">
             {showTicker(token0)}
           </GameEditionLabel>
-          <Row className="fs">
+          <div className="flex justify-fs">
             {getTokenIcon(token0)}
             <GameEditionLabel fontSize={22} color="blue-grey">
               {extractDecimal(swap?.localRes?.result?.data?.amount0)}
             </GameEditionLabel>
-          </Row>
+          </div>
         </>
       }
       rightItem={
@@ -41,12 +41,12 @@ export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }
             {showTicker(token1)}
           </GameEditionLabel>
 
-          <Row className="fs">
+          <div className="flex justify-fs">
             {getTokenIcon(token1)}
             <GameEditionLabel fontSize={22} color="blue-grey">
               {extractDecimal(swap?.localRes?.result?.data?.amount1)}
             </GameEditionLabel>
-          </Row>
+          </div>
         </>
       }
       infoItems={[

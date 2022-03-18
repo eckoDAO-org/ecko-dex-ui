@@ -10,7 +10,7 @@ import CustomButton from '../../../components/shared/CustomButton';
 import { SuccessfullIcon } from '../../../assets';
 import tokenData from '../../../constants/cryptoCurrencies';
 import Label from '../../shared/Label';
-import { Row, SuccessViewContainerGE } from '../common-result-components';
+import { SuccessViewContainerGE } from '../common-result-components';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import { CryptoContainer, FlexContainer } from '../../shared/FlexContainer';
 import CopyPopup from '../../shared/CopyPopup';
@@ -139,12 +139,12 @@ const ReviewTxModal = ({ fromValues, toValues, supply }) => {
               {fromValues.coin}
             </GameEditionLabel>
 
-            <Row className="fs">
+            <div className="flex justify-fs">
               {getTokenIcon(fromValues.coin)}
               <GameEditionLabel fontSize={22} color="blue-grey">
                 {fromValues.amount}
               </GameEditionLabel>
-            </Row>
+            </div>
 
             <GameEditionLabel color="blue">{`1 ${fromValues?.coin} =  ${reduceBalance(1 / pact.ratio)} ${toValues?.coin}`}</GameEditionLabel>
           </>
@@ -155,12 +155,12 @@ const ReviewTxModal = ({ fromValues, toValues, supply }) => {
               {toValues.coin}
             </GameEditionLabel>
 
-            <Row className="fs">
+            <div className="flex justify-fs">
               {getTokenIcon(toValues.coin)}
               <GameEditionLabel fontSize={22} color="blue-grey">
                 {toValues.amount}
               </GameEditionLabel>
-            </Row>
+            </div>
             <GameEditionLabel color="blue">{`1 ${toValues?.coin} =  ${reduceBalance(pact.ratio)} ${fromValues?.coin}`}</GameEditionLabel>
           </>
         }

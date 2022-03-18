@@ -11,7 +11,7 @@ import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_LIQUIDITY_TOKENS } fr
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
 import { get24HVolumeSingleSided, getAllPairValues, getTokenUsdPrice } from '../../utils/token-utils';
-import InfoPopup from '../shared/InfoPopup';
+
 const LiquidityTokensTable = () => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
