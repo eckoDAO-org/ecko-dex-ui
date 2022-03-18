@@ -1,19 +1,20 @@
 import React, { useRef, useState } from 'react';
 import { Divider } from 'semantic-ui-react';
 import styled, { css } from 'styled-components/macro';
+import useWindowSize from '../../../hooks/useWindowSize';
+import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
+import { useAccountContext, useGameEditionContext, useModalContext } from '../../../contexts';
 import { PowerIcon } from '../../../assets';
-import { useAccountContext, useApplicationContext, useGameEditionContext, useModalContext } from '../../../contexts';
 import HeaderItem from '../../../components/shared/HeaderItem';
 import LightModeToggle from '../../../components/shared/LightModeToggle';
-import { theme, commonTheme } from '../../../styles/theme';
 import AccountInfo from './AccountInfo';
 import AccountModal from '../../modals/kdaModals/AccountModal';
 import reduceToken from '../../../utils/reduceToken';
 import { reduceBalance } from '../../../utils/reduceBalance';
-import useWindowSize from '../../../hooks/useWindowSize';
-import GradientContainer from '../../shared/GradientContainer';
 import browserDetection from '../../../utils/browserDetection';
-import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
+import { FlexContainer } from '../../shared/FlexContainer';
+import Label from '../../shared/Label';
+import { commonTheme } from '../../../styles/theme';
 
 const Wrapper = styled.div`
   height: 100%;
@@ -21,7 +22,7 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
-const PopupContainer = styled(GradientContainer)`
+const PopupContainer = styled(FlexContainer)`
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -29,7 +30,7 @@ const PopupContainer = styled(GradientContainer)`
   border-radius: 10px;
   background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
   position: absolute;
-
+  z-index: 5;
   top: 40px;
   right: 0px;
   &.hamburger {
@@ -68,17 +69,10 @@ const CustomDivider = styled(Divider)`
   border-bottom: 0px !important;
 `;
 
-const HeaderItemContent = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContentListStyle, withoutAccountInfo, icon, className }) => {
   const { account, logout } = useAccountContext();
   const { gameEditionView, openModal } = useGameEditionContext();
   const modalContext = useModalContext();
-  const { themeMode } = useApplicationContext();
   const [width] = useWindowSize();
 
   const [showPopup, setShowPopup] = useState(false);
@@ -95,30 +89,21 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
         {icon}
       </div>
       {showPopup && (
-        <PopupContainer
-          className={className}
-          style={{ width: 'unset' }}
-          backgroundColor={
-            (browserDetection() === 'BRAVE' || browserDetection() === 'FIREFOX') && themeMode === 'dark' && theme('dark').colors.primary
-          }
-        >
+        <PopupContainer outOfGameEdition withGradient className={className} style={{ width: 'unset' }}>
           <ListContainer style={PopupContentListStyle}>
             {items.map((item, index) => (
               <HeaderItem
-                className={item?.className}
-                route={item?.route}
                 key={index}
+                disableUnderline
+                item={item}
                 onClick={() => {
                   setShowPopup(false);
                 }}
-                icon={item?.icon}
-                link={item?.link}
                 headerItemStyle={{
                   display: 'flex',
                   alignItems: 'center',
                   fontSize: 16,
-                  fontFamily: commonTheme.fontFamily.regular,
-                  width: 42,
+                  fontFamily: commonTheme.fontFamily.basier,
                 }}
               >
                 {item.label}
@@ -152,19 +137,9 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
             )}
 
             {account.account && withLogout && (
-              <HeaderItem
-                headerItemStyle={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  fontSize: 16,
-                  fontFamily: commonTheme.fontFamily.regular,
-                  width: 42,
-                }}
-              >
-                <HeaderItemContent onClick={() => logout()}>
-                  <PowerIcon /> Logout
-                </HeaderItemContent>
-              </HeaderItem>
+              <FlexContainer className="align-ce pointer" onClick={() => logout()}>
+                <PowerIcon /> <Label>Logout</Label>
+              </FlexContainer>
             )}
           </ListContainer>
         </PopupContainer>

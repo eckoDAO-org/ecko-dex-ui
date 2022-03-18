@@ -133,7 +133,7 @@ const LiquidityList = (props) => {
             geCenter
             geLabelStyle={{ marginBottom: '14px' }}
             labelStyle={{ marginBottom: '14px' }}
-            fontFamily="bold"
+            fontFamily="syncopate"
           >
             Liquidity provider rewards
           </Label>
@@ -152,7 +152,7 @@ const LiquidityList = (props) => {
             geCenter
             geLabelStyle={{ marginBottom: 20 }}
             labelStyle={{ margin: '30px 0px 14px' }}
-            fontFamily="bold"
+            fontFamily="syncopate"
             geColor="yellow"
           >
             Your Liquidity
@@ -235,7 +235,7 @@ const LiquidityList = (props) => {
                   <p
                     style={{
                       fontSize: gameEditionView ? 12 : 16,
-                      fontFamily: gameEditionView ? theme(themeMode).fontFamily.pixeboy : theme(themeMode).fontFamily.regular,
+                      fontFamily: gameEditionView ? theme(themeMode).fontFamily.pixeboy : theme(themeMode).fontFamily.basier,
                       textAlign: 'center',
                     }}
                   >
@@ -249,7 +249,7 @@ const LiquidityList = (props) => {
                         inline="centered"
                         style={{
                           color: theme(themeMode).colors.white,
-                          fontFamily: gameEditionView ? theme(themeMode).fontFamily.pixeboy : theme(themeMode).fontFamily.regular,
+                          fontFamily: gameEditionView ? theme(themeMode).fontFamily.pixeboy : theme(themeMode).fontFamily.basier,
                         }}
                       />
                     ) : (

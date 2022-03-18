@@ -2,7 +2,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { throttle, debounce } from 'throttle-debounce';
+import useWindowSize from '../hooks/useWindowSize';
+import { useHistory } from 'react-router-dom';
 import { FadeIn } from '../components/shared/animations';
+import { AccountContext } from '../contexts/AccountContext';
+import { GameEditionContext } from '../contexts/GameEditionContext';
+import { ApplicationContext } from '../contexts/ApplicationContext';
+import { ModalContext } from '../contexts/ModalContext';
+import { PactContext } from '../contexts/PactContext';
+import { SwapContext } from '../contexts/SwapContext';
+import { WalletContext } from '../contexts/WalletContext';
 import TxView from '../components/modals/TxView';
 import WalletRequestView from '../components/modals/WalletRequestView';
 import SwapButtonsForm from '../components/swap/SwapButtonsForm';
@@ -10,12 +19,6 @@ import SwapForm from '../components/swap/SwapForm';
 import SwapResults from '../components/swap/SwapResults';
 import SwapResultsGEv2 from '../components/swap/SwapResultsGEv2';
 import tokenData from '../constants/cryptoCurrencies';
-import { AccountContext } from '../contexts/AccountContext';
-import { GameEditionContext } from '../contexts/GameEditionContext';
-import { ModalContext } from '../contexts/ModalContext';
-import { PactContext } from '../contexts/PactContext';
-import { SwapContext } from '../contexts/SwapContext';
-import { WalletContext } from '../contexts/WalletContext';
 import { getCorrectBalance, reduceBalance } from '../utils/reduceBalance';
 import TokenSelectorModalContent from '../components/modals/swap-modals/TokenSelectorModalContent';
 import TokenSelectorModalContentGE from '../components/modals/swap-modals/TokenSelectorModalContentGE';
@@ -30,6 +33,11 @@ import Label from '../components/shared/Label';
 import PixeledBlueContainer from '../components/game-edition-v2/components/PixeledInfoContainerBlue';
 import useLazyImage from '../hooks/useLazyImage';
 import LogoLoader from '../components/shared/Loader';
+import { FlexContainer } from '../components/shared/FlexContainer';
+import GameEditionModeButton from '../components/layout/header/GameEditionModeButton';
+import { HistoryIcon } from '../assets';
+import { ROUTE_MY_SWAP, ROUTE_SWAP } from '../router/routes';
+import { SwapSuccessView } from '../components/modals/swap-modals/SwapSuccesTxView';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -59,49 +67,38 @@ const Container = styled(FadeIn)`
     } else {
       return css`
         max-width: 550px;
+        overflow: visible;
       `;
     }
   }}
 `;
 
-const SwapTitleContainer = styled.div`
+const SvgContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 14px;
-  ${({ gameEditionView }) => {
-    if (gameEditionView) {
-      return css`
-        justify-content: center;
-      `;
-    }
-  }}
-  width: 100%;
-`;
-
-const GameEditionTokenSelectorContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
   align-items: center;
-  text-align: center;
+  justify-content: center;
+  height: 32px;
+  width: 32px;
+  cursor: pointer;
+  svg {
+    height: 20px;
+    width: 20px;
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
 `;
-
-const ResultContainer = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  margin: 16px 0px;
-`;
-
 const SwapContainer = () => {
+  const history = useHistory();
+  const [width, height] = useWindowSize();
   const pact = useContext(PactContext);
   const swap = useContext(SwapContext);
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const modalContext = useContext(ModalContext);
-  const { gameEditionView, openModal, closeModal, outsideToken } = useContext(GameEditionContext);
+  const { resolutionConfiguration } = useContext(ApplicationContext);
+
+  const { gameEditionView, openModal, closeModal, outsideToken, showTokens, setOutsideToken, setShowTokens } = useContext(GameEditionContext);
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
 
   const [selectedToken, setSelectedToken] = useState(null);
@@ -239,7 +236,12 @@ const SwapContainer = () => {
     } else {
       setPriceImpact('');
     }
-  }, [fromValues.coin, toValues.coin, fromValues.amount, toValues.amount, pact.ratio]);
+  }, [fromValues.amount, toValues.amount, pact.ratio]);
+
+  useEffect(() => {
+    history.push(ROUTE_SWAP.concat(`?token0=${fromValues.coin}&token1=${toValues.coin}`));
+  }, [fromValues.coin, toValues.coin]);
+
   useEffect(() => {
     const getBalance = async () => {
       if (account.account) {
@@ -346,6 +348,18 @@ const SwapContainer = () => {
     }
   };
 
+  const onSelectToken = async (crypto) => {
+    if (gameEditionView && showTokens) {
+      await setOutsideToken((prev) => ({ ...prev, token: crypto }));
+      await setShowTokens(false);
+    }
+    if (tokenSelectorType === 'from' && fromValues.coin === crypto.name) return;
+    if (tokenSelectorType === 'to' && toValues.coin === crypto.name) return;
+    if ((tokenSelectorType === 'from' && fromValues.coin !== crypto.name) || (tokenSelectorType === 'to' && toValues.coin !== crypto.name)) {
+      onTokenClick({ crypto });
+    }
+  };
+
   useEffect(() => {
     if (tokenSelectorType === 'from') {
       if (fromValues.coin === toValues.coin) {
@@ -408,13 +422,13 @@ const SwapContainer = () => {
     if (gameEditionView) {
       openModal({
         titleFontSize: 32,
-        title: 'Select a Token',
+        title: 'Select Token',
         type: 'arcade-dark',
         onClose: () => {
           setTokenSelectorType(null);
         },
         content: (
-          <GameEditionTokenSelectorContainer>
+          <FlexContainer gameEditionClassName="column w-100 h-100 justify-ce align-ce text-ce">
             <TokenSelectorModalContentGE
               selectedToken={selectedToken}
               tokenSelectorType={tokenSelectorType}
@@ -425,17 +439,13 @@ const SwapContainer = () => {
               fromToken={fromValues.coin}
               toToken={toValues.coin}
             />
-          </GameEditionTokenSelectorContainer>
+          </FlexContainer>
         ),
       });
     } else {
       modalContext.openModal({
-        title: 'select a token',
+        title: 'Select Token',
         description: '',
-        containerStyle: {
-          minWidth: '0px',
-          width: '75%',
-        },
         onClose: () => {
           setTokenSelectorType(null);
           modalContext.closeModal();
@@ -443,8 +453,8 @@ const SwapContainer = () => {
         content: (
           <TokenSelectorModalContent
             selectedToken={selectedToken}
-            tokenSelectorType={tokenSelectorType}
-            onTokenClick={onTokenClick}
+            token={tokenSelectorType === 'from' ? fromValues.coin : toValues.coin}
+            onSelectToken={onSelectToken}
             onClose={() => {
               modalContext.closeModal();
             }}
@@ -454,6 +464,14 @@ const SwapContainer = () => {
         ),
       });
     }
+  };
+
+  const sendTransaction = () => {
+    setLoading(true);
+    swap.swapSend();
+    setShowTxModal(false);
+    modalContext.closeModal();
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -494,7 +512,9 @@ const SwapContainer = () => {
                 setShowTxModal(false);
                 modalContext.closeModal();
               }}
-            />
+            >
+              <SwapSuccessView loading={loading} sendTransaction={sendTransaction} />
+            </TxView>
           ),
         });
       }
@@ -510,12 +530,28 @@ const SwapContainer = () => {
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
       {!gameEditionView && isLogoVisible && <BackgroundLogo />}
 
-      <SwapTitleContainer gameEditionView={gameEditionView}>
-        <Label fontSize={32} geCenter fontFamily="bold" geFontSize={52} geLabelStyle={{ lineHeight: '32px' }}>
-          Swap
+      <FlexContainer
+        className="justify-sb w-100"
+        gameEditionClassName="justify-ce"
+        style={{ marginBottom: 24 }}
+        gameEditionStyle={{ marginBottom: 14 }}
+      >
+        <Label fontSize={32} geCenter fontFamily="syncopate" geFontSize={52} geLabelStyle={{ lineHeight: '32px' }}>
+          SWAP
         </Label>
-        {!gameEditionView && <SlippagePopupContent />}
-      </SwapTitleContainer>
+        {!gameEditionView && (
+          <FlexContainer className="align-ce" gap={10}>
+            <SvgContainer onClick={() => history.push(ROUTE_MY_SWAP)}>
+              <HistoryIcon />
+            </SvgContainer>
+            <SvgContainer>
+              <SlippagePopupContent />
+            </SvgContainer>
+            {width >= resolutionConfiguration?.width && height >= resolutionConfiguration?.height && <GameEditionModeButton />}
+          </FlexContainer>
+        )}
+      </FlexContainer>
+
       <FormContainer
         gameEditionView={gameEditionView}
         footer={
@@ -559,12 +595,12 @@ const SwapContainer = () => {
             {gameEditionView ? (
               <PixeledBlueContainer label="Max Slippage" value={`${pact.slippage * 100}%`} style={{ marginTop: 10 }} />
             ) : (
-              <ResultContainer gameEditionView={gameEditionView}>
+              <FlexContainer className="w-100 justify-sb" style={{ margin: '16px 0' }}>
                 <Label fontSize={13} geFontSize={20} geColor="blue">
                   Max slippage
                 </Label>
-                <Label fontSize={13} fontFamily="bold" geFontSize={28}>{`${pact.slippage * 100}%`}</Label>
-              </ResultContainer>
+                <Label fontSize={13} geFontSize={28}>{`${pact.slippage * 100}%`}</Label>
+              </FlexContainer>
             )}
           </>
         )}

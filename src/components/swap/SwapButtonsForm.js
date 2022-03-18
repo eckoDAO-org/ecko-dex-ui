@@ -11,6 +11,15 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
 import LogoLoader from '../shared/Loader';
 import Label from '../shared/Label';
+import {
+  SWAP_BUTTON_CONNECT_WALLET,
+  SWAP_BUTTON_ENTER_AMOUNT,
+  SWAP_BUTTON_FETCHING_PAIR,
+  SWAP_BUTTON_NOT_LIQUIDITY,
+  SWAP_BUTTON_PAIR_NOT_ESIST,
+  SWAP_BUTTON_SELECT_TOKENS,
+  SWAP_BUTTON_SWAP,
+} from '../../constants/swap';
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -47,15 +56,15 @@ const SwapButtonsForm = ({
   const { gameEditionView, openModal, setButtons, closeModal } = useContext(GameEditionContext);
 
   const getButtonLabel = () => {
-    if (!account.account) return 'Connect wallet';
+    if (!account.account) return SWAP_BUTTON_CONNECT_WALLET.label;
     //if (!pact.hasWallet()) return "Set signing method in wallet";
-    if (!fromValues.coin || !toValues.coin) return 'Select tokens';
-    if (fetchingPair) return 'Fetching Pair...';
-    if (isNaN(ratio)) return 'Pair does not exist!';
-    if (noLiquidity) return 'not enough liquidity';
-    if (!fromValues.amount || !toValues.amount) return 'Enter an amount';
+    if (!fromValues.coin || !toValues.coin) return SWAP_BUTTON_SELECT_TOKENS.label;
+    if (fetchingPair) return SWAP_BUTTON_FETCHING_PAIR.label;
+    if (isNaN(ratio)) return SWAP_BUTTON_PAIR_NOT_ESIST.label;
+    if (noLiquidity) return SWAP_BUTTON_NOT_LIQUIDITY.label;
+    if (!fromValues.amount || !toValues.amount) return SWAP_BUTTON_ENTER_AMOUNT.label;
     if (fromValues.amount > fromValues.balance) return `Insufficient ${fromValues.coin} balance`;
-    return 'SWAP';
+    return SWAP_BUTTON_SWAP.label;
   };
 
   useEffect(() => {
@@ -157,13 +166,14 @@ const SwapButtonsForm = ({
       setLoading(false);
     }
   };
+
   return (
     <ButtonContainer gameEditionView={gameEditionView}>
       {gameEditionView ? (
         <LabelContainer>
           {loading ? (
             <LogoLoader />
-          ) : getButtonLabel() === 'SWAP' ? (
+          ) : getButtonLabel() === SWAP_BUTTON_SWAP.label ? (
             <PressButtonToActionLabel actionLabel="swap" />
           ) : (
             <Label geColor="yellow">{getButtonLabel()}</Label>
@@ -172,13 +182,13 @@ const SwapButtonsForm = ({
       ) : (
         <CustomButton
           fluid
-          type={getButtonLabel() === 'SWAP' ? 'secondary' : 'primary'}
-          disabled={account.account && (getButtonLabel() !== 'SWAP' || isNaN(fromValues.amount) || isNaN(toValues.amount))}
+          type="gradient"
+          disabled={account.account && (getButtonLabel() !== SWAP_BUTTON_SWAP.label || isNaN(fromValues.amount) || isNaN(toValues.amount))}
           loading={loading}
           onClick={async () => {
             if (!account.account) {
               return modalContext.openModal({
-                title: account?.account ? 'wallet connected' : 'connect wallet',
+                title: account?.account ? 'wallet connected' : SWAP_BUTTON_CONNECT_WALLET.label,
                 description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
                 content: <ConnectWalletModal />,
               });

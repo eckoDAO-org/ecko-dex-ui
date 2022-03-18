@@ -8,20 +8,19 @@ import { AccountProvider } from './contexts/AccountContext';
 import { WalletProvider } from './contexts/WalletContext';
 import { PactProvider } from './contexts/PactContext';
 import ModalRender from './components/modals/ModalRender';
-import RightModalRender from './components/right-modal-notification/RightModalRender';
 import { SwapProvider } from './contexts/SwapContext';
 import { LiquidityProvider } from './contexts/LiquidityContext';
 import { GameEditionProvider } from './contexts/GameEditionContext';
 import { ApplicationContext } from './contexts/ApplicationContext';
 import { KaddexWalletProvider } from './contexts/KaddexWalletContext';
 import NotificationModalRender from './components/right-modal-notification/NotificationModalRender';
-import centerBackground from './assets/images/game-edition/center-background.png';
+import gameEditionBackground from './assets/images/game-edition/game-edition-background.png';
 import useLazyImage from './hooks/useLazyImage';
 import AppLoader from './components/shared/AppLoader';
 
 function App() {
   const { themeMode } = useContext(ApplicationContext);
-  const [loaded] = useLazyImage([centerBackground]);
+  const [loaded] = useLazyImage([gameEditionBackground]);
   return (
     <ThemeProvider theme={theme(themeMode)}>
       {!loaded ? (
@@ -38,11 +37,9 @@ function App() {
                       <SwapProvider>
                         <LiquidityProvider>
                           <NotificationModalRender>
-                            <RightModalRender>
-                              <ModalRender>
-                                <Router />
-                              </ModalRender>
-                            </RightModalRender>
+                            <ModalRender>
+                              <Router />
+                            </ModalRender>
                           </NotificationModalRender>
                         </LiquidityProvider>
                       </SwapProvider>

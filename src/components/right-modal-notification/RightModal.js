@@ -21,7 +21,7 @@ const Container = styled(Modal)`
   /* -webkit-backdrop-filter: blur(2em);
   backdrop-filter: blur(2em); */
 
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
   border-radius: 0px !important;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel - 1}px`}) {
     max-width: 100% !important;
@@ -38,7 +38,7 @@ const ContentContainer = styled.div`
 
 const Title = styled.div`
   font-size: 16px;
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.syncopate};
   color: ${({ theme: { colors } }) => colors.white};
   margin-left: 10px;
   width: 100%;
@@ -52,7 +52,7 @@ const Header = styled.div`
   padding: 10px 22px 10px 26px;
   color: ${({ theme: { colors } }) => colors.white};
   min-height: 56px;
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.syncopate};
   font-size: 16px;
   border-radius: 0px !important;
   box-shadow: ${({ theme }) => theme.boxShadow};

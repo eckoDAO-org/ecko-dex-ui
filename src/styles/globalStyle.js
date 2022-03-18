@@ -1,5 +1,6 @@
 import { createGlobalStyle, css } from 'styled-components/macro';
-import browserDetection from '../utils/browserDetection';
+import appDarkBackground from '../assets/images/shared/app-dark-background.png';
+import appLightBackground from '../assets/images/shared/app-light-background.png';
 
 export default createGlobalStyle`
     *, *:before, *:after {
@@ -27,24 +28,22 @@ export default createGlobalStyle`
       line-height: inherit;
       overflow: auto;
       min-width: 0;
-      font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
+      font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
       color: ${({ theme: { colors } }) => colors.primary};
-      ${() => {
-        if (browserDetection() === 'SAFARI') {
-          return css`
-            background: ${({ theme: { backgroundBodySafari } }) => backgroundBodySafari};
-          `;
-        } else {
-          return css`
-            background: ${({ theme: { backgroundBody } }) => backgroundBody};
-          `;
-        }
-      }};
+      background: ${({ theme: { backgroundBody } }) => backgroundBody};
       
       opacity: 1;
       background-size: cover;
       background-repeat: no-repeat;
       overflow: hidden;
+      ${({ themeMode }) => {
+        return css`
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-position: center;
+          background-image: url(${themeMode === 'light' ? appLightBackground : appDarkBackground});
+        `;
+      }}};
     };
 
     #root {
@@ -118,14 +117,125 @@ export default createGlobalStyle`
       }
     }
 
-    .scrollbar-none{
+    .scrollbar-none {
       -ms-overflow-style: none;  /* IE and Edge */
       scrollbar-width: none;  /* Firefox */
 
       ::-webkit-scrollbar {
-      display: none;
+       display: none;
       }
       
+    }
+
+    .scrollbar-y-none {
+      ::-webkit-scrollbar {
+        width: 0px;
+      }
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .hide-scrollbar {
+    scroll-behavior: smooth;
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      scrollbar-width: none;
+    }
+    .pointer {
+      cursor: pointer;
+    }
+
+    .scroll-mt {
+      scroll-margin-top: 115px;
+    }
+    .align-fs {
+      align-items: flex-start;
+    }
+
+    .align-fe {
+      align-items: flex-end;
+    }
+
+    .align-ce {
+      align-items: center;
+    }
+
+    .justify-ce {
+      justify-content: center;
+    }
+
+    .justify-sb {
+      justify-content: space-between;
+    }
+    .justify-sa {
+      justify-content: space-around;
+    }
+
+    .justify-fe {
+      justify-content: flex-end;
+    }
+
+    .justify-fs {
+      justify-content: flex-start;
+    }
+
+    .text-ce {
+      text-align: center;
+    }
+
+    .absolute {
+      position: absolute;
+    }
+
+    .fixed {
+      position: fixed;
+    }
+
+    .relative {
+      position: relative;
+    }
+
+    .w-100 {
+      width: 100%;
+    }
+    .h-100 {
+      height: 100%;
+    }
+
+    .flex-1 {
+      flex: 1;
+    }
+
+    .h-fit-content {
+      height: fit-content;
+    }
+    .w-fit-content {
+      width: fit-content;
+    }
+
+    .column {
+      flex-direction: column;
+    
+    }
+
+
+    .column-reverse {
+      flex-direction: column-reverse;
+    }
+
+    .wrap {
+      flex-wrap: wrap;
+    }
+
+    .x-auto {
+      overflow-x: auto;
+    }
+
+    .hidden {
+      overflow: hidden;
     }
 
 `;

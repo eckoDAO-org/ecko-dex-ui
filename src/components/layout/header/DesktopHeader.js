@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { KaddexLightModeLogo, KaddexLogo } from '../../../assets';
@@ -17,10 +17,16 @@ const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   min-height: ${({ theme: { header } }) => `${header.height}px`};
-  padding: 0 48px;
+  padding: ${({ theme: { layout } }) => `0 ${layout.desktopPadding}px`};
   padding-top: 16px;
   zoom: ${({ resolutionConfiguration }) =>
     resolutionConfiguration && resolutionConfiguration['normal-mode'].scale > 1 ? resolutionConfiguration['normal-mode'].scale : 1};
+
+  .header {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 `;
 
 const LeftContainer = styled.div`
@@ -56,7 +62,6 @@ const AnimatedDiv = styled.div`
 
 const DesktopHeader = ({ className }) => {
   const history = useHistory();
-  const [buttonHover, setButtonHover] = useState(null);
   const { gameEditionView } = useGameEditionContext();
   const { resolutionConfiguration } = useApplicationContext();
 
@@ -73,22 +78,16 @@ const DesktopHeader = ({ className }) => {
 
         <AnimatedDiv className={gameEditionView ? 'fadeOut' : 'fadeIn'}>
           {menuItems.map((item, index) => (
-            <HeaderItem
-              key={index}
-              className={item.className}
-              headerItemStyle={{ width: 50 }}
-              route={item.route}
-              onMouseOver={() => setButtonHover(item.id)}
-              onMouseLeave={() => setButtonHover(null)}
-              isHover={buttonHover === item.id}
-            >
+            <HeaderItem key={index} item={item}>
               {item.label}
             </HeaderItem>
           ))}
         </AnimatedDiv>
       </LeftContainer>
 
-      {width >= resolutionConfiguration?.width && height >= resolutionConfiguration?.height && <GameEditionModeButton />}
+      {width >= resolutionConfiguration?.width && height >= resolutionConfiguration?.height && gameEditionView && (
+        <GameEditionModeButton className="header" />
+      )}
 
       <RightContainer>
         <RightHeaderItems />

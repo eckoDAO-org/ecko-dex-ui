@@ -1,19 +1,18 @@
 import React, { useContext } from 'react';
 import { AccountContext } from '../../../contexts/AccountContext';
 import { PactContext } from '../../../contexts/PactContext';
+import { useSwapContext } from '../../../contexts';
 import { extractDecimal, reduceBalance } from '../../../utils/reduceBalance';
 import reduceToken from '../../../utils/reduceToken';
 import { getTokenIcon, showTicker } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
-import { Row, SuccessViewContainerGE, SuccesViewContainer } from '../common-result-components';
 import { ChainIcon } from '../../../assets';
-import { ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
-import { Divider, Icon } from 'semantic-ui-react';
-import PopupTxView from '../PopupTxView';
-import { theme } from '../../../styles/theme';
-import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import { ApplicationContext } from '../../../contexts/ApplicationContext';
+import { chainId, ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
 import Label from '../../shared/Label';
+import { CryptoContainer, FlexContainer } from '../../shared/FlexContainer';
+import CopyPopup from '../../shared/CopyPopup';
+import CustomDivider from '../../shared/CustomDivider';
+import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
 
 export const SwapSuccessViewGE = ({ swap }) => {
   const { account } = useContext(AccountContext);
@@ -25,15 +24,15 @@ export const SwapSuccessViewGE = ({ swap }) => {
       containerStyle={{ marginTop: 16 }}
       leftItem={
         <>
-          <Row className="fs">
+          <div className="flex justify-fs">
             {getTokenIcon(swap?.localRes?.result?.data[0]?.token)}
-            <GameEditionLabel fontSize={32} color="black" fontFamily="bold">
+            <GameEditionLabel fontSize={32} color="black" fontFamily="syncopate">
               {extractDecimal(swap?.localRes?.result?.data[0]?.amount)}
             </GameEditionLabel>
-          </Row>
+          </div>
 
           <GameEditionLabel color="blue">From</GameEditionLabel>
-          <Row className="fs">
+          <div className="flex justify-fs">
             <GameEditionLabel fontSize={22} color="blue-grey">
               {reduceToken(account.account)}
             </GameEditionLabel>
@@ -41,19 +40,19 @@ export const SwapSuccessViewGE = ({ swap }) => {
             <GameEditionLabel fontSize={22} color="blue-grey">
               {swap?.localRes?.metaData?.publicMeta?.chainId}
             </GameEditionLabel>
-          </Row>
+          </div>
         </>
       }
       rightItem={
         <>
-          <Row className="fs">
+          <div className="flex justify-fs">
             {getTokenIcon(swap?.localRes?.result?.data[1]?.token)}
-            <GameEditionLabel fontSize={32} color="black" fontFamily="bold">
+            <GameEditionLabel fontSize={32} color="black" fontFamily="syncopate">
               {extractDecimal(swap?.localRes?.result?.data[1]?.amount)}
             </GameEditionLabel>
-          </Row>
+          </div>
           <GameEditionLabel color="blue">From</GameEditionLabel>
-          <Row className="fs">
+          <div className="flex justify-fs">
             <GameEditionLabel fontSize={22} color="blue-grey">
               {reduceToken(account.account)}
             </GameEditionLabel>
@@ -61,7 +60,7 @@ export const SwapSuccessViewGE = ({ swap }) => {
             <GameEditionLabel fontSize={22} color="blue-grey">
               {swap?.localRes?.metaData?.publicMeta?.chainId}
             </GameEditionLabel>
-          </Row>
+          </div>
         </>
       }
       infoItems={[
@@ -87,12 +86,11 @@ export const SwapSuccessViewGE = ({ swap }) => {
   );
 };
 
-export const SwapSuccessView = ({ swap, loading, sendTransaction }) => {
+export const SwapSuccessView = ({ loading, sendTransaction }) => {
   const { account } = useContext(AccountContext);
   const pact = useContext(PactContext);
-  const { gameEditionView } = useContext(GameEditionContext);
-  const { themeMode } = useContext(ApplicationContext);
 
+  const swap = useSwapContext();
   return (
     <SuccesViewContainer
       swap={swap}
@@ -101,51 +99,51 @@ export const SwapSuccessView = ({ swap, loading, sendTransaction }) => {
         sendTransaction();
       }}
     >
-      <Row className="sb">
-        <Label fontFamily="bold">From</Label>
-        <Label fontSize={13}></Label>
-      </Row>
-      <Row className="sb">
-        <Label fontSize={13}>Account</Label>
-        <Label fontSize={13}>
-          {`${reduceToken(account.account)}`}
-          <PopupTxView isAccountPopup />
-        </Label>
-      </Row>
-      <Row className="sb">
-        <Label fontSize={13}>Chain ID</Label>
-        <Label fontSize={13}>{swap?.localRes?.metaData?.publicMeta?.chainId}</Label>
-      </Row>
-      <Divider
-        style={{
-          width: '100%',
-          marginTop: 0,
-          borderTop: gameEditionView ? `2px dashed ${theme(themeMode).colors.black}` : `1px solid ${theme(themeMode).colors.white}`,
-        }}
-      />
+      <FlexContainer className="w-100 column" gap={12}>
+        <Label>From</Label>
 
-      <Row className="sb">
-        <Row className="fs">
-          <Label fontFamily="bold"> {getTokenIcon(swap?.localRes?.result?.data[0]?.token)}</Label>
-          <Label fontFamily="bold">{extractDecimal(swap?.localRes?.result?.data[0]?.amount)}</Label>
-        </Row>
-        <Label fontFamily="bold">{showTicker(swap?.localRes?.result?.data[0]?.token)}</Label>
-      </Row>
-      <Row className="sb">
-        <Label fontFamily="bold">
-          <Icon name="long arrow alternate down" style={{}} />
-        </Label>
+        {/* ACCOUNT */}
+        <FlexContainer className="align-ce justify-sb">
+          <Label fontSize={13}>Account</Label>
+          <Label fontSize={13}>
+            {reduceToken(account.account)}
+            <CopyPopup textToCopy={account.account} />
+          </Label>
+        </FlexContainer>
+        {/* CHAIN */}
+        <FlexContainer className="align-ce justify-sb">
+          <Label fontSize={13}>Chain Id</Label>
+          <Label fontSize={13}>{chainId}</Label>
+        </FlexContainer>
+
+        <CustomDivider style={{ margin: '16px 0' }} />
+
+        <Label>Amount</Label>
+
+        {/* FROM VALUES */}
+        <FlexContainer className="align-ce justify-sb">
+          <FlexContainer>
+            <CryptoContainer size={30}>{getTokenIcon(swap?.localRes?.result?.data[0]?.token)}</CryptoContainer>
+            <Label>{extractDecimal(swap?.localRes?.result?.data[0]?.amount)}</Label>
+          </FlexContainer>
+          <Label>{showTicker(swap?.localRes?.result?.data[0]?.token)}</Label>
+        </FlexContainer>
         <Label fontSize={13}>{`1 ${showTicker(swap?.localRes?.result?.data[0]?.token)} = ${reduceBalance(pact?.computeOut(1), 12)} ${showTicker(
           swap?.localRes?.result?.data[1]?.token
         )}`}</Label>
-      </Row>
-      <Row className="sb">
-        <Row className="fs">
-          <Label fontFamily="bold"> {getTokenIcon(swap?.localRes?.result?.data[1]?.token)}</Label>
-          <Label fontFamily="bold">{`${extractDecimal(swap?.localRes?.result?.data[1]?.amount)} `}</Label>
-        </Row>
-        <Label fontFamily="bold">{` ${showTicker(swap?.localRes?.result?.data[1]?.token)}`}</Label>
-      </Row>
+        {/* TO VALUES */}
+        <FlexContainer className="align-ce justify-sb">
+          <FlexContainer>
+            <CryptoContainer size={30}>{getTokenIcon(swap?.localRes?.result?.data[1]?.token)}</CryptoContainer>
+            <Label>{extractDecimal(swap?.localRes?.result?.data[1]?.amount)}</Label>
+          </FlexContainer>
+          <Label>{showTicker(swap?.localRes?.result?.data[1]?.token)}</Label>
+        </FlexContainer>
+
+        <Label fontSize={13}>{`1 ${showTicker(swap?.localRes?.result?.data[1]?.token)} =  ${1 / reduceBalance(pact?.computeOut(1), 12)} ${showTicker(
+          swap?.localRes?.result?.data[0]?.token
+        )}`}</Label>
+      </FlexContainer>
     </SuccesViewContainer>
   );
 };

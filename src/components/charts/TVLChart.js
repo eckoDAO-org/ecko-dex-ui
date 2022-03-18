@@ -4,10 +4,9 @@ import styled from 'styled-components';
 import moment from 'moment';
 import { PactContext } from '../../contexts/PactContext';
 import { LineChart, Line, Tooltip, ResponsiveContainer } from 'recharts';
-import GradientBorder from '../shared/GradientBorder';
 import Label from '../shared/Label';
-import { humanReadableNUmber } from '../../utils/reduceBalance';
-import { CardContainer } from '../stats/StatsTab';
+import { humanReadableNumber } from '../../utils/reduceBalance';
+import { FlexContainer } from '../shared/FlexContainer';
 
 export const GraphCardHeader = styled.div`
   width: 100%;
@@ -18,7 +17,7 @@ export const GraphCardHeader = styled.div`
   }
 `;
 
-const TVLChart = ({ kdaPrice, height, containerStyle }) => {
+const TVLChart = ({ kdaPrice, height }) => {
   const [viewedTVL, setViewedTVL] = useState(null);
   const [currentTVL, setCurrentTVL] = useState(null);
   const [currentDate, setCurrentDate] = useState(null);
@@ -90,16 +89,13 @@ const TVLChart = ({ kdaPrice, height, containerStyle }) => {
   }, [pact]);
 
   return (
-    <CardContainer style={containerStyle}>
-      <GradientBorder />
-      <GraphCardHeader>
-        <div>
-          <Label fontSize={16}>TVL</Label>
-          <Label fontSize={24}>$ {humanReadableNUmber(Number(viewedTVL))}</Label>
-          <Label fontSize={16}>{currentDate || moment().format('DD/MM/YYYY')}</Label>
-        </div>
-        <div></div>
-      </GraphCardHeader>
+    <FlexContainer className="column align-ce w-100 h-100" withGradient style={{ padding: 32 }}>
+      <div className="column w-100">
+        <Label fontSize={16}>TVL</Label>
+        <Label fontSize={24}>$ {humanReadableNumber(Number(viewedTVL))}</Label>
+        <Label fontSize={16}>{currentDate || moment().format('DD/MM/YYYY')}</Label>
+      </div>
+
       <div style={{ width: '100%', height }}>
         <ResponsiveContainer>
           <LineChart
@@ -126,7 +122,7 @@ const TVLChart = ({ kdaPrice, height, containerStyle }) => {
           </LineChart>
         </ResponsiveContainer>
       </div>
-    </CardContainer>
+    </FlexContainer>
   );
 };
 export default TVLChart;

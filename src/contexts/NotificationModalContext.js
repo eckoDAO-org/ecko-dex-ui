@@ -7,7 +7,6 @@ const initialState = {
   open: false,
   title: '',
   content: null,
-  footer: null,
 };
 export const NotificationModalProvider = (props) => {
   const { notificationList, setNotificationList } = useContext(NotificationContext);
@@ -22,7 +21,7 @@ export const NotificationModalProvider = (props) => {
     // if in the notification list the nofications are readed
     const newNotificationList = notificationList.map((notif) => ({
       ...notif,
-      isReaded: true,
+      isRead: true,
     }));
     setNotificationList(newNotificationList);
   };

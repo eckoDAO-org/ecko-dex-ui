@@ -41,7 +41,7 @@ const AccountIdContainer = styled.div`
   padding: 14px 10px;
   align-items: center;
   font-size: ${({ $gameEditionView }) => ($gameEditionView ? '13px' : '16px')};
-  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
+  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pressStartRegular : fontFamily.syncopate)};
   & > *:not(:last-child) {
     margin-bottom: ${({ $gameEditionView }) => ($gameEditionView ? '8px' : '16px')};
   }
@@ -61,7 +61,7 @@ const RightContainer = styled.div`
   width: 100%;
   font-size: ${({ $gameEditionView }) => ($gameEditionView ? '13px' : '16px')};
 
-  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pressStartRegular : fontFamily.bold)};
+  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pressStartRegular : fontFamily.syncopate)};
   & > *:not(:last-child) {
     margin-right: 8px;
   }
@@ -137,7 +137,7 @@ const AccountModal = () => {
         {account?.account && (
           <AccountIdContainer $gameEditionView={gameEditionView}>
             <RowContainer>
-              <Label fontFamily="bold" geFontSize={20}>
+              <Label fontFamily="syncopate" geFontSize={20}>
                 Account
               </Label>
 
@@ -148,13 +148,13 @@ const AccountModal = () => {
                 }
               >
                 <ExplorerIcon />
-                <Label fontFamily="bold" geFontSize={20}>
+                <Label fontFamily="syncopate" geFontSize={20}>
                   View in Explorer
                 </Label>
               </RightContainer>
             </RowContainer>
             <RowContainer>
-              <Label fontFamily="bold" geFontSize={20}>
+              <Label fontFamily="syncopate" geFontSize={20}>
                 {reduceToken(account.account)}
               </Label>
 
@@ -166,7 +166,7 @@ const AccountModal = () => {
           <Label fontSize={14} geFontSize={24}>
             Balance
           </Label>
-          <Label fontFamily="bold" fontSize={14} geFontSize={24}>
+          <Label fontFamily="syncopate" fontSize={14} geFontSize={24}>
             {account.balance}
           </Label>
         </RowContainer>

@@ -16,18 +16,38 @@ const STYText = styled.span`
       color: ${colors.primary};
     `}
   font-size: ${({ fontSize }) => fontSize}px;
-  svg {
+  /* svg {
     path {
       fill: ${({ theme: { colors } }) => colors.white};
     }
+  } */
+
+  &.capitalize {
+    text-transform: capitalize;
+  }
+
+  &.uppercase {
+    text-transform: uppercase;
+  }
+
+  &.justify-fe {
+    justify-content: flex-end;
+  }
+
+  &.gradient {
+    display: block;
+    background-image: linear-gradient(90deg, #10c4df 0%, #f04ca9 51%, #edba31 100%);
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
   }
 `;
 
 const Label = ({
   className,
   children,
-  fontFamily = 'regular',
-  fontSize = 16,
+  fontFamily = 'basier',
+  fontSize = 13,
   labelStyle,
   geFontSize,
   geFontWeight,
@@ -57,7 +77,7 @@ const Label = ({
     </GameEditionLabel>
   ) : (
     <STYText
-      className={className}
+      className={`${fontFamily === 'syncopate' ? 'uppercase' : ''} ${className}`}
       inverted={inverted}
       color={color}
       fontSize={fontSize}

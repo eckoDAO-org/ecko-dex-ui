@@ -46,7 +46,7 @@ const TokenItem = styled.div`
   display: flex;
   align-items: center;
   font-size: 16px;
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
   color: ${({ selected, theme: { colors } }) => (selected ? `${colors.white}99` : colors.white)};
   svg {
     margin-right: 8px;
@@ -57,10 +57,10 @@ const TokenItem = styled.div`
     font-size: ${({ gameEditionView }) => gameEditionView && '13px'};
   }
 `;
-const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, fromToken, toToken }) => {
+const TokenSelectorModalContent = ({ onSelectToken, onClose, token }) => {
   const [searchValue, setSearchValue] = useState('');
   const swap = useContext(SwapContext);
-  const { gameEditionView, showTokens, setOutsideToken, setShowTokens, onCloseTokensList } = useContext(GameEditionContext);
+  const { gameEditionView, onCloseTokensList } = useContext(GameEditionContext);
   const { themeMode } = useContext(ApplicationContext);
 
   const [width] = useWindowSize();
@@ -69,28 +69,9 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
     return code.toLocaleLowerCase().includes(searchValue?.toLocaleLowerCase()) || c.name.toLowerCase().includes(searchValue?.toLowerCase());
   });
 
-  const onSelectToken = async (crypto) => {
-    if (gameEditionView && showTokens) {
-      await setOutsideToken((prev) => ({ ...prev, token: crypto }));
-      await setShowTokens(false);
-    }
-    if (tokenSelectorType === 'from' && fromToken === crypto.name) return;
-    if (tokenSelectorType === 'to' && toToken === crypto.name) return;
-    if ((tokenSelectorType === 'from' && fromToken !== crypto.name) || (tokenSelectorType === 'to' && toToken !== crypto.name)) {
-      onTokenClick({ crypto });
-      setSearchValue('');
-      onClose();
-    }
-  };
   return (
     <Content>
-      {!gameEditionView && (
-        <Label fontSize={13} fontFamily="bold" labelStyle={{ marginTop: 12, marginBottom: 8 }}>
-          Search token
-        </Label>
-      )}
-
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex', marginTop: 16 }}>
         <Search
           gameEditionView={gameEditionView}
           fluid
@@ -109,8 +90,8 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
         )}
       </div>
       {!gameEditionView && (
-        <Label fontSize={13} fontFamily="bold">
-          Token
+        <Label fontSize={13} fontFamily="syncopate">
+          Tokens
         </Label>
       )}
       {!gameEditionView && <Divider />}
@@ -130,19 +111,21 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
                   <TokenItem
                     gameEditionView={gameEditionView}
                     key={crypto.name}
-                    selected={fromToken === crypto.name || toToken === crypto.name}
+                    selected={token === crypto.name}
                     style={{
-                      cursor: fromToken === crypto.name || toToken === crypto.name ? 'default' : 'pointer',
+                      cursor: token === crypto.name ? 'default' : 'pointer',
                     }}
                     onClick={async () => {
                       await onSelectToken(crypto);
+                      setSearchValue('');
+                      onClose();
                     }}
                   >
                     {crypto.icon}
                     {crypto.name}
 
-                    {((tokenSelectorType === 'from' && fromToken === crypto.name) || (tokenSelectorType === 'to' && toToken === crypto.name)) && (
-                      <Label fontSize={13} fontFamily="bold" labelStyle={{ marginLeft: 5 }}>
+                    {token === crypto.name && (
+                      <Label fontSize={13} fontFamily="syncopate" labelStyle={{ marginLeft: 5, lineHeight: 1 }}>
                         (Selected)
                       </Label>
                     )}

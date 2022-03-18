@@ -11,14 +11,18 @@ const LogoLoader = ({ withTopMargin, containerStyle, logoStyle }) => {
   );
 };
 
-export const GameEditionLoader = () => {
+export const GameEditionLoader = ({ style }) => {
   return (
-    <GeLoaderContainer>
+    <GeLoaderContainer style={style}>
       <GeLoader className="loader">
         <span></span>
       </GeLoader>
     </GeLoaderContainer>
   );
+};
+
+export const CircularLoader = () => {
+  return <CircularLoaderContainer />;
 };
 
 const Loader = ({ withTopMargin, containerStyle, logoStyle }) => {
@@ -65,6 +69,7 @@ const GeLoaderContainer = styled.div`
   justify-content: center;
   height: fit-content;
   margin-bottom: 4px;
+  z-index: 1;
 `;
 const GeLoader = styled.div`
   &.loader {
@@ -105,6 +110,71 @@ const GeLoader = styled.div`
       transform: rotate(0deg);
     }
     100% {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
+const CircularLoaderContainer = styled.div`
+  font-size: 10px;
+  margin: 50px auto;
+  text-indent: -9999em;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: ${({ theme: { colors } }) => colors.white};
+  background: ${({ theme: { colors } }) => `-moz-linear-gradient(left, ${colors.white} 10%, rgba(255, 255, 255, 0) 42%)`};
+  background: ${({ theme: { colors } }) => `-webkit-linear-gradient(left, ${colors.white} 10%, rgba(255, 255, 255, 0) 42%)`};
+  background: ${({ theme: { colors } }) => `-o-linear-gradient(left, ${colors.white} 10%, rgba(255, 255, 255, 0) 42%)`};
+  background: ${({ theme: { colors } }) => `-ms-linear-gradient(left, ${colors.white} 10%, rgba(255, 255, 255, 0) 42%)`};
+  background: ${({ theme: { colors } }) => `-linear-gradient(left, ${colors.white} 10%, rgba(255, 255, 255, 0) 42%)`};
+  position: relative;
+  -webkit-animation: load3 1.4s infinite linear;
+  animation: load3 1.4s infinite linear;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+
+  :before {
+    width: 65%;
+    height: 65%;
+    background: ${({ theme: { colors } }) => colors.white};
+    border-radius: 100% 0 0 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: '';
+  }
+  :after {
+    background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
+    width: 75%;
+    height: 75%;
+    border-radius: 50%;
+    content: '';
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+  @-webkit-keyframes load3 {
+    0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes load3 {
+    0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
       transform: rotate(360deg);
     }
   }

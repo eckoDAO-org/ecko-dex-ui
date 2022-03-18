@@ -109,7 +109,7 @@ const HistoryCard = ({ tx }) => {
           <IconsContainer>
             {getInfoCoin(3)?.icon}
             {getInfoCoin(5)?.icon}
-            <Label fontFamily="bold">{`${getInfoCoin(3)?.name}-${getInfoCoin(5)?.name}`}</Label>
+            <Label fontFamily="syncopate">{`${getInfoCoin(3)?.name}-${getInfoCoin(5)?.name}`}</Label>
           </IconsContainer>
           <ColumnContainer style={{ marginRight: '16px' }}>
             <Label withShade>Date</Label>
@@ -132,7 +132,7 @@ const HistoryCard = ({ tx }) => {
             <IconsContainer style={{ flex: 1 }}>
               {getInfoCoin(3)?.icon}
               {getInfoCoin(5)?.icon}
-              <Label fontFamily="bold">{`${getInfoCoin(3)?.name}-${getInfoCoin(5)?.name}`}</Label>
+              <Label fontFamily="syncopate">{`${getInfoCoin(3)?.name}-${getInfoCoin(5)?.name}`}</Label>
             </IconsContainer>
 
             <ColumnContainer style={{ marginTop: 32 }}>

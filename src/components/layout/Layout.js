@@ -1,25 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
 import styled, { css } from 'styled-components/macro';
+import { useHistory, useLocation } from 'react-router';
+import useWindowSize from '../../hooks/useWindowSize';
+import { useApplicationContext } from '../../contexts';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
 import Wrapper from '../../components/shared/Wrapper';
 import DesktopHeader from './header/DesktopHeader';
 import MobileHeader from './header/MobileHeader';
 import { ReactComponent as Stripes } from '../../assets/images/shared/stripes.svg';
 import GameEditionContainer from '../game-edition-v2/GameEditionContainer';
-import { useHistory } from 'react-router';
-import { ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from '../../router/routes';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION, ROUTE_INDEX } from '../../router/routes';
 import browserDetection from '../../utils/browserDetection';
-import centerBackground from '../../assets/images/game-edition/center-background.png';
-import useWindowSize from '../../hooks/useWindowSize';
+import gameEditionBackground from '../../assets/images/game-edition/game-edition-background.png';
 import TabletHeader from './header/TabletHeader';
-import { useApplicationContext } from '../../contexts';
-
-const MainContainer = styled.div`
-  display: flex;
-  height: 100%;
-  width: 100%;
-`;
+import { FlexContainer } from '../shared/FlexContainer';
 
 const WrapperContainer = styled(Wrapper)`
   height: 100%;
@@ -27,7 +22,7 @@ const WrapperContainer = styled(Wrapper)`
   .mainnet-chain-2 {
     font-size: 14px;
     text-align: center;
-    font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+    font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
     color: ${({ theme: { colors } }) => colors.white};
     @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
       padding-top: 20px;
@@ -38,8 +33,9 @@ const WrapperContainer = styled(Wrapper)`
 const CenterBackground = styled.img`
   position: absolute;
   width: 100%;
+  height: 100%;
   top: 0px;
-  z-index: -1;
+  z-index: 0;
   animation: fade-in 0.5s linear;
   @keyframes fade-in {
     from {
@@ -103,19 +99,25 @@ const StripesContainer = styled.div`
   bottom: ${browserDetection() === 'SAFARI' ? '4px' : '0px'};
   left: 0;
   line-height: 0;
+  z-index: 10;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     display: none;
   }
 `;
 
 const Layout = ({ children }) => {
+  const { pathname } = useLocation();
   const history = useHistory();
   const [width, height] = useWindowSize();
   const { gameEditionView, setGameEditionView } = useContext(GameEditionContext);
   const { resolutionConfiguration } = useApplicationContext();
 
   useEffect(() => {
-    gameEditionView ? history.push(ROUTE_GAME_START_ANIMATION) : history.push(ROUTE_SWAP);
+    if (gameEditionView) {
+      history.push(ROUTE_GAME_START_ANIMATION);
+    } else if (pathname === ROUTE_GAME_EDITION_MENU || pathname === ROUTE_GAME_START_ANIMATION) {
+      history.push(ROUTE_INDEX);
+    }
   }, [gameEditionView]);
 
   useEffect(() => {
@@ -125,7 +127,7 @@ const Layout = ({ children }) => {
   }, [gameEditionView, width, height, resolutionConfiguration]);
 
   return (
-    <MainContainer>
+    <FlexContainer className="w-100 h-100">
       <WrapperContainer>
         <MobileHeader className="mobile-only" />
         <TabletHeader className="desktop-none mobile-none" />
@@ -134,7 +136,7 @@ const Layout = ({ children }) => {
 
         {gameEditionView && resolutionConfiguration && width >= resolutionConfiguration.width && height >= resolutionConfiguration.height ? (
           <>
-            <CenterBackground src={centerBackground} alt="" />
+            <CenterBackground src={gameEditionBackground} alt="" />
             <GameEditionContainer>{children}</GameEditionContainer>
           </>
         ) : (
@@ -144,7 +146,7 @@ const Layout = ({ children }) => {
       <StripesContainer>
         <Stripes />
       </StripesContainer>
-    </MainContainer>
+    </FlexContainer>
   );
 };
 

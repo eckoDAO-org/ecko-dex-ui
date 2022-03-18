@@ -29,14 +29,14 @@ const Content = styled.div`
 `;
 
 const Title = styled.div`
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.syncopate};
   font-size: 24px;
   padding: 16px;
   color: #ffffff;
 `;
 
 const SubTitle = styled.div`
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.bold};
+  font-family: ${({ theme: { fontFamily } }) => fontFamily.syncopate};
   font-size: 16px;
   color: #ffffff;
 `;

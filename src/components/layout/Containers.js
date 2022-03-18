@@ -40,7 +40,7 @@ export const ColumnContainer = styled.div`
 `;
 
 export const Label = styled.span`
-  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pixeboy : fontFamily.regular)};
+  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pixeboy : fontFamily.basier)};
   color: ${({ $gameEditionView, withShade, theme: { colors } }) => ($gameEditionView ? colors.white : `${colors.white}99 !important`)};
   font-size: ${({ $gameEditionView }) => ($gameEditionView ? '18px' : '13px')};
   text-align: ${({ $gameEditionView }) => $gameEditionView && 'left'};
@@ -49,7 +49,7 @@ export const Label = styled.span`
 `;
 
 export const BoldLabel = styled.span`
-  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pixeboy : fontFamily.bold)};
+  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pixeboy : fontFamily.syncopate)};
   color: ${({ $gameEditionView, withShade, theme: { colors } }) => ($gameEditionView ? colors.white : `${colors.white} !important`)};
   font-size: 13px;
   text-align: ${({ $gameEditionView }) => $gameEditionView && 'left'};
@@ -57,7 +57,7 @@ export const BoldLabel = styled.span`
 `;
 
 export const Value = styled.span`
-  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pixeboy : fontFamily.regular)};
+  font-family: ${({ $gameEditionView, theme: { fontFamily } }) => ($gameEditionView ? fontFamily.pixeboy : fontFamily.basier)};
   font-size: ${({ $gameEditionView }) => ($gameEditionView ? '18px' : '16px')};
   line-height: 20px;
   color: ${({ $gameEditionView, withShade, theme: { colors } }) => ($gameEditionView ? colors.white : `${colors.white} !important`)};
@@ -78,7 +78,7 @@ export const TitleContainer = styled.div`
 
 export const Title = styled.span`
   font: ${({ theme: { fontFamily }, $gameEditionView }) =>
-    $gameEditionView ? `normal normal normal 40px ${fontFamily.pixeboy}` : `normal normal bold 32px/57px ${fontFamily.bold}`};
+    $gameEditionView ? `normal normal normal 40px ${fontFamily.pixeboy}` : `normal normal bold 32px/57px ${fontFamily.syncopate}`};
   letter-spacing: 0px;
   color: ${({ $gameEditionView, theme: { colors } }) => colors.white};
   text-transform: ${({ $gameEditionView }) => ($gameEditionView ? `uppercase` : ` capitalize`)};

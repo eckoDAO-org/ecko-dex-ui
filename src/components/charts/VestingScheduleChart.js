@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import GradientBorder from '../shared/GradientBorder';
 import Label from '../shared/Label';
 import { TimeRangeBar, TimeRangeBtn } from './VolumeChart';
-import { CardContainer } from '../stats/StatsTab';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { getVestingScheduleData } from './data/chartData';
+import { FlexContainer } from '../shared/FlexContainer';
 
 export const VestingHeader = styled.div`
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
@@ -31,7 +31,7 @@ const endDate10Years = '2031-06-01';
 const VestingScheduleChart = ({ height }) => {
   const [endDate, setEndDate] = useState(endDate4Years);
   return (
-    <CardContainer>
+    <FlexContainer withGradient className="column w-100 h-100">
       <GradientBorder />
       <VestingHeader>
         <Label></Label>
@@ -81,7 +81,7 @@ const VestingScheduleChart = ({ height }) => {
           </AreaChart>
         </ResponsiveContainer>
       </div>
-    </CardContainer>
+    </FlexContainer>
   );
 };
 

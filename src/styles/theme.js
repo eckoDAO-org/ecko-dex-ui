@@ -1,8 +1,7 @@
 export const commonTheme = {
   layout: {
-    desktopWidth: '80%',
-    mobileWidth: '95%',
-    mainContentPadding: 24,
+    desktopPadding: 88,
+    mobilePadding: 16,
   },
   header: {
     height: 65,
@@ -18,6 +17,8 @@ export const commonTheme = {
     boldItalic: 'montserrat-bold-italic',
     pressStartRegular: 'press-start-regular',
     pixeboy: 'pixeboy',
+    syncopate: 'syncopate-bold',
+    basier: 'basier-square-mono-regular',
   },
   mediaQueries: {
     mobileBreakpoint: '48rem',
@@ -49,8 +50,7 @@ export const lightTheme = {
   ...commonTheme,
   backgroundBody:
     'radial-gradient(at 90% 10%, hsla(298,34%,85%,1) 0, transparent 37%),radial-gradient(at 18% 73%, hsla(179,100%,94%,1) 0, transparent 71%),radial-gradient(at 81% 69%, hsla(40,100%,93%,1) 0, transparent 79%);',
-  backgroundBodySafari:
-    'radial-gradient(at 90% 10%, hsla(298,34%,85%,1) 0, transparent 100%),radial-gradient(at 18% 73%, hsla(179,100%,94%,1) 0, transparent 100%),radial-gradient(at 81% 69%, hsla(40,100%,93%,1) 0, transparent 100%);',
+
   colors: {
     primary: '#FFFFFF',
     border: '#240B2F',
@@ -58,15 +58,13 @@ export const lightTheme = {
     ...commonColors,
   },
   buttonBackgroundGradient: '#212750',
-  backgroundRightModal: '#FFFFFF',
   backgroundInput: '#2127501A',
-  backgroundContainer: '#FFFFFF',
+  backgroundContainer: '#F7F7F7',
 };
 
 export const darkTheme = {
   ...commonTheme,
-  backgroundBody: 'linear-gradient(135.8deg, rgba(0,7,22,1) 0%, rgba(26,15,53,1) 46.31%, rgba(45,21,74,1) 100%)',
-  backgroundBodySafari: 'linear-gradient(135.8deg, rgba(0,7,22,1) 0%, rgba(26,15,53,1) 46.31%, rgba(45,21,74,1) 100%)',
+  backgroundBody: '#0A0B1D',
   colors: {
     primary: '#212750',
     border: '#ECEBEC',
@@ -75,8 +73,7 @@ export const darkTheme = {
   },
   buttonBackgroundGradient: 'rgb(17,8,23)',
   backgroundInput: 'transparent',
-  backgroundContainer: 'transparent',
-  backgroundRightModal: '#4E125A40',
+  backgroundContainer: '#292A45',
 };
 
 export const theme = (mode = 'light') => {

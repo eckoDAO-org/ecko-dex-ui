@@ -15,7 +15,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 500px;
+  max-width: fit-content;
   width: 100%;
   z-index: 5;
 `;

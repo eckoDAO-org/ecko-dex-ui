@@ -18,8 +18,8 @@ const IconColumn = styled(Grid.Column)`
 const ColumnContainer = styled(Grid.Column)`
   font-family: ${({ theme: { fontFamily }, gameEditionView, regular }) => {
     if (gameEditionView) return fontFamily.pressStartRegular;
-    else if (regular) return fontFamily.regular;
-    else return fontFamily.bold;
+    else if (regular) return fontFamily.basier;
+    else return fontFamily.syncopate;
   }};
   font-size: ${({ fontSize }) => (fontSize ? fontSize : '18px')};
 `;

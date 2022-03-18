@@ -47,7 +47,7 @@ export const AccountProvider = (props) => {
         date: getCurrentDate(),
         title: 'Transaction Error',
         description: localRes,
-        isReaded: false,
+        isRead: false,
       });
     }
   }, [localRes]);

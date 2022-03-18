@@ -1,22 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components/macro';
+import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
+import { useApplicationContext } from '../../../contexts';
 import { PactContext } from '../../../contexts/PactContext';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import Input from '../../../components/shared/Input';
 import LightModeToggle from '../../../components/shared/LightModeToggle';
 import Label from '../../shared/Label';
-import GradientContainer from '../../shared/GradientContainer';
-import browserDetection from '../../../utils/browserDetection';
-import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
 import { CogIcon } from '../../../assets';
-import { useApplicationContext } from '../../../contexts';
-import { theme } from '../../../styles/theme';
+import { FlexContainer } from '../../shared/FlexContainer';
 
 const Wrapper = styled.div`
   height: 100%;
   display: flex;
   position: relative;
+  align-items: center;
   z-index: 2;
   svg {
     path {
@@ -32,7 +31,7 @@ const Wrapper = styled.div`
     }
   }};
 `;
-const PopupContainer = styled(GradientContainer)`
+const PopupContainer = styled(FlexContainer)`
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -44,6 +43,7 @@ const PopupContainer = styled(GradientContainer)`
   top: -20px;
   &.header-item {
     top: 40px;
+    right: 0px;
   }
 `;
 
@@ -58,7 +58,7 @@ const SlippageTolleranceValue = styled.div`
   border-radius: 16px;
   border: ${({ theme: { colors } }) => `1px solid ${colors.white}`};
   color: ${({ isSelected, theme: { colors } }) => (isSelected ? colors.primary : colors.white)};
-  font-family: ${({ isSelected, theme: { fontFamily } }) => (isSelected ? fontFamily.bold : fontFamily.regular)};
+  font-family: ${({ isSelected, theme: { fontFamily } }) => (isSelected ? fontFamily.syncopate : fontFamily.basier)};
   font-size: 14px;
   padding: 6.5px 8.5px;
   min-width: 48px;
@@ -105,7 +105,7 @@ const Row = styled.div`
 const SlippagePopupContent = ({ className }) => {
   const pact = useContext(PactContext);
   const { gameEditionView } = useContext(GameEditionContext);
-  const { themeMode, resolutionConfiguration } = useApplicationContext();
+  const { resolutionConfiguration } = useApplicationContext();
   const [showSplippageContent, setShowSlippageContent] = useState(false);
 
   const ref = useRef();
@@ -123,15 +123,9 @@ const SlippagePopupContent = ({ className }) => {
     <Wrapper ref={ref} resolutionConfiguration={resolutionConfiguration}>
       <CogIcon onClick={() => setShowSlippageContent((prev) => !prev)} style={{ cursor: 'pointer' }} />
       {showSplippageContent && (
-        <PopupContainer
-          className={className}
-          style={{ width: 'unset', zIndex: 1 }}
-          backgroundColor={
-            (browserDetection() === 'BRAVE' || browserDetection() === 'FIREFOX') && themeMode === 'dark' && theme('dark').colors.primary
-          }
-        >
+        <PopupContainer outOfGameEdition withGradient className={`background-fill ${className}`} style={{ width: 'unset', zIndex: 1 }}>
           <Container>
-            <Label outGameEditionView fontSize={13} fontFamily="bold">
+            <Label outGameEditionView fontSize={13} fontFamily="syncopate">
               Transactions Settings
             </Label>
             {!gameEditionView && (

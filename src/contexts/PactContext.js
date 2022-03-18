@@ -45,6 +45,7 @@ export const PactProvider = (props) => {
   const [swapList, setSwapList] = useState([]);
   const [offsetSwapList, setOffsetSwapList] = useState(0);
   const [moreSwap, setMoreSwap] = useState(true);
+  const [loadingSwap, setLoadingSwap] = useState(false);
 
   //TO FIX, not working when multiple toasts are there
   const toastId = React.useRef(null);
@@ -100,9 +101,9 @@ export const PactProvider = (props) => {
   const getEventsSwapList = async () => {
     setSwapList([]);
     const limit = 20;
-
     try {
       if (account.account.account) {
+        setLoadingSwap(true);
         let response = await axios.get('https://estats.chainweb.com/txs/events', {
           params: {
             search: account.account.account,
@@ -115,11 +116,13 @@ export const PactProvider = (props) => {
         if (Object.values(response?.data).length < limit) setMoreSwap(false);
         if (Object.values(response?.data).length !== 0) {
           let swap = Object.values(response?.data);
-          if (swap.length !== 0) setSwapList(swap);
-          else setSwapList({ error: 'No swaps found' });
+          if (swap.length !== 0) {
+            setSwapList(swap);
+          } else setSwapList({ error: 'No swaps found' });
         } else {
           setSwapList({ error: 'No movement was performed' });
         }
+        setLoadingSwap(false);
       } else {
         setSwapList({ error: 'Connect your wallet to view the swap history' });
       }
@@ -134,6 +137,7 @@ export const PactProvider = (props) => {
 
     try {
       if (account.account.account) {
+        setLoadingSwap(true);
         let response = await axios.get('https://estats.chainweb.com/txs/events', {
           params: {
             search: account.account.account,
@@ -145,10 +149,15 @@ export const PactProvider = (props) => {
         // console.log('get more events list response: ',response);
         let swap = Object.values(response?.data);
         if (swap.length !== 0) {
-          setSwapList(swapList.concat(swap));
+          const newResults = [...swapList, ...swap];
+          if (swap.length < limit) {
+            setMoreSwap(false);
+          }
+          setSwapList(newResults);
         } else {
           setMoreSwap(false);
         }
+        setLoadingSwap(false);
       } else {
         setSwapList({ error: 'Connect your wallet to view the swap history' });
       }
@@ -158,9 +167,11 @@ export const PactProvider = (props) => {
     }
   };
 
-  useEffect(() => {
-    getEventsSwapList();
-  }, [account.sendRes, account.account]);
+  // useEffect(() => {
+  //   if (account.account) {
+  //     getEventsSwapList();
+  //   }
+  // }, [account.account]);
 
   const fetchAllBalances = async () => {
     let endBracket = '';
@@ -243,6 +254,7 @@ export const PactProvider = (props) => {
         accum += `[${pair.split(':').join(' ')}] `;
         return accum;
       }, '');
+      console.log('tokenPairList', tokenPairList);
       let data = await Pact.fetch.local(
         {
           pactCode: `
@@ -347,7 +359,7 @@ export const PactProvider = (props) => {
         title: 'Transaction Success!',
         description: 'Check it out in the block explorer',
         link: `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
-        isReaded: false,
+        isRead: false,
       });
       // open the toast SUCCESS message
       notificationContext.showNotification({
@@ -374,7 +386,7 @@ export const PactProvider = (props) => {
         title: 'Transaction Failure!',
         description: 'Check it out in the block explorer',
         link: `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
-        isReaded: false,
+        isRead: false,
       });
       // open the toast FAILURE message
       notificationContext.showNotification({
@@ -619,6 +631,8 @@ export const PactProvider = (props) => {
     computeIn,
     setMoreSwap,
     getCurrentKdaUSDPrice,
+    loadingSwap,
+    getEventsSwapList,
   };
   return <PactContext.Provider value={contextValues}>{props.children}</PactContext.Provider>;
 };

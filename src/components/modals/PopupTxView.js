@@ -31,7 +31,7 @@ const PopupTxView = ({ isAccountPopup, popupStyle, offset }) => {
       on="click"
     >
       <Label
-        fontFamily="bold"
+        fontFamily="syncopate"
         labelStyle={{
           padding: '12px 12px 4px 12px',
           display: 'flex',
@@ -77,7 +77,7 @@ const PopupTxView = ({ isAccountPopup, popupStyle, offset }) => {
     >
       <Label
         geColor="yellow"
-        fontFamily="bold"
+        fontFamily="syncopate"
         geLabelStyle={{ marginBottom: 8 }}
         labelStyle={{
           padding: '8px 8px 4px 8px',
