@@ -65,9 +65,9 @@ const AnalyticsContainer = () => {
             <AnalyticsSimpleWidget title={'Marketcap'} mainText={`$ ${humanReadableNumber(Number(KDX_TOTAL_SUPPLY * KDX_PRICE))}`} subtitle={null} />
           </FlexContainer>
           <FlexContainer mobileClassName="column" gap={24}>
-            <TVLChart height={300} />
+            <TVLChart kdaPrice={kdaPrice} height={300} />
 
-            <VolumeChart height={300} />
+            <VolumeChart kdaPrice={kdaPrice} height={300} />
           </FlexContainer>
           <VestingScheduleChart height={300} />
         </FlexContainer>
