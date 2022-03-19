@@ -30,6 +30,7 @@ const volumeRanges = {
     name: (_id) => moment(_id).format('DD/MM/YYYY'),
     dateStart: moment().subtract(60, 'days').format('YYYY-MM-DD'),
     title: (payload) => moment(payload._id).format('DD/MM/YYYY'),
+    timeLabel: '24h',
   },
   [WEEKLY_VOLUME_RANGE]: {
     name: (_id) => _id,
@@ -37,6 +38,7 @@ const volumeRanges = {
       .subtract(7 * 40, 'days')
       .format('YYYY-MM-DD'),
     title: (payload) => moment(payload.volumes[0]?.startDay).format('DD/MM/YYYY'),
+    timeLabel: 'weekly',
   },
   [MONTHLY_VOLUME_RANGE]: {
     name: (_id) => _id,
@@ -45,6 +47,7 @@ const volumeRanges = {
       .days(0)
       .format('YYYY-MM-DD'),
     title: (payload) => moment(payload.volumes[0]?.startDay).format('MMM YY'),
+    timeLabel: 'monthly',
   },
 };
 
@@ -86,7 +89,7 @@ const VolumeChart = ({ kdaPrice, width, height }) => {
     <FlexContainer withGradient className="column align-ce w-100 h-100" style={{ padding: 32 }}>
       <div className="w-100 flex justify-sb">
         <div>
-          <Label fontSize={16}>Volume 24h</Label>
+          <Label fontSize={16}>Volume {volumeRanges[volumeRange].timeLabel}</Label>
           <Label fontSize={24}>$ {humanReadableNumber(Number(dailyVolume))}</Label>
           <Label>&nbsp;{currentDate || ''}</Label>
         </div>
@@ -110,12 +113,12 @@ const VolumeChart = ({ kdaPrice, width, height }) => {
             data={volume}
             onMouseMove={({ activePayload }) => {
               if (activePayload) {
-                setDailyVolume((activePayload && activePayload[0]?.payload?.Volume) || '');
+                setDailyVolume((activePayload && activePayload[0]?.payload?.Volume * kdaPrice) || '');
                 setCurrentDate((activePayload && activePayload[0]?.payload?.title) || null);
               }
             }}
             onMouseLeave={() => {
-              setDailyVolume(volume[volume.length - 1]?.Volume * kdaPrice ?? null);
+              setDailyVolume(volume[volume.length - 1]?.Volume * kdaPrice);
               setCurrentDate(null);
             }}
             margin={{
