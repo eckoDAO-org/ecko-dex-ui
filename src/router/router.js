@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
-import PoolContainer from '../containers/PoolContainer';
 import SwapContainer from '../containers/SwapContainer';
 import WrapContainer from '../containers/WrapContainer';
 import AnalyticsContainer from '../containers/AnalyticsContainer';

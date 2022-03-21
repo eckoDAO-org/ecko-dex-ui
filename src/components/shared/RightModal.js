@@ -1,11 +1,9 @@
-import React, { useContext, useRef } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components/macro';
 import { CloseIcon } from '../../assets';
-import { NotificationContext } from '../../contexts/NotificationContext';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
-import CustomButton from '../shared/CustomButton';
 import Label from '../shared/Label';
-import NotificationCard from './NotificationCard';
+
 const Container = styled.div`
   width: 335px;
   position: fixed;
@@ -81,9 +79,7 @@ const Content = styled.div`
   flex: 1;
 `;
 
-const NotificationModal = ({ open, onClose, customIcon, removeIcon, headerStyle, footerButton }) => {
-  const notification = useContext(NotificationContext);
-
+const RightModal = ({ title, open, onClose, customIcon, removeIcon, headerStyle, content, footer }) => {
   const ref = useRef();
   useOnClickOutside(ref, () => open && onClose());
 
@@ -92,45 +88,17 @@ const NotificationModal = ({ open, onClose, customIcon, removeIcon, headerStyle,
       <>
         <Header style={headerStyle}>
           <Label fontFamily="syncopate" labelStyle={{ marginLeft: 10 }}>
-            Notifications
+            {title}
           </Label>
           <IconContainer onClick={onClose}>{!removeIcon && (customIcon || <CloseIcon style={{ height: 10, width: 10 }} />)}</IconContainer>
         </Header>
 
-        <Content>
-          {[...notification.notificationList]?.reverse().map((notif, index) => {
-            return (
-              <NotificationCard
-                key={index}
-                index={index}
-                type={notif?.type}
-                time={notif?.time}
-                date={notif?.date}
-                title={notif?.title}
-                isHighlight={!notif?.isRead}
-                description={notif?.description}
-                removeItem={notification?.removeItem}
-                link={notif?.link}
-              />
-            );
-          })}
-        </Content>
+        <Content>{content}</Content>
 
-        <FooterContainer>
-          <CustomButton
-            onClick={() => {
-              notification.removeAllItem();
-            }}
-            fontSize="12px"
-            buttonStyle={{ width: '100%' }}
-            outGameEditionView
-          >
-            Remove All Notification
-          </CustomButton>
-        </FooterContainer>
+        <FooterContainer>{footer}</FooterContainer>
       </>
     </Container>
   );
 };
 
-export default NotificationModal;
+export default RightModal;

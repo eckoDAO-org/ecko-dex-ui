@@ -5,7 +5,7 @@ import CommonWrapper from './CommonWrapper';
 
 const Analytics = ({ apr, volume, stakedShare, totalStaked }) => {
   return (
-    <CommonWrapper title="analytics">
+    <CommonWrapper title="analytics" gap={24}>
       <div>
         <div className="flex align-ce">
           <Label>APR</Label>

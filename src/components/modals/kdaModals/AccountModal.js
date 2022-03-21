@@ -16,7 +16,6 @@ import ConnectWalletModal from './ConnectWalletModal';
 import Label from '../../shared/Label';
 import PressButtonToActionLabel from '../../game-edition-v2/components/PressButtonToActionLabel';
 import { FlexContainer } from '../../shared/FlexContainer';
-import { useLocation } from 'react-router-dom';
 
 const AccountModalContainer = styled(Container)`
   justify-content: space-between;
@@ -74,8 +73,7 @@ const RightContainer = styled.div`
   }
 `;
 
-const AccountModal = () => {
-  const { pathname } = useLocation();
+const AccountModal = ({ pathname }) => {
   const { account, logout } = useContext(AccountContext);
   const modalContext = useContext(ModalContext);
   const { gameEditionView, setSelectedWire, setShowWires, setButtons, buttons } = useContext(GameEditionContext);

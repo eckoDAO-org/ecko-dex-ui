@@ -6,7 +6,7 @@ import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
 
-const Rewards = ({ amount, stakedTime, rewardsPenality }) => {
+const Rewards = ({ amount, stakedTime, rewardsPenality, disabled }) => {
   return (
     <CommonWrapper gap={16} title="rewards">
       <div>
@@ -34,8 +34,12 @@ const Rewards = ({ amount, stakedTime, rewardsPenality }) => {
           {rewardsPenality} %
         </Label>
       </div>
-      <CustomButton type="gradient">stake rewards</CustomButton>
-      <CustomButton type="primary">withdraw</CustomButton>
+      <CustomButton type="gradient" disabled={disabled} buttonStyle={{ marginTop: 4 }}>
+        stake rewards
+      </CustomButton>
+      <CustomButton type="primary" disabled={disabled}>
+        withdraw
+      </CustomButton>
     </CommonWrapper>
   );
 };

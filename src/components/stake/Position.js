@@ -15,7 +15,7 @@ const Position = ({ buttonLabel, amount, stakeKdxAmout, setStakeKdxAmount }) => 
         <Label>Amount</Label>
         <Label fontSize={32}>{humanReadableNumber(amount)}</Label>
       </div>
-      <CustomDivider />
+      <CustomDivider style={{ margin: '40px 0' }} />
 
       <Input
         topLeftLabel="amount"
@@ -37,7 +37,9 @@ const Position = ({ buttonLabel, amount, stakeKdxAmout, setStakeKdxAmount }) => 
           setStakeKdxAmount(limitDecimalPlaces(value, 12));
         }}
       />
-      <CustomButton type="gradient">{buttonLabel}</CustomButton>
+      <CustomButton type="gradient" buttonStyle={{ marginTop: 40 }}>
+        {buttonLabel}
+      </CustomButton>
     </CommonWrapper>
   );
 };

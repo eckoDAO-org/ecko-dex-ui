@@ -9,7 +9,7 @@ import { FlexContainer } from './FlexContainer';
 import Loader from './Loader';
 
 const StyledButton = styled(FlexContainer)`
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
   width: 100%;
   justify-content: center;
   align-items: center;

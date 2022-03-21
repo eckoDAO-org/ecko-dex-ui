@@ -1,15 +1,15 @@
 import React from 'react';
-import { NotificationModalConsumer, NotificationModalProvider } from '../../contexts/NotificationModalContext';
-import NotificationModal from './NotificationModal';
+import { RightModalConsumer, RightModalProvider } from '../../contexts/RightModalContext';
+import RightModal from '../shared/RightModal';
 
 const NotificationModalRender = ({ children }) => {
   return (
-    <NotificationModalProvider>
+    <RightModalProvider>
       {children}
-      <NotificationModalConsumer>
+      <RightModalConsumer>
         {(value) => {
           return (
-            <NotificationModal
+            <RightModal
               open={value.open || false}
               title={value.title}
               content={value?.content ?? null}
@@ -17,11 +17,12 @@ const NotificationModalRender = ({ children }) => {
               contentStyle={value.contentStyle}
               titleStyle={value.titleStyle}
               onClose={value.onClose || value.closeModal}
+              footer={value?.footer}
             />
           );
         }}
-      </NotificationModalConsumer>
-    </NotificationModalProvider>
+      </RightModalConsumer>
+    </RightModalProvider>
   );
 };
 

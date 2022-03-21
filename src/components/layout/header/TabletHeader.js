@@ -6,7 +6,6 @@ import { useApplicationContext } from '../../../contexts';
 import useWindowSize from '../../../hooks/useWindowSize';
 import { ROUTE_INDEX } from '../../../router/routes';
 import menuItems from '../../menuItems';
-import Label from '../../shared/Label';
 import GameEditionModeButton from './GameEditionModeButton';
 import PopupContentList from './PopupContentList';
 import RightHeaderItems from './RightHeaderItems';
@@ -71,9 +70,9 @@ const TabletHeader = ({ className }) => {
           <RightHeaderItems />
         </RightContainer>
       </RowContainer>
-      <Label outGameEditionView className="mainnet-chain-2 desktop-none mobile-none">
+      {/* <Label outGameEditionView className="mainnet-chain-2 desktop-none mobile-none">
         Chain 2
-      </Label>
+      </Label> */}
     </Container>
   );
 };

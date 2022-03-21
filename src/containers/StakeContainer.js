@@ -46,14 +46,14 @@ const StakeContainer = () => {
         <InfoPopup></InfoPopup>
       </FlexContainer>
 
-      <FlexContainer gap={24}>
+      <FlexContainer gap={24} tabletClassName="column" mobileClassName="column">
         <Position
           amount={231.3213}
           stakeKdxAmout={stakeKdxAmout}
           setStakeKdxAmount={setStakeKdxAmount}
           buttonLabel={pathname === ROUTE_STAKE ? 'stake' : 'unstake'}
         />
-        <Rewards amount={231.3213} rewardsPenality={2} stakedTime={32} />
+        <Rewards amount={231.3213} rewardsPenality={2} stakedTime={32} disabled={pathname === ROUTE_UNSTAKE} />
         <Analytics apr={32} volume={321232.231321} stakedShare={5.16} totalStaked={35.16} />
       </FlexContainer>
 

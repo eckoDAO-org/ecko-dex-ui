@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { CoinKaddexIcon, KaddexLightModeLogo, KaddexLogo } from '../../../assets';
+import { KaddexLightModeLogo, KaddexLogo } from '../../../assets';
 import { ROUTE_INDEX } from '../../../router/routes';
 import menuItems from '../../menuItems';
 import RightHeaderItems from './RightHeaderItems';

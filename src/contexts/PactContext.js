@@ -53,7 +53,7 @@ export const PactProvider = (props) => {
 
   useEffect(() => {
     if (!notificationNotCompletedChecked) {
-      const pendingNotification = notificationContext.notificationList.filter((notif) => notif.type === 'info' && notif.isCompleted === false);
+      const pendingNotification = account.notificationList.filter((notif) => notif.type === 'info' && notif.isCompleted === false);
       pendingNotification.map((pendingNotif) => listen(pendingNotif.description));
 
       setNotificationNotCompletedChecked(true);
