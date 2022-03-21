@@ -42,16 +42,10 @@ const AllProposalsContainer = () => {
           <PartialScrollableScrollSection id="proposals-list" className="scrollbar-none" style={{ width: '100%' }}>
             {allProposal.map((data, index) => (
               <FlexContainer className="column pointer" key={index} onClick={() => history.push(ROUTE_DAO_PROPOSAL.replace(':proposal_id', data.id))}>
-                <Label fontFamily="basier" fontSize={13} labelStyle={{ opacity: 0.7, marginBottom: 8 }}>
-                  {moment(data['creation-date']).format('YYYY-MM-DD')}
-                </Label>
-                <Label fontFamily="basier" fontSize={16} labelStyle={{ marginBottom: 4 }}>
-                  {data?.title}
-                </Label>
-                <Label fontFamily="basier" fontSize={13} labelStyle={{ marginBottom: 16 }}>
-                  {data?.description}
-                </Label>
-                <FlexContainer>
+                <FlexContainer className="align-ce" gap={8} style={{ marginBottom: 8 }}>
+                  <Label fontFamily="basier" fontSize={13} labelStyle={{ opacity: 0.7 }}>
+                    {moment(data['creation-date']).format('YYYY-MM-DD')}
+                  </Label>
                   <Label
                     fontFamily="basier"
                     fontSize={10}
@@ -64,6 +58,14 @@ const AllProposalsContainer = () => {
                     {data?.status}
                   </Label>
                 </FlexContainer>
+
+                <Label fontFamily="basier" fontSize={16} labelStyle={{ marginBottom: 4 }}>
+                  {data?.title}
+                </Label>
+                <Label fontFamily="basier" fontSize={13} labelStyle={{ marginBottom: 16 }}>
+                  {data?.description}
+                </Label>
+
                 {index < allProposal.length - 1 && <Divider />}
               </FlexContainer>
             ))}
