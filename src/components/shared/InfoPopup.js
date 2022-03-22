@@ -13,7 +13,7 @@ const InfoPopup = ({ title, children, type, size }) => {
       size={size}
       name="info circle"
       style={{ margin: ' 0px 0px 0px 4px', cursor: 'pointer', color: theme(themeMode).colors.white }}
-      onClick={() => rightModalContext.openModal({ className: 'info-popup', title, content: children, contentStyle: { padding: 16 } })}
+      onClick={() => rightModalContext.openModal({ className: 'info-popup', title, content: children, contentStyle: { padding: 16, paddingTop: 0 } })}
     />
   ) : (
     <CustomPopup
