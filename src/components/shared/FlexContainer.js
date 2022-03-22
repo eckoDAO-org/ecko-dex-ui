@@ -202,3 +202,15 @@ export const CryptoContainer = styled.div`
     height: ${({ size = 32 }) => `${size}px`}!important;
   }
 `;
+
+export const EquationContainer = styled(FlexContainer)`
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
+  .equation span {
+    color: ${({ theme: { colors } }) => colors.white};
+    font-family: ${({ theme: { fontFamily } }) => fontFamily.syncopate};
+  }
+`;

@@ -1,6 +1,8 @@
 import React from 'react';
 import { CoinKaddexIcon } from '../../assets';
+import { useAccountContext, useModalContext } from '../../contexts';
 import { humanReadableNumber, limitDecimalPlaces } from '../../utils/reduceBalance';
+import ConnectWalletModal from '../modals/kdaModals/ConnectWalletModal';
 import CustomButton from '../shared/CustomButton';
 import CustomDivider from '../shared/CustomDivider';
 import { FlexContainer } from '../shared/FlexContainer';
@@ -9,6 +11,8 @@ import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
 
 const Position = ({ buttonLabel, amount, stakeKdxAmout, setStakeKdxAmount }) => {
+  const modalContext = useModalContext();
+  const { account } = useAccountContext();
   return (
     <CommonWrapper title="position (p)" popup="asd">
       <div>
@@ -37,8 +41,21 @@ const Position = ({ buttonLabel, amount, stakeKdxAmout, setStakeKdxAmount }) => 
           setStakeKdxAmount(limitDecimalPlaces(value, 12));
         }}
       />
-      <CustomButton type="gradient" buttonStyle={{ marginTop: 40 }}>
-        {buttonLabel}
+
+      <CustomButton
+        type="gradient"
+        buttonStyle={{ marginTop: 40 }}
+        onClick={() => {
+          if (!account.account) {
+            modalContext.openModal({
+              title: 'connect wallet',
+              description: 'Connect a wallet using one of the methods below',
+              content: <ConnectWalletModal />,
+            });
+          }
+        }}
+      >
+        {!account.account ? 'Connect Wallet' : buttonLabel}
       </CustomButton>
     </CommonWrapper>
   );

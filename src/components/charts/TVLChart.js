@@ -89,7 +89,7 @@ const TVLChart = ({ kdaPrice, height }) => {
   }, [pact]);
 
   return (
-    <FlexContainer className="column align-ce w-100 h-100" withGradient style={{ padding: 32 }}>
+    <FlexContainer className="column align-ce w-100 h-100 background-fill" withGradient style={{ padding: 32 }}>
       <div className="column w-100">
         <Label fontSize={16}>TVL</Label>
         <Label fontSize={24}>$ {humanReadableNumber(Number(viewedTVL))}</Label>

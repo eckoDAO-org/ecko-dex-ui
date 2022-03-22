@@ -1,23 +1,11 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 import { Equation } from 'react-equation';
-import { FlexContainer } from '../shared/FlexContainer';
+import { EquationContainer, FlexContainer } from '../shared/FlexContainer';
 import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
 import ProgressBar from '../shared/ProgressBar';
 import CommonWrapper from './CommonWrapper';
-
-const EquationContainer = styled(FlexContainer)`
-  svg {
-    path {
-      fill: ${({ theme: { colors } }) => colors.white};
-    }
-  }
-  .equation span {
-    color: ${({ theme: { colors } }) => colors.white};
-    font-family: ${({ theme: { fontFamily } }) => fontFamily.syncopate};
-  }
-`;
 
 const VotingPower = () => {
   return (

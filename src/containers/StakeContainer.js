@@ -6,9 +6,11 @@ import Label from '../components/shared/Label';
 import Analytics from '../components/stake/Analytics';
 import Position from '../components/stake/Position';
 import Rewards from '../components/stake/Rewards';
+import StakeInfo from '../components/stake/StakeInfo';
+import UnstakeInfo from '../components/stake/UnstakeInfo';
 import VotingPower from '../components/stake/VotingPower';
 import { ROUTE_STAKE, ROUTE_UNSTAKE } from '../router/routes';
-import theme from '../styles/theme';
+import { theme } from '../styles/theme';
 
 const StakeContainer = () => {
   const history = useHistory();
@@ -18,7 +20,7 @@ const StakeContainer = () => {
   return (
     <FlexContainer
       className="column w-100 h-100"
-      desktopStyle={{ padding: `50px ${theme.layout.desktopPadding}px` }}
+      desktopStyle={{ padding: `50px ${theme().layout.desktopPadding}px` }}
       mobileStyle={{ paddingBottom: 40 }}
     >
       <FlexContainer className="w-100 justify-sb" mobileClassName="column" style={{ marginBottom: 24 }} mobileStyle={{ marginTop: 24 }}>
@@ -42,8 +44,9 @@ const StakeContainer = () => {
             UNSTAKE
           </Label>
         </FlexContainer>
-
-        <InfoPopup></InfoPopup>
+        <InfoPopup title={pathname.substring(1)} type="modal">
+          {pathname === ROUTE_STAKE ? <StakeInfo /> : <UnstakeInfo />}
+        </InfoPopup>
       </FlexContainer>
 
       <FlexContainer gap={24} tabletClassName="column" mobileClassName="column">

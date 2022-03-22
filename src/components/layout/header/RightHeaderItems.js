@@ -129,6 +129,7 @@ const RightHeaderItems = () => {
         onClick={() => {
           rightModalContext.openModal({
             title: 'notifications',
+            titleStyle: { padding: '10px 22px 10px 26px' },
             content: [...notificationList]?.reverse().map((notif, index) => {
               return (
                 <NotificationCard

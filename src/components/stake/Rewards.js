@@ -5,6 +5,7 @@ import CustomButton from '../shared/CustomButton';
 import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
+import PentalityRewardsInfo from './PentalityRewardsInfo';
 
 const Rewards = ({ amount, stakedTime, rewardsPenality, disabled }) => {
   return (
@@ -22,11 +23,8 @@ const Rewards = ({ amount, stakedTime, rewardsPenality, disabled }) => {
       <div>
         <div className="flex align-ce">
           <Label>Rewards Penality</Label>
-          <InfoPopup>
-            The penalty structure of the KDX Staking tool is designed to achieve two objectives: to reward long-term holders and to prevent
-            manipulation and spam of the smart contract involved. If you unstake during the first 72hours you will incur in a penalty: 3% flat penalty
-            on your staked amount. If you withdraw your rewards during the first 60 days, you will incur in a penalty: the penalty will only affect
-            your accumulated rewards and exponentially decreases in time. Your initial capital will not be affected.
+          <InfoPopup type="modal" title="penality rewards">
+            <PentalityRewardsInfo />
           </InfoPopup>
         </div>
 

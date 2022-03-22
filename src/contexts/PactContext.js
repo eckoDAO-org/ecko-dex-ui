@@ -352,7 +352,7 @@ export const PactProvider = (props) => {
       setIsCompletedNotification(reqKey);
 
       // store in local storage the success notification for the right modal
-      notificationContext.storeNotification({
+      account.storeNotification({
         type: 'success',
         time: getCurrentTime(),
         date: getCurrentDate(),
@@ -379,7 +379,7 @@ export const PactProvider = (props) => {
     } else {
       setIsCompletedNotification(reqKey);
       // store in local storage the error notification for the right modal
-      notificationContext.storeNotification({
+      account.storeNotification({
         type: 'error',
         time: getCurrentTime(),
         date: getCurrentDate(),

@@ -32,7 +32,7 @@ const Header = styled.div`
   position: relative;
   justify-content: space-between;
   z-index: 2;
-  padding: 10px 22px 10px 26px;
+  padding: 16px;
   color: ${({ theme: { colors } }) => colors.white};
   min-height: 56px;
   border-radius: 0px !important;
@@ -79,21 +79,21 @@ const Content = styled.div`
   flex: 1;
 `;
 
-const RightModal = ({ title, open, onClose, customIcon, removeIcon, headerStyle, content, footer }) => {
+const RightModal = ({ title, open, onClose, customIcon, removeIcon, titleStyle, content, footer, contentStyle }) => {
   const ref = useRef();
   useOnClickOutside(ref, () => open && onClose());
 
   return (
     <Container ref={ref} open={open} right={window.innerWidth}>
       <>
-        <Header style={headerStyle}>
+        <Header style={titleStyle}>
           <Label fontFamily="syncopate" labelStyle={{ marginLeft: 10 }}>
             {title}
           </Label>
           <IconContainer onClick={onClose}>{!removeIcon && (customIcon || <CloseIcon style={{ height: 10, width: 10 }} />)}</IconContainer>
         </Header>
 
-        <Content>{content}</Content>
+        <Content style={contentStyle}>{content}</Content>
 
         <FooterContainer>{footer}</FooterContainer>
       </>
