@@ -14,7 +14,10 @@ const Position = ({ buttonLabel, amount, stakeKdxAmout, setStakeKdxAmount }) => 
   const modalContext = useModalContext();
   const { account } = useAccountContext();
   return (
-    <CommonWrapper title="position (p)" popup="asd">
+    <CommonWrapper
+      title="position (p)"
+      popup="Our DAO aggregator smart contract will allow three different avenues for $KDX holders to accrue a higher position. These three avenues are - First sale investor that choose to migrate to vaulting/lockup program, second sale investors during the vesting period, and all users that stake KDX from platform launch."
+    >
       <div>
         <Label>Amount</Label>
         <Label fontSize={32}>{humanReadableNumber(amount)}</Label>

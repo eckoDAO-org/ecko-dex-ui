@@ -8,7 +8,7 @@ const Container = styled.div`
   width: 335px;
   position: fixed;
   background: ${({ theme: { colors } }) => colors.primary};
-  box-shadow: -10px 0px 40px #0f054c3d;
+  box-shadow: -10px 0px 40px #00000066;
   top: 0;
   right: 0;
   height: 100%;
@@ -24,6 +24,10 @@ const Container = styled.div`
     width: 0px;
   }
   scrollbar-width: none;
+
+  .info-popup {
+    line-height: 18px;
+  }
 `;
 
 const Header = styled.div`
@@ -79,7 +83,7 @@ const Content = styled.div`
   flex: 1;
 `;
 
-const RightModal = ({ title, open, onClose, customIcon, removeIcon, titleStyle, content, footer, contentStyle }) => {
+const RightModal = ({ className, title, open, onClose, customIcon, removeIcon, titleStyle, content, footer, contentStyle }) => {
   const ref = useRef();
   useOnClickOutside(ref, () => open && onClose());
 
@@ -87,15 +91,15 @@ const RightModal = ({ title, open, onClose, customIcon, removeIcon, titleStyle, 
     <Container ref={ref} open={open} right={window.innerWidth}>
       <>
         <Header style={titleStyle}>
-          <Label fontFamily="syncopate" labelStyle={{ marginLeft: 10 }}>
-            {title}
-          </Label>
+          <Label fontFamily="syncopate">{title}</Label>
           <IconContainer onClick={onClose}>{!removeIcon && (customIcon || <CloseIcon style={{ height: 10, width: 10 }} />)}</IconContainer>
         </Header>
 
-        <Content style={contentStyle}>{content}</Content>
+        <Content className={className} style={contentStyle}>
+          {content}
+        </Content>
 
-        <FooterContainer>{footer}</FooterContainer>
+        {footer && <FooterContainer>{footer}</FooterContainer>}
       </>
     </Container>
   );

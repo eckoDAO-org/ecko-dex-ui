@@ -5,14 +5,15 @@ import { theme } from '../../styles/theme';
 import CustomPopup from './CustomPopup';
 import Label from './Label';
 
-const InfoPopup = ({ title, children, type }) => {
+const InfoPopup = ({ title, children, type, size }) => {
   const { themeMode } = useApplicationContext();
   const rightModalContext = useRightModalContext();
   return type === 'modal' ? (
     <Icon
+      size={size}
       name="info circle"
       style={{ margin: ' 0px 0px 0px 4px', cursor: 'pointer', color: theme(themeMode).colors.white }}
-      onClick={() => rightModalContext.openModal({ title, content: children, contentStyle: { padding: 16 } })}
+      onClick={() => rightModalContext.openModal({ className: 'info-popup', title, content: children, contentStyle: { padding: 16 } })}
     />
   ) : (
     <CustomPopup

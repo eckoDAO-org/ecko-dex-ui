@@ -1,7 +1,6 @@
 import React from 'react';
-import styled from 'styled-components/macro';
 import { Equation } from 'react-equation';
-import { EquationContainer, FlexContainer } from '../shared/FlexContainer';
+import { EquationContainer } from '../shared/FlexContainer';
 import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
 import ProgressBar from '../shared/ProgressBar';
@@ -15,7 +14,7 @@ const VotingPower = () => {
       cardStyle={{ paddingBottom: 32 }}
       title={
         <EquationContainer className="flex align-ce">
-          <Label fontFamily="syncopate" fontSize={24}>
+          <Label fontFamily="syncopate" fontSize={24} labelStyle={{ marginRight: 16 }}>
             Voting Power (V)
           </Label>
           <Equation className="equation" value="V = root(2, P*M)" />
@@ -27,7 +26,7 @@ const VotingPower = () => {
           multiplayer (m)
         </Label>
 
-        <InfoPopup></InfoPopup>
+        <InfoPopup>to do</InfoPopup>
       </div>
 
       <div>

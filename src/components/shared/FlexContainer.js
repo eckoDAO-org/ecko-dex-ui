@@ -211,6 +211,6 @@ export const EquationContainer = styled(FlexContainer)`
   }
   .equation span {
     color: ${({ theme: { colors } }) => colors.white};
-    font-family: ${({ theme: { fontFamily } }) => fontFamily.syncopate};
+    font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
   }
 `;

@@ -10,6 +10,7 @@ const NotificationModalRender = ({ children }) => {
         {(value) => {
           return (
             <RightModal
+              className={value.className}
               open={value.open || false}
               title={value.title}
               content={value?.content ?? null}
