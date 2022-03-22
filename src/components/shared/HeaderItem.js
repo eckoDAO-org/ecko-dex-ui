@@ -82,7 +82,7 @@ const HeaderItem = ({
             history.push(item.route);
           }
         } else if (item.link) {
-          window.open(item.link, '_blank', 'noopener,noreferrer');
+          window.open(item.link, '_self');
         } else {
           if (onClick) {
             onClick();

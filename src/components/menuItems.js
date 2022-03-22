@@ -43,8 +43,13 @@ export const STAKE = {
   route: ROUTE_STAKE,
   activeRoutes: [ROUTE_UNSTAKE],
 };
+export const VAULT = {
+  id: 3,
+  label: 'vault',
+  link: 'http://134.209.219.136/',
+};
 
-export default [SWAP, LIQUIDITY, STAKE, ANALYTICS];
+export default [SWAP, LIQUIDITY, STAKE, ANALYTICS, VAULT];
 
 export const gameEditionRoutes = [
   {
