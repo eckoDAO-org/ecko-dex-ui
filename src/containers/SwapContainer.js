@@ -389,6 +389,7 @@ const SwapContainer = () => {
   const onWalletRequestViewModalClose = () => {
     wallet.setIsWaitingForWalletAuth(false);
     wallet.setWalletError(null);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -422,7 +423,7 @@ const SwapContainer = () => {
     if (gameEditionView) {
       openModal({
         titleFontSize: 32,
-        title: 'Select Token',
+        title: 'Selec',
         type: 'arcade-dark',
         onClose: () => {
           setTokenSelectorType(null);
@@ -444,7 +445,7 @@ const SwapContainer = () => {
       });
     } else {
       modalContext.openModal({
-        title: 'Select Token',
+        title: 'Select',
         description: '',
         onClose: () => {
           setTokenSelectorType(null);
@@ -568,6 +569,13 @@ const SwapContainer = () => {
             noLiquidity={noLiquidity}
             setShowTxModal={setShowTxModal}
             showTxModal={showTxModal}
+            onSelectToken={() => {
+              if (!fromValues.coin) {
+                setTokenSelectorType('from');
+              } else {
+                setTokenSelectorType('to');
+              }
+            }}
           />
         }
       >

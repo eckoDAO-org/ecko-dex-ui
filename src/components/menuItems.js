@@ -9,6 +9,8 @@ import {
   ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED,
   ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED,
   ROUTE_LIQUIDITY_REMOVE_LIQUIDITY,
+  ROUTE_STAKE,
+  ROUTE_UNSTAKE,
 } from '../router/routes';
 
 export const SWAP = {
@@ -35,8 +37,14 @@ export const ANALYTICS = {
   label: 'analytics',
   route: ROUTE_ANALYTICS,
 };
+export const STAKE = {
+  id: 3,
+  label: 'stake',
+  route: ROUTE_STAKE,
+  activeRoutes: [ROUTE_UNSTAKE],
+};
 
-export default [SWAP, LIQUIDITY, ANALYTICS];
+export default [SWAP, LIQUIDITY, ANALYTICS, STAKE];
 
 export const gameEditionRoutes = [
   {

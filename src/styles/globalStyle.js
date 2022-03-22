@@ -217,6 +217,7 @@ export default createGlobalStyle`
     }
 
     .column {
+      display: flex;
       flex-direction: column;
     
     }

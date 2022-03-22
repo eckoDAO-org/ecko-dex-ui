@@ -48,10 +48,6 @@ const LeftContainer = styled.div`
   }
 `;
 
-const RightContainer = styled.div`
-  display: flex;
-`;
-
 const AnimatedDiv = styled.div`
   display: flex;
   align-items: center;
@@ -89,9 +85,7 @@ const DesktopHeader = ({ className }) => {
         <GameEditionModeButton className="header" />
       )}
 
-      <RightContainer>
-        <RightHeaderItems />
-      </RightContainer>
+      <RightHeaderItems />
     </Container>
   );
 };

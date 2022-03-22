@@ -23,7 +23,7 @@ export const SwapContext = createContext();
 export const SwapProvider = (props) => {
   const pact = usePactContext();
   const notificationContext = useNotificationContext();
-  const { account, localRes, setLocalRes } = useAccountContext();
+  const { account, localRes, setLocalRes, storeNotification } = useAccountContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
 
   const wallet = useWalletContext();
@@ -130,7 +130,7 @@ export const SwapProvider = (props) => {
         data = await Pact.wallet.sendSigned(cmd, network);
       }
       pact.pollingNotif(data.requestKeys[0]);
-      notificationContext.storeNotification({
+      storeNotification({
         type: 'info',
         time: getCurrentTime(),
         date: getCurrentDate(),
@@ -151,7 +151,7 @@ export const SwapProvider = (props) => {
         autoClose: 5000,
         hideProgressBar: true,
       });
-      notificationContext.storeNotification({
+      storeNotification({
         type: 'error',
         time: getCurrentTime(),
         date: getCurrentDate(),

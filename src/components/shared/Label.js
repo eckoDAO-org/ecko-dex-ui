@@ -60,6 +60,7 @@ const Label = ({
   onClick,
   onClose,
   outGameEditionView,
+  nullableValue,
 }) => {
   const { gameEditionView } = useGameEditionContext();
   return gameEditionView && !outGameEditionView ? (
@@ -85,7 +86,7 @@ const Label = ({
       withShade={withShade}
       style={{ fontFamily: commonTheme.fontFamily[fontFamily], ...labelStyle }}
     >
-      {children}
+      {children || nullableValue}
     </STYText>
   );
 };

@@ -30,11 +30,7 @@ const CopyPopup = ({ textToCopy, title, containerStyle }) => {
               navigator.clipboard.writeText(textToCopy);
             }}
           />
-          {title && (
-            <Label fontFamily="syncopate" geFontSize={20}>
-              {title}
-            </Label>
-          )}
+          {title && <Label geFontSize={20}>{title}</Label>}
         </div>
       }
     >

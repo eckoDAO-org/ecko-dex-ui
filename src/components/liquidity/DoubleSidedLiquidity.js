@@ -377,7 +377,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
     if (gameEditionView) {
       openModal({
         titleFontSize: 32,
-        title: 'Select Token',
+        title: 'Select',
         type: 'arcade-dark',
         onClose: () => {
           setTokenSelectorType(null);
@@ -400,7 +400,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
       });
     } else {
       modalContext.openModal({
-        title: 'Select Token',
+        title: 'Select',
         description: '',
 
         onClose: () => {

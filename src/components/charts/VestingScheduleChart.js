@@ -31,7 +31,7 @@ const endDate10Years = '2031-06-01';
 const VestingScheduleChart = ({ height }) => {
   const [endDate, setEndDate] = useState(endDate4Years);
   return (
-    <FlexContainer withGradient className="column w-100 h-100">
+    <FlexContainer withGradient className="column w-100 h-100 background-fill">
       <GradientBorder />
       <VestingHeader>
         <Label></Label>

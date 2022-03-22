@@ -71,14 +71,8 @@ const TokenSelectorModalContent = ({ onSelectToken, onClose, token }) => {
 
   return (
     <Content>
-      <div style={{ display: 'flex', marginTop: 16 }}>
-        <Search
-          gameEditionView={gameEditionView}
-          fluid
-          placeholder="Search Token"
-          value={searchValue}
-          onChange={(e, { value }) => setSearchValue(value)}
-        />
+      <div style={{ display: 'flex' }}>
+        <Search gameEditionView={gameEditionView} fluid placeholder="Search" value={searchValue} onChange={(e, { value }) => setSearchValue(value)} />
         {gameEditionView && (
           <CloseIcon
             className="close-icon"

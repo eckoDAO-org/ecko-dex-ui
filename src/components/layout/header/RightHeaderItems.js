@@ -5,8 +5,7 @@ import { ModalContext } from '../../../contexts/ModalContext';
 import ConnectWalletModal from '../../modals/kdaModals/ConnectWalletModal';
 import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import BellNotification from '../../right-modal-notification/BellNotification';
-import { NotificationContext } from '../../../contexts/NotificationContext';
-import { NotificationModalContext } from '../../../contexts/NotificationModalContext';
+
 import { AccountContext } from '../../../contexts/AccountContext';
 import AccountInfo from './AccountInfo';
 import Button from '../../../components/shared/CustomButton';
@@ -15,10 +14,14 @@ import PopupContentList from './PopupContentList';
 import reduceToken from '../../../utils/reduceToken';
 import SlippagePopupContent from './SlippagePopupContent';
 import AccountModal from '../../modals/kdaModals/AccountModal';
-import { commonTheme } from '../../../styles/theme';
-import { ThreeDotsIcon } from '../../../assets';
+import theme, { commonTheme } from '../../../styles/theme';
+import { CoinKaddexIcon, ThreeDotsIcon } from '../../../assets';
 import { reduceBalance } from '../../../utils/reduceBalance';
 import Label from '../../shared/Label';
+import { RightModalContext } from '../../../contexts/RightModalContext';
+import CustomButton from '../../../components/shared/CustomButton';
+import NotificationCard from '../../right-modal-notification/NotificationCard';
+import { useLocation } from 'react-router-dom';
 
 const RightContainerHeader = styled.div`
   display: flex;
@@ -41,7 +44,7 @@ const RightContainerHeader = styled.div`
     transition: opacity 1s linear;
   }
 
-  svg {
+  svg:not(.kaddex-price) {
     path {
       fill: ${({ theme: { colors } }) => colors.white};
     }
@@ -51,21 +54,27 @@ const RightContainerHeader = styled.div`
 const FadeContainer = styled.div``;
 
 const RightHeaderItems = () => {
+  const { pathname } = useLocation();
   const [width] = useWindowSize();
 
-  const { account } = useContext(AccountContext);
+  const { account, notificationList, removeAllNotifications, removeNotification } = useContext(AccountContext);
   const modalContext = useContext(ModalContext);
   const { gameEditionView, openModal } = useContext(GameEditionContext);
-  const notificationModalContext = useContext(NotificationModalContext);
-  const notification = useContext(NotificationContext);
+  const rightModalContext = useContext(RightModalContext);
 
   return (
     <RightContainerHeader>
       {/* TODO: make kdx price dynamic after mint */}
-      <Label fontSize={13} className="mainnet-chain-2 desktop-only">
-        KDX $0.16
-      </Label>
-      <Label fontSize={13} class1Name="mainnet-chain-2 desktop-only">
+      {width >= theme.mediaQueries.deskstopPixel && (
+        <div className="flex align-ce">
+          <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 8 }} />
+          <Label outGameEditionView fontSize={13} className="mainnet-chain-2">
+            $0.16
+          </Label>
+        </div>
+      )}
+
+      <Label outGameEditionView fontSize={13} class1Name="mainnet-chain-2 desktop-only">
         Chain 2
       </Label>
       {account?.account && width >= commonTheme.mediaQueries.desktopPixel && (
@@ -74,12 +83,12 @@ const RightHeaderItems = () => {
             if (gameEditionView) {
               return openModal({
                 title: 'Account',
-                content: <AccountModal />,
+                content: <AccountModal pathname={pathname} />,
               });
             } else {
               modalContext.openModal({
                 title: 'Account',
-                content: <AccountModal />,
+                content: <AccountModal pathname={pathname} />,
               });
             }
           }}
@@ -118,9 +127,40 @@ const RightHeaderItems = () => {
       {gameEditionView && <SlippagePopupContent className="header-item w-fit-content" />}
 
       <BellNotification
-        hasNotification={notification.notificationList?.some((notif) => notif.isRead === false)}
+        hasNotification={notificationList?.some((notif) => notif.isRead === false)}
         onClick={() => {
-          notificationModalContext.openModal();
+          rightModalContext.openModal({
+            title: 'notifications',
+            titleStyle: { padding: '10px 22px 10px 26px' },
+            content: [...notificationList]?.reverse().map((notif, index) => {
+              return (
+                <NotificationCard
+                  key={index}
+                  index={index}
+                  type={notif?.type}
+                  time={notif?.time}
+                  date={notif?.date}
+                  title={notif?.title}
+                  isHighlight={!notif?.isRead}
+                  description={notif?.description}
+                  removeItem={removeNotification}
+                  link={notif?.link}
+                />
+              );
+            }),
+            footer: (
+              <CustomButton
+                onClick={() => {
+                  removeAllNotifications();
+                }}
+                fontSize="12px"
+                buttonStyle={{ width: '100%' }}
+                outGameEditionView
+              >
+                Remove All Notification
+              </CustomButton>
+            ),
+          });
         }}
       />
 

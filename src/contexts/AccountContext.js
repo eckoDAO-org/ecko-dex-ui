@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
 import swal from '@sweetalert/with-react';
 import { getCorrectBalance } from '../utils/reduceBalance';
 import { chainId, creationTime, GAS_PRICE, getCurrentDate, getCurrentTime, network } from '../constants/contextConstants';
-import { NotificationContext } from './NotificationContext';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { useGameEditionContext } from '.';
 
@@ -13,8 +12,9 @@ export const AccountContext = createContext();
 export const AccountProvider = (props) => {
   const [sendRes, setSendRes] = useState(null);
   const [localRes, setLocalRes] = useState(null);
-  const notificationContext = useContext(NotificationContext);
   const { gameEditionView } = useGameEditionContext();
+
+  const [notificationList, setNotificationList] = useLocalStorage('Notification', []);
 
   const [account, setAccount, removeAccount] = useLocalStorage('acct', { account: null, guard: null, balance: 0 });
   const [privKey, setPrivKey, removePrivKey] = useLocalStorage('pk', '');
@@ -41,7 +41,7 @@ export const AccountProvider = (props) => {
 
   useEffect(() => {
     if (typeof localRes === 'string') {
-      return notificationContext.storeNotification({
+      return storeNotification({
         type: 'error',
         time: getCurrentTime(),
         date: getCurrentDate(),
@@ -120,6 +120,33 @@ export const AccountProvider = (props) => {
     }
   };
 
+  useEffect(() => {
+    localStorage.setItem(`Notification`, JSON.stringify(notificationList));
+  }, [notificationList]);
+
+  const storeNotification = (notification) => {
+    const notificationListByStorage = JSON.parse(localStorage.getItem('Notification'));
+    if (!notificationListByStorage) {
+      //first saving notification in localstorage
+      localStorage.setItem(`Notification`, JSON.stringify([notification]));
+      setNotificationList(notification);
+    } else {
+      notificationListByStorage.push(notification);
+      localStorage.setItem(`Notification`, JSON.stringify(notificationListByStorage));
+      setNotificationList(notificationListByStorage);
+    }
+  };
+
+  const removeNotification = (indexToRemove) => {
+    // remember that notification list i view reversed
+    const notifWithoutRemoved = [...notificationList].reverse().filter((notif, index) => index !== indexToRemove);
+    setNotificationList(notifWithoutRemoved);
+  };
+
+  const removeAllNotifications = (list) => {
+    setNotificationList([]);
+  };
+
   const contextValues = {
     account,
     privKey,
@@ -136,6 +163,12 @@ export const AccountProvider = (props) => {
     tokenToAccount,
     tokenFromAccount,
     logout,
+
+    notificationList,
+    setNotificationList,
+    storeNotification,
+    removeNotification,
+    removeAllNotifications,
   };
   return <AccountContext.Provider value={contextValues}>{props.children}</AccountContext.Provider>;
 };

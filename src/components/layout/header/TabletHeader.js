@@ -70,7 +70,9 @@ const TabletHeader = ({ className }) => {
           <RightHeaderItems />
         </RightContainer>
       </RowContainer>
-      <span className="mainnet-chain-2 desktop-none mobile-none">Chain 2</span>
+      {/* <Label outGameEditionView className="mainnet-chain-2 desktop-none mobile-none">
+        Chain 2
+      </Label> */}
     </Container>
   );
 };

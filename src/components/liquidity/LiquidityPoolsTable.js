@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom';
 import { useErrorState } from '../../hooks/useErrorState';
 import { getDailyVolume } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact-pair';
-import { NETWORK_TYPE } from '../../constants/contextConstants';
 import { humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
@@ -40,9 +39,6 @@ const LiquidityPoolsTable = () => {
     <CommonTable
       items={pairList}
       columns={renderColumns()}
-      onClick={(item) => {
-        window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${item?.requestKey}`, '_blank', 'noopener,noreferrer');
-      }}
       actions={[
         {
           icon: <AddIcon />,

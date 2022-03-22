@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
-import PoolContainer from '../containers/PoolContainer';
 import SwapContainer from '../containers/SwapContainer';
 import WrapContainer from '../containers/WrapContainer';
 import AnalyticsContainer from '../containers/AnalyticsContainer';
@@ -9,7 +8,6 @@ import GameEditionMenuContainer from '../components/game-edition-v2/GameEditionM
 import GameEditionStartAnimation from '../components/game-edition-v2/GameEditionStartAnimation';
 import {
   ROUTE_INDEX,
-  ROUTE_POOL,
   ROUTE_WRAP,
   ROUTE_STATS,
   ROUTE_GAME_START_ANIMATION,
@@ -22,6 +20,8 @@ import {
   ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED,
   ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED,
   ROUTE_LIQUIDITY_REMOVE_LIQUIDITY,
+  ROUTE_STAKE,
+  ROUTE_UNSTAKE,
 } from './routes';
 import SwapHistoryContainer from '../containers/SwapHistoryContainer';
 import { useGameEditionContext } from '../contexts';
@@ -29,6 +29,7 @@ import StatsHistoryGameEditionContainer from '../containers/StatsHistoryGameEdit
 import LiquidityContainer from '../containers/LiquidityContainer';
 import AddLiquidityContainer from '../components/liquidity/AddLiquidityContainer';
 import RemoveLiquidityContainer from '../containers/RemoveLiquidityContainer';
+import StakeContainer from '../containers/StakeContainer';
 
 export default () => {
   const { gameEditionView } = useGameEditionContext();
@@ -54,8 +55,8 @@ export default () => {
               component={AddLiquidityContainer}
             />
             <Route exact path={ROUTE_LIQUIDITY_REMOVE_LIQUIDITY} component={RemoveLiquidityContainer} />
-            <Route exact path={ROUTE_POOL} component={PoolContainer} />
             <Route exact path={ROUTE_ANALYTICS} component={AnalyticsContainer} />
+            <Route exact path={[ROUTE_STAKE, ROUTE_UNSTAKE]} component={StakeContainer} />
             <Route exact path={ROUTE_WRAP} component={WrapContainer} />
           </Switch>
         )}

@@ -9,7 +9,7 @@ import { FlexContainer } from './FlexContainer';
 import Loader from './Loader';
 
 const StyledButton = styled(FlexContainer)`
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
   width: 100%;
   justify-content: center;
   align-items: center;
@@ -96,7 +96,6 @@ const CustomButton = ({
 }) => {
   const { gameEditionView: $gameEditionView } = useContext(GameEditionContext);
 
-  console.log('loading', loading);
   return $gameEditionView && geType ? (
     <GameEditionButton type={geType} disabled={disabled} onClick={onClick} style={geButtonStyle}>
       {geLabel}
@@ -105,7 +104,7 @@ const CustomButton = ({
     <StyledButton
       {...props}
       onClick={() => {
-        if (!disabled && onClick) {
+        if (!disabled && !loading && onClick) {
           onClick();
         }
       }}

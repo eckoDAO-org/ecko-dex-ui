@@ -14,7 +14,7 @@ import {
 export const WALLET = {
   KADDEX_WALLET: {
     id: 'KADDEX_WALLET',
-    name: 'X Wallet',
+    name: 'X-Wallet',
     logo: <KaddexWhite style={{ width: 45 }} />,
     wireIcon: <WireXwalletIcon />,
     notificationLogo: <LogoXwalletIcon />,
