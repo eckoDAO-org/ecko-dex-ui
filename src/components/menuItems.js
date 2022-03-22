@@ -44,7 +44,7 @@ export const STAKE = {
   activeRoutes: [ROUTE_UNSTAKE],
 };
 
-export default [SWAP, LIQUIDITY, ANALYTICS, STAKE];
+export default [SWAP, LIQUIDITY, STAKE, ANALYTICS];
 
 export const gameEditionRoutes = [
   {
