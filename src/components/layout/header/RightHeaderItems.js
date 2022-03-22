@@ -14,7 +14,7 @@ import PopupContentList from './PopupContentList';
 import reduceToken from '../../../utils/reduceToken';
 import SlippagePopupContent from './SlippagePopupContent';
 import AccountModal from '../../modals/kdaModals/AccountModal';
-import { commonTheme } from '../../../styles/theme';
+import theme, { commonTheme } from '../../../styles/theme';
 import { CoinKaddexIcon, ThreeDotsIcon } from '../../../assets';
 import { reduceBalance } from '../../../utils/reduceBalance';
 import Label from '../../shared/Label';
@@ -65,12 +65,14 @@ const RightHeaderItems = () => {
   return (
     <RightContainerHeader>
       {/* TODO: make kdx price dynamic after mint */}
-      <div className="desktop-only flex align-ce">
-        <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 8 }} />
-        <Label outGameEditionView fontSize={13} className="mainnet-chain-2">
-          $0.16
-        </Label>
-      </div>
+      {width >= theme.mediaQueries.deskstopPixel && (
+        <div className="flex align-ce">
+          <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 8 }} />
+          <Label outGameEditionView fontSize={13} className="mainnet-chain-2">
+            $0.16
+          </Label>
+        </div>
+      )}
 
       <Label outGameEditionView fontSize={13} class1Name="mainnet-chain-2 desktop-only">
         Chain 2

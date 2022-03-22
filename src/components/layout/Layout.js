@@ -130,9 +130,8 @@ const Layout = ({ children }) => {
     <FlexContainer className="w-100 h-100">
       <WrapperContainer>
         {width <= theme.mediaQueries.mobilePixel && <MobileHeader />}
-        {width > theme.mediaQueries.mobilePixel && width < theme.mediaQueries.desktopPixel && <TabletHeader className="desktop-none mobile-none" />}
-
-        <DesktopHeader className="desktop-only" gameEditionView={gameEditionView} />
+        {width > theme.mediaQueries.mobilePixel && width < theme.mediaQueries.desktopPixel && <TabletHeader />}
+        {width >= theme.mediaQueries.desktopPixel && <DesktopHeader gameEditionView={gameEditionView} />}
 
         {gameEditionView && resolutionConfiguration && width >= resolutionConfiguration.width && height >= resolutionConfiguration.height ? (
           <>

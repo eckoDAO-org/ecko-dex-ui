@@ -19,8 +19,10 @@ const StakeContainer = () => {
   const [stakeKdxAmout, setStakeKdxAmount] = useState(0);
   return (
     <FlexContainer
-      className="column w-100 h-100"
+      className="column w-100"
+      desktopClassName="h-100"
       desktopStyle={{ padding: `50px ${theme().layout.desktopPadding}px` }}
+      tabletStyle={{ paddingBottom: 40 }}
       mobileStyle={{ paddingBottom: 40 }}
     >
       <FlexContainer className="w-100 justify-sb" mobileClassName="column" style={{ marginBottom: 24 }} mobileStyle={{ marginTop: 24 }}>
