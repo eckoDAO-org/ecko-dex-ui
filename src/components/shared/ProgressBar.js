@@ -58,7 +58,7 @@ const ProgressBar = ({ currentValue, maxValue, topLabelLeft, withBottomLabel, da
             <Label>1.5</Label>
           </PercetageIndicator>
           <PercetageIndicator>
-            <Label>3</Label>
+            <Label>2.5</Label>
           </PercetageIndicator>
         </FlexContainer>
       )}

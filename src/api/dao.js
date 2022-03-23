@@ -11,6 +11,15 @@ const DEV_NETWORK_TYPE = 'Custom';
 const DEV_NETWORK = 'https://devnet.private.kate.land/chainweb/0.0/development/chain/0/pact';
 const DEV_PACT_DAO_CONTRACT = 'kaddex.dao';
 
+export const getAccountData = async (account) => {
+  try {
+    const pactCode = `(${DEV_PACT_DAO_CONTRACT}.get-account-data "${account}")`;
+    return await pactDevnetFetchLocal(pactCode);
+  } catch (e) {
+    return handleError(e);
+  }
+};
+
 export const readAllProposals = async () => {
   try {
     const pactCode = `(${DEV_PACT_DAO_CONTRACT}.read-all-proposals)`;

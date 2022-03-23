@@ -14,7 +14,7 @@ import VoteResultsContainer from './VoteResultsContainer';
 import { readSingleProposal } from '../../api/dao';
 import AppLoader from '../shared/AppLoader';
 
-const SingleProposalContainer = ({ proposal_id }) => {
+const SingleProposalContainer = ({ proposal_id, accountData }) => {
   const { themeMode } = useContext(ApplicationContext);
   const history = useHistory();
   const [loading, setLoading] = useState(false);
@@ -34,7 +34,6 @@ const SingleProposalContainer = ({ proposal_id }) => {
   }, []);
 
   const [fakeButtonSelect, setFakeButtonSelect] = useState('');
-  console.log('LOG / file: SingleProposalContainer.js / line 95 / SingleProposalContainer / fakeButtonSelect', fakeButtonSelect);
 
   const ColumnLabels = ({ title, description }) => (
     <FlexContainer className="column">
@@ -71,12 +70,17 @@ const SingleProposalContainer = ({ proposal_id }) => {
                   fontFamily="basier"
                   fontSize={10}
                   labelStyle={{
-                    backgroundColor: singleProposalData?.status === 'active' ? commonColors.active : commonColors.closed,
+                    backgroundColor:
+                      moment(singleProposalData['start-date']?.time) <= moment() && moment(singleProposalData['end-date']?.time) >= moment()
+                        ? commonColors.active
+                        : commonColors.closed,
                     borderRadius: 100,
                     padding: '2px 8px',
                   }}
                 >
-                  {singleProposalData?.status}
+                  {moment(singleProposalData['start-date']?.time) <= moment() && moment(singleProposalData['end-date']?.time) >= moment()
+                    ? 'active'
+                    : 'closed'}
                 </Label>
               </FlexContainer>
               <FlexContainer className="justify-sb align-ce w-100" mobileClassName="grid" columns={2}>
@@ -90,7 +94,7 @@ const SingleProposalContainer = ({ proposal_id }) => {
           </PartialScrollableScrollSection>
         </FlexContainer>
         <FlexContainer className="column" gap={16}>
-          <VotingPowerContainer />
+          <VotingPowerContainer accountData={accountData} />
           <VoteResultsContainer onClickYes={() => setFakeButtonSelect('YES')} onClickNo={() => setFakeButtonSelect('NO')} />
         </FlexContainer>
       </FlexContainer>

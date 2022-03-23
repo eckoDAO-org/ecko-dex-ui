@@ -12,15 +12,15 @@ import VotingPowerContainer from './VotingPowerContainer';
 import { readAllProposals } from '../../api/dao';
 import AppLoader from '../shared/AppLoader';
 
-const AllProposalsContainer = () => {
+const AllProposalsContainer = ({ accountData }) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [allProposal, setAllProposal] = useState([]);
 
   const fetchData = async () => {
     const readAllProposalsRes = await readAllProposals();
-    setAllProposal(readAllProposalsRes);
-
+    const orderedProposals = readAllProposalsRes.sort((x, y) => moment(y['start-date']?.time) - moment(x['start-date']?.time));
+    setAllProposal(orderedProposals);
     setLoading(false);
   };
 
@@ -44,18 +44,21 @@ const AllProposalsContainer = () => {
               <FlexContainer className="column pointer" key={index} onClick={() => history.push(ROUTE_DAO_PROPOSAL.replace(':proposal_id', data.id))}>
                 <FlexContainer className="align-ce" gap={8} style={{ marginBottom: 8 }}>
                   <Label fontFamily="basier" fontSize={13} labelStyle={{ opacity: 0.7 }}>
-                    {moment(data['creation-date']).format('YYYY-MM-DD')}
+                    {moment(data['start-date']?.time).format('YYYY-MM-DD')}
                   </Label>
                   <Label
                     fontFamily="basier"
                     fontSize={10}
                     labelStyle={{
-                      backgroundColor: data.status === 'active' ? commonColors.active : commonColors.closed,
+                      backgroundColor:
+                        moment(data['start-date'].time) <= moment() && moment(data['end-date'].time) >= moment()
+                          ? commonColors.active
+                          : commonColors.closed,
                       borderRadius: 100,
                       padding: '2px 8px',
                     }}
                   >
-                    {data?.status}
+                    {moment(data['start-date'].time) <= moment() && moment(data['end-date'].time) >= moment() ? 'active' : 'closed'}
                   </Label>
                 </FlexContainer>
 
@@ -72,7 +75,7 @@ const AllProposalsContainer = () => {
           </PartialScrollableScrollSection>
         </FlexContainer>
 
-        <VotingPowerContainer />
+        <VotingPowerContainer accountData={accountData} />
       </FlexContainer>
     </>
   );
