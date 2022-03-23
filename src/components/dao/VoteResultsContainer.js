@@ -36,12 +36,7 @@ const CheckboxContainer = styled.div`
 
 const VoteResultsContainer = ({ onClickYes, onClickNo }) => {
   return (
-    <>
-      <FlexContainer style={{ height: 'min-content' }}>
-        <Label fontSize={13} labelStyle={{ opacity: 0.7 }}>
-          Vote result
-        </Label>
-      </FlexContainer>
+    <FlexContainer className="column w-100" gap={16} style={{ marginTop: 4 }}>
       <FlexContainer gap={10} className="align-ce">
         <CheckboxContainer>
           <Checkbox radio label="Yes" value="yes" onChange={() => onClickYes} />
@@ -58,7 +53,7 @@ const VoteResultsContainer = ({ onClickYes, onClickNo }) => {
           <ProgressBar darkBar withRightLabel currentValue={1} maxValue={3} />
         </FlexContainer>
       </FlexContainer>
-    </>
+    </FlexContainer>
   );
 };
 

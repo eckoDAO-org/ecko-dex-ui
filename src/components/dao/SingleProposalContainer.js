@@ -36,7 +36,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
   const [fakeButtonSelect, setFakeButtonSelect] = useState('');
 
   const ColumnLabels = ({ title, description }) => (
-    <FlexContainer className="column">
+    <FlexContainer className="column" gap={4}>
       <Label fontSize={13} labelStyle={{ opacity: 0.7 }}>
         {title}
       </Label>
@@ -90,7 +90,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
                 <ColumnLabels title="Voting System" description="Single choice voting" />
               </FlexContainer>
               <ColumnLabels title="Description" description={singleProposalData?.description} />
-              <VoteResultsContainer />
+              <ColumnLabels title="Vote Result" description={<VoteResultsContainer />} />
             </FlexContainer>
           </PartialScrollableScrollSection>
         </FlexContainer>
