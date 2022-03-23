@@ -153,7 +153,7 @@ const GameEditionContainer = ({ children }) => {
     await setSelectedWallet(wallet);
     closeModal();
     showNotification({
-      title: `${wallet.name}  was connected`,
+      title: `${wallet.name} was connected`,
       type: 'game-mode',
       icon: wallet.notificationLogo,
       closeButton: false,
@@ -214,7 +214,7 @@ const GameEditionContainer = ({ children }) => {
       onWireSelect(WALLET.KADDEX_WALLET);
 
       showNotification({
-        title: `${WALLET.KADDEX_WALLET.name}  was connected`,
+        title: `${WALLET.KADDEX_WALLET.name} connected`,
         type: 'game-mode',
         icon: WALLET.KADDEX_WALLET.notificationLogo,
         closeButton: false,

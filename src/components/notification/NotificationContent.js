@@ -11,6 +11,7 @@ const Container = styled.div`
 const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
+  margin-left: 16px;
 `;
 
 const capitalizeFirstLetter = (string) => {
