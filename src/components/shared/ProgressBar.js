@@ -31,7 +31,7 @@ const PercetageIndicator = styled(FlexContainer)`
   }
 `;
 
-const ProgressBar = ({ currentValue, maxValue, topLabelLeft, withBottomLabel, darkBar }) => {
+const ProgressBar = ({ currentValue, maxValue, topLabelLeft, withBottomLabel, withRightLabel, darkBar }) => {
   const getPercentage = (current, max) => {
     if (current <= maxValue) return (100 * current) / max;
     else return 100;
@@ -48,6 +48,11 @@ const ProgressBar = ({ currentValue, maxValue, topLabelLeft, withBottomLabel, da
       <STYMaxSupplyContainer>
         <STYMaxSupply darkBar={darkBar} width={getPercentage(currentValue, maxValue)} />
       </STYMaxSupplyContainer>
+      {withRightLabel && (
+        <FlexContainer className="justify-sb align-fe" style={{ marginLeft: 8 }}>
+          <Label fontSize={13}>{getPercentage(currentValue, maxValue).toFixed(1)}%</Label>
+        </FlexContainer>
+      )}
       {withBottomLabel && (
         <FlexContainer className="justify-sb align-ce w-100" gap={16}>
           <PercetageIndicator>

@@ -90,12 +90,12 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
                 <ColumnLabels title="Voting System" description="Single choice voting" />
               </FlexContainer>
               <ColumnLabels title="Description" description={singleProposalData?.description} />
+              <VoteResultsContainer />
             </FlexContainer>
           </PartialScrollableScrollSection>
         </FlexContainer>
         <FlexContainer className="column" gap={16}>
           <VotingPowerContainer accountData={accountData} />
-          <VoteResultsContainer onClickYes={() => setFakeButtonSelect('YES')} onClickNo={() => setFakeButtonSelect('NO')} />
         </FlexContainer>
       </FlexContainer>
     </>
