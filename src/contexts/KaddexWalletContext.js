@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, createContext, useEffect, useCallback } from 'react';
 import { useAccountContext, useWalletContext, useNotificationContext } from '.';
-import { network, NETWORKID } from '../constants/contextConstants';
+import { NETWORK, NETWORKID } from '../constants/contextConstants';
 import { WALLET } from '../constants/wallet';
 import useLocalStorage from '../hooks/useLocalStorage';
 
@@ -10,7 +10,7 @@ export const KaddexWalletContext = createContext();
 const initialKaddexWalletState = {
   isConnected: false,
   isInstalled: false,
-  network,
+  NETWORK,
   account: null,
 };
 

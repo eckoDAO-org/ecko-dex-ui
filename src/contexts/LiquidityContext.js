@@ -1,7 +1,7 @@
 import React, { useState, createContext } from 'react';
 import pairTokens from '../constants/pairs.json';
 import Pact from 'pact-lang-api';
-import { chainId, creationTime, GAS_PRICE, network, NETWORKID, PRECISION, ENABLE_GAS_STATION } from '../constants/contextConstants';
+import { chainId, creationTime, GAS_PRICE, NETWORK, NETWORKID, PRECISION, ENABLE_GAS_STATION } from '../constants/contextConstants';
 import { useKaddexWalletContext, useSwapContext, usePactContext, useWalletContext, useAccountContext } from '.';
 import { reduceBalance } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
@@ -62,7 +62,7 @@ export const LiquidityProvider = (props) => {
              `,
           meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 150000, creationTime(), 600),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         let dataList = data.result.data.reduce((accum, data) => {
@@ -102,7 +102,7 @@ export const LiquidityProvider = (props) => {
           meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 5000, creationTime(), 28800),
           networkId: NETWORKID,
         },
-        network
+        NETWORK
       );
       let pair = data.result.data.account;
       try {
@@ -155,7 +155,7 @@ export const LiquidityProvider = (props) => {
           meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account, chainId, GAS_PRICE, 5000, creationTime(), 600),
           networkId: NETWORKID,
         };
-        let data = await Pact.fetch.local(cmd, network);
+        let data = await Pact.fetch.local(cmd, NETWORK);
         swap.setCmd(cmd);
         setLocalRes(data);
         return data;
@@ -224,7 +224,7 @@ export const LiquidityProvider = (props) => {
         meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account, chainId, GAS_PRICE, 150000, creationTime(), 600),
         networkId: NETWORKID,
       };
-      let data = await Pact.fetch.local(cmd, network);
+      let data = await Pact.fetch.local(cmd, NETWORK);
       swap.setCmd(cmd);
       setLocalRes(data);
       return data;
@@ -295,7 +295,7 @@ export const LiquidityProvider = (props) => {
       wallet.setWalletSuccess(true);
       //set signedtx
       swap.setCmd(command);
-      let data = await fetch(`${network}/api/v1/local`, swap.mkReq(command));
+      let data = await fetch(`${NETWORK}/api/v1/local`, swap.mkReq(command));
       data = await swap.parseRes(data);
       setLocalRes(data);
       return data;
@@ -372,7 +372,7 @@ export const LiquidityProvider = (props) => {
         meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account, chainId, GAS_PRICE, 150000, creationTime(), 600),
       };
       swap.setCmd(cmd);
-      let data = await Pact.fetch.local(cmd, network);
+      let data = await Pact.fetch.local(cmd, NETWORK);
       setLocalRes(data);
       return data;
     } catch (e) {
@@ -441,7 +441,7 @@ export const LiquidityProvider = (props) => {
       wallet.setIsWaitingForWalletAuth(false);
       wallet.setWalletSuccess(true);
       swap.setCmd(cmd);
-      let data = await fetch(`${network}/api/v1/local`, swap.mkReq(cmd));
+      let data = await fetch(`${NETWORK}/api/v1/local`, swap.mkReq(cmd));
       data = await swap.parseRes(data);
       setLocalRes(data);
       return data;

@@ -18,6 +18,7 @@ import AccountModal from '../../modals/kdaModals/AccountModal';
 import { commonTheme } from '../../../styles/theme';
 import { ThreeDotsIcon } from '../../../assets';
 import { reduceBalance } from '../../../utils/reduceBalance';
+import { chainId } from '../../../constants/contextConstants';
 
 const RightContainerHeader = styled.div`
   display: flex;
@@ -56,7 +57,7 @@ const RightHeaderItems = () => {
     <RightContainerHeader>
       {/* TODO: make kdx price dynamic after mint */}
       <span className="mainnet-chain-2 desktop-only">KDX $0.16</span>
-      <span class1Name="mainnet-chain-2 desktop-only">Chain 2</span>
+      <span class1Name="mainnet-chain-2 desktop-only">{`Chain ${chainId}`}</span>
       {account?.account && width >= commonTheme.mediaQueries.desktopPixel && (
         <AccountInfo
           onClick={() => {

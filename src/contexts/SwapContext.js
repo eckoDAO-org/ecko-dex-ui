@@ -10,7 +10,7 @@ import {
   chainId,
   creationTime,
   GAS_PRICE,
-  network,
+  NETWORK,
   NETWORKID,
   ENABLE_GAS_STATION,
   getCurrentDate,
@@ -60,7 +60,7 @@ export const SwapProvider = (props) => {
           pactCode: `(at 'account (kswap.exchange.get-pair ${token0} ${token1}))`,
           meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 3000, creationTime(), 600),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         setPairAccount(data.result.data);
@@ -121,7 +121,7 @@ export const SwapProvider = (props) => {
         meta: Pact.lang.mkMeta(account.account, chainId, GAS_PRICE, 3000, creationTime(), 600),
       };
       setCmd(cmd);
-      await Pact.fetch.send(cmd, network);
+      await Pact.fetch.send(cmd, NETWORK);
     } catch (e) {
       console.log(e);
     }
@@ -132,9 +132,9 @@ export const SwapProvider = (props) => {
     try {
       let data;
       if (cmd.pactCode) {
-        data = await Pact.fetch.send(cmd, network);
+        data = await Pact.fetch.send(cmd, NETWORK);
       } else {
-        data = await Pact.wallet.sendSigned(cmd, network);
+        data = await Pact.wallet.sendSigned(cmd, NETWORK);
       }
       pact.pollingNotif(data.requestKeys[0]);
       notificationContext.storeNotification({
@@ -236,7 +236,7 @@ export const SwapProvider = (props) => {
         meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account, chainId, GAS_PRICE, 3000, ct, 600),
       };
       setCmd(cmd);
-      let data = await Pact.fetch.local(cmd, network);
+      let data = await Pact.fetch.local(cmd, NETWORK);
       setLocalRes(data);
       return data;
     } catch (e) {
@@ -308,7 +308,7 @@ export const SwapProvider = (props) => {
       wallet.setWalletSuccess(true);
       //set signedtx
       setCmd(command);
-      let data = await fetch(`${network}/api/v1/local`, mkReq(command));
+      let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(command));
       data = await parseRes(data);
       setLocalRes(data);
       return data;

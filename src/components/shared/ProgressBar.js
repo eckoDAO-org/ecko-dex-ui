@@ -33,6 +33,7 @@ const PercetageIndicator = styled(FlexContainer)`
 
 const ProgressBar = ({ currentValue, maxValue, topLabelLeft, withBottomLabel, withRightLabel, darkBar }) => {
   const getPercentage = (current, max) => {
+    if (maxValue === 0) return 0;
     if (current <= maxValue) return (100 * current) / max;
     else return 100;
   };

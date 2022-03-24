@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
 import swal from '@sweetalert/with-react';
 import { getCorrectBalance } from '../utils/reduceBalance';
-import { chainId, creationTime, GAS_PRICE, getCurrentDate, getCurrentTime, network } from '../constants/contextConstants';
+import { chainId, creationTime, GAS_PRICE, getCurrentDate, getCurrentTime, NETWORK } from '../constants/contextConstants';
 import { NotificationContext } from './NotificationContext';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { useGameEditionContext } from '.';
@@ -65,7 +65,7 @@ export const AccountProvider = (props) => {
           pactCode: `(coin.details ${JSON.stringify(accountName)})`,
           meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 3000, creationTime(), 600),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         await setAccount({
@@ -95,7 +95,7 @@ export const AccountProvider = (props) => {
           keyPairs: Pact.crypto.genKeyPair(),
           meta: Pact.lang.mkMeta('', chainId, 0.01, 100000000, 28800, creationTime()),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         // setTokenAccount({...data.result.data, balance: getCorrectBalance(data.result.data.balance)});

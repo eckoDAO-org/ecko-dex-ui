@@ -1,20 +1,13 @@
 import Pact from 'pact-lang-api';
-import { creationTime } from '../constants/contextConstants';
-import { handleError } from './pact';
+import { chainId, GAS_LIMIT, GAS_PRICE, NETWORK, NETWORKID } from '../constants/contextConstants';
+import { handleError, listen, mkReq, pactFetchLocal, parseRes } from './pact';
 
-const DEV_CHAIN_ID = '0';
-const DEV_GAS_PRICE = 0.0000001;
-const DEV_GAS_LIMIT = 100000;
-const DEV_NETWORK_ID = 'development';
-const DEV_FEE = 0.003;
-const DEV_NETWORK_TYPE = 'Custom';
-const DEV_NETWORK = 'https://devnet.private.kate.land/chainweb/0.0/development/chain/0/pact';
 const DEV_PACT_DAO_CONTRACT = 'kaddex.dao';
 
 export const getAccountData = async (account) => {
   try {
     const pactCode = `(${DEV_PACT_DAO_CONTRACT}.get-account-data "${account}")`;
-    return await pactDevnetFetchLocal(pactCode);
+    return await pactFetchLocal(pactCode);
   } catch (e) {
     return handleError(e);
   }
@@ -23,7 +16,7 @@ export const getAccountData = async (account) => {
 export const readAllProposals = async () => {
   try {
     const pactCode = `(${DEV_PACT_DAO_CONTRACT}.read-all-proposals)`;
-    return await pactDevnetFetchLocal(pactCode);
+    return await pactFetchLocal(pactCode);
   } catch (e) {
     return handleError(e);
   }
@@ -32,27 +25,51 @@ export const readAllProposals = async () => {
 export const readSingleProposal = async (proposalId) => {
   try {
     const pactCode = `(${DEV_PACT_DAO_CONTRACT}.read-proposal "${proposalId}")`;
-    return await pactDevnetFetchLocal(pactCode);
+    return await pactFetchLocal(pactCode);
   } catch (e) {
     return handleError(e);
   }
 };
 
-export const pactDevnetFetchLocal = async (pactCode, options) => {
-  let data = await Pact.fetch.local(
-    {
+export const voteCommandToSign = (type, proposalId, account) => {
+  try {
+    let pactCode = '';
+    if (type === 'approved') pactCode = `(${DEV_PACT_DAO_CONTRACT}.approved-vote "${proposalId}" "${account.account}" )`;
+    else pactCode = `(${DEV_PACT_DAO_CONTRACT}.refused-vote "${proposalId}" "${account.account}" )`;
+    const cmdToSign = {
       pactCode,
-      meta: Pact.lang.mkMeta('', DEV_CHAIN_ID, DEV_GAS_PRICE, DEV_GAS_LIMIT, creationTime(), 600),
-      ...options,
-    },
-    DEV_NETWORK
-  );
-  if (data.result.status === 'success') {
-    return data.result.data;
-  } else if (data.result.error.message) {
-    const errorMessage = handleError(data);
-    return { errorMessage: data.result.error.message || errorMessage };
-  } else {
-    return handleError(data);
+      clist: [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap],
+      sender: account.account,
+      gasLimit: GAS_LIMIT,
+      gasPrice: GAS_PRICE,
+      chainId: chainId,
+      ttl: 600,
+      signingPubKey: account.guard.keys[0],
+      networkId: NETWORKID,
+    };
+    return cmdToSign;
+  } catch (e) {
+    return handleError(e);
   }
+};
+
+export const votePreview = async (signedCommand) => {
+  try {
+    let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(signedCommand));
+    return parseRes(data);
+  } catch (e) {
+    return handleError(e);
+  }
+};
+
+export const vote = async (signedCmd, notification) => {
+  let data = null;
+  if (signedCmd.pactCode) {
+    data = await Pact.fetch.send(signedCmd, NETWORK);
+  } else {
+    data = await Pact.wallet.sendSigned(signedCmd, NETWORK);
+  }
+  if (notification) notification(data.requestKeys[0]);
+  console.log('voting data', data);
+  return { listen: await listen(data.requestKeys[0]), data };
 };

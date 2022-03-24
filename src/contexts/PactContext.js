@@ -12,7 +12,7 @@ import {
   GAS_PRICE,
   getCurrentDate,
   getCurrentTime,
-  network,
+  NETWORK,
   NETWORK_TYPE,
   NETWORKID,
 } from '../constants/contextConstants';
@@ -195,7 +195,7 @@ export const PactProvider = (props) => {
           pactCode: tokenNames,
           meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 150000, creationTime(), 600),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         Object.keys(tokenData).forEach((token) => {
@@ -233,7 +233,7 @@ export const PactProvider = (props) => {
           pactCode: tokenNames,
           meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 150000, creationTime(), 600),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         Object.keys(tokenData).forEach((token) => {
@@ -284,7 +284,7 @@ export const PactProvider = (props) => {
              `,
           meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 150000, creationTime(), 600),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         let dataList = data.result.data.reduce((accum, data) => {
@@ -330,7 +330,7 @@ export const PactProvider = (props) => {
     var pollRes;
     while (time > 0) {
       await wait(5000);
-      pollRes = await Pact.fetch.poll({ requestKeys: [reqKey] }, network);
+      pollRes = await Pact.fetch.poll({ requestKeys: [reqKey] }, NETWORK);
       if (Object.keys(pollRes).length === 0) {
         console.log('no return poll');
         console.log(pollRes);
@@ -414,7 +414,7 @@ export const PactProvider = (props) => {
            `,
           meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 150000, creationTime(), 600),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         return data.result.data;
@@ -453,7 +453,7 @@ export const PactProvider = (props) => {
           keyPairs: Pact.crypto.genKeyPair(),
           meta: Pact.lang.mkMeta('', chainId, 0.01, 100000000, 28800, creationTime()),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         if (data.result.data.decimal) setTotalSupply(data.result.data.decimal);
@@ -472,7 +472,7 @@ export const PactProvider = (props) => {
           keyPairs: Pact.crypto.genKeyPair(),
           meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 150000, creationTime(), 600),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         setPair(data.result.data);
@@ -492,7 +492,7 @@ export const PactProvider = (props) => {
           pactCode: `(kswap.exchange.get-pair-key ${token0} ${token1})`,
           meta: Pact.lang.mkMeta(account.account.account, chainId, GAS_PRICE, 150000, creationTime(), 600),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         return data.result.data;
@@ -517,7 +517,7 @@ export const PactProvider = (props) => {
            `,
           meta: Pact.lang.mkMeta('account', chainId, GAS_PRICE, 150000, creationTime(), 600),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         await setPairReserve({
