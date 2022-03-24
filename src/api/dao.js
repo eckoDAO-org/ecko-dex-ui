@@ -13,6 +13,15 @@ export const getAccountData = async (account) => {
   }
 };
 
+export const hasAccountVoted = async (account, proposalId) => {
+  try {
+    const pactCode = `(${DEV_PACT_DAO_CONTRACT}.read-account-vote-proposal  "${account}" "${proposalId}")`;
+    return await pactFetchLocal(pactCode);
+  } catch (e) {
+    return handleError(e);
+  }
+};
+
 export const readAllProposals = async () => {
   try {
     const pactCode = `(${DEV_PACT_DAO_CONTRACT}.read-all-proposals)`;

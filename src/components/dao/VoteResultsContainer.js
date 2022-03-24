@@ -17,12 +17,12 @@ const CheckboxContainer = styled.div`
   }
   .ui.radio.checkbox input:checked ~ .box:after,
   .ui.radio.checkbox input:checked ~ label:after {
-    background-color: #fff;
+    background-color: ${({ theme: { colors } }) => colors.white};
   }
 
   .ui.radio.checkbox input:checked ~ .box:before,
   .ui.radio.checkbox input:checked ~ label:before {
-    border: 1px solid #fff;
+    border: 1px solid ${({ theme: { colors } }) => colors.white};
     background-color: transparent;
   }
 
@@ -32,12 +32,12 @@ const CheckboxContainer = styled.div`
   }
 `;
 
-const VoteResultsContainer = ({ onClickYes, onClickNo, proposalData }) => {
+const VoteResultsContainer = ({ onClickYes, onClickNo, proposalData, hasVoted }) => {
   return (
     <FlexContainer className="column w-100" gap={16} style={{ marginTop: 4 }}>
       <FlexContainer gap={10} className="align-ce">
         <CheckboxContainer>
-          <Checkbox radio label="Yes" value="yes" onChange={onClickYes} />
+          <Checkbox disabled={hasVoted} radio checked={hasVoted === 'approved'} label="Yes" value="yes" onChange={onClickYes} />
         </CheckboxContainer>
         <FlexContainer className="align-ce w-100" style={{ border: '1px solid #FFFFFF99', borderRadius: 10, padding: 8 }}>
           <ProgressBar
@@ -49,7 +49,7 @@ const VoteResultsContainer = ({ onClickYes, onClickNo, proposalData }) => {
       </FlexContainer>
       <FlexContainer gap={10} className="align-ce">
         <CheckboxContainer>
-          <Checkbox radio label="No" value="no" onChange={onClickNo} />
+          <Checkbox disabled={hasVoted} radio checked={hasVoted === 'refused'} label="No" value="no" onChange={onClickNo} />
         </CheckboxContainer>
         <FlexContainer className="align-ce w-100" style={{ border: '1px solid #FFFFFF99', borderRadius: 10, padding: 8 }}>
           <ProgressBar

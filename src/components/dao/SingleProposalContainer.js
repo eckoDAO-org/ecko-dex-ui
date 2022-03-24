@@ -12,7 +12,7 @@ import { ApplicationContext } from '../../contexts/ApplicationContext';
 import { ROUTE_DAO } from '../../router/routes';
 import { useHistory } from 'react-router-dom';
 import VoteResultsContainer from './VoteResultsContainer';
-import { readSingleProposal, vote, voteCommandToSign, votePreview } from '../../api/dao';
+import { hasAccountVoted, readSingleProposal, vote, voteCommandToSign, votePreview } from '../../api/dao';
 import AppLoader from '../shared/AppLoader';
 import { useAccountContext, useKaddexWalletContext, useNotificationContext } from '../../contexts';
 import { STATUSES } from '../../contexts/NotificationContext';
@@ -29,10 +29,14 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
   const history = useHistory();
   const [daoLoading, setDaoLoading] = useState(false);
   const [singleProposalData, setSingleProposalData] = useState({});
+  const [accountVoted, setAccountVoted] = useState({});
 
   const fetchData = async () => {
     const readSingleProposalRes = await readSingleProposal(proposal_id);
     setSingleProposalData(readSingleProposalRes);
+
+    const checkAccountHasVoted = await hasAccountVoted(account.account, proposal_id);
+    setAccountVoted(checkAccountHasVoted);
 
     setDaoLoading(false);
   };
@@ -161,8 +165,8 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
               </FlexContainer>
               <FlexContainer className="justify-sb align-ce w-100" mobileClassName="grid" columns={2}>
                 <ColumnLabels title="Author" description={singleProposalData?.account} />
-                <ColumnLabels title="Start Date" description={moment(singleProposalData['start-date']).format('LLL')} />
-                <ColumnLabels title="End Date" description={moment(singleProposalData['end-date']).format('LLL')} />
+                <ColumnLabels title="Start Date" description={moment(singleProposalData['start-date']?.time).format('LLL')} />
+                <ColumnLabels title="End Date" description={moment(singleProposalData['end-date']?.time).format('LLL')} />
                 <ColumnLabels title="Voting System" description="Single choice voting" />
               </FlexContainer>
               <ColumnLabels title="Description" description={singleProposalData?.description} />
@@ -173,6 +177,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
                     onClickYes={() => handleClick('approved')}
                     onClickNo={() => handleClick('refused')}
                     proposalData={singleProposalData}
+                    hasVoted={accountVoted[0]?.action ? accountVoted[0]?.action : ''}
                   />
                 }
               />
