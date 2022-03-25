@@ -75,7 +75,7 @@ const RightHeaderItems = () => {
         </div>
       )}
 
-      <span class1Name="mainnet-chain-2 desktop-only">{`Chain ${chainId}`}</span>
+      <Label outGameEditionView fontSize={13} class1Name="mainnet-chain-2 desktop-only">{`Chain ${chainId}`}</Label>
       {account?.account && width >= commonTheme.mediaQueries.desktopPixel && (
         <AccountInfo
           onClick={() => {
