@@ -4,6 +4,12 @@ import { FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
 import ProgressBar from '../shared/ProgressBar';
 
+const positionInfo = `"Position" accrues your KDX holdings from both the Vaulting and the Staking Programs. 
+                        Please note that all Second Sale participants are automatically staking their KDX while it is being vesting.`;
+
+const multiplierInfo = `The Voting Power Multiplier is a time-dependent function of your KDX staking amount and meaningful contributions (Vibedust).
+                         In 60 days the multiplier value goes up to 1 and can reach 2.5 over the course of 4 years.`;
+
 const VotingPowerContainer = ({ accountData }) => {
   return (
     <FlexContainer className="column">
@@ -11,7 +17,7 @@ const VotingPowerContainer = ({ accountData }) => {
         <Label fontSize={16} fontFamily="syncopate">
           voting power (V)
         </Label>
-        <Label fontSize={13}>
+        <Label fontSize={13} fontFamily="syncopate">
           V = &radic;<span style={{ textDecoration: 'overline' }}>&nbsp;P * M&nbsp;</span>
         </Label>
         <Label fontSize={38} className="gradient" fontFamily="syncopate">
@@ -20,7 +26,7 @@ const VotingPowerContainer = ({ accountData }) => {
       </FlexContainer>
       <FlexContainer className="column" gap={10} withGradient style={{ height: 'min-content' }} desktopStyle={{ width: 268 }}>
         <FlexContainer className="column" style={{ marginBottom: 6 }}>
-          <Label fontSize={13} info="position info">
+          <Label fontSize={13} info={positionInfo}>
             Position (P)
           </Label>
           <FlexContainer className="justify-sb">
@@ -28,7 +34,7 @@ const VotingPowerContainer = ({ accountData }) => {
             <Label fontSize={32}>KDX</Label>
           </FlexContainer>
         </FlexContainer>
-        <Label fontSize={13} info="multiplier info" labelStyle={{ marginBottom: 10 }}>
+        <Label fontSize={13} info={multiplierInfo} labelStyle={{ marginBottom: 10 }}>
           Multiplier (M)
         </Label>
         <ProgressBar withBottomLabel currentValue={accountData.multiplier} maxValue={2.5} />

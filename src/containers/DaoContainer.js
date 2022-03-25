@@ -24,7 +24,7 @@ const DaoContainer = () => {
   useEffect(() => {
     setLoading(true);
     fetchData();
-  }, []);
+  }, [account]);
 
   return (
     <FlexContainer className="column" gap={16} desktopStyle={{ padding: '60px 88px 30px' }}>
