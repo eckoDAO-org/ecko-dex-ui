@@ -9,6 +9,7 @@ export const STYGradientBorder = styled.div`
   border-radius: 10px; /*1*/
   border: 1px solid transparent; /*2*/
   background: linear-gradient(90deg, #ed1cb5, #ffa900, #39fffc) border-box; /*3*/
+
   -webkit-mask: /*4*/ linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: source-out !important; /*5'*/
   mask-composite: exclude !important; /*5*/
@@ -20,6 +21,11 @@ export const STYGradientBorder = styled.div`
   width: 100%;
   height: 100%;
   z-index: -1;
+
+  &.gradient-button {
+    border-radius: 20px;
+    background: linear-gradient(90deg, #10c4df, #f04ca9, #edba31) border-box; /*3*/
+  }
 `;
 
 export const FlexContainer = ({
@@ -38,6 +44,7 @@ export const FlexContainer = ({
   gameEditionStyle,
   backgroundImage,
   withGradient,
+  gradientColors,
   outOfGameEdition,
   ...rest
 }) => {
@@ -68,7 +75,7 @@ export const FlexContainer = ({
       ref={reference}
       className={getClassName()}
       backgroundImage={backgroundImage}
-      withGradient={withGradient}
+      withGradient={withGradient || className?.includes('gradient-button')}
       gameEditionView={gameEditionView}
       outOfGameEdition={outOfGameEdition}
       style={
@@ -82,7 +89,9 @@ export const FlexContainer = ({
             }
       }
     >
-      {withGradient && (!gameEditionView || outOfGameEdition) && <STYGradientBorder />}
+      {(withGradient || className?.includes('gradient-button')) && (!gameEditionView || outOfGameEdition) && (
+        <STYGradientBorder className={className?.includes('gradient-button') ? 'gradient-button' : ''} />
+      )}
       {children}
     </STYFlexContainer>
   );
@@ -90,84 +99,6 @@ export const FlexContainer = ({
 const STYFlexContainer = styled.div`
   display: flex;
 
-  &.hide-scrollbar {
-    scroll-behavior: smooth;
-    ::-webkit-scrollbar {
-      display: none;
-    }
-    scrollbar-width: none;
-  }
-  &.pointer {
-    cursor: pointer;
-  }
-
-  &.scroll-mt {
-    scroll-margin-top: 115px;
-  }
-  &.align-fs {
-    align-items: flex-start;
-  }
-
-  &.align-fe {
-    align-items: flex-end;
-  }
-
-  &.align-ce {
-    align-items: center;
-  }
-
-  &.justify-ce {
-    justify-content: center;
-  }
-
-  &.justify-sb {
-    justify-content: space-between;
-  }
-  &.justify-sa {
-    justify-content: space-around;
-  }
-
-  &.justify-fe {
-    justify-content: flex-end;
-  }
-
-  &.justify-fs {
-    justify-content: flex-start;
-  }
-
-  &.text-ce {
-    text-align: center;
-  }
-
-  &.absolute {
-    position: absolute;
-  }
-
-  &.fixed {
-    position: fixed;
-  }
-
-  &.relative {
-    position: relative;
-  }
-
-  &.w-100 {
-    width: 100%;
-  }
-  &.h-100 {
-    height: 100%;
-  }
-
-  &.flex-1 {
-    flex: 1;
-  }
-
-  &.h-fit-content {
-    height: fit-content;
-  }
-  &.w-fit-content {
-    width: fit-content;
-  }
   ${({ gameEditionView, outOfGameEdition }) => {
     if (!gameEditionView || outOfGameEdition) {
       return css`
@@ -181,7 +112,9 @@ const STYFlexContainer = styled.div`
             border-radius: 10px;
             backdrop-filter: blur(50px);
             padding: 16px;
-            box-shadow: ${({ themeMode }) => themeMode === 'light' && ' 2px 5px 30px #00000029'};
+            :not(.gradient-button) {
+              box-shadow: 2px 5px 24px #21275029;
+            }
           `}
       `;
     }
@@ -255,26 +188,29 @@ const STYFlexContainer = styled.div`
     }}
   }
 
-  &.column-reverse {
-    flex-direction: column-reverse;
-  }
-
-  &.wrap {
-    flex-wrap: wrap;
-  }
-
   &.grid {
     display: grid;
     grid-template-columns: ${({ columns, px }) => `repeat(${columns}, ${px ? `${px}px` : '1fr'})`};
     row-gap: 30px;
     column-gap: ${({ gridColumnGap = 30 }) => gridColumnGap}px;
   }
+`;
 
-  &.x-auto {
-    overflow-x: auto;
+export const CryptoContainer = styled.div`
+  img {
+    width: ${({ size = 32 }) => `${size}px`}!important;
+    height: ${({ size = 32 }) => `${size}px`}!important;
   }
+`;
 
-  &.hidden {
-    overflow: hidden;
+export const EquationContainer = styled(FlexContainer)`
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
+  .equation span {
+    color: ${({ theme: { colors } }) => colors.white};
+    font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
   }
 `;

@@ -1,7 +1,7 @@
 export const commonTheme = {
   layout: {
     desktopPadding: 88,
-    mobilePadding: 24,
+    mobilePadding: 16,
   },
   header: {
     height: 65,
@@ -62,7 +62,7 @@ export const lightTheme = {
   },
   buttonBackgroundGradient: '#212750',
   backgroundInput: '#2127501A',
-  backgroundContainer: '#FFFFFF',
+  backgroundContainer: '#F7F7F7',
 };
 
 export const darkTheme = {

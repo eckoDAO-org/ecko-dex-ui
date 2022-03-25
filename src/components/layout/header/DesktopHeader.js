@@ -21,6 +21,12 @@ const Container = styled.div`
   padding-top: 16px;
   zoom: ${({ resolutionConfiguration }) =>
     resolutionConfiguration && resolutionConfiguration['normal-mode'].scale > 1 ? resolutionConfiguration['normal-mode'].scale : 1};
+
+  .header {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 `;
 
 const LeftContainer = styled.div`
@@ -40,10 +46,6 @@ const LeftContainer = styled.div`
     opacity: 1;
     transition: opacity 1s linear;
   }
-`;
-
-const RightContainer = styled.div`
-  display: flex;
 `;
 
 const AnimatedDiv = styled.div`
@@ -83,9 +85,7 @@ const DesktopHeader = ({ className }) => {
         <GameEditionModeButton className="header" />
       )}
 
-      <RightContainer>
-        <RightHeaderItems />
-      </RightContainer>
+      <RightHeaderItems />
     </Container>
   );
 };

@@ -1,47 +1,21 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { useGameEditionContext } from '../../contexts';
-import { ErrorIcon } from '../../assets';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { ErrorIcon, PixeledCircleArrowIcon, SuccessfullIcon } from '../../assets';
+import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
 import { SwapContext } from '../../contexts/SwapContext';
 import CustomButton from '../shared/CustomButton';
 import Label from '../shared/Label';
-import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
-import { SuccessAddRemoveView, SuccessAddRemoveViewGE } from './liquidity/LiquidityTxView';
-import { SwapSuccessView, SwapSuccessViewGE } from './swap-modals/SwapSuccesTxView';
 import { commonColors } from '../../styles/theme';
-
-const Content = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-  & > *:not(:last-child) {
-    margin-bottom: 16px;
-  }
-  svg {
-    path {
-      fill: ${({ theme: { colors }, gameEditionView }) => !gameEditionView && colors.white};
-    }
-  }
-
-  ${({ gameEditionView }) => {
-    if (gameEditionView) {
-      return css`
-        padding: 16px;
-        height: 100%;
-      `;
-    }
-  }}
-
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
-    svg {
-      width: 40px;
-      height: 40px;
-    }
-  }
-`;
+import Loader from '../shared/Loader';
+import GameEditionLabel from '../game-edition-v2/components/GameEditionLabel';
+import { PixeledInfoContainerWhite } from '../game-edition-v2/components/PixeledInfoContainerWhite';
+import PixeledBlueContainer, { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
+import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
+import { ENABLE_GAS_STATION, GAS_PRICE } from '../../constants/contextConstants';
+import PopupTxView from './PopupTxView';
+import { FlexContainer } from '../shared/FlexContainer';
+import LogoLoader from '../shared/Loader';
 
 const TransactionsDetails = styled.div`
   width: 100%;
@@ -52,18 +26,9 @@ const TransactionsDetails = styled.div`
   }
 `;
 
-const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
+const TxView = ({ loading, onClose, children }) => {
   const swap = useContext(SwapContext);
   const { gameEditionView } = useContext(GameEditionContext);
-
-  const [loading, setLoading] = useState(false);
-
-  const sendTransaction = () => {
-    setLoading(true);
-    swap.swapSend();
-    onClose();
-    setLoading(false);
-  };
 
   const failView = () => {
     return (
@@ -127,43 +92,31 @@ const TxView = ({ view, onClose, token0, token1, createTokenPair }) => {
     );
   };
 
-  const onAddLiquidity = async () => {
-    setLoading(true);
-    if (view === LIQUIDITY_VIEW.ADD_LIQUIDITY) {
-      swap.swapSend();
-      onClose();
-    } else {
-      await createTokenPair();
-      await swap.swapSend();
-      onClose();
-    }
-    setLoading(false);
-  };
-
   const renderSwitch = () => {
     if (swap.localRes && swap.localRes.result && swap.localRes.result.status === 'success') {
-      switch (view) {
-        default:
-          return () => {};
-        case LIQUIDITY_VIEW.REMOVE_LIQUIDITY:
-          return gameEditionView ? (
-            <SuccessAddRemoveViewGE token0={token0} token1={token1} swap={swap} label="Remove Liquidity" onBPress={sendTransaction} />
-          ) : (
-            <SuccessAddRemoveView token0={token0} token1={token1} swap={swap} label="Remove Liquidity" loading={loading} onClick={sendTransaction} />
-          );
-        case LIQUIDITY_VIEW.ADD_LIQUIDITY:
-          return gameEditionView ? (
-            <SuccessAddRemoveViewGE token0={token0} token1={token1} swap={swap} label="Add Liquidity" onBPress={onAddLiquidity} />
-          ) : (
-            <SuccessAddRemoveView token0={token0} token1={token1} swap={swap} label="Add Liquidity" loading={loading} onClick={onAddLiquidity} />
-          );
-        case undefined:
-          return gameEditionView ? (
-            <SwapSuccessViewGE swap={swap} />
-          ) : (
-            <SwapSuccessView swap={swap} loading={loading} sendTransaction={sendTransaction} />
-          );
-      }
+      return loading ? <Loader /> : children || <></>;
+      // switch (view) {
+      //   default:
+      //     return () => {};
+      //   case LIQUIDITY_VIEW.REMOVE_LIQUIDITY:
+      //     return gameEditionView ? (
+      //       <SuccessAddRemoveViewGE token0={token0} token1={token1} swap={swap} label="Remove Liquidity" onBPress={sendTransaction} />
+      //     ) : (
+      //       <SuccessRemoveView token0={token0} token1={token1} swap={swap} label="Remove Liquidity" loading={loading} onClick={sendTransaction} />
+      //     );
+      //   case LIQUIDITY_VIEW.ADD_LIQUIDITY:
+      //     return gameEditionView ? (
+      //       <SuccessAddRemoveViewGE token0={token0} token1={token1} swap={swap} label="Add Liquidity" onBPress={onAddLiquidity} />
+      //     ) : (
+      //       <SuccessAddView token0={token0} token1={token1} swap={swap} label="Add Liquidity" loading={loading} onClick={onAddLiquidity} />
+      //     );
+      //   case undefined:
+      //     return gameEditionView ? (
+      //       <SwapSuccessViewGE swap={swap} />
+      //     ) : (
+      //       <SwapSuccessView swap={swap} loading={loading} sendTransaction={sendTransaction} />
+      //     );
+      // }
     } else return failView();
   };
   return typeof swap.localRes === 'string' ? localError() : renderSwitch();
@@ -197,3 +150,137 @@ const Message = ({ color, children }) => {
     </MessageContainer>
   );
 };
+
+// GAS COST COMPONENT
+export const GasCost = ({ swap }) => {
+  return (
+    <div className="flex justify-sb">
+      <Label fontSize={13}>Gas Cost</Label>
+      <div style={{ display: 'flex' }}>
+        {ENABLE_GAS_STATION ? (
+          <>
+            <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ textDecoration: 'line-through' }}>
+              {(GAS_PRICE * swap?.localRes?.gas).toPrecision(4)} KDA
+            </Label>
+            <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ marginLeft: 5 }}>
+              FREE!
+            </Label>
+          </>
+        ) : (
+          <Label fontSize={13} color={commonColors.green} geColor="green">
+            {(GAS_PRICE * swap?.localRes?.gas).toPrecision(4)} KDA
+          </Label>
+        )}
+        {ENABLE_GAS_STATION && <PopupTxView popupStyle={{ maxWidth: '400px' }} />}
+      </div>
+    </div>
+  );
+};
+
+// CONTENT CONTAINER
+export const SuccesViewContainer = ({ swap, onClick, children, icon, hideSubtitle, footer }) => {
+  const { gameEditionView } = useGameEditionContext();
+  return (
+    <Content gameEditionView={gameEditionView}>
+      {!hideSubtitle && (
+        <Label fontFamily="syncopate" geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
+          Preview Successful!
+        </Label>
+      )}
+      {!gameEditionView && (icon || <SuccessfullIcon />)}
+
+      <FlexContainer className="w-100 flex column" gap={16} style={{ marginTop: 24 }}>
+        {children}
+        <GasCost swap={swap} />
+      </FlexContainer>
+
+      {footer}
+      <CustomButton
+        type="gradient"
+        buttonStyle={{
+          width: '100%',
+          marginTop: !gameEditionView && '16px',
+          marginBottom: gameEditionView && '16px',
+        }}
+        onClick={async () => {
+          await onClick();
+        }}
+      >
+        confirm
+      </CustomButton>
+    </Content>
+  );
+};
+
+export const SuccessViewContainerGE = ({ leftItem, rightItem, infoItems, hideIcon, title, containerStyle, loading }) => {
+  const { gameEditionView } = useGameEditionContext();
+  return (
+    <PreviewContainer gameEditionView={gameEditionView} style={containerStyle}>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        {title && (
+          <GameEditionLabel center color="yellow" fontSize={24} style={{ marginBottom: 0 }}>
+            {title}
+          </GameEditionLabel>
+        )}
+        <div className="flex justify-sb relative" style={{ paddingLeft: 16, paddingRight: 16 }}>
+          <PixeledInfoContainerWhite>{leftItem}</PixeledInfoContainerWhite>
+          {!hideIcon && (
+            <PixeledCircleArrowIcon
+              style={{ position: 'absolute', width: 51.5, height: 49, top: 'calc(50% - 20px)', left: '44%', transform: 'rotate(-90deg)' }}
+            />
+          )}
+          <PixeledInfoContainerWhite>{rightItem}</PixeledInfoContainerWhite>
+        </div>
+        <InfoContainer style={{ width: GE_DESKTOP_CONFIGURATION.DISPLAY_WIDTH, marginTop: 16 }}>
+          {infoItems?.map((item, i) => (
+            <PixeledBlueContainer key={i} label={item.label} value={item.value} />
+          ))}
+        </InfoContainer>
+      </div>
+      <div className="flex justify-ce">{loading ? <LogoLoader /> : <PressButtonToActionLabel actionLabel="send" />}</div>
+    </PreviewContainer>
+  );
+};
+
+const Content = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: 550px;
+  width: 100%;
+  & > *:not(:last-child) {
+    margin-bottom: 16px;
+  }
+  svg {
+    path {
+      fill: ${({ theme: { colors }, gameEditionView }) => !gameEditionView && colors.white};
+    }
+  }
+
+  ${({ gameEditionView }) => {
+    if (gameEditionView) {
+      return css`
+        padding: 16px;
+        height: 100%;
+      `;
+    }
+  }}
+
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+  }
+`;
+const PreviewContainer = styled.div`
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  & > *:not(:last-child) {
+    margin-bottom: 16px;
+  }
+`;

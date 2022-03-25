@@ -1,4 +1,18 @@
-import { ROUTE_POOL, ROUTE_STATS, ROUTE_SWAP, ROUTE_ANALYTICS, ROUTE_MY_SWAP, ROUTE_DAO } from '../router/routes';
+import {
+  ROUTE_STATS,
+  ROUTE_SWAP,
+  ROUTE_ANALYTICS,
+  ROUTE_MY_SWAP,
+  ROUTE_LIQUIDITY_TOKENS,
+  ROUTE_LIQUIDITY_POOLS,
+  ROUTE_LIQUIDITY_MY_LIQUIDITY,
+  ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED,
+  ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED,
+  ROUTE_LIQUIDITY_REMOVE_LIQUIDITY,
+  ROUTE_STAKE,
+  ROUTE_UNSTAKE,
+  ROUTE_DAO,
+} from '../router/routes';
 
 export const SWAP = {
   id: 0,
@@ -6,10 +20,17 @@ export const SWAP = {
   route: ROUTE_SWAP,
   activeRoutes: [ROUTE_MY_SWAP],
 };
-export const POOL = {
+export const LIQUIDITY = {
   id: 1,
-  label: 'pool',
-  route: ROUTE_POOL,
+  label: 'Liquidity',
+  route: ROUTE_LIQUIDITY_TOKENS,
+  activeRoutes: [
+    ROUTE_LIQUIDITY_POOLS,
+    ROUTE_LIQUIDITY_MY_LIQUIDITY,
+    ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED,
+    ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED,
+    ROUTE_LIQUIDITY_REMOVE_LIQUIDITY,
+  ],
 };
 export const DAO = {
   id: 2,
@@ -17,18 +38,24 @@ export const DAO = {
   route: ROUTE_DAO,
   className: '',
 };
-export const STATS = {
-  id: 3,
-  label: 'stats',
-  route: ROUTE_STATS,
-};
 export const ANALYTICS = {
   id: 4,
   label: 'analytics',
   route: ROUTE_ANALYTICS,
 };
+export const STAKE = {
+  id: 3,
+  label: 'stake',
+  route: ROUTE_STAKE,
+  activeRoutes: [ROUTE_UNSTAKE],
+};
+export const VAULT = {
+  id: 3,
+  label: 'vault',
+  link: 'http://134.209.219.136/',
+};
 
-export default [SWAP, POOL, ANALYTICS, STATS, DAO];
+export default [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS, VAULT];
 
 export const gameEditionRoutes = [
   {

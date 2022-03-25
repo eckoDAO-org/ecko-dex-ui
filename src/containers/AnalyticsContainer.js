@@ -1,53 +1,28 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components/macro';
+import useLazyImage from '../hooks/useLazyImage';
 import axios from 'axios';
 import { PactContext } from '../contexts/PactContext';
-import { CardContainer } from '../components/stats/StatsTab';
-import styled, { css } from 'styled-components/macro';
 import { GameEditionContext } from '../contexts/GameEditionContext';
 import VolumeChart from '../components/charts/VolumeChart';
 import TVLChart from '../components/charts/TVLChart';
 import VestingScheduleChart from '../components/charts/VestingScheduleChart';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
 import { FadeIn } from '../components/shared/animations';
-import useLazyImage from '../hooks/useLazyImage';
-import { humanReadableNUmber } from '../utils/reduceBalance';
+import { humanReadableNumber } from '../utils/reduceBalance';
 import LogoLoader from '../components/shared/Loader';
+import { FlexContainer } from '../components/shared/FlexContainer';
 import AnalyticsSimpleWidget from '../components/shared/AnalyticsSimpleWidget';
-
-const ChartsContainer = styled.div`
-  display: flex;
-  width: 100%;
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
-`;
-
-const SingleChartContainer = styled.div`
-  display: flex;
-  width: 100%;
-  padding: 5px;
-`;
 
 const Container = styled(FadeIn)`
   display: flex;
   flex-direction: column;
   width: 100%;
-  /* height: 100%; */
-  padding: ${({ gameEditionView }) => (gameEditionView ? '16px' : '32px')};
+  height: 100%;
   justify-content: flex-start;
   align-items: center;
-  ${({ gameEditionView }) => {
-    if (gameEditionView) {
-      return css`
-        height: 100%;
-        display: flex;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        background-image: ${`url(${modalBackground})`};
-      `;
-    }
-  }}
+
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {
     padding: ${({ gameEditionView }) => !gameEditionView && '32px 11px'};
   }
@@ -84,31 +59,18 @@ const AnalyticsContainer = () => {
   ) : (
     !gameEditionView && (
       <Container gameEditionView={gameEditionView}>
-        <CardContainer style={{ background: 'transparent' }}>
-          <ChartsContainer>
-            <SingleChartContainer>
-              <AnalyticsSimpleWidget title={'Kaddex price (KDX)'} mainText={`$ ${KDX_PRICE}`} subtitle={`${(KDX_PRICE / kdaPrice).toFixed(4)} KDA`} />
-            </SingleChartContainer>
-            <SingleChartContainer>
-              <AnalyticsSimpleWidget
-                title={'Marketcap'}
-                mainText={`$ ${humanReadableNUmber(Number(KDX_TOTAL_SUPPLY * KDX_PRICE))}`}
-                subtitle={null}
-              />
-            </SingleChartContainer>
-          </ChartsContainer>
-          <ChartsContainer>
-            <SingleChartContainer>
-              <TVLChart height={300} kdaPrice={kdaPrice} />
-            </SingleChartContainer>
-            <SingleChartContainer>
-              <VolumeChart height={300} kdaPrice={kdaPrice} />
-            </SingleChartContainer>
-          </ChartsContainer>
-          <ChartsContainer style={{ padding: 5, marginTop: 20 }}>
-            <VestingScheduleChart height={300} />
-          </ChartsContainer>
-        </CardContainer>
+        <FlexContainer className="column w-100" gap={24} style={{ padding: '50px 0', maxWidth: 1100 }}>
+          <FlexContainer mobileClassName="column" gap={24}>
+            <AnalyticsSimpleWidget title={'Kaddex price (KDX)'} mainText={`$ ${KDX_PRICE}`} subtitle={`${(KDX_PRICE / kdaPrice).toFixed(4)} KDA`} />
+            <AnalyticsSimpleWidget title={'Marketcap'} mainText={`$ ${humanReadableNumber(Number(KDX_TOTAL_SUPPLY * KDX_PRICE))}`} subtitle={null} />
+          </FlexContainer>
+          <FlexContainer mobileClassName="column" gap={24}>
+            <TVLChart kdaPrice={kdaPrice} height={300} />
+
+            <VolumeChart kdaPrice={kdaPrice} height={300} />
+          </FlexContainer>
+          <VestingScheduleChart height={300} />
+        </FlexContainer>
       </Container>
     )
   );

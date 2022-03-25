@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { ROUTE_INDEX } from '../../router/routes';
 
 const Item = styled.div`
   color: ${({ theme: { colors } }) => colors.white};
@@ -61,11 +62,11 @@ const HeaderItem = ({
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
   const history = useHistory();
+  const { pathname } = useLocation();
 
   const [buttonHover, setButtonHover] = useState(null);
 
   const isActive = () => {
-    const { pathname } = window.location;
     return pathname === item?.route || item?.activeRoutes?.includes(pathname);
   };
 
@@ -75,9 +76,13 @@ const HeaderItem = ({
       className={className}
       onClick={() => {
         if (item.route) {
-          history.push(item.route);
+          if (item.route === ROUTE_INDEX) {
+            history.push(item.route?.concat(history?.location?.search));
+          } else {
+            history.push(item.route);
+          }
         } else if (item.link) {
-          window.open(item.link, '_blank', 'noopener,noreferrer');
+          window.open(item.link, '_self');
         } else {
           if (onClick) {
             onClick();

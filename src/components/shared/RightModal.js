@@ -1,14 +1,14 @@
-import React, { useContext, useRef } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components/macro';
 import { CloseIcon } from '../../assets';
-import { NotificationContext } from '../../contexts/NotificationContext';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
-import NotificationCard from './NotificationCard';
+import Label from '../shared/Label';
+
 const Container = styled.div`
   width: 335px;
   position: fixed;
   background: ${({ theme: { colors } }) => colors.primary};
-  box-shadow: -10px 0px 40px #0f054c3d;
+  box-shadow: -10px 0px 40px #00000066;
   top: 0;
   right: 0;
   height: 100%;
@@ -24,26 +24,21 @@ const Container = styled.div`
     width: 0px;
   }
   scrollbar-width: none;
-`;
 
-const Title = styled.div`
-  font-size: 16px;
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.syncopate};
-  color: ${({ theme: { colors } }) => colors.white};
-  margin-left: 10px;
-  width: 100%;
+  .info-popup {
+    line-height: 18px;
+  }
 `;
 
 const Header = styled.div`
   display: flex;
   align-items: center;
   position: relative;
+  justify-content: space-between;
   z-index: 2;
-  padding: 10px 22px 10px 26px;
+  padding: 16px;
   color: ${({ theme: { colors } }) => colors.white};
   min-height: 56px;
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.syncopate};
-  font-size: 16px;
   border-radius: 0px !important;
   box-shadow: ${({ theme }) => theme.boxShadow};
   svg {
@@ -88,43 +83,26 @@ const Content = styled.div`
   flex: 1;
 `;
 
-const NotificationModal = ({ open, onClose, titleStyle, customIcon, removeIcon, headerStyle, footerButton }) => {
-  const notification = useContext(NotificationContext);
-
+const RightModal = ({ className, title, open, onClose, customIcon, removeIcon, titleStyle, content, footer, contentStyle }) => {
   const ref = useRef();
   useOnClickOutside(ref, () => open && onClose());
 
   return (
     <Container ref={ref} open={open} right={window.innerWidth}>
       <>
-        <Header style={headerStyle}>
-          <Title style={titleStyle}>Notifications</Title>
+        <Header style={titleStyle}>
+          <Label fontFamily="syncopate">{title}</Label>
           <IconContainer onClick={onClose}>{!removeIcon && (customIcon || <CloseIcon style={{ height: 10, width: 10 }} />)}</IconContainer>
         </Header>
 
-        <Content>
-          {[...notification.notificationList]?.reverse().map((notif, index) => {
-            return (
-              <NotificationCard
-                key={index}
-                index={index}
-                type={notif?.type}
-                time={notif?.time}
-                date={notif?.date}
-                title={notif?.title}
-                isHighlight={!notif?.isReaded}
-                description={notif?.description}
-                removeItem={notification?.removeItem}
-                link={notif?.link}
-              />
-            );
-          })}
+        <Content className={className} style={contentStyle}>
+          {content}
         </Content>
 
-        <FooterContainer>{footerButton}</FooterContainer>
+        {footer && <FooterContainer>{footer}</FooterContainer>}
       </>
     </Container>
   );
 };
 
-export default NotificationModal;
+export default RightModal;

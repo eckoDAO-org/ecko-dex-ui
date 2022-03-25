@@ -17,6 +17,12 @@ const Container = styled.div`
   padding: ${({ theme: { layout } }) => `0 ${layout.mobilePadding}px`};
 
   padding-top: 16px;
+
+  .hamburger-icon {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
 `;
 const RowContainer = styled.div`
   display: flex;
@@ -43,10 +49,6 @@ const LeftContainer = styled.div`
   }
 `;
 
-const RightContainer = styled.div`
-  display: flex;
-`;
-
 const MobileHeader = ({ className }) => {
   const history = useHistory();
 
@@ -54,16 +56,16 @@ const MobileHeader = ({ className }) => {
     <Container className={className}>
       <RowContainer>
         <LeftContainer>
-          <PopupContentList withoutAccountInfo items={menuItems} icon={<HamburgerIcon />} className="hamburger" />
+          <PopupContentList withoutAccountInfo items={menuItems} icon={<HamburgerIcon className="hamburger-icon" />} className="hamburger" />
           <KaddexLetterLogo onClick={() => history.push(ROUTE_SWAP)} />
         </LeftContainer>
 
         {/* <GameEditionModeButton /> */}
-        <RightContainer>
-          <RightHeaderItems />
-        </RightContainer>
+        <RightHeaderItems />
       </RowContainer>
-      <span className="mainnet-chain-2 mobile-only">Chain 2</span>
+      {/* <Label outGameEditionView className="mainnet-chain-2 mobile-only">
+        Chain 2
+      </Label> */}
     </Container>
   );
 };

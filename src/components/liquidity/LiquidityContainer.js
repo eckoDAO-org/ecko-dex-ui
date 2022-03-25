@@ -118,7 +118,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
   const [inputSide, setInputSide] = useState('');
-
+  console.log('pair', pair);
   const [fromValues, setFromValues] = useState({
     coin: 'KDA',
     account: '',
@@ -335,7 +335,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
   const buttonStatus = () => {
     let status = {
       0: { msg: 'Connect your KDA wallet', status: false },
-      1: { msg: 'Enter An Amount', status: false },
+      1: { msg: 'Enter Amount', status: false },
       2: { msg: 'Supply', status: true },
       3: {
         msg: (token) => `Insufficient ${token} Balance`,
@@ -461,7 +461,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
     if (gameEditionView) {
       openModal({
         titleFontSize: 32,
-        title: 'Select a Token',
+        title: 'Select Token',
         type: 'arcade-dark',
         onClose: () => {
           setTokenSelectorType(null);
@@ -484,12 +484,9 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
       });
     } else {
       modalContext.openModal({
-        title: 'select a token',
+        title: 'Select Token',
         description: '',
-        containerStyle: {
-          minWidth: '0px',
-          width: '75%',
-        },
+
         onClose: () => {
           setTokenSelectorType(null);
           modalContext.closeModal();
@@ -497,7 +494,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
         content: (
           <TokenSelectorModalContent
             selectedToken={selectedToken}
-            tokenSelectorType={tokenSelectorType}
+            token={tokenSelectorType === 'from' ? fromValues.coin : toValues.coin}
             onTokenClick={onTokenClick}
             onClose={() => {
               modalContext.closeModal();
@@ -686,7 +683,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
                     value={reduceBalance(pact.getRatio1(fromValues.coin, toValues.coin)) ?? '-'}
                   />
                   <PixeledBlueContainer
-                    label="share of pool"
+                    label="pool share"
                     value={`${!pact.share(fromValues.amount) ? 0 : (pact.share(fromValues.amount) * 100).toPrecision(4)} %`}
                   />
                 </InfoContainer>
@@ -707,7 +704,7 @@ const LiquidityContainer = ({ selectedView, setSelectedView, pair, closeLiquidit
                     </Label>
                   </InnerRowContainer>
                   <InnerRowContainer>
-                    <Label fontSize={13}>Share of Pool</Label>
+                    <Label fontSize={13}>Pool Share</Label>
                     <Label fontSize={13} fontFamily="syncopate" labelStyle={{ textAlign: 'end' }}>
                       {!pact.share(fromValues.amount) ? 0 : (pact.share(fromValues.amount) * 100).toPrecision(4)} %
                     </Label>

@@ -36,7 +36,8 @@ import LogoLoader from '../components/shared/Loader';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import GameEditionModeButton from '../components/layout/header/GameEditionModeButton';
 import { HistoryIcon } from '../assets';
-import { ROUTE_MY_SWAP } from '../router/routes';
+import { ROUTE_MY_SWAP, ROUTE_SWAP } from '../router/routes';
+import { SwapSuccessView } from '../components/modals/swap-modals/SwapSuccesTxView';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -66,6 +67,7 @@ const Container = styled(FadeIn)`
     } else {
       return css`
         max-width: 550px;
+        overflow: visible;
       `;
     }
   }}
@@ -96,7 +98,7 @@ const SwapContainer = () => {
   const modalContext = useContext(ModalContext);
   const { resolutionConfiguration } = useContext(ApplicationContext);
 
-  const { gameEditionView, openModal, closeModal, outsideToken } = useContext(GameEditionContext);
+  const { gameEditionView, openModal, closeModal, outsideToken, showTokens, setOutsideToken, setShowTokens } = useContext(GameEditionContext);
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
 
   const [selectedToken, setSelectedToken] = useState(null);
@@ -234,7 +236,12 @@ const SwapContainer = () => {
     } else {
       setPriceImpact('');
     }
-  }, [fromValues.coin, toValues.coin, fromValues.amount, toValues.amount, pact.ratio]);
+  }, [fromValues.amount, toValues.amount, pact.ratio]);
+
+  useEffect(() => {
+    history.push(ROUTE_SWAP.concat(`?token0=${fromValues.coin}&token1=${toValues.coin}`));
+  }, [fromValues.coin, toValues.coin]);
+
   useEffect(() => {
     const getBalance = async () => {
       if (account.account) {
@@ -341,6 +348,18 @@ const SwapContainer = () => {
     }
   };
 
+  const onSelectToken = async (crypto) => {
+    if (gameEditionView && showTokens) {
+      await setOutsideToken((prev) => ({ ...prev, token: crypto }));
+      await setShowTokens(false);
+    }
+    if (tokenSelectorType === 'from' && fromValues.coin === crypto.name) return;
+    if (tokenSelectorType === 'to' && toValues.coin === crypto.name) return;
+    if ((tokenSelectorType === 'from' && fromValues.coin !== crypto.name) || (tokenSelectorType === 'to' && toValues.coin !== crypto.name)) {
+      onTokenClick({ crypto });
+    }
+  };
+
   useEffect(() => {
     if (tokenSelectorType === 'from') {
       if (fromValues.coin === toValues.coin) {
@@ -370,6 +389,7 @@ const SwapContainer = () => {
   const onWalletRequestViewModalClose = () => {
     wallet.setIsWaitingForWalletAuth(false);
     wallet.setWalletError(null);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -403,7 +423,7 @@ const SwapContainer = () => {
     if (gameEditionView) {
       openModal({
         titleFontSize: 32,
-        title: 'Select a Token',
+        title: 'Selec',
         type: 'arcade-dark',
         onClose: () => {
           setTokenSelectorType(null);
@@ -425,12 +445,8 @@ const SwapContainer = () => {
       });
     } else {
       modalContext.openModal({
-        title: 'select a token',
+        title: 'Select',
         description: '',
-        containerStyle: {
-          minWidth: '0px',
-          width: '75%',
-        },
         onClose: () => {
           setTokenSelectorType(null);
           modalContext.closeModal();
@@ -438,8 +454,8 @@ const SwapContainer = () => {
         content: (
           <TokenSelectorModalContent
             selectedToken={selectedToken}
-            tokenSelectorType={tokenSelectorType}
-            onTokenClick={onTokenClick}
+            token={tokenSelectorType === 'from' ? fromValues.coin : toValues.coin}
+            onSelectToken={onSelectToken}
             onClose={() => {
               modalContext.closeModal();
             }}
@@ -449,6 +465,14 @@ const SwapContainer = () => {
         ),
       });
     }
+  };
+
+  const sendTransaction = () => {
+    setLoading(true);
+    swap.swapSend();
+    setShowTxModal(false);
+    modalContext.closeModal();
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -489,7 +513,9 @@ const SwapContainer = () => {
                 setShowTxModal(false);
                 modalContext.closeModal();
               }}
-            />
+            >
+              <SwapSuccessView loading={loading} sendTransaction={sendTransaction} />
+            </TxView>
           ),
         });
       }
@@ -526,6 +552,7 @@ const SwapContainer = () => {
           </FlexContainer>
         )}
       </FlexContainer>
+
       <FormContainer
         gameEditionView={gameEditionView}
         footer={
@@ -542,6 +569,13 @@ const SwapContainer = () => {
             noLiquidity={noLiquidity}
             setShowTxModal={setShowTxModal}
             showTxModal={showTxModal}
+            onSelectToken={() => {
+              if (!fromValues.coin) {
+                setTokenSelectorType('from');
+              } else {
+                setTokenSelectorType('to');
+              }
+            }}
           />
         }
       >

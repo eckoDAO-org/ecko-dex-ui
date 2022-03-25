@@ -15,6 +15,7 @@ import browserDetection from '../../../utils/browserDetection';
 import { FlexContainer } from '../../shared/FlexContainer';
 import Label from '../../shared/Label';
 import { commonTheme } from '../../../styles/theme';
+import { useLocation } from 'react-router-dom';
 
 const Wrapper = styled.div`
   height: 100%;
@@ -70,6 +71,7 @@ const CustomDivider = styled(Divider)`
 `;
 
 const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContentListStyle, withoutAccountInfo, icon, className }) => {
+  const { pathname } = useLocation();
   const { account, logout } = useAccountContext();
   const { gameEditionView, openModal } = useGameEditionContext();
   const modalContext = useModalContext();
@@ -122,12 +124,12 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
                   if (gameEditionView) {
                     return openModal({
                       title: 'Account',
-                      content: <AccountModal />,
+                      content: <AccountModal pathname={pathname} />,
                     });
                   } else {
                     modalContext.openModal({
                       title: 'Account',
-                      content: <AccountModal />,
+                      content: <AccountModal pathname={pathname} />,
                     });
                   }
                 }}

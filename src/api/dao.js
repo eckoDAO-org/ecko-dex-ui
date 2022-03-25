@@ -65,6 +65,7 @@ export const voteCommandToSign = (type, proposalId, account) => {
 export const votePreview = async (signedCommand) => {
   try {
     let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(signedCommand));
+    // let data = await Pact.fetch.local(signedCommand, `${NETWORK}/api/v1/local`);
     return parseRes(data);
   } catch (e) {
     return handleError(e);

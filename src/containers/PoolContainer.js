@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled, { css } from 'styled-components/macro';
 import LiquidityContainer from '../components/liquidity/LiquidityContainer';
 import LiquidityList from '../components/liquidity/LiquidityList';
-import RemoveLiqContainer from '../components/liquidity/RemoveLiqContainer';
+import RemoveLiquidityContent from '../components/liquidity/RemoveLiquidityContent';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
 import { useGameEditionContext } from '../contexts';
 import useButtonScrollEvent from '../hooks/useButtonScrollEvent';
@@ -63,7 +63,7 @@ const PoolContainer = () => {
   ) : (
     <Container id="pool-scrolling-container" $gameEditionView={gameEditionView} selectedView={selectedView}>
       {selectedView === LIQUIDITY_VIEW.REMOVE_LIQUIDITY && (
-        <RemoveLiqContainer
+        <RemoveLiquidityContent
           closeLiquidity={() => {
             setPair(null);
             setSelectedView(LIQUIDITY_VIEW.LIQUIDITY_LIST);

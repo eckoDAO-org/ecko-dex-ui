@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-import theme from '../../styles/theme';
+import Label from '../shared/Label';
 
 const Container = styled.div`
   display: flex;
@@ -11,13 +11,7 @@ const Container = styled.div`
 const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-const Text = styled.span`
   margin-left: 16px;
-
-  font-size: 16px;
-  font-family: ${({ fontWeight }) => (fontWeight ? theme.fontFamily.syncopate : theme.fontFamily.basier)};
 `;
 
 const capitalizeFirstLetter = (string) => {
@@ -29,10 +23,10 @@ const NotificationContent = ({ icon, type, message, title, titleStyle }) => {
     <Container>
       {icon}
       <TextContainer className={type}>
-        <Text fontWeight="bold" style={titleStyle}>
+        <Label fontFamily="syncopate" style={titleStyle}>
           {capitalizeFirstLetter(title) || capitalizeFirstLetter(type)}
-        </Text>
-        <Text>{capitalizeFirstLetter(message)}</Text>
+        </Label>
+        <Label>{capitalizeFirstLetter(message)}</Label>
       </TextContainer>
     </Container>
   );

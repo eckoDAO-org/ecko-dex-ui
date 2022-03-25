@@ -48,6 +48,7 @@ const SwapButtonsForm = ({
   ratio,
   setShowTxModal,
   showTxModal,
+  onSelectToken,
 }) => {
   const modalContext = useContext(ModalContext);
   const { account } = useContext(AccountContext);
@@ -182,10 +183,16 @@ const SwapButtonsForm = ({
       ) : (
         <CustomButton
           fluid
-          type={getButtonLabel() === SWAP_BUTTON_SWAP.label || getButtonLabel() === SWAP_BUTTON_CONNECT_WALLET.label ? 'secondary' : 'primary'}
-          disabled={account.account && (getButtonLabel() !== SWAP_BUTTON_SWAP.label || isNaN(fromValues.amount) || isNaN(toValues.amount))}
+          type="gradient"
+          disabled={
+            account.account &&
+            ((getButtonLabel() !== SWAP_BUTTON_SWAP.label && getButtonLabel() !== SWAP_BUTTON_SELECT_TOKENS.label) ||
+              isNaN(fromValues.amount) ||
+              isNaN(toValues.amount))
+          }
           loading={loading}
           onClick={async () => {
+            console.log('asd');
             if (!account.account) {
               return modalContext.openModal({
                 title: account?.account ? 'wallet connected' : SWAP_BUTTON_CONNECT_WALLET.label,
@@ -193,7 +200,11 @@ const SwapButtonsForm = ({
                 content: <ConnectWalletModal />,
               });
             }
-            await handleClick();
+            if (!fromValues.coin || !toValues.coin) {
+              onSelectToken();
+            } else {
+              await handleClick();
+            }
           }}
         >
           {getButtonLabel()}

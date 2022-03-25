@@ -4,6 +4,7 @@ import { FlexContainer } from './FlexContainer';
 import Label from './Label';
 
 const STYMaxSupplyContainer = styled.div`
+  position: relative;
   border: 1px solid ${({ theme: { colors } }) => `${colors.white}99`};
   border-radius: 10px;
   width: 100%;
@@ -31,15 +32,14 @@ const PercetageIndicator = styled(FlexContainer)`
   }
 `;
 
-const ProgressBar = ({ currentValue, maxValue, topLabelLeft, withBottomLabel, withRightLabel, darkBar }) => {
+const ProgressBar = ({ currentValue, maxValue, topLabelLeft, bottomValues, withBottomLabel, darkBar, containerStyle }) => {
   const getPercentage = (current, max) => {
     if (maxValue === 0) return 0;
     if (current <= maxValue) return (100 * current) / max;
     else return 100;
   };
-
   return (
-    <>
+    <FlexContainer className="column w-100" style={containerStyle}>
       {topLabelLeft && (
         <FlexContainer className="justify-sb align-ce w-100">
           <Label fontSize={13}>{topLabelLeft}</Label>
@@ -48,12 +48,26 @@ const ProgressBar = ({ currentValue, maxValue, topLabelLeft, withBottomLabel, wi
       )}
       <STYMaxSupplyContainer>
         <STYMaxSupply darkBar={darkBar} width={getPercentage(currentValue, maxValue)} />
+
+        {bottomValues && (
+          <FlexContainer className="align-ce w-100">
+            {bottomValues?.map((v, i) => {
+              const width = v.toString().length * 8;
+              return (
+                <PercetageIndicator
+                  id={`value-${v}`}
+                  key={i}
+                  style={{ position: 'absolute', left: `calc(${getPercentage(v, maxValue)}% - ${width / 2}px)`, top: -6 }}
+                >
+                  <Indicator />
+                  <Label>{v.toString()}</Label>
+                </PercetageIndicator>
+              );
+            })}
+          </FlexContainer>
+        )}
       </STYMaxSupplyContainer>
-      {withRightLabel && (
-        <FlexContainer className="justify-sb align-fe" style={{ marginLeft: 8 }}>
-          <Label fontSize={13}>{getPercentage(currentValue, maxValue).toFixed(1)}%</Label>
-        </FlexContainer>
-      )}
+      {/* 
       {withBottomLabel && (
         <FlexContainer className="justify-sb align-ce w-100" gap={16}>
           <PercetageIndicator>
@@ -64,12 +78,18 @@ const ProgressBar = ({ currentValue, maxValue, topLabelLeft, withBottomLabel, wi
             <Label>1.5</Label>
           </PercetageIndicator>
           <PercetageIndicator>
-            <Label>2.5</Label>
+            <Label>3</Label>
           </PercetageIndicator>
         </FlexContainer>
-      )}
-    </>
+      )} */}
+    </FlexContainer>
   );
 };
 
 export default ProgressBar;
+
+const Indicator = styled.div`
+  background-color: ${({ theme: { colors } }) => colors.white};
+  height: 20px;
+  width: 1px;
+`;

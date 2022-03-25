@@ -43,11 +43,7 @@ const VoteResultsContainer = ({ onClickYes, onClickNo, proposalData, hasVoted })
           <Checkbox disabled={!account?.account || hasVoted} radio checked={hasVoted === 'approved'} label="Yes" value="yes" onChange={onClickYes} />
         </CheckboxContainer>
         <FlexContainer className="align-ce w-100" style={{ border: '1px solid #FFFFFF99', borderRadius: 10, padding: 8 }}>
-          <ProgressBar
-            withRightLabel
-            currentValue={proposalData['tot-approved']}
-            maxValue={proposalData['tot-approved'] + proposalData['tot-refused']}
-          />
+          <ProgressBar currentValue={proposalData['tot-approved']} maxValue={proposalData['tot-approved'] + proposalData['tot-refused']} />
         </FlexContainer>
       </FlexContainer>
       <FlexContainer gap={10} className="align-ce">
@@ -55,12 +51,7 @@ const VoteResultsContainer = ({ onClickYes, onClickNo, proposalData, hasVoted })
           <Checkbox disabled={!account?.account || hasVoted} radio checked={hasVoted === 'refused'} label="No" value="no" onChange={onClickNo} />
         </CheckboxContainer>
         <FlexContainer className="align-ce w-100" style={{ border: '1px solid #FFFFFF99', borderRadius: 10, padding: 8 }}>
-          <ProgressBar
-            darkBar
-            withRightLabel
-            currentValue={proposalData['tot-refused']}
-            maxValue={proposalData['tot-approved'] + proposalData['tot-refused']}
-          />
+          <ProgressBar darkBar currentValue={proposalData['tot-refused']} maxValue={proposalData['tot-approved'] + proposalData['tot-refused']} />
         </FlexContainer>
       </FlexContainer>
     </FlexContainer>

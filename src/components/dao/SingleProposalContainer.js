@@ -1,26 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import Pact from 'pact-lang-api';
+import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
+import { hasAccountVoted, readSingleProposal, vote, voteCommandToSign, votePreview } from '../../api/dao';
+import { useAccountContext, useApplicationContext, useKaddexWalletContext, useNotificationContext } from '../../contexts';
+import { STATUSES } from '../../contexts/NotificationContext';
+import { NETWORK_TYPE } from '../../constants/contextConstants';
+import { ROUTE_DAO } from '../../router/routes';
 import { PartialScrollableScrollSection } from '../layout/Containers';
 import { FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
 import VotingPowerContainer from './VotingPowerContainer';
 import { ArrowBack } from '../../assets';
-import { commonColors, theme } from '../../styles/theme';
-import { ApplicationContext } from '../../contexts/ApplicationContext';
-import { ROUTE_DAO } from '../../router/routes';
-import { useHistory } from 'react-router-dom';
 import VoteResultsContainer from './VoteResultsContainer';
-import { hasAccountVoted, readSingleProposal, vote, voteCommandToSign, votePreview } from '../../api/dao';
 import AppLoader from '../shared/AppLoader';
-import { useAccountContext, useKaddexWalletContext, useNotificationContext } from '../../contexts';
-import { STATUSES } from '../../contexts/NotificationContext';
-import { NETWORK_TYPE } from '../../constants/contextConstants';
-import { toast } from 'react-toastify';
+import { commonColors, theme } from '../../styles/theme';
 
 const SingleProposalContainer = ({ proposal_id, accountData }) => {
-  const { themeMode } = useContext(ApplicationContext);
+  const { themeMode } = useApplicationContext();
   const { account } = useAccountContext();
   const { showNotification } = useNotificationContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();

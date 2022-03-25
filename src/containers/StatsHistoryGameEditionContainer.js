@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
-import { PactContext } from '../contexts/PactContext';
+import { useErrorState } from '../hooks/useErrorState';
+import { getPairList } from '../api/pact-pair';
 import { FadeIn } from '../components/shared/animations';
 import CommonTableGameEdition from '../components/shared/CommonTableGameEdition';
 import { FlexContainer } from '../components/shared/FlexContainer';
@@ -27,33 +28,19 @@ export const CardContainer = styled(FadeIn)`
 `;
 
 const StatsHistoryGameEditionContainer = () => {
-  const pact = useContext(PactContext);
+  const [pairList, setPairList] = useErrorState([], true);
+  const [loading, setLoading] = useState(false);
 
+  const fetchData = async () => {
+    const resultPairList = await getPairList();
+    setPairList(resultPairList);
+    setLoading(false);
+  };
   useEffect(() => {
-    pact.getEventsSwapList();
+    setLoading(true);
+    fetchData();
   }, []);
 
-  const renderColumns = () => {
-    return [
-      {
-        name: 'pair',
-        render: ({ item }) => `${item.token0}/${item.token1}`,
-      },
-      {
-        renderName: ({ item }) => item.token0,
-        render: ({ item }) => reduceBalance(item.reserves[0]),
-      },
-      {
-        renderName: ({ item }) => item.token1,
-        render: ({ item }) => reduceBalance(item.reserves[1]),
-      },
-      {
-        name: 'rate',
-        width: 160,
-        render: ({ item }) => `${reduceBalance(extractDecimal(item.reserves[0]) / extractDecimal(item.reserves[1]))} ${item.token0}/${item.token1}`,
-      },
-    ];
-  };
   return (
     <CardContainer>
       <FlexContainer className="w-100 justify-sb" style={{ marginBottom: 24 }} gameEditionStyle={{ marginBottom: 14 }}>
@@ -61,10 +48,10 @@ const StatsHistoryGameEditionContainer = () => {
           STATS
         </Label>
       </FlexContainer>
-      {pact.pairList[0] ? (
+      {!loading ? (
         <CommonTableGameEdition
           id="swap-history-list"
-          items={pact.pairList}
+          items={Object.values(pairList)}
           columns={renderColumns()}
           onClick={(item) => {
             window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${item?.requestKey}`, '_blank', 'noopener,noreferrer');
@@ -78,3 +65,25 @@ const StatsHistoryGameEditionContainer = () => {
 };
 
 export default StatsHistoryGameEditionContainer;
+
+const renderColumns = () => {
+  return [
+    {
+      name: 'pair',
+      render: ({ item }) => `${item.token0}/${item.token1}`,
+    },
+    {
+      renderName: ({ item }) => item.token0,
+      render: ({ item }) => reduceBalance(item.reserves[0]),
+    },
+    {
+      renderName: ({ item }) => item.token1,
+      render: ({ item }) => reduceBalance(item.reserves[1]),
+    },
+    {
+      name: 'rate',
+      width: 160,
+      render: ({ item }) => `${reduceBalance(extractDecimal(item.reserves[0]) / extractDecimal(item.reserves[1]))} ${item.token0}/${item.token1}`,
+    },
+  ];
+};

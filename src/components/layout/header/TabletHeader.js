@@ -19,6 +19,12 @@ const Container = styled.div`
   width: 100%;
   padding: 0 24px;
   padding-top: 16px;
+
+  .hamburger-icon {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
 `;
 
 const LeftContainer = styled.div`
@@ -50,7 +56,7 @@ const TabletHeader = ({ className }) => {
     <Container className={className}>
       <RowContainer>
         <LeftContainer>
-          <PopupContentList withoutAccountInfo items={menuItems} icon={<HamburgerIcon />} className="hamburger" />
+          <PopupContentList withoutAccountInfo items={menuItems} icon={<HamburgerIcon className="hamburger-icon" />} className="hamburger" />
           {themeMode === 'dark' ? (
             <KaddexLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
           ) : (
@@ -64,7 +70,9 @@ const TabletHeader = ({ className }) => {
           <RightHeaderItems />
         </RightContainer>
       </RowContainer>
-      <span className="mainnet-chain-2 desktop-none mobile-none">Chain 2</span>
+      {/* <Label outGameEditionView className="mainnet-chain-2 desktop-none mobile-none">
+        Chain 2
+      </Label> */}
     </Container>
   );
 };

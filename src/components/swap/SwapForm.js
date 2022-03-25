@@ -1,16 +1,18 @@
 import React, { useContext, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
+import { useApplicationContext } from '../../contexts';
+import { GameEditionContext } from '../../contexts/GameEditionContext';
 import InputToken from '../../components/shared/InputToken';
 import { SwapIcon } from '../../assets';
 import { limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
-import { Divider } from 'semantic-ui-react';
 import noExponents from '../../utils/noExponents';
 import FirstInput from '../../assets/images/game-edition/pixeled-box-yellow.svg';
 import SecondInput from '../../assets/images/game-edition/pixeled-box-purple.svg';
 import { GeArrowIcon } from '../../assets';
 import { PixeledCircleDoubleArrowIcon } from '../../assets';
 import Input from '../shared/Input';
+import CustomDivider from '../shared/CustomDivider';
+import { theme } from '../../styles/theme';
 
 const Container = styled.div`
   position: relative;
@@ -74,6 +76,7 @@ const SecondInputContainer = styled.div`
 `;
 
 const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, toNote, setTokenSelectorType, setInputSide, swapValues }) => {
+  const { themeMode } = useApplicationContext();
   const { gameEditionView } = useContext(GameEditionContext);
   const [rotation, setRotation] = useState(0);
 
@@ -132,16 +135,24 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
           }}
         />
       ) : (
-        <Divider horizontal style={{ zIndex: 1 }}>
+        <div className="relative flex justify-ce align-ce" style={{ marginTop: 12, marginBottom: 12 }}>
+          <CustomDivider className="absolute" style={{ zIndex: 1 }} />
           <SwapIcon
             id="swap-button"
-            style={{ cursor: 'pointer', transform: `rotate(${rotation}deg)`, transition: 'width 0.3s, transform 0.3s' }}
+            style={{
+              cursor: 'pointer',
+              transform: `rotate(${rotation}deg)`,
+              transition: 'width 0.3s, transform 0.3s',
+              zIndex: 2,
+              borderRadius: '50%',
+              backgroundColor: theme(themeMode).backgroundContainer,
+            }}
             onClick={() => {
               swapValues();
               setRotation((prev) => prev + 180);
             }}
           />
-        </Divider>
+        </div>
       )}
       <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
         {gameEditionView && <div style={{ width: 14.65, height: 14.65 }} />}

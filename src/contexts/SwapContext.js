@@ -16,13 +16,14 @@ import {
   getCurrentDate,
   getCurrentTime,
 } from '../constants/contextConstants';
+import { pactFetchLocal } from '../api/pact';
 
 export const SwapContext = createContext();
 
 export const SwapProvider = (props) => {
   const pact = usePactContext();
   const notificationContext = useNotificationContext();
-  const { account, localRes, setLocalRes } = useAccountContext();
+  const { account, localRes, setLocalRes, storeNotification } = useAccountContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
 
   const wallet = useWalletContext();
@@ -54,20 +55,12 @@ export const SwapProvider = (props) => {
   };
 
   const getPairAccount = async (token0, token1) => {
-    try {
-      let data = await Pact.fetch.local(
-        {
-          pactCode: `(at 'account (kswap.exchange.get-pair ${token0} ${token1}))`,
-          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 3000, creationTime(), 600),
-        },
-        NETWORK
-      );
-      if (data.result.status === 'success') {
-        setPairAccount(data.result.data);
-        return data.result.data;
-      }
-    } catch (e) {
-      console.log(e);
+    const result = await pactFetchLocal(`(at 'account (kswap.exchange.get-pair ${token0} ${token1}))`);
+    if (result.errorMessage) {
+      return result.errorMessage;
+    } else {
+      setPairAccount(result);
+      return result;
     }
   };
 
@@ -137,13 +130,13 @@ export const SwapProvider = (props) => {
         data = await Pact.wallet.sendSigned(cmd, NETWORK);
       }
       pact.pollingNotif(data.requestKeys[0]);
-      notificationContext.storeNotification({
+      storeNotification({
         type: 'info',
         time: getCurrentTime(),
         date: getCurrentDate(),
         title: 'Transaction Pending',
         description: data.requestKeys[0],
-        isReaded: false,
+        isRead: false,
         isCompleted: false,
       });
 
@@ -158,13 +151,13 @@ export const SwapProvider = (props) => {
         autoClose: 5000,
         hideProgressBar: true,
       });
-      notificationContext.storeNotification({
+      storeNotification({
         type: 'error',
         time: getCurrentTime(),
         date: getCurrentDate(),
         title: 'Transaction Error',
         description: 'Insufficient funds - attempt to buy gas failed.',
-        isReaded: false,
+        isRead: false,
         isCompleted: false,
       });
       console.log('error', e);

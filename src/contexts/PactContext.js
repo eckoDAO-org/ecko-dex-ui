@@ -53,7 +53,7 @@ export const PactProvider = (props) => {
 
   useEffect(() => {
     if (!notificationNotCompletedChecked) {
-      const pendingNotification = notificationContext.notificationList.filter((notif) => notif.type === 'info' && notif.isCompleted === false);
+      const pendingNotification = account.notificationList.filter((notif) => notif.type === 'info' && notif.isCompleted === false);
       pendingNotification.map((pendingNotif) => listen(pendingNotif.description));
 
       setNotificationNotCompletedChecked(true);
@@ -254,6 +254,7 @@ export const PactProvider = (props) => {
         accum += `[${pair.split(':').join(' ')}] `;
         return accum;
       }, '');
+      console.log('tokenPairList', tokenPairList);
       let data = await Pact.fetch.local(
         {
           pactCode: `
@@ -351,14 +352,14 @@ export const PactProvider = (props) => {
       setIsCompletedNotification(reqKey);
 
       // store in local storage the success notification for the right modal
-      notificationContext.storeNotification({
+      account.storeNotification({
         type: 'success',
         time: getCurrentTime(),
         date: getCurrentDate(),
         title: 'Transaction Success!',
         description: 'Check it out in the block explorer',
         link: `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
-        isReaded: false,
+        isRead: false,
       });
       // open the toast SUCCESS message
       notificationContext.showNotification({
@@ -378,14 +379,14 @@ export const PactProvider = (props) => {
     } else {
       setIsCompletedNotification(reqKey);
       // store in local storage the error notification for the right modal
-      notificationContext.storeNotification({
+      account.storeNotification({
         type: 'error',
         time: getCurrentTime(),
         date: getCurrentDate(),
         title: 'Transaction Failure!',
         description: 'Check it out in the block explorer',
         link: `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
-        isReaded: false,
+        isRead: false,
       });
       // open the toast FAILURE message
       notificationContext.showNotification({

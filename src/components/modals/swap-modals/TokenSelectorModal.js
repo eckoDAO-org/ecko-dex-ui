@@ -39,7 +39,7 @@ const TokenSelectorModal = ({ show, selectedToken, onTokenClick, onClose, fromTo
                   }}
                 />
                 <ModalContainer
-                  title="select a token"
+                  title="Select Token"
                   onClose={() => {
                     onClose();
                   }}

@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import GradientBorder from '../shared/GradientBorder';
 import Label from '../shared/Label';
-import { GraphCardHeader } from './TVLChart';
-import { humanReadableNUmber } from '../../utils/reduceBalance';
-import { CardContainer } from '../stats/StatsTab';
+import { humanReadableNumber } from '../../utils/reduceBalance';
 import { BarChart, Bar, Tooltip, ResponsiveContainer } from 'recharts';
 import styled from 'styled-components';
+import { FlexContainer } from '../shared/FlexContainer';
 
 export const TimeRangeBar = styled.div`
   display: flex;
@@ -32,6 +30,7 @@ const volumeRanges = {
     name: (_id) => moment(_id).format('DD/MM/YYYY'),
     dateStart: moment().subtract(60, 'days').format('YYYY-MM-DD'),
     title: (payload) => moment(payload._id).format('DD/MM/YYYY'),
+    timeLabel: '24h',
   },
   [WEEKLY_VOLUME_RANGE]: {
     name: (_id) => _id,
@@ -39,6 +38,7 @@ const volumeRanges = {
       .subtract(7 * 40, 'days')
       .format('YYYY-MM-DD'),
     title: (payload) => moment(payload.volumes[0]?.startDay).format('DD/MM/YYYY'),
+    timeLabel: 'weekly',
   },
   [MONTHLY_VOLUME_RANGE]: {
     name: (_id) => _id,
@@ -47,10 +47,11 @@ const volumeRanges = {
       .days(0)
       .format('YYYY-MM-DD'),
     title: (payload) => moment(payload.volumes[0]?.startDay).format('MMM YY'),
+    timeLabel: 'monthly',
   },
 };
 
-const VolumeChart = ({ kdaPrice, width, height, containerStyle }) => {
+const VolumeChart = ({ kdaPrice, width, height }) => {
   const [volume, setVolume] = useState([]);
   const [dailyVolume, setDailyVolume] = useState('');
   const [currentDate, setCurrentDate] = useState(null);
@@ -85,12 +86,11 @@ const VolumeChart = ({ kdaPrice, width, height, containerStyle }) => {
   }, [volumeRange, kdaPrice]);
 
   return (
-    <CardContainer style={containerStyle}>
-      <GradientBorder />
-      <GraphCardHeader>
+    <FlexContainer withGradient className="column align-ce w-100 h-100 background-fill" style={{ padding: 32 }}>
+      <div className="w-100 flex justify-sb">
         <div>
-          <Label fontSize={16}>Volume 24h</Label>
-          <Label fontSize={24}>$ {humanReadableNUmber(Number(dailyVolume))}</Label>
+          <Label fontSize={16}>Volume {volumeRanges[volumeRange].timeLabel}</Label>
+          <Label fontSize={24}>$ {humanReadableNumber(Number(dailyVolume))}</Label>
           <Label>&nbsp;{currentDate || ''}</Label>
         </div>
         <TimeRangeBar>
@@ -104,7 +104,7 @@ const VolumeChart = ({ kdaPrice, width, height, containerStyle }) => {
             M
           </TimeRangeBtn>
         </TimeRangeBar>
-      </GraphCardHeader>
+      </div>
       <div style={{ width: '100%', height }}>
         <ResponsiveContainer>
           <BarChart
@@ -113,12 +113,12 @@ const VolumeChart = ({ kdaPrice, width, height, containerStyle }) => {
             data={volume}
             onMouseMove={({ activePayload }) => {
               if (activePayload) {
-                setDailyVolume((activePayload && activePayload[0]?.payload?.Volume) || '');
+                setDailyVolume((activePayload && activePayload[0]?.payload?.Volume * kdaPrice) || '');
                 setCurrentDate((activePayload && activePayload[0]?.payload?.title) || null);
               }
             }}
             onMouseLeave={() => {
-              setDailyVolume(volume[volume.length - 1]?.Volume * kdaPrice ?? null);
+              setDailyVolume(volume[volume.length - 1]?.Volume * kdaPrice);
               setCurrentDate(null);
             }}
             margin={{
@@ -133,7 +133,7 @@ const VolumeChart = ({ kdaPrice, width, height, containerStyle }) => {
           </BarChart>
         </ResponsiveContainer>
       </div>
-    </CardContainer>
+    </FlexContainer>
   );
 };
 

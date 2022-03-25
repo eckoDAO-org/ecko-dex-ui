@@ -1,29 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
 import styled, { css } from 'styled-components/macro';
+import { useHistory, useLocation } from 'react-router';
 import useWindowSize from '../../hooks/useWindowSize';
 import { useApplicationContext } from '../../contexts';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
-import Wrapper from '../../components/shared/Wrapper';
 import DesktopHeader from './header/DesktopHeader';
 import MobileHeader from './header/MobileHeader';
 import { ReactComponent as Stripes } from '../../assets/images/shared/stripes.svg';
 import GameEditionContainer from '../game-edition-v2/GameEditionContainer';
-import { useHistory } from 'react-router';
-import { ROUTE_GAME_START_ANIMATION, ROUTE_SWAP } from '../../router/routes';
+import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION, ROUTE_INDEX, ROUTE_STATS } from '../../router/routes';
 import browserDetection from '../../utils/browserDetection';
 import gameEditionBackground from '../../assets/images/game-edition/game-edition-background.png';
 import TabletHeader from './header/TabletHeader';
 import { FlexContainer } from '../shared/FlexContainer';
+import theme from '../../styles/theme';
 
-const WrapperContainer = styled(Wrapper)`
+const WrapperContainer = styled.div`
+  flex-direction: column;
+  display: flex;
   height: 100%;
 
   .mainnet-chain-2 {
     font-size: 14px;
     text-align: center;
-    font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
-    color: ${({ theme: { colors } }) => colors.white};
     @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
       padding-top: 20px;
     }
@@ -106,13 +106,18 @@ const StripesContainer = styled.div`
 `;
 
 const Layout = ({ children }) => {
+  const { pathname } = useLocation();
   const history = useHistory();
   const [width, height] = useWindowSize();
   const { gameEditionView, setGameEditionView } = useContext(GameEditionContext);
   const { resolutionConfiguration } = useApplicationContext();
 
   useEffect(() => {
-    gameEditionView ? history.push(ROUTE_GAME_START_ANIMATION) : history.push(ROUTE_SWAP);
+    if (gameEditionView) {
+      history.push(ROUTE_GAME_START_ANIMATION);
+    } else if (pathname === ROUTE_GAME_EDITION_MENU || pathname === ROUTE_GAME_START_ANIMATION || pathname === ROUTE_STATS) {
+      history.push(ROUTE_INDEX);
+    }
   }, [gameEditionView]);
 
   useEffect(() => {
@@ -124,10 +129,9 @@ const Layout = ({ children }) => {
   return (
     <FlexContainer className="w-100 h-100">
       <WrapperContainer>
-        <MobileHeader className="mobile-only" />
-        <TabletHeader className="desktop-none mobile-none" />
-
-        <DesktopHeader className="desktop-only" gameEditionView={gameEditionView} />
+        {width <= theme.mediaQueries.mobilePixel && <MobileHeader />}
+        {width > theme.mediaQueries.mobilePixel && width < theme.mediaQueries.desktopPixel && <TabletHeader />}
+        {width >= theme.mediaQueries.desktopPixel && <DesktopHeader gameEditionView={gameEditionView} />}
 
         {gameEditionView && resolutionConfiguration && width >= resolutionConfiguration.width && height >= resolutionConfiguration.height ? (
           <>

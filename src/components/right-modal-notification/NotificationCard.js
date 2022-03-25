@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import { CloseIcon, NotificationCautionBlueIcon, NotificationErrorIcon, NotificationSuccessIcon, NotificationWarningIcon } from '../../assets';
+import Label from '../shared/Label';
 
 const Container = styled.div`
   display: flex;
@@ -11,10 +12,6 @@ const Container = styled.div`
     isHighlight ? `transparent linear-gradient(90deg, ${typeColor}1A 0%, #80621800 100%) 0% 0% no-repeat padding-box;` : 'none'};
   width: 100%;
   padding: 0px 26px;
-
-  /* 
-  transform: ${({ animation }) => (!animation ? 'translateX(0px)' : 'translateX(500px)')};
-  transition: transform 1s ease-in-out; */
 `;
 
 const NotificationContainer = styled.div`
@@ -62,21 +59,10 @@ const DescriptionColumn = styled.div`
   }
 `;
 
-const DateTimeText = styled.span`
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
-  font-size: 12px;
-  color: grey;
-`;
-const Title = styled.span`
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.syncopate};
-  font-size: 16px;
-`;
-const Description = styled.span`
+const Description = styled(Label)`
   word-wrap: break-word;
   overflow-wrap: anywhere;
   line-height: 18px;
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
-  font-size: 14px;
 `;
 
 const NotificationCard = ({ index, time, date, title, description, type, removeItem, link, isHighlight }) => {
@@ -130,16 +116,17 @@ const NotificationCard = ({ index, time, date, title, description, type, removeI
               link && window.open(link, '_blank', 'noopener,noreferrer');
             }}
           >
-            <DateTimeText>{`${date} - ${time}`}</DateTimeText>
-            <Title>{title}</Title>
-            <Description>{description}</Description>
+            <Label fontSize={12} color="grey">{`${date} - ${time}`}</Label>
+            <Label fontFamily="syncopate" outGameEditionView>
+              {title}
+            </Label>
+            <Description fontSize={14}>{description}</Description>
           </DescriptionColumn>
         </Content>
         <CloseIconColumn>
           <CloseIcon
             style={{ cursor: 'pointer' }}
             onClick={() => {
-              //   setAnimation(true);
               removeItem(index);
             }}
           />

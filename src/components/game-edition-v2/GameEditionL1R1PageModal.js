@@ -3,13 +3,13 @@ import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { useGameEditionContext } from '../../contexts';
 import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
-import menuItems from '../menuItems';
+import { gameEditionRoutes } from '../menuItems';
 import GameEditionLabel from './components/GameEditionLabel';
 import { PixeledArrowDownIcon } from '../../assets';
 import { useHistory, useLocation } from 'react-router-dom';
 
 const SCROLL_OFFSET = 95;
-
+const WIDTH = 274;
 const Content = styled.div`
   display: flex;
   flex-flow: column;
@@ -33,6 +33,7 @@ const ItemsContainer = styled.div`
     margin-left: ${SCROLL_OFFSET}px;
   }
   & > div:last-child {
+    margin-left: 44px;
     margin-right: ${SCROLL_OFFSET}px;
   }
 `;
@@ -69,7 +70,7 @@ const GameEditionL1R1PageModal = ({ direction }) => {
 
   // init index based on the current route when this page is rendered
   useEffect(() => {
-    const routeIndex = menuItems.findIndex((r) => r.route === location.pathname);
+    const routeIndex = gameEditionRoutes.findIndex((r) => r.route === location.pathname);
     if (routeIndex < 0) {
       if (direction === 'left') {
         onSwitch(direction, 0);
@@ -78,20 +79,20 @@ const GameEditionL1R1PageModal = ({ direction }) => {
       }
     } else {
       if (direction === 'right') {
-        if (routeIndex === menuItems.length - 1) {
+        if (routeIndex === gameEditionRoutes.length - 1) {
           setSelectedItemIndex(routeIndex);
-          setTranslateX(routeIndex * 274);
+          setTranslateX(routeIndex * WIDTH);
         } else if (routeIndex >= 0) {
           setSelectedItemIndex(routeIndex + 1);
-          setTranslateX((routeIndex + 1) * 274);
+          setTranslateX((routeIndex + 1) * WIDTH);
         }
       } else {
         if (routeIndex === 0) {
           setSelectedItemIndex(0);
           setTranslateX(0);
-        } else if (routeIndex <= menuItems.length - 1) {
+        } else if (routeIndex <= gameEditionRoutes.length - 1) {
           setSelectedItemIndex(routeIndex - 1);
-          setTranslateX((routeIndex - 1) * 274);
+          setTranslateX((routeIndex - 1) * WIDTH);
         }
       }
     }
@@ -130,20 +131,24 @@ const GameEditionL1R1PageModal = ({ direction }) => {
       });
       closeModal();
 
-      history.push(menuItems[selectedItemIndex].route);
+      history.push(gameEditionRoutes[selectedItemIndex].route);
     }
   }, [seconds]);
 
   // funcation on L1 and R1 buttons
-  const onSwitch = (direction, index, scrollX) => {
-    if (direction === 'right' && selectedItemIndex + 1 < menuItems.length) {
+  const onSwitch = (direction) => {
+    if (direction === 'right' && selectedItemIndex + 1 < gameEditionRoutes.length) {
+      // for last item too long
+      const offset = selectedItemIndex + 1 === gameEditionRoutes.length - 1 ? 20 : 0;
       setSelectedItemIndex((prev) => prev + 1);
-      setTranslateX((prev) => prev + 274);
+      setTranslateX((prev) => prev + WIDTH + offset);
     }
     if (direction === 'left' && selectedItemIndex - 1 >= 0) {
+      // for last item too long
+      const offset = selectedItemIndex - 1 === gameEditionRoutes.length - 2 ? 20 : 0;
       setSelectedItemIndex((prev) => prev - 1);
 
-      setTranslateX((prev) => prev - 274);
+      setTranslateX((prev) => prev - WIDTH - offset);
     }
   };
 
@@ -169,10 +174,10 @@ const GameEditionL1R1PageModal = ({ direction }) => {
         <PixeledArrowDownIcon />
       </IconContainer>
       <ItemsContainer id="switch-items-container" translateX={translateX}>
-        {menuItems.map((item, i) => {
+        {gameEditionRoutes.map((item, i) => {
           const isSelected = selectedItemIndex === item.id;
           return (
-            <Item key={i} selected={isSelected} style={{ minWidth: 274 }}>
+            <Item key={i} selected={isSelected} style={{ minWidth: WIDTH }}>
               <GameEditionLabel fontSize={92} color={isSelected ? 'yellow' : 'white-grey'}>
                 {item.label}
               </GameEditionLabel>

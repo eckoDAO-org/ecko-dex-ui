@@ -73,7 +73,7 @@ const GameEditionMenuContainer = () => {
 
   // check to not render this component when exit from game edition
   return gameEditionView ? (
-    <Container style={{ backgroundImage: `url(${menuBackground})` }}>
+    <Container gameEditionStyle={{ backgroundImage: `url(${menuBackground})` }}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <GameEditionLabel fontSize={52} fontWeight={400} style={{ marginBottom: 10 }}>
           MENU

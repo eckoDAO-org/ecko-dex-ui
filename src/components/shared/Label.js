@@ -19,11 +19,11 @@ const STYText = styled.span`
       color: ${colors.primary};
     `}
   font-size: ${({ fontSize }) => fontSize}px;
-  svg {
+  /* svg {
     path {
       fill: ${({ theme: { colors } }) => colors.white};
     }
-  }
+  } */
 
   &.capitalize {
     text-transform: capitalize;
@@ -62,7 +62,7 @@ const Label = ({
   className,
   children,
   fontFamily = 'basier',
-  fontSize = 16,
+  fontSize = 13,
   labelStyle,
   geFontSize,
   geFontWeight,
@@ -76,6 +76,7 @@ const Label = ({
   onClick,
   onClose,
   outGameEditionView,
+  nullableValue,
 }) => {
   const { gameEditionView } = useGameEditionContext();
   return gameEditionView && !outGameEditionView ? (
@@ -93,7 +94,7 @@ const Label = ({
     </GameEditionLabel>
   ) : (
     <STYText
-      className={className}
+      className={`${fontFamily === 'syncopate' ? 'uppercase' : ''} ${className}`}
       inverted={inverted}
       color={color}
       fontSize={fontSize}
@@ -101,7 +102,7 @@ const Label = ({
       withShade={withShade}
       style={{ fontFamily: commonTheme.fontFamily[fontFamily], ...labelStyle }}
     >
-      {children}
+      {children || nullableValue}
       {info && (
         <Popup
           basic

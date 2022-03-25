@@ -1,16 +1,20 @@
 export { ReactComponent as AboutBigIcon } from './images/header/about-big.svg';
 export { ReactComponent as AboutIcon } from './images/header/about.svg';
+export { ReactComponent as AddIcon } from './images/shared/add.svg';
 export { ReactComponent as ArrowBack } from './images/shared/arrow-back.svg';
 export { ReactComponent as ArrowDown } from './images/shared/arrow-down-white.svg';
 export { ReactComponent as CodeIcon } from './images/header/code.svg';
 export { ReactComponent as CogIcon } from './images/header/cog.svg';
 export { ReactComponent as CopyIcon } from './images/shared/copy.svg';
 export { ReactComponent as CloseGe } from './images/shared/close-ge.svg';
+export { ReactComponent as CoinsIcon } from './images/shared/coins.svg';
+export { ReactComponent as CoinKaddexIcon } from './images/shared/coin-kaddex.svg';
 export { ReactComponent as CloseIcon } from './images/shared/cross.svg';
 export { ReactComponent as DiscordIcon } from './images/header/discord.svg';
 export { ReactComponent as DropdownGe } from './images/shared/dropdown-ge.svg';
 export { ReactComponent as ErrorIcon } from './images/shared/error-circle.svg';
 export { ReactComponent as ExplorerIcon } from './images/shared/ic_explorer.svg';
+export { ReactComponent as GasIcon } from './images/shared/gas.svg';
 export { ReactComponent as HamburgerIcon } from './images/header/hamburger.svg';
 export { ReactComponent as HistoryIcon } from './images/shared/history.svg';
 export { ReactComponent as KaddexLightModeLogo } from './images/header/kaddex_logo_light_mode.svg';
@@ -18,6 +22,7 @@ export { ReactComponent as KaddexLetterLogo } from './images/header/Kaddex_A_log
 export { ReactComponent as KaddexLogo } from './images/header/kaddex_logo.svg';
 export { ReactComponent as KaddexWhite } from './images/header/KADDEX-white.svg';
 export { ReactComponent as KDALogo } from './images/header/kadena-logo.svg';
+export { ReactComponent as KaddexOutlineIcon } from './images/shared/kaddex-outline.svg';
 export { ReactComponent as LockLogo } from './images/shared/awesome-lock.svg';
 export { ReactComponent as Logo } from './images/shared/Logo.svg';
 export { ReactComponent as MenuGEIcon } from './images/shared/menu-ge.svg';
@@ -28,6 +33,7 @@ export { ReactComponent as NotificationSuccessIcon } from './images/shared/ic_su
 export { ReactComponent as NotificationWarningIcon } from './images/shared/ic_caution_orange.svg';
 export { ReactComponent as OnOffIcon } from './images/shared/on-off.svg';
 export { ReactComponent as PowerIcon } from './images/header/power.svg';
+export { ReactComponent as RemoveIcon } from './images/shared/remove.svg';
 export { ReactComponent as SearchGEIcon } from './images/shared/search-ge.svg';
 export { ReactComponent as SuccessfullIcon } from './images/shared/successful-circle.svg';
 export { ReactComponent as SwapArrowsIcon } from './images/shared/invert.svg';

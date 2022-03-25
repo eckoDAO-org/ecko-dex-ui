@@ -16,7 +16,7 @@ const ResultContainer = styled.div`
     flex-flow: column;
   }
   & > *:not(:last-child) {
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
 `;
 
