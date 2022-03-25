@@ -222,7 +222,7 @@ export const SuccessViewContainerGE = ({ leftItem, rightItem, infoItems, hideIco
             {title}
           </GameEditionLabel>
         )}
-        <div className="flex justify-sb relative" style={{ paddingLeft: 16, paddingRight: 16 }}>
+        <div className="flex justify-sb relative">
           <PixeledInfoContainerWhite>{leftItem}</PixeledInfoContainerWhite>
           {!hideIcon && (
             <PixeledCircleArrowIcon
@@ -261,7 +261,6 @@ const Content = styled.div`
   ${({ gameEditionView }) => {
     if (gameEditionView) {
       return css`
-        padding: 16px;
         height: 100%;
       `;
     }

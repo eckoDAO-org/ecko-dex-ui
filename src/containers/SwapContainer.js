@@ -37,7 +37,7 @@ import { FlexContainer } from '../components/shared/FlexContainer';
 import GameEditionModeButton from '../components/layout/header/GameEditionModeButton';
 import { HistoryIcon } from '../assets';
 import { ROUTE_MY_SWAP, ROUTE_SWAP } from '../router/routes';
-import { SwapSuccessView } from '../components/modals/swap-modals/SwapSuccesTxView';
+import { SwapSuccessView, SwapSuccessViewGE } from '../components/modals/swap-modals/SwapSuccesTxView';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -496,7 +496,9 @@ const SwapContainer = () => {
                 setShowTxModal(false);
                 closeModal();
               }}
-            />
+            >
+              <SwapSuccessViewGE loading={loading} sendTransaction={sendTransaction} />
+            </TxView>
           ),
         });
       } else {

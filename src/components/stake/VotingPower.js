@@ -27,7 +27,7 @@ const VotingPower = () => {
           multiplayer (m)
         </Label>
 
-        <InfoPopup>
+        <InfoPopup centerIcon>
           The Voting Power Multiplier is a time-dependent function of your KDX staking amount and meaningful contributions (Vibedust). In 60 days the
           multiplier value goes up to 1 and can reach 2.5 over the course of 4 years.
         </InfoPopup>
@@ -37,7 +37,14 @@ const VotingPower = () => {
         <ProgressBar
           maxValue={2.5}
           currentValue={1.1}
-          values={[{ value: 0, label: 'START' }, { value: 0.5, label: '30d' }, { value: 1, label: '60d' }, 1.5, 2, { value: 2.5, label: '4Y' }]}
+          values={[
+            { value: 0, label: 'START' },
+            { value: 0.5, label: '7d' },
+            { value: 1, label: '2m' },
+            { value: 1.5, label: '8.25m' },
+            { value: 2, label: '22m' },
+            { value: 2.5, label: '4Y' },
+          ]}
         />
       </div>
     </CommonWrapper>

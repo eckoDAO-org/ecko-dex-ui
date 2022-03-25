@@ -12,12 +12,6 @@ const Item = styled.div`
   background: transparent;
   z-index: 1;
 
-  svg {
-    path {
-      fill: ${({ theme: { colors } }) => colors.white};
-    }
-  }
-
   .underline {
     width: ${({ $isHover }) => ($isHover ? '100%' : 0)};
     transition: width 0.3s;
@@ -80,6 +74,9 @@ const HeaderItem = ({
             history.push(item.route?.concat(history?.location?.search));
           } else {
             history.push(item.route);
+          }
+          if (onClick) {
+            onClick();
           }
         } else if (item.link) {
           window.open(item.link, '_self');

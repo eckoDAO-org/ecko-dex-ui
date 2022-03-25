@@ -44,7 +44,7 @@ const RightContainerHeader = styled.div`
     transition: opacity 1s linear;
   }
 
-  svg:not(.kaddex-price) {
+  svg.menu-icon {
     path {
       fill: ${({ theme: { colors } }) => colors.white};
     }
@@ -165,7 +165,7 @@ const RightHeaderItems = () => {
       />
 
       <PopupContentList
-        icon={<ThreeDotsIcon />}
+        icon={<ThreeDotsIcon className="menu-icon" />}
         items={headerLinks}
         className="w-fit-content"
         viewOtherComponents
