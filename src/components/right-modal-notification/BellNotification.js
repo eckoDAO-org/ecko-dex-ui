@@ -9,7 +9,7 @@ const Container = styled.div`
     width: 24px;
     height: 24px;
     path {
-      fill: ${({ color }) => color};
+      fill: ${({ theme: { colors } }) => colors.white};
     }
   }
 `;

@@ -3,7 +3,7 @@ import { FlexContainer } from '../shared/FlexContainer';
 import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
 
-const CommonWrapper = ({ gap, title, popup, children, containerStyle, cardStyle }) => {
+const CommonWrapper = ({ centerIcon, gap, title, popup, children, containerStyle, cardStyle }) => {
   return (
     <div className="flex column w-100" style={containerStyle}>
       <div className="flex align-ce">
@@ -14,7 +14,7 @@ const CommonWrapper = ({ gap, title, popup, children, containerStyle, cardStyle 
         ) : (
           title
         )}
-        {popup && <InfoPopup>{popup}</InfoPopup>}
+        {popup && <InfoPopup centerIcon>{popup}</InfoPopup>}
       </div>
 
       <FlexContainer gap={gap} withGradient className="h-100  column justify-sb background-fill" style={{ marginTop: 24, ...cardStyle }}>

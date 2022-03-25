@@ -70,6 +70,9 @@ const RightContainer = styled.div`
   svg {
     height: 24px;
     height: 24px;
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
   }
 `;
 
@@ -129,7 +132,7 @@ const AccountModal = ({ pathname }) => {
             Balance
           </Label>
           <Label fontSize={14} geFontSize={24}>
-            {account.balance}
+            {account.balance} KDA
           </Label>
         </div>
       </Content>

@@ -10,7 +10,7 @@ export const InfoContainer = styled.div`
   display: flex;
   align-items: center;
   width: ${GE_DESKTOP_CONFIGURATION.DISPLAY_WIDTH}px;
-  padding: 0 16px;
+
   & > div:not(:last-child) {
     margin-right: 16px;
   }

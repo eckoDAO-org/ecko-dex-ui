@@ -14,11 +14,11 @@ import CopyPopup from '../../shared/CopyPopup';
 import CustomDivider from '../../shared/CustomDivider';
 import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
 
-export const SwapSuccessViewGE = ({ swap }) => {
+export const SwapSuccessViewGE = () => {
   const { account } = useContext(AccountContext);
 
   const pact = useContext(PactContext);
-
+  const swap = useSwapContext();
   return (
     <SuccessViewContainerGE
       containerStyle={{ marginTop: 16 }}

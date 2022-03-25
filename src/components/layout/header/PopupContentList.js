@@ -97,6 +97,7 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
                 key={index}
                 disableUnderline
                 item={item}
+                className={item?.className}
                 onClick={() => {
                   setShowPopup(false);
                 }}
@@ -139,7 +140,7 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
 
             {account.account && withLogout && (
               <FlexContainer className="align-ce pointer" onClick={() => logout()}>
-                <PowerIcon /> <Label>Logout</Label>
+                <PowerIcon className="menu-icon" /> <Label>Logout</Label>
               </FlexContainer>
             )}
           </ListContainer>

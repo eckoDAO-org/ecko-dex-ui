@@ -8,7 +8,7 @@ const SwapResultsGEv2 = ({ priceImpact, fromValues, toValues }) => {
   const pact = useContext(PactContext);
   const liquidity = useContext(LiquidityContext);
   return (
-    <InfoContainer style={{ marginTop: 6 }}>
+    <InfoContainer style={{ marginTop: 6, paddingLeft: 16, paddingRight: 16 }}>
       <PixeledBlueContainer label={`${fromValues.coin}/${toValues.coin}`} value={`${reduceBalance(pact.ratio * (1 + priceImpact))}`} />
       <PixeledBlueContainer
         label="price impact"
