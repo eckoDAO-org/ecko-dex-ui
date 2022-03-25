@@ -27,7 +27,6 @@ const PopupContainer = styled(FlexContainer)`
   display: flex;
   align-items: center;
   flex-direction: column;
-  width: 100%;
   border-radius: 10px;
   background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
   position: absolute;
@@ -91,7 +90,7 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
         {icon}
       </div>
       {showPopup && (
-        <PopupContainer outOfGameEdition withGradient className={className} style={{ width: 'unset' }}>
+        <PopupContainer outOfGameEdition withGradient className={className} style={{ width: 'unset', minWidth: 150 }}>
           <ListContainer style={PopupContentListStyle}>
             {items.map((item, index) => (
               <HeaderItem

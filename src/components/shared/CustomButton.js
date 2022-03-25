@@ -108,7 +108,7 @@ const CustomButton = ({
           onClick();
         }
       }}
-      className={type === 'gradient' ? 'gradient-button' : ''}
+      className={type === 'gradient' ? 'gradient-button relative' : ''}
       fluid={fluid}
       $gameEditionView={$gameEditionView}
       disabled={disabled}

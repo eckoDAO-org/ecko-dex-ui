@@ -76,18 +76,18 @@ const renderColumns = () => {
       name: 'My Pool Tokens',
       width: 160,
 
-      render: ({ item }) => pairUnit(extractDecimal(item.balance)),
+      render: ({ item }) => pairUnit(extractDecimal(item.balance), 6),
     },
     {
       name: 'Pooled Token 1',
       width: 160,
-      render: ({ item }) => `${pairUnit(extractDecimal(item.pooledAmount[0]))} ${item.token0}`,
+      render: ({ item }) => `${pairUnit(extractDecimal(item.pooledAmount[0]), 6)} ${item.token0}`,
     },
 
     {
       name: 'Pooled Token 2',
       width: 160,
-      render: ({ item }) => `${pairUnit(extractDecimal(item.pooledAmount[1]))} ${item.token1}`,
+      render: ({ item }) => `${pairUnit(extractDecimal(item.pooledAmount[1]), 6)} ${item.token1}`,
     },
 
     {

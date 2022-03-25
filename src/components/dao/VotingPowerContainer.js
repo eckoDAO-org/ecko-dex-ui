@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
-import { FlexContainer } from '../shared/FlexContainer';
+import { VotingPowerFormulaIcon } from '../../assets';
+import { EquationContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
 import ProgressBar from '../shared/ProgressBar';
 
@@ -17,9 +18,9 @@ const VotingPowerContainer = ({ accountData }) => {
         <Label fontSize={16} fontFamily="syncopate">
           voting power (V)
         </Label>
-        <Label fontSize={13} fontFamily="syncopate">
-          V = &radic;<span style={{ textDecoration: 'overline' }}>&nbsp;P * M&nbsp;</span>
-        </Label>
+        <EquationContainer className="flex align-ce">
+          <VotingPowerFormulaIcon width={88} />
+        </EquationContainer>
         <Label fontSize={38} className="gradient" fontFamily="syncopate">
           {accountData.vp ? accountData.vp : '-'}
         </Label>
@@ -37,7 +38,7 @@ const VotingPowerContainer = ({ accountData }) => {
         <Label fontSize={13} info={multiplierInfo} labelStyle={{ marginBottom: 10 }}>
           Multiplier (M)
         </Label>
-        <ProgressBar containerStyle={{ marginBottom: 24 }} currentValue={accountData.multiplier} maxValue={2.5} bottomValues={[0, 1, 2.5]} />
+        <ProgressBar containerStyle={{ marginBottom: 24 }} currentValue={accountData.multiplier} maxValue={2.5} values={[0, 0.5, 1, 1.5, 2, 2.5]} />
       </FlexContainer>
     </FlexContainer>
   );

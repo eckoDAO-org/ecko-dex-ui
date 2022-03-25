@@ -16,7 +16,7 @@ const Position = ({ buttonLabel, amount, stakeKdxAmout, setStakeKdxAmount }) => 
   return (
     <CommonWrapper
       title="position (p)"
-      popup="Our DAO aggregator smart contract will allow three different avenues for $KDX holders to accrue a higher position. These three avenues are - First sale investor that choose to migrate to vaulting/lockup program, second sale investors during the vesting period, and all users that stake KDX from platform launch."
+      popup="“Position” accrues your KDX holdings from both the Vaulting and the Staking Programs. Please note that all Second Sale participants are automatically staking their KDX while it is being vesting."
     >
       <div>
         <Label>Amount</Label>
