@@ -234,6 +234,9 @@ export default createGlobalStyle`
     .x-auto {
       overflow-x: auto;
     }
+    .y-auto {
+      overflow-y: auto;
+    }
 
     .hidden {
       overflow: hidden;

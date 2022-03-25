@@ -7,7 +7,7 @@ import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
 import PentalityRewardsInfo from './PentalityRewardsInfo';
 
-const Rewards = ({ amount, stakedTime, rewardsPenality, disabled }) => {
+const Rewards = ({ amount, stakedTime, rewardsPenalty, disabled }) => {
   return (
     <CommonWrapper gap={16} title="rewards">
       <div>
@@ -22,14 +22,14 @@ const Rewards = ({ amount, stakedTime, rewardsPenality, disabled }) => {
       </div>
       <div>
         <div className="flex align-ce">
-          <Label>Rewards Penality</Label>
-          <InfoPopup type="modal" title="penality rewards">
+          <Label>Rewards Penalty</Label>
+          <InfoPopup type="modal" title="penalty rewards">
             <PentalityRewardsInfo />
           </InfoPopup>
         </div>
 
         <Label fontSize={24} color={commonColors.green}>
-          {rewardsPenality} %
+          {rewardsPenalty} %
         </Label>
       </div>
       <CustomButton type="gradient" disabled={disabled} buttonStyle={{ marginTop: 4 }}>

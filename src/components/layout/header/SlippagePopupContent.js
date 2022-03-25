@@ -35,7 +35,6 @@ const PopupContainer = styled(FlexContainer)`
   display: flex;
   align-items: center;
   flex-direction: column;
-  width: 100%;
   border-radius: 10px;
   position: absolute;
 

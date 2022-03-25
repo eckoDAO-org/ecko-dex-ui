@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { Checkbox } from 'semantic-ui-react';
 import styled from 'styled-components/macro';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { ApplicationContext } from '../../contexts/ApplicationContext';
 import Label from './Label';
 
@@ -46,7 +45,6 @@ const ToggleContainer = styled.div`
 `;
 
 const LightModeToggle = ({ animation, style }) => {
-  const game = useContext(GameEditionContext);
   const { themeMode, themeToggler } = useContext(ApplicationContext);
 
   const getModeLabel = () => {
@@ -54,7 +52,7 @@ const LightModeToggle = ({ animation, style }) => {
   };
   return (
     <ToggleContainer animation={animation} style={style}>
-      <Label className="capitalize" labelStyle={{ marginRight: 8 }} gameEditionView={game.gameEditionView}>{`${getModeLabel()}`}</Label>
+      <Label className="capitalize" labelStyle={{ marginRight: 8 }} outGameEditionView>{`${getModeLabel()}`}</Label>
       <Checkbox
         toggle
         onChange={() => {
