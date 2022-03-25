@@ -41,6 +41,7 @@ export { ReactComponent as SwapIcon } from './images/shared/swap-icon.svg';
 export { ReactComponent as TelegramIcon } from './images/header/telegram.svg';
 export { ReactComponent as ThreeDotsIcon } from './images/header/three_dots.svg';
 export { ReactComponent as TorusLogo } from './images/shared/torus-logo.svg';
+export { ReactComponent as VotingPowerFormulaIcon } from './images/shared/voting-power-formula.svg';
 export { ReactComponent as ZelcoreLogo } from './images/shared/zelcore-logo.svg';
 export { ReactComponent as XWalletLogo } from './images/header/x-wallet-logo.svg';
 

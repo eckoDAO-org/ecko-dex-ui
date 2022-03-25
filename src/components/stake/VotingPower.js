@@ -1,10 +1,10 @@
 import React from 'react';
-import { Equation } from 'react-equation';
 import { EquationContainer } from '../shared/FlexContainer';
 import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
 import ProgressBar from '../shared/ProgressBar';
 import CommonWrapper from './CommonWrapper';
+import { VotingPowerFormulaIcon } from '../../assets';
 
 const VotingPower = () => {
   return (
@@ -17,7 +17,8 @@ const VotingPower = () => {
           <Label fontFamily="syncopate" fontSize={24} labelStyle={{ marginRight: 16 }}>
             Voting Power (V)
           </Label>
-          <Equation className="equation" value="V = root(2, P*M)" />
+          {/* <Equation className="equation" value="V = root(2, P*M)" /> */}
+          <VotingPowerFormulaIcon width={88} />
         </EquationContainer>
       }
     >

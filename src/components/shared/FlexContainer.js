@@ -205,7 +205,8 @@ export const CryptoContainer = styled.div`
 
 export const EquationContainer = styled(FlexContainer)`
   svg {
-    path {
+    path,
+    rect {
       fill: ${({ theme: { colors } }) => colors.white};
     }
   }
