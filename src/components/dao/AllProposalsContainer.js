@@ -19,7 +19,7 @@ const AllProposalsContainer = ({ accountData }) => {
 
   const fetchData = async () => {
     const readAllProposalsRes = await readAllProposals();
-    const orderedProposals = readAllProposalsRes.sort((x, y) => moment(y['start-date']?.time) - moment(x['start-date']?.time));
+    const orderedProposals = readAllProposalsRes?.sort((x, y) => moment(y['start-date']?.time) - moment(x['start-date']?.time));
     setAllProposal(orderedProposals);
     setLoading(false);
   };
