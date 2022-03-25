@@ -11,7 +11,7 @@ const DaoContainer = () => {
   const { proposal_id } = useParams();
   const { account } = useAccountContext();
 
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   const [accountData, setAccountData] = useState({});
 
   const fetchData = async () => {

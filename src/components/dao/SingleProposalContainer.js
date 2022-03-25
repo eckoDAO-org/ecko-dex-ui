@@ -44,7 +44,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
   useEffect(() => {
     setDaoLoading(true);
     fetchData();
-  }, []);
+  }, [account]);
 
   const pollingNotif = (reqKey) => {
     toastId.current = showNotification({
