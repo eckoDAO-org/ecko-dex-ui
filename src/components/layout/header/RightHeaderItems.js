@@ -65,11 +65,11 @@ const RightHeaderItems = () => {
   return (
     <RightContainerHeader>
       {/* TODO: make kdx price dynamic after mint */}
-      {width >= theme.mediaQueries.deskstopPixel && (
+      {width >= theme.mediaQueries.desktopPixel && (
         <div className="flex align-ce">
           <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 8 }} />
           <Label outGameEditionView fontSize={13} className="mainnet-chain-2">
-            $0.16
+            $ 0.16
           </Label>
         </div>
       )}

@@ -99,7 +99,7 @@ const StripesContainer = styled.div`
   bottom: ${browserDetection() === 'SAFARI' ? '4px' : '0px'};
   left: 0;
   line-height: 0;
-  z-index: 10;
+  z-index: -1;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
     display: none;
   }

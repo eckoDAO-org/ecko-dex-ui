@@ -19,8 +19,8 @@ export const gasUnit = (decimal) => {
   return decimal.toFixed(12);
 };
 
-export const pairUnit = (decimal) => {
-  return Number(decimal).toFixed(14);
+export const pairUnit = (decimal, toFixed = 14) => {
+  return Number(decimal).toFixed(toFixed);
 };
 
 export const extractDecimal = (num) => {

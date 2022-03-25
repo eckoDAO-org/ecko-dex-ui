@@ -27,12 +27,11 @@ const PercetageIndicator = styled(FlexContainer)`
     margin-bottom: 6px;
   }
   span {
-    font-family: ${({ theme: { fontFamily } }) => fontFamily.basier} !important;
     font-size: 13px;
   }
 `;
 
-const ProgressBar = ({ currentValue, maxValue, topLabelLeft, bottomValues, withBottomLabel, darkBar }) => {
+const ProgressBar = ({ currentValue, maxValue, topLabelLeft, values, withBottomLabel, darkBar }) => {
   const getPercentage = (current, max) => {
     if (current <= maxValue) return (100 * current) / max;
     else return 100;
@@ -49,18 +48,29 @@ const ProgressBar = ({ currentValue, maxValue, topLabelLeft, bottomValues, withB
       <STYMaxSupplyContainer>
         <STYMaxSupply darkBar={darkBar} width={getPercentage(currentValue, maxValue)} />
 
-        {bottomValues && (
+        {values && (
           <FlexContainer className="align-ce w-100">
-            {bottomValues?.map((v, i) => {
-              const width = v.toString().length * 8;
+            {values?.map((v, i) => {
+              const width = (typeof v === 'number' ? v : v.value).toString().length * 8;
+              let left = 0;
+              if (i === 0) {
+                left = '0px';
+              } else {
+                left = `calc(${getPercentage(typeof v === 'number' ? v : v.value, maxValue)}% - ${width / 2}px)`;
+              }
               return (
                 <PercetageIndicator
-                  id={`value-${v}`}
                   key={i}
-                  style={{ position: 'absolute', left: `calc(${getPercentage(v, maxValue)}% - ${width / 2}px)`, top: -6 }}
+                  style={{
+                    alignItems: i === 0 && 'flex-start',
+                    position: 'absolute',
+                    left,
+                    top: -6,
+                  }}
                 >
                   <Indicator />
-                  <Label>{v.toString()}</Label>
+                  <Label>{typeof v === 'number' ? v.toString() : v.value.toString()}</Label>
+                  {v?.label && <Label labelStyle={{ fontWeight: 'bold' }}>{v.label}</Label>}
                 </PercetageIndicator>
               );
             })}

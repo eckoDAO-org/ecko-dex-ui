@@ -19,7 +19,7 @@ const StakeContainer = () => {
   const [stakeKdxAmout, setStakeKdxAmount] = useState(0);
   return (
     <FlexContainer
-      className="column w-100"
+      className="column w-100 y-auto"
       desktopClassName="h-100"
       desktopStyle={{ padding: `50px ${theme().layout.desktopPadding}px` }}
       tabletStyle={{ paddingBottom: 40 }}
@@ -58,7 +58,7 @@ const StakeContainer = () => {
           setStakeKdxAmount={setStakeKdxAmount}
           buttonLabel={pathname === ROUTE_STAKE ? 'stake' : 'unstake'}
         />
-        <Rewards amount={231.3213} rewardsPenality={2} stakedTime={32} disabled={pathname === ROUTE_UNSTAKE} />
+        <Rewards amount={231.3213} rewardsPenalty={2} stakedTime={32} disabled={pathname === ROUTE_UNSTAKE} />
         <Analytics apr={32} volume={321232.231321} stakedShare={5.16} totalStaked={35.16} />
       </FlexContainer>
 
