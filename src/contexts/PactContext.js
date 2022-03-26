@@ -341,6 +341,7 @@ export const PactProvider = (props) => {
       // setting reqKey for calling History Transaction
       // setReqKeysLocalStorage(reqKey);
       setIsCompletedNotification(reqKey);
+
       // store in local storage the success notification for the right modal
       account.storeNotification({
         type: 'success',
