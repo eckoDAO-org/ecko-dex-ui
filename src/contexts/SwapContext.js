@@ -1,21 +1,13 @@
 import React, { useState, createContext } from 'react';
 import Pact from 'pact-lang-api';
+import moment from 'moment';
 import tokenData from '../constants/cryptoCurrencies';
 import pwPrompt from '../components/alerts/pwPrompt';
 import { reduceBalance } from '../utils/reduceBalance';
 import { decryptKey } from '../utils/keyUtils';
 import { STATUSES } from './NotificationContext';
 import { useKaddexWalletContext, useWalletContext, useAccountContext, usePactContext, useNotificationContext } from '.';
-import {
-  chainId,
-  creationTime,
-  GAS_PRICE,
-  network,
-  NETWORKID,
-  ENABLE_GAS_STATION,
-  getCurrentDate,
-  getCurrentTime,
-} from '../constants/contextConstants';
+import { chainId, creationTime, GAS_PRICE, network, NETWORKID, ENABLE_GAS_STATION } from '../constants/contextConstants';
 import { pactFetchLocal } from '../api/pact';
 
 export const SwapContext = createContext();
@@ -132,8 +124,8 @@ export const SwapProvider = (props) => {
       pact.pollingNotif(data.requestKeys[0]);
       storeNotification({
         type: 'info',
-        time: getCurrentTime(),
-        date: getCurrentDate(),
+        date: moment().format('DD/MM/YYYY - HH:mm:ss'),
+
         title: 'Transaction Pending',
         description: data.requestKeys[0],
         isRead: false,
@@ -153,8 +145,8 @@ export const SwapProvider = (props) => {
       });
       storeNotification({
         type: 'error',
-        time: getCurrentTime(),
-        date: getCurrentDate(),
+        date: moment().format('DD/MM/YYYY - HH:mm:ss'),
+
         title: 'Transaction Error',
         description: 'Insufficient funds - attempt to buy gas failed.',
         isRead: false,

@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useEffect, useState } from 'react';
+import moment from 'moment';
 import Pact from 'pact-lang-api';
 import swal from '@sweetalert/with-react';
 import { getCorrectBalance } from '../utils/reduceBalance';
-import { chainId, creationTime, GAS_PRICE, getCurrentDate, getCurrentTime, network } from '../constants/contextConstants';
+import { chainId, creationTime, GAS_PRICE, network } from '../constants/contextConstants';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { useGameEditionContext } from '.';
 
@@ -43,8 +44,7 @@ export const AccountProvider = (props) => {
     if (typeof localRes === 'string') {
       return storeNotification({
         type: 'error',
-        time: getCurrentTime(),
-        date: getCurrentDate(),
+        date: moment().format('DD/MM/YYYY - HH:mm:ss'),
         title: 'Transaction Error',
         description: localRes,
         isRead: false,
@@ -125,25 +125,18 @@ export const AccountProvider = (props) => {
   }, [notificationList]);
 
   const storeNotification = (notification) => {
-    const notificationListByStorage = JSON.parse(localStorage.getItem('Notification'));
-    if (!notificationListByStorage) {
-      //first saving notification in localstorage
-      localStorage.setItem(`Notification`, JSON.stringify([notification]));
-      setNotificationList(notification);
-    } else {
-      notificationListByStorage.push(notification);
-      localStorage.setItem(`Notification`, JSON.stringify(notificationListByStorage));
-      setNotificationList(notificationListByStorage);
-    }
+    const notifications = [...notificationList];
+    notifications.unshift(notification);
+    setNotificationList(notifications);
   };
 
   const removeNotification = (indexToRemove) => {
     // remember that notification list i view reversed
-    const notifWithoutRemoved = [...notificationList].reverse().filter((notif, index) => index !== indexToRemove);
+    const notifWithoutRemoved = [...notificationList].filter((notif, index) => index !== indexToRemove);
     setNotificationList(notifWithoutRemoved);
   };
 
-  const removeAllNotifications = (list) => {
+  const removeAllNotifications = () => {
     setNotificationList([]);
   };
 

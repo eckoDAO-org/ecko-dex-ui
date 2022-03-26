@@ -4,18 +4,9 @@ import Pact from 'pact-lang-api';
 import pairTokens from '../constants/pairs.json';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import moment from 'moment';
 
-import {
-  chainId,
-  creationTime,
-  FEE,
-  GAS_PRICE,
-  getCurrentDate,
-  getCurrentTime,
-  network,
-  NETWORK_TYPE,
-  NETWORKID,
-} from '../constants/contextConstants';
+import { chainId, creationTime, FEE, GAS_PRICE, network, NETWORK_TYPE, NETWORKID } from '../constants/contextConstants';
 import { extractDecimal } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
 import { AccountContext } from './AccountContext';
@@ -350,12 +341,11 @@ export const PactProvider = (props) => {
       // setting reqKey for calling History Transaction
       // setReqKeysLocalStorage(reqKey);
       setIsCompletedNotification(reqKey);
-
       // store in local storage the success notification for the right modal
       account.storeNotification({
         type: 'success',
-        time: getCurrentTime(),
-        date: getCurrentDate(),
+        date: moment().format('DD/MM/YYYY - HH:mm:ss'),
+
         title: 'Transaction Success!',
         description: 'Check it out in the block explorer',
         link: `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
@@ -381,8 +371,8 @@ export const PactProvider = (props) => {
       // store in local storage the error notification for the right modal
       account.storeNotification({
         type: 'error',
-        time: getCurrentTime(),
-        date: getCurrentDate(),
+        date: moment().format('DD/MM/YYYY - HH:mm:ss'),
+
         title: 'Transaction Failure!',
         description: 'Check it out in the block explorer',
         link: `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
