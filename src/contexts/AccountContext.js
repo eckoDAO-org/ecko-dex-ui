@@ -9,13 +9,13 @@ import useLocalStorage from '../hooks/useLocalStorage';
 import { useGameEditionContext } from '.';
 
 export const AccountContext = createContext();
-
+const getStoredNotification = JSON.parse(localStorage.getItem('Notification'));
 export const AccountProvider = (props) => {
   const [sendRes, setSendRes] = useState(null);
   const [localRes, setLocalRes] = useState(null);
   const { gameEditionView } = useGameEditionContext();
 
-  const [notificationList, setNotificationList] = useLocalStorage('Notification', []);
+  const [notificationList, setNotificationList] = useState(getStoredNotification || []);
 
   const [account, setAccount, removeAccount] = useLocalStorage('acct', { account: null, guard: null, balance: 0 });
   const [privKey, setPrivKey, removePrivKey] = useLocalStorage('pk', '');
@@ -58,7 +58,6 @@ export const AccountProvider = (props) => {
   };
 
   const setVerifiedAccount = async (accountName, onConnectionSuccess) => {
-    /* console.log("network", network); */
     try {
       let data = await Pact.fetch.local(
         {
@@ -124,10 +123,21 @@ export const AccountProvider = (props) => {
     localStorage.setItem(`Notification`, JSON.stringify(notificationList));
   }, [notificationList]);
 
+  useEffect(() => {
+    if (!getStoredNotification) localStorage.setItem(`Notification`, JSON.stringify([]));
+  }, []);
+
   const storeNotification = (notification) => {
-    const notifications = [...notificationList];
-    notifications.unshift(notification);
-    setNotificationList(notifications);
+    const notificationListByStorage = JSON.parse(localStorage.getItem('Notification'));
+    if (!notificationListByStorage) {
+      //first saving notification in localstorage
+      localStorage.setItem(`Notification`, JSON.stringify([notification]));
+      setNotificationList(notification);
+    } else {
+      notificationListByStorage.unshift(notification);
+      localStorage.setItem(`Notification`, JSON.stringify(notificationListByStorage));
+      setNotificationList(notificationListByStorage);
+    }
   };
 
   const removeNotification = (indexToRemove) => {
@@ -136,7 +146,7 @@ export const AccountProvider = (props) => {
     setNotificationList(notifWithoutRemoved);
   };
 
-  const removeAllNotifications = () => {
+  const removeAllNotifications = (list) => {
     setNotificationList([]);
   };
 

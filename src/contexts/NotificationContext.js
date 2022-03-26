@@ -56,7 +56,6 @@ export const NotificationProvider = ({ children }) => {
       icon,
     });
   };
-
   return (
     <NotificationContext.Provider
       value={{
