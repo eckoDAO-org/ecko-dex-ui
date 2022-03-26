@@ -30,9 +30,10 @@ const NotificationContainer = styled.div`
 const CloseIconContainer = styled.div`
   display: flex;
   height: 100%;
+  justify-content: flex-end;
   align-self: flex-start;
-  height: 20px;
-  width: 20px;
+  height: 30px;
+  width: 30px;
   svg {
     width: 7px;
     height: 7px;
