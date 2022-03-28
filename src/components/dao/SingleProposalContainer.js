@@ -26,7 +26,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
   const toastId = React.useRef(null);
 
   const history = useHistory();
-  const [daoLoading, setDaoLoading] = useState(false);
+  const [daoSingleProposalLoading, setDaoSingleProposalLoading] = useState(false);
   const [singleProposalData, setSingleProposalData] = useState({});
   const [accountVoted, setAccountVoted] = useState({});
 
@@ -37,11 +37,11 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
     const checkAccountHasVoted = await hasAccountVoted(account.account, proposal_id);
     setAccountVoted(checkAccountHasVoted);
 
-    setDaoLoading(false);
+    setDaoSingleProposalLoading(false);
   };
 
   useEffect(() => {
-    setDaoLoading(true);
+    setDaoSingleProposalLoading(true);
     fetchData();
   }, [account]);
 
@@ -80,7 +80,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
           },
           autoClose: 10000,
         });
-        setDaoLoading(false);
+        setDaoSingleProposalLoading(false);
       } else {
         toast.dismiss(toastId.current);
         showNotification({
@@ -89,7 +89,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
           type: STATUSES.ERROR,
           autoClose: 5000,
         });
-        setDaoLoading(false);
+        setDaoSingleProposalLoading(false);
       }
     } else {
       showNotification({
@@ -123,7 +123,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
     </FlexContainer>
   );
 
-  return daoLoading ? (
+  return daoSingleProposalLoading ? (
     <AppLoader containerStyle={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} />
   ) : (
     <>
@@ -139,7 +139,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
         />
         back to proposals
       </Label>
-      <FlexContainer className="row" gap={16} mobileClassName="column">
+      <FlexContainer className="row" gap={16} mobileClassName="column-reverse" mobileStyle={{ paddingBottom: 16 }}>
         <FlexContainer className="column" withGradient style={{ height: 'min-content' }} desktopStyle={{ flex: 1, maxHeight: 550 }}>
           <PartialScrollableScrollSection id="proposals-list" className="scrollbar-none" style={{ width: '100%' }}>
             <FlexContainer className="column" gap={16}>

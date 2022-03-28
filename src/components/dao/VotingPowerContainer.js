@@ -13,7 +13,7 @@ const multiplierInfo = `The Voting Power Multiplier is a time-dependent function
 
 const VotingPowerContainer = ({ accountData }) => {
   return (
-    <FlexContainer className="column">
+    <FlexContainer className="column" mobileStyle={{ marginBottom: 16 }}>
       <FlexContainer className="column" gap={10} style={{ height: 'min-content', marginBottom: 18 }} desktopStyle={{ width: 268 }}>
         <Label fontSize={16} fontFamily="syncopate">
           voting power (V)

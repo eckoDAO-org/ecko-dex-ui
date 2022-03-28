@@ -14,22 +14,23 @@ import AppLoader from '../shared/AppLoader';
 
 const AllProposalsContainer = ({ accountData }) => {
   const history = useHistory();
-  const [loading, setLoading] = useState(false);
+  const [daoALlProposalsLoading, setDaoALlProposalsLoading] = useState(false);
+
   const [allProposal, setAllProposal] = useState([]);
 
   const fetchData = async () => {
     const readAllProposalsRes = await readAllProposals();
     const orderedProposals = readAllProposalsRes?.sort((x, y) => moment(y['start-date']?.time) - moment(x['start-date']?.time));
     setAllProposal(orderedProposals);
-    setLoading(false);
+    setDaoALlProposalsLoading(false);
   };
 
   useEffect(() => {
-    setLoading(true);
+    setDaoALlProposalsLoading(true);
     fetchData();
   }, []);
 
-  return loading ? (
+  return daoALlProposalsLoading ? (
     <AppLoader containerStyle={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} />
   ) : (
     <>
@@ -37,7 +38,7 @@ const AllProposalsContainer = ({ accountData }) => {
         proposals
       </Label>
 
-      <FlexContainer className="row" gap={16} mobileClassName="column">
+      <FlexContainer className="row" gap={16} mobileClassName="column-reverse" mobileStyle={{ paddingBottom: 16 }}>
         <FlexContainer className="column" withGradient style={{ height: 'min-content', maxHeight: 500, flex: 1 }}>
           <PartialScrollableScrollSection id="proposals-list" className="scrollbar-none" style={{ width: '100%' }}>
             {allProposal.map((data, index) => (
