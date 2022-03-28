@@ -9,7 +9,6 @@ import { WalletContext } from '../../contexts/WalletContext';
 import { SwapContext } from '../../contexts/SwapContext';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
-import LogoLoader from '../shared/Loader';
 import Label from '../shared/Label';
 import {
   SWAP_BUTTON_CONNECT_WALLET,
@@ -172,9 +171,7 @@ const SwapButtonsForm = ({
     <ButtonContainer gameEditionView={gameEditionView}>
       {gameEditionView ? (
         <LabelContainer>
-          {loading ? (
-            <LogoLoader />
-          ) : getButtonLabel() === SWAP_BUTTON_SWAP.label ? (
+          {getButtonLabel() === SWAP_BUTTON_SWAP.label ? (
             <PressButtonToActionLabel actionLabel="swap" />
           ) : (
             <Label geColor="yellow">{getButtonLabel()}</Label>

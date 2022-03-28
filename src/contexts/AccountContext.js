@@ -1,20 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useEffect, useState } from 'react';
+import moment from 'moment';
 import Pact from 'pact-lang-api';
 import swal from '@sweetalert/with-react';
 import { getCorrectBalance } from '../utils/reduceBalance';
-import { chainId, creationTime, GAS_PRICE, getCurrentDate, getCurrentTime, NETWORK } from '../constants/contextConstants';
+import { chainId, creationTime, GAS_PRICE, NETWORK } from '../constants/contextConstants';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { useGameEditionContext } from '.';
 
 export const AccountContext = createContext();
-
+const getStoredNotification = JSON.parse(localStorage.getItem('Notification'));
 export const AccountProvider = (props) => {
   const [sendRes, setSendRes] = useState(null);
   const [localRes, setLocalRes] = useState(null);
   const { gameEditionView } = useGameEditionContext();
 
-  const [notificationList, setNotificationList] = useLocalStorage('Notification', []);
+  const [notificationList, setNotificationList] = useState(getStoredNotification || []);
 
   const [account, setAccount, removeAccount] = useLocalStorage('acct', { account: null, guard: null, balance: 0 });
   const [privKey, setPrivKey, removePrivKey] = useLocalStorage('pk', '');
@@ -43,8 +44,7 @@ export const AccountProvider = (props) => {
     if (typeof localRes === 'string') {
       return storeNotification({
         type: 'error',
-        time: getCurrentTime(),
-        date: getCurrentDate(),
+        date: moment().format('DD/MM/YYYY - HH:mm:ss'),
         title: 'Transaction Error',
         description: localRes,
         isRead: false,
@@ -58,7 +58,6 @@ export const AccountProvider = (props) => {
   };
 
   const setVerifiedAccount = async (accountName, onConnectionSuccess) => {
-    /* console.log("network", network); */
     try {
       let data = await Pact.fetch.local(
         {
@@ -124,6 +123,10 @@ export const AccountProvider = (props) => {
     localStorage.setItem(`Notification`, JSON.stringify(notificationList));
   }, [notificationList]);
 
+  useEffect(() => {
+    if (!getStoredNotification) localStorage.setItem(`Notification`, JSON.stringify([]));
+  }, []);
+
   const storeNotification = (notification) => {
     const notificationListByStorage = JSON.parse(localStorage.getItem('Notification'));
     if (!notificationListByStorage) {
@@ -131,7 +134,7 @@ export const AccountProvider = (props) => {
       localStorage.setItem(`Notification`, JSON.stringify([notification]));
       setNotificationList(notification);
     } else {
-      notificationListByStorage.push(notification);
+      notificationListByStorage.unshift(notification);
       localStorage.setItem(`Notification`, JSON.stringify(notificationListByStorage));
       setNotificationList(notificationListByStorage);
     }
@@ -139,7 +142,7 @@ export const AccountProvider = (props) => {
 
   const removeNotification = (indexToRemove) => {
     // remember that notification list i view reversed
-    const notifWithoutRemoved = [...notificationList].reverse().filter((notif, index) => index !== indexToRemove);
+    const notifWithoutRemoved = [...notificationList].filter((notif, index) => index !== indexToRemove);
     setNotificationList(notifWithoutRemoved);
   };
 

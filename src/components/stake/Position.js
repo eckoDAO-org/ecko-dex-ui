@@ -17,6 +17,7 @@ const Position = ({ buttonLabel, amount, stakeKdxAmout, setStakeKdxAmount }) => 
     <CommonWrapper
       title="position (p)"
       popup="“Position” accrues your KDX holdings from both the Vaulting and the Staking Programs. Please note that all Second Sale participants are automatically staking their KDX while it is being vesting."
+      centerIcon
     >
       <div>
         <Label>Amount</Label>
