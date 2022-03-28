@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
+import { useAccountContext } from '../../contexts';
 import { CloseIcon, NotificationCautionBlueIcon, NotificationErrorIcon, NotificationSuccessIcon, NotificationWarningIcon } from '../../assets';
 import Label from '../shared/Label';
 
@@ -26,26 +27,20 @@ const NotificationContainer = styled.div`
   border-top: 1px solid #707070;
 `;
 
-const CloseIconColumn = styled.div`
+const CloseIconContainer = styled.div`
   display: flex;
   height: 100%;
+  justify-content: flex-end;
   align-self: flex-start;
+  height: 30px;
+  width: 30px;
   svg {
     width: 7px;
     height: 7px;
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
   }
-`;
-
-const IconColumn = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 16px;
-`;
-
-const Content = styled.div`
-  display: flex;
-  align-items: center;
 `;
 
 const DescriptionColumn = styled.div`
@@ -65,8 +60,10 @@ const Description = styled(Label)`
   line-height: 18px;
 `;
 
-const NotificationCard = ({ index, time, date, title, description, type, removeItem, link, isHighlight }) => {
-  const [animation] = useState(false);
+const NotificationList = () => {
+  const { notificationList } = useAccountContext();
+
+  const { removeNotification } = useAccountContext();
 
   const getIconByTypeNotification = (type) => {
     switch (type) {
@@ -100,40 +97,46 @@ const NotificationCard = ({ index, time, date, title, description, type, removeI
     }
   };
 
-  return (
-    <Container
-      id={`notification_card_${index}`}
-      typeColor={getColorByType(type)}
-      isHighlight={isHighlight}
-      animation={animation}
-      style={{ cursor: link && 'pointer' }}
-    >
-      <NotificationContainer>
-        <Content>
-          <IconColumn>{getIconByTypeNotification(type)}</IconColumn>
-          <DescriptionColumn
-            onClick={() => {
-              link && window.open(link, '_blank', 'noopener,noreferrer');
-            }}
-          >
-            <Label fontSize={12} color="grey">{`${date} - ${time}`}</Label>
-            <Label fontFamily="syncopate" outGameEditionView>
-              {title}
-            </Label>
-            <Description fontSize={14}>{description}</Description>
-          </DescriptionColumn>
-        </Content>
-        <CloseIconColumn>
-          <CloseIcon
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              removeItem(index);
-            }}
-          />
-        </CloseIconColumn>
-      </NotificationContainer>
-    </Container>
-  );
+  return notificationList.map((notification, index) => {
+    return (
+      <Container
+        id={`notification_card_${index}`}
+        typeColor={getColorByType(notification.type)}
+        isHighlight={!notification.isRead}
+        style={{ cursor: notification.link && 'pointer' }}
+      >
+        <NotificationContainer>
+          <div className="flex align-ce">
+            <div className="flex justify-fe align-ce" style={{ marginRight: 16 }}>
+              {getIconByTypeNotification(notification.type)}
+            </div>
+            <DescriptionColumn
+              onClick={() => {
+                notification.link && window.open(notification.link, '_blank', 'noopener,noreferrer');
+              }}
+            >
+              <Label fontSize={12} color="grey">
+                {notification.date}
+              </Label>
+              <Label fontFamily="syncopate" outGameEditionView>
+                {notification.title}
+              </Label>
+              <Description fontSize={14}>{notification.description}</Description>
+            </DescriptionColumn>
+          </div>
+          <CloseIconContainer>
+            <CloseIcon
+              className="remove-notification-icon"
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                removeNotification(index);
+              }}
+            />
+          </CloseIconContainer>
+        </NotificationContainer>
+      </Container>
+    );
+  });
 };
 
-export default NotificationCard;
+export default NotificationList;

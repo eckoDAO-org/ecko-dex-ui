@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import useWindowSize from '../../../hooks/useWindowSize';
 import { ModalContext } from '../../../contexts/ModalContext';
@@ -20,8 +21,7 @@ import { reduceBalance } from '../../../utils/reduceBalance';
 import Label from '../../shared/Label';
 import { RightModalContext } from '../../../contexts/RightModalContext';
 import CustomButton from '../../../components/shared/CustomButton';
-import NotificationCard from '../../right-modal-notification/NotificationCard';
-import { useLocation } from 'react-router-dom';
+import NotificationList from '../../right-modal-notification/NotificationList';
 
 const RightContainerHeader = styled.div`
   display: flex;
@@ -57,7 +57,7 @@ const RightHeaderItems = () => {
   const { pathname } = useLocation();
   const [width] = useWindowSize();
 
-  const { account, notificationList, removeAllNotifications, removeNotification } = useContext(AccountContext);
+  const { account, notificationList, removeAllNotifications } = useContext(AccountContext);
   const modalContext = useContext(ModalContext);
   const { gameEditionView, openModal } = useContext(GameEditionContext);
   const rightModalContext = useContext(RightModalContext);
@@ -132,22 +132,7 @@ const RightHeaderItems = () => {
           rightModalContext.openModal({
             title: 'notifications',
             titleStyle: { padding: '10px 22px 10px 26px' },
-            content: [...notificationList]?.reverse().map((notif, index) => {
-              return (
-                <NotificationCard
-                  key={index}
-                  index={index}
-                  type={notif?.type}
-                  time={notif?.time}
-                  date={notif?.date}
-                  title={notif?.title}
-                  isHighlight={!notif?.isRead}
-                  description={notif?.description}
-                  removeItem={removeNotification}
-                  link={notif?.link}
-                />
-              );
-            }),
+            content: <NotificationList />,
             footer: (
               <CustomButton
                 onClick={() => {

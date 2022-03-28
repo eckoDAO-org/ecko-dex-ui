@@ -28,11 +28,11 @@ const Item = styled.div`
     color: ${({ theme: { colors } }) => colors.white};
 
     cursor: pointer;
-    & svg {
+    /* & svg {
       & path {
         fill: ${({ $disableHover, theme: { colors } }) => !$disableHover && colors.white};
       }
-    }
+    } */
   }
 `;
 
