@@ -68,22 +68,23 @@ export const KaddexWalletProvider = (props) => {
     console.log('!!!initializeKaddexWallet');
     const networkInfo = await getNetworkInfo();
     console.log('🚀 !!! ~ networkInfo', networkInfo);
-    if (networkInfo.networkId !== NETWORKID) {
-      showNetworkError();
-    } else {
-      console.log("🚀 !!! ~ i'm connecting");
-      const connectResponse = await connectWallet();
-      console.log('🚀 !!! ~ connectResponse', connectResponse);
-      if (connectResponse?.status === 'success') {
-        await setAccountData();
-      }
+    // if (networkInfo.networkId !== NETWORKID) {
+    //   showNetworkError();
+    // } else {
+    console.log("🚀 !!! ~ i'm connecting");
+    const connectResponse = await connectWallet();
+    console.log('🚀 !!! ~ connectResponse', connectResponse);
+    if (connectResponse?.status === 'success') {
+      await setAccountData();
     }
+    // }
   };
 
   const connectWallet = async () => {
     const connect = await kadenaExt.request({
       method: 'kda_connect',
-      networkId: NETWORKID,
+      // networkId: NETWORKID,
+      networkId: 'mainnet01',
     });
     return connect;
   };
@@ -98,7 +99,8 @@ export const KaddexWalletProvider = (props) => {
       });
       await kadenaExt.request({
         method: 'kda_disconnect',
-        networkId: NETWORKID,
+        // networkId: NETWORKID,
+        networkId: 'mainnet01',
       });
       logout();
     }
@@ -117,14 +119,16 @@ export const KaddexWalletProvider = (props) => {
     console.log('X-Wallet: SEND kda_checkStatus request');
     await kadenaExt?.request({
       method: 'kda_checkStatus',
-      networkId: NETWORKID,
+      // networkId: NETWORKID,
+      networkId: 'mainnet01',
     });
   };
 
   const getAccountInfo = async () => {
     const account = await kadenaExt.request({
       method: 'kda_requestAccount',
-      networkId: NETWORKID,
+      // networkId: NETWORKID,
+      networkId: 'mainnet01',
     });
     console.log('X-Wallet: SEND kda_requestAccount request', account);
     return account;
@@ -139,7 +143,8 @@ export const KaddexWalletProvider = (props) => {
       return await kadenaExt.request({
         method: 'kda_requestSign',
         data: {
-          networkId: NETWORKID,
+          // networkId: NETWORKID,
+          networkId: 'mainnet01',
           signingCmd,
         },
       });
