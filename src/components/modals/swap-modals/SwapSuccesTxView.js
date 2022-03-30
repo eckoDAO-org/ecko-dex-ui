@@ -7,7 +7,7 @@ import reduceToken from '../../../utils/reduceToken';
 import { getTokenIcon, showTicker } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import { ChainIcon } from '../../../assets';
-import { chainId, ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
+import { CHAIN_ID, ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
 import Label from '../../shared/Label';
 import { CryptoContainer, FlexContainer } from '../../shared/FlexContainer';
 import CopyPopup from '../../shared/CopyPopup';
@@ -113,7 +113,7 @@ export const SwapSuccessView = ({ loading, sendTransaction }) => {
         {/* CHAIN */}
         <FlexContainer className="align-ce justify-sb">
           <Label fontSize={13}>Chain Id</Label>
-          <Label fontSize={13}>{chainId}</Label>
+          <Label fontSize={13}>{CHAIN_ID}</Label>
         </FlexContainer>
 
         <CustomDivider style={{ margin: '16px 0' }} />

@@ -1,7 +1,7 @@
 {
-  "coin:runonflux.flux": {
-    "name": "coin:runonflux.flux",
+  "coin:kaddex.kdx": {
+    "name": "coin:kaddex.kdx",
     "token0": "KDA",
-    "token1": "FLUX"
+    "token1": "KDX"
   }
 }

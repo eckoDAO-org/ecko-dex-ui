@@ -4,7 +4,7 @@ import moment from 'moment';
 import Pact from 'pact-lang-api';
 import swal from '@sweetalert/with-react';
 import { getCorrectBalance } from '../utils/reduceBalance';
-import { chainId, creationTime, GAS_PRICE, network } from '../constants/contextConstants';
+import { CHAIN_ID, creationTime, GAS_PRICE, NETWORK } from '../constants/contextConstants';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { useGameEditionContext } from '.';
 
@@ -62,9 +62,9 @@ export const AccountProvider = (props) => {
       let data = await Pact.fetch.local(
         {
           pactCode: `(coin.details ${JSON.stringify(accountName)})`,
-          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 3000, creationTime(), 600),
+          meta: Pact.lang.mkMeta('', CHAIN_ID, GAS_PRICE, 3000, creationTime(), 600),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         await setAccount({
@@ -92,9 +92,9 @@ export const AccountProvider = (props) => {
         {
           pactCode: `(${token}.details ${JSON.stringify(account)})`,
           keyPairs: Pact.crypto.genKeyPair(),
-          meta: Pact.lang.mkMeta('', chainId, 0.01, 100000000, 28800, creationTime()),
+          meta: Pact.lang.mkMeta('', CHAIN_ID, 0.01, 100000000, 28800, creationTime()),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         // setTokenAccount({...data.result.data, balance: getCorrectBalance(data.result.data.balance)});

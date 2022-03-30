@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, createContext, useEffect, useCallback } from 'react';
 import { useAccountContext, useWalletContext, useNotificationContext } from '.';
-import { network, NETWORKID } from '../constants/contextConstants';
+import { NETWORK, NETWORKID } from '../constants/contextConstants';
 import { WALLET } from '../constants/wallet';
 import useLocalStorage from '../hooks/useLocalStorage';
 
@@ -10,7 +10,7 @@ export const KaddexWalletContext = createContext();
 const initialKaddexWalletState = {
   isConnected: false,
   isInstalled: false,
-  network,
+  NETWORK,
   account: null,
 };
 
@@ -205,7 +205,7 @@ export const KaddexWalletProvider = (props) => {
   // const showChainError = (selectedChain) => {
   //   showNotification({
   //     title: 'Wallet error',
-  //     message: `Please set chain ${chainId} ${selectedChain ? `(chain ${selectedChain} selected)` : ''}`,
+  //     message: `Please set chain ${CHAIN_ID} ${selectedChain ? `(chain ${selectedChain} selected)` : ''}`,
   //     type: STATUSES.WARNING,
   //     autoClose: 5000,
   //     hideProgressBar: false,
