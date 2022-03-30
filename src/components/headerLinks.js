@@ -1,7 +1,13 @@
 import React from 'react';
-import { AboutIcon, CodeIcon, DiscordIcon, XWalletLogo } from '../assets';
+import { AboutIcon, BetaIcon, CodeIcon, DiscordIcon, XWalletLogo } from '../assets';
 
 export default [
+  {
+    id: 4,
+    label: 'BETA',
+    icon: <BetaIcon className="menu-icon" />,
+    link: 'https://swap.kaddex.com',
+  },
   {
     id: 0,
     label: 'about',

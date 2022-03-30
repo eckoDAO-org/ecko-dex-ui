@@ -115,13 +115,15 @@ const NotificationList = () => {
                 notification.link && window.open(notification.link, '_blank', 'noopener,noreferrer');
               }}
             >
-              <Label fontSize={12} color="grey">
+              <Label outGameEditionView fontSize={12} color="grey">
                 {notification.date}
               </Label>
-              <Label fontFamily="syncopate" outGameEditionView>
+              <Label outGameEditionView fontFamily="syncopate">
                 {notification.title}
               </Label>
-              <Description fontSize={14}>{notification.description}</Description>
+              <Description outGameEditionView fontSize={14}>
+                {notification.description}
+              </Description>
             </DescriptionColumn>
           </div>
           <CloseIconContainer>

@@ -65,10 +65,10 @@ const ProgressBar = ({ currentValue, maxValue, topLabelLeft, values, withBottomL
                     alignItems: i === 0 && 'flex-start',
                     position: 'absolute',
                     left,
-                    top: -6,
+                    top: 14,
                   }}
                 >
-                  <Indicator />
+                  {/* <Indicator /> */}
                   <Label>{typeof v === 'number' ? v.toString() : v.value.toString()}</Label>
                   {v?.label && <Label labelStyle={{ fontWeight: 'bold' }}>{v.label}</Label>}
                 </PercetageIndicator>
@@ -98,8 +98,8 @@ const ProgressBar = ({ currentValue, maxValue, topLabelLeft, values, withBottomL
 
 export default ProgressBar;
 
-const Indicator = styled.div`
-  background-color: ${({ theme: { colors } }) => colors.white};
-  height: 20px;
-  width: 1px;
-`;
+// const Indicator = styled.div`
+//   background-color: ${({ theme: { colors } }) => colors.white};
+//   height: 20px;
+//   width: 1px;
+// `;

@@ -79,7 +79,7 @@ const HeaderItem = ({
             onClick();
           }
         } else if (item.link) {
-          window.open(item.link, '_self');
+          window.open(item.link, '_blank');
         } else {
           if (onClick) {
             onClick();
