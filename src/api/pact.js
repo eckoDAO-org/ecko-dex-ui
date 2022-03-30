@@ -1,6 +1,16 @@
 import Pact from 'pact-lang-api';
 import { chainId, creationTime, GAS_PRICE, network } from '../constants/contextConstants';
 
+export const mkReq = function (cmd) {
+  return {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify(cmd),
+  };
+};
+
 export const handleError = (error) => {
   console.log(`ERROR: ${JSON.stringify(error)}`);
   return { errorMessage: 'Unhandled Exception' };

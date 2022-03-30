@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
 import { useHistory, useLocation } from 'react-router-dom';
-import { getPoolState } from '../api/kaddex.staking';
-import { reduceBalance } from '../utils/reduceBalance';
+import { mkReq } from '../api/pact';
+import { getPoolState, getAddStakeCommand, geUnstakeCommand, estimateUnstake, getRollupRewardsCommand } from '../api/kaddex.staking';
 import { getKDXAccountBalance } from '../api/kaddex.kdx';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import InfoPopup from '../components/shared/InfoPopup';
@@ -13,18 +13,9 @@ import Rewards from '../components/stake/Rewards';
 import StakeInfo from '../components/stake/StakeInfo';
 import UnstakeInfo from '../components/stake/UnstakeInfo';
 import VotingPower from '../components/stake/VotingPower';
-import { useAccountContext, useWalletContext, usePactContext, useKaddexWalletContext } from '../contexts';
+import { useAccountContext, useKaddexWalletContext, useNotificationContext } from '../contexts';
 import { ROUTE_STAKE, ROUTE_UNSTAKE } from '../router/routes';
-import {
-  chainId,
-  creationTime,
-  GAS_PRICE,
-  network,
-  NETWORKID,
-  ENABLE_GAS_STATION,
-  getCurrentDate,
-  getCurrentTime,
-} from '../constants/contextConstants';
+import { network } from '../constants/contextConstants';
 import { theme } from '../styles/theme';
 
 const StakeContainer = () => {
@@ -32,16 +23,21 @@ const StakeContainer = () => {
   const { pathname } = useLocation();
   const { account } = useAccountContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
-  const pact = usePactContext();
-  const wallet = useWalletContext();
+  const { showNotification, STATUSES } = useNotificationContext();
 
   const [kdxAccountBalance, setKdxAccountBalance] = useState(0);
+  const [estimateUnstakeData, setEstimateUnstakeData] = useState(null);
   const [amountToStake, setAmountToStake] = useState(0);
+  console.log(`amountToStake`, amountToStake);
 
   useEffect(() => {
     if (account?.account) {
       getKDXAccountBalance(account.account).then((kdxBalance) => {
-        setKdxAccountBalance(kdxBalance?.balance);
+        setKdxAccountBalance(kdxBalance?.balance ?? 0);
+      });
+      estimateUnstake(account?.account).then((resEstimate) => {
+        console.log(`resEstimate`, resEstimate);
+        setEstimateUnstakeData(resEstimate);
       });
     }
   }, [account?.account]);
@@ -52,70 +48,111 @@ const StakeContainer = () => {
     });
   }, []);
 
-  const stakeKDX = async () => {
-    try {
-      const pactCode = `(kaddex.staking.stake "${account?.account}" 20.0)`;
-      const signCmd = {
-        pactCode,
-        caps: [
-          Pact.lang.mkCap('wrap capability', 'wrapping skdx', `kaddex.kdx.WRAP`, ['skdx', account.account, account.account, 20.0]),
-          Pact.lang.mkCap('stake capability', 'staking', `kaddex.staking.STAKE`, [account.account, 20.0]),
-          Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
-        ],
-        sender: account.account,
-        gasLimit: 3000,
-        gasPrice: GAS_PRICE,
-        chainId: chainId,
-        ttl: 600,
-        envData: {
-          'user-ks': account.guard,
-        },
-        signingPubKey: account.guard.keys[0],
-        networkId: NETWORKID,
-      };
-      //alert to sign tx
-      /* walletLoading(); */
-      wallet.setIsWaitingForWalletAuth(true);
-      let command = null;
-      if (isKaddexWalletConnected) {
-        const res = await kaddexWalletRequestSign(signCmd);
-        command = res.signedCmd;
-      } else {
-        console.log('🚀 !!! ~ signCmd', JSON.stringify(JSON.stringify(signCmd)));
-        command = await Pact.wallet.sign(signCmd);
-      }
-      //close alert programmatically
-      /* swal.close(); */
-      wallet.setIsWaitingForWalletAuth(false);
-      wallet.setWalletSuccess(true);
-      //set signedtx
-      let stakingResponse = await fetch(`${network}/api/v1/local`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify(command),
-      });
-      console.log('🚀 !!! ~ stakingResponse', stakingResponse);
-    } catch (e) {
-      //wallet error alert
-      /* setLocalRes({}); */
-      if (e.message.includes('Failed to fetch'))
-        wallet.setWalletError({
-          error: true,
-          title: 'No Wallet',
-          content: 'Please make sure you open and login to your wallet.',
-        });
-      //walletError();
-      else
-        wallet.setWalletError({
-          error: true,
-          title: 'Wallet Signing Failure',
-          content:
-            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kaddex.',
-        }); //walletSigError();
-      console.log(e);
+  const signCommand = async (cmd) => {
+    if (isKaddexWalletConnected) {
+      const res = await kaddexWalletRequestSign(cmd);
+      return res.signedCmd;
+    } else {
+      return await Pact.wallet.sign(cmd);
     }
+  };
+
+  const stakeKDX = async () => {
+    const command = getAddStakeCommand(account, amountToStake);
+    const signedCommand = await signCommand(command);
+    fetch(`${network}/api/v1/local`, mkReq(signedCommand))
+      .then((response) => response.json())
+      .then((stakingResponse) => {
+        console.log(' stakingResponse', stakingResponse);
+        if (stakingResponse.result?.status === 'success') {
+          showNotification({
+            title: 'Staking success',
+            message: 'Staking success!',
+            type: STATUSES.SUCCESS,
+          });
+        } else {
+          showNotification({
+            title: 'Staking error',
+            message: stakingResponse.result?.error?.message ?? 'Add stake error',
+            type: STATUSES.ERROR,
+          });
+        }
+        setAmountToStake(0);
+      })
+      .catch((error) => {
+        console.log(`~ error`, error);
+        showNotification({
+          title: 'Staking error',
+          message: 'Generic add stake error',
+          type: STATUSES.ERROR,
+        });
+      });
+  };
+
+  const unstakeKDX = async () => {
+    const command = geUnstakeCommand(account);
+    const signedCommand = await signCommand(command);
+
+    fetch(`${network}/api/v1/local`, mkReq(signedCommand))
+      .then((response) => response.json())
+      .then((unstakingResponse) => {
+        console.log(' unstakingResponse', unstakingResponse);
+        if (unstakingResponse.result?.status === 'success') {
+          showNotification({
+            title: 'Unstaking success',
+            message: 'Unstaking success!',
+            type: STATUSES.SUCCESS,
+          });
+        } else {
+          showNotification({
+            title: 'Staking error',
+            message: unstakingResponse.result?.error?.message ?? 'Unstake command error',
+            type: STATUSES.ERROR,
+          });
+        }
+        setAmountToStake(0);
+      })
+      .catch((error) => {
+        console.log(`~ unstaking error`, error);
+        showNotification({
+          title: 'Staking error',
+          message: 'Generic add stake error',
+          type: STATUSES.ERROR,
+        });
+      });
+  };
+
+  const rollupKDX = async () => {
+    const command = getRollupRewardsCommand(account);
+    const signedCommand = await signCommand(command);
+
+    fetch(`${network}/api/v1/local`, mkReq(signedCommand))
+      .then((response) => response.json())
+      .then((unstakingResponse) => {
+        console.log(' unstakingResponse', unstakingResponse);
+        if (unstakingResponse.result?.status === 'success') {
+          showNotification({
+            title: 'Unstaking success',
+            message: 'Unstaking success!',
+            type: STATUSES.SUCCESS,
+          });
+        } else {
+          showNotification({
+            title: 'Staking error',
+            message: unstakingResponse.result?.error?.message ?? 'Unstake command error',
+            type: STATUSES.ERROR,
+          });
+        }
+        setAmountToStake(0);
+      })
+      .catch((error) => {
+        console.log(`~ unstaking error`, error);
+        showNotification({
+          title: 'Staking error',
+          message: 'Generic add stake error',
+          type: STATUSES.ERROR,
+        });
+      });
   };
 
   return (
@@ -154,18 +191,20 @@ const StakeContainer = () => {
 
       <FlexContainer gap={24} tabletClassName="column" mobileClassName="column">
         <Position
-          amount={231.3213}
+          amount={estimateUnstakeData?.staked || 0}
           kdxAccountBalance={kdxAccountBalance}
           amountToStake={amountToStake}
           onClickMax={() => setAmountToStake(200)}
           setKdxAmount={(value) => setAmountToStake(value)}
           buttonLabel={pathname === ROUTE_STAKE ? 'stake' : 'unstake'}
-          onSubmitStake={() => {
-            console.log('Staking ' + amountToStake + ' kdx...');
-            stakeKDX();
-          }}
+          onSubmitStake={() => stakeKDX()}
         />
-        <Rewards amount={231.3213} rewardsPenalty={2} stakedTime={32} disabled={pathname === ROUTE_UNSTAKE} />
+        <Rewards
+          amount={(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || 0}
+          rewardsPenalty={2}
+          stakedTime={32}
+          disabled={pathname === ROUTE_UNSTAKE}
+        />
         <Analytics apr={32} volume={321232.231321} stakedShare={5.16} totalStaked={35.16} />
       </FlexContainer>
 

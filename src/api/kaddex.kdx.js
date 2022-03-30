@@ -3,7 +3,6 @@ import { handleError, pactFetchLocal } from './pact';
 export const getKDXTotalSupply = async () => {
   try {
     const totalSupplyData = await pactFetchLocal(`(kaddex.kdx.total-supply)`);
-    console.log('🚀 !!! ~ totalSupplyData', totalSupplyData);
     return totalSupplyData;
   } catch (e) {
     if (process.env.REACT_APP_STAKING_SIMULATION) {

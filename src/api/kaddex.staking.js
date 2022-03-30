@@ -1,6 +1,8 @@
 import moment from 'moment';
+import Pact from 'pact-lang-api';
 import { handleError, pactFetchLocal } from './pact';
 import { estimateUnstakeSampleData, poolStateData } from './sample-data/staking';
+import { chainId, GAS_PRICE, NETWORKID } from '../constants/contextConstants';
 
 const _managePactError = (e, fakeData) => {
   if (process.env.REACT_APP_STAKING_SIMULATION === 'true') {
@@ -28,19 +30,97 @@ export const estimateUnstake = async (account) => {
   }
 };
 
-export const addStake = async (account, amount) => {
-  try {
-    const addStakeData = await pactFetchLocal(`(kaddex.staking.stake "${account}" ${amount}))`);
-    /**
-     *  with the following capabilities: (kaddex.kdx.WRAP “skdx” k:4c9ce8d8530503ba05ca9dfa476d0829dd861909df0b625d2eada9d7ce64eb3a k:4c9ce8d8530503ba05ca9dfa476d0829dd861909df0b625d2eada9d7ce64eb3a 10.0) and (kaddex.staking.STAKE “account” 20.0) ??
-    (kaddex.kdx.WRAP "skdx" "k:4c9ce8d8530503ba05ca9dfa476d0829dd861909df0b625d2eada9d7ce64eb3a" "k:4c9ce8d8530503ba05ca9dfa476d0829dd861909df0b625d2eada9d7ce64eb3a" 10.0)
-    (kaddex.staking.STAKE "k:4c9ce8d8530503ba05ca9dfa476d0829dd861909df0b625d2eada9d7ce64eb3a" 10.0)
-    */
+export const getAddStakeCommand = (verifiedAccount, amountToStake) => {
+  // TODO: set precision
+  const parsedAmount = parseFloat(amountToStake?.toString());
+  const pactCode = `(kaddex.staking.stake "${verifiedAccount.account}" ${parsedAmount.toFixed(2)})`;
+  return {
+    pactCode,
+    caps: [
+      Pact.lang.mkCap('wrap capability', 'wrapping skdx', `kaddex.kdx.WRAP`, [
+        'skdx',
+        verifiedAccount.account,
+        verifiedAccount.account,
+        parsedAmount,
+      ]),
+      Pact.lang.mkCap('stake capability', 'staking', `kaddex.staking.STAKE`, [verifiedAccount.account, parsedAmount]),
+      Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
+    ],
+    sender: verifiedAccount.account,
+    gasLimit: 3000,
+    gasPrice: GAS_PRICE,
+    chainId: chainId,
+    ttl: 600,
+    envData: {
+      'user-ks': verifiedAccount.guard,
+    },
+    signingPubKey: verifiedAccount.guard.keys[0],
+    networkId: NETWORKID,
+  };
+};
 
-    return addStakeData;
-  } catch (e) {
-    return _managePactError(e, estimateUnstakeSampleData());
-  }
+export const geUnstakeCommand = (verifiedAccount) => {
+  const pactCode = `(kaddex.staking.unstake "${verifiedAccount.account}")`;
+  return {
+    pactCode,
+    caps: [
+      Pact.lang.mkCap('skdx DEBIT capability', 'debit skdx', `kaddex.skdx.DEBIT`),
+      Pact.lang.mkCap('unstake capability', 'unstaking', `kaddex.staking.UNSTAKE`, [verifiedAccount.account]),
+      Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
+    ],
+    sender: verifiedAccount.account,
+    gasLimit: 3000,
+    gasPrice: GAS_PRICE,
+    chainId: chainId,
+    ttl: 600,
+    envData: {
+      'user-ks': verifiedAccount.guard,
+    },
+    signingPubKey: verifiedAccount.guard.keys[0],
+    networkId: NETWORKID,
+  };
+};
+
+export const getRollupRewardsCommand = (verifiedAccount) => {
+  const pactCode = `(kaddex.staking.rollup "${verifiedAccount.account}")`;
+  return {
+    pactCode,
+    caps: [
+      Pact.lang.mkCap('rollup capability', 'rollup', `kaddex.staking.ROLLUP`, [verifiedAccount.account]),
+      // Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'), // no gas needed?
+    ],
+    sender: verifiedAccount.account,
+    gasLimit: 3000,
+    gasPrice: GAS_PRICE,
+    chainId: chainId,
+    ttl: 600,
+    envData: {
+      'user-ks': verifiedAccount.guard,
+    },
+    signingPubKey: verifiedAccount.guard.keys[0],
+    networkId: NETWORKID,
+  };
+};
+
+export const getClaimRewardsCommand = (verifiedAccount) => {
+  const pactCode = `(kaddex.staking.claim "${verifiedAccount.account}")`;
+  return {
+    pactCode,
+    caps: [
+      Pact.lang.mkCap('claim capability', 'claim', `kaddex.staking.CLAIM`, [verifiedAccount.account]),
+      Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
+    ],
+    sender: verifiedAccount.account,
+    gasLimit: 3000,
+    gasPrice: GAS_PRICE,
+    chainId: chainId,
+    ttl: 600,
+    envData: {
+      'user-ks': verifiedAccount.guard,
+    },
+    signingPubKey: verifiedAccount.guard.keys[0],
+    networkId: NETWORKID,
+  };
 };
 
 /**
