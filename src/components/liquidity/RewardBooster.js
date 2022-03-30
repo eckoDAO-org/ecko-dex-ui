@@ -33,7 +33,7 @@ const RewardBooster = ({ type, apr }) => {
       <div className="flex justify-sb align-ce">
         <div>
           <Label fontSize={13}>
-            Network Rewards Available{' '}
+            KDX Rewards Available{' '}
             <InfoPopup>
               Accounting for 40% of the overall supply, Network Rewards serve a crucial function of both attracting liquidity and mitigating
               impermanent loss. Their emission is programmatical, diminishing and time oriented.
