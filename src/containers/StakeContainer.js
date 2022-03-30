@@ -13,22 +13,24 @@ import Rewards from '../components/stake/Rewards';
 import StakeInfo from '../components/stake/StakeInfo';
 import UnstakeInfo from '../components/stake/UnstakeInfo';
 import VotingPower from '../components/stake/VotingPower';
-import { useAccountContext, useKaddexWalletContext, useNotificationContext } from '../contexts';
+import { useAccountContext, useKaddexWalletContext, useNotificationContext, usePactContext } from '../contexts';
 import { ROUTE_STAKE, ROUTE_UNSTAKE } from '../router/routes';
-import { network } from '../constants/contextConstants';
+import { network, getCurrentDate, getCurrentTime } from '../constants/contextConstants';
 import { theme } from '../styles/theme';
 
 const StakeContainer = () => {
   const history = useHistory();
   const { pathname } = useLocation();
-  const { account } = useAccountContext();
+  const { account, storeNotification } = useAccountContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
   const { showNotification, STATUSES } = useNotificationContext();
+  const pact = usePactContext();
+
+  const toastId = React.useRef(null);
 
   const [kdxAccountBalance, setKdxAccountBalance] = useState(0);
   const [estimateUnstakeData, setEstimateUnstakeData] = useState(null);
   const [amountToStake, setAmountToStake] = useState(0);
-  console.log(`amountToStake`, amountToStake);
 
   useEffect(() => {
     if (account?.account) {
@@ -58,29 +60,36 @@ const StakeContainer = () => {
   };
 
   const stakeKDX = async () => {
+    if (!amountToStake) {
+      return;
+    }
     const command = getAddStakeCommand(account, amountToStake);
     const signedCommand = await signCommand(command);
-    fetch(`${network}/api/v1/local`, mkReq(signedCommand))
-      .then((response) => response.json())
-      .then((stakingResponse) => {
+    if (!signedCommand) {
+      return;
+    }
+    pact.setPolling(true);
+    Pact.wallet
+      .sendSigned(signedCommand, network)
+      .then(async (stakingResponse) => {
         console.log(' stakingResponse', stakingResponse);
-        if (stakingResponse.result?.status === 'success') {
-          showNotification({
-            title: 'Staking success',
-            message: 'Staking success!',
-            type: STATUSES.SUCCESS,
-          });
-        } else {
-          showNotification({
-            title: 'Staking error',
-            message: stakingResponse.result?.error?.message ?? 'Add stake error',
-            type: STATUSES.ERROR,
-          });
-        }
+        pact.pollingNotif(stakingResponse.requestKeys[0]);
+        storeNotification({
+          type: 'info',
+          time: getCurrentTime(),
+          date: getCurrentDate(),
+          title: 'Staking Transaction Pending',
+          description: stakingResponse.requestKeys[0],
+          isRead: false,
+          isCompleted: false,
+        });
+        await pact.listen(stakingResponse.requestKeys[0]);
+        pact.setPolling(false);
         setAmountToStake(0);
       })
       .catch((error) => {
         console.log(`~ error`, error);
+        pact.setPolling(false);
         showNotification({
           title: 'Staking error',
           message: 'Generic add stake error',
@@ -93,30 +102,30 @@ const StakeContainer = () => {
     const command = geUnstakeCommand(account);
     const signedCommand = await signCommand(command);
 
-    fetch(`${network}/api/v1/local`, mkReq(signedCommand))
-      .then((response) => response.json())
-      .then((unstakingResponse) => {
+    pact.setPolling(true);
+    Pact.wallet
+      .sendSigned(signedCommand, network)
+      .then(async (unstakingResponse) => {
         console.log(' unstakingResponse', unstakingResponse);
-        if (unstakingResponse.result?.status === 'success') {
-          showNotification({
-            title: 'Unstaking success',
-            message: 'Unstaking success!',
-            type: STATUSES.SUCCESS,
-          });
-        } else {
-          showNotification({
-            title: 'Staking error',
-            message: unstakingResponse.result?.error?.message ?? 'Unstake command error',
-            type: STATUSES.ERROR,
-          });
-        }
-        setAmountToStake(0);
+        pact.pollingNotif(unstakingResponse.requestKeys[0]);
+        storeNotification({
+          type: 'info',
+          time: getCurrentTime(),
+          date: getCurrentDate(),
+          title: 'Unstaking Transaction Pending',
+          description: unstakingResponse.requestKeys[0],
+          isRead: false,
+          isCompleted: false,
+        });
+        await pact.listen(unstakingResponse.requestKeys[0]);
+        pact.setPolling(false);
       })
       .catch((error) => {
-        console.log(`~ unstaking error`, error);
+        console.log(`~ error`, error);
+        pact.setPolling(false);
         showNotification({
           title: 'Staking error',
-          message: 'Generic add stake error',
+          message: 'Generic unstake error',
           type: STATUSES.ERROR,
         });
       });
