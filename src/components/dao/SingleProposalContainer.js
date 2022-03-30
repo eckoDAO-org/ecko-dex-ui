@@ -17,6 +17,8 @@ import { ArrowBack } from '../../assets';
 import VoteResultsContainer from './VoteResultsContainer';
 import AppLoader from '../shared/AppLoader';
 import { commonColors, theme } from '../../styles/theme';
+import { getStatusProposal } from '../../utils/dao-utils';
+import Loader from '../shared/Loader';
 
 const SingleProposalContainer = ({ proposal_id, accountData }) => {
   const { themeMode } = useApplicationContext();
@@ -27,6 +29,8 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
 
   const history = useHistory();
   const [daoSingleProposalLoading, setDaoSingleProposalLoading] = useState(false);
+  const [daoFetchDataLoading, setDaoFetchDataLoading] = useState(false);
+
   const [singleProposalData, setSingleProposalData] = useState({});
   const [accountVoted, setAccountVoted] = useState({});
 
@@ -43,7 +47,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
   useEffect(() => {
     setDaoSingleProposalLoading(true);
     fetchData();
-  }, [account]);
+  }, [account, daoFetchDataLoading]);
 
   const pollingNotif = (reqKey) => {
     toastId.current = showNotification({
@@ -67,6 +71,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
     console.log('votePreview -> votePreviewResponse', votePreviewResponse);
 
     if (votePreviewResponse?.result?.status === 'success') {
+      setDaoFetchDataLoading(true);
       const res = await vote(signedCommand, pollingNotif);
 
       if (res?.listen === 'success') {
@@ -81,6 +86,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
           autoClose: 10000,
         });
         setDaoSingleProposalLoading(false);
+        setDaoFetchDataLoading(false);
       } else {
         toast.dismiss(toastId.current);
         showNotification({
@@ -89,6 +95,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
           type: STATUSES.ERROR,
           autoClose: 5000,
         });
+        setDaoFetchDataLoading(false);
         setDaoSingleProposalLoading(false);
       }
     } else {
@@ -157,9 +164,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
                     padding: '2px 8px',
                   }}
                 >
-                  {moment(singleProposalData['start-date']?.time) <= moment() && moment(singleProposalData['end-date']?.time) >= moment()
-                    ? 'active'
-                    : 'closed'}
+                  {getStatusProposal(singleProposalData)}
                 </Label>
               </FlexContainer>
               <FlexContainer className="justify-sb align-ce w-100" mobileClassName="grid" columns={2}>
@@ -169,17 +174,21 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
                 <ColumnLabels title="Voting System" description="Single choice voting" />
               </FlexContainer>
               <ColumnLabels title="Description" description={singleProposalData?.description} />
-              <ColumnLabels
-                title="Vote Result"
-                description={
-                  <VoteResultsContainer
-                    onClickYes={() => handleClick('approved')}
-                    onClickNo={() => handleClick('refused')}
-                    proposalData={singleProposalData}
-                    hasVoted={accountVoted[0]?.action ? accountVoted[0]?.action : ''}
-                  />
-                }
-              />
+              {!daoFetchDataLoading ? (
+                <ColumnLabels
+                  title="Vote Result"
+                  description={
+                    <VoteResultsContainer
+                      onClickYes={() => handleClick('approved')}
+                      onClickNo={() => handleClick('refused')}
+                      proposalData={singleProposalData}
+                      hasVoted={accountVoted[0]?.action ? accountVoted[0]?.action : ''}
+                    />
+                  }
+                />
+              ) : (
+                <Loader />
+              )}
             </FlexContainer>
           </PartialScrollableScrollSection>
         </FlexContainer>

@@ -11,6 +11,7 @@ import { ROUTE_DAO_PROPOSAL } from '../../router/routes';
 import VotingPowerContainer from './VotingPowerContainer';
 import { readAllProposals } from '../../api/dao';
 import AppLoader from '../shared/AppLoader';
+import { getStatusProposal } from '../../utils/dao-utils';
 
 const AllProposalsContainer = ({ accountData }) => {
   const history = useHistory();
@@ -59,7 +60,7 @@ const AllProposalsContainer = ({ accountData }) => {
                       padding: '2px 8px',
                     }}
                   >
-                    {moment(data['start-date'].time) <= moment() && moment(data['end-date'].time) >= moment() ? 'active' : 'closed'}
+                    {getStatusProposal(data)}
                   </Label>
                 </FlexContainer>
 

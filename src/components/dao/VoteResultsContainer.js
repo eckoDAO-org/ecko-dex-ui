@@ -39,7 +39,7 @@ const VoteResultsContainer = ({ onClickYes, onClickNo, proposalData, hasVoted })
   const { account } = useAccountContext();
 
   const dataValidation = () =>
-    ((!account?.account || hasVoted) && moment(proposalData['start-date']?.time) >= moment()) || moment(proposalData['end-date']?.time) <= moment();
+    !account?.account || hasVoted || moment(proposalData['start-date']?.time) >= moment() || moment(proposalData['end-date']?.time) <= moment();
 
   console.log('validation', dataValidation());
 
@@ -47,7 +47,7 @@ const VoteResultsContainer = ({ onClickYes, onClickNo, proposalData, hasVoted })
     <FlexContainer className="column w-100" gap={16} style={{ marginTop: 4 }}>
       <FlexContainer gap={10} className="align-ce">
         <CheckboxContainer>
-          <Checkbox disabled={dataValidation} radio checked={hasVoted === 'approved'} label="Yes" value="yes" onChange={onClickYes} />
+          <Checkbox disabled={dataValidation()} radio checked={hasVoted === 'approved'} label="Yes" value="yes" onChange={onClickYes} />
         </CheckboxContainer>
         <FlexContainer className="align-ce w-100" style={{ border: '1px solid #FFFFFF99', borderRadius: 10, padding: 8 }}>
           <ProgressBar currentValue={proposalData['tot-approved']} maxValue={proposalData['tot-approved'] + proposalData['tot-refused']} />
@@ -55,7 +55,7 @@ const VoteResultsContainer = ({ onClickYes, onClickNo, proposalData, hasVoted })
       </FlexContainer>
       <FlexContainer gap={10} className="align-ce">
         <CheckboxContainer>
-          <Checkbox disabled={dataValidation} radio checked={hasVoted === 'refused'} label="No" value="no" onChange={onClickNo} />
+          <Checkbox disabled={dataValidation()} radio checked={hasVoted === 'refused'} label="No" value="no" onChange={onClickNo} />
         </CheckboxContainer>
         <FlexContainer className="align-ce w-100" style={{ border: '1px solid #FFFFFF99', borderRadius: 10, padding: 8 }}>
           <ProgressBar darkBar currentValue={proposalData['tot-refused']} maxValue={proposalData['tot-approved'] + proposalData['tot-refused']} />
