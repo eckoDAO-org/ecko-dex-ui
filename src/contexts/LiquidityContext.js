@@ -1,5 +1,5 @@
 import React, { useState, createContext } from 'react';
-import pairTokens from '../constants/pairs.json';
+import pairTokens from '../constants/pairsConfig';
 import Pact from 'pact-lang-api';
 import {
   CHAIN_ID,

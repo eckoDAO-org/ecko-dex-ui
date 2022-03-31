@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
-import pairTokens from '../constants/pairs.json';
+import pairTokens from '../constants/pairsConfig';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import moment from 'moment';

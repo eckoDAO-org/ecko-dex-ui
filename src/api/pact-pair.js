@@ -1,5 +1,5 @@
 import { handleError, pactFetchLocal } from './pact';
-import pairTokens from '../constants/pairs.json';
+import pairTokens from '../constants/pairsConfig';
 import { KADDEX_NAMESPACE } from '../constants/contextConstants';
 
 export const getPairList = async () => {
