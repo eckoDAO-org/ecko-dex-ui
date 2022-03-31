@@ -40,7 +40,7 @@ const AllProposalsContainer = ({ accountData }) => {
       </Label>
 
       <FlexContainer className="row" gap={16} mobileClassName="column-reverse" mobileStyle={{ paddingBottom: 16 }}>
-        <FlexContainer className="column" withGradient style={{ height: 'min-content', maxHeight: 500, flex: 1 }}>
+        <FlexContainer className="column background-fill" withGradient style={{ height: 'min-content', maxHeight: 500, flex: 1 }}>
           <PartialScrollableScrollSection id="proposals-list" className="scrollbar-none" style={{ width: '100%' }}>
             {allProposal.map((data, index) => (
               <FlexContainer className="column pointer" key={index} onClick={() => history.push(ROUTE_DAO_PROPOSAL.replace(':proposal_id', data.id))}>

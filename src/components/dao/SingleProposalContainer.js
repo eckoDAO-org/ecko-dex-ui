@@ -147,7 +147,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
         back to proposals
       </Label>
       <FlexContainer className="row" gap={16} mobileClassName="column-reverse" mobileStyle={{ paddingBottom: 16 }}>
-        <FlexContainer className="column" withGradient style={{ height: 'min-content' }} desktopStyle={{ flex: 1, maxHeight: 550 }}>
+        <FlexContainer className="column background-fill" withGradient style={{ height: 'min-content' }} desktopStyle={{ flex: 1, maxHeight: 550 }}>
           <PartialScrollableScrollSection id="proposals-list" className="scrollbar-none" style={{ width: '100%' }}>
             <FlexContainer className="column" gap={16}>
               <FlexContainer className="justify-sb align-ce w-100">

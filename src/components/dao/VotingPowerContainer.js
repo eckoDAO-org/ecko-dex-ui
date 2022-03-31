@@ -25,7 +25,7 @@ const VotingPowerContainer = ({ accountData }) => {
           {accountData.vp ? accountData.vp : '-'}
         </Label>
       </FlexContainer>
-      <FlexContainer className="column" gap={10} withGradient style={{ height: 'min-content' }} desktopStyle={{ width: 268 }}>
+      <FlexContainer className="column background-fill" gap={10} withGradient style={{ height: 'min-content' }} desktopStyle={{ width: 268 }}>
         <FlexContainer className="column" style={{ marginBottom: 6 }}>
           <Label fontSize={13} info={positionInfo}>
             Position (P)
