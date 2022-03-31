@@ -1,5 +1,5 @@
 import Pact from 'pact-lang-api';
-import { chainId, GAS_LIMIT, GAS_PRICE, NETWORK, NETWORKID } from '../constants/contextConstants';
+import { CHAIN_ID, GAS_LIMIT, GAS_PRICE, NETWORK, NETWORKID } from '../constants/contextConstants';
 import { handleError, listen, mkReq, pactFetchLocal, parseRes } from './pact';
 
 const DEV_PACT_DAO_CONTRACT = 'kaddex.dao';
@@ -51,7 +51,7 @@ export const voteCommandToSign = (type, proposalId, account) => {
       sender: account.account,
       gasLimit: GAS_LIMIT,
       gasPrice: GAS_PRICE,
-      chainId: chainId,
+      chainId: CHAIN_ID,
       ttl: 600,
       signingPubKey: account.guard.keys[0],
       networkId: NETWORKID,

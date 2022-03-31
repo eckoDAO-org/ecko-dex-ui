@@ -7,7 +7,7 @@ import { reduceBalance } from '../utils/reduceBalance';
 import { decryptKey } from '../utils/keyUtils';
 import { STATUSES } from './NotificationContext';
 import { useKaddexWalletContext, useWalletContext, useAccountContext, usePactContext, useNotificationContext } from '.';
-import { chainId, creationTime, GAS_PRICE, NETWORK, NETWORKID, ENABLE_GAS_STATION } from '../constants/contextConstants';
+import { CHAIN_ID, creationTime, GAS_PRICE, NETWORK, NETWORKID, ENABLE_GAS_STATION, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { pactFetchLocal } from '../api/pact';
 
 export const SwapContext = createContext();
@@ -47,7 +47,7 @@ export const SwapProvider = (props) => {
   };
 
   const getPairAccount = async (token0, token1) => {
-    const result = await pactFetchLocal(`(at 'account (kswap.exchange.get-pair ${token0} ${token1}))`);
+    const result = await pactFetchLocal(`(at 'account (${KADDEX_NAMESPACE}.exchange.get-pair ${token0} ${token1}))`);
     if (result.errorMessage) {
       return result.errorMessage;
     } else {
@@ -60,7 +60,7 @@ export const SwapProvider = (props) => {
     try {
       let pair = await getPairAccount(token0.address, token1.address);
 
-      const inPactCode = `(kswap.exchange.swap-exact-in
+      const inPactCode = `(${KADDEX_NAMESPACE}.exchange.swap-exact-in
           (read-decimal 'token0Amount)
           (read-decimal 'token1AmountWithSlippage)
           [${token0.address} ${token1.address}]
@@ -68,7 +68,7 @@ export const SwapProvider = (props) => {
           ${JSON.stringify(account.account)}
           (read-keyset 'user-ks)
         )`;
-      const outPactCode = `(kswap.exchange.swap-exact-out
+      const outPactCode = `(${KADDEX_NAMESPACE}.exchange.swap-exact-out
           (read-decimal 'token1Amount)
           (read-decimal 'token0AmountWithSlippage)
           [${token0.address} ${token1.address}]
@@ -103,7 +103,7 @@ export const SwapProvider = (props) => {
         },
         // meta: Pact.lang.mkMeta('', '', 0, 0, 0, 0),
         networkId: NETWORKID,
-        meta: Pact.lang.mkMeta(account.account, chainId, GAS_PRICE, 3000, creationTime(), 600),
+        meta: Pact.lang.mkMeta(account.account, CHAIN_ID, GAS_PRICE, 3000, creationTime(), 600),
       };
       setCmd(cmd);
       await Pact.fetch.send(cmd, NETWORK);
@@ -168,7 +168,7 @@ export const SwapProvider = (props) => {
       }
       const ct = creationTime();
       let pair = await getPairAccount(token0.address, token1.address);
-      const inPactCode = `(kswap.exchange.swap-exact-in
+      const inPactCode = `(${KADDEX_NAMESPACE}.exchange.swap-exact-in
           (read-decimal 'token0Amount)
           (read-decimal 'token1AmountWithSlippage)
           [${token0.address} ${token1.address}]
@@ -176,7 +176,7 @@ export const SwapProvider = (props) => {
           ${JSON.stringify(account.account)}
           (read-keyset 'user-ks)
         )`;
-      const outPactCode = `(kswap.exchange.swap-exact-out
+      const outPactCode = `(${KADDEX_NAMESPACE}.exchange.swap-exact-out
           (read-decimal 'token1Amount)
           (read-decimal 'token0AmountWithSlippage)
           [${token0.address} ${token1.address}]
@@ -193,7 +193,7 @@ export const SwapProvider = (props) => {
             ...(ENABLE_GAS_STATION
               ? [
                   {
-                    name: 'kswap.gas-station.GAS_PAYER',
+                    name: `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`,
                     args: ['free-gas', { int: 1 }, 1.0],
                   },
                 ]
@@ -218,7 +218,7 @@ export const SwapProvider = (props) => {
           token0AmountWithSlippage: reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision),
         },
         networkId: NETWORKID,
-        meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account, chainId, GAS_PRICE, 3000, ct, 600),
+        meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account, CHAIN_ID, GAS_PRICE, 3000, ct, 600),
       };
       setCmd(cmd);
       let data = await Pact.fetch.local(cmd, NETWORK);
@@ -233,7 +233,7 @@ export const SwapProvider = (props) => {
 
   const swapWallet = async (token0, token1, isSwapIn) => {
     try {
-      const inPactCode = `(kswap.exchange.swap-exact-in
+      const inPactCode = `(${KADDEX_NAMESPACE}.exchange.swap-exact-in
           (read-decimal 'token0Amount)
           (read-decimal 'token1AmountWithSlippage)
           [${token0.address} ${token1.address}]
@@ -241,7 +241,7 @@ export const SwapProvider = (props) => {
           ${JSON.stringify(account.account)}
           (read-keyset 'user-ks)
         )`;
-      const outPactCode = `(kswap.exchange.swap-exact-out
+      const outPactCode = `(${KADDEX_NAMESPACE}.exchange.swap-exact-out
           (read-decimal 'token1Amount)
           (read-decimal 'token0AmountWithSlippage)
           [${token0.address} ${token1.address}]
@@ -252,7 +252,9 @@ export const SwapProvider = (props) => {
       const signCmd = {
         pactCode: isSwapIn ? inPactCode : outPactCode,
         caps: [
-          ...(ENABLE_GAS_STATION ? [Pact.lang.mkCap('Gas Station', 'free gas', 'kswap.gas-station.GAS_PAYER', ['free-gas', { int: 1 }, 1.0])] : []),
+          ...(ENABLE_GAS_STATION
+            ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['free-gas', { int: 1 }, 1.0])]
+            : []),
           Pact.lang.mkCap('transfer capability', 'trasnsfer token in', `${token0.address}.TRANSFER`, [
             account.account,
             pact.pair.account,
@@ -262,10 +264,10 @@ export const SwapProvider = (props) => {
           ]),
           ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : []),
         ],
-        sender: ENABLE_GAS_STATION ? 'kswap-free-gas' : account.account,
+        sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
         gasLimit: 3000,
         gasPrice: GAS_PRICE,
-        chainId: chainId,
+        chainId: CHAIN_ID,
         ttl: 600,
         envData: {
           'user-ks': account.guard,

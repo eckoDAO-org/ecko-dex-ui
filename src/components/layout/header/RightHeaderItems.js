@@ -22,7 +22,7 @@ import Label from '../../shared/Label';
 import { RightModalContext } from '../../../contexts/RightModalContext';
 import CustomButton from '../../../components/shared/CustomButton';
 import NotificationList from '../../right-modal-notification/NotificationList';
-import { chainId } from '../../../constants/contextConstants';
+import { CHAIN_ID } from '../../../constants/contextConstants';
 
 const RightContainerHeader = styled.div`
   display: flex;
@@ -75,7 +75,7 @@ const RightHeaderItems = () => {
         </div>
       )}
 
-      <Label outGameEditionView fontSize={13} class1Name="mainnet-chain-2 desktop-only">{`Chain ${chainId}`}</Label>
+      <Label outGameEditionView fontSize={13} class1Name="mainnet-chain-2 desktop-only">{`Chain ${CHAIN_ID}`}</Label>
       {account?.account && width >= commonTheme.mediaQueries.desktopPixel && (
         <AccountInfo
           onClick={() => {

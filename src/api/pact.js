@@ -1,5 +1,5 @@
 import Pact from 'pact-lang-api';
-import { chainId, creationTime, GAS_LIMIT, GAS_PRICE, NETWORK } from '../constants/contextConstants';
+import { CHAIN_ID, creationTime, GAS_PRICE, NETWORK } from '../constants/contextConstants';
 
 export const handleError = (error) => {
   console.log(`ERROR: ${JSON.stringify(error)}`);
@@ -10,7 +10,7 @@ export const pactFetchLocal = async (pactCode, options) => {
   let data = await Pact.fetch.local(
     {
       pactCode,
-      meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, GAS_LIMIT, creationTime(), 600),
+      meta: Pact.lang.mkMeta('', CHAIN_ID, GAS_PRICE, 150000, creationTime(), 600),
       ...options,
     },
     NETWORK

@@ -205,7 +205,7 @@ export const KaddexWalletProvider = (props) => {
   // const showChainError = (selectedChain) => {
   //   showNotification({
   //     title: 'Wallet error',
-  //     message: `Please set chain ${chainId} ${selectedChain ? `(chain ${selectedChain} selected)` : ''}`,
+  //     message: `Please set chain ${CHAIN_ID} ${selectedChain ? `(chain ${selectedChain} selected)` : ''}`,
   //     type: STATUSES.WARNING,
   //     autoClose: 5000,
   //     hideProgressBar: false,
