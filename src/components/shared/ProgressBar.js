@@ -68,7 +68,7 @@ const ProgressBar = ({ currentValue, maxValue, topLabelLeft, bottomValues, withB
                     top: -6,
                   }}
                 >
-                  <Indicator />
+                  <Indicator style={{ visibility: i === 0 || i === values.length - 1 ? 'hidden' : 'visible' }} />
                   <Label>{typeof v === 'number' ? v.toString() : v.value.toString()}</Label>
                   {v?.label && <Label labelStyle={{ fontWeight: 'bold' }}>{v.label}</Label>}
                 </PercetageIndicator>
