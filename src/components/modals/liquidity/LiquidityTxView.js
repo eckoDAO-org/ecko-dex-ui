@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import styled from 'styled-components/macro';
 import { useAccountContext, useGameEditionContext, usePactContext, useSwapContext } from '../../../contexts';
-import { chainId, ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
+import { CHAIN_ID, ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
 import { extractDecimal, reduceBalance } from '../../../utils/reduceBalance';
 import { getTokenIcon, showTicker } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
@@ -93,7 +93,7 @@ export const SuccessAddView = ({ token0, token1, loading, onClick }) => {
         {/* CHAIN */}
         <FlexContainer className="align-ce justify-sb">
           <Label fontSize={13}>Chain Id</Label>
-          <Label fontSize={13}>{chainId}</Label>
+          <Label fontSize={13}>{CHAIN_ID}</Label>
         </FlexContainer>
         {/* POOL */}
         <FlexContainer className="align-ce justify-sb">

@@ -14,7 +14,7 @@ import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel'
 import { CryptoContainer, FlexContainer } from '../../shared/FlexContainer';
 import CopyPopup from '../../shared/CopyPopup';
 import reduceToken from '../../../utils/reduceToken';
-import { chainId } from '../../../constants/contextConstants';
+import { CHAIN_ID } from '../../../constants/contextConstants';
 import { SuccessViewContainerGE } from '../TxView';
 
 const Content = styled(FlexContainer)`
@@ -64,7 +64,7 @@ const ReviewTxModal = ({ fromValues, toValues, supply }) => {
         {/* CHAIN */}
         <FlexContainer className="align-ce justify-sb">
           <Label fontSize={13}>Chain Id</Label>
-          <Label fontSize={13}>{chainId}</Label>
+          <Label fontSize={13}>{CHAIN_ID}</Label>
         </FlexContainer>
         {/* POOL */}
         <FlexContainer className="align-ce justify-sb">
