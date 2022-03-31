@@ -128,7 +128,7 @@ const MessageContainer = styled.div`
   border: ${({ color, gameEditionView }) => (gameEditionView ? `2px dashed ${color}` : `1px solid ${color}`)};
   padding: 16px 24px;
   border-radius: ${({ gameEditionView }) => !gameEditionView && '4px'};
-  background-color: ${({ gameEditionView, theme: { colors } }) => !gameEditionView && colors.black};
+  background-color: ${({ gameEditionView, theme: { colors } }) => !gameEditionView && colors.backgroundContainer};
 `;
 
 const Message = ({ color, children }) => {
@@ -144,7 +144,13 @@ const Message = ({ color, children }) => {
   };
   return (
     <MessageContainer gameEditionView={gameEditionView} color={getColor()}>
-      <Label color={getColor()} geColor={color} labelStyle={{ wordBreak: 'break-all' }} geLabelStyle={{ wordBreak: 'break-all' }}>
+      <Label
+        color={getColor()}
+        geColor={color}
+        className="capitalize"
+        labelStyle={{ wordBreak: 'break-all' }}
+        geLabelStyle={{ wordBreak: 'break-all' }}
+      >
         {children}
       </Label>
     </MessageContainer>

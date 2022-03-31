@@ -15,7 +15,7 @@ const Rewards = ({ amount, stakedTime, rewardsPenalty, disabled }) => {
         <Label fontSize={32}>{humanReadableNumber(amount)}</Label>
       </div>
       <div>
-        <Label>Stake Time</Label>
+        <Label>Staking Time</Label>
         <Label fontSize={24} color={commonColors.green}>
           {stakedTime} days
         </Label>
@@ -23,7 +23,7 @@ const Rewards = ({ amount, stakedTime, rewardsPenalty, disabled }) => {
       <div>
         <div className="flex align-ce">
           <Label>Rewards Penalty</Label>
-          <InfoPopup type="modal" title="penalty rewards">
+          <InfoPopup type="modal" title="Rewards Penalty">
             <PentalityRewardsInfo />
           </InfoPopup>
         </div>

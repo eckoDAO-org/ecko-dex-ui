@@ -24,7 +24,7 @@ const VotingPower = () => {
     >
       <div className="flex align-ce">
         <Label fontFamily="syncopate" fontSize={16}>
-          multiplayer (m)
+          multiplier (m)
         </Label>
 
         <InfoPopup centerIcon>
@@ -43,7 +43,7 @@ const VotingPower = () => {
             { value: 1, label: '2m' },
             { value: 1.5, label: '8.25m' },
             { value: 2, label: '22m' },
-            { value: 2.5, label: '4Y' },
+            { value: 2.5, label: '4y' },
           ]}
         />
       </div>
