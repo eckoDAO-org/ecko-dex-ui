@@ -11,6 +11,7 @@ import {
   ROUTE_LIQUIDITY_REMOVE_LIQUIDITY,
   ROUTE_STAKE,
   ROUTE_UNSTAKE,
+  ROUTE_DAO,
 } from '../router/routes';
 
 export const SWAP = {
@@ -31,9 +32,14 @@ export const LIQUIDITY = {
     ROUTE_LIQUIDITY_REMOVE_LIQUIDITY,
   ],
 };
-
+export const DAO = {
+  id: 2,
+  label: 'dao',
+  route: ROUTE_DAO,
+  className: '',
+};
 export const ANALYTICS = {
-  id: 3,
+  id: 4,
   label: 'analytics',
   route: ROUTE_ANALYTICS,
 };
@@ -49,7 +55,7 @@ export const VAULT = {
   link: 'http://134.209.219.136/',
 };
 
-export default [SWAP, LIQUIDITY, STAKE, ANALYTICS, VAULT];
+export default [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS, VAULT];
 
 export const gameEditionRoutes = [
   {

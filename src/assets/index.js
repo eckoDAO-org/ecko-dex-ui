@@ -45,5 +45,6 @@ export { ReactComponent as TorusLogo } from './images/shared/torus-logo.svg';
 export { ReactComponent as VotingPowerFormulaIcon } from './images/shared/voting-power-formula.svg';
 export { ReactComponent as ZelcoreLogo } from './images/shared/zelcore-logo.svg';
 export { ReactComponent as XWalletLogo } from './images/header/x-wallet-logo.svg';
+export { ReactComponent as InfoIcon } from './images/shared/info-icon.svg';
 
 export * from '../assets/images/game-edition';
