@@ -1,12 +1,10 @@
 import Pact from 'pact-lang-api';
-import { CHAIN_ID, GAS_LIMIT, GAS_PRICE, NETWORK, NETWORKID } from '../constants/contextConstants';
+import { CHAIN_ID, GAS_LIMIT, GAS_PRICE, KADDEX_NAMESPACE, NETWORK, NETWORKID } from '../constants/contextConstants';
 import { handleError, listen, mkReq, pactFetchLocal, parseRes } from './pact';
-
-const DEV_PACT_DAO_CONTRACT = 'kaddex.dao';
 
 export const getAccountData = async (account) => {
   try {
-    const pactCode = `(${DEV_PACT_DAO_CONTRACT}.get-account-data "${account}")`;
+    const pactCode = `(${KADDEX_NAMESPACE}.dao.get-account-data "${account}")`;
     return await pactFetchLocal(pactCode);
   } catch (e) {
     return handleError(e);
@@ -15,7 +13,7 @@ export const getAccountData = async (account) => {
 
 export const hasAccountVoted = async (account, proposalId) => {
   try {
-    const pactCode = `(${DEV_PACT_DAO_CONTRACT}.read-account-vote-proposal  "${account}" "${proposalId}")`;
+    const pactCode = `(${KADDEX_NAMESPACE}.dao.read-account-vote-proposal  "${account}" "${proposalId}")`;
     return await pactFetchLocal(pactCode);
   } catch (e) {
     return handleError(e);
@@ -24,7 +22,7 @@ export const hasAccountVoted = async (account, proposalId) => {
 
 export const readAllProposals = async () => {
   try {
-    const pactCode = `(${DEV_PACT_DAO_CONTRACT}.read-all-proposals)`;
+    const pactCode = `(${KADDEX_NAMESPACE}.dao.read-all-proposals)`;
     return await pactFetchLocal(pactCode);
   } catch (e) {
     return handleError(e);
@@ -33,7 +31,7 @@ export const readAllProposals = async () => {
 
 export const readSingleProposal = async (proposalId) => {
   try {
-    const pactCode = `(${DEV_PACT_DAO_CONTRACT}.read-proposal "${proposalId}")`;
+    const pactCode = `(${KADDEX_NAMESPACE}.dao.read-proposal "${proposalId}")`;
     return await pactFetchLocal(pactCode);
   } catch (e) {
     return handleError(e);
@@ -43,8 +41,8 @@ export const readSingleProposal = async (proposalId) => {
 export const voteCommandToSign = (type, proposalId, account) => {
   try {
     let pactCode = '';
-    if (type === 'approved') pactCode = `(${DEV_PACT_DAO_CONTRACT}.approved-vote "${proposalId}" "${account.account}" )`;
-    else pactCode = `(${DEV_PACT_DAO_CONTRACT}.refused-vote "${proposalId}" "${account.account}" )`;
+    if (type === 'approved') pactCode = `(${KADDEX_NAMESPACE}.dao.approved-vote "${proposalId}" "${account.account}" )`;
+    else pactCode = `(${KADDEX_NAMESPACE}.dao.refused-vote "${proposalId}" "${account.account}" )`;
     const cmdToSign = {
       pactCode,
       clist: [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap],
