@@ -41,7 +41,7 @@ const verifierMap = {
   },
 };
 
-/* const createAPIHost = (network, chainId) => `https://${network}.testnet.chainweb.com/chainweb/0.0/testnet02/chain/${chainId}/pact` */
+/* const createAPIHost = (network, CHAIN_ID) => `https://${network}.testnet.chainweb.com/chainweb/0.0/testnet02/chain/${CHAIN_ID}/pact` */
 
 function Login({ onClose, onBack }) {
   const modalContext = useContext(ModalContext);

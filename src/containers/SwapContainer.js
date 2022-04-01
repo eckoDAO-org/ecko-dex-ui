@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import { throttle, debounce } from "throttle-debounce";

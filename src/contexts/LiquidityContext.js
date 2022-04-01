@@ -1,31 +1,30 @@
-import React, { useState, useContext, createContext } from "react";
+import React, { useState, createContext } from "react";
 import pairTokens from "../constants/pairs.json";
 import Pact from "pact-lang-api";
-import { PactContext } from "./PactContext";
 import {
-  chainId,
+  CHAIN_ID,
   creationTime,
   GAS_PRICE,
-  network,
+  GAS_LIMIT,
+  NETWORK,
   NETWORKID,
   PRECISION,
   ENABLE_GAS_STATION,
 } from "../constants/contextConstants";
-import { AccountContext } from "./AccountContext";
-import { WalletContext } from "./WalletContext";
+import { useKaddexWalletContext, useSwapContext, usePactContext, useWalletContext, useAccountContext } from '.';
 import { reduceBalance } from "../utils/reduceBalance";
 import tokenData from "../constants/cryptoCurrencies";
-import { SwapContext } from "./SwapContext";
 import pwPrompt from "../components/alerts/pwPrompt";
 import { decryptKey } from "../utils/keyUtils";
 
 export const LiquidityContext = createContext(null);
 
 export const LiquidityProvider = (props) => {
-  const pact = useContext(PactContext);
-  const { account, setLocalRes } = useContext(AccountContext);
-  const wallet = useContext(WalletContext);
-  const swap = useContext(SwapContext);
+  const pact = usePactContext();
+  const { account, setLocalRes } = useAccountContext();
+  const { isConnected: isXWalletConnected, requestSign: xWalletRequestSign } = useKaddexWalletContext();
+  const wallet = useWalletContext();
+  const swap = useSwapContext();
   const [liquidityProviderFee, setLiquidityProviderFee] = useState(0.003);
   const [pairListAccount, setPairListAccount] = useState(pairTokens);
 
@@ -73,14 +72,14 @@ export const LiquidityProvider = (props) => {
              `,
           meta: Pact.lang.mkMeta(
             "",
-            chainId,
+            CHAIN_ID,
             GAS_PRICE,
-            150000,
+            GAS_LIMIT,
             creationTime(),
             600
           ),
         },
-        network
+        NETWORK
       );
       if (data.result.status === "success") {
         let dataList = data.result.data.reduce((accum, data) => {
@@ -121,7 +120,7 @@ export const LiquidityProvider = (props) => {
             )`,
           meta: Pact.lang.mkMeta(
             "",
-            chainId,
+            CHAIN_ID,
             GAS_PRICE,
             5000,
             creationTime(),
@@ -129,7 +128,7 @@ export const LiquidityProvider = (props) => {
           ),
           networkId: NETWORKID,
         },
-        network
+        NETWORK
       );
       let pair = data.result.data.account;
       try {
@@ -193,7 +192,7 @@ export const LiquidityProvider = (props) => {
           },
           meta: Pact.lang.mkMeta(
             ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
-            chainId,
+            CHAIN_ID,
             GAS_PRICE,
             5000,
             creationTime(),
@@ -201,7 +200,7 @@ export const LiquidityProvider = (props) => {
           ),
           networkId: NETWORKID,
         };
-        let data = await Pact.fetch.local(cmd, network);
+        let data = await Pact.fetch.local(cmd, NETWORK);
         swap.setCmd(cmd);
         setLocalRes(data);
         return data;
@@ -286,15 +285,15 @@ export const LiquidityProvider = (props) => {
         },
         meta: Pact.lang.mkMeta(
           ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
-          chainId,
+          CHAIN_ID,
           GAS_PRICE,
-          150000,
+          GAS_LIMIT,
           creationTime(),
           600
         ),
         networkId: NETWORKID,
       };
-      let data = await Pact.fetch.local(cmd, network);
+      let data = await Pact.fetch.local(cmd, NETWORK);
       swap.setCmd(cmd);
       setLocalRes(data);
       return data;
@@ -353,9 +352,9 @@ export const LiquidityProvider = (props) => {
             : []),
         ],
         sender: ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
-        gasLimit: 150000,
+        gasLimit: GAS_LIMIT,
         gasPrice: GAS_PRICE,
-        chainId: chainId,
+        chainId: CHAIN_ID,
         ttl: 600,
         envData: {
           "user-ks": account.guard,
@@ -382,14 +381,20 @@ export const LiquidityProvider = (props) => {
       //alert to sign tx
       /* walletLoading(); */
       wallet.setIsWaitingForWalletAuth(true);
-      const cmd = await Pact.wallet.sign(signCmd);
+      let command = null;
+      if (isXWalletConnected) {
+        const res = await xWalletRequestSign(signCmd);
+        command = res.signedCmd;
+      } else {
+        command = await Pact.wallet.sign(signCmd);
+      }
       //close alert programmatically
       /* swal.close(); */
       wallet.setIsWaitingForWalletAuth(false);
       wallet.setWalletSuccess(true);
       //set signedtx
-      swap.setCmd(cmd);
-      let data = await fetch(`${network}/api/v1/local`, swap.mkReq(cmd));
+      swap.setCmd(command);
+      let data = await fetch(`${NETWORK}/api/v1/local`, swap.mkReq(command));
       data = await swap.parseRes(data);
       setLocalRes(data);
       return data;
@@ -465,15 +470,15 @@ export const LiquidityProvider = (props) => {
         },
         meta: Pact.lang.mkMeta(
           ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
-          chainId,
+          CHAIN_ID,
           GAS_PRICE,
-          150000,
+          GAS_LIMIT,
           creationTime(),
           600
         ),
       };
       swap.setCmd(cmd);
-      let data = await Pact.fetch.local(cmd, network);
+      let data = await Pact.fetch.local(cmd, NETWORK);
       setLocalRes(data);
       return data;
     } catch (e) {
@@ -527,9 +532,9 @@ export const LiquidityProvider = (props) => {
             : []),
         ],
         sender: ENABLE_GAS_STATION ? "kswap-free-gas" : account.account,
-        gasLimit: 150000,
+        gasLimit: GAS_LIMIT,
         gasPrice: GAS_PRICE,
-        chainId: chainId,
+        chainId: CHAIN_ID,
         ttl: 600,
         envData: {
           "user-ks": account.guard,
@@ -541,13 +546,19 @@ export const LiquidityProvider = (props) => {
       //alert to sign tx
       /* walletLoading(); */
       wallet.setIsWaitingForWalletAuth(true);
-      const cmd = await Pact.wallet.sign(signCmd);
+      let cmd = null;
+      if (isXWalletConnected) {
+        const res = await xWalletRequestSign(signCmd);
+        cmd = res.signedCmd;
+      } else {
+        cmd = await Pact.wallet.sign(signCmd);
+      }
       //close alert programmatically
       /* swal.close(); */
       wallet.setIsWaitingForWalletAuth(false);
       wallet.setWalletSuccess(true);
       swap.setCmd(cmd);
-      let data = await fetch(`${network}/api/v1/local`, swap.mkReq(cmd));
+      let data = await fetch(`${NETWORK}/api/v1/local`, swap.mkReq(cmd));
       data = await swap.parseRes(data);
       setLocalRes(data);
       return data;

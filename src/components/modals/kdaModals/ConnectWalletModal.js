@@ -5,11 +5,13 @@ import CustomButton from "../../../shared/CustomButton";
 import { WALLET } from "../../../constants/wallet";
 import { ModalContext } from "../../../contexts/ModalContext";
 import ConnectWalletZelcoreModal from "./ConnectWalletZelcoreModal";
-import ConnecWalletTorusModal from "./ConnectWalletTorusModal";
 import ConnectWalletChainweaverModal from "./ConnectWalletChainweaverModal";
+import { useKaddexWalletContext, useNotificationContext } from "../../../contexts";
 
 const ConnectWalletModal = () => {
   const modalContext = useContext(ModalContext);
+  const { STATUSES, showNotification } = useNotificationContext();
+  const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
 
   const openWalletModal = (walletName) => {
     switch (walletName) {
@@ -28,19 +30,6 @@ const ConnectWalletModal = () => {
             />
           ),
         });
-      case "Torus":
-        return modalContext.openModal({
-          id: "TORUS",
-          title: "connect wallet",
-          description: "Torus Signing",
-          onBack: () => modalContext.onBackModal(),
-          content: (
-            <ConnecWalletTorusModal
-              onClose={() => modalContext.closeModal()}
-              onBack={() => modalContext.onBackModal()}
-            />
-          ),
-        });
       case "Chainweaver":
         return modalContext.openModal({
           id: "CHIANWEAVER",
@@ -54,6 +43,17 @@ const ConnectWalletModal = () => {
             />
           ),
         });
+        case "X-Wallet":
+          if (!isInstalled) {
+            showNotification({
+              title: 'Wallet not found',
+              message: `Please install ${WALLET.KADDEX_WALLET.name}`,
+              type: STATUSES.WARNING,
+            });
+          } else {
+            initializeKaddexWallet();
+            modalContext.closeModal();
+          };
     }
   };
 

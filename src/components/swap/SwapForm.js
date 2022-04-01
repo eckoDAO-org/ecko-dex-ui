@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import ButtonDivider from '../../shared/ButtonDivider';
 import Input from '../../shared/Input';
 import InputToken from '../../shared/InputToken';
-import CustomButton from '../../shared/CustomButton';
 import { SwapArrowsIcon } from '../../assets';
 import { limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
 import tokenData from '../../constants/cryptoCurrencies';

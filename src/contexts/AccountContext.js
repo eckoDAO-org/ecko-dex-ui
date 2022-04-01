@@ -1,31 +1,25 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useEffect, useState } from "react";
 import Pact from "pact-lang-api";
 import swal from "@sweetalert/with-react";
 import { getCorrectBalance } from "../utils/reduceBalance";
 import {
-  chainId,
+  CHAIN_ID,
   creationTime,
   GAS_PRICE,
-  network,
+  NETWORK,
 } from "../constants/contextConstants";
-import FailedLoginView from "../shared/FailedLoginView";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 export const AccountContext = createContext();
 
-const savedAcct = localStorage.getItem("acct");
-const savedPrivKey = localStorage.getItem("pk");
-const savedSigning = localStorage.getItem("signing");
 
 export const AccountProvider = (props) => {
   const [sendRes, setSendRes] = useState(null);
   const [localRes, setLocalRes] = useState(null);
 
-  const [account, setAccount] = useState(
-    savedAcct
-      ? JSON.parse(savedAcct)
-      : { account: null, guard: null, balance: 0 }
-  );
-  const [privKey, setPrivKey] = useState(savedPrivKey ? savedPrivKey : "");
+  const [account, setAccount, removeAccount] = useLocalStorage('acct', { account: null, guard: null, balance: 0 });
+  const [privKey, setPrivKey, removePrivKey] = useLocalStorage('pk', '');
 
   const [registered, setRegistered] = useState(false);
 
@@ -53,21 +47,21 @@ export const AccountProvider = (props) => {
   };
 
   const setVerifiedAccount = async (accountName) => {
-    /* console.log("network", network); */
+    /* console.log("NETWORK", NETWORK); */
     try {
       let data = await Pact.fetch.local(
         {
           pactCode: `(coin.details ${JSON.stringify(accountName)})`,
           meta: Pact.lang.mkMeta(
             "",
-            chainId,
+            CHAIN_ID,
             GAS_PRICE,
             3000,
             creationTime(),
             600
           ),
         },
-        network
+        NETWORK
       );
       if (data.result.status === "success") {
         await localStorage.setItem("acct", JSON.stringify(data.result.data));
@@ -97,14 +91,14 @@ export const AccountProvider = (props) => {
           keyPairs: Pact.crypto.genKeyPair(),
           meta: Pact.lang.mkMeta(
             "",
-            chainId,
+            CHAIN_ID,
             0.01,
             100000000,
             28800,
             creationTime()
           ),
         },
-        network
+        NETWORK
       );
       if (data.result.status === "success") {
         // setTokenAccount({...data.result.data, balance: getCorrectBalance(data.result.data.balance)});
@@ -124,11 +118,10 @@ export const AccountProvider = (props) => {
   };
 
   const logout = () => {
-    localStorage.removeItem("acct", null);
-    localStorage.removeItem("signing", null);
-    localStorage.removeItem("pk");
-    localStorage.removeItem("wallet");
-    window.location.reload();
+    removeAccount();
+    localStorage.removeItem('signing', null);
+    removePrivKey();
+    localStorage.removeItem('wallet');
   };
 
   const contextValues = {
