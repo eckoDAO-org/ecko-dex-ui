@@ -1,7 +1,28 @@
 {
-  "coin:runonflux.flux": {
-    "name": "coin:runonflux.flux",
-    "token0": "KDA",
-    "token1": "FLUX"
+  "pairs": {
+    "development": {
+      "coin:kaddex.kdx": {
+        "name": "coin:kaddex.kdx",
+        "token0": "KDA",
+        "token1": "KDX"
+      },
+      "coin:kaddex.abc": {
+        "name": "coin:kaddex.abc",
+        "token0": "KDA",
+        "token1": "ABC"
+      },
+      "coin:kaddex.xyz": {
+        "name": "coin:kaddex.xyz",
+        "token0": "KDA",
+        "token1": "XYZ"
+      }
+    },
+    "mainnet": {
+      "coin:runonflux.flux": {
+        "name": "coin:runonflux.flux",
+        "token0": "KDA",
+        "token1": "FLUX"
+      }
+    }
   }
 }

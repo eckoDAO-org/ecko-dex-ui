@@ -28,11 +28,11 @@ const Item = styled.div`
     color: ${({ theme: { colors } }) => colors.white};
 
     cursor: pointer;
-    & svg {
+    /* & svg {
       & path {
         fill: ${({ $disableHover, theme: { colors } }) => !$disableHover && colors.white};
       }
-    }
+    } */
   }
 `;
 
@@ -79,7 +79,7 @@ const HeaderItem = ({
             onClick();
           }
         } else if (item.link) {
-          window.open(item.link, '_self');
+          window.open(item.link, '_blank');
         } else {
           if (onClick) {
             onClick();

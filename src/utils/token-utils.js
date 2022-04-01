@@ -1,5 +1,5 @@
 import { getCoingeckoUsdPrice } from '../api/coingecko';
-import { chainId, FEE } from '../constants/contextConstants';
+import { CHAIN_ID, FEE } from '../constants/contextConstants';
 import tokenData from '../constants/cryptoCurrencies';
 import { bigNumberConverter } from './bignumber';
 import { reduceBalance } from './reduceBalance';
@@ -86,7 +86,7 @@ export const get24HVolumeDoubleSided = (volumes, token0NameKaddexStats, token1Na
   return last24hDailyVolume.volumes
     ?.filter(
       (v) =>
-        v.chain === Number(chainId) &&
+        v.chain === Number(CHAIN_ID) &&
         ((v.tokenFromName === token0NameKaddexStats && v.tokenToName === token1NameKaddexStats) ||
           (v.tokenFromName === token1NameKaddexStats && v.tokenToName === token0NameKaddexStats))
     )
@@ -96,7 +96,7 @@ export const get24HVolumeDoubleSided = (volumes, token0NameKaddexStats, token1Na
 export const get24HVolumeSingleSided = (volumes, tokenNameKaddexStats) => {
   const last24hDailyVolume = volumes.slice(-1)[0];
   return last24hDailyVolume.volumes
-    ?.filter((v) => v.chain === Number(chainId) && (v.tokenFromName === tokenNameKaddexStats || v.tokenToName === tokenNameKaddexStats))
+    ?.filter((v) => v.chain === Number(CHAIN_ID) && (v.tokenFromName === tokenNameKaddexStats || v.tokenToName === tokenNameKaddexStats))
     .reduce((total, v) => total + getVolume(v, tokenNameKaddexStats), 0);
 };
 

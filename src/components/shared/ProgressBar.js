@@ -31,14 +31,14 @@ const PercetageIndicator = styled(FlexContainer)`
   }
 `;
 
-const ProgressBar = ({ currentValue, maxValue, topLabelLeft, values, withBottomLabel, darkBar }) => {
+const ProgressBar = ({ currentValue, maxValue, topLabelLeft, bottomValues, withBottomLabel, values, darkBar, containerStyle }) => {
   const getPercentage = (current, max) => {
+    if (maxValue === 0) return 0;
     if (current <= maxValue) return (100 * current) / max;
     else return 100;
   };
-
   return (
-    <FlexContainer className="column">
+    <FlexContainer className="column w-100" style={containerStyle}>
       {topLabelLeft && (
         <FlexContainer className="justify-sb align-ce w-100">
           <Label fontSize={13}>{topLabelLeft}</Label>
@@ -65,10 +65,11 @@ const ProgressBar = ({ currentValue, maxValue, topLabelLeft, values, withBottomL
                     alignItems: i === 0 && 'flex-start',
                     position: 'absolute',
                     left,
-                    top: -6,
+                    top: 14,
                   }}
                 >
-                  <Indicator />
+                  {/* <Indicator /> */}
+               {/* <Indicator style={{ visibility: i === 0 || i === values.length - 1 ? 'hidden' : 'visible' }} />*/}
                   <Label>{typeof v === 'number' ? v.toString() : v.value.toString()}</Label>
                   {v?.label && <Label labelStyle={{ fontWeight: 'bold' }}>{v.label}</Label>}
                 </PercetageIndicator>
@@ -77,7 +78,7 @@ const ProgressBar = ({ currentValue, maxValue, topLabelLeft, values, withBottomL
           </FlexContainer>
         )}
       </STYMaxSupplyContainer>
-
+      {/* 
       {withBottomLabel && (
         <FlexContainer className="justify-sb align-ce w-100" gap={16}>
           <PercetageIndicator>
@@ -91,15 +92,15 @@ const ProgressBar = ({ currentValue, maxValue, topLabelLeft, values, withBottomL
             <Label>3</Label>
           </PercetageIndicator>
         </FlexContainer>
-      )}
+      )} */}
     </FlexContainer>
   );
 };
 
 export default ProgressBar;
 
-const Indicator = styled.div`
-  background-color: ${({ theme: { colors } }) => colors.white};
-  height: 20px;
-  width: 1px;
-`;
+// const Indicator = styled.div`
+//   background-color: ${({ theme: { colors } }) => colors.white};
+//   height: 20px;
+//   width: 1px;
+// `;

@@ -3,6 +3,7 @@ export { ReactComponent as AboutIcon } from './images/header/about.svg';
 export { ReactComponent as AddIcon } from './images/shared/add.svg';
 export { ReactComponent as ArrowBack } from './images/shared/arrow-back.svg';
 export { ReactComponent as ArrowDown } from './images/shared/arrow-down-white.svg';
+export { ReactComponent as BetaIcon } from './images/header/beta.svg';
 export { ReactComponent as CodeIcon } from './images/header/code.svg';
 export { ReactComponent as CogIcon } from './images/header/cog.svg';
 export { ReactComponent as CopyIcon } from './images/shared/copy.svg';
@@ -44,5 +45,6 @@ export { ReactComponent as TorusLogo } from './images/shared/torus-logo.svg';
 export { ReactComponent as VotingPowerFormulaIcon } from './images/shared/voting-power-formula.svg';
 export { ReactComponent as ZelcoreLogo } from './images/shared/zelcore-logo.svg';
 export { ReactComponent as XWalletLogo } from './images/header/x-wallet-logo.svg';
+export { ReactComponent as InfoIcon } from './images/shared/info-icon.svg';
 
 export * from '../assets/images/game-edition';

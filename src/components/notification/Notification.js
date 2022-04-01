@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const Container = styled.div`
   .Toastify__toast {
     height: 88px;
-    width: 370px;
+    min-width: 370px;
     border-radius: 30px;
   }
 

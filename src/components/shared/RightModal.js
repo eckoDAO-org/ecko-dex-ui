@@ -67,9 +67,6 @@ const FooterContainer = styled.div`
   width: 100%;
   z-index: 1;
   padding: 16px 26px;
-  & > * {
-    width: 200px;
-  }
 `;
 
 const Content = styled.div`
@@ -91,7 +88,9 @@ const RightModal = ({ className, title, open, onClose, customIcon, removeIcon, t
     <Container ref={ref} open={open} right={window.innerWidth}>
       <>
         <Header style={titleStyle}>
-          <Label fontFamily="syncopate">{title}</Label>
+          <Label outGameEditionView fontFamily="syncopate">
+            {title}
+          </Label>
           <IconContainer onClick={onClose}>{!removeIcon && (customIcon || <CloseIcon style={{ height: 10, width: 10 }} />)}</IconContainer>
         </Header>
 

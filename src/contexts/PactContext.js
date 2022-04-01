@@ -1,21 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
-import pairTokens from '../constants/pairs.json';
+import pairTokens from '../constants/pairsConfig';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import moment from 'moment';
 
-import {
-  chainId,
-  creationTime,
-  FEE,
-  GAS_PRICE,
-  getCurrentDate,
-  getCurrentTime,
-  network,
-  NETWORK_TYPE,
-  NETWORKID,
-} from '../constants/contextConstants';
+import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, NETWORK_TYPE, NETWORKID, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { extractDecimal } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
 import { AccountContext } from './AccountContext';
@@ -107,7 +98,7 @@ export const PactProvider = (props) => {
         let response = await axios.get('https://estats.chainweb.com/txs/events', {
           params: {
             search: account.account.account,
-            name: 'kswap.exchange.SWAP',
+            name: '${KADDEX_NAMESPACE}.exchange.SWAP',
             offset: offsetSwapList,
             limit: limit,
           },
@@ -141,7 +132,7 @@ export const PactProvider = (props) => {
         let response = await axios.get('https://estats.chainweb.com/txs/events', {
           params: {
             search: account.account.account,
-            name: 'kswap.exchange.SWAP',
+            name: `${KADDEX_NAMESPACE}.exchange.SWAP`,
             offset: offset,
             limit: limit,
           },
@@ -193,9 +184,9 @@ export const PactProvider = (props) => {
       let data = await Pact.fetch.local(
         {
           pactCode: tokenNames,
-          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 150000, creationTime(), 600),
+          meta: Pact.lang.mkMeta('', CHAIN_ID, GAS_PRICE, 150000, creationTime(), 600),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         Object.keys(tokenData).forEach((token) => {
@@ -231,9 +222,9 @@ export const PactProvider = (props) => {
       let data = await Pact.fetch.local(
         {
           pactCode: tokenNames,
-          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 150000, creationTime(), 600),
+          meta: Pact.lang.mkMeta('', CHAIN_ID, GAS_PRICE, 150000, creationTime(), 600),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         Object.keys(tokenData).forEach((token) => {
@@ -254,13 +245,12 @@ export const PactProvider = (props) => {
         accum += `[${pair.split(':').join(' ')}] `;
         return accum;
       }, '');
-      console.log('tokenPairList', tokenPairList);
       let data = await Pact.fetch.local(
         {
           pactCode: `
             (namespace 'free)
 
-            (module kswap-read G
+            (module ${KADDEX_NAMESPACE}-read G
 
               (defcap G ()
                 true)
@@ -269,23 +259,23 @@ export const PactProvider = (props) => {
                 (let* (
                   (token0 (at 0 pairList))
                   (token1 (at 1 pairList))
-                  (p (kswap.exchange.get-pair token0 token1))
-                  (reserveA (kswap.exchange.reserve-for p token0))
-                  (reserveB (kswap.exchange.reserve-for p token1))
-                  (totalBal (kswap.tokens.total-supply (kswap.exchange.get-pair-key token0 token1)))
+                  (p (${KADDEX_NAMESPACE}.exchange.get-pair token0 token1))
+                  (reserveA (${KADDEX_NAMESPACE}.exchange.reserve-for p token0))
+                  (reserveB (${KADDEX_NAMESPACE}.exchange.reserve-for p token1))
+                  (totalBal (${KADDEX_NAMESPACE}.tokens.total-supply (${KADDEX_NAMESPACE}.exchange.get-pair-key token0 token1)))
                 )
-                [(kswap.exchange.get-pair-key token0 token1)
+                [(${KADDEX_NAMESPACE}.exchange.get-pair-key token0 token1)
                  reserveA
                  reserveB
                  totalBal
                ]
               ))
             )
-            (map (kswap-read.pair-info) [${tokenPairList}])
+            (map (${KADDEX_NAMESPACE}-read.pair-info) [${tokenPairList}])
              `,
-          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 150000, creationTime(), 600),
+          meta: Pact.lang.mkMeta('', CHAIN_ID, GAS_PRICE, 150000, creationTime(), 600),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         let dataList = data.result.data.reduce((accum, data) => {
@@ -331,7 +321,7 @@ export const PactProvider = (props) => {
     var pollRes;
     while (time > 0) {
       await wait(5000);
-      pollRes = await Pact.fetch.poll({ requestKeys: [reqKey] }, network);
+      pollRes = await Pact.fetch.poll({ requestKeys: [reqKey] }, NETWORK);
       if (Object.keys(pollRes).length === 0) {
         console.log('no return poll');
         console.log(pollRes);
@@ -354,8 +344,8 @@ export const PactProvider = (props) => {
       // store in local storage the success notification for the right modal
       account.storeNotification({
         type: 'success',
-        time: getCurrentTime(),
-        date: getCurrentDate(),
+        date: moment().format('DD/MM/YYYY - HH:mm:ss'),
+
         title: 'Transaction Success!',
         description: 'Check it out in the block explorer',
         link: `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
@@ -381,8 +371,8 @@ export const PactProvider = (props) => {
       // store in local storage the error notification for the right modal
       account.storeNotification({
         type: 'error',
-        time: getCurrentTime(),
-        date: getCurrentDate(),
+        date: moment().format('DD/MM/YYYY - HH:mm:ss'),
+
         title: 'Transaction Failure!',
         description: 'Check it out in the block explorer',
         link: `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
@@ -411,11 +401,11 @@ export const PactProvider = (props) => {
       let data = await Pact.fetch.local(
         {
           pactCode: `
-          (kswap.tokens.get-tokens)
+          (${KADDEX_NAMESPACE}.tokens.get-tokens)
            `,
-          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 150000, creationTime(), 600),
+          meta: Pact.lang.mkMeta('', CHAIN_ID, GAS_PRICE, 150000, creationTime(), 600),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         return data.result.data;
@@ -433,7 +423,7 @@ export const PactProvider = (props) => {
       let data = await Pact.fetch.local(
         {
           pactCode: `
-          (kaddex.public-sale.kda-current-usd-price)
+          (${KADDEX_NAMESPACE}.public-sale.kda-current-usd-price)
           `,
           meta: Pact.lang.mkMeta('', '0', GAS_PRICE, 150000, creationTime(), 600),
           chainId: 0,
@@ -450,11 +440,11 @@ export const PactProvider = (props) => {
     try {
       let data = await Pact.fetch.local(
         {
-          pactCode: `(kswap.tokens.total-supply (kswap.exchange.get-pair-key ${token0} ${token1}))`,
+          pactCode: `(${KADDEX_NAMESPACE}.tokens.total-supply (${KADDEX_NAMESPACE}.exchange.get-pair-key ${token0} ${token1}))`,
           keyPairs: Pact.crypto.genKeyPair(),
-          meta: Pact.lang.mkMeta('', chainId, 0.01, 100000000, 28800, creationTime()),
+          meta: Pact.lang.mkMeta('', CHAIN_ID, 0.01, 100000000, 28800, creationTime()),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         if (data.result.data.decimal) setTotalSupply(data.result.data.decimal);
@@ -469,11 +459,11 @@ export const PactProvider = (props) => {
     try {
       let data = await Pact.fetch.local(
         {
-          pactCode: `(kswap.exchange.get-pair ${token0} ${token1})`,
+          pactCode: `(${KADDEX_NAMESPACE}.exchange.get-pair ${token0} ${token1})`,
           keyPairs: Pact.crypto.genKeyPair(),
-          meta: Pact.lang.mkMeta('', chainId, GAS_PRICE, 150000, creationTime(), 600),
+          meta: Pact.lang.mkMeta('', CHAIN_ID, GAS_PRICE, 150000, creationTime(), 600),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         setPair(data.result.data);
@@ -490,10 +480,10 @@ export const PactProvider = (props) => {
     try {
       let data = await Pact.fetch.local(
         {
-          pactCode: `(kswap.exchange.get-pair-key ${token0} ${token1})`,
-          meta: Pact.lang.mkMeta(account.account.account, chainId, GAS_PRICE, 150000, creationTime(), 600),
+          pactCode: `(${KADDEX_NAMESPACE}.exchange.get-pair-key ${token0} ${token1})`,
+          meta: Pact.lang.mkMeta(account.account.account, CHAIN_ID, GAS_PRICE, 150000, creationTime(), 600),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         return data.result.data;
@@ -508,7 +498,7 @@ export const PactProvider = (props) => {
       let data = await Pact.fetch.local(
         {
           pactCode: `
-          (use kswap.exchange)
+          (use ${KADDEX_NAMESPACE}.exchange)
           (let*
             (
               (p (get-pair ${token0} ${token1}))
@@ -516,9 +506,9 @@ export const PactProvider = (props) => {
               (reserveB (reserve-for p ${token1}))
             )[reserveA reserveB])
            `,
-          meta: Pact.lang.mkMeta('account', chainId, GAS_PRICE, 150000, creationTime(), 600),
+          meta: Pact.lang.mkMeta('account', CHAIN_ID, GAS_PRICE, 150000, creationTime(), 600),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         await setPairReserve({

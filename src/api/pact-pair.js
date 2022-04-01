@@ -1,5 +1,6 @@
 import { handleError, pactFetchLocal } from './pact';
-import pairTokens from '../constants/pairs.json';
+import pairTokens from '../constants/pairsConfig';
+import { KADDEX_NAMESPACE } from '../constants/contextConstants';
 
 export const getPairList = async () => {
   try {
@@ -12,7 +13,7 @@ export const getPairList = async () => {
       `
               (namespace 'free)
   
-              (module kswap-read G
+              (module ${KADDEX_NAMESPACE}-read G
   
                 (defcap G ()
                   true)
@@ -21,19 +22,19 @@ export const getPairList = async () => {
                   (let* (
                     (token0 (at 0 pairList))
                     (token1 (at 1 pairList))
-                    (p (kswap.exchange.get-pair token0 token1))
-                    (reserveA (kswap.exchange.reserve-for p token0))
-                    (reserveB (kswap.exchange.reserve-for p token1))
-                    (totalBal (kswap.tokens.total-supply (kswap.exchange.get-pair-key token0 token1)))
+                    (p (${KADDEX_NAMESPACE}.exchange.get-pair token0 token1))
+                    (reserveA (${KADDEX_NAMESPACE}.exchange.reserve-for p token0))
+                    (reserveB (${KADDEX_NAMESPACE}.exchange.reserve-for p token1))
+                    (totalBal (${KADDEX_NAMESPACE}.tokens.total-supply (${KADDEX_NAMESPACE}.exchange.get-pair-key token0 token1)))
                   )
-                  [(kswap.exchange.get-pair-key token0 token1)
+                  [(${KADDEX_NAMESPACE}.exchange.get-pair-key token0 token1)
                    reserveA
                    reserveB
                    totalBal
                  ]
                 ))
               )
-              (map (kswap-read.pair-info) [${tokenPairList}])
+              (map (${KADDEX_NAMESPACE}-read.pair-info) [${tokenPairList}])
                `
     );
     if (data) {
@@ -67,7 +68,7 @@ export const getPairListAccountBalance = async (account) => {
       `
             (namespace 'free)
 
-            (module kswap-read G
+            (module ${KADDEX_NAMESPACE}-read G
 
               (defcap G ()
                 true)
@@ -76,15 +77,17 @@ export const getPairListAccountBalance = async (account) => {
                 (let* (
                   (token0 (at 0 pairList))
                   (token1 (at 1 pairList))
-                  (p (kswap.exchange.get-pair token0 token1))
-                  (reserveA (kswap.exchange.reserve-for p token0))
-                  (reserveB (kswap.exchange.reserve-for p token1))
-                  (totalBal (kswap.tokens.total-supply (kswap.exchange.get-pair-key token0 token1)))
+                  (p (${KADDEX_NAMESPACE}.exchange.get-pair token0 token1))
+                  (reserveA (${KADDEX_NAMESPACE}.exchange.reserve-for p token0))
+                  (reserveB (${KADDEX_NAMESPACE}.exchange.reserve-for p token1))
+                  (totalBal (${KADDEX_NAMESPACE}.tokens.total-supply (${KADDEX_NAMESPACE}.exchange.get-pair-key token0 token1)))
                   (acctBal
-                      (try 0.0 (kswap.tokens.get-balance (kswap.exchange.get-pair-key token0 token1) ${JSON.stringify(account)})
+                      (try 0.0 (${KADDEX_NAMESPACE}.tokens.get-balance (${KADDEX_NAMESPACE}.exchange.get-pair-key token0 token1) ${JSON.stringify(
+        account
+      )})
                     ))
                 )
-                [(kswap.exchange.get-pair-key token0 token1)
+                [(${KADDEX_NAMESPACE}.exchange.get-pair-key token0 token1)
                  reserveA
                  reserveB
                  totalBal
@@ -94,7 +97,7 @@ export const getPairListAccountBalance = async (account) => {
                ]
               ))
             )
-            (map (kswap-read.pair-info) [${tokenPairList}])
+            (map (${KADDEX_NAMESPACE}-read.pair-info) [${tokenPairList}])
              `
     );
     if (data) {
@@ -123,7 +126,7 @@ export const getPairListAccountBalance = async (account) => {
 
 export const getPairAccount = async (token0, token1) => {
   try {
-    let data = await pactFetchLocal(`(at 'account (kswap.exchange.get-pair ${token0} ${token1}))`);
+    let data = await pactFetchLocal(`(at 'account (${KADDEX_NAMESPACE}.exchange.get-pair ${token0} ${token1}))`);
     if (data.result.status === 'success') {
       return data.result.data;
     }
