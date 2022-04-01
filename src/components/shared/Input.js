@@ -185,7 +185,7 @@ const Input = ({
         type={type}
         maxLength={maxLength}
         onChange={(e, props) => {
-          if (numberOnly && props.value.match(/[a-zA-Z]/)) return;
+          if (numberOnly && !props.value.match(/^[0-9]*[.,]?[0-9]*$/)) return;
           onChange(e, props);
         }}
         style={inputStyle}
