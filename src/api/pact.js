@@ -70,16 +70,6 @@ const wait = async (timeout) => {
   });
 };
 
-export const mkReq = function (cmd) {
-  return {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-    body: JSON.stringify(cmd),
-  };
-};
-
 export const parseRes = function (raw) {
   const rawRes = raw;
   const res = rawRes;

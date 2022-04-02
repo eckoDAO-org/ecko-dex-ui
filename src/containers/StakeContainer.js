@@ -3,7 +3,7 @@ import Pact from 'pact-lang-api';
 import { useHistory, useLocation } from 'react-router-dom';
 import { mkReq } from '../api/pact';
 import { getPoolState, getAddStakeCommand, geUnstakeCommand, estimateUnstake, getRollupRewardsCommand } from '../api/kaddex.staking';
-import { getKDXAccountBalance } from '../api/kaddex.kdx';
+import { getKDXAccountBalance, getKDXTotalSupply } from '../api/kaddex.kdx';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import InfoPopup from '../components/shared/InfoPopup';
 import Label from '../components/shared/Label';
@@ -15,7 +15,7 @@ import UnstakeInfo from '../components/stake/UnstakeInfo';
 import VotingPower from '../components/stake/VotingPower';
 import { useAccountContext, useKaddexWalletContext, useNotificationContext, usePactContext } from '../contexts';
 import { ROUTE_STAKE, ROUTE_UNSTAKE } from '../router/routes';
-import { network, getCurrentDate, getCurrentTime } from '../constants/contextConstants';
+import { NETWORK, getCurrentDate, getCurrentTime } from '../constants/contextConstants';
 import { theme } from '../styles/theme';
 
 const StakeContainer = () => {
@@ -26,8 +26,8 @@ const StakeContainer = () => {
   const { showNotification, STATUSES } = useNotificationContext();
   const pact = usePactContext();
 
-  const toastId = React.useRef(null);
-
+  const [kdxTotalSupply, setKdxTotalSupply] = useState(null);
+  const [poolState, setPoolState] = useState(null);
   const [kdxAccountBalance, setKdxAccountBalance] = useState(0);
   const [estimateUnstakeData, setEstimateUnstakeData] = useState(null);
   const [amountToStake, setAmountToStake] = useState(0);
@@ -46,9 +46,26 @@ const StakeContainer = () => {
 
   useEffect(() => {
     getPoolState().then((res) => {
-      console.log('poolState', res);
+      setPoolState(res);
+    });
+    getKDXTotalSupply().then((res) => {
+      setKdxTotalSupply(res);
     });
   }, []);
+
+  const getSupplyStakingPercentage = () => {
+    if (poolState && poolState['staked-kdx']) {
+      return (100 * poolState['staked-kdx']) / kdxTotalSupply;
+    }
+    return '--';
+  };
+
+  const getAccountStakingPercentage = () => {
+    if (estimateUnstakeData?.staked && poolState && poolState['staked-kdx']) {
+      return (100 * estimateUnstakeData?.staked) / poolState['staked-kdx'];
+    }
+    return '--';
+  };
 
   const signCommand = async (cmd) => {
     if (isKaddexWalletConnected) {
@@ -70,7 +87,7 @@ const StakeContainer = () => {
     }
     pact.setPolling(true);
     Pact.wallet
-      .sendSigned(signedCommand, network)
+      .sendSigned(signedCommand, NETWORK)
       .then(async (stakingResponse) => {
         console.log(' stakingResponse', stakingResponse);
         pact.pollingNotif(stakingResponse.requestKeys[0]);
@@ -104,7 +121,7 @@ const StakeContainer = () => {
 
     pact.setPolling(true);
     Pact.wallet
-      .sendSigned(signedCommand, network)
+      .sendSigned(signedCommand, NETWORK)
       .then(async (unstakingResponse) => {
         console.log(' unstakingResponse', unstakingResponse);
         pact.pollingNotif(unstakingResponse.requestKeys[0]);
@@ -135,7 +152,7 @@ const StakeContainer = () => {
     const command = getRollupRewardsCommand(account);
     const signedCommand = await signCommand(command);
 
-    fetch(`${network}/api/v1/local`, mkReq(signedCommand))
+    fetch(`${NETWORK}/api/v1/local`, mkReq(signedCommand))
       .then((response) => response.json())
       .then((unstakingResponse) => {
         console.log(' unstakingResponse', unstakingResponse);
@@ -201,20 +218,27 @@ const StakeContainer = () => {
       <FlexContainer gap={24} tabletClassName="column" mobileClassName="column">
         <Position
           amount={estimateUnstakeData?.staked || 0}
+          pendingAmount={(estimateUnstakeData && estimateUnstakeData['stake-record'] && estimateUnstakeData['stake-record']['pending-add']) || false}
           kdxAccountBalance={kdxAccountBalance}
           amountToStake={amountToStake}
-          onClickMax={() => setAmountToStake(200)}
+          onClickMax={() => setAmountToStake(kdxAccountBalance)}
           setKdxAmount={(value) => setAmountToStake(value)}
           buttonLabel={pathname === ROUTE_STAKE ? 'stake' : 'unstake'}
-          onSubmitStake={() => stakeKDX()}
+          onSubmitStake={() => (pathname !== ROUTE_UNSTAKE ? stakeKDX() : unstakeKDX())}
         />
         <Rewards
           amount={(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || 0}
-          rewardsPenalty={2}
-          stakedTime={32}
+          rewardsPenalty={estimateUnstakeData && estimateUnstakeData['stake-record'] && estimateUnstakeData['stake-record']['stake-penalty']}
+          stakedTimeStart={
+            (estimateUnstakeData &&
+              estimateUnstakeData['stake-record'] &&
+              estimateUnstakeData['stake-record']['effective-start'] &&
+              estimateUnstakeData['stake-record']['effective-start']['timep']) ||
+            false
+          }
           disabled={pathname === ROUTE_UNSTAKE}
         />
-        <Analytics apr={32} volume={321232.231321} stakedShare={5.16} totalStaked={35.16} />
+        <Analytics apr={32} volume={321232.231321} stakedShare={getAccountStakingPercentage()} totalStaked={getSupplyStakingPercentage()} />
       </FlexContainer>
 
       <VotingPower />

@@ -2,22 +2,14 @@ import moment from 'moment';
 import Pact from 'pact-lang-api';
 import { handleError, pactFetchLocal } from './pact';
 import { estimateUnstakeSampleData, poolStateData } from './sample-data/staking';
-import { chainId, GAS_PRICE, NETWORKID } from '../constants/contextConstants';
-
-const _managePactError = (e, fakeData) => {
-  if (process.env.REACT_APP_STAKING_SIMULATION === 'true') {
-    return fakeData;
-  } else {
-    return handleError(e);
-  }
-};
+import { CHAIN_ID, GAS_PRICE, NETWORKID } from '../constants/contextConstants';
 
 export const getPoolState = async () => {
   try {
     const stakingPoolStateData = await pactFetchLocal(`(kaddex.staking.get-pool-state)`);
     return stakingPoolStateData;
   } catch (e) {
-    return _managePactError(e, poolStateData);
+    return handleError(e);
   }
 };
 
@@ -26,12 +18,11 @@ export const estimateUnstake = async (account) => {
     const stakingPoolStateData = await pactFetchLocal(`(kaddex.staking.estimate-unstake "${account}")`);
     return stakingPoolStateData;
   } catch (e) {
-    return _managePactError(e, estimateUnstakeSampleData());
+    return handleError(e);
   }
 };
 
 export const getAddStakeCommand = (verifiedAccount, amountToStake) => {
-  // TODO: set precision
   const parsedAmount = parseFloat(amountToStake?.toString());
   const pactCode = `(kaddex.staking.stake "${verifiedAccount.account}" ${parsedAmount.toFixed(2)})`;
   return {
@@ -49,7 +40,7 @@ export const getAddStakeCommand = (verifiedAccount, amountToStake) => {
     sender: verifiedAccount.account,
     gasLimit: 3000,
     gasPrice: GAS_PRICE,
-    chainId: chainId,
+    chainId: CHAIN_ID,
     ttl: 600,
     envData: {
       'user-ks': verifiedAccount.guard,
@@ -69,9 +60,9 @@ export const geUnstakeCommand = (verifiedAccount) => {
       Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
     ],
     sender: verifiedAccount.account,
-    gasLimit: 3000,
+    gasLimit: 6000,
     gasPrice: GAS_PRICE,
-    chainId: chainId,
+    chainId: CHAIN_ID,
     ttl: 600,
     envData: {
       'user-ks': verifiedAccount.guard,
@@ -92,7 +83,7 @@ export const getRollupRewardsCommand = (verifiedAccount) => {
     sender: verifiedAccount.account,
     gasLimit: 3000,
     gasPrice: GAS_PRICE,
-    chainId: chainId,
+    chainId: CHAIN_ID,
     ttl: 600,
     envData: {
       'user-ks': verifiedAccount.guard,
@@ -113,7 +104,7 @@ export const getClaimRewardsCommand = (verifiedAccount) => {
     sender: verifiedAccount.account,
     gasLimit: 3000,
     gasPrice: GAS_PRICE,
-    chainId: chainId,
+    chainId: CHAIN_ID,
     ttl: 600,
     envData: {
       'user-ks': verifiedAccount.guard,
