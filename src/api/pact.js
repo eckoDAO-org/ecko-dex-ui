@@ -1,6 +1,16 @@
 import Pact from 'pact-lang-api';
 import { CHAIN_ID, creationTime, GAS_PRICE, NETWORK } from '../constants/contextConstants';
 
+export const mkReq = function (cmd) {
+  return {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify(cmd),
+  };
+};
+
 export const handleError = (error) => {
   console.log(`ERROR: ${JSON.stringify(error)}`);
   return { errorMessage: 'Unhandled Exception' };
@@ -58,16 +68,6 @@ const wait = async (timeout) => {
   return new Promise((resolve) => {
     setTimeout(resolve, timeout);
   });
-};
-
-export const mkReq = function (cmd) {
-  return {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-    body: JSON.stringify(cmd),
-  };
 };
 
 export const parseRes = function (raw) {

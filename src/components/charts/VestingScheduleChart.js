@@ -58,7 +58,7 @@ const VestingScheduleChart = ({ height }) => {
             }}
           >
             <XAxis dataKey="name" interval={endDate === endDate4Years ? 2 : 4} />
-            <YAxis domain={[0, 100]} />
+            <YAxis domain={[0, 100]} tickFormatter={(value) => `${value}%`} />
             <Tooltip
               content={(data) => {
                 return (

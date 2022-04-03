@@ -67,13 +67,12 @@ export const KaddexWalletProvider = (props) => {
   const initializeKaddexWallet = async () => {
     console.log('!!!initializeKaddexWallet');
     const networkInfo = await getNetworkInfo();
-    console.log('🚀 !!! ~ networkInfo', networkInfo);
+    console.log('networkInfo', networkInfo);
     if (networkInfo.networkId !== NETWORKID) {
       showNetworkError();
     } else {
-      console.log("🚀 !!! ~ i'm connecting");
       const connectResponse = await connectWallet();
-      console.log('🚀 !!! ~ connectResponse', connectResponse);
+      console.log('connectResponse', connectResponse);
       if (connectResponse?.status === 'success') {
         await setAccountData();
       }

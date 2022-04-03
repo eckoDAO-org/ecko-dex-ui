@@ -10,7 +10,7 @@ import Input from '../shared/Input';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
 
-const Position = ({ buttonLabel, amount, stakeKdxAmout, setStakeKdxAmount }) => {
+const Position = ({ buttonLabel, amount, pendingAmount, topRightLabel, amountToStake, isInputDisabled, setKdxAmount, onClickMax, onSubmitStake }) => {
   const modalContext = useModalContext();
   const { account } = useAccountContext();
   return (
@@ -22,18 +22,20 @@ const Position = ({ buttonLabel, amount, stakeKdxAmout, setStakeKdxAmount }) => 
       <div>
         <Label>Amount</Label>
         <Label fontSize={32}>{humanReadableNumber(amount)}</Label>
+        {pendingAmount && <Label fontSize={15}>(Pending {humanReadableNumber(pendingAmount)})</Label>}
       </div>
       <CustomDivider style={{ margin: '40px 0' }} />
 
       <Input
+        disabled={isInputDisabled}
         topLeftLabel="amount"
-        topRightLabel={`balance: ${0 ?? '-'}`}
+        topRightLabel={topRightLabel}
         placeholder="0.0"
         maxLength="15"
         numberOnly
-        value={stakeKdxAmout}
+        value={amountToStake}
         inputRightComponent={
-          <FlexContainer className="pointer align-ce" gap={16} onClick={() => console.log('max')}>
+          <FlexContainer className="pointer align-ce" gap={16} onClick={onClickMax}>
             <Label>MAX</Label>
 
             <CoinKaddexIcon />
@@ -42,7 +44,7 @@ const Position = ({ buttonLabel, amount, stakeKdxAmout, setStakeKdxAmount }) => 
           </FlexContainer>
         }
         onChange={(e, { value }) => {
-          setStakeKdxAmount(limitDecimalPlaces(value, 12));
+          setKdxAmount(limitDecimalPlaces(value, 12));
         }}
       />
 
@@ -56,6 +58,8 @@ const Position = ({ buttonLabel, amount, stakeKdxAmout, setStakeKdxAmount }) => 
               description: 'Connect a wallet using one of the methods below',
               content: <ConnectWalletModal />,
             });
+          } else {
+            onSubmitStake();
           }
         }}
       >
