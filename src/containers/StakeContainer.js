@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
 import { useHistory, useLocation } from 'react-router-dom';
-import { mkReq } from '../api/pact';
-import { getPoolState, getAddStakeCommand, geUnstakeCommand, estimateUnstake, getRollupRewardsCommand } from '../api/kaddex.staking';
+import { getPoolState, getAddStakeCommand, estimateUnstake, getRollupAndClaimCommand, getRollupAndUnstakeCommand } from '../api/kaddex.staking';
 import { getKDXAccountBalance, getKDXTotalSupply } from '../api/kaddex.kdx';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import InfoPopup from '../components/shared/InfoPopup';
@@ -32,17 +31,29 @@ const StakeContainer = () => {
   const [estimateUnstakeData, setEstimateUnstakeData] = useState(null);
   const [amountToStake, setAmountToStake] = useState(0);
 
-  useEffect(() => {
+  const updateAccountStakingData = useCallback(() => {
     if (account?.account) {
       getKDXAccountBalance(account.account).then((kdxBalance) => {
         setKdxAccountBalance(kdxBalance?.balance ?? 0);
       });
       estimateUnstake(account?.account).then((resEstimate) => {
-        console.log(`resEstimate`, resEstimate);
         setEstimateUnstakeData(resEstimate);
       });
     }
   }, [account?.account]);
+
+  useEffect(() => {
+    updateAccountStakingData();
+  }, [updateAccountStakingData]);
+
+  useEffect(() => {
+    const updateAccountStakingDataInterval = setInterval(() => {
+      updateAccountStakingData();
+    }, 10000);
+    return () => {
+      clearInterval(updateAccountStakingDataInterval);
+    };
+  }, [updateAccountStakingData]);
 
   useEffect(() => {
     getPoolState().then((res) => {
@@ -55,14 +66,14 @@ const StakeContainer = () => {
 
   const getSupplyStakingPercentage = () => {
     if (poolState && poolState['staked-kdx']) {
-      return (100 * poolState['staked-kdx']) / kdxTotalSupply;
+      return ((100 * poolState['staked-kdx']) / kdxTotalSupply).toFixed(6);
     }
     return '--';
   };
 
   const getAccountStakingPercentage = () => {
     if (estimateUnstakeData?.staked && poolState && poolState['staked-kdx']) {
-      return (100 * estimateUnstakeData?.staked) / poolState['staked-kdx'];
+      return parseFloat(((100 * estimateUnstakeData?.staked) / poolState['staked-kdx']).toFixed(6));
     }
     return '--';
   };
@@ -78,6 +89,13 @@ const StakeContainer = () => {
 
   const stakeKDX = async () => {
     if (!amountToStake) {
+      showNotification({
+        title: 'Staking error',
+        message: 'Please set a valid amount',
+        type: STATUSES.WARNING,
+        autoClose: 5000,
+        hideProgressBar: false,
+      });
       return;
     }
     const command = getAddStakeCommand(account, amountToStake);
@@ -100,9 +118,9 @@ const StakeContainer = () => {
           isRead: false,
           isCompleted: false,
         });
+        setAmountToStake(0);
         await pact.listen(stakingResponse.requestKeys[0]);
         pact.setPolling(false);
-        setAmountToStake(0);
       })
       .catch((error) => {
         console.log(`~ error`, error);
@@ -115,70 +133,96 @@ const StakeContainer = () => {
       });
   };
 
-  const unstakeKDX = async () => {
-    const command = geUnstakeCommand(account);
+  const rollupAndUnstake = async () => {
+    if (!estimateUnstakeData?.staked) {
+      showNotification({
+        title: 'Unstake error',
+        message: 'Your staked amount is not valid',
+        type: STATUSES.WARNING,
+        autoClose: 5000,
+        hideProgressBar: false,
+      });
+      return;
+    }
+    const command = getRollupAndUnstakeCommand(account);
     const signedCommand = await signCommand(command);
-
-    pact.setPolling(true);
     Pact.wallet
       .sendSigned(signedCommand, NETWORK)
-      .then(async (unstakingResponse) => {
-        console.log(' unstakingResponse', unstakingResponse);
-        pact.pollingNotif(unstakingResponse.requestKeys[0]);
+      .then(async (rollupAndUnstake) => {
+        console.log(' rollupAndUnstake', rollupAndUnstake);
+        pact.pollingNotif(rollupAndUnstake.requestKeys[0]);
         storeNotification({
           type: 'info',
           time: getCurrentTime(),
           date: getCurrentDate(),
-          title: 'Unstaking Transaction Pending',
-          description: unstakingResponse.requestKeys[0],
+          title: 'Rollup and Unstake Transaction Pending',
+          description: rollupAndUnstake.requestKeys[0],
           isRead: false,
           isCompleted: false,
         });
-        await pact.listen(unstakingResponse.requestKeys[0]);
+        await pact.listen(rollupAndUnstake.requestKeys[0]);
         pact.setPolling(false);
+        setAmountToStake(0);
       })
       .catch((error) => {
-        console.log(`~ error`, error);
+        console.log(`~ rollupAndUnstake error`, error);
         pact.setPolling(false);
         showNotification({
-          title: 'Staking error',
-          message: 'Generic unstake error',
+          title: 'RollupAndUnstake error',
+          message: (error.toString && error.toString()) || 'Generic rollupAndUnstake error',
           type: STATUSES.ERROR,
         });
       });
   };
 
-  const rollupKDX = async () => {
-    const command = getRollupRewardsCommand(account);
+  const rollupAndClaimCommand = async () => {
+    if (!(estimateUnstakeData && estimateUnstakeData['reward-accrued'])) {
+      showNotification({
+        title: 'Claim error',
+        message: 'No rewards collected',
+        type: STATUSES.WARNING,
+        autoClose: 5000,
+        hideProgressBar: false,
+      });
+      return;
+    }
+    const command = getRollupAndClaimCommand(account);
     const signedCommand = await signCommand(command);
-
-    fetch(`${NETWORK}/api/v1/local`, mkReq(signedCommand))
-      .then((response) => response.json())
-      .then((unstakingResponse) => {
-        console.log(' unstakingResponse', unstakingResponse);
-        if (unstakingResponse.result?.status === 'success') {
-          showNotification({
-            title: 'Unstaking success',
-            message: 'Unstaking success!',
-            type: STATUSES.SUCCESS,
-          });
-        } else {
-          showNotification({
-            title: 'Staking error',
-            message: unstakingResponse.result?.error?.message ?? 'Unstake command error',
-            type: STATUSES.ERROR,
-          });
-        }
+    Pact.wallet
+      .sendSigned(signedCommand, NETWORK)
+      .then(async (rollupAndClaim) => {
+        console.log(' rollupAndClaim', rollupAndClaim);
+        pact.pollingNotif(rollupAndClaim.requestKeys[0]);
+        storeNotification({
+          type: 'info',
+          time: getCurrentTime(),
+          date: getCurrentDate(),
+          title: 'Rollup and Unstake Transaction Pending',
+          description: rollupAndClaim.requestKeys[0],
+          isRead: false,
+          isCompleted: false,
+        });
+        await pact.listen(rollupAndClaim.requestKeys[0]);
+        pact.setPolling(false);
         setAmountToStake(0);
       })
       .catch((error) => {
-        console.log(`~ unstaking error`, error);
+        console.log(`~ rollupAndClaim error`, error);
+        pact.setPolling(false);
         showNotification({
-          title: 'Staking error',
-          message: 'Generic add stake error',
+          title: 'RollupAndClaim error',
+          message: (error.toString && error.toString()) || 'Generic rollupAndClaim error',
           type: STATUSES.ERROR,
         });
       });
+  };
+
+  const getPositionLabel = () => {
+    if (pathname !== ROUTE_UNSTAKE) {
+      return `Balance: ${kdxAccountBalance ?? 0}`;
+    } else {
+      return `Staked: ${estimateUnstakeData?.staked ?? 0}`;
+    }
   };
 
   return (
@@ -217,18 +261,20 @@ const StakeContainer = () => {
 
       <FlexContainer gap={24} tabletClassName="column" mobileClassName="column">
         <Position
+          isInputDisabled={pathname === ROUTE_UNSTAKE}
           amount={estimateUnstakeData?.staked || 0}
-          pendingAmount={(estimateUnstakeData && estimateUnstakeData['stake-record'] && estimateUnstakeData['stake-record']['pending-add']) || false}
-          kdxAccountBalance={kdxAccountBalance}
-          amountToStake={amountToStake}
-          onClickMax={() => setAmountToStake(kdxAccountBalance)}
-          setKdxAmount={(value) => setAmountToStake(value)}
+          topRightLabel={getPositionLabel()}
+          amountToStake={pathname !== ROUTE_UNSTAKE ? amountToStake : estimateUnstakeData?.staked || 0}
           buttonLabel={pathname === ROUTE_STAKE ? 'stake' : 'unstake'}
-          onSubmitStake={() => (pathname !== ROUTE_UNSTAKE ? stakeKDX() : unstakeKDX())}
+          pendingAmount={(estimateUnstakeData && estimateUnstakeData['stake-record'] && estimateUnstakeData['stake-record']['pending-add']) || false}
+          onClickMax={() => setAmountToStake(pathname !== ROUTE_UNSTAKE ? kdxAccountBalance : estimateUnstakeData?.staked || 0)}
+          setKdxAmount={(value) => setAmountToStake(value)}
+          onSubmitStake={() => (pathname !== ROUTE_UNSTAKE ? stakeKDX() : rollupAndUnstake())}
         />
         <Rewards
           amount={(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || 0}
           rewardsPenalty={estimateUnstakeData && estimateUnstakeData['stake-record'] && estimateUnstakeData['stake-record']['stake-penalty']}
+          onWithdrawClick={() => rollupAndClaimCommand()}
           stakedTimeStart={
             (estimateUnstakeData &&
               estimateUnstakeData['stake-record'] &&
@@ -236,9 +282,8 @@ const StakeContainer = () => {
               estimateUnstakeData['stake-record']['effective-start']['timep']) ||
             false
           }
-          disabled={pathname === ROUTE_UNSTAKE}
         />
-        <Analytics apr={32} volume={321232.231321} stakedShare={getAccountStakingPercentage()} totalStaked={getSupplyStakingPercentage()} />
+        <Analytics apr={'--'} volume={'--'} stakedShare={getAccountStakingPercentage()} totalStaked={getSupplyStakingPercentage()} />
       </FlexContainer>
 
       <VotingPower />

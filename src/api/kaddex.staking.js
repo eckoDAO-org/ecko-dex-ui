@@ -1,7 +1,6 @@
 import moment from 'moment';
 import Pact from 'pact-lang-api';
 import { handleError, pactFetchLocal } from './pact';
-import { estimateUnstakeSampleData, poolStateData } from './sample-data/staking';
 import { CHAIN_ID, GAS_PRICE, NETWORKID } from '../constants/contextConstants';
 
 export const getPoolState = async () => {
@@ -78,10 +77,61 @@ export const getRollupRewardsCommand = (verifiedAccount) => {
     pactCode,
     caps: [
       Pact.lang.mkCap('rollup capability', 'rollup', `kaddex.staking.ROLLUP`, [verifiedAccount.account]),
-      // Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'), // no gas needed?
+      Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
     ],
     sender: verifiedAccount.account,
     gasLimit: 3000,
+    gasPrice: GAS_PRICE,
+    chainId: CHAIN_ID,
+    ttl: 600,
+    envData: {
+      'user-ks': verifiedAccount.guard,
+    },
+    signingPubKey: verifiedAccount.guard.keys[0],
+    networkId: NETWORKID,
+  };
+};
+
+export const getRollupAndUnstakeCommand = (verifiedAccount) => {
+  const pactCode = `
+  (kaddex.staking.rollup "${verifiedAccount.account}")
+  (kaddex.staking.unstake "${verifiedAccount.account}")
+  `;
+  return {
+    pactCode,
+    caps: [
+      Pact.lang.mkCap('rollup capability', 'rollup', `kaddex.staking.ROLLUP`, [verifiedAccount.account]),
+      Pact.lang.mkCap('skdx DEBIT capability', 'debit skdx', `kaddex.skdx.DEBIT`),
+      Pact.lang.mkCap('unstake capability', 'unstaking', `kaddex.staking.UNSTAKE`, [verifiedAccount.account]),
+      Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
+    ],
+    sender: verifiedAccount.account,
+    gasLimit: 6000,
+    gasPrice: GAS_PRICE,
+    chainId: CHAIN_ID,
+    ttl: 600,
+    envData: {
+      'user-ks': verifiedAccount.guard,
+    },
+    signingPubKey: verifiedAccount.guard.keys[0],
+    networkId: NETWORKID,
+  };
+};
+
+export const getRollupAndClaimCommand = (verifiedAccount) => {
+  const pactCode = `
+  (kaddex.staking.rollup "${verifiedAccount.account}")
+  (kaddex.staking.claim "${verifiedAccount.account}")
+  `;
+  return {
+    pactCode,
+    caps: [
+      Pact.lang.mkCap('rollup capability', 'rollup', `kaddex.staking.ROLLUP`, [verifiedAccount.account]),
+      Pact.lang.mkCap('claim capability', 'claim', `kaddex.staking.CLAIM`, [verifiedAccount.account]),
+      Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
+    ],
+    sender: verifiedAccount.account,
+    gasLimit: 6000,
     gasPrice: GAS_PRICE,
     chainId: CHAIN_ID,
     ttl: 600,

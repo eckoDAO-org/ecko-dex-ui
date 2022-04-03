@@ -10,7 +10,7 @@ import Input from '../shared/Input';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
 
-const Position = ({ buttonLabel, amount, pendingAmount, kdxAccountBalance, amountToStake, setKdxAmount, onClickMax, onSubmitStake }) => {
+const Position = ({ buttonLabel, amount, pendingAmount, topRightLabel, amountToStake, isInputDisabled, setKdxAmount, onClickMax, onSubmitStake }) => {
   const modalContext = useModalContext();
   const { account } = useAccountContext();
   return (
@@ -27,8 +27,9 @@ const Position = ({ buttonLabel, amount, pendingAmount, kdxAccountBalance, amoun
       <CustomDivider style={{ margin: '40px 0' }} />
 
       <Input
+        disabled={isInputDisabled}
         topLeftLabel="amount"
-        topRightLabel={`balance: ${kdxAccountBalance ?? '-'}`}
+        topRightLabel={topRightLabel}
         placeholder="0.0"
         maxLength="15"
         numberOnly

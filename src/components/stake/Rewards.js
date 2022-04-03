@@ -7,7 +7,7 @@ import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
 import PentalityRewardsInfo from './PentalityRewardsInfo';
 
-const Rewards = ({ amount, stakedTimeStart, rewardsPenalty, disabled }) => {
+const Rewards = ({ amount, stakedTimeStart, rewardsPenalty, disabled, onWithdrawClick }) => {
   /*
     If you unstake during the first 72hours you will incur in a penalty: 3% flat penalty on your staked amount. 
     If you withdraw your rewards during the first 60 days, you will incur in a penalty: the penalty will only affect your accumulated rewards 
@@ -51,7 +51,7 @@ const Rewards = ({ amount, stakedTimeStart, rewardsPenalty, disabled }) => {
       <CustomButton type="gradient" disabled={disabled} buttonStyle={{ marginTop: 4 }}>
         stake rewards
       </CustomButton>
-      <CustomButton type="primary" disabled={disabled}>
+      <CustomButton type="primary" disabled={disabled} onClick={() => onWithdrawClick()}>
         withdraw
       </CustomButton>
     </CommonWrapper>
