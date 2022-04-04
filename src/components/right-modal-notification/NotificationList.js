@@ -101,6 +101,7 @@ const NotificationList = () => {
     return (
       <Container
         id={`notification_card_${index}`}
+        key={`notification_card_${index}`}
         typeColor={getColorByType(notification.type)}
         isHighlight={!notification.isRead}
         style={{ cursor: notification.link && 'pointer' }}

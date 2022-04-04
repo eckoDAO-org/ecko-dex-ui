@@ -304,17 +304,6 @@ export const PactProvider = (props) => {
     });
   };
 
-  const setIsCompletedNotification = (reqKey) => {
-    const getStoredNotification = JSON.parse(localStorage.getItem('Notification'));
-    const newNotificationList = getStoredNotification.map((notif) => {
-      if (notif.type === 'info' && notif.description === reqKey) {
-        notif.isCompleted = true;
-      }
-      return notif;
-    });
-    localStorage.setItem(`Notification`, JSON.stringify(newNotificationList));
-  };
-
   const listen = async (reqKey) => {
     //check kadena tx status every 10 seconds until we get a response (success or fail)
     var time = 240;
@@ -339,7 +328,7 @@ export const PactProvider = (props) => {
     if (pollRes[reqKey].result.status === 'success') {
       // setting reqKey for calling History Transaction
       // setReqKeysLocalStorage(reqKey);
-      setIsCompletedNotification(reqKey);
+      account.setIsCompletedNotification(reqKey);
 
       // store in local storage the success notification for the right modal
       account.storeNotification({
@@ -367,7 +356,7 @@ export const PactProvider = (props) => {
         autoClose: 10000,
       });
     } else {
-      setIsCompletedNotification(reqKey);
+      account.setIsCompletedNotification(reqKey);
       // store in local storage the error notification for the right modal
       account.storeNotification({
         type: 'error',

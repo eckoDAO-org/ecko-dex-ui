@@ -140,6 +140,25 @@ export const AccountProvider = (props) => {
     }
   };
 
+  const setIsCompletedNotification = (reqKey) => {
+    const getStoredNotification = JSON.parse(localStorage.getItem('Notification'));
+    const newNotificationList = getStoredNotification.map((notif) => {
+      if (notif.type === 'info' && notif.description === reqKey) {
+        notif.isCompleted = true;
+      }
+      return notif;
+    });
+    localStorage.setItem(`Notification`, JSON.stringify(newNotificationList));
+  };
+
+  const seIsReadedNotification = () => {
+    const newNotificationList = notificationList.map((notif) => ({
+      ...notif,
+      isRead: true,
+    }));
+    setNotificationList(newNotificationList);
+  };
+
   const removeNotification = (indexToRemove) => {
     // remember that notification list i view reversed
     const notifWithoutRemoved = [...notificationList].filter((notif, index) => index !== indexToRemove);
@@ -170,6 +189,8 @@ export const AccountProvider = (props) => {
     notificationList,
     setNotificationList,
     storeNotification,
+    setIsCompletedNotification,
+    seIsReadedNotification,
     removeNotification,
     removeAllNotifications,
   };
