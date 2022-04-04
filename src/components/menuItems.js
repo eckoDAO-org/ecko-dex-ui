@@ -52,6 +52,7 @@ export const STAKE = {
 export const VAULT = {
   id: 3,
   label: 'vault',
+  target: '_self',
   link: 'http://134.209.219.136/',
 };
 

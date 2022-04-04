@@ -100,24 +100,26 @@ const GameEditionMenuContainer = () => {
         </TopListContainer>
       </div>
       <RowMenuContainer>
-        {headerLinks.map((item, index) => (
-          <HeaderItem
-            key={index}
-            disableUnderline
-            hideIcon
-            item={item}
-            headerItemStyle={{
-              fontFamily: theme.fontFamily.pixeboy,
-              color: commonColors.gameEditionBlue,
-              margin: '0px 22px',
-              fontSize: 20,
-              fontWeight: 400,
-              textTransform: 'uppercase',
-            }}
-          >
-            {item.label}
-          </HeaderItem>
-        ))}
+        {headerLinks
+          ?.filter((item) => !item?.hideOnGameEdition)
+          .map((item, index) => (
+            <HeaderItem
+              key={index}
+              disableUnderline
+              hideIcon
+              item={item}
+              headerItemStyle={{
+                fontFamily: theme.fontFamily.pixeboy,
+                color: commonColors.gameEditionBlue,
+                margin: '0px 22px',
+                fontSize: 20,
+                fontWeight: 400,
+                textTransform: 'uppercase',
+              }}
+            >
+              {item.label}
+            </HeaderItem>
+          ))}
       </RowMenuContainer>
       <PressButtonToActionLabel actionLabel="select" />
     </Container>
