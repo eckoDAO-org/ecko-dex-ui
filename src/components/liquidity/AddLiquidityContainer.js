@@ -121,7 +121,7 @@ const AddLiquidityContainer = (props) => {
 
       {pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED && (
         <SingleSidedLiquidity
-          pools={data.pools?.filter((p) => p.token0 === pair.token0 || p.token1 === pair.token0)}
+          pools={data.pools}
           pair={pair}
           onPairChange={(token0) => {
             history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${token0}`));

@@ -96,6 +96,7 @@ export const AccountProvider = (props) => {
         },
         NETWORK
       );
+
       if (data.result.status === 'success') {
         // setTokenAccount({...data.result.data, balance: getCorrectBalance(data.result.data.balance)});
         first ? setTokenFromAccount(data.result.data) : setTokenToAccount(data.result.data);

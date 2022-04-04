@@ -17,7 +17,7 @@ const Rewards = ({ amount, stakedTimeStart, rewardsPenalty, disabled, onWithdraw
     const diffHours = moment().diff(stakedTimeStart, 'hours');
     const diffDays = moment().diff(stakedTimeStart, 'days');
     if (diffHours < 72) {
-      return '3%';
+      return '3';
     } else if (diffDays < 60) {
       return rewardsPenalty;
     }
@@ -27,12 +27,12 @@ const Rewards = ({ amount, stakedTimeStart, rewardsPenalty, disabled, onWithdraw
   return (
     <CommonWrapper gap={16} title="rewards">
       <div>
-        <Label>Rewards Collected</Label>
-        <Label fontSize={32}>{amount || '-'}</Label>
+        <Label>KDX Collected</Label>
+        <Label fontSize={32}>{amount || '-'} KDX</Label>
       </div>
       <div>
         <Label>Staking Time</Label>
-        <Label fontSize={24} color={commonColors.green}>
+        <Label fontSize={24} color={moment().diff(moment(stakedTimeStart), 'day') >= 60 ? commonColors.green : commonColors.red}>
           {(stakedTimeStart && moment(stakedTimeStart).fromNow()) || '-'}
         </Label>
       </div>
@@ -44,8 +44,8 @@ const Rewards = ({ amount, stakedTimeStart, rewardsPenalty, disabled, onWithdraw
           </InfoPopup>
         </div>
 
-        <Label fontSize={24} color={commonColors.green}>
-          {getPenaltyPercentage()}
+        <Label fontSize={24} color={getPenaltyPercentage() === 0 ? commonColors.green : commonColors.red}>
+          {getPenaltyPercentage()}%
         </Label>
       </div>
       <CustomButton type="gradient" disabled={disabled} buttonStyle={{ marginTop: 4 }}>

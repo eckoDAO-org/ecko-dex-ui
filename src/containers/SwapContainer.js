@@ -98,23 +98,23 @@ const SwapContainer = () => {
   const modalContext = useContext(ModalContext);
   const { resolutionConfiguration } = useContext(ApplicationContext);
 
-  const { gameEditionView, openModal, closeModal, outsideToken, showTokens, setOutsideToken, setShowTokens } = useContext(GameEditionContext);
+  const { gameEditionView, openModal, closeModal, outsideToken } = useContext(GameEditionContext);
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
 
   const [selectedToken, setSelectedToken] = useState(null);
   const [fromValues, setFromValues] = useState({
     amount: '',
     balance: account.account.balance || '',
-    coin: 'KDA',
-    address: 'coin',
+    coin: 'KDX',
+    address: 'kaddex.kdx',
     precision: 12,
   });
 
   const [toValues, setToValues] = useState({
     amount: '',
     balance: '',
-    coin: '',
-    address: '',
+    coin: 'KDA',
+    address: 'coin',
     precision: 0,
   });
 
@@ -317,18 +317,19 @@ const SwapContainer = () => {
     }
   };
   const onTokenClick = async ({ crypto }) => {
+    const side = outsideToken.tokenSelectorType || tokenSelectorType;
     let balance;
     if (crypto.code === 'coin') {
       if (account.account) {
         balance = account.account.balance;
       }
     } else {
-      let acct = await account.getTokenAccount(crypto.code, account.account.account, tokenSelectorType === 'from');
+      let acct = await account.getTokenAccount(crypto.code, account.account.account, side === 'from');
       if (acct) {
         balance = getCorrectBalance(acct.balance);
       }
     }
-    if (tokenSelectorType === 'from') {
+    if (side === 'from') {
       setFromValues((prev) => ({
         ...prev,
         balance: balance,
@@ -337,7 +338,7 @@ const SwapContainer = () => {
         precision: crypto.precision,
       }));
     }
-    if (tokenSelectorType === 'to') {
+    if (side === 'to') {
       setToValues((prev) => ({
         ...prev,
         balance: balance,
@@ -349,16 +350,18 @@ const SwapContainer = () => {
   };
 
   const onSelectToken = async (crypto) => {
-    if (gameEditionView && showTokens) {
-      await setOutsideToken((prev) => ({ ...prev, token: crypto }));
-      await setShowTokens(false);
-    }
     if (tokenSelectorType === 'from' && fromValues.coin === crypto.name) return;
     if (tokenSelectorType === 'to' && toValues.coin === crypto.name) return;
     if ((tokenSelectorType === 'from' && fromValues.coin !== crypto.name) || (tokenSelectorType === 'to' && toValues.coin !== crypto.name)) {
       onTokenClick({ crypto });
     }
   };
+
+  useEffect(() => {
+    if (gameEditionView && outsideToken) {
+      onSelectToken(outsideToken);
+    }
+  }, [outsideToken, gameEditionView]);
 
   useEffect(() => {
     if (tokenSelectorType === 'from') {
@@ -383,6 +386,7 @@ const SwapContainer = () => {
         });
       }
     }
+
     setTokenSelectorType(null);
   }, [toValues, fromValues]);
 
@@ -423,7 +427,7 @@ const SwapContainer = () => {
     if (gameEditionView) {
       openModal({
         titleFontSize: 32,
-        title: 'Selec',
+        title: 'Select',
         type: 'arcade-dark',
         onClose: () => {
           setTokenSelectorType(null);

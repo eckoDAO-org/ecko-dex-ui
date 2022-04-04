@@ -57,7 +57,7 @@ const TokenItem = styled.div`
     font-size: ${({ gameEditionView }) => gameEditionView && '13px'};
   }
 `;
-const TokenSelectorModalContent = ({ onSelectToken, onClose, token }) => {
+const TokenSelectorModalContent = ({ onSelectToken, onClose, token, tokensToKeep }) => {
   const [searchValue, setSearchValue] = useState('');
   const swap = useContext(SwapContext);
   const { gameEditionView, onCloseTokensList } = useContext(GameEditionContext);
@@ -99,35 +99,41 @@ const TokenSelectorModalContent = ({ onSelectToken, onClose, token }) => {
       >
         <TokensContainer gameEditionView={gameEditionView}>
           {cryptoCurrencies.length ? (
-            cryptoCurrencies.map((crypto, i) => {
-              return (
-                <React.Fragment key={i}>
-                  <TokenItem
-                    gameEditionView={gameEditionView}
-                    key={crypto.name}
-                    selected={token === crypto.name}
-                    style={{
-                      cursor: token === crypto.name ? 'default' : 'pointer',
-                    }}
-                    onClick={async () => {
-                      await onSelectToken(crypto);
-                      setSearchValue('');
-                      onClose();
-                    }}
-                  >
-                    {crypto.icon}
-                    {crypto.name}
+            cryptoCurrencies
+              ?.filter((crypto) => (tokensToKeep ? tokensToKeep.includes(crypto.name) : crypto))
+              .map((crypto, i) => {
+                return (
+                  <React.Fragment key={i}>
+                    <TokenItem
+                      gameEditionView={gameEditionView}
+                      key={crypto.name}
+                      selected={token === crypto.name}
+                      style={{
+                        cursor: token === crypto.name ? 'default' : 'pointer',
+                      }}
+                      onClick={async () => {
+                        if (onSelectToken) {
+                          await onSelectToken(crypto);
+                        }
+                        setSearchValue('');
+                        if (onClose) {
+                          onClose();
+                        }
+                      }}
+                    >
+                      {crypto.icon}
+                      {crypto.name}
 
-                    {token === crypto.name && (
-                      <Label fontSize={13} fontFamily="syncopate" labelStyle={{ marginLeft: 5, lineHeight: 1 }}>
-                        (Selected)
-                      </Label>
-                    )}
-                  </TokenItem>
-                  {gameEditionView && <Divider gameEditionView={gameEditionView} />}
-                </React.Fragment>
-              );
-            })
+                      {token === crypto.name && (
+                        <Label fontSize={13} fontFamily="syncopate" labelStyle={{ marginLeft: 5, lineHeight: 1 }}>
+                          (Selected)
+                        </Label>
+                      )}
+                    </TokenItem>
+                    {gameEditionView && <Divider gameEditionView={gameEditionView} />}
+                  </React.Fragment>
+                );
+              })
           ) : (
             <>
               <div style={{ color: theme(themeMode).colors.white }}>Token not found</div>

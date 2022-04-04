@@ -1,10 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import Pact from 'pact-lang-api';
 import React, { useEffect, useState } from 'react';
 import { ArrowDown } from '../../assets';
+import { CHAIN_ID, creationTime, NETWORK } from '../../constants/contextConstants';
 import tokenData from '../../constants/cryptoCurrencies';
 import { useAccountContext, useModalContext, usePactContext } from '../../contexts';
 import noExponents from '../../utils/noExponents';
-import { limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
+import { getCorrectBalance, limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
 import SelectPoolModal from '../modals/liquidity/SelectPoolModal';
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
 import CustomButton from '../shared/CustomButton';
@@ -17,12 +19,12 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
   const modalContext = useModalContext();
 
   const pact = usePactContext();
-  const { account } = useAccountContext();
+  const account = useAccountContext();
 
   const [selectedPool, setSelectedPool] = useState(null);
 
   const [values, setValues] = useState({
-    coin: pair?.token0 || 'KDA',
+    coin: pair?.token0 || 'KDX',
     account: '',
     guard: null,
     balance: account?.account?.balance,
@@ -30,18 +32,44 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
     precision: 12,
   });
 
-  useEffect(() => {
-    onPairChange(values.coin);
-  }, [values.coin]);
+  // useEffect(() => {
+  //   onPairChange(values.coin);
+  //   handleTokenValue(pair?.token0 || 'KDA');
+  // }, [pair.coin]);
 
   useEffect(() => {
-    console.log('pools', pools);
     setSelectedPool(pools[0]);
-    onPairChange(values.coin);
+    handleTokenValue(pair?.token0 || 'KDX');
   }, []);
 
-  const onSelectToken = async (crypto) => {
-    setValues((prev) => ({ ...prev, coin: crypto.name }));
+  const handleTokenValue = async (token) => {
+    const crypto = tokenData[token];
+
+    let balance;
+    if (crypto?.code === 'coin') {
+      if (account.account) {
+        balance = account.account.balance;
+      }
+    } else {
+      let data = await Pact.fetch.local(
+        {
+          pactCode: `(${crypto.code}.details ${JSON.stringify(account.account.account)})`,
+          keyPairs: Pact.crypto.genKeyPair(),
+          meta: Pact.lang.mkMeta('', CHAIN_ID, 0.01, 100000000, 28800, creationTime()),
+        },
+        NETWORK
+      );
+      if (data.result.status === 'success') {
+        balance = getCorrectBalance(data.result.data.balance);
+      }
+    }
+    setValues((prev) => ({
+      ...prev,
+      balance: balance,
+      coin: crypto?.name,
+      precision: crypto?.precision,
+    }));
+    onPairChange(token);
   };
 
   const openTokenSelectorModal = () => {
@@ -55,7 +83,8 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
       content: (
         <TokenSelectorModalContent
           token={values.coin}
-          onSelectToken={onSelectToken}
+          tokensToKeep={[selectedPool?.token0, selectedPool?.token1]}
+          onSelectToken={async (crypto) => await handleTokenValue(crypto.name)}
           onClose={() => {
             modalContext.closeModal();
           }}
@@ -107,6 +136,8 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
                 pools={pools}
                 onSelect={(pool) => {
                   setSelectedPool(pool);
+                  modalContext.closeModal();
+                  setValues((prev) => ({ ...prev, coin: pool.token0 }));
                 }}
                 onClose={() => {
                   modalContext.closeModal();

@@ -25,7 +25,7 @@ const TokensContainer = styled.div`
   transform: ${({ translateX }) => `translateX(${translateX}px)`};
 
   & > div:not(:last-child) {
-    margin-right: 50px;
+    margin-right: 60px;
   }
 `;
 const PixeledTokenSelectorContainer = styled.div`
@@ -141,12 +141,12 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
   const onSelectToken = (direction) => {
     if (direction === 'right' && selectedTokenIndex + 1 <= cryptoCurrencies.length) {
       setSelectedTokenIndex((prev) => prev + 1);
-      setTranslateX((prev) => prev - 150);
+      setTranslateX((prev) => prev - 160);
     }
     if (direction === 'left' && selectedTokenIndex - 1 >= 0) {
       setSelectedTokenIndex((prev) => prev - 1);
 
-      setTranslateX((prev) => prev + 150);
+      setTranslateX((prev) => prev + 160);
     }
   };
   const onTokenSelect = (crypto) => {

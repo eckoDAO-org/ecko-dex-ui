@@ -145,7 +145,8 @@ const GameEditionContainer = ({ children }) => {
   const { initializeKaddexWallet, isConnected, isInstalled } = useKaddexWalletContext();
   const { wallet, signingWallet, setSelectedWallet } = useWalletContext();
   const { resolutionConfiguration, themeMode } = useApplicationContext();
-  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens } = useContext(GameEditionContext);
+  const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens, setOutsideToken, setShowTokens } =
+    useContext(GameEditionContext);
   const { account } = useAccountContext();
 
   const onConnectionSuccess = async (wallet) => {
@@ -291,7 +292,12 @@ const GameEditionContainer = ({ children }) => {
         </GameEditionDesktopContainer>
         {showTokens && (
           <SearchTokenList>
-            <TokenSelectorModalContent />
+            <TokenSelectorModalContent
+              onSelectToken={async (crypto) => {
+                await setOutsideToken((prev) => ({ ...prev, token: crypto }));
+                await setShowTokens(false);
+              }}
+            />
           </SearchTokenList>
         )}
       </div>

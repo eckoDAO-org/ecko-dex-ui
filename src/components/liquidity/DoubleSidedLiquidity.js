@@ -47,24 +47,33 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   const [inputSide, setInputSide] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const [fromValues, setFromValues] = useState({
-    coin: 'KDA',
-    account: '',
-    guard: null,
-    balance: account.account.balance,
-    amount: '',
-    precision: 12,
-  });
+  const [fromValues, setFromValues] = useState(initialStateValue);
 
   const [toValues, setToValues] = useState(initialStateValue);
 
   const [pairExist, setPairExist] = useState(false);
   const [showTxModal, setShowTxModal] = useState(false);
 
+  const initData = async () => {
+    if (pair.token0 && pair.token1) {
+      await handleTokenValue('from', tokenData[pair.token0]);
+
+      await handleTokenValue('to', tokenData[pair.token1]);
+    } else {
+      await handleTokenValue('from', tokenData['KDX']);
+
+      await handleTokenValue('to', tokenData['KDA']);
+    }
+  };
+
+  useEffect(() => {
+    initData();
+  }, []);
+
   useEffect(() => {
     if (showTxModal === false) {
       setFromValues({
-        coin: 'KDA',
+        coin: 'KDX',
         account: '',
         guard: null,
         balance: account.account.balance,
@@ -526,6 +535,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
           setInputSide={setInputSide}
           swapValues={swapValues}
           setShowTxModal={setShowTxModal}
+          label="Amount"
         />
 
         {fromValues.coin && toValues.coin && (
@@ -549,26 +559,26 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
               </>
             ) : (
               <>
-                <FlexContainer className="column" style={{ marginTop: 16 }} gap={16}>
-                  <FlexContainer className="justify-sb w-100">
+                <div className="flex justify-sb" style={{ marginTop: 16 }}>
+                  <FlexContainer className="column w-100">
                     <Label fontSize={13}>{`${toValues.coin}/${fromValues.coin}`}</Label>
                     <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
                       {reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}
                     </Label>
                   </FlexContainer>
-                  <FlexContainer className="justify-sb w-100">
+                  <FlexContainer className="column align-ce w-100">
                     <Label fontSize={13}>{`${fromValues.coin}/${toValues.coin}`}</Label>
                     <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
                       {reduceBalance(pact.getRatio1(fromValues.coin, toValues.coin)) ?? '-'}
                     </Label>
                   </FlexContainer>
-                  <FlexContainer className="justify-sb w-100">
+                  <FlexContainer className="column align-fe w-100">
                     <Label fontSize={13}>Pool Share</Label>
                     <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
                       {!pact.share(fromValues.amount) ? 0 : (pact.share(fromValues.amount) * 100).toPrecision(4)} %
                     </Label>
                   </FlexContainer>
-                </FlexContainer>
+                </div>
               </>
             )}
           </>

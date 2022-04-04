@@ -283,7 +283,7 @@ const StakeContainer = () => {
             false
           }
         />
-        <Analytics apr={'--'} volume={'--'} stakedShare={getAccountStakingPercentage()} totalStaked={getSupplyStakingPercentage()} />
+        <Analytics apr={'-'} volume={'-'} stakedShare={getAccountStakingPercentage()} totalStaked={getSupplyStakingPercentage()} />
       </FlexContainer>
 
       <VotingPower />

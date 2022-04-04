@@ -172,7 +172,7 @@ const SlippagePopupContent = ({ className }) => {
             </Row>
 
             <Label fontSize={13} outGameEditionView labelStyle={{ marginTop: 16 }}>
-              Transaction deadline
+              Transaction Deadline
             </Label>
             <Row style={{ marginTop: 8 }}>
               <ContainerInputTypeNumber>
