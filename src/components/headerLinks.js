@@ -13,6 +13,7 @@ export default [
     label: 'BETA',
     icon: <BetaIcon className="menu-icon" />,
     link: 'https://swap.kaddex.com',
+    hideOnGameEdition: true,
   },
   {
     id: 2,

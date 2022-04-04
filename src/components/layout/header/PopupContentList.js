@@ -140,7 +140,7 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
 
             {account.account && withLogout && (
               <FlexContainer className="align-ce pointer" onClick={() => logout()}>
-                <PowerIcon className="menu-icon" /> <Label>Logout</Label>
+                <PowerIcon className="menu-icon" /> <Label outGameEditionView>Logout</Label>
               </FlexContainer>
             )}
           </ListContainer>
