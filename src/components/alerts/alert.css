@@ -4,12 +4,13 @@
   border-radius: 10px;
   border: 1px solid #ffffff;
   opacity: 1;
-  background: #0d0410f2 0% 0% no-repeat padding-box;
+  background: #292a45 0% 0% no-repeat padding-box;
   color: #ffffff;
+  backdrop-filter: blur(50px);
 }
 .swal-title {
   color: #ffffff !important;
-  font-family: montserrat-bold;
+  font-family: syncopate-bold;
 }
 .swal-text {
   /* background-color: #FEFAE3; */
@@ -19,15 +20,16 @@
   margin: 22px;
   text-align: center;
   color: #e0e0e0 !important;
-  font-family: montserrat-bold !important;
+  font-family: basier-square-mono-regular !important;
 }
 
 .swal-footer {
   text-align: center;
-  background-color: #0d0410f2;
+  background-color: #292a45;
+  backdrop-filter: blur(50px);
   margin-top: 32px;
   overflow: hidden;
-  font-family: montserrat-bold !important;
+  font-family: basier-square-mono-regular !important;
 }
 
 .swal-input {
@@ -41,7 +43,8 @@
   width: 100%;
   cursor: pointer;
   padding: 7px 19px;
-  background-color: #0d0410f2;
+  background-color: #292a45;
+  backdrop-filter: blur(50px);
   border: 1px solid #ffffff;
   font-size: 16px;
   color: #ffffff;
@@ -52,5 +55,5 @@
 .swal-button:hover {
   cursor: pointer;
   background-color: #ffffff !important;
-  color: #0e0413f2;
+  color: #292a45;
 }

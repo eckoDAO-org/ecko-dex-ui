@@ -7,6 +7,7 @@ import { getCorrectBalance } from '../utils/reduceBalance';
 import { CHAIN_ID, creationTime, GAS_PRICE, NETWORK } from '../constants/contextConstants';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { useGameEditionContext } from '.';
+import reduceToken from '../utils/reduceToken';
 
 export const AccountContext = createContext();
 const getStoredNotification = JSON.parse(localStorage.getItem('Notification'));
@@ -77,7 +78,7 @@ export const AccountProvider = (props) => {
       } else {
         await setAccount({ account: null, guard: null, balance: 0 });
         await swal({
-          text: `Please make sure the account ${accountName} exist on kadena blockchain`,
+          text: `Please make sure the account ${reduceToken(accountName)} exist on kadena blockchain`,
           title: 'No Account',
         });
       }
