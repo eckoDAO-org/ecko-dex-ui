@@ -68,7 +68,7 @@ export const PactProvider = (props) => {
       title: 'Transaction Pending',
       message: reqKey,
       type: STATUSES.INFO,
-      autoClose: 92000,
+      closeOnClick: false,
       hideProgressBar: false,
     }));
   };
