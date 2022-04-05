@@ -18,6 +18,7 @@ import { getAllPairValues } from '../../utils/token-utils';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { isValidString } from '../../utils/string-utils';
 import { AppLoader } from '../../components/shared/AppLoader';
+import { useErrorState } from '../../hooks/useErrorState';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -42,7 +43,7 @@ const AddLiquidityContainer = (props) => {
   const query = useQueryParams();
 
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState({ pools: [], volumes: [] });
+  const [data, setData] = useErrorState({ pools: [], volumes: [] });
   const [pair, setPair] = useState({ token0: query?.get('token0'), token1: query.get('token1') });
 
   const [apr, setApr] = useState(null);
@@ -57,9 +58,12 @@ const AddLiquidityContainer = (props) => {
 
   const fetchData = async () => {
     const pools = await getPairList();
-    const volumes = await getDailyVolume();
+    if (pools.length) {
+      console.log('in1');
+      const volumes = await getDailyVolume();
 
-    setData({ pools, volumes });
+      setData({ pools, volumes });
+    }
 
     setLoading(false);
   };

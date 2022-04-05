@@ -37,6 +37,9 @@ export const getPairList = async () => {
               (map (${KADDEX_NAMESPACE}-read.pair-info) [${tokenPairList}])
                `
     );
+    if (data.errorMessage) {
+      return data;
+    }
     if (data) {
       let dataList = data.reduce((accum, data) => {
         accum[data[0]] = {
