@@ -131,6 +131,7 @@ const RightHeaderItems = () => {
           rightModalContext.openModal({
             title: 'notifications',
             titleStyle: { padding: '10px 22px 10px 26px' },
+            isNotificationModal: true,
             content: <NotificationList />,
             footer: (
               <CustomButton

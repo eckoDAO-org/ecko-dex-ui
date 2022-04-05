@@ -17,6 +17,7 @@ const CheckboxContainer = styled.div`
   .ui.radio.checkbox label {
     color: ${({ theme: { colors } }) => colors.white};
   }
+
   .ui.radio.checkbox input:checked ~ .box:after,
   .ui.radio.checkbox input:checked ~ label:after {
     background-color: ${({ theme: { colors } }) => colors.white};
@@ -31,11 +32,11 @@ const CheckboxContainer = styled.div`
   .ui.radio.checkbox .box:before,
   .ui.radio.checkbox label:before {
     background-color: transparent;
+    border: 1px solid ${({ theme: { colors } }) => colors.white};
   }
 `;
 
 const VoteResultsContainer = ({ onClickYes, onClickNo, proposalData, hasVoted }) => {
-  console.log('LOG / file: VoteResultsContainer.js / line 37 / VoteResultsContainer / proposalData', proposalData);
   const { account } = useAccountContext();
 
   const dataValidation = () =>
