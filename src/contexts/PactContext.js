@@ -74,8 +74,8 @@ export const PactProvider = (props) => {
   };
 
   const storeSlippage = async (slippage) => {
-    await setSlippage(slippage);
-    await localStorage.setItem('slippage', slippage);
+    setSlippage(slippage);
+    localStorage.setItem('slippage', slippage);
   };
 
   // const setReqKeysLocalStorage = (key) => {
@@ -98,7 +98,7 @@ export const PactProvider = (props) => {
         let response = await axios.get('https://estats.chainweb.com/txs/events', {
           params: {
             search: account.account.account,
-            name: '${KADDEX_NAMESPACE}.exchange.SWAP',
+            name: `${KADDEX_NAMESPACE}.exchange.SWAP`,
             offset: offsetSwapList,
             limit: limit,
           },

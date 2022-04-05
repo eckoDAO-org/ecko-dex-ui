@@ -22,11 +22,11 @@ const Analytics = ({ apr, volume, stakedShare, totalStaked }) => {
           <Label>Staked Share</Label>
           <InfoPopup>Your personal percentage share of KDX amongst all the KDX currently being staked.</InfoPopup>
         </div>
-        <Label fontSize={32}>{stakedShare} %</Label>
+        <Label fontSize={32}>{stakedShare}%</Label>
       </div>
       <div>
         <Label>Total Staked</Label>
-        <Label fontSize={32}>{totalStaked} %</Label>
+        <Label fontSize={32}>{totalStaked}%</Label>
       </div>
     </CommonWrapper>
   );

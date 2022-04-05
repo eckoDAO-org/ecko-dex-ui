@@ -75,7 +75,7 @@ const SecondInputContainer = styled.div`
   }}
 `;
 
-const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, toNote, setTokenSelectorType, setInputSide, swapValues }) => {
+const SwapForm = ({ label, fromValues, setFromValues, toValues, setToValues, fromNote, toNote, setTokenSelectorType, setInputSide, swapValues }) => {
   const { themeMode } = useApplicationContext();
   const { gameEditionView } = useContext(GameEditionContext);
   const [rotation, setRotation] = useState(0);
@@ -87,7 +87,7 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
         <FirstInputContainer gameEditionView={gameEditionView}>
           <Input
             error={isNaN(fromValues.amount)}
-            topLeftLabel={fromNote ? `from ${fromNote}` : `from`}
+            topLeftLabel={label ? label : fromNote ? `from ${fromNote}` : `from`}
             topRightLabel={`balance: ${reduceBalance(fromValues.balance) ?? '-'}`}
             bottomLeftLabel={`balance: ${reduceBalance(fromValues.balance) ?? '-'}`} //using for gameEdition
             geColor="black"
@@ -160,7 +160,7 @@ const SwapForm = ({ fromValues, setFromValues, toValues, setToValues, fromNote, 
         <SecondInputContainer gameEditionView={gameEditionView}>
           <Input
             error={isNaN(toValues.amount)}
-            topLeftLabel={toNote ? `to ${toNote}` : `to`}
+            topLeftLabel={label ? label : toNote ? `to ${toNote}` : `to`}
             topRightLabel={`balance: ${reduceBalance(toValues.balance) ?? '-'}`}
             bottomLeftLabel={`balance: ${reduceBalance(toValues.balance) ?? '-'}`} //using for gameEdition
             placeholder="0.0"

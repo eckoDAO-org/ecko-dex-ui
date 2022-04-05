@@ -20,8 +20,8 @@ const Position = ({ buttonLabel, amount, pendingAmount, topRightLabel, amountToS
       centerIcon
     >
       <div>
-        <Label>Amount</Label>
-        <Label fontSize={32}>{humanReadableNumber(amount)}</Label>
+        <Label>My Stake</Label>
+        <Label fontSize={32}>{humanReadableNumber(amount)} KDX</Label>
         {pendingAmount && <Label fontSize={15}>(Pending {humanReadableNumber(pendingAmount)})</Label>}
       </div>
       <CustomDivider style={{ margin: '40px 0' }} />
