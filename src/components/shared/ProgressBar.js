@@ -8,7 +8,7 @@ const STYMaxSupplyContainer = styled.div`
   border: 1px solid ${({ theme: { colors } }) => `${colors.white}99`};
   border-radius: 10px;
   width: 100%;
-  background: ${({ theme: { colors } }) => `${colors.grey}99`};
+  background: ${({ theme: { backgroundProgressBar } }) => `${backgroundProgressBar}`};
 `;
 
 const STYMaxSupply = styled.div`
@@ -69,7 +69,7 @@ const ProgressBar = ({ currentValue, maxValue, topLabelLeft, bottomValues, withB
                   }}
                 >
                   {/* <Indicator /> */}
-               {/* <Indicator style={{ visibility: i === 0 || i === values.length - 1 ? 'hidden' : 'visible' }} />*/}
+                  {/* <Indicator style={{ visibility: i === 0 || i === values.length - 1 ? 'hidden' : 'visible' }} />*/}
                   <Label>{typeof v === 'number' ? v.toString() : v.value.toString()}</Label>
                   {v?.label && <Label labelStyle={{ fontWeight: 'bold' }}>{v.label}</Label>}
                 </PercetageIndicator>

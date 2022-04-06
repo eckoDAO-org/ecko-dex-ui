@@ -109,6 +109,7 @@ const STYFlexContainer = styled.div`
         ${({ withGradient }) =>
           withGradient &&
           css`
+            position: relative;
             border-radius: 10px;
             backdrop-filter: blur(50px);
             padding: 16px;
@@ -168,6 +169,28 @@ const STYFlexContainer = styled.div`
 
   &.column {
     flex-direction: column;
+    ${({ gap }) => {
+      if (gap) {
+        const browser = browserDetection();
+
+        if (browser === 'SAFARI') {
+          return css`
+            & > *:not(:last-child) {
+              margin-bottom: ${gap}px;
+              margin-right: 0px;
+            }
+          `;
+        } else
+          return css`
+            row-gap: ${({ gap }) => gap}px;
+            column-gap: 0px;
+          `;
+      }
+    }}
+  }
+
+  &.column-reverse {
+    flex-direction: column-reverse;
     ${({ gap }) => {
       if (gap) {
         const browser = browserDetection();

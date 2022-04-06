@@ -242,4 +242,11 @@ export default createGlobalStyle`
       overflow: hidden;
     }
 
+    .svg-app-color {
+        path {
+          fill: ${({ theme: { colors } }) => colors.white}!important;
+        }
+      
+    }
+
 `;
