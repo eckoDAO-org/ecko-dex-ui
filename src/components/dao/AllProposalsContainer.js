@@ -51,6 +51,7 @@ const AllProposalsContainer = ({ accountData }) => {
                   <Label
                     fontFamily="basier"
                     fontSize={10}
+                    color={'#fff'}
                     labelStyle={{
                       backgroundColor:
                         moment(data['start-date'].time) <= moment() && moment(data['end-date'].time) >= moment()

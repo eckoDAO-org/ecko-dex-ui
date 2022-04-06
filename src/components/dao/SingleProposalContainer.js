@@ -169,9 +169,9 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
     <>
       <Label fontSize={24} fontFamily="syncopate">
         <ArrowBack
+          className="svg-app-color"
           style={{
             cursor: 'pointer',
-            color: theme(themeMode).colors.white,
             marginRight: '15px',
             justifyContent: 'center',
           }}
@@ -188,6 +188,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
                 <Label
                   fontFamily="basier"
                   fontSize={10}
+                  color={'#fff'}
                   labelStyle={{
                     backgroundColor:
                       moment(singleProposalData['start-date']?.time) <= moment() && moment(singleProposalData['end-date']?.time) >= moment()

@@ -106,6 +106,7 @@ const Label = ({
       {info && (
         <Popup
           basic
+          style={{ padding: 0 }}
           offset={[-10, -20]}
           trigger={
             <STYInfoContainer>
@@ -115,7 +116,9 @@ const Label = ({
           on="click"
           position="top left"
         >
-          <FlexContainer withGradient>{info}</FlexContainer>
+          <FlexContainer withGradient>
+            <STYText>{info}</STYText>
+          </FlexContainer>
         </Popup>
       )}
     </STYText>
