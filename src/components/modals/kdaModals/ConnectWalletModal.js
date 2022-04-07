@@ -21,7 +21,7 @@ const ConnectWalletModal = () => {
         return modalContext.openModal({
           id: "ZELCORE",
           title: "connect wallet",
-          description: "Zelcore Signing (Safest)",
+          description: "Zelcore Signing",
           onBack: () => modalContext.onBackModal(),
           content: (
             <ConnectWalletZelcoreModal
