@@ -1,21 +1,16 @@
 import React, { createContext, useEffect, useState } from "react";
 import Pact from "pact-lang-api";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 export const WalletContext = createContext(null);
 
-const savedWallet = localStorage.getItem("wallet");
-const savedSigning = localStorage.getItem("signing");
-const savedPrivKey = localStorage.getItem("pk");
+
 
 export const WalletProvider = (props) => {
-  const [wallet, setWallet] = useState(
-    savedWallet ? JSON.parse(savedWallet) : null
-  );
-  const [signing, setSigning] = useState(
-    savedSigning ? JSON.parse(savedSigning) : { method: "none", key: "" }
-  );
+  const [wallet, setWallet, removeWallet] = useLocalStorage('wallet', null);
+  const [signing, setSigning, removeSigning] = useLocalStorage('signing', { method: 'none', key: '' });
 
-  const [privKey, setPrivKey] = useState(savedPrivKey ? savedPrivKey : "");
+  const [privKey, setPrivKey] = useLocalStorage('pk', '');
   const keyPair = privKey
     ? Pact.crypto.restoreKeyPairFromSecretKey(privKey)
     : "";
@@ -45,13 +40,12 @@ export const WalletProvider = (props) => {
   };
 
   const setSelectedWallet = (wallet) => {
-    setWallet({ name: wallet.name });
-    localStorage.setItem("wallet", JSON.stringify({ name: wallet.name }));
+    setWallet({ id: wallet.id, name: wallet.name });
   };
 
   const disconnectWallet = () => {
-    localStorage.removeItem("wallet", null);
-    localStorage.removeItem("signing", null);
+    removeWallet();
+    removeSigning();
     window.location.reload();
   };
 

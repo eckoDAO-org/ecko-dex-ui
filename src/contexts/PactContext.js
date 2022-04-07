@@ -1,14 +1,16 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
 import pairTokens from '../constants/pairs.json';
 import { toast } from 'react-toastify';
 
 import {
-  chainId,
+  CHAIN_ID,
   creationTime,
   FEE,
   GAS_PRICE,
-  network,
+  GAS_LIMIT,
+  NETWORK,
   NETWORK_TYPE,
 } from '../constants/contextConstants';
 import { extractDecimal } from '../utils/reduceBalance';
@@ -62,8 +64,8 @@ export const PactProvider = (props) => {
       title: 'Transaction Pending',
       message: reqKey,
       type: STATUSES.INFO,
-      autoClose: 92000,
       hideProgressBar: false,
+      closeOnClick: false,
     }));
   };
 
@@ -90,7 +92,7 @@ export const PactProvider = (props) => {
       if (reqKeyList) {
         let tx = await Pact.fetch.poll(
           { requestKeys: Object.values(reqKeyList) },
-          network
+          NETWORK
         );
         if (Object.keys(tx).length !== 0) {
           const searchSwap = Object.values(tx).some(
@@ -146,14 +148,14 @@ export const PactProvider = (props) => {
           pactCode: tokenNames,
           meta: Pact.lang.mkMeta(
             '',
-            chainId,
+            CHAIN_ID,
             GAS_PRICE,
-            150000,
+            GAS_LIMIT,
             creationTime(),
             600
           ),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         Object.keys(tokenData).forEach((token) => {
@@ -196,14 +198,14 @@ export const PactProvider = (props) => {
           pactCode: tokenNames,
           meta: Pact.lang.mkMeta(
             '',
-            chainId,
+            CHAIN_ID,
             GAS_PRICE,
-            150000,
+            GAS_LIMIT,
             creationTime(),
             600
           ),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         Object.keys(tokenData).forEach((token) => {
@@ -254,14 +256,14 @@ export const PactProvider = (props) => {
              `,
           meta: Pact.lang.mkMeta(
             '',
-            chainId,
+            CHAIN_ID,
             GAS_PRICE,
-            150000,
+            GAS_LIMIT,
             creationTime(),
             600
           ),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         let dataList = data.result.data.reduce((accum, data) => {
@@ -292,11 +294,11 @@ export const PactProvider = (props) => {
 
   const listen = async (reqKey) => {
     //check kadena tx status every 10 seconds until we get a response (success or fail)
-    var time = 240;
+    var time = 320;
     var pollRes;
     while (time > 0) {
       await wait(5000);
-      pollRes = await Pact.fetch.poll({ requestKeys: [reqKey] }, network);
+      pollRes = await Pact.fetch.poll({ requestKeys: [reqKey] }, NETWORK);
       if (Object.keys(pollRes).length === 0) {
         console.log('no return poll');
         console.log(pollRes);
@@ -366,14 +368,14 @@ export const PactProvider = (props) => {
            `,
           meta: Pact.lang.mkMeta(
             '',
-            chainId,
+            CHAIN_ID,
             GAS_PRICE,
-            150000,
+            GAS_LIMIT,
             creationTime(),
             600
           ),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         return data.result.data;
@@ -394,14 +396,14 @@ export const PactProvider = (props) => {
           keyPairs: Pact.crypto.genKeyPair(),
           meta: Pact.lang.mkMeta(
             '',
-            chainId,
+            CHAIN_ID,
             0.01,
             100000000,
             28800,
             creationTime()
           ),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         if (data.result.data.decimal) setTotalSupply(data.result.data.decimal);
@@ -420,14 +422,14 @@ export const PactProvider = (props) => {
           keyPairs: Pact.crypto.genKeyPair(),
           meta: Pact.lang.mkMeta(
             '',
-            chainId,
+            CHAIN_ID,
             GAS_PRICE,
-            150000,
+            GAS_LIMIT,
             creationTime(),
             600
           ),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         setPair(data.result.data);
@@ -447,14 +449,14 @@ export const PactProvider = (props) => {
           pactCode: `(kswap.exchange.get-pair-key ${token0} ${token1})`,
           meta: Pact.lang.mkMeta(
             account.account.account,
-            chainId,
+            CHAIN_ID,
             GAS_PRICE,
-            150000,
+            GAS_LIMIT,
             creationTime(),
             600
           ),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         return data.result.data;
@@ -479,14 +481,14 @@ export const PactProvider = (props) => {
            `,
           meta: Pact.lang.mkMeta(
             'account',
-            chainId,
+            CHAIN_ID,
             GAS_PRICE,
-            150000,
+            GAS_LIMIT,
             creationTime(),
             600
           ),
         },
-        network
+        NETWORK
       );
       if (data.result.status === 'success') {
         await setPairReserve({

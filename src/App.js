@@ -6,6 +6,7 @@ import NotificationRender from "./components/notification/NotificationRender";
 import { theme } from "./styles/theme";
 import { AccountProvider } from "./contexts/AccountContext";
 import { WalletProvider } from "./contexts/WalletContext";
+import { KaddexWalletProvider } from './contexts/KaddexWalletContext';
 import { PactProvider } from "./contexts/PactContext";
 import ModalRender from "./components/modals/ModalRender";
 import { SwapProvider } from "./contexts/SwapContext";
@@ -19,6 +20,7 @@ function App() {
         <AccountProvider>
           <WalletProvider>
             <PactProvider>
+            <KaddexWalletProvider>
               <SwapProvider>
                 <LiquidityProvider>
                   <ModalRender>
@@ -26,6 +28,7 @@ function App() {
                   </ModalRender>
                 </LiquidityProvider>
               </SwapProvider>
+              </KaddexWalletProvider>
             </PactProvider>
           </WalletProvider>
         </AccountProvider>
