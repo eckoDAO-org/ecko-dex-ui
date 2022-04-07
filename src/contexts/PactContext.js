@@ -68,14 +68,14 @@ export const PactProvider = (props) => {
       title: 'Transaction Pending',
       message: reqKey,
       type: STATUSES.INFO,
-      autoClose: 92000,
+      closeOnClick: false,
       hideProgressBar: false,
     }));
   };
 
   const storeSlippage = async (slippage) => {
-    await setSlippage(slippage);
-    await localStorage.setItem('slippage', slippage);
+    setSlippage(slippage);
+    localStorage.setItem('slippage', slippage);
   };
 
   // const setReqKeysLocalStorage = (key) => {
@@ -98,7 +98,7 @@ export const PactProvider = (props) => {
         let response = await axios.get('https://estats.chainweb.com/txs/events', {
           params: {
             search: account.account.account,
-            name: '${KADDEX_NAMESPACE}.exchange.SWAP',
+            name: `${KADDEX_NAMESPACE}.exchange.SWAP`,
             offset: offsetSwapList,
             limit: limit,
           },
@@ -304,17 +304,6 @@ export const PactProvider = (props) => {
     });
   };
 
-  const setIsCompletedNotification = (reqKey) => {
-    const getStoredNotification = JSON.parse(localStorage.getItem('Notification'));
-    const newNotificationList = getStoredNotification.map((notif) => {
-      if (notif.type === 'info' && notif.description === reqKey) {
-        notif.isCompleted = true;
-      }
-      return notif;
-    });
-    localStorage.setItem(`Notification`, JSON.stringify(newNotificationList));
-  };
-
   const listen = async (reqKey) => {
     //check kadena tx status every 10 seconds until we get a response (success or fail)
     var time = 240;
@@ -339,7 +328,7 @@ export const PactProvider = (props) => {
     if (pollRes[reqKey].result.status === 'success') {
       // setting reqKey for calling History Transaction
       // setReqKeysLocalStorage(reqKey);
-      setIsCompletedNotification(reqKey);
+      account.setIsCompletedNotification(reqKey);
 
       // store in local storage the success notification for the right modal
       account.storeNotification({
@@ -367,7 +356,7 @@ export const PactProvider = (props) => {
         autoClose: 10000,
       });
     } else {
-      setIsCompletedNotification(reqKey);
+      account.setIsCompletedNotification(reqKey);
       // store in local storage the error notification for the right modal
       account.storeNotification({
         type: 'error',

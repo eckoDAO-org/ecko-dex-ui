@@ -3,7 +3,8 @@ import moment from 'moment';
 import React from 'react';
 import { Checkbox } from 'semantic-ui-react';
 import styled from 'styled-components';
-import { useAccountContext } from '../../contexts';
+import { useAccountContext, useApplicationContext } from '../../contexts';
+import { theme } from '../../styles/theme';
 import { FlexContainer } from '../shared/FlexContainer';
 import ProgressBar from '../shared/ProgressBar';
 
@@ -17,6 +18,7 @@ const CheckboxContainer = styled.div`
   .ui.radio.checkbox label {
     color: ${({ theme: { colors } }) => colors.white};
   }
+
   .ui.radio.checkbox input:checked ~ .box:after,
   .ui.radio.checkbox input:checked ~ label:after {
     background-color: ${({ theme: { colors } }) => colors.white};
@@ -31,12 +33,13 @@ const CheckboxContainer = styled.div`
   .ui.radio.checkbox .box:before,
   .ui.radio.checkbox label:before {
     background-color: transparent;
+    border: 1px solid ${({ theme: { colors } }) => colors.white};
   }
 `;
 
 const VoteResultsContainer = ({ onClickYes, onClickNo, proposalData, hasVoted }) => {
-  console.log('LOG / file: VoteResultsContainer.js / line 37 / VoteResultsContainer / proposalData', proposalData);
   const { account } = useAccountContext();
+  const { themeMode } = useApplicationContext();
 
   const dataValidation = () =>
     !account?.account || hasVoted || moment(proposalData['start-date']?.time) >= moment() || moment(proposalData['end-date']?.time) <= moment();
@@ -49,7 +52,7 @@ const VoteResultsContainer = ({ onClickYes, onClickNo, proposalData, hasVoted })
         <CheckboxContainer>
           <Checkbox disabled={dataValidation()} radio checked={hasVoted === 'approved'} label="Yes" value="yes" onChange={onClickYes} />
         </CheckboxContainer>
-        <FlexContainer className="align-ce w-100" style={{ border: '1px solid #FFFFFF99', borderRadius: 10, padding: 8 }}>
+        <FlexContainer className="align-ce w-100" style={{ border: `1px solid ${theme(themeMode).colors.white}99`, borderRadius: 10, padding: 8 }}>
           <ProgressBar currentValue={proposalData['tot-approved']} maxValue={proposalData['tot-approved'] + proposalData['tot-refused']} />
         </FlexContainer>
       </FlexContainer>
@@ -57,7 +60,7 @@ const VoteResultsContainer = ({ onClickYes, onClickNo, proposalData, hasVoted })
         <CheckboxContainer>
           <Checkbox disabled={dataValidation()} radio checked={hasVoted === 'refused'} label="No" value="no" onChange={onClickNo} />
         </CheckboxContainer>
-        <FlexContainer className="align-ce w-100" style={{ border: '1px solid #FFFFFF99', borderRadius: 10, padding: 8 }}>
+        <FlexContainer className="align-ce w-100" style={{ border: `1px solid ${theme(themeMode).colors.white}99`, borderRadius: 10, padding: 8 }}>
           <ProgressBar darkBar currentValue={proposalData['tot-refused']} maxValue={proposalData['tot-approved'] + proposalData['tot-refused']} />
         </FlexContainer>
       </FlexContainer>

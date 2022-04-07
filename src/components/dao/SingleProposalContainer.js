@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 import { hasAccountVoted, readSingleProposal, vote, voteCommandToSign, votePreview } from '../../api/dao';
 import { useAccountContext, useApplicationContext, useKaddexWalletContext, useNotificationContext } from '../../contexts';
 import { STATUSES } from '../../contexts/NotificationContext';
-import { NETWORK_TYPE } from '../../constants/contextConstants';
+import { getCurrentDate, getCurrentTime, NETWORK_TYPE } from '../../constants/contextConstants';
 import { ROUTE_DAO } from '../../router/routes';
 import { PartialScrollableScrollSection } from '../layout/Containers';
 import { FlexContainer } from '../shared/FlexContainer';
@@ -22,7 +22,7 @@ import Loader from '../shared/Loader';
 
 const SingleProposalContainer = ({ proposal_id, accountData }) => {
   const { themeMode } = useApplicationContext();
-  const { account } = useAccountContext();
+  const { account, storeNotification, setIsCompletedNotification } = useAccountContext();
   const { showNotification } = useNotificationContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
   const toastId = React.useRef(null);
@@ -60,6 +60,15 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
         window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${reqKey}`, '_blank', 'noopener,noreferrer');
       },
     });
+    storeNotification({
+      type: 'info',
+      time: getCurrentTime(),
+      date: getCurrentDate(),
+      title: 'Vote Pending!',
+      description: reqKey,
+      isRead: false,
+      isCompleted: false,
+    });
   };
 
   const handleClick = async (type) => {
@@ -73,7 +82,6 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
     if (votePreviewResponse?.result?.status === 'success') {
       setDaoFetchDataLoading(true);
       const res = await vote(signedCommand, pollingNotif);
-
       if (res?.listen === 'success') {
         toast.dismiss(toastId.current);
         showNotification({
@@ -85,6 +93,16 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
           },
           autoClose: 10000,
         });
+        setIsCompletedNotification(res?.data.requestKeys[0]);
+        storeNotification({
+          type: 'success',
+          date: moment().format('DD/MM/YYYY - HH:mm:ss'),
+          title: 'Vote Success!',
+          description: 'Check it out in the block explorer',
+          link: `https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${res?.data.requestKeys[0]}`,
+          isRead: false,
+        });
+
         setDaoSingleProposalLoading(false);
         setDaoFetchDataLoading(false);
       } else {
@@ -95,6 +113,13 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
           type: STATUSES.ERROR,
           autoClose: 5000,
         });
+        storeNotification({
+          type: 'error',
+          date: moment().format('DD/MM/YYYY - HH:mm:ss'),
+          title: 'Transaction Failed!',
+          isRead: false,
+          isCompleted: false,
+        });
         setDaoFetchDataLoading(false);
         setDaoSingleProposalLoading(false);
       }
@@ -103,6 +128,14 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
         title: 'Vote Error',
         message: votePreviewResponse?.result?.error?.message,
         type: STATUSES.ERROR,
+      });
+      storeNotification({
+        type: 'error',
+        date: moment().format('DD/MM/YYYY - HH:mm:ss'),
+        title: 'Vote Error',
+        description: votePreviewResponse?.result?.error?.message,
+        isRead: false,
+        isCompleted: false,
       });
     }
   };
@@ -136,9 +169,9 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
     <>
       <Label fontSize={24} fontFamily="syncopate">
         <ArrowBack
+          className="svg-app-color"
           style={{
             cursor: 'pointer',
-            color: theme(themeMode).colors.white,
             marginRight: '15px',
             justifyContent: 'center',
           }}
@@ -155,6 +188,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
                 <Label
                   fontFamily="basier"
                   fontSize={10}
+                  color={'#fff'}
                   labelStyle={{
                     backgroundColor:
                       moment(singleProposalData['start-date']?.time) <= moment() && moment(singleProposalData['end-date']?.time) >= moment()

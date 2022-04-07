@@ -34,7 +34,7 @@ export const LIQUIDITY = {
 };
 export const DAO = {
   id: 2,
-  label: 'dao',
+  label: 'DAO',
   route: ROUTE_DAO,
   className: '',
 };

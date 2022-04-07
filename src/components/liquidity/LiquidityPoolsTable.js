@@ -21,11 +21,15 @@ const LiquidityPoolsTable = () => {
 
   const fetchData = async () => {
     const pools = await getPairList();
-    const volumes = await getDailyVolume();
+    if (pools.length) {
+      console.log('in2');
 
-    const result = await getAllPairValues(pools, volumes);
+      const volumes = await getDailyVolume();
 
-    setPairList(result);
+      const result = await getAllPairValues(pools, volumes);
+
+      setPairList(result);
+    }
 
     setLoading(false);
   };
