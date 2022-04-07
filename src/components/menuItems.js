@@ -2,7 +2,6 @@ import {
   ROUTE_POOL,
   ROUTE_STATS,
   ROUTE_SWAP,
-  ROUTE_WRAP,
 } from "../router/routes";
 
 export default [
@@ -18,12 +17,12 @@ export default [
     route: ROUTE_POOL,
     className: "",
   },
-  {
-    id: 2,
-    label: "wrap",
-    route: ROUTE_WRAP,
-    className: "",
-  },
+  // {
+  //   id: 2,
+  //   label: "wrap",
+  //   route: ROUTE_WRAP,
+  //   className: "",
+  // },
   {
     id: 3,
     label: "stats",
