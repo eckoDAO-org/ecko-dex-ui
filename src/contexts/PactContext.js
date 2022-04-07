@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
 import pairTokens from '../constants/pairs.json';
@@ -293,7 +294,7 @@ export const PactProvider = (props) => {
 
   const listen = async (reqKey) => {
     //check kadena tx status every 10 seconds until we get a response (success or fail)
-    var time = 240;
+    var time = 320;
     var pollRes;
     while (time > 0) {
       await wait(5000);
