@@ -12,3 +12,11 @@ export function isUndefined(str) {
 export function isValidString(str) {
   return !isEmpty(str) && !isBlank(str) && !isUndefined(str);
 }
+
+export function getFloatPrecision(floatVal) {
+  if (!floatVal || floatVal.toString().indexOf('.') < 0) {
+    return 0;
+  } else {
+    return Math.abs(floatVal.toString().indexOf('.') - floatVal.toString().length + 1);
+  }
+}

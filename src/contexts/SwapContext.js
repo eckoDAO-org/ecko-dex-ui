@@ -7,7 +7,16 @@ import { reduceBalance } from '../utils/reduceBalance';
 import { decryptKey } from '../utils/keyUtils';
 import { STATUSES } from './NotificationContext';
 import { useKaddexWalletContext, useWalletContext, useAccountContext, usePactContext, useNotificationContext } from '.';
-import { CHAIN_ID, creationTime, GAS_PRICE, NETWORK, NETWORKID, ENABLE_GAS_STATION, KADDEX_NAMESPACE } from '../constants/contextConstants';
+import {
+  CHAIN_ID,
+  creationTime,
+  GAS_PRICE,
+  GAS_LIMIT,
+  NETWORK,
+  NETWORKID,
+  ENABLE_GAS_STATION,
+  KADDEX_NAMESPACE,
+} from '../constants/contextConstants';
 import { pactFetchLocal } from '../api/pact';
 
 export const SwapContext = createContext();
@@ -103,7 +112,7 @@ export const SwapProvider = (props) => {
         },
         // meta: Pact.lang.mkMeta('', '', 0, 0, 0, 0),
         networkId: NETWORKID,
-        meta: Pact.lang.mkMeta(account.account, CHAIN_ID, GAS_PRICE, 3000, creationTime(), 600),
+        meta: Pact.lang.mkMeta(account.account, CHAIN_ID, GAS_PRICE, GAS_LIMIT, creationTime(), 600),
       };
       setCmd(cmd);
       await Pact.fetch.send(cmd, NETWORK);
@@ -218,7 +227,7 @@ export const SwapProvider = (props) => {
           token0AmountWithSlippage: reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision),
         },
         networkId: NETWORKID,
-        meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account, CHAIN_ID, GAS_PRICE, 3000, ct, 600),
+        meta: Pact.lang.mkMeta(ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account, CHAIN_ID, GAS_PRICE, GAS_LIMIT, ct, 600),
       };
       setCmd(cmd);
       let data = await Pact.fetch.local(cmd, NETWORK);
@@ -265,7 +274,7 @@ export const SwapProvider = (props) => {
           ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : []),
         ],
         sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
-        gasLimit: 3000,
+        gasLimit: GAS_LIMIT,
         gasPrice: GAS_PRICE,
         chainId: CHAIN_ID,
         ttl: 600,

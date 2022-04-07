@@ -7,21 +7,32 @@ import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
 import PentalityRewardsInfo from './PentalityRewardsInfo';
 
+export const getPenaltyString = (stakedTimeStart, rewardsPenalty) => {
+  const diffHours = moment().diff(stakedTimeStart, 'hours');
+  const diffDays = moment().diff(stakedTimeStart, 'days');
+  if (diffHours < 72) {
+    return '3%';
+  } else if (diffDays < 60) {
+    return `${rewardsPenalty} KDX`;
+  }
+  return false;
+};
+
 const Rewards = ({ amount, stakedTimeStart, rewardsPenalty, disabled, onWithdrawClick }) => {
   /*
     If you unstake during the first 72hours you will incur in a penalty: 3% flat penalty on your staked amount. 
     If you withdraw your rewards during the first 60 days, you will incur in a penalty: the penalty will only affect your accumulated rewards 
     and exponentially decreases in time. Your initial capital will not be affected.
   */
-  const getPenaltyPercentage = () => {
-    const diffHours = moment().diff(stakedTimeStart, 'hours');
-    const diffDays = moment().diff(stakedTimeStart, 'days');
-    if (diffHours < 72) {
-      return '3';
-    } else if (diffDays < 60) {
-      return rewardsPenalty;
+
+  const getPenaltyColor = () => {
+    if (!getPenaltyString(stakedTimeStart, rewardsPenalty)) {
+      return null;
+    } else if (moment().diff(moment(stakedTimeStart), 'day') >= 60) {
+      return commonColors.green;
+    } else {
+      return commonColors.red;
     }
-    return '-';
   };
 
   return (
@@ -32,7 +43,7 @@ const Rewards = ({ amount, stakedTimeStart, rewardsPenalty, disabled, onWithdraw
       </div>
       <div>
         <Label>Staking Time</Label>
-        <Label fontSize={24} color={moment().diff(moment(stakedTimeStart), 'day') >= 60 ? commonColors.green : commonColors.red}>
+        <Label fontSize={24} color={getPenaltyColor()}>
           {(stakedTimeStart && moment(stakedTimeStart).fromNow()) || '-'}
         </Label>
       </div>
@@ -44,8 +55,8 @@ const Rewards = ({ amount, stakedTimeStart, rewardsPenalty, disabled, onWithdraw
           </InfoPopup>
         </div>
 
-        <Label fontSize={24} color={getPenaltyPercentage() === 0 ? commonColors.green : commonColors.red}>
-          {getPenaltyPercentage()}%
+        <Label fontSize={24} color={getPenaltyColor()}>
+          {getPenaltyString(stakedTimeStart, rewardsPenalty) || '-'}
         </Label>
       </div>
       <CustomButton type="gradient" disabled={disabled} buttonStyle={{ marginTop: 4 }}>

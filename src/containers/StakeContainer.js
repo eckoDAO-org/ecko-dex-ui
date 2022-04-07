@@ -12,7 +12,9 @@ import Rewards from '../components/stake/Rewards';
 import StakeInfo from '../components/stake/StakeInfo';
 import UnstakeInfo from '../components/stake/UnstakeInfo';
 import VotingPower from '../components/stake/VotingPower';
-import { useAccountContext, useKaddexWalletContext, useNotificationContext, usePactContext } from '../contexts';
+import { AddStakeModal } from '../components/modals/stake/AddStakeModal';
+import { UnstakeModal } from '../components/modals/stake/UnstakeModal';
+import { useAccountContext, useKaddexWalletContext, useNotificationContext, usePactContext, useModalContext } from '../contexts';
 import { ROUTE_STAKE, ROUTE_UNSTAKE } from '../router/routes';
 import { NETWORK, getCurrentDate, getCurrentTime } from '../constants/contextConstants';
 import { theme } from '../styles/theme';
@@ -20,6 +22,7 @@ import { theme } from '../styles/theme';
 const StakeContainer = () => {
   const history = useHistory();
   const { pathname } = useLocation();
+  const { openModal, closeModal } = useModalContext();
   const { account, storeNotification } = useAccountContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
   const { showNotification, STATUSES } = useNotificationContext();
@@ -29,7 +32,8 @@ const StakeContainer = () => {
   const [poolState, setPoolState] = useState(null);
   const [kdxAccountBalance, setKdxAccountBalance] = useState(0);
   const [estimateUnstakeData, setEstimateUnstakeData] = useState(null);
-  const [amountToStake, setAmountToStake] = useState(0);
+  console.log('🚀 !!! ~ estimateUnstakeData', estimateUnstakeData);
+  const [amountToStake, setToStakeAmount] = useState(0);
 
   const updateAccountStakingData = useCallback(() => {
     if (account?.account) {
@@ -78,6 +82,20 @@ const StakeContainer = () => {
     return '--';
   };
 
+  const getAddStakeModalTitle = () => {
+    if (estimateUnstakeData?.staked && estimateUnstakeData?.staked > 0) {
+      return `ADDING MORE KDX TO YOUR STAKING AMOUNT?`;
+    }
+    return `Transaction details`;
+  };
+
+  const getUnstakeModalTitle = () => {
+    if (estimateUnstakeData?.staked && estimateUnstakeData?.staked > 0) {
+      return `CLOSING YOUR STAKING PLAN EARLY?`;
+    }
+    return `Transaction details`;
+  };
+
   const signCommand = async (cmd) => {
     if (isKaddexWalletConnected) {
       const res = await kaddexWalletRequestSign(cmd);
@@ -87,7 +105,7 @@ const StakeContainer = () => {
     }
   };
 
-  const stakeKDX = async () => {
+  const onStakeKDX = async () => {
     if (!amountToStake) {
       showNotification({
         title: 'Staking error',
@@ -103,6 +121,26 @@ const StakeContainer = () => {
     if (!signedCommand) {
       return;
     }
+    openModal({
+      title: getAddStakeModalTitle(),
+      description: '',
+      onClose: () => {
+        closeModal();
+      },
+      content: (
+        <AddStakeModal
+          toStakeAmount={amountToStake}
+          alreadyStakedAmount={estimateUnstakeData?.staked}
+          onConfirm={() => {
+            closeModal();
+            sendStakeCommand(signedCommand);
+          }}
+        />
+      ),
+    });
+  };
+
+  const sendStakeCommand = async (signedCommand) => {
     pact.setPolling(true);
     Pact.wallet
       .sendSigned(signedCommand, NETWORK)
@@ -118,7 +156,7 @@ const StakeContainer = () => {
           isRead: false,
           isCompleted: false,
         });
-        setAmountToStake(0);
+        setToStakeAmount(0);
         await pact.listen(stakingResponse.requestKeys[0]);
         pact.setPolling(false);
       })
@@ -162,7 +200,7 @@ const StakeContainer = () => {
         });
         await pact.listen(rollupAndUnstake.requestKeys[0]);
         pact.setPolling(false);
-        setAmountToStake(0);
+        setToStakeAmount(0);
       })
       .catch((error) => {
         console.log(`~ rollupAndUnstake error`, error);
@@ -204,7 +242,7 @@ const StakeContainer = () => {
         });
         await pact.listen(rollupAndClaim.requestKeys[0]);
         pact.setPolling(false);
-        setAmountToStake(0);
+        setToStakeAmount(0);
       })
       .catch((error) => {
         console.log(`~ rollupAndClaim error`, error);
@@ -267,9 +305,9 @@ const StakeContainer = () => {
           amountToStake={pathname !== ROUTE_UNSTAKE ? amountToStake : estimateUnstakeData?.staked || 0}
           buttonLabel={pathname === ROUTE_STAKE ? 'stake' : 'unstake'}
           pendingAmount={(estimateUnstakeData && estimateUnstakeData['stake-record'] && estimateUnstakeData['stake-record']['pending-add']) || false}
-          onClickMax={() => setAmountToStake(pathname !== ROUTE_UNSTAKE ? kdxAccountBalance : estimateUnstakeData?.staked || 0)}
-          setKdxAmount={(value) => setAmountToStake(value)}
-          onSubmitStake={() => (pathname !== ROUTE_UNSTAKE ? stakeKDX() : rollupAndUnstake())}
+          onClickMax={() => setToStakeAmount(pathname !== ROUTE_UNSTAKE ? kdxAccountBalance : estimateUnstakeData?.staked || 0)}
+          setKdxAmount={(value) => setToStakeAmount(value)}
+          onSubmitStake={() => (pathname !== ROUTE_UNSTAKE ? onStakeKDX() : rollupAndUnstake())}
         />
         <Rewards
           amount={(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || 0}
