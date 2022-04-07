@@ -16,12 +16,12 @@ import VotingPowerContainer from './VotingPowerContainer';
 import { ArrowBack } from '../../assets';
 import VoteResultsContainer from './VoteResultsContainer';
 import AppLoader from '../shared/AppLoader';
-import { commonColors, theme } from '../../styles/theme';
+import { commonColors } from '../../styles/theme';
 import { getStatusProposal } from '../../utils/dao-utils';
 import Loader from '../shared/Loader';
+import HtmlFormatterContainer from './HtmlFormatterContainer';
 
 const SingleProposalContainer = ({ proposal_id, accountData }) => {
-  const { themeMode } = useApplicationContext();
   const { account, storeNotification, setIsCompletedNotification } = useAccountContext();
   const { showNotification } = useNotificationContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
@@ -207,7 +207,12 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
                 <ColumnLabels title="End Date" description={moment(singleProposalData['end-date']?.time).format('LLL')} />
                 <ColumnLabels title="Voting System" description="Single choice voting" />
               </FlexContainer>
-              <ColumnLabels title="Description" description={singleProposalData?.description} />
+              <FlexContainer className="column" gap={4}>
+                <Label fontSize={13} labelStyle={{ opacity: 0.7 }}>
+                  Description
+                </Label>
+                <HtmlFormatterContainer htmlText={singleProposalData?.description} />
+              </FlexContainer>
               {!daoFetchDataLoading ? (
                 <ColumnLabels
                   title="Vote Result"
