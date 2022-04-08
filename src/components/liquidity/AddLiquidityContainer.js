@@ -59,7 +59,6 @@ const AddLiquidityContainer = (props) => {
   const fetchData = async () => {
     const pools = await getPairList();
     if (pools.length) {
-      console.log('in1');
       const volumes = await getDailyVolume();
 
       setData({ pools, volumes });
@@ -80,7 +79,7 @@ const AddLiquidityContainer = (props) => {
   return loading ? (
     <AppLoader className="h-100 w-100 align-ce justify-ce" />
   ) : (
-    <Container className="column w-100 relative justify-ce h-100" gap={24}>
+    <Container className="column w-100 relative justify-ce" gap={24} style={{ paddingTop: 50 }} mobileStyle={{ paddingTop: 24 }}>
       <FlexContainer className="w-100 justify-sb">
         <FlexContainer>
           <ArrowBack

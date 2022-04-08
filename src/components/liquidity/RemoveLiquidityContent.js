@@ -156,6 +156,7 @@ const RemoveLiquidityContent = ({ pair }) => {
             }}
             loading={loading}
           >
+            {/* SuccessRemoveWithBoosterView to remove liquidy with booster */}
             <SuccessRemoveView
               token0={pair.token0}
               token1={pair.token1}
@@ -171,30 +172,17 @@ const RemoveLiquidityContent = ({ pair }) => {
   };
 
   const onRemoveLiquidity = async () => {
-    if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
-      setLoading(true);
-      const res = await liquidity.removeLiquidityLocal(tokenData[pair?.token0].code, tokenData[pair?.token1].code, reduceBalance(pooled, PRECISION));
-      if (res === -1) {
-        setLoading(false);
-        alert('Incorrect password. If forgotten, you can reset it with your private key');
-        return;
-      } else {
-        openTxViewModal();
-        setLoading(false);
-      }
+    setLoading(true);
+    const res = await liquidity.removeLiquidityWallet(tokenData[pair?.token0].code, tokenData[pair?.token1].code, reduceBalance(pooled, PRECISION));
+    if (!res) {
+      wallet.setIsWaitingForWalletAuth(true);
+      setLoading(false);
+      /* pact.setWalletError(true); */
+      /* walletError(); */
     } else {
-      setLoading(true);
-      const res = await liquidity.removeLiquidityWallet(tokenData[pair?.token0].code, tokenData[pair?.token1].code, reduceBalance(pooled, PRECISION));
-      if (!res) {
-        wallet.setIsWaitingForWalletAuth(true);
-        setLoading(false);
-        /* pact.setWalletError(true); */
-        /* walletError(); */
-      } else {
-        wallet.setWalletError(null);
-        openTxViewModal();
-        setLoading(false);
-      }
+      wallet.setWalletError(null);
+      openTxViewModal();
+      setLoading(false);
     }
   };
 

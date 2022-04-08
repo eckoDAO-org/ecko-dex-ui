@@ -22,8 +22,6 @@ const LiquidityPoolsTable = () => {
   const fetchData = async () => {
     const pools = await getPairList();
     if (pools.length) {
-      console.log('in2');
-
       const volumes = await getDailyVolume();
 
       const result = await getAllPairValues(pools, volumes);

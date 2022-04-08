@@ -138,6 +138,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
                   setSelectedPool(pool);
                   modalContext.closeModal();
                   setValues((prev) => ({ ...prev, coin: pool.token0 }));
+                  onPairChange(pool.token0);
                 }}
                 onClose={() => {
                   modalContext.closeModal();

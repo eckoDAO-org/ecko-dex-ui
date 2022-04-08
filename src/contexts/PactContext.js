@@ -325,7 +325,7 @@ export const PactProvider = (props) => {
     console.log(pollRes);
     console.log(pollRes[reqKey]);
     console.log(pollRes[reqKey].result);
-    if (pollRes[reqKey].result.status === 'success') {
+    if (pollRes?.[reqKey]?.result?.status === 'success') {
       // setting reqKey for calling History Transaction
       // setReqKeysLocalStorage(reqKey);
       account.setIsCompletedNotification(reqKey);

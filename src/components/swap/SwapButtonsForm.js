@@ -53,7 +53,7 @@ const SwapButtonsForm = ({
   const { account } = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const swap = useContext(SwapContext);
-  const { gameEditionView, openModal, setButtons, closeModal } = useContext(GameEditionContext);
+  const { gameEditionView, setButtons, closeModal } = useContext(GameEditionContext);
 
   const getButtonLabel = () => {
     if (!account.account) return SWAP_BUTTON_CONNECT_WALLET.label;
@@ -89,82 +89,38 @@ const SwapButtonsForm = ({
 
   const handleClick = async () => {
     setLoading(true);
-    if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
-      const res = await swap.swapLocal(
-        {
-          amount: fromValues.amount,
-          address: fromValues.address,
-          coin: fromValues.coin,
-        },
-        {
-          amount: toValues.amount,
-          address: toValues.address,
-          coin: toValues.coin,
-        },
-        fromNote === '(estimated)' ? false : true
-      );
 
-      if (res === -1) {
-        setLoading(false);
-        //error alert
-        if (swap.localRes) {
-          openModal({
-            title: 'Error',
-            content: (
-              <Label geColor="yellow" geCenter>
-                Transaction Error! please try again.
-              </Label>
-            ),
-          });
-        }
-        return;
-      } else {
-        setShowTxModal(true);
-        if (res?.result?.status === 'success') {
-          setFromValues((prev) => ({
-            ...prev,
-            amount: '',
-          }));
-          setToValues((prev) => ({
-            ...prev,
-            amount: '',
-          }));
-        }
-        setLoading(false);
-      }
+    const res = await swap.swapWallet(
+      {
+        amount: fromValues.amount,
+        address: fromValues.address,
+        coin: fromValues.coin,
+      },
+      {
+        amount: toValues.amount,
+        address: toValues.address,
+        coin: toValues.coin,
+      },
+      fromNote === '(estimated)' ? false : true
+    );
+
+    if (!res) {
+      wallet.setIsWaitingForWalletAuth(true);
     } else {
-      const res = await swap.swapWallet(
-        {
-          amount: fromValues.amount,
-          address: fromValues.address,
-          coin: fromValues.coin,
-        },
-        {
-          amount: toValues.amount,
-          address: toValues.address,
-          coin: toValues.coin,
-        },
-        fromNote === '(estimated)' ? false : true
-      );
-
-      if (!res) {
-        wallet.setIsWaitingForWalletAuth(true);
-      } else {
-        wallet.setWalletError(null);
-        setShowTxModal(true);
-      }
-      if (res?.result?.status === 'success') {
-        setFromValues((prev) => ({
-          ...prev,
-          amount: '',
-        }));
-        setToValues((prev) => ({
-          ...prev,
-          amount: '',
-        }));
-      }
-      setLoading(false);
+      wallet.setWalletError(null);
+      setShowTxModal(true);
     }
+    if (res?.result?.status === 'success') {
+      setFromValues((prev) => ({
+        ...prev,
+        amount: '',
+      }));
+      setToValues((prev) => ({
+        ...prev,
+        amount: '',
+      }));
+    }
+    setLoading(false);
   };
 
   return (
@@ -189,7 +145,6 @@ const SwapButtonsForm = ({
           }
           loading={loading}
           onClick={async () => {
-            console.log('asd');
             if (!account.account) {
               return modalContext.openModal({
                 title: account?.account ? 'wallet connected' : SWAP_BUTTON_CONNECT_WALLET.label,

@@ -103,6 +103,7 @@ export const getPairListAccountBalance = async (account) => {
             (map (${KADDEX_NAMESPACE}-read.pair-info) [${tokenPairList}])
              `
     );
+    console.log('data', data);
     if (data) {
       let dataList = data.reduce((accum, data) => {
         accum[data[0]] = {
