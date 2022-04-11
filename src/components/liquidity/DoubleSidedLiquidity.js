@@ -68,6 +68,20 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
 
   useEffect(() => {
     initData();
+  }, []);
+
+  useEffect(() => {
+    if (showTxModal === false) {
+      setFromValues({
+        coin: 'KDX',
+        account: '',
+        guard: null,
+        balance: '',
+        amount: '',
+        precision: 12,
+      });
+      setToValues(initialStateValue);
+    }
   }, [showTxModal]);
 
   // useEffect(() => {

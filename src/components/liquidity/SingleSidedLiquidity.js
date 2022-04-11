@@ -27,7 +27,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
     coin: pair?.token0 || 'KDX',
     account: '',
     guard: null,
-    balance: account?.account?.balance,
+    balance: '',
     amount: '',
     precision: 12,
   });
@@ -41,6 +41,10 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
     setSelectedPool(pools[0]);
     handleTokenValue(pair?.token0 || 'KDX');
   }, []);
+
+  useEffect(() => {
+    onPairChange(values?.coin);
+  }, [values?.coin]);
 
   const handleTokenValue = async (token) => {
     const crypto = tokenData[token];
@@ -69,7 +73,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
       coin: crypto?.name,
       precision: crypto?.precision,
     }));
-    onPairChange(token);
+    // onPairChange(token);
   };
 
   const openTokenSelectorModal = () => {
@@ -137,8 +141,8 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
                 onSelect={(pool) => {
                   setSelectedPool(pool);
                   modalContext.closeModal();
-                  setValues((prev) => ({ ...prev, coin: pool.token0 }));
-                  onPairChange(pool.token0);
+                  //setValues((prev) => ({ ...prev, coin: pool.token0 }));
+                  handleTokenValue(pool.token0);
                 }}
                 onClose={() => {
                   modalContext.closeModal();

@@ -121,6 +121,7 @@ export const SwapProvider = (props) => {
       await pact.listen(data.requestKeys[0]);
       pact.setPolling(false);
     } catch (e) {
+      console.log('e', e);
       pact.setPolling(false);
       toastId.current = notificationContext.showNotification({
         title: 'Transaction Error',

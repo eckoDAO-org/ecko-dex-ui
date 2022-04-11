@@ -127,9 +127,8 @@ const AddLiquidityContainer = (props) => {
           pools={data.pools}
           pair={pair}
           onPairChange={(token0) => {
-            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${token0}`));
-
             setPair({ token0 });
+            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${token0}`));
           }}
         />
       )}
