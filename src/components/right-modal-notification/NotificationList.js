@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-import { useAccountContext } from '../../contexts';
+import { useNotificationContext } from '../../contexts';
 import { CloseIcon, NotificationCautionBlueIcon, NotificationErrorIcon, NotificationSuccessIcon, NotificationWarningIcon } from '../../assets';
 import Label from '../shared/Label';
 
@@ -61,20 +61,18 @@ const Description = styled(Label)`
 `;
 
 const NotificationList = () => {
-  const { notificationList } = useAccountContext();
-
-  const { removeNotification } = useAccountContext();
+  const { STATUSES, notificationList, removeNotification } = useNotificationContext();
 
   const getIconByTypeNotification = (type) => {
     switch (type) {
-      case 'warning':
+      case STATUSES.WARNING:
         return <NotificationWarningIcon />;
-      case 'info':
+      case STATUSES.INFO:
         return <NotificationCautionBlueIcon />;
-      case 'success':
+      case STATUSES.SUCCESS:
         return <NotificationSuccessIcon />;
 
-      case 'error':
+      case STATUSES.ERROR:
         return <NotificationErrorIcon />;
       default:
         return <NotificationCautionBlueIcon />;
@@ -83,14 +81,14 @@ const NotificationList = () => {
 
   const getColorByType = (type) => {
     switch (type) {
-      case 'warning':
+      case STATUSES.WARNING:
         return '#FFC330';
-      case 'info':
+      case STATUSES.INFO:
         return '#3498DB';
-      case 'success':
+      case STATUSES.SUCCESS:
         return '#52AF52';
 
-      case 'error':
+      case STATUSES.ERROR:
         return '#DB2828';
       default:
         return '#3498DB';

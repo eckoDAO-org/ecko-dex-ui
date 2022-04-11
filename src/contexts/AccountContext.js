@@ -6,17 +6,15 @@ import swal from '@sweetalert/with-react';
 import { getCorrectBalance } from '../utils/reduceBalance';
 import { CHAIN_ID, creationTime, GAS_PRICE, NETWORK } from '../constants/contextConstants';
 import useLocalStorage from '../hooks/useLocalStorage';
-import { useGameEditionContext } from '.';
+import { useGameEditionContext, useNotificationContext } from '.';
 import reduceToken from '../utils/reduceToken';
 
 export const AccountContext = createContext();
-const getStoredNotification = JSON.parse(localStorage.getItem('Notification'));
 export const AccountProvider = (props) => {
   const [sendRes, setSendRes] = useState(null);
   const [localRes, setLocalRes] = useState(null);
   const { gameEditionView } = useGameEditionContext();
-
-  const [notificationList, setNotificationList] = useState(getStoredNotification || []);
+  const { storeNotification } = useNotificationContext();
 
   const [account, setAccount, removeAccount] = useLocalStorage('acct', { account: null, guard: null, balance: 0 });
   const [privKey, setPrivKey, removePrivKey] = useLocalStorage('pk', '');
@@ -121,56 +119,6 @@ export const AccountProvider = (props) => {
     }
   };
 
-  useEffect(() => {
-    localStorage.setItem(`Notification`, JSON.stringify(notificationList));
-  }, [notificationList]);
-
-  useEffect(() => {
-    if (!getStoredNotification) localStorage.setItem(`Notification`, JSON.stringify([]));
-  }, []);
-
-  const storeNotification = (notification) => {
-    const notificationListByStorage = JSON.parse(localStorage.getItem('Notification'));
-    if (!notificationListByStorage) {
-      //first saving notification in localstorage
-      localStorage.setItem(`Notification`, JSON.stringify([notification]));
-      setNotificationList(notification);
-    } else {
-      notificationListByStorage.unshift(notification);
-      localStorage.setItem(`Notification`, JSON.stringify(notificationListByStorage));
-      setNotificationList(notificationListByStorage);
-    }
-  };
-
-  const setIsCompletedNotification = (reqKey) => {
-    const getStoredNotification = JSON.parse(localStorage.getItem('Notification'));
-    const newNotificationList = getStoredNotification.map((notif) => {
-      if (notif.type === 'info' && notif.description === reqKey) {
-        notif.isCompleted = true;
-      }
-      return notif;
-    });
-    localStorage.setItem(`Notification`, JSON.stringify(newNotificationList));
-  };
-
-  const seIsReadedNotification = () => {
-    const newNotificationList = notificationList.map((notif) => ({
-      ...notif,
-      isRead: true,
-    }));
-    setNotificationList(newNotificationList);
-  };
-
-  const removeNotification = (indexToRemove) => {
-    // remember that notification list i view reversed
-    const notifWithoutRemoved = [...notificationList].filter((notif, index) => index !== indexToRemove);
-    setNotificationList(notifWithoutRemoved);
-  };
-
-  const removeAllNotifications = (list) => {
-    setNotificationList([]);
-  };
-
   const contextValues = {
     account,
     privKey,
@@ -187,14 +135,6 @@ export const AccountProvider = (props) => {
     tokenToAccount,
     tokenFromAccount,
     logout,
-
-    notificationList,
-    setNotificationList,
-    storeNotification,
-    setIsCompletedNotification,
-    seIsReadedNotification,
-    removeNotification,
-    removeAllNotifications,
   };
   return <AccountContext.Provider value={contextValues}>{props.children}</AccountContext.Provider>;
 };

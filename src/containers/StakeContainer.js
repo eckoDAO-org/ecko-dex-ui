@@ -14,15 +14,15 @@ import UnstakeInfo from '../components/stake/UnstakeInfo';
 import VotingPower from '../components/stake/VotingPower';
 import { useAccountContext, useKaddexWalletContext, useNotificationContext, usePactContext } from '../contexts';
 import { ROUTE_STAKE, ROUTE_UNSTAKE } from '../router/routes';
-import { NETWORK, getCurrentDate, getCurrentTime } from '../constants/contextConstants';
+import { NETWORK } from '../constants/contextConstants';
 import { theme } from '../styles/theme';
 
 const StakeContainer = () => {
   const history = useHistory();
   const { pathname } = useLocation();
-  const { account, storeNotification } = useAccountContext();
+  const { account } = useAccountContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
-  const { showNotification, STATUSES } = useNotificationContext();
+  const { showNotification, STATUSES, pollingNotif, showErrorNotification } = useNotificationContext();
   const pact = usePactContext();
 
   const [kdxTotalSupply, setKdxTotalSupply] = useState(null);
@@ -108,28 +108,16 @@ const StakeContainer = () => {
       .sendSigned(signedCommand, NETWORK)
       .then(async (stakingResponse) => {
         console.log(' stakingResponse', stakingResponse);
-        pact.pollingNotif(stakingResponse.requestKeys[0]);
-        storeNotification({
-          type: 'info',
-          time: getCurrentTime(),
-          date: getCurrentDate(),
-          title: 'Staking Transaction Pending',
-          description: stakingResponse.requestKeys[0],
-          isRead: false,
-          isCompleted: false,
-        });
+        pollingNotif(stakingResponse.requestKeys[0], 'Staking Transaction Pending');
+
         setAmountToStake(0);
-        await pact.listen(stakingResponse.requestKeys[0]);
+        await pact.transactionListen(stakingResponse.requestKeys[0]);
         pact.setPolling(false);
       })
       .catch((error) => {
         console.log(`~ error`, error);
         pact.setPolling(false);
-        showNotification({
-          title: 'Staking error',
-          message: 'Generic add stake error',
-          type: STATUSES.ERROR,
-        });
+        showErrorNotification(null, 'Staking error', 'Generic add stake error');
       });
   };
 
@@ -150,28 +138,16 @@ const StakeContainer = () => {
       .sendSigned(signedCommand, NETWORK)
       .then(async (rollupAndUnstake) => {
         console.log(' rollupAndUnstake', rollupAndUnstake);
-        pact.pollingNotif(rollupAndUnstake.requestKeys[0]);
-        storeNotification({
-          type: 'info',
-          time: getCurrentTime(),
-          date: getCurrentDate(),
-          title: 'Rollup and Unstake Transaction Pending',
-          description: rollupAndUnstake.requestKeys[0],
-          isRead: false,
-          isCompleted: false,
-        });
-        await pact.listen(rollupAndUnstake.requestKeys[0]);
+        pollingNotif(rollupAndUnstake.requestKeys[0], 'Rollup and Unstake Transaction Pending');
+
+        await pact.transactionListen(rollupAndUnstake.requestKeys[0]);
         pact.setPolling(false);
         setAmountToStake(0);
       })
       .catch((error) => {
         console.log(`~ rollupAndUnstake error`, error);
         pact.setPolling(false);
-        showNotification({
-          title: 'RollupAndUnstake error',
-          message: (error.toString && error.toString()) || 'Generic rollupAndUnstake error',
-          type: STATUSES.ERROR,
-        });
+        showErrorNotification(null, 'RollupAndUnstake error', (error.toString && error.toString()) || 'Generic rollupAndUnstake error');
       });
   };
 
@@ -192,28 +168,16 @@ const StakeContainer = () => {
       .sendSigned(signedCommand, NETWORK)
       .then(async (rollupAndClaim) => {
         console.log(' rollupAndClaim', rollupAndClaim);
-        pact.pollingNotif(rollupAndClaim.requestKeys[0]);
-        storeNotification({
-          type: 'info',
-          time: getCurrentTime(),
-          date: getCurrentDate(),
-          title: 'Rollup and Unstake Transaction Pending',
-          description: rollupAndClaim.requestKeys[0],
-          isRead: false,
-          isCompleted: false,
-        });
-        await pact.listen(rollupAndClaim.requestKeys[0]);
+        pollingNotif(rollupAndClaim.requestKeys[0], 'Rollup and Unstake Transaction Pending');
+
+        await pact.transactionListen(rollupAndClaim.requestKeys[0]);
         pact.setPolling(false);
         setAmountToStake(0);
       })
       .catch((error) => {
         console.log(`~ rollupAndClaim error`, error);
         pact.setPolling(false);
-        showNotification({
-          title: 'RollupAndClaim error',
-          message: (error.toString && error.toString()) || 'Generic rollupAndClaim error',
-          type: STATUSES.ERROR,
-        });
+        showErrorNotification(null, 'RollupAndClaim error', (error.toString && error.toString()) || 'Generic RollupAndClaim error');
       });
   };
 

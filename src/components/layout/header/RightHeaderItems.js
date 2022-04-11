@@ -1,13 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import useWindowSize from '../../../hooks/useWindowSize';
-import { ModalContext } from '../../../contexts/ModalContext';
 import ConnectWalletModal from '../../modals/kdaModals/ConnectWalletModal';
-import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import BellNotification from '../../right-modal-notification/BellNotification';
 
-import { AccountContext } from '../../../contexts/AccountContext';
 import AccountInfo from './AccountInfo';
 import Button from '../../../components/shared/CustomButton';
 import headerLinks from '../../headerLinks';
@@ -19,10 +16,10 @@ import theme, { commonTheme } from '../../../styles/theme';
 import { CoinKaddexIcon, ThreeDotsIcon } from '../../../assets';
 import { reduceBalance } from '../../../utils/reduceBalance';
 import Label from '../../shared/Label';
-import { RightModalContext } from '../../../contexts/RightModalContext';
 import CustomButton from '../../../components/shared/CustomButton';
 import NotificationList from '../../right-modal-notification/NotificationList';
 import { CHAIN_ID } from '../../../constants/contextConstants';
+import { useAccountContext, useGameEditionContext, useModalContext, useNotificationContext, useRightModalContext } from '../../../contexts';
 
 const RightContainerHeader = styled.div`
   display: flex;
@@ -58,10 +55,11 @@ const RightHeaderItems = () => {
   const { pathname } = useLocation();
   const [width] = useWindowSize();
 
-  const { account, notificationList, removeAllNotifications } = useContext(AccountContext);
-  const modalContext = useContext(ModalContext);
-  const { gameEditionView, openModal } = useContext(GameEditionContext);
-  const rightModalContext = useContext(RightModalContext);
+  const { account } = useAccountContext();
+  const { notificationList, removeAllNotifications } = useNotificationContext();
+  const modalContext = useModalContext();
+  const { gameEditionView, openModal } = useGameEditionContext();
+  const rightModalContext = useRightModalContext();
 
   return (
     <RightContainerHeader>
