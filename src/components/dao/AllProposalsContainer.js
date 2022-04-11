@@ -12,6 +12,7 @@ import VotingPowerContainer from './VotingPowerContainer';
 import { readAllProposals } from '../../api/dao';
 import AppLoader from '../shared/AppLoader';
 import { getStatusProposal } from '../../utils/dao-utils';
+import HtmlFormatterContainer from './HtmlFormatterContainer';
 
 const AllProposalsContainer = ({ accountData }) => {
   const history = useHistory();
@@ -68,10 +69,7 @@ const AllProposalsContainer = ({ accountData }) => {
                 <Label fontFamily="basier" fontSize={16} labelStyle={{ marginBottom: 4 }}>
                   {data?.title}
                 </Label>
-                <Label fontFamily="basier" fontSize={13} labelStyle={{ marginBottom: 16 }}>
-                  {data?.description}
-                </Label>
-
+                <HtmlFormatterContainer htmlText={data?.description} asAString />
                 {index < allProposal.length - 1 && <Divider />}
               </FlexContainer>
             ))}
