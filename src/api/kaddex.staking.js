@@ -51,8 +51,10 @@ export const getAddStakeCommand = (verifiedAccount, amountToStake) => {
   };
 };
 
-export const geUnstakeCommand = (verifiedAccount) => {
-  const pactCode = `(kaddex.staking.unstake "${verifiedAccount.account}")`;
+export const geUnstakeCommand = (verifiedAccount, amountToUnstake) => {
+  const parsedAmount = parseFloat(amountToUnstake?.toString());
+  const decimalPlaces = getFloatPrecision(parsedAmount);
+  const pactCode = `(kaddex.staking.unstake "${verifiedAccount.account}" ${parsedAmount.toFixed(decimalPlaces || 2)})`;
   return {
     pactCode,
     caps: [
@@ -61,7 +63,7 @@ export const geUnstakeCommand = (verifiedAccount) => {
       Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
     ],
     sender: verifiedAccount.account,
-    gasLimit: 6000,
+    gasLimit: GAS_LIMIT,
     gasPrice: GAS_PRICE,
     chainId: CHAIN_ID,
     ttl: 600,
@@ -94,10 +96,12 @@ export const getRollupRewardsCommand = (verifiedAccount) => {
   };
 };
 
-export const getRollupAndUnstakeCommand = (verifiedAccount) => {
+export const getRollupAndUnstakeCommand = (verifiedAccount, amountToUnstake) => {
+  const parsedAmount = parseFloat(amountToUnstake?.toString());
+  const decimalPlaces = getFloatPrecision(parsedAmount);
   const pactCode = `
   (kaddex.staking.rollup "${verifiedAccount.account}")
-  (kaddex.staking.unstake "${verifiedAccount.account}")
+  (kaddex.staking.unstake "${verifiedAccount.account}" ${parsedAmount.toFixed(decimalPlaces || 2)})
   `;
   return {
     pactCode,
@@ -108,7 +112,7 @@ export const getRollupAndUnstakeCommand = (verifiedAccount) => {
       Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
     ],
     sender: verifiedAccount.account,
-    gasLimit: 6000,
+    gasLimit: GAS_LIMIT,
     gasPrice: GAS_PRICE,
     chainId: CHAIN_ID,
     ttl: 600,
@@ -133,7 +137,7 @@ export const getRollupAndClaimCommand = (verifiedAccount) => {
       Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
     ],
     sender: verifiedAccount.account,
-    gasLimit: 6000,
+    gasLimit: GAS_LIMIT,
     gasPrice: GAS_PRICE,
     chainId: CHAIN_ID,
     ttl: 600,

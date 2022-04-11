@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
+// import tokenData from '../../constants/cryptoCurrencies';
+import { getPairList } from '../../api/pact-pair';
+// import { getTokenUsdPriceByName, getTokenUsdPrice } from '../../utils/token-utils';
 
 const Analytics = ({ apr, volume, stakedShare, totalStaked }) => {
+  useEffect(() => {
+    getPairList()
+      .then(async (pools) => {
+        // console.log('pools', pools);
+        // const token = Object.values(tokenData).find((t) => t.name === 'KDX');
+        // const test = await getTokenUsdPrice(token, pools);
+      })
+      .catch((err) => console.log('errr', err));
+  }, []);
+
   return (
     <CommonWrapper title="analytics" gap={24}>
       <div>

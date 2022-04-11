@@ -5,7 +5,7 @@ import pairTokens from '../constants/pairsConfig';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import moment from 'moment';
-
+import { getTokenUsdPriceByName } from '../utils/token-utils';
 import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, NETWORK_TYPE, NETWORKID, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { extractDecimal } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
@@ -37,6 +37,12 @@ export const PactProvider = (props) => {
   const [offsetSwapList, setOffsetSwapList] = useState(0);
   const [moreSwap, setMoreSwap] = useState(true);
   const [loadingSwap, setLoadingSwap] = useState(false);
+
+  const [kdxPrice, setKdxPrice] = useState(null);
+
+  useEffect(() => {
+    getTokenUsdPriceByName('KDX').then((price) => setKdxPrice(price || null));
+  }, []);
 
   //TO FIX, not working when multiple toasts are there
   const toastId = React.useRef(null);
@@ -570,6 +576,7 @@ export const PactProvider = (props) => {
   }
 
   const contextValues = {
+    kdxPrice,
     slippage,
     setSlippage,
     storeSlippage,

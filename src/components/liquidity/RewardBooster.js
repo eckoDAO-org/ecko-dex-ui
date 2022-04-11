@@ -8,7 +8,7 @@ import Label from '../shared/Label';
 import Toggle from './Toggle';
 
 const RewardBooster = ({ type, apr }) => {
-  const [reward, setReward] = useState('usd');
+  const [, setReward] = useState('usd');
 
   return (
     <Wrapper gap={28} withGradient className="background-fill w-100 column" style={{ padding: 24 }}>

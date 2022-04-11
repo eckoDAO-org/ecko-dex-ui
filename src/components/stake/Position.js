@@ -10,7 +10,7 @@ import Input from '../shared/Input';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
 
-const Position = ({ buttonLabel, amount, pendingAmount, topRightLabel, amountToStake, isInputDisabled, setKdxAmount, onClickMax, onSubmitStake }) => {
+const Position = ({ buttonLabel, amount, pendingAmount, topRightLabel, inputAmount, isInputDisabled, setKdxAmount, onClickMax, onSubmitStake }) => {
   const modalContext = useModalContext();
   const { account } = useAccountContext();
   return (
@@ -33,7 +33,7 @@ const Position = ({ buttonLabel, amount, pendingAmount, topRightLabel, amountToS
         placeholder="0.0"
         maxLength="15"
         numberOnly
-        value={amountToStake}
+        value={inputAmount}
         inputRightComponent={
           <FlexContainer className="pointer align-ce" gap={16} onClick={onClickMax}>
             <Label>MAX</Label>

@@ -8,12 +8,14 @@ import CommonWrapper from './CommonWrapper';
 import PentalityRewardsInfo from './PentalityRewardsInfo';
 
 export const getPenaltyString = (stakedTimeStart, rewardsPenalty) => {
-  const diffHours = moment().diff(stakedTimeStart, 'hours');
-  const diffDays = moment().diff(stakedTimeStart, 'days');
-  if (diffHours < 72) {
-    return '3%';
-  } else if (diffDays < 60) {
-    return `${rewardsPenalty} KDX`;
+  if (stakedTimeStart) {
+    const diffHours = moment().diff(stakedTimeStart, 'hours');
+    const diffDays = moment().diff(stakedTimeStart, 'days');
+    if (diffHours < 72) {
+      return '3%';
+    } else if (diffDays < 60) {
+      return `${rewardsPenalty} KDX`;
+    }
   }
   return false;
 };
@@ -39,7 +41,7 @@ const Rewards = ({ amount, stakedTimeStart, rewardsPenalty, disabled, onWithdraw
     <CommonWrapper gap={16} title="rewards">
       <div>
         <Label>KDX Collected</Label>
-        <Label fontSize={32}>{amount || '-'} KDX</Label>
+        <Label fontSize={32}>{(amount && amount.toFixed(6)) || '-'} KDX</Label>
       </div>
       <div>
         <Label>Staking Time</Label>
@@ -59,7 +61,7 @@ const Rewards = ({ amount, stakedTimeStart, rewardsPenalty, disabled, onWithdraw
           {getPenaltyString(stakedTimeStart, rewardsPenalty) || '-'}
         </Label>
       </div>
-      <CustomButton type="gradient" disabled={disabled} buttonStyle={{ marginTop: 4 }}>
+      <CustomButton type="gradient" disabled={disabled} buttonStyle={{ marginTop: 4 }} onClick={() => {}}>
         stake rewards
       </CustomButton>
       <CustomButton type="primary" disabled={disabled} onClick={() => onWithdrawClick()}>
