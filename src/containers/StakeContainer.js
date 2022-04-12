@@ -3,6 +3,7 @@ import Pact from 'pact-lang-api';
 import moment from 'moment';
 import { useHistory, useLocation } from 'react-router-dom';
 import { getPoolState, getAddStakeCommand, estimateUnstake, getRollupAndClaimCommand, getRollupAndUnstakeCommand } from '../api/kaddex.staking';
+import { getAccountData } from '../api/dao';
 import { getKDXAccountBalance, getKDXTotalSupply } from '../api/kaddex.kdx';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import InfoPopup from '../components/shared/InfoPopup';
@@ -34,7 +35,7 @@ const StakeContainer = () => {
   const [poolState, setPoolState] = useState(null);
   const [kdxAccountBalance, setKdxAccountBalance] = useState(0);
   const [estimateUnstakeData, setEstimateUnstakeData] = useState(null);
-  console.log('🚀 !!! ~ estimateUnstakeData', estimateUnstakeData);
+  const [daoAccountData, setDaoAccountData] = useState(null);
   const [inputAmount, setInputAmount] = useState(0);
 
   const stakedTimeStart =
@@ -52,6 +53,7 @@ const StakeContainer = () => {
       estimateUnstake(account?.account).then((resEstimate) => {
         setEstimateUnstakeData(resEstimate);
       });
+      getAccountData(account?.account).then((daoAccountDataResponse) => setDaoAccountData(daoAccountDataResponse));
     }
   }, [account?.account]);
 
@@ -202,24 +204,26 @@ const StakeContainer = () => {
     }
     const command = getRollupAndUnstakeCommand(account, inputAmount);
     const signedCommand = await signCommand(command);
-    openModal({
-      title: getUnstakeModalTitle(),
-      description: '',
-      onClose: () => {
-        closeModal();
-      },
-      content: (
-        <UnstakeModal
-          toUnstakeAmount={inputAmount}
-          estimateUnstakeData={estimateUnstakeData}
-          stakedTimeStart={stakedTimeStart}
-          onConfirm={() => {
-            closeModal();
-            sendRollupAndUnstakeCommand(signedCommand);
-          }}
-        />
-      ),
-    });
+    if (signedCommand) {
+      openModal({
+        title: getUnstakeModalTitle(),
+        description: '',
+        onClose: () => {
+          closeModal();
+        },
+        content: (
+          <UnstakeModal
+            toUnstakeAmount={inputAmount}
+            estimateUnstakeData={estimateUnstakeData}
+            stakedTimeStart={stakedTimeStart}
+            onConfirm={() => {
+              closeModal();
+              sendRollupAndUnstakeCommand(signedCommand);
+            }}
+          />
+        ),
+      });
+    }
   };
 
   const sendRollupAndUnstakeCommand = async (signedCommand) => {
@@ -254,10 +258,17 @@ const StakeContainer = () => {
   };
 
   const onWithdraw = async () => {
+    let errorMessage = null;
     if (!(estimateUnstakeData && estimateUnstakeData['reward-accrued'])) {
+      errorMessage = 'No accrued rewards';
+    }
+    if (estimateUnstakeData && !estimateUnstakeData['can-claim']) {
+      errorMessage = 'You cannot withdraw rewards yet';
+    }
+    if (errorMessage) {
       showNotification({
         title: 'Withdraw error',
-        message: 'No accrued rewards',
+        message: errorMessage,
         type: STATUSES.WARNING,
         autoClose: 5000,
         hideProgressBar: false,
@@ -266,22 +277,24 @@ const StakeContainer = () => {
     }
     const command = getRollupAndClaimCommand(account);
     const signedCommand = await signCommand(command);
-    openModal({
-      title: 'WITHDRAW YOUR STAKED REWARDS?',
-      description: '',
-      onClose: () => {
-        closeModal();
-      },
-      content: (
-        <ClaimModal
-          estimateUnstakeData={estimateUnstakeData}
-          onConfirm={() => {
-            closeModal();
-            sendRollupAndClaimCommand(signedCommand);
-          }}
-        />
-      ),
-    });
+    if (signedCommand) {
+      openModal({
+        title: 'WITHDRAW YOUR STAKED REWARDS?',
+        description: '',
+        onClose: () => {
+          closeModal();
+        },
+        content: (
+          <ClaimModal
+            estimateUnstakeData={estimateUnstakeData}
+            onConfirm={() => {
+              closeModal();
+              sendRollupAndClaimCommand(signedCommand);
+            }}
+          />
+        ),
+      });
+    }
   };
 
   const sendRollupAndClaimCommand = async (signedCommand) => {
@@ -377,7 +390,7 @@ const StakeContainer = () => {
         <Analytics apr={'-'} volume={'-'} stakedShare={getAccountStakingPercentage()} totalStaked={getSupplyStakingPercentage()} />
       </FlexContainer>
 
-      <VotingPower />
+      <VotingPower daoAccountData={daoAccountData} />
     </FlexContainer>
   );
 };

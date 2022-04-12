@@ -61,9 +61,9 @@ const Rewards = ({ amount, stakedTimeStart, rewardsPenalty, disabled, onWithdraw
           {getPenaltyString(stakedTimeStart, rewardsPenalty) || '-'}
         </Label>
       </div>
-      <CustomButton type="gradient" disabled={disabled} buttonStyle={{ marginTop: 4 }} onClick={() => {}}>
+      {/* <CustomButton type="gradient" disabled={disabled} buttonStyle={{ marginTop: 4 }} onClick={() => {}}>
         stake rewards
-      </CustomButton>
+      </CustomButton> */}
       <CustomButton type="primary" disabled={disabled} onClick={() => onWithdrawClick()}>
         withdraw
       </CustomButton>

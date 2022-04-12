@@ -1,18 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
-// import tokenData from '../../constants/cryptoCurrencies';
 import { getPairList } from '../../api/pact-pair';
-// import { getTokenUsdPriceByName, getTokenUsdPrice } from '../../utils/token-utils';
+import { getDailyVolume } from '../../api/kaddex-stats';
+import { getAllPairValues } from '../../utils/token-utils';
+import { humanReadableNumber } from '../../utils/reduceBalance';
 
-const Analytics = ({ apr, volume, stakedShare, totalStaked }) => {
+const Analytics = ({ apr, stakedShare, totalStaked }) => {
+  const [totalVolumeUSD, setTotalVolumeUSD] = useState(null);
+
   useEffect(() => {
     getPairList()
       .then(async (pools) => {
-        // console.log('pools', pools);
-        // const token = Object.values(tokenData).find((t) => t.name === 'KDX');
-        // const test = await getTokenUsdPrice(token, pools);
+        const volumes = await getDailyVolume();
+        const allPairValues = await getAllPairValues(pools, volumes);
+        let totalUsd = 0;
+        if (allPairValues?.length) {
+          for (const pair of allPairValues) {
+            totalUsd += pair.volume24HUsd;
+          }
+          setTotalVolumeUSD(totalUsd);
+        }
       })
       .catch((err) => console.log('errr', err));
   }, []);
@@ -28,7 +37,7 @@ const Analytics = ({ apr, volume, stakedShare, totalStaked }) => {
       </div>
       <div>
         <Label>Volume</Label>
-        <Label fontSize={32}>{volume} USD</Label>
+        <Label fontSize={32}>{totalVolumeUSD ? humanReadableNumber(totalVolumeUSD) : '-'} USD</Label>
       </div>
       <div>
         <div className="flex align-ce">

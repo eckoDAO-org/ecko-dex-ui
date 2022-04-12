@@ -24,7 +24,7 @@ export const ClaimModal = ({ onConfirm, estimateUnstakeData }) => {
         <StakeModalText>Your KDX staking rewards will unlock on the date shown below.</StakeModalText>
       </div>
       <CustomDivider style={{ margin: '15px 0' }} />
-      <StakeModalText fontSize={16}>Stake </StakeModalText>
+      <StakeModalText fontSize={16}>Staking Rewards Collected</StakeModalText>
       <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 12 }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <span>
