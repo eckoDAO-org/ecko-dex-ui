@@ -81,9 +81,9 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
             </CustomButton>
           )}
           <ElementsContainer $gameEditionView={gameEditionView} geColor={geColor} onClick={onClick}>
-            {tokenData[values.coin].icon}
+            {tokenData[values.coin]?.icon}
             <Label geFontSize={24} geColor={geColor}>
-              {tokenData[values.coin].name}
+              {tokenData[values.coin]?.name}
             </Label>
             {gameEditionView ? <PixeledArrowDownIcon /> : <ArrowDown />}
           </ElementsContainer>

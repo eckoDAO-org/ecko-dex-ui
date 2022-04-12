@@ -2,6 +2,7 @@ import { getCoingeckoUsdPrice } from '../api/coingecko';
 import { CHAIN_ID, FEE } from '../constants/contextConstants';
 import tokenData from '../constants/cryptoCurrencies';
 import { bigNumberConverter } from './bignumber';
+import { getPairList } from '../api/pact-pair';
 import { reduceBalance } from './reduceBalance';
 
 export const showTicker = (ticker) => {
@@ -103,6 +104,15 @@ export const get24HVolumeSingleSided = (volumes, tokenNameKaddexStats) => {
 export const getTokenUsdPriceByLiquidity = (liquidity0, liquidity1, usdPrice) => {
   const liquidityRatio = liquidity0 / liquidity1;
   return bigNumberConverter(liquidityRatio * usdPrice);
+};
+
+/**
+ * @param {string} tokenName [example: "KDX"]
+ */
+export const getTokenUsdPriceByName = async (tokenName) => {
+  const pools = await getPairList();
+  const token = Object.values(tokenData).find((t) => t.name === tokenName);
+  return await getTokenUsdPrice(token, pools);
 };
 
 // retrieve token usd price based on the first pair that contains the token with a known price

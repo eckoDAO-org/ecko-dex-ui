@@ -120,7 +120,7 @@ const ModalContainer = ({
             fontFamily="syncopate"
             className="capitalize"
             fontSize={24}
-            labelStyle={{ marginRight: 84, ...titleStyle }}
+            labelStyle={{ marginRight: 25, ...titleStyle }}
             gameEditionView={gameEditionView}
           >
             {title}
