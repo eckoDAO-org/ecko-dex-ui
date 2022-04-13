@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { useAccountContext } from '../contexts';
+import { useAccountContext, useLiquidityContext } from '../contexts';
 import RemoveLiquidityContent from '../components/liquidity/RemoveLiquidityContent';
 import SlippagePopupContent from '../components/layout/header/SlippagePopupContent';
 import { FadeIn } from '../components/shared/animations';
@@ -36,6 +36,7 @@ const Container = styled(FadeIn)`
 const RemoveLiquidityContainer = () => {
   const history = useHistory();
   const query = useQueryParams();
+  const { setWantsKdxRewards } = useLiquidityContext();
 
   const { account } = useAccountContext();
 
@@ -104,7 +105,7 @@ const RemoveLiquidityContainer = () => {
             </FlexContainer>
             <SlippagePopupContent />
           </FlexContainer>
-          <RewardBooster apr={apr} type={LIQUIDITY_VIEW.REMOVE_LIQUIDITY} />
+          <RewardBooster apr={apr} type={LIQUIDITY_VIEW.REMOVE_LIQUIDITY} handleState={setWantsKdxRewards} />
           <RemoveLiquidityContent pair={pair} />
         </>
       )}

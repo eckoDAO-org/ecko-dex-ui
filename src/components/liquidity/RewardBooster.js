@@ -7,7 +7,7 @@ import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
 import Toggle from './Toggle';
 
-const RewardBooster = ({ type, apr }) => {
+const RewardBooster = ({ type, apr, handleState }) => {
   const [reward, setReward] = useState('usd');
 
   return (
@@ -20,8 +20,10 @@ const RewardBooster = ({ type, apr }) => {
             onClick={(active) => {
               if (active) {
                 setReward('kdx');
+                handleState(true);
               } else {
                 setReward('usd');
+                handleState(false);
               }
             }}
           />

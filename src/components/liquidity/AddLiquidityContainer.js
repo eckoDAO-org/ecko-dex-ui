@@ -99,7 +99,7 @@ const AddLiquidityContainer = (props) => {
         </FlexContainer>
         <SlippagePopupContent />
       </FlexContainer>
-      <RewardBooster apr={apr} type={LIQUIDITY_VIEW.ADD_LIQUIDITY} />
+      <RewardBooster apr={apr} type={LIQUIDITY_VIEW.ADD_LIQUIDITY} handleState={() => {}} />
 
       <FlexContainer gap={24}>
         <Label

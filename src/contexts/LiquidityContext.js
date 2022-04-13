@@ -1,7 +1,7 @@
 import React, { useState, createContext } from 'react';
 import pairTokens from '../constants/pairsConfig';
 import Pact from 'pact-lang-api';
-import { CHAIN_ID, GAS_PRICE, NETWORK, NETWORKID, PRECISION, ENABLE_GAS_STATION, KADDEX_NAMESPACE } from '../constants/contextConstants';
+import { CHAIN_ID, GAS_PRICE, NETWORK, NETWORKID, PRECISION, ENABLE_GAS_STATION, KADDEX_NAMESPACE, GAS_LIMIT } from '../constants/contextConstants';
 import { useKaddexWalletContext, useSwapContext, usePactContext, useWalletContext, useAccountContext } from '.';
 import { reduceBalance } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
@@ -17,12 +17,16 @@ export const LiquidityProvider = (props) => {
   const swap = useSwapContext();
   const [liquidityProviderFee, setLiquidityProviderFee] = useState(0.003);
   const [pairListAccount, setPairListAccount] = useState(pairTokens);
+  const [wantsKdxRewards, setWantsKdxRewards] = useState(false);
 
   const addLiquidityWallet = async (token0, token1, amountDesired0, amountDesired1) => {
     try {
       let pair = await swap.getPairAccount(token0.code, token1.code);
+
+      const pairConfig = pairTokens[`${token0.code}:${token1.code}`] || pairTokens[`${token1.code}:${token0.code}`];
+      const contractName = pairConfig.isBoosted ? 'wrapper' : 'exchange';
       const signCmd = {
-        pactCode: `(${KADDEX_NAMESPACE}.wrapper.add-liquidity
+        pactCode: `(${KADDEX_NAMESPACE}.${contractName}.add-liquidity
             ${token0.code}
             ${token1.code}
             (read-decimal 'amountDesired0)
@@ -50,7 +54,7 @@ export const LiquidityProvider = (props) => {
           ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : []),
         ],
         sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
-        gasLimit: 150000,
+        gasLimit: GAS_LIMIT,
         gasPrice: GAS_PRICE,
         chainId: CHAIN_ID,
         ttl: 600,
@@ -104,34 +108,41 @@ export const LiquidityProvider = (props) => {
     }
   };
 
-  const removeLiquidityWallet = async (token0, token1, liquidity, wantsKdxRewards = false) => {
+  const removeLiquidityWallet = async (token0, token1, liquidity) => {
     try {
-      let pairKey = await pact.getPairKey(token0, token1);
       let pair = await swap.getPairAccount(token0, token1);
+
+      const pairConfig = pairTokens[`${token0}:${token1}`] || pairTokens[`${token1}:${token0}`];
+      const pactCode = pairConfig.isBoosted
+        ? `(${KADDEX_NAMESPACE}.wrapper.remove-liquidity
+        ${token0}
+        ${token1}
+        (read-decimal 'liquidity)
+        0.0
+        0.0
+        ${JSON.stringify(account.account)}
+        ${JSON.stringify(account.account)}
+        (read-keyset 'user-ks)
+        ${wantsKdxRewards}
+      )`
+        : `(${KADDEX_NAMESPACE}.exchange.remove-liquidity
+        ${token0}
+        ${token1}
+        (read-decimal 'liquidity)
+        0.0
+        0.0
+        ${JSON.stringify(account.account)}
+        ${JSON.stringify(account.account)}
+        (read-keyset 'user-ks)
+      )`;
       const signCmd = {
-        pactCode: `(${KADDEX_NAMESPACE}.wrapper.remove-liquidity
-            ${token0}
-            ${token1}
-            (read-decimal 'liquidity)
-            0.0
-            0.0
-            ${JSON.stringify(account.account)}
-            ${JSON.stringify(account.account)}
-            (read-keyset 'user-ks)
-            ${wantsKdxRewards}
-          )`,
+        pactCode,
         caps: [
           ...(ENABLE_GAS_STATION
             ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['free-gas', { int: 1 }, 1.0])]
             : []),
           Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${KADDEX_NAMESPACE}.tokens.TRANSFER`, [
-            pairKey,
-            account.account,
-            pair,
-            Number(liquidity),
-          ]),
-          Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${KADDEX_NAMESPACE}.tokens.TRANSFER`, [
-            pairKey,
+            pairConfig.name,
             account.account,
             pair,
             Number(liquidity),
@@ -139,7 +150,7 @@ export const LiquidityProvider = (props) => {
           ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : []),
         ],
         sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
-        gasLimit: 150000,
+        gasLimit: GAS_LIMIT,
         gasPrice: GAS_PRICE,
         chainId: CHAIN_ID,
         ttl: 600,
@@ -197,6 +208,7 @@ export const LiquidityProvider = (props) => {
     setPairListAccount,
     addLiquidityWallet,
     removeLiquidityWallet,
+    setWantsKdxRewards,
   };
 
   return <LiquidityContext.Provider value={contextValue}>{props.children}</LiquidityContext.Provider>;

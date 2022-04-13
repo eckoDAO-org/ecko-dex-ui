@@ -109,7 +109,7 @@ const RemoveLiquidityContent = ({ pair }) => {
   const sendTransaction = () => {
     setLoading(true);
     swap.swapSend();
-    // onClose();
+    modalContext.closeModal();
     setLoading(false);
   };
 
