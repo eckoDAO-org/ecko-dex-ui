@@ -3,7 +3,8 @@ import React, { createContext, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
 import pairTokens from '../constants/pairsConfig';
 import axios from 'axios';
-
+import moment from 'moment';
+import { getTokenUsdPriceByName } from '../utils/token-utils';
 import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, NETWORKID, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { extractDecimal } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
@@ -36,6 +37,11 @@ export const PactProvider = (props) => {
   const [moreSwap, setMoreSwap] = useState(true);
   const [loadingSwap, setLoadingSwap] = useState(false);
 
+  const [kdxPrice, setKdxPrice] = useState(null);
+
+  useEffect(() => {
+    getTokenUsdPriceByName('KDX').then((price) => setKdxPrice(price || null));
+  }, []);
   useEffect(() => {
     if (!notificationNotCompletedChecked) {
       const pendingNotification = notificationContext.notificationList.filter((notif) => notif.type === 'info' && notif.isCompleted === false);
@@ -476,6 +482,7 @@ export const PactProvider = (props) => {
   }
 
   const contextValues = {
+    kdxPrice,
     slippage,
     setSlippage,
     storeSlippage,

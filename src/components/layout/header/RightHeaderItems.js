@@ -5,6 +5,7 @@ import useWindowSize from '../../../hooks/useWindowSize';
 import ConnectWalletModal from '../../modals/kdaModals/ConnectWalletModal';
 import BellNotification from '../../right-modal-notification/BellNotification';
 
+import { AccountContext } from '../../../contexts/AccountContext';
 import AccountInfo from './AccountInfo';
 import Button from '../../../components/shared/CustomButton';
 import headerLinks from '../../headerLinks';
@@ -16,10 +17,10 @@ import theme, { commonTheme } from '../../../styles/theme';
 import { CoinKaddexIcon, ThreeDotsIcon } from '../../../assets';
 import { reduceBalance } from '../../../utils/reduceBalance';
 import Label from '../../shared/Label';
+import { useRightModalContext, useAccountContext, usePactContext, useGameEditionContext, useModalContext, useNotificationContext } from '../../../contexts';
 import CustomButton from '../../../components/shared/CustomButton';
 import NotificationList from '../../right-modal-notification/NotificationList';
 import { CHAIN_ID } from '../../../constants/contextConstants';
-import { useAccountContext, useGameEditionContext, useModalContext, useNotificationContext, useRightModalContext } from '../../../contexts';
 
 const RightContainerHeader = styled.div`
   display: flex;
@@ -55,6 +56,7 @@ const RightHeaderItems = () => {
   const { pathname } = useLocation();
   const [width] = useWindowSize();
 
+  const { kdxPrice } = usePactContext();
   const { account } = useAccountContext();
   const { notificationList, removeAllNotifications } = useNotificationContext();
   const modalContext = useModalContext();
@@ -68,7 +70,7 @@ const RightHeaderItems = () => {
         <div className="flex align-ce">
           <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 8 }} />
           <Label outGameEditionView fontSize={13} className="mainnet-chain-2">
-            $ 0.16
+            $ {kdxPrice || '-'}
           </Label>
         </div>
       )}

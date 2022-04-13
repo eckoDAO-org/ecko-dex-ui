@@ -1,7 +1,8 @@
 import moment from 'moment';
 import Pact from 'pact-lang-api';
 import { handleError, pactFetchLocal } from './pact';
-import { CHAIN_ID, GAS_PRICE, NETWORKID } from '../constants/contextConstants';
+import { getFloatPrecision } from '../utils/string-utils';
+import { CHAIN_ID, GAS_PRICE, GAS_LIMIT, NETWORKID } from '../constants/contextConstants';
 
 export const getPoolState = async () => {
   try {
@@ -14,7 +15,7 @@ export const getPoolState = async () => {
 
 export const estimateUnstake = async (account) => {
   try {
-    const stakingPoolStateData = await pactFetchLocal(`(kaddex.staking.estimate-unstake "${account}")`);
+    const stakingPoolStateData = await pactFetchLocal(`(kaddex.staking.inspect-staker "${account}")`);
     return stakingPoolStateData;
   } catch (e) {
     return handleError(e);
@@ -23,7 +24,8 @@ export const estimateUnstake = async (account) => {
 
 export const getAddStakeCommand = (verifiedAccount, amountToStake) => {
   const parsedAmount = parseFloat(amountToStake?.toString());
-  const pactCode = `(kaddex.staking.stake "${verifiedAccount.account}" ${parsedAmount.toFixed(2)})`;
+  const decimalPlaces = getFloatPrecision(parsedAmount);
+  const pactCode = `(kaddex.staking.stake "${verifiedAccount.account}" ${parsedAmount.toFixed(decimalPlaces || 2)})`;
   return {
     pactCode,
     caps: [
@@ -37,7 +39,7 @@ export const getAddStakeCommand = (verifiedAccount, amountToStake) => {
       Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
     ],
     sender: verifiedAccount.account,
-    gasLimit: 3000,
+    gasLimit: GAS_LIMIT,
     gasPrice: GAS_PRICE,
     chainId: CHAIN_ID,
     ttl: 600,
@@ -49,8 +51,10 @@ export const getAddStakeCommand = (verifiedAccount, amountToStake) => {
   };
 };
 
-export const geUnstakeCommand = (verifiedAccount) => {
-  const pactCode = `(kaddex.staking.unstake "${verifiedAccount.account}")`;
+export const geUnstakeCommand = (verifiedAccount, amountToUnstake) => {
+  const parsedAmount = parseFloat(amountToUnstake?.toString());
+  const decimalPlaces = getFloatPrecision(parsedAmount);
+  const pactCode = `(kaddex.staking.unstake "${verifiedAccount.account}" ${parsedAmount.toFixed(decimalPlaces || 2)})`;
   return {
     pactCode,
     caps: [
@@ -59,7 +63,7 @@ export const geUnstakeCommand = (verifiedAccount) => {
       Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
     ],
     sender: verifiedAccount.account,
-    gasLimit: 6000,
+    gasLimit: GAS_LIMIT,
     gasPrice: GAS_PRICE,
     chainId: CHAIN_ID,
     ttl: 600,
@@ -80,7 +84,7 @@ export const getRollupRewardsCommand = (verifiedAccount) => {
       Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
     ],
     sender: verifiedAccount.account,
-    gasLimit: 3000,
+    gasLimit: GAS_LIMIT,
     gasPrice: GAS_PRICE,
     chainId: CHAIN_ID,
     ttl: 600,
@@ -92,10 +96,12 @@ export const getRollupRewardsCommand = (verifiedAccount) => {
   };
 };
 
-export const getRollupAndUnstakeCommand = (verifiedAccount) => {
+export const getRollupAndUnstakeCommand = (verifiedAccount, amountToUnstake) => {
+  const parsedAmount = parseFloat(amountToUnstake?.toString());
+  const decimalPlaces = getFloatPrecision(parsedAmount);
   const pactCode = `
   (kaddex.staking.rollup "${verifiedAccount.account}")
-  (kaddex.staking.unstake "${verifiedAccount.account}")
+  (kaddex.staking.unstake "${verifiedAccount.account}" ${parsedAmount.toFixed(decimalPlaces || 2)})
   `;
   return {
     pactCode,
@@ -106,7 +112,7 @@ export const getRollupAndUnstakeCommand = (verifiedAccount) => {
       Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
     ],
     sender: verifiedAccount.account,
-    gasLimit: 6000,
+    gasLimit: GAS_LIMIT,
     gasPrice: GAS_PRICE,
     chainId: CHAIN_ID,
     ttl: 600,
@@ -131,7 +137,7 @@ export const getRollupAndClaimCommand = (verifiedAccount) => {
       Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
     ],
     sender: verifiedAccount.account,
-    gasLimit: 6000,
+    gasLimit: GAS_LIMIT,
     gasPrice: GAS_PRICE,
     chainId: CHAIN_ID,
     ttl: 600,
@@ -152,7 +158,7 @@ export const getClaimRewardsCommand = (verifiedAccount) => {
       Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
     ],
     sender: verifiedAccount.account,
-    gasLimit: 3000,
+    gasLimit: GAS_LIMIT,
     gasPrice: GAS_PRICE,
     chainId: CHAIN_ID,
     ttl: 600,

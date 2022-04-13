@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import useLazyImage from '../hooks/useLazyImage';
 import axios from 'axios';
-import { PactContext } from '../contexts/PactContext';
-import { GameEditionContext } from '../contexts/GameEditionContext';
+import { usePactContext, useGameEditionContext } from '../contexts';
 import VolumeChart from '../components/charts/VolumeChart';
 import TVLChart from '../components/charts/TVLChart';
 import VestingScheduleChart from '../components/charts/VestingScheduleChart';
@@ -28,13 +27,13 @@ const Container = styled(FadeIn)`
   }
 `;
 
-const KDX_PRICE = 0.16;
 const KDX_TOTAL_SUPPLY = 1000000000;
+const KDX_TOTAL_BURNED_MULT = 0.9121;
 
 const AnalyticsContainer = () => {
-  const pact = useContext(PactContext);
+  const pact = usePactContext();
   const [kdaPrice, setKdaPrice] = useState(null);
-  const { gameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView } = useGameEditionContext();
 
   useEffect(() => {
     const getKdaUSDPrice = async () => {
@@ -61,8 +60,16 @@ const AnalyticsContainer = () => {
       <Container gameEditionView={gameEditionView}>
         <FlexContainer className="column w-100" gap={24} style={{ padding: '50px 0', maxWidth: 1100 }}>
           <FlexContainer mobileClassName="column" gap={24}>
-            <AnalyticsSimpleWidget title={'Kaddex price (KDX)'} mainText={`$ ${KDX_PRICE}`} subtitle={`${(KDX_PRICE / kdaPrice).toFixed(4)} KDA`} />
-            <AnalyticsSimpleWidget title={'Marketcap'} mainText={`$ ${humanReadableNumber(Number(KDX_TOTAL_SUPPLY * KDX_PRICE))}`} subtitle={null} />
+            <AnalyticsSimpleWidget
+              title={'Kaddex price (KDX)'}
+              mainText={`$ ${pact?.kdxPrice || '-'}`}
+              subtitle={pact?.kdxPrice && `${(pact?.kdxPrice / kdaPrice).toFixed(4)} KDA`}
+            />
+            <AnalyticsSimpleWidget
+              title={'Marketcap'}
+              mainText={`$ ${humanReadableNumber(Number(KDX_TOTAL_SUPPLY * pact?.kdxPrice * KDX_TOTAL_BURNED_MULT))}`}
+              subtitle={null}
+            />
           </FlexContainer>
           <FlexContainer mobileClassName="column" gap={24}>
             <TVLChart kdaPrice={kdaPrice} height={300} />

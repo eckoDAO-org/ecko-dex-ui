@@ -6,7 +6,7 @@ import ProgressBar from '../shared/ProgressBar';
 import CommonWrapper from './CommonWrapper';
 import { VotingPowerFormulaIcon } from '../../assets';
 
-const VotingPower = () => {
+const VotingPower = ({ daoAccountData }) => {
   return (
     <CommonWrapper
       gap={16}
@@ -36,7 +36,7 @@ const VotingPower = () => {
       <div>
         <ProgressBar
           maxValue={2.5}
-          currentValue={1.1}
+          currentValue={daoAccountData?.multiplier || 0}
           values={[
             { value: 0, label: 'START' },
             { value: 0.5, label: '7d' },
