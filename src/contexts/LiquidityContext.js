@@ -108,6 +108,91 @@ export const LiquidityProvider = (props) => {
     }
   };
 
+  const addOneSideLiquidityWallet = async (token0, token1, amountDesired0, amountDesired1) => {
+    try {
+      let pair = await swap.getPairAccount(token0.code, token1.code);
+      const signCmd = {
+        pactCode: `(${KADDEX_NAMESPACE}.wrapper.add-liquidity-one-sided
+            ${token0.code}
+            ${token1.code}
+            (read-decimal 'amountDesired0)
+            (read-decimal 'amountMinimum0)
+            (read-decimal 'amountMinimum1)
+            ${JSON.stringify(account.account)}
+            (read-keyset 'user-ks)
+            ${JSON.stringify(account.account)}
+            (read-keyset 'user-ks)
+          )`,
+        caps: [
+          ...(ENABLE_GAS_STATION
+            ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['free-gas', { int: 1 }, 1.0])]
+            : []),
+          Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${token0.code}.TRANSFER`, [
+            account.account,
+            pair,
+            Number(amountDesired0),
+          ]),
+          Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${token1.code}.TRANSFER`, [
+            account.account,
+            pair,
+            Number(amountDesired1),
+          ]),
+          ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : []),
+        ],
+        sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
+        gasLimit: GAS_LIMIT,
+        gasPrice: GAS_PRICE,
+        chainId: CHAIN_ID,
+        ttl: 600,
+        envData: {
+          'user-ks': account.guard,
+          amountDesired0: reduceBalance(amountDesired0, tokenData[token0.name].precision),
+          amountMinimum0: 0.0 /* reduceBalance(amountDesired0 * (1 - parseFloat(pact.slippage)), tokenData[token0.name].precision), */,
+          amountMinimum1: 0.0 /* reduceBalance(amountDesired1 * (1 - parseFloat(pact.slippage)), tokenData[token1.name].precision), */,
+        },
+        signingPubKey: account.guard.keys[0],
+        networkId: NETWORKID,
+      };
+      //alert to sign tx
+      /* walletLoading(); */
+      wallet.setIsWaitingForWalletAuth(true);
+      let command = null;
+      if (isXWalletConnected) {
+        const res = await xWalletRequestSign(signCmd);
+        command = res.signedCmd;
+      } else {
+        command = await Pact.wallet.sign(signCmd);
+      }
+      //close alert programmatically
+      /* swal.close(); */
+      wallet.setIsWaitingForWalletAuth(false);
+      wallet.setWalletSuccess(true);
+      //set signedtx
+      swap.setCmd(command);
+      let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(command));
+      data = await parseRes(data);
+      setLocalRes(data);
+      return data;
+    } catch (e) {
+      //wallet error alert
+      if (e.message.includes('Failed to fetch'))
+        wallet.setWalletError({
+          error: true,
+          title: 'No Wallet',
+          content: 'Please make sure you open and login to your wallet.',
+        });
+      //walletError();
+      else
+        wallet.setWalletError({
+          error: true,
+          title: 'Wallet Signing Failure',
+          content:
+            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kadenaswap.',
+        }); //walletSigError();
+      console.log(e);
+    }
+  };
+
   const removeLiquidityWallet = async (token0, token1, liquidity) => {
     try {
       let pair = await swap.getPairAccount(token0, token1);
@@ -207,6 +292,7 @@ export const LiquidityProvider = (props) => {
     pairListAccount,
     setPairListAccount,
     addLiquidityWallet,
+    addOneSideLiquidityWallet,
     removeLiquidityWallet,
     setWantsKdxRewards,
   };

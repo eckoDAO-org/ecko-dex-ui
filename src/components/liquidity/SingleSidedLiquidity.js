@@ -1,29 +1,32 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Pact from 'pact-lang-api';
 import React, { useEffect, useState } from 'react';
+import { debounce, throttle } from 'throttle-debounce';
 import { ArrowDown } from '../../assets';
 import { CHAIN_ID, creationTime, NETWORK } from '../../constants/contextConstants';
 import tokenData from '../../constants/cryptoCurrencies';
-import { useAccountContext, useModalContext, usePactContext } from '../../contexts';
+import { useAccountContext, useLiquidityContext, useModalContext, usePactContext, useWalletContext } from '../../contexts';
 import noExponents from '../../utils/noExponents';
 import { getCorrectBalance, limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
+import { SuccessAddView } from '../modals/liquidity/LiquidityTxView';
 import SelectPoolModal from '../modals/liquidity/SelectPoolModal';
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
+import TxView from '../modals/TxView';
 import CustomButton from '../shared/CustomButton';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Input from '../shared/Input';
 import InputToken from '../shared/InputToken';
 import Label from '../shared/Label';
 
-const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
+const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
   const modalContext = useModalContext();
-
+  const { addOneSideLiquidityWallet } = useLiquidityContext();
+  const wallet = useWalletContext();
   const pact = usePactContext();
   const account = useAccountContext();
 
   const [selectedPool, setSelectedPool] = useState(null);
-
-  const [values, setValues] = useState({
+  const [fromValue, setFromValue] = useState({
     coin: pair?.token0 || 'KDX',
     account: '',
     guard: null,
@@ -31,9 +34,22 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
     amount: '',
     precision: 12,
   });
+  const [toValue, setToValue] = useState({
+    coin: '',
+    account: '',
+    guard: null,
+    balance: '',
+    amount: '',
+    precision: 12,
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  console.log('fromValue', fromValue);
+  console.log('toValue', toValue);
 
   // useEffect(() => {
-  //   onPairChange(values.coin);
+  //   onPairChange(fromValue.coin);
   //   handleTokenValue(pair?.token0 || 'KDA');
   // }, [pair.coin]);
 
@@ -42,9 +58,65 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
     handleTokenValue(pair?.token0 || 'KDX');
   }, []);
 
+  useEffect(async () => {
+    onPairChange(fromValue?.coin);
+    if (selectedPool) {
+      await pact.getPair(tokenData?.[selectedPool?.token0]?.code, tokenData?.[selectedPool?.token1]?.code);
+
+      if (selectedPool?.token0 === fromValue.coin) {
+        setToValue((prev) => ({ ...prev, coin: selectedPool.token1 }));
+        await pact.getReserves(tokenData?.[selectedPool?.token0]?.code, tokenData?.[selectedPool?.token1]?.code);
+      } else {
+        setToValue((prev) => ({ ...prev, coin: selectedPool.token0 }));
+        await pact.getReserves(tokenData?.[selectedPool?.token1]?.code, tokenData?.[selectedPool?.token0]?.code);
+      }
+    }
+  }, [fromValue?.coin, selectedPool]);
+
   useEffect(() => {
-    onPairChange(values?.coin);
-  }, [values?.coin]);
+    console.log('pact.ratio', pact.ratio);
+    if (fromValue.amount !== '') {
+      if (fromValue.coin !== '' && !isNaN(pact.ratio)) {
+        if (fromValue.amount.length < 5) {
+          throttle(
+            500,
+            setToValue({
+              ...toValue,
+              amount: reduceBalance(fromValue.amount / pact.ratio, toValue.precision),
+            })
+          );
+        } else {
+          debounce(
+            500,
+            setToValue({
+              ...toValue,
+              amount: reduceBalance(fromValue.amount / pact.ratio, toValue.precision)?.toFixed(toValue.precision),
+            })
+          );
+        }
+      }
+    }
+    if (isNaN(pact.ratio) || fromValue.amount === '') {
+      setToValue((prev) => ({ ...prev, amount: '' }));
+    }
+  }, [fromValue.amount]);
+
+  useEffect(() => {
+    if (!isNaN(pact.ratio)) {
+      if (fromValue.amount !== '' && toValue.amount === '') {
+        setToValue({
+          ...toValue,
+          amount: reduceBalance(pact.computeOut(fromValue.amount), toValue.precision),
+        });
+      }
+      if (fromValue.amount !== '' && toValue.amount !== '') {
+        setToValue({
+          ...toValue,
+          amount: reduceBalance(pact.computeOut(fromValue.amount), toValue.precision),
+        });
+      }
+    }
+  }, [pact.ratio]);
 
   const handleTokenValue = async (token) => {
     const crypto = tokenData[token];
@@ -67,7 +139,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
         balance = getCorrectBalance(data.result.data.balance);
       }
     }
-    setValues((prev) => ({
+    setFromValue((prev) => ({
       ...prev,
       balance: balance,
       coin: crypto?.name,
@@ -86,7 +158,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
       },
       content: (
         <TokenSelectorModalContent
-          token={values.coin}
+          token={fromValue.coin}
           tokensToKeep={[selectedPool?.token0, selectedPool?.token1]}
           onSelectToken={async (crypto) => await handleTokenValue(crypto.name)}
           onClose={() => {
@@ -95,6 +167,43 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
         />
       ),
     });
+  };
+
+  const supply = async () => {
+    const res = await addOneSideLiquidityWallet(tokenData[fromValue.coin], tokenData[toValue.coin], fromValue.amount, toValue.amount);
+    if (!res) {
+      wallet.setIsWaitingForWalletAuth(true);
+      /* pact.setWalletError(true); */
+      /* walletError(); */
+    } else {
+      console.log('RES:', res);
+      wallet.setWalletError(null);
+      modalContext.openModal({
+        title: 'transaction details',
+        description: '',
+
+        onClose: () => {
+          modalContext.closeModal();
+        },
+        content: (
+          <TxView
+            onClose={() => {
+              modalContext.closeModal();
+            }}
+          >
+            <SuccessAddView
+              isSingleSideLiquidity
+              apr={apr}
+              token0={fromValue.coin}
+              token1={toValue.coin}
+              label="Add Liquidity"
+              loading={loading}
+              onClick={onAddLiquidity}
+            />
+          </TxView>
+        ),
+      });
+    }
   };
 
   const buttonStatus = () => {
@@ -113,13 +222,23 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
     if (!account.account) return status[0];
     if (isNaN(pact.ratio)) {
       return status[4];
-    } else if (!values.amount) return status[1];
-    else if (Number(values.amount) > Number(values.balance)) return { ...status[3], msg: status[3].msg(values.coin) };
+    } else if (!fromValue.amount) return status[1];
+    else if (Number(fromValue.amount) > Number(fromValue.balance)) return { ...status[3], msg: status[3].msg(fromValue.coin) };
     else {
       if (isNaN(pact.ratio)) {
         return status[4];
       } else return status[2];
     }
+  };
+
+  const onAddLiquidity = async () => {
+    setLoading(true);
+
+    // swap.swapSend();
+    console.log('arrivato qui');
+
+    setLoading(false);
+    modalContext.closeModal();
   };
 
   return (
@@ -141,7 +260,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
                 onSelect={(pool) => {
                   setSelectedPool(pool);
                   modalContext.closeModal();
-                  //setValues((prev) => ({ ...prev, coin: pool.token0 }));
+                  //setFromValue((prev) => ({ ...prev, coin: pool.token0 }));
                   handleTokenValue(pool.token0);
                 }}
                 onClose={() => {
@@ -171,10 +290,10 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
       </CustomButton>
 
       <Input
-        error={isNaN(values.amount)}
+        error={isNaN(fromValue.amount)}
         topLeftLabel="amount"
-        topRightLabel={`balance: ${reduceBalance(values.balance) ?? '-'}`}
-        bottomLeftLabel={`balance: ${reduceBalance(values.balance) ?? '-'}`} //using for gameEdition
+        topRightLabel={`balance: ${reduceBalance(fromValue.balance) ?? '-'}`}
+        bottomLeftLabel={`balance: ${reduceBalance(fromValue.balance) ?? '-'}`} //using for gameEdition
         geColor="black"
         placeholder="0.0"
         maxLength="15"
@@ -182,24 +301,24 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
         inputRightComponent={
           <InputToken
             geColor="black"
-            values={values}
-            disabledButton={!values.balance}
+            values={fromValue}
+            disabledButton={!fromValue.balance}
             onClick={() => {
               openTokenSelectorModal();
             }}
             onMaxClickButton={() => {
-              setValues((prev) => ({
+              setFromValue((prev) => ({
                 ...prev,
-                amount: reduceBalance(values.balance),
+                amount: reduceBalance(fromValue.balance),
               }));
             }}
           />
         }
-        value={noExponents(values.amount)}
+        value={noExponents(fromValue.amount)}
         onChange={async (e, { value }) => {
-          setValues((prev) => ({
+          setFromValue((prev) => ({
             ...prev,
-            amount: limitDecimalPlaces(value, values.precision),
+            amount: limitDecimalPlaces(value, fromValue.precision),
           }));
         }}
       />
@@ -207,11 +326,11 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
       <FlexContainer className="justify-sb w-100">
         <Label fontSize={13}>Pool Share</Label>
         <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
-          {!pact.share(values.amount) ? 0 : (pact.share(values.amount) * 100).toPrecision(4)} %
+          {!pact.share(fromValue.amount) ? 0 : (pact.share(fromValue.amount) * 100).toPrecision(4)} %
         </Label>
       </FlexContainer>
 
-      <CustomButton fluid type="gradient" disabled={!buttonStatus().status} onClick={() => console.log('add')}>
+      <CustomButton fluid type="gradient" disabled={!buttonStatus().status} onClick={() => supply()}>
         {buttonStatus().msg}
       </CustomButton>
     </FlexContainer>

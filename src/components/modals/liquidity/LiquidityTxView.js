@@ -15,6 +15,7 @@ import CustomDivider from '../../shared/CustomDivider';
 import { KaddexOutlineIcon } from '../../../assets';
 import { Checkbox } from 'semantic-ui-react';
 import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
+import { isNumber } from 'lodash';
 
 export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }) => {
   const { setButtons } = useGameEditionContext();
@@ -72,7 +73,7 @@ export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }
   );
 };
 
-export const SuccessAddView = ({ token0, token1, loading, onClick }) => {
+export const SuccessAddView = ({ token0, token1, loading, onClick, isSingleSideLiquidity, apr }) => {
   const { account } = useAccountContext();
   const pact = usePactContext();
   const swap = useSwapContext();
@@ -111,6 +112,13 @@ export const SuccessAddView = ({ token0, token1, loading, onClick }) => {
             </Label>
           </FlexContainer>
         </FlexContainer>
+        {/* APR*/}
+        {isNumber(apr) && (
+          <FlexContainer className="align-ce justify-sb">
+            <Label fontSize={13}>APR</Label>
+            <Label fontSize={13}>{`${apr} %`}</Label>
+          </FlexContainer>
+        )}
         {/* POOL SHARE*/}
         <FlexContainer className="align-ce justify-sb">
           <Label fontSize={13}>Pool Share</Label>
@@ -132,14 +140,18 @@ export const SuccessAddView = ({ token0, token1, loading, onClick }) => {
         <Label fontSize={13}>{`1 ${token0} =  ${reduceBalance(1 / pact.ratio)} ${token1}`}</Label>
 
         {/* TO VALUES */}
-        <FlexContainer className="align-ce justify-sb">
-          <FlexContainer>
-            <CryptoContainer size={30}>{getTokenIcon(token1)}</CryptoContainer>
-            <Label>{swap?.localRes?.result?.data?.amount1}</Label>
-          </FlexContainer>
-          <Label>{token1}</Label>
-        </FlexContainer>
-        <Label fontSize={13}>{`1 ${token1} =  ${reduceBalance(pact.ratio)} ${token0}`}</Label>
+        {!isSingleSideLiquidity && (
+          <>
+            <FlexContainer className="align-ce justify-sb">
+              <FlexContainer>
+                <CryptoContainer size={30}>{getTokenIcon(token1)}</CryptoContainer>
+                <Label>{swap?.localRes?.result?.data?.amount1}</Label>
+              </FlexContainer>
+              <Label>{token1}</Label>
+            </FlexContainer>
+            <Label fontSize={13}>{`1 ${token1} =  ${reduceBalance(pact.ratio)} ${token0}`}</Label>
+          </>
+        )}
       </FlexContainer>
     </SuccesViewContainer>
   );

@@ -19,6 +19,7 @@ import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { isValidString } from '../../utils/string-utils';
 import { AppLoader } from '../../components/shared/AppLoader';
 import { useErrorState } from '../../hooks/useErrorState';
+import { usePactContext } from '../../contexts';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -37,6 +38,7 @@ const Container = styled(FadeIn)`
 
 const AddLiquidityContainer = (props) => {
   const history = useHistory();
+  const pact = usePactContext();
 
   const { pathname } = useLocation();
 
@@ -52,8 +54,10 @@ const AddLiquidityContainer = (props) => {
     const pool = data.pools.find(
       (p) => (p.token0 === pair.token0 && p.token1 === pair.token1) || (p.token0 === pair.token1 && p.token1 === pair.token0)
     );
-    const result = await getAllPairValues([pool], data.volumes);
-    setApr(result[0]?.apr?.value);
+    if (pool) {
+      const result = await getAllPairValues([pool], data.volumes);
+      setApr(result[0]?.apr?.value);
+    }
   };
 
   const fetchData = async () => {
@@ -124,6 +128,7 @@ const AddLiquidityContainer = (props) => {
 
       {pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED && (
         <SingleSidedLiquidity
+          apr={apr}
           pools={data.pools}
           pair={pair}
           onPairChange={(token0) => {
