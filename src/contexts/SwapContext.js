@@ -9,11 +9,11 @@ import {
   CHAIN_ID,
   creationTime,
   GAS_PRICE,
+  GAS_LIMIT,
   NETWORK,
   NETWORKID,
   ENABLE_GAS_STATION,
   KADDEX_NAMESPACE,
-  GAS_LIMIT,
 } from '../constants/contextConstants';
 import { pactFetchLocal } from '../api/pact';
 import { mkReq, parseRes } from '../api/utils';
