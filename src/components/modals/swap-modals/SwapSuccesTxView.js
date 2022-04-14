@@ -124,7 +124,7 @@ export const SwapSuccessView = ({ loading, sendTransaction }) => {
         <FlexContainer className="align-ce justify-sb">
           <FlexContainer>
             <CryptoContainer size={30}>{getTokenIcon(swap?.localRes?.result?.data[0]?.token)}</CryptoContainer>
-            <Label>{extractDecimal(swap?.localRes?.result?.data[0]?.amount)}</Label>
+            <Label>{extractDecimal(swap?.localRes?.result?.data[0]?.amount).toFixed(6)}</Label>
           </FlexContainer>
           <Label>{showTicker(swap?.localRes?.result?.data[0]?.token)}</Label>
         </FlexContainer>
@@ -135,7 +135,7 @@ export const SwapSuccessView = ({ loading, sendTransaction }) => {
         <FlexContainer className="align-ce justify-sb">
           <FlexContainer>
             <CryptoContainer size={30}>{getTokenIcon(swap?.localRes?.result?.data[1]?.token)}</CryptoContainer>
-            <Label>{extractDecimal(swap?.localRes?.result?.data[1]?.amount)}</Label>
+            <Label>{extractDecimal(swap?.localRes?.result?.data[1]?.amount).toFixed(6)}</Label>
           </FlexContainer>
           <Label>{showTicker(swap?.localRes?.result?.data[1]?.token)}</Label>
         </FlexContainer>

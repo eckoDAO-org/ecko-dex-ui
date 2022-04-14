@@ -88,6 +88,43 @@ export const getPairListAccountBalance = async (account) => {
   }
 };
 
+export const getOneSideLiquidityPairInfo = async (amountA, slippage, token0, token1) => {
+  try {
+    let data = await pactFetchLocal(
+      `
+    (namespace 'free)
+
+    (module ${KADDEX_NAMESPACE}-read G
+
+      (defcap G ()
+        true)
+
+      (defun pair-info ()
+        (let* (
+          (p (${KADDEX_NAMESPACE}.exchange.get-pair ${token0} ${token1}))
+          (pair-account (at 'account p))
+          (amountB (${KADDEX_NAMESPACE}.wrapper.get-other-side-token-amount-after-swap ${amountA} ${token0} ${token1} (+ ${amountA} ${slippage})))
+          (reserveA (${KADDEX_NAMESPACE}.exchange.reserve-for p ${token0}))
+          (amountA-after-swap (- ${amountA} (${KADDEX_NAMESPACE}.wrapper.get-one-sided-liquidity-swap-amount reserveA ${amountA})))
+          (amountA-min (${KADDEX_NAMESPACE}.exchange.truncate ${token0} (* amountA-after-swap (- ${amountA} ${slippage}))))
+          (amountB-min (${KADDEX_NAMESPACE}.exchange.truncate ${token1} (* (/ amountB (+ ${amountA} ${slippage})) (- ${amountA} ${slippage}))))
+        )
+        { 'account: pair-account, 'amountB: amountB, 'amountA-min: amountA-min, 'amountB-min: amountB-min }
+      ))
+    )
+     (${KADDEX_NAMESPACE}-read.pair-info)
+           `
+    );
+    if (data) {
+      return data;
+    } else {
+      return handleError('');
+    }
+  } catch (e) {
+    return handleError(e);
+  }
+};
+
 const dataWithoutBooster = async (account, tokenPairList) => {
   let data = await pactFetchLocal(
     `

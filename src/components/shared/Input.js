@@ -11,7 +11,16 @@ const Container = styled.div`
 
   width: 100%;
 
-  ${({ gameEditionView, outGameEditionView, noInputBackground, theme: { colors, fontFamily, backgroundInput }, withBorder, color, geColor }) => {
+  ${({
+    gameEditionView,
+    outGameEditionView,
+    noInputBackground,
+    theme: { colors, fontFamily, backgroundInput },
+    placeholderSize,
+    withBorder,
+    color,
+    geColor,
+  }) => {
     if (gameEditionView) {
       return css`
         background-color: transparent;
@@ -61,7 +70,7 @@ const Container = styled.div`
           text-transform: capitalize;
           font-family: 14px;
           font-family: ${fontFamily.basier};
-          font-size: 28px;
+          font-size: ${placeholderSize ? placeholderSize : '28px'};
           @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
             font-size: 20px;
           }
@@ -125,6 +134,7 @@ const Input = ({
   label,
   containerStyle,
   placeholder,
+  placeholderSize,
   size,
   inputRightComponent,
   numberOnly,
@@ -149,6 +159,7 @@ const Input = ({
       gameEditionView={gameEditionView}
       outGameEditionView={outGameEditionView}
       noInputBackground={noInputBackground}
+      placeholderSize={placeholderSize}
       color={color}
       geColor={geColor}
       withBorder={withBorder}

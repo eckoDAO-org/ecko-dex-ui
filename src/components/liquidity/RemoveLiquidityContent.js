@@ -116,6 +116,7 @@ const RemoveLiquidityContent = ({ pair }) => {
   const onWalletRequestViewModalClose = () => {
     wallet.setIsWaitingForWalletAuth(false);
     wallet.setWalletError(null);
+    setLoading(false);
   };
 
   const openTxViewModal = () => {
@@ -220,6 +221,7 @@ const RemoveLiquidityContent = ({ pair }) => {
             value={amount}
             error={isNaN(amount)}
             placeholder="Enter Amount"
+            placeholderSize={13}
             geColor="white"
             withBorder
             numberOnly

@@ -6,6 +6,7 @@ import { useKaddexWalletContext, useSwapContext, usePactContext, useWalletContex
 import { reduceBalance } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
 import { mkReq, parseRes } from '../api/utils';
+import { getOneSideLiquidityPairInfo } from '../api/pact-pair';
 
 export const LiquidityContext = createContext(null);
 
@@ -108,8 +109,9 @@ export const LiquidityProvider = (props) => {
     }
   };
 
-  const addOneSideLiquidityWallet = async (token0, token1, amountDesired0, amountDesired1) => {
+  const addOneSideLiquidityWallet = async (token0, token1, amountDesired0) => {
     try {
+      const args = await getOneSideLiquidityPairInfo(amountDesired0, pact.slippage, token0.code, token1.code);
       let pair = await swap.getPairAccount(token0.code, token1.code);
       const signCmd = {
         pactCode: `(${KADDEX_NAMESPACE}.wrapper.add-liquidity-one-sided
@@ -132,11 +134,7 @@ export const LiquidityProvider = (props) => {
             pair,
             Number(amountDesired0),
           ]),
-          Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${token1.code}.TRANSFER`, [
-            account.account,
-            pair,
-            Number(amountDesired1),
-          ]),
+          Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${token1.code}.TRANSFER`, [account.account, pair, Number(args.amountB)]),
           ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : []),
         ],
         sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
@@ -147,8 +145,8 @@ export const LiquidityProvider = (props) => {
         envData: {
           'user-ks': account.guard,
           amountDesired0: reduceBalance(amountDesired0, tokenData[token0.name].precision),
-          amountMinimum0: 0.0 /* reduceBalance(amountDesired0 * (1 - parseFloat(pact.slippage)), tokenData[token0.name].precision), */,
-          amountMinimum1: 0.0 /* reduceBalance(amountDesired1 * (1 - parseFloat(pact.slippage)), tokenData[token1.name].precision), */,
+          amountMinimum0: reduceBalance(args['amountA-min'], tokenData[token0.name].precision),
+          amountMinimum1: reduceBalance(args['amountB-min'], tokenData[token1.name].precision),
         },
         signingPubKey: account.guard.keys[0],
         networkId: NETWORKID,
