@@ -24,8 +24,8 @@ export const pairUnit = (decimal, toFixed = 14) => {
 };
 
 export const extractDecimal = (num) => {
-  if (num.int) return num.int;
-  if (num.decimal) return num.decimal;
+  if (num?.int) return num.int;
+  if (num?.decimal) return num.decimal;
   else return num;
 };
 

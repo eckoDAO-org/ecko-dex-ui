@@ -91,10 +91,11 @@ const renderColumns = () => {
     {
       name: 'My Pool Share',
       width: 160,
-      render: ({ item }) =>
-        item.poolShare
+      render: ({ item }) => {
+        return item.poolShare >= 0
           ? `${item?.poolShare.toPrecision(4)} %`
-          : `${((extractDecimal(item.balance) / extractDecimal(item.supply)) * 100).toPrecision(4)} %`,
+          : `${((extractDecimal(item.balance) / extractDecimal(item.supply)) * 100).toPrecision(4)} %`;
+      },
     },
   ];
 };
