@@ -3,5 +3,11 @@
     "name": "coin:runonflux.flux",
     "token0": "KDA",
     "token1": "FLUX"
+  },
+  "coin:hypercent.prod-hype-coin": {
+    "name": "coin:hypercent.prod-hype-coin",
+    "token0": "KDA",
+    "token1": "HYPE"
   }
+  
 }
