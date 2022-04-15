@@ -235,7 +235,8 @@ const RemoveLiquidityContent = ({ pair }) => {
             geColor="white"
             withBorder
             numberOnly
-            inputStyle={{ fontSize: 13, padding: 0 }}
+            fontSize={13}
+            inputStyle={{ padding: 0 }}
             topComponent={
               <Label fontSize={13} labelStyle={{ marginBottom: 16 }}>
                 Amount
@@ -281,17 +282,17 @@ const RemoveLiquidityContent = ({ pair }) => {
           <FlexContainer className="column" gap={12} style={{ margin: '16px 0' }}>
             <FlexContainer className="justify-sb w-100">
               <Label fontSize={13}>Pooled {pair?.token0}</Label>
-              <Label fontSize={13}>{pairUnit(extractDecimal(pooledToken0))}</Label>
+              <Label fontSize={13}>{pairUnit(extractDecimal(pooledToken0), 6)}</Label>
             </FlexContainer>
             <FlexContainer className="justify-sb w-100">
               <Label fontSize={13}>Pooled {pair?.token1}</Label>
-              <Label fontSize={13}>{pairUnit(extractDecimal(pooledToken1))}</Label>
+              <Label fontSize={13}>{pairUnit(extractDecimal(pooledToken1), 6)}</Label>
             </FlexContainer>
             <FlexContainer className="justify-sb w-100">
               <Label fontSize={13}>
                 {pair?.token0}/{pair?.token1} Rate
               </Label>
-              <Label fontSize={13}>{pairUnit(extractDecimal(pooled))}</Label>
+              <Label fontSize={13}>{pairUnit(extractDecimal(pooled), 6)}</Label>
             </FlexContainer>
           </FlexContainer>
         )}

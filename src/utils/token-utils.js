@@ -11,6 +11,14 @@ export const showTicker = (ticker) => {
   else return ticker?.toUpperCase();
 };
 
+export const getTokenName = (code) => {
+  const token0 = Object.values(tokenData).find((t) => t.code === code);
+  if (token0?.name) {
+    return token0?.name?.toUpperCase();
+  }
+  return code?.toUpperCase();
+};
+
 export const getTokenIcon = (token) => {
   return tokenData[showTicker(token)]?.icon;
 };

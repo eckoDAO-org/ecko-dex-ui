@@ -54,7 +54,7 @@ const SwapResults = ({ priceImpact, fromValues, toValues }) => {
       <RowContainer>
         <Label fontSize={13}>Liquidity Provider Fee</Label>
         <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
-          {(liquidity.liquidityProviderFee * parseFloat(fromValues.amount)).toFixed(fromValues.precision)} {fromValues.coin}
+          {(liquidity.liquidityProviderFee * parseFloat(fromValues.amount)).toFixed(6)} {fromValues.coin}
         </Label>
       </RowContainer>
     </ResultContainer>

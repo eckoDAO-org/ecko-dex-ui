@@ -6,6 +6,7 @@ import AllProposalsContainer from '../components/dao/AllProposalsContainer';
 import SingleProposalContainer from '../components/dao/SingleProposalContainer';
 import { useAccountContext } from '../contexts';
 import { getAccountData } from '../api/dao';
+import theme from '../styles/theme';
 
 const DaoContainer = () => {
   const { proposal_id } = useParams();
@@ -27,7 +28,7 @@ const DaoContainer = () => {
   }, [account]);
 
   return (
-    <FlexContainer className="column h-100" gap={16} desktopStyle={{ padding: '60px 88px 30px' }}>
+    <FlexContainer className="column h-100" gap={16} desktopStyle={{ padding: `35px ${theme.layout.desktopPadding}px` }}>
       {proposal_id ? (
         <SingleProposalContainer proposal_id={proposal_id} accountData={accountData} />
       ) : (

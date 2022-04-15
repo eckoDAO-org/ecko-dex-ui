@@ -26,7 +26,7 @@ const StakeContainer = () => {
   const history = useHistory();
   const { pathname } = useLocation();
   const { openModal, closeModal } = useModalContext();
-  const { account, storeNotification } = useAccountContext();
+  const { account } = useAccountContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
   const { showNotification, STATUSES, pollingNotif, showErrorNotification } = useNotificationContext();
   const pact = usePactContext();
@@ -304,7 +304,7 @@ const StakeContainer = () => {
     <FlexContainer
       className="column w-100 y-auto"
       desktopClassName="h-100"
-      desktopStyle={{ padding: `50px ${theme().layout.desktopPadding}px` }}
+      desktopStyle={{ padding: `35px ${theme().layout.desktopPadding}px` }}
       tabletStyle={{ paddingBottom: 40 }}
       mobileStyle={{ paddingBottom: 40 }}
     >
