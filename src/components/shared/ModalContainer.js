@@ -22,12 +22,6 @@ const HeaderContainer = styled.div`
   }
 `;
 
-const Description = styled.span`
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
-  font-size: 16px;
-  margin: 24px 0px;
-`;
-
 const ModalContainer = ({ title, description, containerStyle, titleStyle, descriptionStyle, children, onBack, onClose }) => {
   const { gameEditionView } = useContext(GameEditionContext);
   const containerRef = useRef(null);
@@ -43,15 +37,13 @@ const ModalContainer = ({ title, description, containerStyle, titleStyle, descri
       style={{ padding: 32, maxHeight: '90%', overflowY: 'auto', ...containerStyle }}
     >
       <HeaderContainer style={{ justifyContent: !onBack && !onClose && 'center' }}>
-        {onBack ? (
+        {onBack && (
           <ArrowBack
             style={{
               cursor: 'pointer',
             }}
             onClick={onBack}
           />
-        ) : (
-          <></>
         )}
 
         {title && (
@@ -77,7 +69,11 @@ const ModalContainer = ({ title, description, containerStyle, titleStyle, descri
         )}
       </HeaderContainer>
 
-      {description && <Description style={descriptionStyle}>{description}</Description>}
+      {description && (
+        <Label fontSize={16} outGameEditionView labelStyle={{ margin: '16px 0', ...descriptionStyle }}>
+          {description}
+        </Label>
+      )}
       {children}
     </FlexContainer>
   );
