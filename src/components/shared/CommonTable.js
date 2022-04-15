@@ -17,6 +17,7 @@ const Wrapper = styled(FlexContainer)`
     position: relative;
     overflow: auto;
   }
+  .tr-sticky,
   .sticky {
     position: -webkit-sticky;
     position: sticky;
@@ -30,7 +31,7 @@ const Wrapper = styled(FlexContainer)`
     width: 100%;
     position: absolute;
     z-index: 3;
-    bottom: 0px;
+    top: 39px;
     left: 0px;
   }
   th {
@@ -61,7 +62,7 @@ const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onCl
       <FlexContainer className="w-100 x-auto scrollbar-y-none">
         <table cellSpacing={0} cellPadding={24}>
           <thead>
-            <tr className="tr-sticky" style={{ position: 'sticky', zIndex: 3, top: 0 }}>
+            <tr className="tr-sticky" style={{ zIndex: 3, top: 0 }}>
               {columns?.map((c, i) => (
                 <th key={i} className={i === 0 ? 'sticky' : ''} style={{ minWidth: c.width, paddingTop: 0, zIndex: i === 0 ? 3 : 1 }}>
                   {typeof c.name === 'string' ? (
