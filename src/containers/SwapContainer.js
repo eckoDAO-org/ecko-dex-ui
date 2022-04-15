@@ -115,7 +115,7 @@ const SwapContainer = () => {
     balance: '',
     coin: 'KDA',
     address: 'coin',
-    precision: 0,
+    precision: 12,
   });
 
   const [inputSide, setInputSide] = useState('');

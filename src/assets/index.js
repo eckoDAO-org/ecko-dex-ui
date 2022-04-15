@@ -1,6 +1,7 @@
 export { ReactComponent as AboutBigIcon } from './images/header/about-big.svg';
 export { ReactComponent as AboutIcon } from './images/header/about.svg';
 export { ReactComponent as AddIcon } from './images/shared/add.svg';
+export { ReactComponent as AlertIcon } from './images/shared/alert.svg';
 export { ReactComponent as ArrowBack } from './images/shared/arrow-back.svg';
 export { ReactComponent as ArrowDown } from './images/shared/arrow-down-white.svg';
 export { ReactComponent as BetaIcon } from './images/header/beta.svg';

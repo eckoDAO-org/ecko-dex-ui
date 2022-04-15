@@ -3,7 +3,7 @@ import React, { useContext, useEffect } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { useHistory, useLocation } from 'react-router';
 import useWindowSize from '../../hooks/useWindowSize';
-import { useApplicationContext } from '../../contexts';
+import { useAccountContext, useApplicationContext } from '../../contexts';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import DesktopHeader from './header/DesktopHeader';
 import MobileHeader from './header/MobileHeader';
@@ -15,6 +15,7 @@ import gameEditionBackground from '../../assets/images/game-edition/game-edition
 import TabletHeader from './header/TabletHeader';
 import { FlexContainer } from '../shared/FlexContainer';
 import theme from '../../styles/theme';
+import Banner from './header/Banner';
 
 const WrapperContainer = styled.div`
   flex-direction: column;
@@ -109,6 +110,7 @@ const Layout = ({ children }) => {
   const { pathname } = useLocation();
   const history = useHistory();
   const [width, height] = useWindowSize();
+  const { account } = useAccountContext();
   const { gameEditionView, setGameEditionView } = useContext(GameEditionContext);
   const { resolutionConfiguration } = useApplicationContext();
 
@@ -132,7 +134,7 @@ const Layout = ({ children }) => {
         {width <= theme.mediaQueries.mobilePixel && <MobileHeader />}
         {width > theme.mediaQueries.mobilePixel && width < theme.mediaQueries.desktopPixel && <TabletHeader />}
         {width >= theme.mediaQueries.desktopPixel && <DesktopHeader gameEditionView={gameEditionView} />}
-
+        {!account.account && <Banner />}
         {gameEditionView && resolutionConfiguration && width >= resolutionConfiguration.width && height >= resolutionConfiguration.height ? (
           <>
             <CenterBackground src={gameEditionBackground} alt="" />

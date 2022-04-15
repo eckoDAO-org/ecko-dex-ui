@@ -4,7 +4,7 @@ import { PactContext } from '../../../contexts/PactContext';
 import { useSwapContext } from '../../../contexts';
 import { extractDecimal, reduceBalance } from '../../../utils/reduceBalance';
 import reduceToken from '../../../utils/reduceToken';
-import { getTokenIcon, showTicker } from '../../../utils/token-utils';
+import { getTokenIcon, getTokenName } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import { ChainIcon } from '../../../assets';
 import { CHAIN_ID, ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
@@ -65,7 +65,7 @@ export const SwapSuccessViewGE = () => {
       }
       infoItems={[
         {
-          label: `${showTicker(swap?.localRes?.result?.data[0]?.token)}/${showTicker(swap?.localRes?.result?.data[1]?.token)}`,
+          label: `${getTokenName(swap?.localRes?.result?.data[0]?.token)}/${getTokenName(swap?.localRes?.result?.data[1]?.token)}`,
           value: `1 = ${reduceBalance(pact?.computeOut(1), 6)}`,
         },
         {
@@ -126,9 +126,9 @@ export const SwapSuccessView = ({ loading, sendTransaction }) => {
             <CryptoContainer size={30}>{getTokenIcon(swap?.localRes?.result?.data[0]?.token)}</CryptoContainer>
             <Label>{extractDecimal(swap?.localRes?.result?.data[0]?.amount)}</Label>
           </FlexContainer>
-          <Label>{showTicker(swap?.localRes?.result?.data[0]?.token)}</Label>
+          <Label>{getTokenName(swap?.localRes?.result?.data[0]?.token)}</Label>
         </FlexContainer>
-        <Label fontSize={13}>{`1 ${showTicker(swap?.localRes?.result?.data[0]?.token)} = ${reduceBalance(pact?.computeOut(1), 12)} ${showTicker(
+        <Label fontSize={13}>{`1 ${getTokenName(swap?.localRes?.result?.data[0]?.token)} = ${reduceBalance(pact?.computeOut(1), 12)} ${getTokenName(
           swap?.localRes?.result?.data[1]?.token
         )}`}</Label>
         {/* TO VALUES */}
@@ -137,12 +137,11 @@ export const SwapSuccessView = ({ loading, sendTransaction }) => {
             <CryptoContainer size={30}>{getTokenIcon(swap?.localRes?.result?.data[1]?.token)}</CryptoContainer>
             <Label>{extractDecimal(swap?.localRes?.result?.data[1]?.amount)}</Label>
           </FlexContainer>
-          <Label>{showTicker(swap?.localRes?.result?.data[1]?.token)}</Label>
+          <Label>{getTokenName(swap?.localRes?.result?.data[1]?.token)}</Label>
         </FlexContainer>
-
-        <Label fontSize={13}>{`1 ${showTicker(swap?.localRes?.result?.data[1]?.token)} =  ${1 / reduceBalance(pact?.computeOut(1), 12)} ${showTicker(
-          swap?.localRes?.result?.data[0]?.token
-        )}`}</Label>
+        <Label fontSize={13}>{`1 ${getTokenName(swap?.localRes?.result?.data[1]?.token)} =  ${
+          1 / reduceBalance(pact?.computeOut(1), 12)
+        } ${getTokenName(swap?.localRes?.result?.data[0]?.token)}`}</Label>
       </FlexContainer>
     </SuccesViewContainer>
   );
