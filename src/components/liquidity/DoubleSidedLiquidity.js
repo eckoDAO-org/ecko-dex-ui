@@ -31,7 +31,7 @@ const initialStateValue = {
   guard: null,
   balance: null,
   amount: '',
-  precision: 0,
+  precision: 12,
 };
 
 const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
