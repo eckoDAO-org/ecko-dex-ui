@@ -37,7 +37,7 @@ export const pactFetchLocal = async (pactCode, options) => {
 
 export const listen = async (reqKey) => {
   //check kadena tx status every 10 seconds until we get a response (success or fail)
-  var time = 240;
+  var time = 500;
   var pollRes;
   while (time > 0) {
     await wait(5000);
@@ -55,7 +55,7 @@ export const listen = async (reqKey) => {
   console.log(pollRes);
   console.log(pollRes[reqKey]);
   console.log(pollRes[reqKey].result);
-  if (pollRes[reqKey]?.result?.status === 'success') {
+  if (pollRes?.[reqKey]?.result?.status === 'success') {
     console.log('SUCCESS!!!');
     return 'success';
   } else {
@@ -68,16 +68,4 @@ const wait = async (timeout) => {
   return new Promise((resolve) => {
     setTimeout(resolve, timeout);
   });
-};
-
-export const parseRes = function (raw) {
-  const rawRes = raw;
-  const res = rawRes;
-  if (res.ok) {
-    const resJSON = rawRes.json();
-    return resJSON;
-  } else {
-    const resTEXT = rawRes.text();
-    return resTEXT;
-  }
 };

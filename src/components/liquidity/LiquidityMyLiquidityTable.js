@@ -58,7 +58,6 @@ const LiquidityMyLiquidityTable = () => {
 };
 
 export default LiquidityMyLiquidityTable;
-
 const renderColumns = () => {
   return [
     {
@@ -75,7 +74,6 @@ const renderColumns = () => {
     {
       name: 'My Pool Tokens',
       width: 160,
-
       render: ({ item }) => pairUnit(extractDecimal(item.balance), 6),
     },
     {
@@ -93,7 +91,10 @@ const renderColumns = () => {
     {
       name: 'My Pool Share',
       width: 160,
-      render: ({ item }) => `${((extractDecimal(item.balance) / extractDecimal(item.supply)) * 100).toPrecision(4)} %`,
+      render: ({ item }) =>
+        item.poolShare
+          ? `${item?.poolShare.toPrecision(4)} %`
+          : `${((extractDecimal(item.balance) / extractDecimal(item.supply)) * 100).toPrecision(4)} %`,
     },
   ];
 };

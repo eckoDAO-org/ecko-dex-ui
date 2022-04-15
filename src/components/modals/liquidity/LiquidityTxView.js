@@ -5,7 +5,7 @@ import styled from 'styled-components/macro';
 import { useAccountContext, useGameEditionContext, usePactContext, useSwapContext } from '../../../contexts';
 import { CHAIN_ID, ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
 import { extractDecimal, reduceBalance } from '../../../utils/reduceBalance';
-import { getTokenIcon, showTicker } from '../../../utils/token-utils';
+import { getTokenIconById, getTokenName } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import Label from '../../shared/Label';
 import { CryptoContainer, FlexContainer } from '../../shared/FlexContainer';
@@ -15,6 +15,7 @@ import CustomDivider from '../../shared/CustomDivider';
 import { KaddexOutlineIcon } from '../../../assets';
 import { Checkbox } from 'semantic-ui-react';
 import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
+import { isNumber } from 'lodash';
 
 export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }) => {
   const { setButtons } = useGameEditionContext();
@@ -29,10 +30,10 @@ export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }
       leftItem={
         <>
           <GameEditionLabel fontSize={32} color="blue">
-            {showTicker(token0)}
+            {getTokenName(token0)}
           </GameEditionLabel>
           <div className="flex justify-fs">
-            {getTokenIcon(token0)}
+            {getTokenIconById(token0)}
             <GameEditionLabel fontSize={22} color="blue-grey">
               {extractDecimal(swap?.localRes?.result?.data?.amount0)}
             </GameEditionLabel>
@@ -42,11 +43,11 @@ export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }
       rightItem={
         <>
           <GameEditionLabel fontSize={32} color="blue">
-            {showTicker(token1)}
+            {getTokenName(token1)}
           </GameEditionLabel>
 
           <div className="flex justify-fs">
-            {getTokenIcon(token1)}
+            {getTokenIconById(token1)}
             <GameEditionLabel fontSize={22} color="blue-grey">
               {extractDecimal(swap?.localRes?.result?.data?.amount1)}
             </GameEditionLabel>
@@ -72,7 +73,7 @@ export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }
   );
 };
 
-export const SuccessAddView = ({ token0, token1, loading, onClick }) => {
+export const SuccessAddView = ({ token0, token1, loading, onClick, isSingleSideLiquidity, apr }) => {
   const { account } = useAccountContext();
   const pact = usePactContext();
   const swap = useSwapContext();
@@ -100,10 +101,10 @@ export const SuccessAddView = ({ token0, token1, loading, onClick }) => {
           <Label fontSize={13}>Pool</Label>
           <FlexContainer>
             <CryptoContainer size={24} style={{ zIndex: 2 }}>
-              {getTokenIcon(token0)}
+              {getTokenIconById(token0)}
             </CryptoContainer>
             <CryptoContainer size={24} style={{ marginLeft: -12, zIndex: 1 }}>
-              {getTokenIcon(token1)}
+              {getTokenIconById(token1)}
             </CryptoContainer>
 
             <Label fontSize={13}>
@@ -111,6 +112,13 @@ export const SuccessAddView = ({ token0, token1, loading, onClick }) => {
             </Label>
           </FlexContainer>
         </FlexContainer>
+        {/* APR*/}
+        {isNumber(apr) && (
+          <FlexContainer className="align-ce justify-sb">
+            <Label fontSize={13}>APR</Label>
+            <Label fontSize={13}>{`${apr} %`}</Label>
+          </FlexContainer>
+        )}
         {/* POOL SHARE*/}
         <FlexContainer className="align-ce justify-sb">
           <Label fontSize={13}>Pool Share</Label>
@@ -124,7 +132,7 @@ export const SuccessAddView = ({ token0, token1, loading, onClick }) => {
         {/* FROM VALUES */}
         <FlexContainer className="align-ce justify-sb">
           <FlexContainer>
-            <CryptoContainer size={30}>{getTokenIcon(token0)}</CryptoContainer>
+            <CryptoContainer size={30}>{getTokenIconById(token0)}</CryptoContainer>
             <Label>{swap?.localRes?.result?.data?.amount0}</Label>
           </FlexContainer>
           <Label>{token0}</Label>
@@ -132,14 +140,18 @@ export const SuccessAddView = ({ token0, token1, loading, onClick }) => {
         <Label fontSize={13}>{`1 ${token0} =  ${reduceBalance(1 / pact.ratio)} ${token1}`}</Label>
 
         {/* TO VALUES */}
-        <FlexContainer className="align-ce justify-sb">
-          <FlexContainer>
-            <CryptoContainer size={30}>{getTokenIcon(token1)}</CryptoContainer>
-            <Label>{swap?.localRes?.result?.data?.amount1}</Label>
-          </FlexContainer>
-          <Label>{token1}</Label>
-        </FlexContainer>
-        <Label fontSize={13}>{`1 ${token1} =  ${reduceBalance(pact.ratio)} ${token0}`}</Label>
+        {!isSingleSideLiquidity && (
+          <>
+            <FlexContainer className="align-ce justify-sb">
+              <FlexContainer>
+                <CryptoContainer size={30}>{getTokenIconById(token1)}</CryptoContainer>
+                <Label>{swap?.localRes?.result?.data?.amount1}</Label>
+              </FlexContainer>
+              <Label>{token1}</Label>
+            </FlexContainer>
+            <Label fontSize={13}>{`1 ${token1} =  ${reduceBalance(pact.ratio)} ${token0}`}</Label>
+          </>
+        )}
       </FlexContainer>
     </SuccesViewContainer>
   );
@@ -161,7 +173,7 @@ export const SuccessRemoveView = ({ token0, token1, loading, onClick }) => {
 
         <div className="flex align-ce justify-sb">
           <div className="flex align-ce">
-            <CryptoContainer size={24}>{getTokenIcon(token0)}</CryptoContainer>
+            <CryptoContainer size={24}>{getTokenIconById(token0)}</CryptoContainer>
             <Label>
               {swap?.localRes?.result?.data?.amount0} {token0}
             </Label>
@@ -170,7 +182,7 @@ export const SuccessRemoveView = ({ token0, token1, loading, onClick }) => {
         </div>
         <div className="flex align-ce justify-sb">
           <div className="flex align-ce">
-            <CryptoContainer size={24}>{getTokenIcon(token1)}</CryptoContainer>
+            <CryptoContainer size={24}>{getTokenIconById(token1)}</CryptoContainer>
             <Label>
               {swap?.localRes?.result?.data?.amount1} {token1}
             </Label>
@@ -215,7 +227,7 @@ export const SuccessRemoveWithBoosterView = ({ token0, token1, loading, onClick 
 
         <div className="flex align-ce justify-sb">
           <div className="flex align-ce">
-            <CryptoContainer size={24}>{getTokenIcon(token0)}</CryptoContainer>
+            <CryptoContainer size={24}>{getTokenIconById(token0)}</CryptoContainer>
             <Label>
               {swap?.localRes?.result?.data?.amount0} {token0}
             </Label>
@@ -224,7 +236,7 @@ export const SuccessRemoveWithBoosterView = ({ token0, token1, loading, onClick 
         </div>
         <div className="flex align-ce justify-sb">
           <div className="flex align-ce">
-            <CryptoContainer size={24}>{getTokenIcon(token1)}</CryptoContainer>
+            <CryptoContainer size={24}>{getTokenIconById(token1)}</CryptoContainer>
             <Label>
               {swap?.localRes?.result?.data?.amount1} {token1}
             </Label>
@@ -238,7 +250,7 @@ export const SuccessRemoveWithBoosterView = ({ token0, token1, loading, onClick 
         <div className="flex align-ce justify-sb">
           <div className="flex align-ce">
             insert-token-logo-rewards
-            {/* <CryptoContainer size={24}>{getTokenIcon(token0)}</CryptoContainer> */}
+            {/* <CryptoContainer size={24}>{getTokenIconById(token0)}</CryptoContainer> */}
             <Label>insert-amount-rewards</Label>
           </div>
           <Label>insert-token-name-rewards</Label>

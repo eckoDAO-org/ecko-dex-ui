@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import NotificationContainer from '../components/notification/NotificationContainer';
-import { getCurrentDate, getCurrentTime, NETWORK_TYPE } from '../constants/contextConstants';
+import { NETWORK_TYPE } from '../constants/contextConstants';
 
 export const NotificationContext = createContext();
 
@@ -123,15 +123,14 @@ export const NotificationProvider = ({ children }) => {
   const pollingNotif = (reqKey, title, message = null) => {
     storeNotification({
       type: STATUSES.INFO,
-      time: getCurrentTime(),
-      date: getCurrentDate(),
-      title: 'Vote Pending!',
+      date: moment().format('DD/MM/YYYY - HH:mm:ss'),
+      title: title || 'Transaction Pending',
       description: reqKey,
       isRead: false,
       isCompleted: false,
     });
     toastId.current = showNotification({
-      title: title,
+      title: title || 'Transaction Pending',
       message: message || reqKey,
       type: STATUSES.INFO,
       closeOnClick: false,

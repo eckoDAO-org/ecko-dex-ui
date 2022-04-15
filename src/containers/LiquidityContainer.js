@@ -71,8 +71,11 @@ const LiquidityContainer = () => {
           </CustomButton>
         </FlexContainer>
       </FlexContainer>
+      {/* SINGLE SIDE TABLE */}
       {pathname === ROUTE_LIQUIDITY_TOKENS && <LiquidityTokensTable />}
+      {/* DOUBLE SIDE TABLE */}
       {pathname === ROUTE_LIQUIDITY_POOLS && <LiquidityPoolsTable />}
+      {/* MY LIQUIDITY TABLE */}
       {pathname === ROUTE_LIQUIDITY_MY_LIQUIDITY && <LiquidityMyLiquidityTable />}
     </FlexContainer>
   );

@@ -51,7 +51,7 @@ const CenterBackground = styled.img`
 const MainContent = styled.div`
   ${({ resolutionConfiguration }) => {
     if (resolutionConfiguration) {
-      const browser = browserDetection();
+      //const browser = browserDetection();
       // switch (browser) {
       //   case 'CHROME':
       //     return css`

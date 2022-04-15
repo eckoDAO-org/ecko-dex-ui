@@ -4,36 +4,44 @@ import React, { useEffect, useState } from 'react';
 import { ArrowDown } from '../../assets';
 import { CHAIN_ID, creationTime, NETWORK } from '../../constants/contextConstants';
 import tokenData from '../../constants/cryptoCurrencies';
-import { useAccountContext, useModalContext, usePactContext } from '../../contexts';
+import { useAccountContext, useLiquidityContext, useModalContext, usePactContext, useSwapContext, useWalletContext } from '../../contexts';
 import noExponents from '../../utils/noExponents';
 import { getCorrectBalance, limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
+import { SuccessAddView } from '../modals/liquidity/LiquidityTxView';
 import SelectPoolModal from '../modals/liquidity/SelectPoolModal';
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
+import TxView from '../modals/TxView';
+import WalletRequestView from '../modals/WalletRequestView';
 import CustomButton from '../shared/CustomButton';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Input from '../shared/Input';
 import InputToken from '../shared/InputToken';
 import Label from '../shared/Label';
 
-const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
+const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
   const modalContext = useModalContext();
-
+  const swap = useSwapContext();
+  const { addOneSideLiquidityWallet } = useLiquidityContext();
+  const wallet = useWalletContext();
   const pact = usePactContext();
   const account = useAccountContext();
-
+  const [fetchingPair, setFetchingPair] = useState(false);
   const [selectedPool, setSelectedPool] = useState(null);
+  const [showTxModal, setShowTxModal] = useState(false);
 
-  const [values, setValues] = useState({
+  const [fromValue, setFromValue] = useState({
     coin: pair?.token0 || 'KDX',
     account: '',
     guard: null,
-    balance: account?.account?.balance,
+    balance: '',
     amount: '',
     precision: 12,
   });
 
+  const [loading, setLoading] = useState(false);
+
   // useEffect(() => {
-  //   onPairChange(values.coin);
+  //   onPairChange(fromValue.coin);
   //   handleTokenValue(pair?.token0 || 'KDA');
   // }, [pair.coin]);
 
@@ -41,6 +49,21 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
     setSelectedPool(pools[0]);
     handleTokenValue(pair?.token0 || 'KDX');
   }, []);
+
+  useEffect(async () => {
+    onPairChange(fromValue?.coin);
+    if (selectedPool) {
+      setFetchingPair(true);
+      await pact.getPair(tokenData?.[selectedPool?.token0]?.code, tokenData?.[selectedPool?.token1]?.code);
+
+      if (selectedPool?.token0 === fromValue.coin) {
+        await pact.getReserves(tokenData?.[selectedPool?.token0]?.code, tokenData?.[selectedPool?.token1]?.code);
+      } else {
+        await pact.getReserves(tokenData?.[selectedPool?.token1]?.code, tokenData?.[selectedPool?.token0]?.code);
+      }
+      setFetchingPair(false);
+    }
+  }, [fromValue?.coin, selectedPool]);
 
   const handleTokenValue = async (token) => {
     const crypto = tokenData[token];
@@ -63,13 +86,13 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
         balance = getCorrectBalance(data.result.data.balance);
       }
     }
-    setValues((prev) => ({
+    setFromValue((prev) => ({
       ...prev,
       balance: balance,
       coin: crypto?.name,
       precision: crypto?.precision,
     }));
-    onPairChange(token);
+    // onPairChange(token);
   };
 
   const openTokenSelectorModal = () => {
@@ -82,7 +105,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
       },
       content: (
         <TokenSelectorModalContent
-          token={values.coin}
+          token={fromValue.coin}
           tokensToKeep={[selectedPool?.token0, selectedPool?.token1]}
           onSelectToken={async (crypto) => await handleTokenValue(crypto.name)}
           onClose={() => {
@@ -91,6 +114,19 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
         />
       ),
     });
+  };
+
+  const supply = async () => {
+    const token1 = selectedPool?.token0 === fromValue.coin ? selectedPool?.token1 : selectedPool?.token0;
+    const res = await addOneSideLiquidityWallet(tokenData[fromValue.coin], tokenData[token1], fromValue.amount.toFixed(fromValue.precision));
+    if (!res) {
+      wallet.setIsWaitingForWalletAuth(true);
+      /* pact.setWalletError(true); */
+      /* walletError(); */
+    } else {
+      wallet.setWalletError(null);
+      setShowTxModal(true);
+    }
   };
 
   const buttonStatus = () => {
@@ -105,12 +141,16 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
       4: { msg: 'Pair does not exist yet', status: false },
       5: { msg: 'Pair Already Exists', status: false },
       6: { msg: 'Select different tokens', status: false },
+      7: { msg: 'Fetching Pair...', status: false },
     };
     if (!account.account) return status[0];
+    if (fetchingPair) {
+      return status[7];
+    }
     if (isNaN(pact.ratio)) {
       return status[4];
-    } else if (!values.amount) return status[1];
-    else if (Number(values.amount) > Number(values.balance)) return { ...status[3], msg: status[3].msg(values.coin) };
+    } else if (!fromValue.amount) return status[1];
+    else if (Number(fromValue.amount) > Number(fromValue.balance)) return { ...status[3], msg: status[3].msg(fromValue.coin) };
     else {
       if (isNaN(pact.ratio)) {
         return status[4];
@@ -118,98 +158,158 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange }) => {
     }
   };
 
-  return (
-    <FlexContainer className="column background-fill" gap={16} withGradient style={{ padding: 24 }}>
-      <Label fontSize={13}>Pool</Label>
-      <CustomButton
-        type="primary"
-        buttonStyle={{ borderRadius: 4, height: 40, marginBottom: 8 }}
-        onClick={() => {
-          modalContext.openModal({
-            title: 'Select',
+  const onWalletRequestViewModalClose = () => {
+    wallet.setIsWaitingForWalletAuth(false);
+    wallet.setWalletError(null);
+  };
 
-            onClose: () => {
+  const onAddSingleLiquidity = () => {
+    setLoading(true);
+    swap.swapSend();
+
+    setLoading(false);
+    modalContext.closeModal();
+    setShowTxModal(false);
+  };
+
+  useEffect(() => {
+    if (showTxModal === false) {
+      setFromValue((prev) => ({
+        ...prev,
+        amount: '',
+      }));
+    }
+  }, [showTxModal]);
+
+  useEffect(() => {
+    if (showTxModal) {
+      modalContext.openModal({
+        title: 'transaction details',
+        description: '',
+
+        onClose: () => {
+          setShowTxModal(false);
+          modalContext.closeModal();
+        },
+        content: (
+          <TxView
+            onClose={() => {
+              setShowTxModal(false);
               modalContext.closeModal();
-            },
-            content: (
-              <SelectPoolModal
-                pools={pools}
-                onSelect={(pool) => {
-                  setSelectedPool(pool);
-                  modalContext.closeModal();
-                  setValues((prev) => ({ ...prev, coin: pool.token0 }));
-                }}
-                onClose={() => {
-                  modalContext.closeModal();
-                }}
-              />
-            ),
-          });
-        }}
-      >
-        <div className="flex align-ce w-100 justify-sb">
-          <div className="flex align-ce w-100">
-            <div className="flex align-ce">
-              <CryptoContainer size={22} style={{ zIndex: 2 }}>
-                {tokenData?.[selectedPool?.token0]?.icon}
-              </CryptoContainer>
-              <CryptoContainer size={22} style={{ marginLeft: -12, zIndex: 1 }}>
-                {tokenData?.[selectedPool?.token1]?.icon}{' '}
-              </CryptoContainer>
+            }}
+          >
+            <SuccessAddView
+              isSingleSideLiquidity
+              apr={apr}
+              token0={fromValue.coin}
+              token1={selectedPool?.token0 === fromValue.coin ? selectedPool?.token1 : selectedPool?.token0}
+              label="Add Liquidity"
+              loading={loading}
+              onClick={onAddSingleLiquidity}
+            />
+          </TxView>
+        ),
+      });
+    }
+  }, [showTxModal]);
+
+  return (
+    <>
+      <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
+
+      <FlexContainer className="column background-fill" gap={16} withGradient style={{ padding: 24 }}>
+        <Label fontSize={13}>Pool</Label>
+        <CustomButton
+          type="primary"
+          buttonStyle={{ borderRadius: 4, height: 40, marginBottom: 8 }}
+          onClick={() => {
+            modalContext.openModal({
+              title: 'Select',
+
+              onClose: () => {
+                modalContext.closeModal();
+              },
+              content: (
+                <SelectPoolModal
+                  pools={pools}
+                  onSelect={(pool) => {
+                    setSelectedPool(pool);
+                    modalContext.closeModal();
+                    //setFromValue((prev) => ({ ...prev, coin: pool.token0 }));
+                    handleTokenValue(pool.token0);
+                  }}
+                  onClose={() => {
+                    modalContext.closeModal();
+                  }}
+                />
+              ),
+            });
+          }}
+        >
+          <div className="flex align-ce w-100 justify-sb">
+            <div className="flex align-ce w-100">
+              <div className="flex align-ce">
+                <CryptoContainer size={22} style={{ zIndex: 2 }}>
+                  {tokenData?.[selectedPool?.token0]?.icon}
+                </CryptoContainer>
+                <CryptoContainer size={22} style={{ marginLeft: -12, zIndex: 1 }}>
+                  {tokenData?.[selectedPool?.token1]?.icon}{' '}
+                </CryptoContainer>
+              </div>
+              <Label fontSize={13}>
+                {selectedPool?.token0}/{selectedPool?.token1}
+              </Label>
             </div>
-            <Label fontSize={13}>
-              {selectedPool?.token0}/{selectedPool?.token1}
-            </Label>
+            <ArrowDown />
           </div>
-          <ArrowDown />
-        </div>
-      </CustomButton>
+        </CustomButton>
 
-      <Input
-        error={isNaN(values.amount)}
-        topLeftLabel="amount"
-        topRightLabel={`balance: ${reduceBalance(values.balance) ?? '-'}`}
-        bottomLeftLabel={`balance: ${reduceBalance(values.balance) ?? '-'}`} //using for gameEdition
-        geColor="black"
-        placeholder="0.0"
-        maxLength="15"
-        numberOnly
-        inputRightComponent={
-          <InputToken
-            geColor="black"
-            values={values}
-            disabledButton={!values.balance}
-            onClick={() => {
-              openTokenSelectorModal();
-            }}
-            onMaxClickButton={() => {
-              setValues((prev) => ({
-                ...prev,
-                amount: reduceBalance(values.balance),
-              }));
-            }}
-          />
-        }
-        value={noExponents(values.amount)}
-        onChange={async (e, { value }) => {
-          setValues((prev) => ({
-            ...prev,
-            amount: limitDecimalPlaces(value, values.precision),
-          }));
-        }}
-      />
+        <Input
+          error={isNaN(fromValue.amount)}
+          topLeftLabel="amount"
+          topRightLabel={`balance: ${reduceBalance(fromValue.balance) ?? '-'}`}
+          bottomLeftLabel={`balance: ${reduceBalance(fromValue.balance) ?? '-'}`} //using for gameEdition
+          geColor="black"
+          placeholder="0.0"
+          maxLength="15"
+          numberOnly
+          inputRightComponent={
+            <InputToken
+              geColor="black"
+              values={fromValue}
+              disabledButton={!fromValue.balance}
+              onClick={() => {
+                openTokenSelectorModal();
+              }}
+              onMaxClickButton={() => {
+                setFromValue((prev) => ({
+                  ...prev,
+                  amount: reduceBalance(fromValue.balance),
+                }));
+              }}
+            />
+          }
+          value={noExponents(fromValue.amount)}
+          onChange={async (e, { value }) => {
+            setFromValue((prev) => ({
+              ...prev,
+              amount: limitDecimalPlaces(value, fromValue.precision),
+            }));
+          }}
+        />
 
-      <FlexContainer className="justify-sb w-100">
-        <Label fontSize={13}>Pool Share</Label>
-        <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
-          {!pact.share(values.amount) ? 0 : (pact.share(values.amount) * 100).toPrecision(4)} %
-        </Label>
+        <FlexContainer className="justify-sb w-100">
+          <Label fontSize={13}>Pool Share</Label>
+          <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
+            {!pact.share(fromValue.amount) ? 0 : (pact.share(fromValue.amount) * 100).toPrecision(4)} %
+          </Label>
+        </FlexContainer>
+
+        <CustomButton fluid type="gradient" disabled={!buttonStatus().status} onClick={() => supply()}>
+          {buttonStatus().msg}
+        </CustomButton>
       </FlexContainer>
-
-      <CustomButton fluid type="gradient" disabled={!buttonStatus().status} onClick={() => console.log('add')}>
-        {buttonStatus().msg}
-      </CustomButton>
-    </FlexContainer>
+    </>
   );
 };
 

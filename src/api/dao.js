@@ -1,6 +1,7 @@
 import Pact from 'pact-lang-api';
 import { CHAIN_ID, GAS_LIMIT, GAS_PRICE, KADDEX_NAMESPACE, NETWORK, NETWORKID } from '../constants/contextConstants';
-import { handleError, listen, mkReq, pactFetchLocal, parseRes } from './pact';
+import { handleError, listen, pactFetchLocal } from './pact';
+import { mkReq, parseRes } from './utils';
 
 export const getAccountData = async (account) => {
   try {

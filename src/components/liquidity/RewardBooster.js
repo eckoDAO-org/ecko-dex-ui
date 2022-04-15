@@ -7,8 +7,8 @@ import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
 import Toggle from './Toggle';
 
-const RewardBooster = ({ type, apr }) => {
-  const [, setReward] = useState('usd');
+const RewardBooster = ({ type, apr, handleState }) => {
+  const [reward, setReward] = useState('usd');
 
   return (
     <Wrapper gap={28} withGradient className="background-fill w-100 column" style={{ padding: 24 }}>
@@ -20,8 +20,10 @@ const RewardBooster = ({ type, apr }) => {
             onClick={(active) => {
               if (active) {
                 setReward('kdx');
+                handleState(true);
               } else {
                 setReward('usd');
+                handleState(false);
               }
             }}
           />

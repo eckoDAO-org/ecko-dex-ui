@@ -11,7 +11,7 @@ const Container = styled.div`
 
   width: 100%;
 
-  ${({ gameEditionView, outGameEditionView, noInputBackground, theme: { colors, fontFamily, backgroundInput }, withBorder, color, geColor }) => {
+  ${({ gameEditionView, outGameEditionView, theme: { colors, fontFamily }, withBorder, color, geColor }) => {
     if (gameEditionView) {
       return css`
         background-color: transparent;

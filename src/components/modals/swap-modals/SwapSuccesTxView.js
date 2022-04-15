@@ -4,7 +4,7 @@ import { PactContext } from '../../../contexts/PactContext';
 import { useSwapContext } from '../../../contexts';
 import { extractDecimal, reduceBalance } from '../../../utils/reduceBalance';
 import reduceToken from '../../../utils/reduceToken';
-import { getTokenIcon, getTokenName } from '../../../utils/token-utils';
+import { getTokenIconByCode, getTokenName } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import { ChainIcon } from '../../../assets';
 import { CHAIN_ID, ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
@@ -25,7 +25,7 @@ export const SwapSuccessViewGE = () => {
       leftItem={
         <>
           <div className="flex justify-fs">
-            {getTokenIcon(swap?.localRes?.result?.data[0]?.token)}
+            {getTokenIconByCode(swap?.localRes?.result?.data[0]?.token)}
             <GameEditionLabel fontSize={32} color="black" fontFamily="syncopate">
               {extractDecimal(swap?.localRes?.result?.data[0]?.amount)}
             </GameEditionLabel>
@@ -46,7 +46,7 @@ export const SwapSuccessViewGE = () => {
       rightItem={
         <>
           <div className="flex justify-fs">
-            {getTokenIcon(swap?.localRes?.result?.data[1]?.token)}
+            {getTokenIconByCode(swap?.localRes?.result?.data[1]?.token)}
             <GameEditionLabel fontSize={32} color="black" fontFamily="syncopate">
               {extractDecimal(swap?.localRes?.result?.data[1]?.amount)}
             </GameEditionLabel>
@@ -123,8 +123,8 @@ export const SwapSuccessView = ({ loading, sendTransaction }) => {
         {/* FROM VALUES */}
         <FlexContainer className="align-ce justify-sb">
           <FlexContainer>
-            <CryptoContainer size={30}>{getTokenIcon(swap?.localRes?.result?.data[0]?.token)}</CryptoContainer>
-            <Label>{extractDecimal(swap?.localRes?.result?.data[0]?.amount)}</Label>
+            <CryptoContainer size={30}>{getTokenIconByCode(swap?.localRes?.result?.data[0]?.token)}</CryptoContainer>
+            <Label>{extractDecimal(swap?.localRes?.result?.data[0]?.amount).toFixed(6)}</Label>
           </FlexContainer>
           <Label>{getTokenName(swap?.localRes?.result?.data[0]?.token)}</Label>
         </FlexContainer>
@@ -134,8 +134,8 @@ export const SwapSuccessView = ({ loading, sendTransaction }) => {
         {/* TO VALUES */}
         <FlexContainer className="align-ce justify-sb">
           <FlexContainer>
-            <CryptoContainer size={30}>{getTokenIcon(swap?.localRes?.result?.data[1]?.token)}</CryptoContainer>
-            <Label>{extractDecimal(swap?.localRes?.result?.data[1]?.amount)}</Label>
+            <CryptoContainer size={30}>{getTokenIconByCode(swap?.localRes?.result?.data[1]?.token)}</CryptoContainer>
+            <Label>{extractDecimal(swap?.localRes?.result?.data[1]?.amount).toFixed(6)}</Label>
           </FlexContainer>
           <Label>{getTokenName(swap?.localRes?.result?.data[1]?.token)}</Label>
         </FlexContainer>

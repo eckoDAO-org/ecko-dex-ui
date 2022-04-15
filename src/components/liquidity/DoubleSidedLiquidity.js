@@ -76,13 +76,27 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
         coin: 'KDX',
         account: '',
         guard: null,
-        balance: account.account.balance,
+        balance: '',
         amount: '',
         precision: 12,
       });
       setToValues(initialStateValue);
     }
   }, [showTxModal]);
+
+  // useEffect(() => {
+  //   if (showTxModal === false) {
+  //     setFromValues({
+  //       coin: 'KDX',
+  //       account: '',
+  //       guard: null,
+  //       balance: '',
+  //       amount: '',
+  //       precision: 12,
+  //     });
+  //     setToValues(initialStateValue);
+  //   }
+  // }, [showTxModal]);
 
   /////// when pass pair by the container, set the token on InputToken
   const handleTokenValue = async (by, crypto) => {
@@ -307,24 +321,14 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   };
 
   const supply = async () => {
-    if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
-      const res = await liquidity.addLiquidityLocal(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
-      if (res === -1) {
-        alert('Incorrect password. If forgotten, you can reset it with your private key');
-        return;
-      } else {
-        setShowTxModal(true);
-      }
+    const res = await liquidity.addLiquidityWallet(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
+    if (!res) {
+      wallet.setIsWaitingForWalletAuth(true);
+      /* pact.setWalletError(true); */
+      /* walletError(); */
     } else {
-      const res = await liquidity.addLiquidityWallet(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
-      if (!res) {
-        wallet.setIsWaitingForWalletAuth(true);
-        /* pact.setWalletError(true); */
-        /* walletError(); */
-      } else {
-        wallet.setWalletError(null);
-        setShowTxModal(true);
-      }
+      wallet.setWalletError(null);
+      setShowTxModal(true);
     }
   };
 
@@ -464,9 +468,6 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
               view={LIQUIDITY_VIEW.ADD_LIQUIDITY}
               token0={fromValues.coin}
               token1={toValues.coin}
-              createTokenPair={() =>
-                liquidity.createTokenPairLocal(tokenData[fromValues.coin].name, tokenData[toValues.coin].name, fromValues.amount, toValues.amount)
-              }
             />
           ),
         });
@@ -485,10 +486,6 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
                 setShowTxModal(false);
                 modalContext.closeModal();
               }}
-
-              // createTokenPair={() =>
-              //   liquidity.createTokenPairLocal(tokenData[fromValues.coin].name, tokenData[toValues.coin].name, fromValues.amount, toValues.amount)
-              // }
             >
               <SuccessAddView token0={pair.token0} token1={pair.token1} label="Add Liquidity" loading={loading} onClick={onAddLiquidity} />
             </TxView>
