@@ -4,7 +4,7 @@ import { PactContext } from '../../../contexts/PactContext';
 import { useSwapContext } from '../../../contexts';
 import { extractDecimal, reduceBalance } from '../../../utils/reduceBalance';
 import reduceToken from '../../../utils/reduceToken';
-import { getTokenIcon, showTicker } from '../../../utils/token-utils';
+import { getTokenIconByCode, getTokenName } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import { ChainIcon } from '../../../assets';
 import { CHAIN_ID, ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
@@ -25,7 +25,7 @@ export const SwapSuccessViewGE = () => {
       leftItem={
         <>
           <div className="flex justify-fs">
-            {getTokenIcon(swap?.localRes?.result?.data[0]?.token)}
+            {getTokenIconByCode(swap?.localRes?.result?.data[0]?.token)}
             <GameEditionLabel fontSize={32} color="black" fontFamily="syncopate">
               {extractDecimal(swap?.localRes?.result?.data[0]?.amount)}
             </GameEditionLabel>
@@ -46,7 +46,7 @@ export const SwapSuccessViewGE = () => {
       rightItem={
         <>
           <div className="flex justify-fs">
-            {getTokenIcon(swap?.localRes?.result?.data[1]?.token)}
+            {getTokenIconByCode(swap?.localRes?.result?.data[1]?.token)}
             <GameEditionLabel fontSize={32} color="black" fontFamily="syncopate">
               {extractDecimal(swap?.localRes?.result?.data[1]?.amount)}
             </GameEditionLabel>
@@ -65,7 +65,7 @@ export const SwapSuccessViewGE = () => {
       }
       infoItems={[
         {
-          label: `${showTicker(swap?.localRes?.result?.data[0]?.token)}/${showTicker(swap?.localRes?.result?.data[1]?.token)}`,
+          label: `${getTokenName(swap?.localRes?.result?.data[0]?.token)}/${getTokenName(swap?.localRes?.result?.data[1]?.token)}`,
           value: `1 = ${reduceBalance(pact?.computeOut(1), 6)}`,
         },
         {
@@ -123,26 +123,25 @@ export const SwapSuccessView = ({ loading, sendTransaction }) => {
         {/* FROM VALUES */}
         <FlexContainer className="align-ce justify-sb">
           <FlexContainer>
-            <CryptoContainer size={30}>{getTokenIcon(swap?.localRes?.result?.data[0]?.token)}</CryptoContainer>
+            <CryptoContainer size={30}>{getTokenIconByCode(swap?.localRes?.result?.data[0]?.token)}</CryptoContainer>
             <Label>{extractDecimal(swap?.localRes?.result?.data[0]?.amount).toFixed(6)}</Label>
           </FlexContainer>
-          <Label>{showTicker(swap?.localRes?.result?.data[0]?.token)}</Label>
+          <Label>{getTokenName(swap?.localRes?.result?.data[0]?.token)}</Label>
         </FlexContainer>
-        <Label fontSize={13}>{`1 ${showTicker(swap?.localRes?.result?.data[0]?.token)} = ${reduceBalance(pact?.computeOut(1), 12)} ${showTicker(
+        <Label fontSize={13}>{`1 ${getTokenName(swap?.localRes?.result?.data[0]?.token)} = ${reduceBalance(pact?.computeOut(1), 12)} ${getTokenName(
           swap?.localRes?.result?.data[1]?.token
         )}`}</Label>
         {/* TO VALUES */}
         <FlexContainer className="align-ce justify-sb">
           <FlexContainer>
-            <CryptoContainer size={30}>{getTokenIcon(swap?.localRes?.result?.data[1]?.token)}</CryptoContainer>
+            <CryptoContainer size={30}>{getTokenIconByCode(swap?.localRes?.result?.data[1]?.token)}</CryptoContainer>
             <Label>{extractDecimal(swap?.localRes?.result?.data[1]?.amount).toFixed(6)}</Label>
           </FlexContainer>
-          <Label>{showTicker(swap?.localRes?.result?.data[1]?.token)}</Label>
+          <Label>{getTokenName(swap?.localRes?.result?.data[1]?.token)}</Label>
         </FlexContainer>
-
-        <Label fontSize={13}>{`1 ${showTicker(swap?.localRes?.result?.data[1]?.token)} =  ${1 / reduceBalance(pact?.computeOut(1), 12)} ${showTicker(
-          swap?.localRes?.result?.data[0]?.token
-        )}`}</Label>
+        <Label fontSize={13}>{`1 ${getTokenName(swap?.localRes?.result?.data[1]?.token)} =  ${
+          1 / reduceBalance(pact?.computeOut(1), 12)
+        } ${getTokenName(swap?.localRes?.result?.data[0]?.token)}`}</Label>
       </FlexContainer>
     </SuccesViewContainer>
   );

@@ -19,7 +19,6 @@ import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { isValidString } from '../../utils/string-utils';
 import { AppLoader } from '../../components/shared/AppLoader';
 import { useErrorState } from '../../hooks/useErrorState';
-import { usePactContext } from '../../contexts';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -38,7 +37,6 @@ const Container = styled(FadeIn)`
 
 const AddLiquidityContainer = (props) => {
   const history = useHistory();
-  const pact = usePactContext();
 
   const { pathname } = useLocation();
 

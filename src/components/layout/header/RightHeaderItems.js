@@ -15,7 +15,14 @@ import theme, { commonTheme } from '../../../styles/theme';
 import { CoinKaddexIcon, ThreeDotsIcon } from '../../../assets';
 import { reduceBalance } from '../../../utils/reduceBalance';
 import Label from '../../shared/Label';
-import { useRightModalContext, useAccountContext, usePactContext, useGameEditionContext, useModalContext } from '../../../contexts';
+import {
+  useRightModalContext,
+  useAccountContext,
+  usePactContext,
+  useGameEditionContext,
+  useModalContext,
+  useNotificationContext,
+} from '../../../contexts';
 import CustomButton from '../../../components/shared/CustomButton';
 import NotificationList from '../../right-modal-notification/NotificationList';
 import { CHAIN_ID } from '../../../constants/contextConstants';
@@ -54,9 +61,10 @@ const RightHeaderItems = () => {
   const { pathname } = useLocation();
   const [width] = useWindowSize();
 
-  const { account, notificationList, removeAllNotifications } = useAccountContext();
-  const modalContext = useModalContext();
   const { kdxPrice } = usePactContext();
+  const { account } = useAccountContext();
+  const { notificationList, removeAllNotifications } = useNotificationContext();
+  const modalContext = useModalContext();
   const { gameEditionView, openModal } = useGameEditionContext();
   const rightModalContext = useRightModalContext();
 

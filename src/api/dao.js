@@ -78,7 +78,7 @@ export const vote = async (signedCmd, notification) => {
   } else {
     data = await Pact.wallet.sendSigned(signedCmd, NETWORK);
   }
-  if (notification) notification(data.requestKeys[0]);
+  if (notification) notification(data.requestKeys[0], 'Vote Pending');
   console.log('voting data', data);
   return { listen: await listen(data.requestKeys[0]), data };
 };

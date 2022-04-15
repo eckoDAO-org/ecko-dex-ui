@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Pact from 'pact-lang-api';
 import React, { useEffect, useState } from 'react';
-import { debounce, throttle } from 'throttle-debounce';
 import { ArrowDown } from '../../assets';
 import { CHAIN_ID, creationTime, NETWORK } from '../../constants/contextConstants';
 import tokenData from '../../constants/cryptoCurrencies';

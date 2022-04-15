@@ -1,9 +1,8 @@
 import React, { useState, createContext } from 'react';
 import Pact from 'pact-lang-api';
-import moment from 'moment';
 import tokenData from '../constants/cryptoCurrencies';
 import { reduceBalance } from '../utils/reduceBalance';
-import { STATUSES } from './NotificationContext';
+
 import { useKaddexWalletContext, useWalletContext, useAccountContext, usePactContext, useNotificationContext } from '.';
 import {
   CHAIN_ID,
@@ -23,14 +22,13 @@ export const SwapContext = createContext();
 export const SwapProvider = (props) => {
   const pact = usePactContext();
   const notificationContext = useNotificationContext();
-  const { account, localRes, setLocalRes, storeNotification } = useAccountContext();
+  const { account, localRes, setLocalRes } = useAccountContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
 
   const wallet = useWalletContext();
   const [pairAccount, setPairAccount] = useState('');
   const [cmd, setCmd] = useState(null);
 
-  const toastId = React.useRef(null);
 
   const getPairAccount = async (token0, token1) => {
     const result = await pactFetchLocal(`(at 'account (${KADDEX_NAMESPACE}.exchange.get-pair ${token0} ${token1}))`);
@@ -107,37 +105,13 @@ export const SwapProvider = (props) => {
       } else {
         data = await Pact.wallet.sendSigned(cmd, NETWORK);
       }
-      pact.pollingNotif(data.requestKeys[0]);
-      storeNotification({
-        type: 'info',
-        date: moment().format('DD/MM/YYYY - HH:mm:ss'),
+      notificationContext.pollingNotif(data.requestKeys[0], 'Transaction Pending');
 
-        title: 'Transaction Pending',
-        description: data.requestKeys[0],
-        isRead: false,
-        isCompleted: false,
-      });
-
-      await pact.listen(data.requestKeys[0]);
+      await pact.transactionListen(data.requestKeys[0]);
       pact.setPolling(false);
     } catch (e) {
       pact.setPolling(false);
-      toastId.current = notificationContext.showNotification({
-        title: 'Transaction Error',
-        message: 'Generic transaction error ',
-        type: STATUSES.ERROR,
-        autoClose: 5000,
-        hideProgressBar: true,
-      });
-      storeNotification({
-        type: 'error',
-        date: moment().format('DD/MM/YYYY - HH:mm:ss'),
-
-        title: 'Transaction Error',
-        description: 'Generic transaction error',
-        isRead: false,
-        isCompleted: false,
-      });
+      notificationContext.showErrorNotification(null, 'Transaction Error', 'Insufficient funds - attempt to buy gas failed.');
       console.log('error', e);
     }
   };
