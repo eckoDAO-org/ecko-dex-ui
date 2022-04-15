@@ -120,34 +120,37 @@ export const getTokenUsdPriceByName = async (tokenName) => {
 
 // retrieve token usd price based on the first pair that contains the token with a known price
 export const getTokenUsdPrice = async (token, pairsList) => {
-  const filteredPairs = pairsList.filter((p) => p.token0 === token.name || p.token1 === token.name);
+  const filteredPairs = pairsList?.filter((p) => p.token0 === token.name || p.token1 === token.name);
 
   let tokenUsd = await getCoingeckoUsdPrice(token.coingeckoId);
   if (tokenUsd) {
     return tokenUsd;
   } else {
-    for (const pair of filteredPairs) {
-      const liquidity0 = reduceBalance(pair.reserves[0]);
-      const liquidity1 = reduceBalance(pair.reserves[1]);
+    if (filteredPairs) {
+      for (const pair of filteredPairs) {
+        const liquidity0 = reduceBalance(pair.reserves[0]);
+        const liquidity1 = reduceBalance(pair.reserves[1]);
 
-      if (pair.token0 === token.name) {
-        const token1 = Object.values(tokenData).find((t) => t.name === pair.token1);
-        const token1Usd = await getCoingeckoUsdPrice(token1.coingeckoId);
-        if (!token1Usd) {
-          tokenUsd = null;
+        if (pair.token0 === token.name) {
+          const token1 = Object.values(tokenData).find((t) => t.name === pair.token1);
+          const token1Usd = await getCoingeckoUsdPrice(token1.coingeckoId);
+          if (!token1Usd) {
+            tokenUsd = null;
+          } else {
+            return getTokenUsdPriceByLiquidity(liquidity1, liquidity0, token1Usd);
+          }
         } else {
-          return getTokenUsdPriceByLiquidity(liquidity1, liquidity0, token1Usd);
+          const token0 = Object.values(tokenData).find((t) => t.name === pair.token0);
+          const token0Usd = await getCoingeckoUsdPrice(token0.coingeckoId);
+          if (!token0Usd) {
+            tokenUsd = null;
+          }
+          return getTokenUsdPriceByLiquidity(liquidity0, liquidity1, token0Usd);
         }
-      } else {
-        const token0 = Object.values(tokenData).find((t) => t.name === pair.token0);
-        const token0Usd = await getCoingeckoUsdPrice(token0.coingeckoId);
-        if (!token0Usd) {
-          tokenUsd = null;
-        }
-        return getTokenUsdPriceByLiquidity(liquidity0, liquidity1, token0Usd);
-      }
 
-      return tokenUsd;
+        return tokenUsd;
+      }
     }
+    return 0;
   }
 };

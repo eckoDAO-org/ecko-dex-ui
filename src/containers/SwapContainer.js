@@ -24,7 +24,6 @@ import TokenSelectorModalContent from '../components/modals/swap-modals/TokenSel
 import TokenSelectorModalContentGE from '../components/modals/swap-modals/TokenSelectorModalContentGE';
 import SlippagePopupContent from '../components/layout/header/SlippagePopupContent';
 import FormContainer from '../components/shared/FormContainer';
-import GradientBorder from '../components/shared/GradientBorder';
 import BackgroundLogo from '../components/shared/BackgroundLogo';
 import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
 import yellowInputBox from '../assets/images/game-edition/pixeled-box-yellow.svg';
@@ -48,7 +47,6 @@ const Container = styled(FadeIn)`
   overflow: auto;
   display: flex;
   flex-direction: column;
-  height: 100%;
   justify-content: center;
 
   ${({ gameEditionView }) => {
@@ -57,6 +55,7 @@ const Container = styled(FadeIn)`
         padding-top: 24px;
         padding-bottom: 16px;
         height: 100%;
+
         display: flex;
         flex-direction: column;
         background-repeat: no-repeat;
@@ -66,6 +65,7 @@ const Container = styled(FadeIn)`
       `;
     } else {
       return css`
+        padding-bottom: 35px;
         max-width: 550px;
         overflow: visible;
       `;
@@ -513,6 +513,7 @@ const SwapContainer = () => {
             setShowTxModal(false);
             modalContext.closeModal();
           },
+
           content: (
             <TxView
               onClose={() => {
@@ -585,7 +586,7 @@ const SwapContainer = () => {
           />
         }
       >
-        {!gameEditionView && <GradientBorder />}
+        {/* {!gameEditionView && <GradientBorder />} */}
         <SwapForm
           fromValues={fromValues}
           setFromValues={setFromValues}

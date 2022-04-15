@@ -28,7 +28,7 @@ const DaoContainer = () => {
   }, [account]);
 
   return (
-    <FlexContainer className="column h-100" gap={16} desktopStyle={{ padding: `35px ${theme.layout.desktopPadding}px` }}>
+    <FlexContainer className="column h-100 w-100" gap={16} desktopStyle={{ padding: `35px ${theme.layout.desktopPadding}px` }}>
       {proposal_id ? (
         <SingleProposalContainer proposal_id={proposal_id} accountData={accountData} />
       ) : (

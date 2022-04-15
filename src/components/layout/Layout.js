@@ -73,7 +73,8 @@ const MainContent = styled.div`
       // }
     }
   }}
-
+  display: flex;
+  align-items: center;
   height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
   ${() => {
     if (browserDetection() === 'FIREFOX') {
@@ -82,6 +83,12 @@ const MainContent = styled.div`
       `;
     }
   }}
+
+  @media (max-height: 550px) {
+    /* padding-bottom: 40px; */
+
+    display: block;
+  }
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
     padding: 0 16px;
     height: ${({ theme: { header } }) => `calc(100% - ${header.mobileHeight}px)`};
