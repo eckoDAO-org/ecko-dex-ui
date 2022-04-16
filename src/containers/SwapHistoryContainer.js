@@ -103,7 +103,7 @@ const SwapHistoryContainer = () => {
   return (
     <CardContainer
       gameEditionView={gameEditionView}
-      desktopStyle={{ padding: `50px ${theme.layout.desktopPadding}px` }}
+      desktopStyle={{ padding: `35px ${theme.layout.desktopPadding}px` }}
       mobileStyle={{ paddingBottom: 40 }}
     >
       <FlexContainer className="w-100 justify-sb" style={{ marginBottom: 24 }} gameEditionStyle={{ marginBottom: 14 }}>

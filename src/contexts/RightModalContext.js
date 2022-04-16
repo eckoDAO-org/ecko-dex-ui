@@ -1,5 +1,5 @@
 import React, { useState, createContext } from 'react';
-import { useAccountContext } from '.';
+import { useNotificationContext } from '.';
 
 export const RightModalContext = createContext();
 
@@ -13,7 +13,7 @@ const initialState = {
 
 export const RightModalProvider = (props) => {
   const [state, setState] = useState(initialState);
-  const { seIsReadedNotification } = useAccountContext();
+  const { seIsReadedNotification } = useNotificationContext();
 
   const openModal = (settings) => {
     setState((prev) => ({ ...prev, ...settings, open: true }));

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
 import moment from 'moment';
@@ -19,16 +20,17 @@ import { UnstakeModal } from '../components/modals/stake/UnstakeModal';
 import { ClaimModal } from '../components/modals/stake/ClaimModal';
 import { useAccountContext, useKaddexWalletContext, useNotificationContext, usePactContext, useModalContext } from '../contexts';
 import { ROUTE_STAKE, ROUTE_UNSTAKE } from '../router/routes';
-import { NETWORK, getCurrentDate, getCurrentTime } from '../constants/contextConstants';
+import { NETWORK } from '../constants/contextConstants';
 import { theme } from '../styles/theme';
+import { useInterval } from '../hooks/useInterval';
 
 const StakeContainer = () => {
   const history = useHistory();
   const { pathname } = useLocation();
   const { openModal, closeModal } = useModalContext();
-  const { account, storeNotification } = useAccountContext();
+  const { account } = useAccountContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
-  const { showNotification, STATUSES } = useNotificationContext();
+  const { showNotification, STATUSES, pollingNotif, showErrorNotification } = useNotificationContext();
   const pact = usePactContext();
 
   const [poolState, setPoolState] = useState(null);
@@ -60,14 +62,7 @@ const StakeContainer = () => {
     updateAccountStakingData();
   }, [updateAccountStakingData]);
 
-  useEffect(() => {
-    const updateAccountStakingDataInterval = setInterval(() => {
-      updateAccountStakingData();
-    }, 10000);
-    return () => {
-      clearInterval(updateAccountStakingDataInterval);
-    };
-  }, [updateAccountStakingData]);
+  useInterval(updateAccountStakingData, 10000);
 
   useEffect(() => {
     getPoolState().then((res) => {
@@ -155,28 +150,16 @@ const StakeContainer = () => {
       .sendSigned(signedCommand, NETWORK)
       .then(async (stakingResponse) => {
         console.log(' stakingResponse', stakingResponse);
-        pact.pollingNotif(stakingResponse.requestKeys[0]);
-        storeNotification({
-          type: 'info',
-          time: getCurrentTime(),
-          date: getCurrentDate(),
-          title: 'Staking Transaction Pending',
-          description: stakingResponse.requestKeys[0],
-          isRead: false,
-          isCompleted: false,
-        });
+        pollingNotif(stakingResponse.requestKeys[0], 'Staking Transaction Pending');
+
         setInputAmount(0);
-        await pact.listen(stakingResponse.requestKeys[0]);
+        await pact.transactionListen(stakingResponse.requestKeys[0]);
         pact.setPolling(false);
       })
       .catch((error) => {
         console.log(`~ error`, error);
         pact.setPolling(false);
-        showNotification({
-          title: 'Staking error',
-          message: 'Generic add stake error',
-          type: STATUSES.ERROR,
-        });
+        showErrorNotification(null, 'Staking error', 'Generic add stake error');
       });
   };
 
@@ -220,29 +203,17 @@ const StakeContainer = () => {
     Pact.wallet
       .sendSigned(signedCommand, NETWORK)
       .then(async (rollupAndUnstake) => {
-        console.log('rollupAndUnstake', rollupAndUnstake);
-        pact.pollingNotif(rollupAndUnstake.requestKeys[0]);
-        storeNotification({
-          type: 'info',
-          time: getCurrentTime(),
-          date: getCurrentDate(),
-          title: 'Rollup and Unstake Transaction Pending',
-          description: rollupAndUnstake.requestKeys[0],
-          isRead: false,
-          isCompleted: false,
-        });
-        await pact.listen(rollupAndUnstake.requestKeys[0]);
+        console.log(' rollupAndUnstake', rollupAndUnstake);
+        pollingNotif(rollupAndUnstake.requestKeys[0], 'Rollup and Unstake Transaction Pending');
+
+        await pact.transactionListen(rollupAndUnstake.requestKeys[0]);
         pact.setPolling(false);
         setInputAmount(0);
       })
       .catch((error) => {
         console.log(`~ rollupAndUnstake error`, error);
         pact.setPolling(false);
-        showNotification({
-          title: 'RollupAndUnstake error',
-          message: (error.toString && error.toString()) || 'Generic rollupAndUnstake error',
-          type: STATUSES.ERROR,
-        });
+        showErrorNotification(null, 'RollupAndUnstake error', (error.toString && error.toString()) || 'Generic rollupAndUnstake error');
       });
   };
 
@@ -292,28 +263,16 @@ const StakeContainer = () => {
       .sendSigned(signedCommand, NETWORK)
       .then(async (rollupAndClaim) => {
         console.log(' rollupAndClaim', rollupAndClaim);
-        pact.pollingNotif(rollupAndClaim.requestKeys[0]);
-        storeNotification({
-          type: 'info',
-          time: getCurrentTime(),
-          date: getCurrentDate(),
-          title: 'Rollup and Unstake Transaction Pending',
-          description: rollupAndClaim.requestKeys[0],
-          isRead: false,
-          isCompleted: false,
-        });
-        await pact.listen(rollupAndClaim.requestKeys[0]);
+        pollingNotif(rollupAndClaim.requestKeys[0], 'Rollup and Unstake Transaction Pending');
+
+        await pact.transactionListen(rollupAndClaim.requestKeys[0]);
         pact.setPolling(false);
         setInputAmount(0);
       })
       .catch((error) => {
         console.log(`~ rollupAndClaim error`, error);
         pact.setPolling(false);
-        showNotification({
-          title: 'RollupAndClaim error',
-          message: (error.toString && error.toString()) || 'Generic rollupAndClaim error',
-          type: STATUSES.ERROR,
-        });
+        showErrorNotification(null, 'RollupAndClaim error', (error.toString && error.toString()) || 'Generic RollupAndClaim error');
       });
   };
 
@@ -329,7 +288,7 @@ const StakeContainer = () => {
     <FlexContainer
       className="column w-100 y-auto"
       desktopClassName="h-100"
-      desktopStyle={{ padding: `50px ${theme().layout.desktopPadding}px` }}
+      desktopStyle={{ padding: `35px ${theme().layout.desktopPadding}px` }}
       tabletStyle={{ paddingBottom: 40 }}
       mobileStyle={{ paddingBottom: 40 }}
     >

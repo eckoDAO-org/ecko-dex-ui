@@ -17,7 +17,7 @@ const Container = styled.div`
   align-items: center;
   max-width: fit-content;
   width: 100%;
-  z-index: 5;
+  z-index: 100;
 `;
 
 const ContentContainer = styled.div`

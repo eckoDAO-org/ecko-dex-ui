@@ -11,7 +11,7 @@ const Container = styled.div`
 
   width: 100%;
 
-  ${({ gameEditionView, outGameEditionView, noInputBackground, theme: { colors, fontFamily, backgroundInput }, withBorder, color, geColor }) => {
+  ${({ gameEditionView, outGameEditionView, theme: { colors, fontFamily }, withBorder, color, geColor }) => {
     if (gameEditionView) {
       return css`
         background-color: transparent;
@@ -51,7 +51,7 @@ const Container = styled.div`
           padding: 10px 2px;
           font-family: ${fontFamily.basier};
           color: ${color ? color : colors.white} !important;
-          font-size: 28px;
+          font-size: ${({ fontSize = 28 }) => fontSize}px;
           @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
             font-size: 20px;
           }
@@ -61,7 +61,7 @@ const Container = styled.div`
           text-transform: capitalize;
           font-family: 14px;
           font-family: ${fontFamily.basier};
-          font-size: 28px;
+          font-size: ${({ fontSize = 28 }) => fontSize}px;
           @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
             font-size: 20px;
           }
@@ -71,7 +71,7 @@ const Container = styled.div`
           padding-left: 0px;
           padding-right: 0px;
           color: ${colors.white} !important;
-          font-size: 28px;
+          font-size: ${({ fontSize = 28 }) => fontSize}px;
           @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
             font-size: 20px;
           }
@@ -141,6 +141,7 @@ const Input = ({
   geColor,
   inputStyle,
   topComponent,
+  fontSize,
 }) => {
   const { gameEditionView } = useContext(GameEditionContext);
 
@@ -153,6 +154,7 @@ const Input = ({
       geColor={geColor}
       withBorder={withBorder}
       style={containerStyle}
+      fontSize={fontSize}
     >
       {(topLeftLabel || topRightLabel) && !gameEditionView && (
         <TopLabelsContainer>

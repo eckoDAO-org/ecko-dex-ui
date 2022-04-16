@@ -5,17 +5,20 @@ import { bigNumberConverter } from './bignumber';
 import { getPairList } from '../api/pact-pair';
 import { reduceBalance } from './reduceBalance';
 
-export const showTicker = (ticker) => {
-  if (ticker === 'coin') return 'KDA';
-  else if (ticker === 'runonflux.flux') return 'FLUX';
-  else return ticker?.toUpperCase();
+export const getTokenName = (code) => {
+  const token0 = Object.values(tokenData).find((t) => t.code === code);
+  if (token0?.name) {
+    return token0?.name?.toUpperCase();
+  }
+  return code?.toUpperCase();
 };
 
-export const getTokenIcon = (token) => {
-  return tokenData[showTicker(token)]?.icon;
+export const getTokenIconById = (token) => {
+  return tokenData[token]?.icon;
 };
-
-export const getKadenaTokenPrice = () => {};
+export const getTokenIconByCode = (tokenCode) => {
+  return tokenData[getTokenName(tokenCode)]?.icon;
+};
 
 export const getInfoCoin = (item, coinPositionArray) => {
   let cryptoCode = item?.params[coinPositionArray]?.refName?.namespace

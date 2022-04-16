@@ -4,24 +4,28 @@
       "coin:kaddex.kdx": {
         "name": "coin:kaddex.kdx",
         "token0": "KDA",
-        "token1": "KDX"
+        "token1": "KDX",
+        "isBoosted": true
       },
       "coin:kaddex.abc": {
         "name": "coin:kaddex.abc",
         "token0": "KDA",
-        "token1": "ABC"
+        "token1": "ABC",
+        "isBoosted": true
       },
       "coin:kaddex.xyz": {
         "name": "coin:kaddex.xyz",
         "token0": "KDA",
-        "token1": "XYZ"
+        "token1": "XYZ",
+        "isBoosted": false
       }
     },
     "mainnet": {
       "coin:runonflux.flux": {
         "name": "coin:runonflux.flux",
         "token0": "KDA",
-        "token1": "FLUX"
+        "token1": "FLUX",
+        "isBoosted": false
       }
     }
   }

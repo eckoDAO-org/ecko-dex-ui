@@ -109,13 +109,14 @@ const RemoveLiquidityContent = ({ pair }) => {
   const sendTransaction = () => {
     setLoading(true);
     swap.swapSend();
-    // onClose();
+    modalContext.closeModal();
     setLoading(false);
   };
 
   const onWalletRequestViewModalClose = () => {
     wallet.setIsWaitingForWalletAuth(false);
     wallet.setWalletError(null);
+    setLoading(false);
   };
 
   const openTxViewModal = () => {
@@ -156,6 +157,7 @@ const RemoveLiquidityContent = ({ pair }) => {
             }}
             loading={loading}
           >
+            {/* SuccessRemoveWithBoosterView to remove liquidy with booster */}
             <SuccessRemoveView
               token0={pair.token0}
               token1={pair.token1}
@@ -171,30 +173,17 @@ const RemoveLiquidityContent = ({ pair }) => {
   };
 
   const onRemoveLiquidity = async () => {
-    if (wallet.signing.method !== 'sign' && wallet.signing.method !== 'none') {
-      setLoading(true);
-      const res = await liquidity.removeLiquidityLocal(tokenData[pair?.token0].code, tokenData[pair?.token1].code, reduceBalance(pooled, PRECISION));
-      if (res === -1) {
-        setLoading(false);
-        alert('Incorrect password. If forgotten, you can reset it with your private key');
-        return;
-      } else {
-        openTxViewModal();
-        setLoading(false);
-      }
+    setLoading(true);
+    const res = await liquidity.removeLiquidityWallet(tokenData[pair?.token0].code, tokenData[pair?.token1].code, reduceBalance(pooled, PRECISION));
+    if (!res) {
+      wallet.setIsWaitingForWalletAuth(true);
+      setLoading(false);
+      /* pact.setWalletError(true); */
+      /* walletError(); */
     } else {
-      setLoading(true);
-      const res = await liquidity.removeLiquidityWallet(tokenData[pair?.token0].code, tokenData[pair?.token1].code, reduceBalance(pooled, PRECISION));
-      if (!res) {
-        wallet.setIsWaitingForWalletAuth(true);
-        setLoading(false);
-        /* pact.setWalletError(true); */
-        /* walletError(); */
-      } else {
-        wallet.setWalletError(null);
-        openTxViewModal();
-        setLoading(false);
-      }
+      wallet.setWalletError(null);
+      openTxViewModal();
+      setLoading(false);
     }
   };
 
@@ -235,12 +224,9 @@ const RemoveLiquidityContent = ({ pair }) => {
             geColor="white"
             withBorder
             numberOnly
-            inputStyle={{ fontSize: 13, padding: 0 }}
-            topComponent={
-              <Label fontSize={13} labelStyle={{ marginBottom: 16 }}>
-                Amount
-              </Label>
-            }
+            fontSize={13}
+            inputStyle={{ padding: 0 }}
+            topComponent={<Label labelStyle={{ marginBottom: 16 }}>Amount</Label>}
             inputRightComponent={
               <FlexContainer className="align-ce h-fit-content">
                 <CustomButton
@@ -256,9 +242,7 @@ const RemoveLiquidityContent = ({ pair }) => {
                 >
                   Max
                 </CustomButton>
-                <Label labelStyle={{ marginLeft: 4 }} fontSize={13}>
-                  %
-                </Label>
+                <Label labelStyle={{ marginLeft: 4 }}>%</Label>
               </FlexContainer>
             }
             onChange={(e) => {
@@ -281,17 +265,17 @@ const RemoveLiquidityContent = ({ pair }) => {
           <FlexContainer className="column" gap={12} style={{ margin: '16px 0' }}>
             <FlexContainer className="justify-sb w-100">
               <Label fontSize={13}>Pooled {pair?.token0}</Label>
-              <Label fontSize={13}>{pairUnit(extractDecimal(pooledToken0))}</Label>
+              <Label fontSize={13}>{pairUnit(extractDecimal(pooledToken0), 6)}</Label>
             </FlexContainer>
             <FlexContainer className="justify-sb w-100">
               <Label fontSize={13}>Pooled {pair?.token1}</Label>
-              <Label fontSize={13}>{pairUnit(extractDecimal(pooledToken1))}</Label>
+              <Label fontSize={13}>{pairUnit(extractDecimal(pooledToken1), 6)}</Label>
             </FlexContainer>
             <FlexContainer className="justify-sb w-100">
               <Label fontSize={13}>
                 {pair?.token0}/{pair?.token1} Rate
               </Label>
-              <Label fontSize={13}>{pairUnit(extractDecimal(pooled))}</Label>
+              <Label fontSize={13}>{pairUnit(extractDecimal(pooled), 6)}</Label>
             </FlexContainer>
           </FlexContainer>
         )}

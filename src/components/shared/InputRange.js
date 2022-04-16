@@ -57,7 +57,7 @@ const InputRange = ({ value, setValue }) => {
   useEffect(() => {
     document.querySelectorAll('.__range').forEach(function (el) {
       el.oninput = function () {
-        var valPercent = (el.valueAsNumber - parseInt(el.min)) / (parseInt(el.max) - parseInt(el.min));
+        var valPercent = value ? (el.valueAsNumber - parseInt(el.min)) / (parseInt(el.max) - parseInt(el.min)) : 0;
         var style = `background-image: -webkit-gradient(linear, 0% 0%, 100% 0%, color-stop(${valPercent}, ${
           theme(themeMode).colors.white
         }), color-stop(${valPercent},transparent));`;

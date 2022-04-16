@@ -1,17 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
 import pairTokens from '../constants/pairsConfig';
 import { useInterval } from '../hooks/useInterval';
-import { toast } from 'react-toastify';
 import axios from 'axios';
-import moment from 'moment';
 import { getTokenUsdPriceByName } from '../utils/token-utils';
-import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, NETWORK_TYPE, NETWORKID, KADDEX_NAMESPACE } from '../constants/contextConstants';
+import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, NETWORKID, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { extractDecimal } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
-import { AccountContext } from './AccountContext';
-import { NotificationContext, STATUSES } from './NotificationContext';
+import { useAccountContext, useNotificationContext } from '.';
+import { listen } from '../api/pact';
 
 export const PactContext = createContext();
 
@@ -19,8 +17,8 @@ const savedSlippage = localStorage.getItem('slippage');
 const savedTtl = localStorage.getItem('ttl');
 
 export const PactProvider = (props) => {
-  const account = useContext(AccountContext);
-  const notificationContext = useContext(NotificationContext);
+  const account = useAccountContext();
+  const notificationContext = useNotificationContext();
 
   const [slippage, setSlippage] = useState(savedSlippage ? savedSlippage : 0.05);
   const [ttl, setTtl] = useState(savedTtl ? savedTtl : 600);
@@ -46,15 +44,10 @@ export const PactProvider = (props) => {
     updateKdxPrice();
   }, []);
   useInterval(updateKdxPrice, 20000);
-
-  //TO FIX, not working when multiple toasts are there
-  const toastId = React.useRef(null);
-  // const [toastIds, setToastIds] = useState({})
-
   useEffect(() => {
     if (!notificationNotCompletedChecked) {
-      const pendingNotification = account.notificationList.filter((notif) => notif.type === 'info' && notif.isCompleted === false);
-      pendingNotification.map((pendingNotif) => listen(pendingNotif.description));
+      const pendingNotification = notificationContext.notificationList.filter((notif) => notif.type === 'info' && notif.isCompleted === false);
+      pendingNotification.map((pendingNotif) => transactionListen(pendingNotif.description));
 
       setNotificationNotCompletedChecked(true);
     }
@@ -71,16 +64,6 @@ export const PactProvider = (props) => {
   useEffect(() => {
     fetchAllBalances();
   }, [balances, account.account, account.sendRes]);
-
-  const pollingNotif = (reqKey) => {
-    return (toastId.current = notificationContext.showNotification({
-      title: 'Transaction Pending',
-      message: reqKey,
-      type: STATUSES.INFO,
-      closeOnClick: false,
-      hideProgressBar: false,
-    }));
-  };
 
   const storeSlippage = async (slippage) => {
     setSlippage(slippage);
@@ -307,90 +290,12 @@ export const PactProvider = (props) => {
     }
   };
 
-  const wait = async (timeout) => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, timeout);
-    });
-  };
-
-  const listen = async (reqKey) => {
-    //check kadena tx status every 10 seconds until we get a response (success or fail)
-    var time = 240;
-    var pollRes;
-    while (time > 0) {
-      await wait(5000);
-      pollRes = await Pact.fetch.poll({ requestKeys: [reqKey] }, NETWORK);
-      if (Object.keys(pollRes).length === 0) {
-        console.log('no return poll');
-        console.log(pollRes);
-        time = time - 5;
-      } else {
-        console.log(pollRes);
-        time = 0;
-      }
-    }
-    account.setSendRes(pollRes);
-    console.log(reqKey);
-    console.log(pollRes);
-    console.log(pollRes[reqKey]);
-    console.log(pollRes[reqKey].result);
-    if (pollRes[reqKey].result.status === 'success') {
-      // setting reqKey for calling History Transaction
-      // setReqKeysLocalStorage(reqKey);
-      account.setIsCompletedNotification(reqKey);
-
-      // store in local storage the success notification for the right modal
-      account.storeNotification({
-        type: 'success',
-        date: moment().format('DD/MM/YYYY - HH:mm:ss'),
-
-        title: 'Transaction Success!',
-        description: 'Check it out in the block explorer',
-        link: `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
-        isRead: false,
-      });
-      // open the toast SUCCESS message
-      notificationContext.showNotification({
-        title: 'Transaction Success!',
-        message: 'Check it out in the block explorer',
-        type: STATUSES.SUCCESS,
-        onClose: async () => {
-          await toast.dismiss(toastId);
-          /* window.location.reload(); */
-        },
-        onClick: async () => {
-          await toast.dismiss(toastId);
-          await window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`, '_blank', 'noopener,noreferrer');
-        },
-        autoClose: 10000,
-      });
+  const transactionListen = async (reqKey) => {
+    const pollRes = await listen(reqKey);
+    if (pollRes === 'success') {
+      notificationContext.showSuccessNotification(reqKey);
     } else {
-      account.setIsCompletedNotification(reqKey);
-      // store in local storage the error notification for the right modal
-      account.storeNotification({
-        type: 'error',
-        date: moment().format('DD/MM/YYYY - HH:mm:ss'),
-
-        title: 'Transaction Failure!',
-        description: 'Check it out in the block explorer',
-        link: `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
-        isRead: false,
-      });
-      // open the toast FAILURE message
-      notificationContext.showNotification({
-        title: 'Transaction Failure!',
-        message: 'Check it out in the block explorer',
-        type: STATUSES.ERROR,
-        onClose: async () => {
-          await toast.dismiss(toastId);
-          /* window.location.reload(); */
-        },
-        onClick: async () => {
-          await toast.dismiss(toastId);
-          await window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`, '_blank', 'noopener,noreferrer');
-        },
-        autoClose: 10000,
-      });
+      notificationContext.showErrorNotification(reqKey);
     }
   };
 
@@ -600,10 +505,9 @@ export const PactProvider = (props) => {
     getTotalTokenSupply,
     getMoreEventsSwapList,
     moreSwap,
-    listen,
+    transactionListen,
     polling,
     setPolling,
-    pollingNotif,
     ratio,
     getRatio,
     getRatio1,

@@ -1,6 +1,7 @@
 import Pact from 'pact-lang-api';
 import { CHAIN_ID, GAS_LIMIT, GAS_PRICE, KADDEX_NAMESPACE, NETWORK, NETWORKID } from '../constants/contextConstants';
-import { handleError, listen, mkReq, pactFetchLocal, parseRes } from './pact';
+import { handleError, listen, pactFetchLocal } from './pact';
+import { mkReq, parseRes } from './utils';
 
 export const getAccountData = async (account) => {
   try {
@@ -77,7 +78,7 @@ export const vote = async (signedCmd, notification) => {
   } else {
     data = await Pact.wallet.sendSigned(signedCmd, NETWORK);
   }
-  if (notification) notification(data.requestKeys[0]);
+  if (notification) notification(data.requestKeys[0], 'Vote Pending');
   console.log('voting data', data);
   return { listen: await listen(data.requestKeys[0]), data };
 };

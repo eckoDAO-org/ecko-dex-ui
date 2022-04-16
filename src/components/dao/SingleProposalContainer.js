@@ -5,9 +5,7 @@ import Pact from 'pact-lang-api';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import { hasAccountVoted, readSingleProposal, vote, voteCommandToSign, votePreview } from '../../api/dao';
-import { useAccountContext, useApplicationContext, useKaddexWalletContext, useNotificationContext } from '../../contexts';
-import { STATUSES } from '../../contexts/NotificationContext';
-import { getCurrentDate, getCurrentTime, NETWORK_TYPE } from '../../constants/contextConstants';
+import { useAccountContext, useKaddexWalletContext, useNotificationContext } from '../../contexts';
 import { ROUTE_DAO } from '../../router/routes';
 import { PartialScrollableScrollSection } from '../layout/Containers';
 import { FlexContainer } from '../shared/FlexContainer';
@@ -22,10 +20,9 @@ import Loader from '../shared/Loader';
 import HtmlFormatterContainer from './HtmlFormatterContainer';
 
 const SingleProposalContainer = ({ proposal_id, accountData }) => {
-  const { account, storeNotification, setIsCompletedNotification } = useAccountContext();
-  const { showNotification } = useNotificationContext();
+  const { account } = useAccountContext();
+  const notificationContext = useNotificationContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
-  const toastId = React.useRef(null);
 
   const history = useHistory();
   const [daoSingleProposalLoading, setDaoSingleProposalLoading] = useState(false);
@@ -49,28 +46,6 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
     fetchData();
   }, [account, daoFetchDataLoading]);
 
-  const pollingNotif = (reqKey) => {
-    toastId.current = showNotification({
-      title: 'Vote Pending! Do not refresh the page',
-      // message: ' the vote is in the registration phase',
-      type: STATUSES.INFO,
-      closeOnClick: false,
-      hideProgressBar: false,
-      onClick: async () => {
-        window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${reqKey}`, '_blank', 'noopener,noreferrer');
-      },
-    });
-    storeNotification({
-      type: 'info',
-      time: getCurrentTime(),
-      date: getCurrentDate(),
-      title: 'Vote Pending!',
-      description: reqKey,
-      isRead: false,
-      isCompleted: false,
-    });
-  };
-
   const handleClick = async (type) => {
     console.log(account);
     const commandToSign = voteCommandToSign(type, proposal_id, account);
@@ -81,62 +56,19 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
 
     if (votePreviewResponse?.result?.status === 'success') {
       setDaoFetchDataLoading(true);
-      const res = await vote(signedCommand, pollingNotif);
+      const res = await vote(signedCommand, notificationContext.pollingNotif);
       if (res?.listen === 'success') {
-        toast.dismiss(toastId.current);
-        showNotification({
-          title: 'Transaction Success!',
-          message: 'Check it out in the block explorer',
-          type: STATUSES.SUCCESS,
-          onClick: async () => {
-            await window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${res?.data.requestKeys[0]}`, '_blank', 'noopener,noreferrer');
-          },
-          autoClose: 10000,
-        });
-        setIsCompletedNotification(res?.data.requestKeys[0]);
-        storeNotification({
-          type: 'success',
-          date: moment().format('DD/MM/YYYY - HH:mm:ss'),
-          title: 'Vote Success!',
-          description: 'Check it out in the block explorer',
-          link: `https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${res?.data.requestKeys[0]}`,
-          isRead: false,
-        });
-
+        toast.dismiss(notificationContext.toastId.current);
+        notificationContext.showSuccessNotification(res?.data.requestKeys[0], 'Vote Success!');
         setDaoSingleProposalLoading(false);
         setDaoFetchDataLoading(false);
       } else {
-        toast.dismiss(toastId.current);
-        showNotification({
-          title: 'Transaction Failed!',
-          // message: 'Check it out in the block explorer',
-          type: STATUSES.ERROR,
-          autoClose: 5000,
-        });
-        storeNotification({
-          type: 'error',
-          date: moment().format('DD/MM/YYYY - HH:mm:ss'),
-          title: 'Transaction Failed!',
-          isRead: false,
-          isCompleted: false,
-        });
+        notificationContext.showErrorNotification(null, 'Vote Failed');
         setDaoFetchDataLoading(false);
         setDaoSingleProposalLoading(false);
       }
     } else {
-      showNotification({
-        title: 'Vote Error',
-        message: votePreviewResponse?.result?.error?.message,
-        type: STATUSES.ERROR,
-      });
-      storeNotification({
-        type: 'error',
-        date: moment().format('DD/MM/YYYY - HH:mm:ss'),
-        title: 'Vote Error',
-        description: votePreviewResponse?.result?.error?.message,
-        isRead: false,
-        isCompleted: false,
-      });
+      notificationContext.showErrorNotification(null, 'Vote Error', votePreviewResponse?.result?.error?.message);
     }
   };
 

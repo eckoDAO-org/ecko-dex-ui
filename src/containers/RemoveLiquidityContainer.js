@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { useAccountContext } from '../contexts';
+import { useAccountContext, useLiquidityContext } from '../contexts';
 import RemoveLiquidityContent from '../components/liquidity/RemoveLiquidityContent';
 import SlippagePopupContent from '../components/layout/header/SlippagePopupContent';
 import { FadeIn } from '../components/shared/animations';
@@ -15,6 +15,8 @@ import { getPairListAccountBalance } from '../api/pact-pair';
 import useQueryParams from '../hooks/useQueryParams';
 import AppLoader from '../components/shared/AppLoader';
 import { LIQUIDITY_VIEW } from '../constants/liquidityView';
+import { getAllPairValues } from '../utils/token-utils';
+import { getDailyVolume } from '../api/kaddex-stats';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -34,19 +36,35 @@ const Container = styled(FadeIn)`
 const RemoveLiquidityContainer = () => {
   const history = useHistory();
   const query = useQueryParams();
+  const { setWantsKdxRewards } = useLiquidityContext();
 
   const { account } = useAccountContext();
 
   const [loading, setLoading] = useState(false);
   const [pair, setPair] = useState(null);
+  const [apr, setApr] = useState(null);
+
+  const calculateApr = async (resultPairList, currentPair) => {
+    const volumes = await getDailyVolume();
+    const pool = resultPairList.find(
+      (p) =>
+        (p.token0 === currentPair.token0 && p.token1 === currentPair.token1) || (p.token0 === currentPair.token1 && p.token1 === currentPair.token0)
+    );
+    const result = await getAllPairValues([pool], volumes);
+    setApr(result[0]?.apr?.value);
+  };
 
   const fetchData = async () => {
     const token0 = query.get('token0');
     const token1 = query.get('token1');
     const resultPairList = await getPairListAccountBalance(account.account);
-    const currentPair = resultPairList.find((p) => p.token0 === token0 && p.token1 === token1);
-    setPair(currentPair);
-
+    if (resultPairList.length) {
+      const currentPair = resultPairList.find((p) => p.token0 === token0 && p.token1 === token1);
+      setPair(currentPair);
+      if (currentPair) {
+        await calculateApr(resultPairList, currentPair);
+      }
+    }
     setLoading(false);
   };
 
@@ -62,7 +80,7 @@ const RemoveLiquidityContainer = () => {
   return loading ? (
     <AppLoader className="h-100 w-100 justify-ce align-ce" />
   ) : (
-    <Container className="column w-100 relative justify-ce h-100" gap={24}>
+    <Container className="column w-100 relative justify-ce" gap={24} style={{ paddingTop: 50 }} mobileStyle={{ paddingTop: 24 }}>
       {!pair ? (
         <Label>no pair</Label>
       ) : (
@@ -87,7 +105,7 @@ const RemoveLiquidityContainer = () => {
             </FlexContainer>
             <SlippagePopupContent />
           </FlexContainer>
-          <RewardBooster type={LIQUIDITY_VIEW.REMOVE_LIQUIDITY} />
+          <RewardBooster apr={apr} type={LIQUIDITY_VIEW.REMOVE_LIQUIDITY} handleState={setWantsKdxRewards} />
           <RemoveLiquidityContent pair={pair} />
         </>
       )}
