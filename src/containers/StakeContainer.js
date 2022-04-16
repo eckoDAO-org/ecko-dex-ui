@@ -330,7 +330,7 @@ const StakeContainer = () => {
           onSubmitStake={() => (pathname !== ROUTE_UNSTAKE ? onStakeKDX() : onRollupAndUnstake())}
         />
         <Rewards
-          amount={(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || 0}
+          rewardAccrued={(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || 0}
           rewardsPenalty={estimateUnstakeData && estimateUnstakeData['reward-penalty']}
           onWithdrawClick={() => onWithdraw()}
           stakedTimeStart={stakedTimeStart}

@@ -7,28 +7,27 @@ import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
 import PenaltyRewardsInfo from './PenaltyRewardsInfo';
 
-export const getPenaltyString = (stakedTimeStart, rewardsPenalty) => {
-  if (stakedTimeStart) {
-    const diffHours = moment().diff(stakedTimeStart, 'hours');
-    const diffDays = moment().diff(stakedTimeStart, 'days');
-    if (diffHours < 72) {
-      return '3%';
-    } else if (diffDays < 60) {
-      return `${rewardsPenalty.toFixed(2)} KDX`;
-    }
-  }
-  return '0 KDX';
-};
-
-const Rewards = ({ amount, stakedTimeStart, rewardsPenalty, disabled, onWithdrawClick }) => {
+const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onWithdrawClick }) => {
   /*
     If you unstake during the first 72hours you will incur in a penalty: 3% flat penalty on your staked amount. 
     If you withdraw your rewards during the first 60 days, you will incur in a penalty: the penalty will only affect your accumulated rewards 
     and exponentially decreases in time. Your initial capital will not be affected.
   */
+  const getPenaltyRewardsString = () => {
+    if (stakedTimeStart) {
+      const rewardPenaltyPercentage = (100 * rewardsPenalty) / rewardAccrued;
+      const diffHours = moment().diff(stakedTimeStart, 'hours');
+      if (diffHours < 72) {
+        return `${rewardPenaltyPercentage.toFixed(2)}%`;
+      } else {
+        return `${(rewardsPenalty || 0).toFixed(2)} KDX`;
+      }
+    }
+    return '-';
+  };
 
   const getPenaltyColor = () => {
-    if (!getPenaltyString(stakedTimeStart, rewardsPenalty)) {
+    if (!rewardsPenalty) {
       return null;
     } else if (moment().diff(moment(stakedTimeStart), 'day') >= 60) {
       return commonColors.green;
@@ -41,7 +40,7 @@ const Rewards = ({ amount, stakedTimeStart, rewardsPenalty, disabled, onWithdraw
     <CommonWrapper gap={16} title="rewards">
       <div>
         <Label>KDX Collected</Label>
-        <Label fontSize={32}>{(amount && amount.toFixed(6)) || '-'} KDX</Label>
+        <Label fontSize={32}>{(rewardAccrued && rewardAccrued.toFixed(6)) || '-'} KDX</Label>
       </div>
       <div>
         <Label>Staking Time</Label>
@@ -58,7 +57,7 @@ const Rewards = ({ amount, stakedTimeStart, rewardsPenalty, disabled, onWithdraw
         </div>
 
         <Label fontSize={24} color={getPenaltyColor()}>
-          {getPenaltyString(stakedTimeStart, rewardsPenalty) || '-'}
+          {getPenaltyRewardsString() || '-'}
         </Label>
       </div>
       {/* <CustomButton type="gradient" disabled={disabled} buttonStyle={{ marginTop: 4 }} onClick={() => {}}>
