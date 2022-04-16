@@ -28,7 +28,9 @@ const Container = styled(FadeIn)`
 `;
 
 const KDX_TOTAL_SUPPLY = 1000000000;
-const KDX_TOTAL_BURNED_MULT = 0.9121;
+// TEMP: get real circulating supply
+const CIRCULATING_SUPPLY = KDX_TOTAL_SUPPLY * 0.025;
+// const KDX_TOTAL_BURNED_MULT = 0.9121;
 
 const AnalyticsContainer = () => {
   const pact = usePactContext();
@@ -61,13 +63,13 @@ const AnalyticsContainer = () => {
         <FlexContainer className="column w-100" gap={24} style={{ padding: '50px 0', maxWidth: 1100 }}>
           <FlexContainer mobileClassName="column" gap={24}>
             <AnalyticsSimpleWidget
-              title={'Kaddex price (KDX)'}
+              title={'KDX price'}
               mainText={`$ ${pact?.kdxPrice || '-'}`}
               subtitle={pact?.kdxPrice && `${(pact?.kdxPrice / kdaPrice).toFixed(4)} KDA`}
             />
             <AnalyticsSimpleWidget
               title={'Marketcap'}
-              mainText={`$ ${humanReadableNumber(Number(KDX_TOTAL_SUPPLY * pact?.kdxPrice * KDX_TOTAL_BURNED_MULT))}`}
+              mainText={`$ ${humanReadableNumber(Number(CIRCULATING_SUPPLY * pact?.kdxPrice))}`}
               subtitle={null}
             />
           </FlexContainer>

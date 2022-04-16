@@ -7,6 +7,7 @@ export const GAS_LIMIT = Number(process.env.REACT_APP_KDA_GAS_LIMIT) || 100000;
 export const NETWORK_TYPE = process.env.REACT_APP_KDA_NETWORK_TYPE || 'testnet';
 export const ENABLE_GAS_STATION = process.env.ENABLE_GAS_STATION || false;
 export const KADDEX_NAMESPACE = process.env.REACT_APP_KADDEX_NAMESPACE || 'kaddex'; //
+export const STAKING_REWARDS_PERCENT = process.env.REACT_APP_STAKING_REWARDS_PERCENT || 0.05;
 
 export const NETWORK = `${process.env.REACT_APP_KDA_NETWORK}/chainweb/0.0/${NETWORKID}/chain/${CHAIN_ID}/pact`;
 

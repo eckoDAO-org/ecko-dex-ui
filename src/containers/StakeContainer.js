@@ -5,7 +5,7 @@ import moment from 'moment';
 import { useHistory, useLocation } from 'react-router-dom';
 import { getPoolState, getAddStakeCommand, estimateUnstake, getRollupAndClaimCommand, getRollupAndUnstakeCommand } from '../api/kaddex.staking';
 import { getAccountData } from '../api/dao';
-import { getKDXAccountBalance, getKDXTotalSupply } from '../api/kaddex.kdx';
+import { getKDXAccountBalance } from '../api/kaddex.kdx';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import InfoPopup from '../components/shared/InfoPopup';
 import Label from '../components/shared/Label';
@@ -22,6 +22,7 @@ import { useAccountContext, useKaddexWalletContext, useNotificationContext, useP
 import { ROUTE_STAKE, ROUTE_UNSTAKE } from '../router/routes';
 import { NETWORK } from '../constants/contextConstants';
 import { theme } from '../styles/theme';
+import { useInterval } from '../hooks/useInterval';
 
 const StakeContainer = () => {
   const history = useHistory();
@@ -32,7 +33,6 @@ const StakeContainer = () => {
   const { showNotification, STATUSES, pollingNotif, showErrorNotification } = useNotificationContext();
   const pact = usePactContext();
 
-  const [kdxTotalSupply, setKdxTotalSupply] = useState(null);
   const [poolState, setPoolState] = useState(null);
   const [kdxAccountBalance, setKdxAccountBalance] = useState(0);
   const [estimateUnstakeData, setEstimateUnstakeData] = useState(null);
@@ -62,36 +62,19 @@ const StakeContainer = () => {
     updateAccountStakingData();
   }, [updateAccountStakingData]);
 
-  useEffect(() => {
-    const updateAccountStakingDataInterval = setInterval(() => {
-      updateAccountStakingData();
-    }, 10000);
-    return () => {
-      clearInterval(updateAccountStakingDataInterval);
-    };
-  }, [updateAccountStakingData]);
+  useInterval(updateAccountStakingData, 10000);
 
   useEffect(() => {
     getPoolState().then((res) => {
       setPoolState(res);
     });
-    getKDXTotalSupply().then((res) => {
-      setKdxTotalSupply(res.decimal || res);
-    });
   }, []);
-
-  const getSupplyStakingPercentage = () => {
-    if (poolState && poolState['staked-kdx'] && !Number.isNaN(poolState['staked-kdx'])) {
-      return ((100 * poolState['staked-kdx']) / kdxTotalSupply).toFixed(6);
-    }
-    return '--';
-  };
 
   const getAccountStakingPercentage = () => {
     if (estimateUnstakeData?.staked && poolState && poolState['staked-kdx']) {
       return parseFloat(((100 * estimateUnstakeData?.staked) / poolState['staked-kdx']).toFixed(6));
     }
-    return '--';
+    return false;
   };
 
   const getAddStakeModalTitle = () => {
@@ -348,11 +331,11 @@ const StakeContainer = () => {
         />
         <Rewards
           amount={(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || 0}
-          rewardsPenalty={estimateUnstakeData && estimateUnstakeData['stake-record'] && estimateUnstakeData['stake-record']['stake-penalty']}
+          rewardsPenalty={estimateUnstakeData && estimateUnstakeData['reward-penalty']}
           onWithdrawClick={() => onWithdraw()}
           stakedTimeStart={stakedTimeStart}
         />
-        <Analytics apr={'-'} volume={'-'} stakedShare={getAccountStakingPercentage()} totalStaked={getSupplyStakingPercentage()} />
+        <Analytics stakedShare={getAccountStakingPercentage()} totalStaked={poolState && poolState['staked-kdx']} />
       </FlexContainer>
 
       <VotingPower daoAccountData={daoAccountData} />
