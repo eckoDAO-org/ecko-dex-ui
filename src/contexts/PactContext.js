@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
 import pairTokens from '../constants/pairsConfig';
+import { useInterval } from '../hooks/useInterval';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import moment from 'moment';
@@ -40,9 +41,11 @@ export const PactProvider = (props) => {
 
   const [kdxPrice, setKdxPrice] = useState(null);
 
+  const updateKdxPrice = () => getTokenUsdPriceByName('KDX').then((price) => setKdxPrice(price || null));
   useEffect(() => {
-    getTokenUsdPriceByName('KDX').then((price) => setKdxPrice(price || null));
+    updateKdxPrice();
   }, []);
+  useInterval(updateKdxPrice, 20000);
 
   //TO FIX, not working when multiple toasts are there
   const toastId = React.useRef(null);

@@ -5,7 +5,7 @@ import CustomButton from '../shared/CustomButton';
 import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
-import PentalityRewardsInfo from './PentalityRewardsInfo';
+import PenaltyRewardsInfo from './PenaltyRewardsInfo';
 
 export const getPenaltyString = (stakedTimeStart, rewardsPenalty) => {
   if (stakedTimeStart) {
@@ -14,10 +14,10 @@ export const getPenaltyString = (stakedTimeStart, rewardsPenalty) => {
     if (diffHours < 72) {
       return '3%';
     } else if (diffDays < 60) {
-      return `${rewardsPenalty} KDX`;
+      return `${rewardsPenalty.toFixed(2)} KDX`;
     }
   }
-  return false;
+  return '0 KDX';
 };
 
 const Rewards = ({ amount, stakedTimeStart, rewardsPenalty, disabled, onWithdrawClick }) => {
@@ -53,7 +53,7 @@ const Rewards = ({ amount, stakedTimeStart, rewardsPenalty, disabled, onWithdraw
         <div className="flex align-ce">
           <Label>Rewards Penalty</Label>
           <InfoPopup type="modal" title="Rewards Penalty">
-            <PentalityRewardsInfo />
+            <PenaltyRewardsInfo />
           </InfoPopup>
         </div>
 

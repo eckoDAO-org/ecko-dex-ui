@@ -8,6 +8,7 @@ import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { AccountContext } from '../../contexts/AccountContext';
 import { theme } from '../../styles/theme';
 import reduceToken from '../../utils/reduceToken';
+import { STAKING_REWARDS_PERCENT } from '../../constants/contextConstants';
 import ConnectWalletModal from '../../components/modals/kdaModals/ConnectWalletModal';
 import { ModalContext } from '../../contexts/ModalContext';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
@@ -93,7 +94,8 @@ const LiquidityList = (props) => {
                 Liquidity provider rewards
               </Label>
               <Label geFontSize={18} geColor={'blue'} geCenter geLabelStyle={{ padding: '0px 10px' }}>
-                Liquidity providers earn a 0.25% fee back and 0.05% goes to stakers on all trades proportional to their share of the pool.
+                Liquidity providers earn a 0.25% fee back and {STAKING_REWARDS_PERCENT}% goes to stakers on all trades proportional to their share of
+                the pool.
                 <br />
                 Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.
               </Label>
@@ -116,7 +118,8 @@ const LiquidityList = (props) => {
           {!account?.account && (
             <>
               <Label geFontSize={18} geColor={'blue'} geCenter geLabelStyle={{ padding: '10px' }}>
-                Liquidity providers earn a 0.25% fee back and 0.05% goes to stakers on all trades proportional to their share of the pool.
+                Liquidity providers earn a 0.25% fee back and {STAKING_REWARDS_PERCENT}% goes to stakers on all trades proportional to their share of
+                the pool.
                 <br />
                 Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.{' '}
               </Label>
@@ -138,7 +141,8 @@ const LiquidityList = (props) => {
             Liquidity provider rewards
           </Label>
           <Label fontSize={16} geFontSize={18} geColor={'blue'} geCenter geLabelStyle={{ padding: '0px 10px' }}>
-            Liquidity providers earn a 0.25% fee back and 0.05% goes to stakers on all trades proportional to their share of the pool. <br />
+            Liquidity providers earn a 0.25% fee back and {STAKING_REWARDS_PERCENT}% goes to stakers on all trades proportional to their share of the
+            pool. <br />
             Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.{' '}
           </Label>
         </>

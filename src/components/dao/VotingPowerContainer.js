@@ -31,7 +31,7 @@ const VotingPowerContainer = ({ accountData }) => {
             Position (P)
           </Label>
           <FlexContainer className="justify-sb">
-            <Label fontSize={32}>{accountData['staked-amount'] ? accountData['staked-amount'] : '-'}</Label>
+            <Label fontSize={32}>{accountData['staked-amount'] ? accountData['staked-amount'].toFixed(2) : '-'}</Label>
             <Label fontSize={32}>KDX</Label>
           </FlexContainer>
         </FlexContainer>

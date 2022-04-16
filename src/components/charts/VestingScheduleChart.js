@@ -74,10 +74,10 @@ const VestingScheduleChart = ({ height }) => {
               }}
             />
             <Area type="monotone" dataKey="Total Supply" stackId="2" stroke="#ffffffb3" fill="#4120727a" />
-            <Area type="monotone" dataKey="Network Rewards" stackId="1" stroke="#8884d8" fill="#8884d8" />
+            <Area type="monotone" dataKey="Liquidity mining" stackId="1" stroke="#8884d8" fill="#8884d8" />
             <Area type="monotone" dataKey="Community Sales" stackId="1" stroke="#ffc658" fill="#ffc658" />
             <Area type="monotone" dataKey="Team" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
-            <Area type="monotone" dataKey="Community Rewards" stackId="1" stroke="#ed1cb5" fill="#ed1cb5" />
+            <Area type="monotone" dataKey="DAO treasury" stackId="1" stroke="#ed1cb5" fill="#ed1cb5" />
           </AreaChart>
         </ResponsiveContainer>
       </div>

@@ -1,5 +1,5 @@
 import { getCoingeckoUsdPrice } from '../api/coingecko';
-import { CHAIN_ID, FEE } from '../constants/contextConstants';
+import { CHAIN_ID, FEE, STAKING_REWARDS_PERCENT } from '../constants/contextConstants';
 import tokenData from '../constants/cryptoCurrencies';
 import { bigNumberConverter } from './bignumber';
 import { getPairList } from '../api/pact-pair';
@@ -31,6 +31,15 @@ export const getApr = (volume, liquidity) => {
   const apr = (percentagePerYear * 100) / liquidity;
 
   return apr;
+};
+
+export const getStakingApr = (totalDailyVolumeUSD, totalUsdStakedKDX) => {
+  if (isNaN(totalDailyVolumeUSD) || isNaN(totalUsdStakedKDX)) {
+    return null;
+  }
+  const dailyRewards = (totalDailyVolumeUSD * STAKING_REWARDS_PERCENT) / 100;
+  const yearlyRewards = dailyRewards * 365;
+  return (100 * yearlyRewards) / totalUsdStakedKDX;
 };
 
 // calculate liquidity, volumes and apr for each pool
@@ -117,6 +126,9 @@ export const getTokenUsdPriceByName = async (tokenName) => {
 
 // retrieve token usd price based on the first pair that contains the token with a known price
 export const getTokenUsdPrice = async (token, pairsList) => {
+  if (!Array.isArray(pairsList)) {
+    return null;
+  }
   const filteredPairs = pairsList.filter((p) => p.token0 === token.name || p.token1 === token.name);
 
   let tokenUsd = await getCoingeckoUsdPrice(token.coingeckoId);
