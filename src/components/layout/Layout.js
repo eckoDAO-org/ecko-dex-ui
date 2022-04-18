@@ -134,7 +134,7 @@ const Layout = ({ children }) => {
         {width <= theme.mediaQueries.mobilePixel && <MobileHeader />}
         {width > theme.mediaQueries.mobilePixel && width < theme.mediaQueries.desktopPixel && <TabletHeader />}
         {width >= theme.mediaQueries.desktopPixel && <DesktopHeader gameEditionView={gameEditionView} />}
-        {!account.account && <Banner />}
+        {!account.account && !gameEditionView && <Banner />}
         {gameEditionView && resolutionConfiguration && width >= resolutionConfiguration.width && height >= resolutionConfiguration.height ? (
           <>
             <CenterBackground src={gameEditionBackground} alt="" />
