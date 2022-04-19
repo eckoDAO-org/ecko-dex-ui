@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { AlertIcon } from '../../../assets';
+import theme from '../../../styles/theme';
+import { FlexContainer } from '../../shared/FlexContainer';
 import Label from '../../shared/Label';
 
-const STYBannerContainer = styled.div`
+const STYBannerContainer = styled(FlexContainer)`
   display: flex;
   align-items: center;
   width: 100%;
@@ -14,7 +16,6 @@ const STYBannerContainer = styled.div`
   background-color: ${({ theme: { colors } }) => colors.white};
   border-radius: 10px;
   margin: ${({ theme: { layout } }) => `0 ${layout.desktopPadding}px`};
-  margin-top: 16px;
   padding: 8px;
   svg {
     margin-right: 8px;
@@ -24,8 +25,6 @@ const STYBannerContainer = styled.div`
   }
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel - 1}px`}) {
-    margin: ${({ theme: { layout } }) => `0 ${layout.mobilePadding}px`};
-    margin-top: 0px;
     padding: 16px;
     text-align: center;
     flex-direction: column;
@@ -38,7 +37,11 @@ const STYBannerContainer = styled.div`
 
 const Banner = () => {
   return (
-    <STYBannerContainer>
+    <STYBannerContainer
+      desktopStyle={{ margin: `16px ${theme.layout.desktopPadding}px 0px` }}
+      tabletStyle={{ margin: `16px ${theme.layout.tabletPadding}px 0px` }}
+      mobileStyle={{ margin: `16px ${theme.layout.mobilePadding}px 0px` }}
+    >
       <AlertIcon className="mobile-none" />
       <Label inverted fontSize={13} labelStyle={{ display: 'inline-block' }}>
         When using Kaddex, first, make sure to have your Kadena native assets on chain 2.

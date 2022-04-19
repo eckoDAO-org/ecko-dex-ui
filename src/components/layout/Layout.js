@@ -90,7 +90,7 @@ const MainContent = styled.div`
     display: block;
   }
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
-    padding: 0 16px;
+    padding: 0 24px;
     height: ${({ theme: { header } }) => `calc(100% - ${header.mobileHeight}px)`};
     overflow-x: auto;
     ::-webkit-scrollbar {
@@ -98,6 +98,10 @@ const MainContent = styled.div`
     }
 
     scrollbar-width: none;
+  }
+
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel - 1}px`}) {
+    padding: 0 16px;
   }
   overflow: auto;
 `;

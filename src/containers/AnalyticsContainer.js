@@ -13,6 +13,7 @@ import { humanReadableNumber } from '../utils/reduceBalance';
 import LogoLoader from '../components/shared/Loader';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import AnalyticsSimpleWidget from '../components/shared/AnalyticsSimpleWidget';
+import theme from '../styles/theme';
 
 const Container = styled(FadeIn)`
   display: flex;
@@ -21,10 +22,6 @@ const Container = styled(FadeIn)`
   height: 100%;
   justify-content: flex-start;
   align-items: center;
-
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {
-    padding: ${({ gameEditionView }) => !gameEditionView && '32px 11px'};
-  }
 `;
 
 const KDX_TOTAL_SUPPLY = 1000000000;
@@ -56,30 +53,34 @@ const AnalyticsContainer = () => {
   return !loaded && gameEditionView ? (
     <LogoLoader />
   ) : (
-    !gameEditionView && (
-      <Container gameEditionView={gameEditionView}>
-        <FlexContainer className="column w-100" gap={24} style={{ padding: '50px 0', maxWidth: 1100 }}>
-          <FlexContainer mobileClassName="column" gap={24}>
-            <AnalyticsSimpleWidget
-              title={'Kaddex price (KDX)'}
-              mainText={`$ ${pact?.kdxPrice || '-'}`}
-              subtitle={pact?.kdxPrice && `${(pact?.kdxPrice / kdaPrice).toFixed(4)} KDA`}
-            />
-            <AnalyticsSimpleWidget
-              title={'Marketcap'}
-              mainText={`$ ${humanReadableNumber(Number(KDX_TOTAL_SUPPLY * pact?.kdxPrice * KDX_TOTAL_BURNED_MULT))}`}
-              subtitle={null}
-            />
-          </FlexContainer>
-          <FlexContainer mobileClassName="column" gap={24}>
-            <TVLChart kdaPrice={kdaPrice} height={300} />
-
-            <VolumeChart kdaPrice={kdaPrice} height={300} />
-          </FlexContainer>
-          <VestingScheduleChart height={300} />
+    <Container>
+      <FlexContainer
+        className="column w-100"
+        gap={24}
+        style={{ paddingTop: 35 }}
+        desktopStyle={{ padding: `35px ${theme.layout.desktopPadding}px` }}
+        mobileStyle={{ paddingBottom: 40 }}
+      >
+        <FlexContainer mobileClassName="column" gap={24}>
+          <AnalyticsSimpleWidget
+            title={'Kaddex price (KDX)'}
+            mainText={`$ ${pact?.kdxPrice || '-'}`}
+            subtitle={pact?.kdxPrice && `${(pact?.kdxPrice / kdaPrice).toFixed(4)} KDA`}
+          />
+          <AnalyticsSimpleWidget
+            title={'Marketcap'}
+            mainText={`$ ${humanReadableNumber(Number(KDX_TOTAL_SUPPLY * pact?.kdxPrice * KDX_TOTAL_BURNED_MULT))}`}
+            subtitle={null}
+          />
         </FlexContainer>
-      </Container>
-    )
+        <FlexContainer mobileClassName="column" gap={24}>
+          <TVLChart kdaPrice={kdaPrice} height={300} />
+
+          <VolumeChart kdaPrice={kdaPrice} height={300} />
+        </FlexContainer>
+        <VestingScheduleChart height={300} />
+      </FlexContainer>
+    </Container>
   );
 };
 
