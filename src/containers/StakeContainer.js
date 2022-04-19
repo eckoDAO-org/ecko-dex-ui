@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
+import styled from 'styled-components/macro';
 import moment from 'moment';
 import { useHistory, useLocation } from 'react-router-dom';
 import { getPoolState, getAddStakeCommand, estimateUnstake, getRollupAndClaimCommand, getRollupAndUnstakeCommand } from '../api/kaddex.staking';
@@ -23,6 +24,16 @@ import { ROUTE_STAKE, ROUTE_UNSTAKE } from '../router/routes';
 import { NETWORK } from '../constants/contextConstants';
 import { theme } from '../styles/theme';
 import { useInterval } from '../hooks/useInterval';
+import { FadeIn } from '../components/shared/animations';
+
+const Container = styled(FadeIn)`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: flex-start;
+  align-items: center;
+`;
 
 const StakeContainer = () => {
   const history = useHistory();
@@ -285,61 +296,65 @@ const StakeContainer = () => {
   };
 
   return (
-    <FlexContainer
-      className="column w-100 y-auto"
-      desktopClassName="h-100"
-      desktopStyle={{ padding: `35px ${theme().layout.desktopPadding}px` }}
-      tabletStyle={{ paddingBottom: 40 }}
-      mobileStyle={{ paddingBottom: 40 }}
-    >
-      <FlexContainer className="w-100 justify-sb" mobileClassName="column" style={{ marginBottom: 24 }} mobileStyle={{ marginTop: 24 }}>
-        <FlexContainer gap={16} mobileStyle={{ marginBottom: 16 }}>
-          <Label
-            withShade={pathname !== ROUTE_STAKE}
-            className="pointer"
-            fontSize={24}
-            fontFamily="syncopate"
-            onClick={() => history.push(ROUTE_STAKE)}
-          >
-            STAKE
-          </Label>
-          <Label
-            withShade={pathname !== ROUTE_UNSTAKE}
-            className="pointer"
-            fontSize={24}
-            fontFamily="syncopate"
-            onClick={() => history.push(ROUTE_UNSTAKE)}
-          >
-            UNSTAKE
-          </Label>
+    <Container>
+      <FlexContainer
+        className="column w-100"
+        style={{ paddingTop: 35 }}
+        desktopStyle={{ padding: `35px ${theme().layout.desktopPadding}px` }}
+        tabletStyle={{ paddingBottom: 40 }}
+        mobileStyle={{ paddingBottom: 40 }}
+      >
+        <FlexContainer className="w-100 justify-sb" style={{ marginBottom: 24 }} mobileStyle={{ marginTop: 24 }}>
+          <FlexContainer gap={16} mobileStyle={{ marginBottom: 16 }}>
+            <Label
+              withShade={pathname !== ROUTE_STAKE}
+              className="pointer"
+              fontSize={24}
+              fontFamily="syncopate"
+              onClick={() => history.push(ROUTE_STAKE)}
+            >
+              STAKE
+            </Label>
+            <Label
+              withShade={pathname !== ROUTE_UNSTAKE}
+              className="pointer"
+              fontSize={24}
+              fontFamily="syncopate"
+              onClick={() => history.push(ROUTE_UNSTAKE)}
+            >
+              UNSTAKE
+            </Label>
+          </FlexContainer>
+          <InfoPopup title={pathname.substring(1)} type="modal" size="large">
+            {pathname === ROUTE_STAKE ? <StakeInfo /> : <UnstakeInfo />}
+          </InfoPopup>
         </FlexContainer>
-        <InfoPopup title={pathname.substring(1)} type="modal" size="large">
-          {pathname === ROUTE_STAKE ? <StakeInfo /> : <UnstakeInfo />}
-        </InfoPopup>
-      </FlexContainer>
 
-      <FlexContainer gap={24} tabletClassName="column" mobileClassName="column">
-        <Position
-          amount={estimateUnstakeData?.staked || 0}
-          topRightLabel={getPositionLabel()}
-          inputAmount={inputAmount}
-          buttonLabel={pathname === ROUTE_STAKE ? 'stake' : 'unstake'}
-          pendingAmount={(estimateUnstakeData && estimateUnstakeData['stake-record'] && estimateUnstakeData['stake-record']['pending-add']) || false}
-          onClickMax={() => setInputAmount(pathname !== ROUTE_UNSTAKE ? kdxAccountBalance : estimateUnstakeData?.staked || 0)}
-          setKdxAmount={(value) => setInputAmount(value)}
-          onSubmitStake={() => (pathname !== ROUTE_UNSTAKE ? onStakeKDX() : onRollupAndUnstake())}
-        />
-        <Rewards
-          rewardAccrued={(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || 0}
-          rewardsPenalty={estimateUnstakeData && estimateUnstakeData['reward-penalty']}
-          onWithdrawClick={() => onWithdraw()}
-          stakedTimeStart={stakedTimeStart}
-        />
-        <Analytics stakedShare={getAccountStakingPercentage()} totalStaked={poolState && poolState['staked-kdx']} />
-      </FlexContainer>
+        <FlexContainer gap={24} tabletClassName="column" mobileClassName="column">
+          <Position
+            amount={estimateUnstakeData?.staked || 0}
+            topRightLabel={getPositionLabel()}
+            inputAmount={inputAmount}
+            buttonLabel={pathname === ROUTE_STAKE ? 'stake' : 'unstake'}
+            pendingAmount={
+              (estimateUnstakeData && estimateUnstakeData['stake-record'] && estimateUnstakeData['stake-record']['pending-add']) || false
+            }
+            onClickMax={() => setInputAmount(pathname !== ROUTE_UNSTAKE ? kdxAccountBalance : estimateUnstakeData?.staked || 0)}
+            setKdxAmount={(value) => setInputAmount(value)}
+            onSubmitStake={() => (pathname !== ROUTE_UNSTAKE ? onStakeKDX() : onRollupAndUnstake())}
+          />
+          <Rewards
+            rewardAccrued={(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || 0}
+            rewardsPenalty={estimateUnstakeData && estimateUnstakeData['reward-penalty']}
+            onWithdrawClick={() => onWithdraw()}
+            stakedTimeStart={stakedTimeStart}
+          />
+          <Analytics stakedShare={getAccountStakingPercentage()} totalStaked={poolState && poolState['staked-kdx']} />
+        </FlexContainer>
 
-      <VotingPower daoAccountData={daoAccountData} />
-    </FlexContainer>
+        <VotingPower daoAccountData={daoAccountData} />
+      </FlexContainer>
+    </Container>
   );
 };
 

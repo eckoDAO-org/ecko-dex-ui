@@ -13,7 +13,6 @@ import { humanReadableNumber } from '../utils/reduceBalance';
 import LogoLoader from '../components/shared/Loader';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import AnalyticsSimpleWidget from '../components/shared/AnalyticsSimpleWidget';
-import theme from '../styles/theme';
 
 const Container = styled(FadeIn)`
   display: flex;
@@ -73,11 +72,12 @@ const AnalyticsContainer = () => {
           <FlexContainer mobileClassName="column" gap={24}>
             <TVLChart kdaPrice={kdaPrice} height={300} />
 
-          <VolumeChart kdaPrice={kdaPrice} height={300} />
+            <VolumeChart kdaPrice={kdaPrice} height={300} />
+          </FlexContainer>
+          <VestingScheduleChart height={300} />
         </FlexContainer>
-        <VestingScheduleChart height={300} />
-      </FlexContainer>
-    </Container>
+      </Container>
+    )
   );
 };
 
