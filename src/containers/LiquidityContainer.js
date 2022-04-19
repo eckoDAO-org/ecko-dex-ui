@@ -21,9 +21,10 @@ const LiquidityContainer = () => {
   return (
     <FlexContainer
       className="column w-100 h-100"
-      desktopStyle={{ padding: `35px ${theme.layout.desktopPadding}px` }}
-      tabletStyle={{ paddingTop: 35 }}
-      mobileStyle={{ paddingBottom: 40 }}
+      style={{ paddingTop: 35, paddingBottom: 35 }}
+      desktopStyle={{ paddingRight: theme.layout.desktopPadding, paddingLeft: theme.layout.desktopPadding }}
+      tabletStyle={{ paddingRight: theme.layout.tabletPadding, paddingLeft: theme.layout.tabletPadding }}
+      mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
     >
       <FlexContainer className="w-100 justify-sb" mobileClassName="column" style={{ marginBottom: 24 }} mobileStyle={{ marginTop: 24 }}>
         <FlexContainer gap={16} mobileStyle={{ marginBottom: 16 }}>

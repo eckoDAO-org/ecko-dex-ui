@@ -29,10 +29,12 @@ const DaoContainer = () => {
 
   return (
     <FlexContainer
-      className="column h-100 w-100"
+      className="column w-100"
       gap={16}
-      style={{ paddingTop: 35 }}
-      desktopStyle={{ padding: `35px ${theme.layout.desktopPadding}px` }}
+      style={{ paddingTop: 35, paddingBottom: 35 }}
+      desktopStyle={{ paddingRight: theme.layout.desktopPadding, paddingLeft: theme.layout.desktopPadding }}
+      tabletStyle={{ paddingRight: theme.layout.tabletPadding, paddingLeft: theme.layout.tabletPadding }}
+      mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
     >
       {proposal_id ? (
         <SingleProposalContainer proposal_id={proposal_id} accountData={accountData} />

@@ -81,7 +81,7 @@ const AddLiquidityContainer = (props) => {
   return loading ? (
     <AppLoader className="h-100 w-100 align-ce justify-ce" />
   ) : (
-    <Container className="column w-100 h-100 relative" gap={24} style={{ paddingTop: 50, paddingBottom: 35 }} mobileStyle={{ paddingTop: 24 }}>
+    <Container className="column w-100 relative" gap={24} style={{ paddingTop: 35, paddingBottom: 35 }}>
       <FlexContainer className="w-100 justify-sb">
         <FlexContainer>
           <ArrowBack

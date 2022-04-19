@@ -40,14 +40,10 @@ import { SwapSuccessView, SwapSuccessViewGE } from '../components/modals/swap-mo
 
 const Container = styled(FadeIn)`
   width: 100%;
-  margin-top: 0px;
   position: relative;
   margin-left: auto;
   margin-right: auto;
-  overflow: auto;
-  display: flex;
   flex-direction: column;
-  justify-content: center;
 
   ${({ gameEditionView }) => {
     if (gameEditionView) {
@@ -65,6 +61,7 @@ const Container = styled(FadeIn)`
       `;
     } else {
       return css`
+        padding-top: 35px;
         padding-bottom: 35px;
         max-width: 550px;
         overflow: visible;

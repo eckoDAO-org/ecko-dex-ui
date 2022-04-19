@@ -80,7 +80,7 @@ const RemoveLiquidityContainer = () => {
   return loading ? (
     <AppLoader className="h-100 w-100 justify-ce align-ce" />
   ) : (
-    <Container className="column w-100 relative justify-ce" gap={24} style={{ paddingTop: 50 }} mobileStyle={{ paddingTop: 24 }}>
+    <Container className="column w-100 relative justify-ce" gap={24} style={{ paddingTop: 35, paddingBottom: 35 }}>
       {!pair ? (
         <Label>no pair</Label>
       ) : (
