@@ -25,7 +25,9 @@ const Container = styled(FadeIn)`
 `;
 
 const KDX_TOTAL_SUPPLY = 1000000000;
-const KDX_TOTAL_BURNED_MULT = 0.9121;
+// TEMP: get real circulating supply
+const CIRCULATING_SUPPLY = KDX_TOTAL_SUPPLY * 0.025;
+// const KDX_TOTAL_BURNED_MULT = 0.9121;
 
 const AnalyticsContainer = () => {
   const pact = usePactContext();
@@ -53,28 +55,23 @@ const AnalyticsContainer = () => {
   return !loaded && gameEditionView ? (
     <LogoLoader />
   ) : (
-    <Container>
-      <FlexContainer
-        className="column w-100"
-        gap={24}
-        style={{ paddingTop: 35 }}
-        desktopStyle={{ padding: `35px ${theme.layout.desktopPadding}px` }}
-        mobileStyle={{ paddingBottom: 40 }}
-      >
-        <FlexContainer mobileClassName="column" gap={24}>
-          <AnalyticsSimpleWidget
-            title={'Kaddex price (KDX)'}
-            mainText={`$ ${pact?.kdxPrice || '-'}`}
-            subtitle={pact?.kdxPrice && `${(pact?.kdxPrice / kdaPrice).toFixed(4)} KDA`}
-          />
-          <AnalyticsSimpleWidget
-            title={'Marketcap'}
-            mainText={`$ ${humanReadableNumber(Number(KDX_TOTAL_SUPPLY * pact?.kdxPrice * KDX_TOTAL_BURNED_MULT))}`}
-            subtitle={null}
-          />
-        </FlexContainer>
-        <FlexContainer mobileClassName="column" gap={24}>
-          <TVLChart kdaPrice={kdaPrice} height={300} />
+    !gameEditionView && (
+      <Container gameEditionView={gameEditionView}>
+        <FlexContainer className="column w-100" gap={24} style={{ padding: '50px 0', maxWidth: 1100 }}>
+          <FlexContainer mobileClassName="column" gap={24}>
+            <AnalyticsSimpleWidget
+              title={'KDX price'}
+              mainText={`$ ${pact?.kdxPrice || '-'}`}
+              subtitle={pact?.kdxPrice && `${(pact?.kdxPrice / kdaPrice).toFixed(4)} KDA`}
+            />
+            <AnalyticsSimpleWidget
+              title={'Marketcap'}
+              mainText={`$ ${humanReadableNumber(Number(CIRCULATING_SUPPLY * pact?.kdxPrice))}`}
+              subtitle={null}
+            />
+          </FlexContainer>
+          <FlexContainer mobileClassName="column" gap={24}>
+            <TVLChart kdaPrice={kdaPrice} height={300} />
 
           <VolumeChart kdaPrice={kdaPrice} height={300} />
         </FlexContainer>

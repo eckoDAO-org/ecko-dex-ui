@@ -13,12 +13,14 @@ const VotingPower = ({ daoAccountData }) => {
       containerStyle={{ marginTop: 24 }}
       cardStyle={{ paddingBottom: 60 }}
       title={
-        <EquationContainer className="flex align-ce">
+        <EquationContainer className="flex align-ce" mobileStyle={{ flexDirection: 'column', display: 'flex' }}>
           <Label fontFamily="syncopate" fontSize={24} labelStyle={{ marginRight: 16 }}>
             Voting Power (V)
           </Label>
-          {/* <Equation className="equation" value="V = root(2, P*M)" /> */}
           <VotingPowerFormulaIcon width={88} />
+          <Label fontSize={38} className="gradient" fontFamily="syncopate" labelStyle={{ marginLeft: 20 }}>
+            {daoAccountData?.vp}
+          </Label>
         </EquationContainer>
       }
     >

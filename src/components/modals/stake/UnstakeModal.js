@@ -5,16 +5,7 @@ import CustomDivider from '../../shared/CustomDivider';
 import { CoinKaddexIcon } from '../../../assets';
 import { KaddexOutlineIcon } from '../../../assets';
 import { usePactContext } from '../../../contexts';
-import styled from 'styled-components';
-
-const IconSubTitle = styled.div`
-  text-align: center;
-  margin: 15px 0 24px 0;
-`;
-
-const StakeModalText = styled.span`
-  font-size: ${({ fontSize }) => `${fontSize || 13}px`};
-`;
+import { StakeModalRow, StakeModalText, IconSubTitle } from './AddStakeModal';
 
 export const UnstakeModal = ({ onConfirm, estimateUnstakeData, toUnstakeAmount, stakedTimeStart }) => {
   const { kdxPrice } = usePactContext();
@@ -92,15 +83,15 @@ export const UnstakeModal = ({ onConfirm, estimateUnstakeData, toUnstakeAmount, 
       </IconSubTitle>
       {getUnstakeModalContent()}
       <StakeModalText fontSize={16}>Unstaked Amount</StakeModalText>
-      <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 12 }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+      <StakeModalRow>
+        <div>
           <span>
             <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 16, height: 30, width: 30 }} />
           </span>
           <span>{toUnstakeAmount} </span>
         </div>
         <div>KDX</div>
-      </div>
+      </StakeModalRow>
       <CustomButton type="gradient" buttonStyle={{ marginTop: 40 }} onClick={onConfirm}>
         CONFIRM
       </CustomButton>

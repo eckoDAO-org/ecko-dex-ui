@@ -4,7 +4,7 @@ import { EquationContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
 import List from '../shared/List';
 
-const PentalityRewardsInfo = () => {
+const PenaltyRewardsInfo = () => {
   return (
     <FlexContainer className="column" gap={16}>
       <Label>
@@ -35,4 +35,4 @@ const PentalityRewardsInfo = () => {
   );
 };
 
-export default PentalityRewardsInfo;
+export default PenaltyRewardsInfo;
