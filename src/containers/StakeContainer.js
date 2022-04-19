@@ -23,6 +23,7 @@ import { ROUTE_STAKE, ROUTE_UNSTAKE } from '../router/routes';
 import { NETWORK } from '../constants/contextConstants';
 import { theme } from '../styles/theme';
 import { useInterval } from '../hooks/useInterval';
+import { reduceBalance } from '../utils/reduceBalance';
 
 const StakeContainer = () => {
   const history = useHistory();
@@ -72,7 +73,7 @@ const StakeContainer = () => {
 
   const getAccountStakingPercentage = () => {
     if (estimateUnstakeData?.staked && poolState && poolState['staked-kdx']) {
-      return parseFloat(((100 * estimateUnstakeData?.staked) / poolState['staked-kdx']).toFixed(6));
+      return parseFloat((100 * estimateUnstakeData?.staked) / reduceBalance(poolState['staked-kdx']));
     }
     return false;
   };

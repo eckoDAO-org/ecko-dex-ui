@@ -5,7 +5,7 @@ import CommonWrapper from './CommonWrapper';
 import { getPairList } from '../../api/pact-pair';
 import { getDailyVolume } from '../../api/kaddex-stats';
 import { getAllPairValues, getStakingApr } from '../../utils/token-utils';
-import { humanReadableNumber } from '../../utils/reduceBalance';
+import { humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
 import { usePactContext } from '../../contexts';
 
 const Analytics = ({ stakedShare, totalStaked }) => {
@@ -57,7 +57,7 @@ const Analytics = ({ stakedShare, totalStaked }) => {
       </div>
       <div>
         <Label>Total Staked</Label>
-        <Label fontSize={32}>{(totalStaked && totalStaked.toFixed(2)) || '-'} KDX</Label>
+        <Label fontSize={32}>{(totalStaked && reduceBalance(totalStaked, 2)) || '-'} KDX</Label>
       </div>
     </CommonWrapper>
   );
