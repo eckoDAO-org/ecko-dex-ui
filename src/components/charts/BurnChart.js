@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import GradientBorder from '../shared/GradientBorder';
 import Label from '../shared/Label';
 import { TimeRangeBar, TimeRangeBtn } from './VolumeChart';
 import { VestingHeader, VestingPopup } from './VestingScheduleChart';
@@ -14,7 +13,6 @@ const VestingScheduleChart = ({ height }) => {
   const [endDate, setEndDate] = useState(endDate4Years);
   return (
     <CardContainer>
-      <GradientBorder />
       <VestingHeader>
         <Label></Label>
         <Label>KDX Burning</Label>

@@ -586,7 +586,6 @@ const SwapContainer = () => {
           />
         }
       >
-        {/* {!gameEditionView && <GradientBorder />} */}
         <SwapForm
           fromValues={fromValues}
           setFromValues={setFromValues}
