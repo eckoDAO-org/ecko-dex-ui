@@ -25,7 +25,6 @@ export const PactProvider = (props) => {
   const [pair, setPair] = useState('');
   const [pairReserve, setPairReserve] = useState('');
   const [precision, setPrecision] = useState(false);
-  const [balances, setBalances] = useState(false);
   const [polling, setPolling] = useState(false);
   const [notificationNotCompletedChecked, setNotificationNotCompletedChecked] = useState(false);
 
@@ -59,11 +58,7 @@ export const PactProvider = (props) => {
 
   useEffect(() => {
     fetchPrecision();
-  }, [precision]);
-
-  useEffect(() => {
-    fetchAllBalances();
-  }, [balances, account.account, account.sendRes]);
+  }, []);
 
   const storeSlippage = async (slippage) => {
     setSlippage(slippage);
@@ -147,50 +142,6 @@ export const PactProvider = (props) => {
       setOffsetSwapList(offset);
     } catch (error) {
       console.log(error);
-    }
-  };
-
-  // useEffect(() => {
-  //   if (account.account) {
-  //     getEventsSwapList();
-  //   }
-  // }, [account.account]);
-
-  const fetchAllBalances = async () => {
-    let endBracket = '';
-    let tokenNames = Object.values(tokenData).reduce((accum, cumul) => {
-      endBracket += ')';
-      let code = `
-      (let
-        ((${cumul.name}
-          (try -1 (${cumul.code}.get-balance "${account.account.account}"))
-      ))`;
-      accum += code;
-      return accum;
-    }, '');
-    let objFormat = `{${Object.keys(tokenData)
-      .map((token) => `"${token}": ${token}`)
-      .join(',')}}`;
-    tokenNames = tokenNames + objFormat + endBracket;
-    try {
-      let data = await Pact.fetch.local(
-        {
-          pactCode: tokenNames,
-          meta: Pact.lang.mkMeta('', CHAIN_ID, GAS_PRICE, 150000, creationTime(), 600),
-        },
-        NETWORK
-      );
-      if (data.result.status === 'success') {
-        Object.keys(tokenData).forEach((token) => {
-          tokenData[token].balance = extractDecimal(data.result.data[token]) === -1 ? '0' : extractDecimal(data.result.data[token]);
-        });
-        setBalances(true);
-      } else {
-        setBalances(false);
-      }
-    } catch (e) {
-      console.log(e);
-      setBalances(true);
     }
   };
 
@@ -494,9 +445,6 @@ export const PactProvider = (props) => {
     precision,
     setPrecision,
     fetchPrecision,
-    balances,
-    setBalances,
-    fetchAllBalances,
     pairList,
     setPairList,
     getPairList,

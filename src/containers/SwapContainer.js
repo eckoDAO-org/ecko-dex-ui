@@ -38,6 +38,7 @@ import GameEditionModeButton from '../components/layout/header/GameEditionModeBu
 import { HistoryIcon } from '../assets';
 import { ROUTE_MY_SWAP, ROUTE_SWAP } from '../router/routes';
 import { SwapSuccessView, SwapSuccessViewGE } from '../components/modals/swap-modals/SwapSuccesTxView';
+import { useInterval } from '../hooks/useInterval';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -121,6 +122,7 @@ const SwapContainer = () => {
   const [inputSide, setInputSide] = useState('');
   const [fromNote, setFromNote] = useState('');
   const [toNote, setToNote] = useState('');
+  const [isTokenSelected, setIsTokenSelected] = useState(true);
   const [showTxModal, setShowTxModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fetchingPair, setFetchingPair] = useState(false);
@@ -264,19 +266,27 @@ const SwapContainer = () => {
       }
     };
     getBalance();
-  }, [toValues.amount, fromValues.amount, account.account?.account]);
+  }, [account.sendRes]);
 
-  useEffect(() => {
-    const getReserves = async () => {
-      if (toValues.coin !== '' && fromValues.coin !== '') {
-        setFetchingPair(true);
-        await pact.getPair(fromValues.address, toValues.address);
-        await pact.getReserves(fromValues.address, toValues.address);
-        setFetchingPair(false);
-      }
-    };
-    getReserves();
-  }, [fromValues.coin, toValues.coin]);
+  /////// TOKENS RATIO LOGIC TO UPDATE INPUT BALANCE AND VALUES //////////
+  useEffect(async () => {
+    setFetchingPair(true);
+    if (toValues.coin !== '' && fromValues.coin !== '') {
+      await pact.getPair(fromValues.address, toValues.address);
+      await pact.getReserves(fromValues.address, toValues.address);
+    }
+    setFetchingPair(false);
+    setIsTokenSelected(false);
+  }, [isTokenSelected]); //the getPair call is invoked when is selected a token
+
+  /// POLLING ON UPDATE PACT RATIO
+  useInterval(async () => {
+    if (!isNaN(pact.ratio)) {
+      await pact.getReserves(fromValues.address, toValues.address);
+    }
+  }, 10000);
+  //////////////////////////////////////////////////////////////////////
+
   useEffect(() => {
     if (swap.walletSuccess) {
       setLoading(false);
@@ -347,6 +357,7 @@ const SwapContainer = () => {
         precision: crypto.precision,
       }));
     }
+    setIsTokenSelected(true);
   };
 
   const onSelectToken = async (crypto) => {
