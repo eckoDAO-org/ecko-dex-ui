@@ -61,7 +61,7 @@ const Container = styled(FadeIn)`
       `;
     } else {
       return css`
-        padding-top: 120px;
+        padding-top: 80px;
         padding-bottom: 35px;
         max-width: 550px;
         overflow: visible;
