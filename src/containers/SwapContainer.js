@@ -24,7 +24,6 @@ import TokenSelectorModalContent from '../components/modals/swap-modals/TokenSel
 import TokenSelectorModalContentGE from '../components/modals/swap-modals/TokenSelectorModalContentGE';
 import SlippagePopupContent from '../components/layout/header/SlippagePopupContent';
 import FormContainer from '../components/shared/FormContainer';
-import BackgroundLogo from '../components/shared/BackgroundLogo';
 import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
 import yellowInputBox from '../assets/images/game-edition/pixeled-box-yellow.svg';
 import purpleInputBox from '../assets/images/game-edition/pixeled-box-purple.svg';
@@ -124,7 +123,6 @@ const SwapContainer = () => {
   const [fetchingPair, setFetchingPair] = useState(false);
   const [noLiquidity, setNoLiquidity] = useState(false);
   const [priceImpact, setPriceImpact] = useState('');
-  const [isLogoVisible, setIsLogoVisible] = useState(false);
 
   useEffect(() => {
     if (!isNaN(fromValues.amount)) {
@@ -534,12 +532,10 @@ const SwapContainer = () => {
   ) : (
     <Container
       gameEditionView={gameEditionView}
-      onAnimationEnd={() => setIsLogoVisible(true)}
       className="scrollbar-none"
       mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
     >
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
-      {!gameEditionView && isLogoVisible && <BackgroundLogo />}
 
       <FlexContainer
         className="justify-sb w-100"

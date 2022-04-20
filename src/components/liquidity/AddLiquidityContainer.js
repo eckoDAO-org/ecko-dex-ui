@@ -29,7 +29,8 @@ const Container = styled(FadeIn)`
   max-width: 550px;
   overflow: visible;
 
-  .arrow-back {
+  .arrow-back,
+  .arrow-down {
     path {
       fill: ${({ theme: { colors } }) => colors.white};
     }

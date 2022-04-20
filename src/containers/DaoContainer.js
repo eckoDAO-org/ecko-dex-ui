@@ -12,18 +12,14 @@ const DaoContainer = () => {
   const { proposal_id } = useParams();
   const { account } = useAccountContext();
 
-  const [, setLoading] = useState(false);
   const [accountData, setAccountData] = useState({});
 
   const fetchData = async () => {
     const getAccountDataRes = await getAccountData(account.account);
     setAccountData(getAccountDataRes);
-
-    setLoading(false);
   };
 
   useEffect(() => {
-    setLoading(true);
     fetchData();
   }, [account]);
 

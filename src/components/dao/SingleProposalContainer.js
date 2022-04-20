@@ -14,10 +14,11 @@ import VotingPowerContainer from './VotingPowerContainer';
 import { ArrowBack } from '../../assets';
 import VoteResultsContainer from './VoteResultsContainer';
 import AppLoader from '../shared/AppLoader';
-import { commonColors } from '../../styles/theme';
+import theme, { commonColors } from '../../styles/theme';
 import { getStatusProposal } from '../../utils/dao-utils';
 import Loader from '../shared/Loader';
 import HtmlFormatterContainer from './HtmlFormatterContainer';
+import useWindowSize from '../../hooks/useWindowSize';
 
 const SingleProposalContainer = ({ proposal_id, accountData }) => {
   const { account } = useAccountContext();
@@ -95,8 +96,17 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
     </FlexContainer>
   );
 
+  const [, height] = useWindowSize();
   return daoSingleProposalLoading ? (
-    <AppLoader containerStyle={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} />
+    <AppLoader
+      containerStyle={{
+        height: `calc(${height}px - ${theme.header.height}px)`,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: -35,
+      }}
+    />
   ) : (
     <>
       <Label fontSize={24} fontFamily="syncopate">
