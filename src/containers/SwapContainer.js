@@ -37,6 +37,7 @@ import GameEditionModeButton from '../components/layout/header/GameEditionModeBu
 import { HistoryIcon } from '../assets';
 import { ROUTE_MY_SWAP, ROUTE_SWAP } from '../router/routes';
 import { SwapSuccessView, SwapSuccessViewGE } from '../components/modals/swap-modals/SwapSuccesTxView';
+import theme from '../styles/theme';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -531,7 +532,12 @@ const SwapContainer = () => {
   return !loaded && gameEditionView ? (
     <LogoLoader />
   ) : (
-    <Container gameEditionView={gameEditionView} onAnimationEnd={() => setIsLogoVisible(true)} className="scrollbar-none">
+    <Container
+      gameEditionView={gameEditionView}
+      onAnimationEnd={() => setIsLogoVisible(true)}
+      className="scrollbar-none"
+      mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
+    >
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
       {!gameEditionView && isLogoVisible && <BackgroundLogo />}
 
