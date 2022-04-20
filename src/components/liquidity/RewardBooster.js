@@ -8,8 +8,6 @@ import Label from '../shared/Label';
 import Toggle from './Toggle';
 
 const RewardBooster = ({ type, apr, handleState }) => {
-  const [reward, setReward] = useState('usd');
-
   return (
     <Wrapper gap={28} withGradient className="background-fill w-100 column" style={{ padding: 24 }}>
       <Label fontFamily="syncopate">REWARD BOOSTER</Label>
@@ -19,10 +17,8 @@ const RewardBooster = ({ type, apr, handleState }) => {
           <Toggle
             onClick={(active) => {
               if (active) {
-                setReward('kdx');
                 handleState(true);
               } else {
-                setReward('usd');
                 handleState(false);
               }
             }}
