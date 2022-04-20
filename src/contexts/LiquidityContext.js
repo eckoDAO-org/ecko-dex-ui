@@ -2,11 +2,11 @@ import React, { useState, createContext } from 'react';
 import pairTokens from '../constants/pairsConfig';
 import Pact from 'pact-lang-api';
 import { CHAIN_ID, GAS_PRICE, NETWORK, NETWORKID, PRECISION, ENABLE_GAS_STATION, KADDEX_NAMESPACE, GAS_LIMIT } from '../constants/contextConstants';
-import { useKaddexWalletContext, useSwapContext, usePactContext, useWalletContext, useAccountContext } from '.';
+import { useKaddexWalletContext, usePactContext, useWalletContext, useAccountContext } from '.';
 import { reduceBalance } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
 import { mkReq, parseRes } from '../api/utils';
-import { getOneSideLiquidityPairInfo } from '../api/pact';
+import { getOneSideLiquidityPairInfo, getPairAccount } from '../api/pact';
 
 export const LiquidityContext = createContext(null);
 
@@ -15,14 +15,13 @@ export const LiquidityProvider = (props) => {
   const { account, setLocalRes } = useAccountContext();
   const { isConnected: isXWalletConnected, requestSign: xWalletRequestSign } = useKaddexWalletContext();
   const wallet = useWalletContext();
-  const swap = useSwapContext();
   const [liquidityProviderFee, setLiquidityProviderFee] = useState(0.003);
   const [pairListAccount, setPairListAccount] = useState(pairTokens);
   const [wantsKdxRewards, setWantsKdxRewards] = useState(false);
 
   const addLiquidityWallet = async (token0, token1, amountDesired0, amountDesired1) => {
     try {
-      let pair = await swap.getPairAccount(token0.code, token1.code);
+      let pair = await getPairAccount(token0.code, token1.code);
 
       const pairConfig = pairTokens[`${token0.code}:${token1.code}`] || pairTokens[`${token1.code}:${token0.code}`];
       const contractName = pairConfig.isBoosted ? 'wrapper' : 'exchange';
@@ -70,7 +69,6 @@ export const LiquidityProvider = (props) => {
         networkId: NETWORKID,
       };
       //alert to sign tx
-      /* walletLoading(); */
       wallet.setIsWaitingForWalletAuth(true);
       let command = null;
       if (isXWalletConnected) {
@@ -80,11 +78,10 @@ export const LiquidityProvider = (props) => {
         command = await Pact.wallet.sign(signCmd);
       }
       //close alert programmatically
-      /* swal.close(); */
       wallet.setIsWaitingForWalletAuth(false);
       wallet.setWalletSuccess(true);
       //set signedtx
-      swap.setCmd(command);
+      pact.setPactCmd(command);
       let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(command));
       data = await parseRes(data);
       setLocalRes(data);
@@ -97,14 +94,13 @@ export const LiquidityProvider = (props) => {
           title: 'No Wallet',
           content: 'Please make sure you open and login to your wallet.',
         });
-      //walletError();
       else
         wallet.setWalletError({
           error: true,
           title: 'Wallet Signing Failure',
           content:
             'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kadenaswap.',
-        }); //walletSigError();
+        });
       console.log(e);
     }
   };
@@ -112,7 +108,7 @@ export const LiquidityProvider = (props) => {
   const addOneSideLiquidityWallet = async (token0, token1, amountDesired0) => {
     try {
       const args = await getOneSideLiquidityPairInfo(amountDesired0, pact.slippage, token0.code, token1.code);
-      let pair = await swap.getPairAccount(token0.code, token1.code);
+      let pair = await getPairAccount(token0.code, token1.code);
       const signCmd = {
         pactCode: `(${KADDEX_NAMESPACE}.wrapper.add-liquidity-one-sided
             ${token0.code}
@@ -152,7 +148,6 @@ export const LiquidityProvider = (props) => {
         networkId: NETWORKID,
       };
       //alert to sign tx
-      /* walletLoading(); */
       wallet.setIsWaitingForWalletAuth(true);
       let command = null;
       if (isXWalletConnected) {
@@ -162,11 +157,10 @@ export const LiquidityProvider = (props) => {
         command = await Pact.wallet.sign(signCmd);
       }
       //close alert programmatically
-      /* swal.close(); */
       wallet.setIsWaitingForWalletAuth(false);
       wallet.setWalletSuccess(true);
       //set signedtx
-      swap.setCmd(command);
+      pact.setPactCmd(command);
       let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(command));
       data = await parseRes(data);
       setLocalRes(data);
@@ -179,21 +173,20 @@ export const LiquidityProvider = (props) => {
           title: 'No Wallet',
           content: 'Please make sure you open and login to your wallet.',
         });
-      //walletError();
       else
         wallet.setWalletError({
           error: true,
           title: 'Wallet Signing Failure',
           content:
             'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kadenaswap.',
-        }); //walletSigError();
+        });
       console.log(e);
     }
   };
 
   const removeLiquidityWallet = async (token0, token1, liquidity) => {
     try {
-      let pair = await swap.getPairAccount(token0, token1);
+      let pair = await getPairAccount(token0, token1);
 
       const pairConfig = pairTokens[`${token0}:${token1}`] || pairTokens[`${token1}:${token0}`];
       const pactCode = pairConfig.isBoosted
@@ -245,7 +238,6 @@ export const LiquidityProvider = (props) => {
         networkId: NETWORKID,
       };
       //alert to sign tx
-      /* walletLoading(); */
       wallet.setIsWaitingForWalletAuth(true);
       let cmd = null;
       if (isXWalletConnected) {
@@ -255,16 +247,14 @@ export const LiquidityProvider = (props) => {
         cmd = await Pact.wallet.sign(signCmd);
       }
       //close alert programmatically
-      /* swal.close(); */
       wallet.setIsWaitingForWalletAuth(false);
       wallet.setWalletSuccess(true);
-      swap.setCmd(cmd);
+      pact.setPactCmd(cmd);
       let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(cmd));
       data = await parseRes(data);
       setLocalRes(data);
       return data;
     } catch (e) {
-      //wallet error alert
       setLocalRes({});
       if (e.message.includes('Failed to fetch'))
         wallet.setWalletError({
@@ -272,14 +262,13 @@ export const LiquidityProvider = (props) => {
           title: 'No Wallet',
           content: 'Please make sure you open and login to your wallet.',
         });
-      //walletError();
       else
         wallet.setWalletError({
           error: true,
           title: 'Wallet Signing Failure',
           content:
             'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kadenaswap.',
-        }); //walletSigError();
+        });
       console.log(e);
     }
   };

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
-import { useGameEditionContext, useLiquidityContext, useModalContext, useSwapContext, useWalletContext } from '../../contexts';
+import { useGameEditionContext, useLiquidityContext, useModalContext, usePactContext, useWalletContext } from '../../contexts';
 import TxView from '../modals/TxView';
 import WalletRequestView from '../modals/WalletRequestView';
 import CustomButton from '../shared/CustomButton';
@@ -64,7 +64,7 @@ const ButtonContainer = styled.div`
 `;
 
 const RemoveLiquidityContent = ({ pair }) => {
-  const swap = useSwapContext();
+  const pact = usePactContext();
   const wallet = useWalletContext();
   const liquidity = useLiquidityContext();
   const modalContext = useModalContext();
@@ -108,7 +108,7 @@ const RemoveLiquidityContent = ({ pair }) => {
 
   const sendTransaction = () => {
     setLoading(true);
-    swap.swapSend();
+    pact.txSend();
     modalContext.closeModal();
     setLoading(false);
   };
@@ -158,14 +158,7 @@ const RemoveLiquidityContent = ({ pair }) => {
             loading={loading}
           >
             {/* SuccessRemoveWithBoosterView to remove liquidy with booster */}
-            <SuccessRemoveView
-              token0={pair.token0}
-              token1={pair.token1}
-              swap={swap}
-              label="Remove Liquidity"
-              loading={loading}
-              onClick={sendTransaction}
-            />
+            <SuccessRemoveView token0={pair.token0} token1={pair.token1} label="Remove Liquidity" loading={loading} onClick={sendTransaction} />
           </TxView>
         ),
       });

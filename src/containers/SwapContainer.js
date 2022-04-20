@@ -281,7 +281,6 @@ const SwapContainer = () => {
     if (fetchData) {
       setFetchingPair(true);
       if (toValues.coin !== '' && fromValues.coin !== '') {
-        await pact.getPair(fromValues.address, toValues.address);
         await pact.getReserves(fromValues.address, toValues.address);
       }
       setFetchingPair(false);
@@ -494,7 +493,7 @@ const SwapContainer = () => {
 
   const sendTransaction = () => {
     setLoading(true);
-    swap.swapSend();
+    pact.txSend();
     setShowTxModal(false);
     modalContext.closeModal();
     setLoading(false);

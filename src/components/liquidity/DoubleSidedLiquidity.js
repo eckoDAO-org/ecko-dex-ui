@@ -23,12 +23,10 @@ import TokenSelectorModalContentGE from '../../components/modals/swap-modals/Tok
 import WalletRequestView from '../../components/modals/WalletRequestView';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { SuccessAddView } from '../modals/liquidity/LiquidityTxView';
-import { useSwapContext } from '../../contexts';
 import { useInterval } from '../../hooks/useInterval';
 
 const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   const pact = useContext(PactContext);
-  const swap = useSwapContext();
   const account = useContext(AccountContext);
   const wallet = useContext(WalletContext);
   const liquidity = useContext(LiquidityContext);
@@ -98,7 +96,6 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
     if (fetchData) {
       setFetchingPair(true);
       if (toValues.coin !== '' && fromValues.coin !== '') {
-        await pact.getPair(tokenData?.[fromValues?.coin]?.code, tokenData?.[toValues?.coin]?.code);
         await pact.getReserves(tokenData?.[fromValues?.coin]?.code, tokenData?.[toValues?.coin]?.code);
       }
       setFetchingPair(false);
@@ -112,7 +109,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
       await pact.getReserves(tokenData?.[fromValues?.coin]?.code, tokenData?.[toValues?.coin]?.code);
     }
   }, 10000);
-  //////////////////////////////////////////////////////////////////////
+  ////////////////////////
 
   const onTokenClick = async ({ crypto }) => {
     let balance;
@@ -379,14 +376,21 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
     }
   };
 
-  const onAddLiquidity = async () => {
+  const onAddLiquidity = () => {
     setLoading(true);
-
-    swap.swapSend();
-
+    pact.txSend();
     setLoading(false);
+
     modalContext.closeModal();
     setShowTxModal(false);
+    setFromValues({
+      ...fromValues,
+      amount: '',
+    });
+    setToValues({
+      ...toValues,
+      amount: '',
+    });
   };
 
   const swapValues = () => {

@@ -6,9 +6,8 @@ import { useInterval } from '../hooks/useInterval';
 import axios from 'axios';
 import { getTokenUsdPriceByName } from '../utils/token-utils';
 import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, KADDEX_NAMESPACE } from '../constants/contextConstants';
-import { extractDecimal } from '../utils/reduceBalance';
-import tokenData from '../constants/cryptoCurrencies';
-import { useAccountContext } from '.';
+import { useAccountContext, useNotificationContext } from '.';
+import { fetchPrecision } from '../api/pact';
 
 export const PactContext = createContext();
 
@@ -17,15 +16,15 @@ const savedTtl = localStorage.getItem('ttl');
 
 export const PactProvider = (props) => {
   const account = useAccountContext();
+  const notificationContext = useNotificationContext();
 
   const [slippage, setSlippage] = useState(savedSlippage ? savedSlippage : 0.05);
   const [ttl, setTtl] = useState(savedTtl ? savedTtl : 600);
-  const [pair, setPair] = useState('');
   const [pairReserve, setPairReserve] = useState('');
   const [precision, setPrecision] = useState(false);
   const [polling, setPolling] = useState(false);
+  const [pactCmd, setPactCmd] = useState(null);
 
-  const [totalSupply, setTotalSupply] = useState('');
   const [ratio, setRatio] = useState(NaN);
   const [pairList, setPairList] = useState(pairTokens);
   const [swapList, setSwapList] = useState([]);
@@ -48,22 +47,6 @@ export const PactProvider = (props) => {
   useEffect(() => {
     fetchPrecision();
   }, []);
-
-  const storeSlippage = async (slippage) => {
-    setSlippage(slippage);
-    localStorage.setItem('slippage', slippage);
-  };
-
-  // const setReqKeysLocalStorage = (key) => {
-  //   const swapReqKeysLS = JSON.parse(localStorage.getItem('swapReqKeys'));
-  //   if (!swapReqKeysLS) {
-  //     //first saving swapReqKeys in localstorage
-  //     localStorage.setItem(`swapReqKeys`, JSON.stringify([key]));
-  //   } else {
-  //     swapReqKeysLS.push(key);
-  //     localStorage.setItem(`swapReqKeys`, JSON.stringify(swapReqKeysLS));
-  //   }
-  // };
 
   const getEventsSwapList = async () => {
     setSwapList([]);
@@ -134,181 +117,6 @@ export const PactProvider = (props) => {
     }
   };
 
-  const fetchPrecision = async () => {
-    let endBracket = '';
-    let tokenNames = Object.values(tokenData).reduce((accum, cumul) => {
-      endBracket += ')';
-      let code = `
-      (let
-        ((${cumul.name}
-          (try -1 (${cumul.code}.precision))
-      ))`;
-      accum += code;
-      return accum;
-    }, '');
-    let objFormat = `{${Object.keys(tokenData)
-      .map((token) => `"${token}": ${token}`)
-      .join(',')}}`;
-    tokenNames = tokenNames + objFormat + endBracket;
-    try {
-      let data = await Pact.fetch.local(
-        {
-          pactCode: tokenNames,
-          meta: Pact.lang.mkMeta('', CHAIN_ID, GAS_PRICE, 150000, creationTime(), 600),
-        },
-        NETWORK
-      );
-      if (data.result.status === 'success') {
-        Object.keys(tokenData).forEach((token) => {
-          tokenData[token].precision = extractDecimal(data.result.data[token]);
-        });
-        setPrecision(true);
-      }
-    } catch (e) {
-      setPrecision(false);
-
-      console.log(e);
-    }
-  };
-
-  const getPairList = async () => {
-    try {
-      const tokenPairList = Object.keys(pairList).reduce((accum, pair) => {
-        accum += `[${pair.split(':').join(' ')}] `;
-        return accum;
-      }, '');
-      let data = await Pact.fetch.local(
-        {
-          pactCode: `
-            (namespace 'free)
-
-            (module ${KADDEX_NAMESPACE}-read G
-
-              (defcap G ()
-                true)
-
-              (defun pair-info (pairList:list)
-                (let* (
-                  (token0 (at 0 pairList))
-                  (token1 (at 1 pairList))
-                  (p (${KADDEX_NAMESPACE}.exchange.get-pair token0 token1))
-                  (reserveA (${KADDEX_NAMESPACE}.exchange.reserve-for p token0))
-                  (reserveB (${KADDEX_NAMESPACE}.exchange.reserve-for p token1))
-                  (totalBal (${KADDEX_NAMESPACE}.tokens.total-supply (${KADDEX_NAMESPACE}.exchange.get-pair-key token0 token1)))
-                )
-                [(${KADDEX_NAMESPACE}.exchange.get-pair-key token0 token1)
-                 reserveA
-                 reserveB
-                 totalBal
-               ]
-              ))
-            )
-            (map (${KADDEX_NAMESPACE}-read.pair-info) [${tokenPairList}])
-             `,
-          meta: Pact.lang.mkMeta('', CHAIN_ID, GAS_PRICE, 150000, creationTime(), 600),
-        },
-        NETWORK
-      );
-      if (data.result.status === 'success') {
-        let dataList = data.result.data.reduce((accum, data) => {
-          accum[data[0]] = {
-            supply: data[3],
-            reserves: [data[1], data[2]],
-          };
-          return accum;
-        }, {});
-        const pairList = Object.values(pairTokens).map((pair) => {
-          return {
-            ...pair,
-            ...dataList[pair.name],
-          };
-        });
-        setPairList(pairList);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const tokens = async (token0, token1, account) => {
-    try {
-      let data = await Pact.fetch.local(
-        {
-          pactCode: `
-          (${KADDEX_NAMESPACE}.tokens.get-tokens)
-           `,
-          meta: Pact.lang.mkMeta('', CHAIN_ID, GAS_PRICE, 150000, creationTime(), 600),
-        },
-        NETWORK
-      );
-      if (data.result.status === 'success') {
-        return data.result.data;
-      } else {
-        await setPairReserve(null);
-        console.log('Failed');
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const getTotalTokenSupply = async (token0, token1) => {
-    try {
-      let data = await Pact.fetch.local(
-        {
-          pactCode: `(${KADDEX_NAMESPACE}.tokens.total-supply (${KADDEX_NAMESPACE}.exchange.get-pair-key ${token0} ${token1}))`,
-          keyPairs: Pact.crypto.genKeyPair(),
-          meta: Pact.lang.mkMeta('', CHAIN_ID, 0.01, 100000000, 28800, creationTime()),
-        },
-        NETWORK
-      );
-      if (data.result.status === 'success') {
-        if (data.result.data.decimal) setTotalSupply(data.result.data.decimal);
-        else setTotalSupply(data.result.data);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const getPair = async (token0, token1) => {
-    try {
-      let data = await Pact.fetch.local(
-        {
-          pactCode: `(${KADDEX_NAMESPACE}.exchange.get-pair ${token0} ${token1})`,
-          keyPairs: Pact.crypto.genKeyPair(),
-          meta: Pact.lang.mkMeta('', CHAIN_ID, GAS_PRICE, 150000, creationTime(), 600),
-        },
-        NETWORK
-      );
-      if (data.result.status === 'success') {
-        setPair(data.result.data);
-        return data.result.data;
-      } else {
-        return null;
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const getPairKey = async (token0, token1) => {
-    try {
-      let data = await Pact.fetch.local(
-        {
-          pactCode: `(${KADDEX_NAMESPACE}.exchange.get-pair-key ${token0} ${token1})`,
-          meta: Pact.lang.mkMeta(account.account.account, CHAIN_ID, GAS_PRICE, 150000, creationTime(), 600),
-        },
-        NETWORK
-      );
-      if (data.result.status === 'success') {
-        return data.result.data;
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   const getReserves = async (token0, token1) => {
     try {
       let data = await Pact.fetch.local(
@@ -327,21 +135,46 @@ export const PactProvider = (props) => {
         NETWORK
       );
       if (data.result.status === 'success') {
-        await setPairReserve({
+        setPairReserve({
           token0: data.result.data[0].decimal ? data.result.data[0].decimal : data.result.data[0],
           token1: data.result.data[1].decimal ? data.result.data[1].decimal : data.result.data[1],
         });
       } else {
-        await setPairReserve({});
+        setPairReserve({});
       }
     } catch (e) {
       console.log(e);
     }
   };
 
+  const txSend = async () => {
+    setPolling(true);
+    try {
+      let data;
+      if (pactCmd.pactCode) {
+        data = await Pact.fetch.send(pactCmd, NETWORK);
+      } else {
+        data = await Pact.wallet.sendSigned(pactCmd, NETWORK);
+      }
+      notificationContext.pollingNotif(data.requestKeys[0], 'Transaction Pending');
+
+      await notificationContext.transactionListen(data.requestKeys[0]);
+      setPolling(false);
+    } catch (e) {
+      setPolling(false);
+      notificationContext.showErrorNotification(null, 'Transaction Error', 'Insufficient funds - attempt to buy gas failed.');
+      console.log('error', e);
+    }
+  };
+
+  const storeSlippage = async (slippage) => {
+    setSlippage(slippage);
+    localStorage.setItem('slippage', slippage);
+  };
+
   const storeTtl = async (ttl) => {
-    await setTtl(slippage);
-    await localStorage.setItem('ttl', ttl);
+    setTtl(slippage);
+    localStorage.setItem('ttl', ttl);
   };
 
   // UTILS
@@ -397,6 +230,7 @@ export const PactProvider = (props) => {
   }
 
   const contextValues = {
+    setPactCmd,
     kdxPrice,
     slippage,
     setSlippage,
@@ -409,10 +243,7 @@ export const PactProvider = (props) => {
     fetchPrecision,
     pairList,
     setPairList,
-    getPairList,
     swapList,
-    totalSupply,
-    getTotalTokenSupply,
     getMoreEventsSwapList,
     moreSwap,
     polling,
@@ -421,12 +252,8 @@ export const PactProvider = (props) => {
     getRatio,
     getRatio1,
     share,
-    pair,
-    setPair,
-    getPair,
-    getPairKey,
     getReserves,
-    tokens,
+    txSend,
     computePriceImpact,
     priceImpactWithoutFee,
     computeOut,

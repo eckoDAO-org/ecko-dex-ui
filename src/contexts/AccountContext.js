@@ -7,6 +7,7 @@ import { CHAIN_ID, creationTime, GAS_PRICE, NETWORK } from '../constants/context
 import useLocalStorage from '../hooks/useLocalStorage';
 import { useGameEditionContext } from '.';
 import reduceToken from '../utils/reduceToken';
+import { getTokenBalanceAccount } from '../api/pact';
 
 export const AccountContext = createContext();
 export const AccountProvider = (props) => {
@@ -68,14 +69,7 @@ export const AccountProvider = (props) => {
 
   const getTokenAccount = async (token, account, first) => {
     try {
-      let data = await Pact.fetch.local(
-        {
-          pactCode: `(${token}.details ${JSON.stringify(account)})`,
-          keyPairs: Pact.crypto.genKeyPair(),
-          meta: Pact.lang.mkMeta('', CHAIN_ID, 0.01, 100000000, 28800, creationTime()),
-        },
-        NETWORK
-      );
+      let data = getTokenBalanceAccount(token, account);
 
       if (data.result.status === 'success') {
         // setTokenAccount({...data.result.data, balance: getCorrectBalance(data.result.data.balance)});

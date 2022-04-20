@@ -1,12 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import CustomButton from '../../components/shared/CustomButton';
-import { AccountContext } from '../../contexts/AccountContext';
 import reduceToken from '../../utils/reduceToken';
 import ConnectWalletModal from '../modals/kdaModals/ConnectWalletModal';
-import { ModalContext } from '../../contexts/ModalContext';
-import { WalletContext } from '../../contexts/WalletContext';
-import { SwapContext } from '../../contexts/SwapContext';
 import { GameEditionContext } from '../../contexts/GameEditionContext';
 import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
 import Label from '../shared/Label';
@@ -19,6 +15,7 @@ import {
   SWAP_BUTTON_SELECT_TOKENS,
   SWAP_BUTTON_SWAP,
 } from '../../constants/swap';
+import { useAccountContext, useModalContext, usePactContext, useSwapContext, useWalletContext } from '../../contexts';
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -49,10 +46,11 @@ const SwapButtonsForm = ({
   showTxModal,
   onSelectToken,
 }) => {
-  const modalContext = useContext(ModalContext);
-  const { account } = useContext(AccountContext);
-  const wallet = useContext(WalletContext);
-  const swap = useContext(SwapContext);
+  const modalContext = useModalContext();
+  const { account } = useAccountContext();
+  const wallet = useWalletContext();
+  const { swapWallet } = useSwapContext();
+  const pact = usePactContext();
   const { gameEditionView, setButtons, closeModal } = useContext(GameEditionContext);
 
   const getButtonLabel = () => {
@@ -73,7 +71,7 @@ const SwapButtonsForm = ({
         A: () => {
           if (showTxModal) {
             setLoading(true);
-            swap.swapSend();
+            pact.txSend();
             setShowTxModal(false);
             closeModal();
             setLoading(false);
@@ -90,7 +88,7 @@ const SwapButtonsForm = ({
   const handleClick = async () => {
     setLoading(true);
 
-    const res = await swap.swapWallet(
+    const res = await swapWallet(
       {
         amount: fromValues.amount,
         address: fromValues.address,

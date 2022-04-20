@@ -3,6 +3,8 @@ import { handleError } from './utils';
 import pairTokens from '../constants/pairsConfig';
 import { CHAIN_ID, creationTime, GAS_PRICE, KADDEX_NAMESPACE, NETWORKID } from '../constants/contextConstants';
 import { NETWORK } from '../constants/contextConstants';
+import tokenData from '../constants/cryptoCurrencies';
+import { extractDecimal } from '../utils/reduceBalance';
 
 export const pactFetchLocal = async (pactCode, options) => {
   let data = await Pact.fetch.local(
@@ -36,6 +38,26 @@ export const getCurrentKdaUSDPrice = async () => {
       `https://api.chainweb.com/chainweb/0.0/${NETWORKID}/chain/0/pact`
     );
     return data.result?.status === 'success' ? data.result?.data : null;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getPair = async (token0, token1) => {
+  try {
+    let data = await Pact.fetch.local(
+      {
+        pactCode: `(${KADDEX_NAMESPACE}.exchange.get-pair ${token0} ${token1})`,
+        keyPairs: Pact.crypto.genKeyPair(),
+        meta: Pact.lang.mkMeta('', CHAIN_ID, GAS_PRICE, 150000, creationTime(), 600),
+      },
+      NETWORK
+    );
+    if (data.result.status === 'success') {
+      return data.result.data;
+    } else {
+      return null;
+    }
   } catch (e) {
     console.log(e);
   }
@@ -294,12 +316,55 @@ const dataWithBooster = async (account, tokenPairList) => {
 };
 
 export const getPairAccount = async (token0, token1) => {
+  const result = await pactFetchLocal(`(at 'account (${KADDEX_NAMESPACE}.exchange.get-pair ${token0} ${token1}))`);
+  if (result.errorMessage) {
+    return result.errorMessage;
+  } else {
+    return result;
+  }
+};
+
+export const getTokenBalanceAccount = async (coinCode, account) => {
+  return await Pact.fetch.local(
+    {
+      pactCode: `(${coinCode}.details ${JSON.stringify(account)})`,
+      keyPairs: Pact.crypto.genKeyPair(),
+      meta: Pact.lang.mkMeta('', CHAIN_ID, 0.01, 100000000, 28800, creationTime()),
+    },
+    NETWORK
+  );
+};
+
+export const fetchPrecision = async () => {
+  let endBracket = '';
+  let tokenNames = Object.values(tokenData).reduce((accum, cumul) => {
+    endBracket += ')';
+    let code = `
+    (let
+      ((${cumul.name}
+        (try -1 (${cumul.code}.precision))
+    ))`;
+    accum += code;
+    return accum;
+  }, '');
+  let objFormat = `{${Object.keys(tokenData)
+    .map((token) => `"${token}": ${token}`)
+    .join(',')}}`;
+  tokenNames = tokenNames + objFormat + endBracket;
   try {
-    let data = await pactFetchLocal(`(at 'account (${KADDEX_NAMESPACE}.exchange.get-pair ${token0} ${token1}))`);
+    let data = await Pact.fetch.local(
+      {
+        pactCode: tokenNames,
+        meta: Pact.lang.mkMeta('', CHAIN_ID, GAS_PRICE, 150000, creationTime(), 600),
+      },
+      NETWORK
+    );
     if (data.result.status === 'success') {
-      return data.result.data;
+      Object.keys(tokenData).forEach((token) => {
+        tokenData[token].precision = extractDecimal(data.result.data[token]);
+      });
     }
   } catch (e) {
-    return e;
+    console.log(e);
   }
 };
