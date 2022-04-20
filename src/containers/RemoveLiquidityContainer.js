@@ -11,7 +11,7 @@ import { ArrowBack } from '../assets';
 import Label from '../components/shared/Label';
 import RewardBooster from '../components/liquidity/RewardBooster';
 import { ROUTE_LIQUIDITY_MY_LIQUIDITY } from '../router/routes';
-import { getPairListAccountBalance } from '../api/pact-pair';
+import { getPairListAccountBalance } from '../api/pact';
 import useQueryParams from '../hooks/useQueryParams';
 import AppLoader from '../components/shared/AppLoader';
 import { LIQUIDITY_VIEW } from '../constants/liquidityView';

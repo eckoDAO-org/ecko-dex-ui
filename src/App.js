@@ -29,8 +29,8 @@ function App() {
         <>
           <GlobalStyle themeMode={themeMode} />
           <GameEditionProvider>
-            <NotificationRender>
-              <AccountProvider>
+            <AccountProvider>
+              <NotificationRender>
                 <WalletProvider>
                   <PactProvider>
                     <KaddexWalletProvider>
@@ -46,8 +46,8 @@ function App() {
                     </KaddexWalletProvider>
                   </PactProvider>
                 </WalletProvider>
-              </AccountProvider>
-            </NotificationRender>
+              </NotificationRender>
+            </AccountProvider>
           </GameEditionProvider>
         </>
       )}

@@ -24,15 +24,7 @@ import WalletRequestView from '../../components/modals/WalletRequestView';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { SuccessAddView } from '../modals/liquidity/LiquidityTxView';
 import { useSwapContext } from '../../contexts';
-
-const initialStateValue = {
-  coin: '',
-  account: '',
-  guard: null,
-  balance: null,
-  amount: '',
-  precision: 12,
-};
+import { useInterval } from '../../hooks/useInterval';
 
 const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   const pact = useContext(PactContext);
@@ -44,104 +36,56 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   const { gameEditionView, openModal, closeModal, outsideToken, showTokens, setShowTokens, setOutsideToken } = useContext(GameEditionContext);
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
+  const [fetchData, setFetchData] = useState(true);
+  const [fetchingPair, setFetchingPair] = useState(false);
+
   const [inputSide, setInputSide] = useState('');
   const [loading, setLoading] = useState(false);
+  const [fromValues, setFromValues] = useState({
+    amount: '',
+    balance: '',
+    coin: 'KDX',
+    precision: 12,
+  });
+  const [toValues, setToValues] = useState({
+    amount: '',
+    balance: account.account.balance || '',
+    coin: 'KDA',
+    precision: 12,
+  });
 
-  const [fromValues, setFromValues] = useState(initialStateValue);
-
-  const [toValues, setToValues] = useState(initialStateValue);
-
-  const [pairExist, setPairExist] = useState(false);
   const [showTxModal, setShowTxModal] = useState(false);
 
-  const initData = async () => {
-    if (pair.token0 && pair.token1) {
-      await handleTokenValue('from', tokenData[pair.token0]);
-
-      await handleTokenValue('to', tokenData[pair.token1]);
-    } else {
-      await handleTokenValue('from', tokenData['KDX']);
-
-      await handleTokenValue('to', tokenData['KDA']);
-    }
-  };
-
   useEffect(() => {
-    initData();
-  }, []);
-
-  useEffect(() => {
-    if (showTxModal === false) {
-      setFromValues({
-        coin: 'KDX',
-        account: '',
-        guard: null,
-        balance: '',
-        amount: '',
-        precision: 12,
-      });
-      setToValues(initialStateValue);
-    }
-  }, [showTxModal]);
-
-  // useEffect(() => {
-  //   if (showTxModal === false) {
-  //     setFromValues({
-  //       coin: 'KDX',
-  //       account: '',
-  //       guard: null,
-  //       balance: '',
-  //       amount: '',
-  //       precision: 12,
-  //     });
-  //     setToValues(initialStateValue);
-  //   }
-  // }, [showTxModal]);
-
-  /////// when pass pair by the container, set the token on InputToken
-  const handleTokenValue = async (by, crypto) => {
-    let balance;
-    if (crypto?.code === 'coin') {
+    const getBalance = async () => {
       if (account.account) {
-        balance = account.account.balance;
+        let acctOfFromValues = await account.getTokenAccount(tokenData[fromValues.coin]?.code, account.account.account, tokenSelectorType === 'from');
+        let acctOfToValues = await account.getTokenAccount(tokenData[toValues.coin]?.code, account.account.account, tokenSelectorType === 'to');
+        if (acctOfFromValues) {
+          let balanceFrom = getCorrectBalance(acctOfFromValues.balance);
+          setFromValues((prev) => ({
+            ...prev,
+            balance: balanceFrom,
+          }));
+        }
+        if (acctOfToValues) {
+          let balanceTo = getCorrectBalance(acctOfToValues.balance);
+          setToValues((prev) => ({
+            ...prev,
+            balance: balanceTo,
+          }));
+        }
       }
-    } else {
-      let acct = await account.getTokenAccount(crypto?.code, account.account.account, tokenSelectorType === 'from');
-      if (acct) {
-        balance = getCorrectBalance(acct.balance);
-      }
-    }
-    if (by === 'from')
-      return setFromValues((prev) => ({
-        ...prev,
-        balance: balance,
-        coin: crypto?.name,
-        precision: crypto?.precision,
-      }));
-    if (by === 'to')
-      return setToValues((prev) => ({
-        ...prev,
-        balance: balance,
-        coin: crypto?.name,
-        precision: crypto?.precision,
-      }));
-    else return null;
-  };
+    };
+    getBalance();
+  }, [account.fetchAccountBalance, account.account.account]);
 
   useEffect(() => {
-    setInputSide('from');
-    if (pair?.token0 && fromValues === initialStateValue) {
-      handleTokenValue('from', tokenData[pair?.token0]);
-    }
-  }, [pair?.token0]);
-
-  useEffect(() => {
-    setInputSide('to');
-    if (pair?.token1 && toValues === initialStateValue) {
-      handleTokenValue('to', tokenData[pair?.token1]);
-    }
-  }, [pair?.token1]);
-  ////////
+    account.setFetchAccountBalance(true);
+    return () => {
+      account.setFetchAccountBalance(false);
+    };
+  }, []);
 
   useEffect(async () => {
     if (tokenSelectorType === 'from') setSelectedToken(fromValues?.coin);
@@ -149,21 +93,26 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
     else setSelectedToken(null);
   }, [tokenSelectorType]);
 
+  /////// TOKENS RATIO LOGIC TO UPDATE INPUT BALANCE AND VALUES //////////
   useEffect(async () => {
-    if (fromValues?.coin !== '') {
-      await account.getTokenAccount(tokenData?.[fromValues?.coin]?.code, account.account.account, true);
-    }
-    if (toValues?.coin !== '') {
-      await account.getTokenAccount(tokenData?.[toValues?.coin]?.code, account.account.account, false);
-    }
-    if (fromValues?.coin !== '' && toValues?.coin !== '') {
-      await pact.getPair(tokenData?.[fromValues?.coin]?.code, tokenData?.[toValues?.coin]?.code);
-      await pact.getReserves(tokenData?.[fromValues?.coin]?.code, tokenData?.[toValues?.coin]?.code);
-      if (pact.pair) {
-        setPairExist(true);
+    if (fetchData) {
+      setFetchingPair(true);
+      if (toValues.coin !== '' && fromValues.coin !== '') {
+        await pact.getPair(tokenData?.[fromValues?.coin]?.code, tokenData?.[toValues?.coin]?.code);
+        await pact.getReserves(tokenData?.[fromValues?.coin]?.code, tokenData?.[toValues?.coin]?.code);
       }
+      setFetchingPair(false);
+      setFetchData(false);
     }
-  }, [fromValues, toValues, pairExist, account.account.account]);
+  }, [fetchData]); //the getPair call is invoked when is selected a token
+
+  /// POLLING ON UPDATE PACT RATIO
+  useInterval(async () => {
+    if (!isNaN(pact.ratio)) {
+      await pact.getReserves(tokenData?.[fromValues?.coin]?.code, tokenData?.[toValues?.coin]?.code);
+    }
+  }, 10000);
+  //////////////////////////////////////////////////////////////////////
 
   const onTokenClick = async ({ crypto }) => {
     let balance;
@@ -191,6 +140,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
         coin: crypto?.name,
         precision: crypto?.precision,
       }));
+    setFetchData(true);
   };
 
   const onSelectToken = async (crypto) => {
@@ -305,8 +255,10 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
       4: { msg: 'Pair does not exist yet', status: false },
       5: { msg: 'Pair Already Exists', status: false },
       6: { msg: 'Select different tokens', status: false },
+      7: { msg: 'Fetching Pair...', status: false },
     };
     if (!account.account.account) return status[0];
+    if (fetchingPair) return status[7];
     if (isNaN(pact.ratio)) {
       return status[4];
     } else if (!fromValues.amount || !toValues.amount) return status[1];
@@ -330,13 +282,6 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
       wallet.setWalletError(null);
       setShowTxModal(true);
     }
-  };
-
-  const swapValues = () => {
-    const from = { ...fromValues };
-    const to = { ...toValues };
-    setFromValues({ ...to });
-    setToValues({ ...from });
   };
 
   useEffect(() => {
@@ -442,6 +387,13 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
     setLoading(false);
     modalContext.closeModal();
     setShowTxModal(false);
+  };
+
+  const swapValues = () => {
+    const from = { ...fromValues };
+    const to = { ...toValues };
+    setFromValues({ ...to });
+    setToValues({ ...from });
   };
 
   useEffect(() => {
