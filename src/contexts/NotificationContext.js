@@ -1,8 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import NotificationContainer from '../components/notification/NotificationContainer';
 import { NETWORK_TYPE } from '../constants/contextConstants';
+import { listen } from '../api/utils';
+import { useAccountContext } from '.';
 
 export const NotificationContext = createContext();
 
@@ -19,8 +22,10 @@ const getStoredNotification = JSON.parse(localStorage.getItem('Notification'));
 
 export const NotificationProvider = ({ children }) => {
   const toastId = React.useRef(null);
+  const { account, setFetchAccountBalance } = useAccountContext();
 
   const [notificationList, setNotificationList] = useState(getStoredNotification || []);
+  const [notificationNotCompletedChecked, setNotificationNotCompletedChecked] = useState(false);
 
   // TOAST NOTIFICATION
   const showNotification = ({
@@ -121,24 +126,27 @@ export const NotificationProvider = ({ children }) => {
 
   // UTILS FOR THE LOGIC ON BLOCKCHAIN CALLS
   const pollingNotif = (reqKey, title, message = null) => {
-    storeNotification({
-      type: STATUSES.INFO,
-      date: moment().format('DD/MM/YYYY - HH:mm:ss'),
-      title: title || 'Transaction Pending',
-      description: reqKey,
-      isRead: false,
-      isCompleted: false,
-    });
-    toastId.current = showNotification({
-      title: title || 'Transaction Pending',
-      message: message || reqKey,
-      type: STATUSES.INFO,
-      closeOnClick: false,
-      hideProgressBar: false,
-      onClick: async () => {
-        window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${reqKey}`, '_blank', 'noopener,noreferrer');
-      },
-    });
+    const notificationExists = notificationList.filter((notif) => notif.type === STATUSES.INFO).find((notif) => notif.description === reqKey);
+    if (!notificationExists) {
+      storeNotification({
+        type: STATUSES.INFO,
+        date: moment().format('DD/MM/YYYY - HH:mm:ss'),
+        title: title || 'Transaction Pending',
+        description: reqKey,
+        isRead: false,
+        isCompleted: false,
+      });
+      toastId.current = showNotification({
+        title: title || 'Transaction Pending',
+        message: message || reqKey,
+        type: STATUSES.INFO,
+        closeOnClick: false,
+        hideProgressBar: false,
+        onClick: async () => {
+          window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${reqKey}`, '_blank', 'noopener,noreferrer');
+        },
+      });
+    }
   };
 
   //Show and store the Error Notification
@@ -193,6 +201,26 @@ export const NotificationProvider = ({ children }) => {
     });
   };
 
+  const transactionListen = async (reqKey) => {
+    const pollRes = await listen(reqKey);
+    if (pollRes === 'success') {
+      setFetchAccountBalance(true);
+      showSuccessNotification(reqKey);
+    } else {
+      setFetchAccountBalance(true);
+      showErrorNotification(reqKey);
+    }
+  };
+
+  useEffect(() => {
+    if (!notificationNotCompletedChecked && account.account) {
+      const pendingNotification = notificationList.filter((notif) => notif.type === 'info' && notif.isCompleted === false);
+      pendingNotification.map((pendingNotif) => transactionListen(pendingNotif.description));
+
+      setNotificationNotCompletedChecked(true);
+    }
+  }, [account.account]);
+
   return (
     <NotificationContext.Provider
       value={{
@@ -209,6 +237,7 @@ export const NotificationProvider = ({ children }) => {
         pollingNotif,
         showErrorNotification,
         showSuccessNotification,
+        transactionListen,
       }}
     >
       {children}

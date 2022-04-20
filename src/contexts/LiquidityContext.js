@@ -6,7 +6,7 @@ import { useKaddexWalletContext, useSwapContext, usePactContext, useWalletContex
 import { reduceBalance } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
 import { mkReq, parseRes } from '../api/utils';
-import { getOneSideLiquidityPairInfo } from '../api/pact-pair';
+import { getOneSideLiquidityPairInfo } from '../api/pact';
 
 export const LiquidityContext = createContext(null);
 

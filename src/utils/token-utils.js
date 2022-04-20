@@ -2,7 +2,7 @@ import { getCoingeckoUsdPrice } from '../api/coingecko';
 import { CHAIN_ID, FEE, STAKING_REWARDS_PERCENT } from '../constants/contextConstants';
 import tokenData from '../constants/cryptoCurrencies';
 import { bigNumberConverter } from './bignumber';
-import { getPairList } from '../api/pact-pair';
+import { getPairList } from '../api/pact';
 import { reduceBalance } from './reduceBalance';
 
 export const getTokenName = (code) => {

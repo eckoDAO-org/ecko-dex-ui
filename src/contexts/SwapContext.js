@@ -29,7 +29,6 @@ export const SwapProvider = (props) => {
   const [pairAccount, setPairAccount] = useState('');
   const [cmd, setCmd] = useState(null);
 
-
   const getPairAccount = async (token0, token1) => {
     const result = await pactFetchLocal(`(at 'account (${KADDEX_NAMESPACE}.exchange.get-pair ${token0} ${token1}))`);
     if (result.errorMessage) {
@@ -107,7 +106,7 @@ export const SwapProvider = (props) => {
       }
       notificationContext.pollingNotif(data.requestKeys[0], 'Transaction Pending');
 
-      await pact.transactionListen(data.requestKeys[0]);
+      await notificationContext.transactionListen(data.requestKeys[0]);
       pact.setPolling(false);
     } catch (e) {
       pact.setPolling(false);

@@ -122,7 +122,8 @@ const SwapContainer = () => {
   const [inputSide, setInputSide] = useState('');
   const [fromNote, setFromNote] = useState('');
   const [toNote, setToNote] = useState('');
-  const [isTokenSelected, setIsTokenSelected] = useState(true);
+  const [fetchData, setFetchData] = useState(true);
+
   const [showTxModal, setShowTxModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fetchingPair, setFetchingPair] = useState(false);
@@ -246,7 +247,7 @@ const SwapContainer = () => {
 
   useEffect(() => {
     const getBalance = async () => {
-      if (account.account) {
+      if (account.account && account.fetchAccountBalance) {
         let acctOfFromValues = await account.getTokenAccount(tokenData[fromValues.coin]?.code, account.account.account, tokenSelectorType === 'from');
         let acctOfToValues = await account.getTokenAccount(tokenData[toValues.coin]?.code, account.account.account, tokenSelectorType === 'to');
         if (acctOfFromValues) {
@@ -266,18 +267,27 @@ const SwapContainer = () => {
       }
     };
     getBalance();
-  }, [account.sendRes]);
+  }, [account.fetchAccountBalance]);
+
+  useEffect(() => {
+    account.setFetchAccountBalance(true);
+    return () => {
+      account.setFetchAccountBalance(false);
+    };
+  }, []);
 
   /////// TOKENS RATIO LOGIC TO UPDATE INPUT BALANCE AND VALUES //////////
   useEffect(async () => {
-    setFetchingPair(true);
-    if (toValues.coin !== '' && fromValues.coin !== '') {
-      await pact.getPair(fromValues.address, toValues.address);
-      await pact.getReserves(fromValues.address, toValues.address);
+    if (fetchData) {
+      setFetchingPair(true);
+      if (toValues.coin !== '' && fromValues.coin !== '') {
+        await pact.getPair(fromValues.address, toValues.address);
+        await pact.getReserves(fromValues.address, toValues.address);
+      }
+      setFetchingPair(false);
+      setFetchData(false);
     }
-    setFetchingPair(false);
-    setIsTokenSelected(false);
-  }, [isTokenSelected]); //the getPair call is invoked when is selected a token
+  }, [fetchData]); //the getPair call is invoked when is selected a token
 
   /// POLLING ON UPDATE PACT RATIO
   useInterval(async () => {
@@ -357,7 +367,7 @@ const SwapContainer = () => {
         precision: crypto.precision,
       }));
     }
-    setIsTokenSelected(true);
+    setFetchData(true);
   };
 
   const onSelectToken = async (crypto) => {

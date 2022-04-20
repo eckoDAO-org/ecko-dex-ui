@@ -1,20 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useEffect, useState } from 'react';
-import moment from 'moment';
 import Pact from 'pact-lang-api';
 import swal from '@sweetalert/with-react';
 import { getCorrectBalance } from '../utils/reduceBalance';
 import { CHAIN_ID, creationTime, GAS_PRICE, NETWORK } from '../constants/contextConstants';
 import useLocalStorage from '../hooks/useLocalStorage';
-import { useGameEditionContext, useNotificationContext } from '.';
+import { useGameEditionContext } from '.';
 import reduceToken from '../utils/reduceToken';
 
 export const AccountContext = createContext();
 export const AccountProvider = (props) => {
-  const [sendRes, setSendRes] = useState(null);
+  const [fetchAccountBalance, setFetchAccountBalance] = useState(false);
   const [localRes, setLocalRes] = useState(null);
   const { gameEditionView } = useGameEditionContext();
-  const { storeNotification } = useNotificationContext();
 
   const [account, setAccount, removeAccount] = useLocalStorage('acct', { account: null, guard: null, balance: 0 });
   const [privKey, setPrivKey, removePrivKey] = useLocalStorage('pk', '');
@@ -33,28 +31,11 @@ export const AccountProvider = (props) => {
   });
   useEffect(() => {
     if (account.account) setVerifiedAccount(account.account);
-  }, [sendRes]);
+  }, [fetchAccountBalance]);
 
   useEffect(() => {
     if (account.account) setRegistered(true);
   }, [registered]);
-
-  useEffect(() => {
-    if (typeof localRes === 'string') {
-      return storeNotification({
-        type: 'error',
-        date: moment().format('DD/MM/YYYY - HH:mm:ss'),
-        title: 'Transaction Error',
-        description: localRes,
-        isRead: false,
-      });
-    }
-  }, [localRes]);
-
-  const clearSendRes = () => {
-    setVerifiedAccount(account.account);
-    setSendRes(null);
-  };
 
   const setVerifiedAccount = async (accountName, onConnectionSuccess) => {
     try {
@@ -106,6 +87,8 @@ export const AccountProvider = (props) => {
       }
     } catch (e) {
       console.log(e);
+    } finally {
+      setFetchAccountBalance(false);
     }
   };
 
@@ -123,9 +106,8 @@ export const AccountProvider = (props) => {
     account,
     privKey,
     setPrivKey,
-    clearSendRes,
-    sendRes,
-    setSendRes,
+    fetchAccountBalance,
+    setFetchAccountBalance,
     localRes,
     setLocalRes,
     setVerifiedAccount,

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
-import { getPairList } from '../../api/pact-pair';
+import { getPairList } from '../../api/pact';
 import { getDailyVolume } from '../../api/kaddex-stats';
 import { getAllPairValues, getStakingApr } from '../../utils/token-utils';
 import { humanReadableNumber } from '../../utils/reduceBalance';

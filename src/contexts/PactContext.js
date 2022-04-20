@@ -5,11 +5,10 @@ import pairTokens from '../constants/pairsConfig';
 import { useInterval } from '../hooks/useInterval';
 import axios from 'axios';
 import { getTokenUsdPriceByName } from '../utils/token-utils';
-import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, NETWORKID, KADDEX_NAMESPACE } from '../constants/contextConstants';
+import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { extractDecimal } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
-import { useAccountContext, useNotificationContext } from '.';
-import { listen } from '../api/pact';
+import { useAccountContext } from '.';
 
 export const PactContext = createContext();
 
@@ -18,7 +17,6 @@ const savedTtl = localStorage.getItem('ttl');
 
 export const PactProvider = (props) => {
   const account = useAccountContext();
-  const notificationContext = useNotificationContext();
 
   const [slippage, setSlippage] = useState(savedSlippage ? savedSlippage : 0.05);
   const [ttl, setTtl] = useState(savedTtl ? savedTtl : 600);
@@ -26,7 +24,6 @@ export const PactProvider = (props) => {
   const [pairReserve, setPairReserve] = useState('');
   const [precision, setPrecision] = useState(false);
   const [polling, setPolling] = useState(false);
-  const [notificationNotCompletedChecked, setNotificationNotCompletedChecked] = useState(false);
 
   const [totalSupply, setTotalSupply] = useState('');
   const [ratio, setRatio] = useState(NaN);
@@ -43,14 +40,6 @@ export const PactProvider = (props) => {
     updateKdxPrice();
   }, []);
   useInterval(updateKdxPrice, 20000);
-  useEffect(() => {
-    if (!notificationNotCompletedChecked) {
-      const pendingNotification = notificationContext.notificationList.filter((notif) => notif.type === 'info' && notif.isCompleted === false);
-      pendingNotification.map((pendingNotif) => transactionListen(pendingNotif.description));
-
-      setNotificationNotCompletedChecked(true);
-    }
-  }, []);
 
   useEffect(() => {
     pairReserve ? setRatio(pairReserve['token0'] / pairReserve['token1']) : setRatio(NaN);
@@ -241,15 +230,6 @@ export const PactProvider = (props) => {
     }
   };
 
-  const transactionListen = async (reqKey) => {
-    const pollRes = await listen(reqKey);
-    if (pollRes === 'success') {
-      notificationContext.showSuccessNotification(reqKey);
-    } else {
-      notificationContext.showErrorNotification(reqKey);
-    }
-  };
-
   const tokens = async (token0, token1, account) => {
     try {
       let data = await Pact.fetch.local(
@@ -267,24 +247,6 @@ export const PactProvider = (props) => {
         await setPairReserve(null);
         console.log('Failed');
       }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const getCurrentKdaUSDPrice = async () => {
-    try {
-      let data = await Pact.fetch.local(
-        {
-          pactCode: `
-          (${KADDEX_NAMESPACE}.public-sale.kda-current-usd-price)
-          `,
-          meta: Pact.lang.mkMeta('', '0', GAS_PRICE, 150000, creationTime(), 600),
-          chainId: 0,
-        },
-        `https://api.chainweb.com/chainweb/0.0/${NETWORKID}/chain/0/pact`
-      );
-      return data.result?.status === 'success' ? data.result?.data : null;
     } catch (e) {
       console.log(e);
     }
@@ -453,7 +415,6 @@ export const PactProvider = (props) => {
     getTotalTokenSupply,
     getMoreEventsSwapList,
     moreSwap,
-    transactionListen,
     polling,
     setPolling,
     ratio,
@@ -471,7 +432,6 @@ export const PactProvider = (props) => {
     computeOut,
     computeIn,
     setMoreSwap,
-    getCurrentKdaUSDPrice,
     loadingSwap,
     getEventsSwapList,
   };

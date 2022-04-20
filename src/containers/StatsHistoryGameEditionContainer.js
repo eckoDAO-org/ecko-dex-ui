@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import { useErrorState } from '../hooks/useErrorState';
-import { getPairList } from '../api/pact-pair';
+import { getPairList } from '../api/pact';
 import { FadeIn } from '../components/shared/animations';
 import CommonTableGameEdition from '../components/shared/CommonTableGameEdition';
 import { FlexContainer } from '../components/shared/FlexContainer';

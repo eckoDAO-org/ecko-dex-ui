@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useErrorState } from '../../hooks/useErrorState';
-import { getPairListAccountBalance } from '../../api/pact-pair';
+import { getPairListAccountBalance } from '../../api/pact';
 import { AccountContext } from '../../contexts/AccountContext';
 import { AddIcon, RemoveIcon } from '../../assets';
 import tokenData from '../../constants/cryptoCurrencies';
