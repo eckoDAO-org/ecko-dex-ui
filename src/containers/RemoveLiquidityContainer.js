@@ -17,6 +17,7 @@ import AppLoader from '../components/shared/AppLoader';
 import { LIQUIDITY_VIEW } from '../constants/liquidityView';
 import { getAllPairValues } from '../utils/token-utils';
 import { getDailyVolume } from '../api/kaddex-stats';
+import theme from '../styles/theme';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -80,7 +81,12 @@ const RemoveLiquidityContainer = () => {
   return loading ? (
     <AppLoader className="h-100 w-100 justify-ce align-ce" />
   ) : (
-    <Container className="column w-100 relative justify-ce" gap={24} style={{ paddingTop: 35, paddingBottom: 35 }}>
+    <Container
+      className="column w-100 relative justify-ce"
+      gap={24}
+      style={{ paddingTop: 35, paddingBottom: 35 }}
+      mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
+    >
       {!pair ? (
         <Label>no pair</Label>
       ) : (
