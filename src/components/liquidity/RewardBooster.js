@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
 import { CoinKaddexIcon, CoinsIcon } from '../../assets';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
