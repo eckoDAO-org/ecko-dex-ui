@@ -39,12 +39,14 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
 
   const [loading, setLoading] = useState(false);
 
+  // update the balance after a transaction send or change account
   useEffect(() => {
     if (account.fetchAccountBalance) {
       handleTokenValue(pair?.token0 || 'KDX');
     }
   }, [account.fetchAccountBalance, account.account.account]);
 
+  //reset fetchAccountBalance change page
   useEffect(() => {
     account.setFetchAccountBalance(true);
     return () => {
@@ -75,7 +77,6 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
       await pact.getReserves(tokenData?.[selectedPool?.token0]?.code, tokenData?.[selectedPool?.token1]?.code);
     }
   }, 10000);
-  ////////////////////////
 
   const handleTokenValue = async (token) => {
     const crypto = tokenData[token];

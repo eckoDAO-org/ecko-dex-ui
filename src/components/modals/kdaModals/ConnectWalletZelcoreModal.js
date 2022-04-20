@@ -1,12 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import CustomButton from '../../../components/shared/CustomButton';
-import { ModalContext } from '../../../contexts/ModalContext';
 import GetZelcoreAccountModal from './GetZelcoreAccountModal';
 import Label from '../../shared/Label';
-import { useGameEditionContext } from '../../../contexts';
+import { useGameEditionContext, useModalContext } from '../../../contexts';
 
 const ConnectWalletZelcoreModal = ({ onConnectionSuccess }) => {
-  const modalContext = useContext(ModalContext);
+  const modalContext = useModalContext();
   const { gameEditionView, openModal } = useGameEditionContext();
 
   return (

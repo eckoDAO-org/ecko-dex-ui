@@ -69,7 +69,7 @@ export const AccountProvider = (props) => {
 
   const getTokenAccount = async (token, account, first) => {
     try {
-      let data = getTokenBalanceAccount(token, account);
+      let data = await getTokenBalanceAccount(token, account);
 
       if (data.result.status === 'success') {
         // setTokenAccount({...data.result.data, balance: getCorrectBalance(data.result.data.balance)});

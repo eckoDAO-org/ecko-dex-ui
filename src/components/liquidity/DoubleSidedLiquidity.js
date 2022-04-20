@@ -1,13 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { throttle, debounce } from 'throttle-debounce';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import tokenData from '../../constants/cryptoCurrencies';
-import { AccountContext } from '../../contexts/AccountContext';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
-import { LiquidityContext } from '../../contexts/LiquidityContext';
-import { ModalContext } from '../../contexts/ModalContext';
-import { PactContext } from '../../contexts/PactContext';
-import { WalletContext } from '../../contexts/WalletContext';
 import { getCorrectBalance, reduceBalance } from '../../utils/reduceBalance';
 import PixeledBlueContainer, { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
 import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
@@ -24,19 +18,20 @@ import WalletRequestView from '../../components/modals/WalletRequestView';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { SuccessAddView } from '../modals/liquidity/LiquidityTxView';
 import { useInterval } from '../../hooks/useInterval';
+import { useAccountContext, useGameEditionContext, useLiquidityContext, useModalContext, usePactContext, useWalletContext } from '../../contexts';
 
 const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
-  const pact = useContext(PactContext);
-  const account = useContext(AccountContext);
-  const wallet = useContext(WalletContext);
-  const liquidity = useContext(LiquidityContext);
-  const modalContext = useContext(ModalContext);
-  const { gameEditionView, openModal, closeModal, outsideToken, showTokens, setShowTokens, setOutsideToken } = useContext(GameEditionContext);
+  const pact = usePactContext();
+  const account = useAccountContext();
+  const wallet = useWalletContext();
+  const liquidity = useLiquidityContext();
+  const modalContext = useModalContext();
+  const { gameEditionView, openModal, closeModal, outsideToken, showTokens, setShowTokens, setOutsideToken } = useGameEditionContext();
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
   const [fetchData, setFetchData] = useState(true);
   const [fetchingPair, setFetchingPair] = useState(false);
-
+  const [showTxModal, setShowTxModal] = useState(false);
   const [inputSide, setInputSide] = useState('');
   const [loading, setLoading] = useState(false);
   const [fromValues, setFromValues] = useState({
@@ -52,8 +47,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
     precision: 12,
   });
 
-  const [showTxModal, setShowTxModal] = useState(false);
-
+  // update the balance after a transaction send or change account
   useEffect(() => {
     const getBalance = async () => {
       if (account.account) {
@@ -78,6 +72,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
     getBalance();
   }, [account.fetchAccountBalance, account.account.account]);
 
+  //reset fetchAccountBalance change page
   useEffect(() => {
     account.setFetchAccountBalance(true);
     return () => {
@@ -109,7 +104,6 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
       await pact.getReserves(tokenData?.[fromValues?.coin]?.code, tokenData?.[toValues?.coin]?.code);
     }
   }, 10000);
-  ////////////////////////
 
   const onTokenClick = async ({ crypto }) => {
     let balance;
@@ -273,14 +267,13 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
     const res = await liquidity.addLiquidityWallet(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
     if (!res) {
       wallet.setIsWaitingForWalletAuth(true);
-      /* pact.setWalletError(true); */
-      /* walletError(); */
     } else {
       wallet.setWalletError(null);
       setShowTxModal(true);
     }
   };
 
+  // to reset the input data when selected the same coin
   useEffect(() => {
     if (tokenSelectorType === 'from') {
       if (fromValues.coin === toValues.coin) {
@@ -400,6 +393,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
     setToValues({ ...from });
   };
 
+  // trigger for open the preview modal
   useEffect(() => {
     if (showTxModal) {
       if (gameEditionView) {

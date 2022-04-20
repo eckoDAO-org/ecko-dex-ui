@@ -26,6 +26,12 @@
         "token0": "KDA",
         "token1": "FLUX",
         "isBoosted": false
+      },
+      "coin:hypercent.prod-hype-coin": {
+        "name": "coin:hypercent.prod-hype-coin",
+        "token0": "KDA",
+        "token1": "HYPE",
+        "isBoosted": false
       }
     }
   }

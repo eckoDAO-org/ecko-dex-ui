@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
 import { Search as SUISearch } from 'semantic-ui-react';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { useGameEditionContext } from '../../contexts';
 
 const Container = styled.div.attrs({ icon: 'search' })`
   margin-bottom: 15px;
@@ -30,7 +30,7 @@ const Container = styled.div.attrs({ icon: 'search' })`
 `;
 
 const Search = ({ fluid, containerStyle, placeholder, value, onChange }) => {
-  const { gameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView } = useGameEditionContext();
   return (
     <Container gameEditionView={gameEditionView} fluid={fluid} style={containerStyle}>
       <SUISearch fluid open={false} icon={'search'} placeholder={placeholder} value={value} onSearchChange={onChange} />

@@ -1,12 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import { Input as SUIInput } from 'semantic-ui-react';
 import CustomButton from '../../../components/shared/CustomButton';
 import Input from '../../../components/shared/Input';
-import { AccountContext } from '../../../contexts/AccountContext';
-import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import Label from '../../shared/Label';
 import pixeledYellowBox from '../../../assets/images/game-edition/pixeled-box-yellow.svg';
+import { useAccountContext, useGameEditionContext } from '../../../contexts';
 
 const ActionContainer = styled.div`
   display: flex;
@@ -17,8 +16,8 @@ const ActionContainer = styled.div`
 `;
 
 const ConnectWalletChainweaverModal = ({ onClose }) => {
-  const account = useContext(AccountContext);
-  const { gameEditionView } = useContext(GameEditionContext);
+  const account = useAccountContext();
+  const { gameEditionView } = useGameEditionContext();
 
   const [accountId, setAccountId] = useState('');
   useState(false);

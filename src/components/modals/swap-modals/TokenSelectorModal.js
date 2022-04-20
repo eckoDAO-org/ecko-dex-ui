@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
 import { Transition } from 'react-spring/renderprops';
 import Backdrop from '../../../components/shared/Backdrop';
 import ModalContainer from '../../../components/shared/ModalContainer';
 import TokenSelectorModalContent from './TokenSelectorModalContent';
-import { GameEditionContext } from '../../../contexts/GameEditionContext';
+import { useGameEditionContext } from '../../../contexts';
 
 const Container = styled.div`
   position: absolute;
@@ -23,7 +23,7 @@ const Container = styled.div`
 `;
 
 const TokenSelectorModal = ({ show, selectedToken, onTokenClick, onClose, fromToken, toToken }) => {
-  const game = useContext(GameEditionContext);
+  const game = useGameEditionContext();
 
   return (
     <>

@@ -1,7 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import styled, { css } from 'styled-components/macro';
-import { useApplicationContext } from '../../contexts';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { useApplicationContext, useGameEditionContext } from '../../contexts';
 import InputToken from '../../components/shared/InputToken';
 import { SwapIcon } from '../../assets';
 import { limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
@@ -77,7 +76,7 @@ const SecondInputContainer = styled.div`
 
 const SwapForm = ({ label, fromValues, setFromValues, toValues, setToValues, fromNote, toNote, setTokenSelectorType, setInputSide, swapValues }) => {
   const { themeMode } = useApplicationContext();
-  const { gameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView } = useGameEditionContext();
   const [rotation, setRotation] = useState(0);
 
   return (

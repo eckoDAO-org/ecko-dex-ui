@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { useGameEditionContext } from '../../contexts';
 import { ROUTE_INDEX } from '../../router/routes';
 
 const Item = styled.div`
@@ -54,7 +54,7 @@ const HeaderItem = ({
   disableHover,
   notChangebleFontOnHover,
 }) => {
-  const { gameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView } = useGameEditionContext();
   const history = useHistory();
   const { pathname } = useLocation();
 

@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
 import { useLocation } from 'react-router-dom';
-import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../../contexts/GameEditionContext';
-import { useApplicationContext } from '../../../contexts';
+import { GE_DESKTOP_CONFIGURATION } from '../../../contexts/GameEditionContext';
+import { useApplicationContext, useGameEditionContext } from '../../../contexts';
 import { ROUTE_GAME_START_ANIMATION } from '../../../router/routes';
 import { FadeIn } from '../../shared/animations';
 import { ConnectWalletIcon, WireConnectionLightIcon, WireConnectionDarkIcon } from '../../../assets';
@@ -30,7 +30,7 @@ const ConnectWalletContainer = styled.div`
 const ConnectWalletWire = ({ onClick }) => {
   const location = useLocation();
   const { themeMode } = useApplicationContext();
-  const { showWires, selectedWire } = useContext(GameEditionContext);
+  const { showWires, selectedWire } = useGameEditionContext();
 
   return (
     <WireConnectionContainer

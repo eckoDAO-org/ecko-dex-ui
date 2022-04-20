@@ -329,7 +329,7 @@ export const getTokenBalanceAccount = async (coinCode, account) => {
     {
       pactCode: `(${coinCode}.details ${JSON.stringify(account)})`,
       keyPairs: Pact.crypto.genKeyPair(),
-      meta: Pact.lang.mkMeta('', CHAIN_ID, 0.01, 100000000, 28800, creationTime()),
+      meta: Pact.lang.mkMeta('', CHAIN_ID, GAS_PRICE, 150000, creationTime(), 600),
     },
     NETWORK
   );

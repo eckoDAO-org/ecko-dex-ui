@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components/macro';
 import { ArrowBack, CloseIcon } from '../../assets';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
 import GradientBorder from './GradientBorder';
 import browserDetection from '../../utils/browserDetection';
 import Label from './Label';
+import { useGameEditionContext } from '../../contexts';
 
 const Container = styled.div`
   position: relative;
@@ -93,7 +93,7 @@ const ModalContainer = ({
   withoutRainbowBackground = false,
   backgroundNotChangebleWithTheme,
 }) => {
-  const { gameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView } = useGameEditionContext();
 
   return (
     <Container

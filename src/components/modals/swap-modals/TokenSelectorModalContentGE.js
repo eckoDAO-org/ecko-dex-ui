@@ -1,12 +1,11 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components/macro';
-import { SwapContext } from '../../../contexts/SwapContext';
-import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import PixeledTokenSelectorBlueIcon from '../../../assets/images/game-edition/pixeled-token-selector-blue.svg';
 import PixeledTokenSelectorWhiteIcon from '../../../assets/images/game-edition/pixeled-token-selector-white.svg';
 import { PixeledArrowDownIcon, TreeDotsHorizontalIcon } from '../../../assets';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import PressButtonToActionLabel from '../../game-edition-v2/components/PressButtonToActionLabel';
+import { useGameEditionContext, useSwapContext } from '../../../contexts';
 
 const Content = styled.div`
   display: flex;
@@ -102,11 +101,11 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
   const [searchValue, setSearchValue] = useState('');
   const [translateX, setTranslateX] = useState(0);
 
-  const swap = useContext(SwapContext);
+  const swap = useSwapContext();
 
   const [selectedToken, setSelectedToken] = useState(null);
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(1);
-  const { gameEditionView, setShowTokens, setButtons, setOutsideToken, showTokens } = useContext(GameEditionContext);
+  const { gameEditionView, setShowTokens, setButtons, setOutsideToken, showTokens } = useGameEditionContext();
 
   const cryptoCurrencies = Object.values(swap.tokenData)
     .filter((c) => {

@@ -1,13 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { ExplorerIcon } from '../../../assets';
 import { NETWORK_TYPE } from '../../../constants/contextConstants';
-import { AccountContext } from '../../../contexts/AccountContext';
-import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import { ModalContext } from '../../../contexts/ModalContext';
-import { WalletContext } from '../../../contexts/WalletContext';
-import { KaddexWalletContext } from '../../../contexts/KaddexWalletContext';
 import CopyPopup from '../../../components/shared/CopyPopup';
 import CustomButton from '../../../components/shared/CustomButton';
 import reduceToken from '../../../utils/reduceToken';
@@ -16,6 +11,7 @@ import ConnectWalletModal from './ConnectWalletModal';
 import Label from '../../shared/Label';
 import PressButtonToActionLabel from '../../game-edition-v2/components/PressButtonToActionLabel';
 import { FlexContainer } from '../../shared/FlexContainer';
+import { useAccountContext, useGameEditionContext, useKaddexWalletContext, useModalContext, useWalletContext } from '../../../contexts';
 
 const AccountModalContainer = styled(Container)`
   justify-content: space-between;
@@ -77,11 +73,11 @@ const RightContainer = styled.div`
 `;
 
 const AccountModal = ({ pathname }) => {
-  const { account, logout } = useContext(AccountContext);
-  const modalContext = useContext(ModalContext);
-  const { gameEditionView, setSelectedWire, setShowWires, setButtons, buttons } = useContext(GameEditionContext);
-  const { wallet } = useContext(WalletContext);
-  const { disconnectWallet } = useContext(KaddexWalletContext);
+  const { account, logout } = useAccountContext();
+  const modalContext = useModalContext();
+  const { gameEditionView, setSelectedWire, setShowWires, setButtons, buttons } = useGameEditionContext();
+  const { wallet } = useWalletContext();
+  const { disconnectWallet } = useKaddexWalletContext();
 
   useEffect(() => {
     const oldButtons = buttons;

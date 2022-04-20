@@ -1,10 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styled, { css } from 'styled-components/macro';
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
-import { GameEditionContext } from '../contexts/GameEditionContext';
-import { PactContext } from '../contexts/PactContext';
 import { CryptoContainer, FlexContainer } from '../components/shared/FlexContainer';
 import LogoLoader from '../components/shared/Loader';
 import Label from '../components/shared/Label';
@@ -20,6 +18,7 @@ import CommonTableGameEdition from '../components/shared/CommonTableGameEdition'
 import { NETWORK_TYPE } from '../constants/contextConstants';
 import AppLoader from '../components/shared/AppLoader';
 import theme from '../styles/theme';
+import { useGameEditionContext, usePactContext } from '../contexts';
 
 export const CardContainer = styled(FadeIn)`
   display: flex;
@@ -79,8 +78,8 @@ const HistoryIconContainer = styled(FlexContainer)`
 
 const SwapHistoryContainer = () => {
   const history = useHistory();
-  const pact = useContext(PactContext);
-  const { gameEditionView, setButtons } = useContext(GameEditionContext);
+  const pact = usePactContext();
+  const { gameEditionView, setButtons } = useGameEditionContext();
 
   useEffect(() => {
     pact.getEventsSwapList();

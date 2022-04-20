@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { useHistory, useLocation } from 'react-router';
 import useWindowSize from '../../hooks/useWindowSize';
-import { useAccountContext, useApplicationContext } from '../../contexts';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { useAccountContext, useApplicationContext, useGameEditionContext } from '../../contexts';
 import DesktopHeader from './header/DesktopHeader';
 import MobileHeader from './header/MobileHeader';
 import { ReactComponent as Stripes } from '../../assets/images/shared/stripes.svg';
@@ -111,7 +110,7 @@ const Layout = ({ children }) => {
   const history = useHistory();
   const [width, height] = useWindowSize();
   const { account } = useAccountContext();
-  const { gameEditionView, setGameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView, setGameEditionView } = useGameEditionContext();
   const { resolutionConfiguration } = useApplicationContext();
 
   useEffect(() => {

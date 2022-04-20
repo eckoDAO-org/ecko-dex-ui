@@ -1,17 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { throttle, debounce } from 'throttle-debounce';
 import useWindowSize from '../hooks/useWindowSize';
 import { useHistory } from 'react-router-dom';
 import { FadeIn } from '../components/shared/animations';
-import { AccountContext } from '../contexts/AccountContext';
-import { GameEditionContext } from '../contexts/GameEditionContext';
-import { ApplicationContext } from '../contexts/ApplicationContext';
-import { ModalContext } from '../contexts/ModalContext';
-import { PactContext } from '../contexts/PactContext';
-import { SwapContext } from '../contexts/SwapContext';
-import { WalletContext } from '../contexts/WalletContext';
 import TxView from '../components/modals/TxView';
 import WalletRequestView from '../components/modals/WalletRequestView';
 import SwapButtonsForm from '../components/swap/SwapButtonsForm';
@@ -39,6 +32,15 @@ import { HistoryIcon } from '../assets';
 import { ROUTE_MY_SWAP, ROUTE_SWAP } from '../router/routes';
 import { SwapSuccessView, SwapSuccessViewGE } from '../components/modals/swap-modals/SwapSuccesTxView';
 import { useInterval } from '../hooks/useInterval';
+import {
+  useAccountContext,
+  useApplicationContext,
+  useGameEditionContext,
+  useModalContext,
+  usePactContext,
+  useSwapContext,
+  useWalletContext,
+} from '../contexts';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -92,14 +94,14 @@ const SvgContainer = styled.div`
 const SwapContainer = () => {
   const history = useHistory();
   const [width, height] = useWindowSize();
-  const pact = useContext(PactContext);
-  const swap = useContext(SwapContext);
-  const account = useContext(AccountContext);
-  const wallet = useContext(WalletContext);
-  const modalContext = useContext(ModalContext);
-  const { resolutionConfiguration } = useContext(ApplicationContext);
+  const pact = usePactContext();
+  const swap = useSwapContext();
+  const account = useAccountContext();
+  const wallet = useWalletContext();
+  const modalContext = useModalContext();
+  const { resolutionConfiguration } = useApplicationContext();
 
-  const { gameEditionView, openModal, closeModal, outsideToken } = useContext(GameEditionContext);
+  const { gameEditionView, openModal, closeModal, outsideToken } = useGameEditionContext();
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
 
   const [selectedToken, setSelectedToken] = useState(null);
@@ -269,6 +271,7 @@ const SwapContainer = () => {
     getBalance();
   }, [account.fetchAccountBalance]);
 
+  //reset fetchAccountBalance change page
   useEffect(() => {
     account.setFetchAccountBalance(true);
     return () => {
@@ -294,7 +297,6 @@ const SwapContainer = () => {
       await pact.getReserves(fromValues.address, toValues.address);
     }
   }, 10000);
-  //////////////////////////////////////////////////////////////////////
 
   useEffect(() => {
     if (swap.walletSuccess) {
@@ -335,6 +337,7 @@ const SwapContainer = () => {
       });
     }
   };
+
   const onTokenClick = async ({ crypto }) => {
     const side = outsideToken.tokenSelectorType || tokenSelectorType;
     let balance;
@@ -383,6 +386,7 @@ const SwapContainer = () => {
     }
   }, [outsideToken, gameEditionView]);
 
+  // to reset the input data when selected the same coin
   useEffect(() => {
     if (tokenSelectorType === 'from') {
       if (fromValues.coin === toValues.coin) {

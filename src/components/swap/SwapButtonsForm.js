@@ -1,9 +1,8 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components/macro';
 import CustomButton from '../../components/shared/CustomButton';
 import reduceToken from '../../utils/reduceToken';
 import ConnectWalletModal from '../modals/kdaModals/ConnectWalletModal';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
 import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
 import Label from '../shared/Label';
 import {
@@ -15,7 +14,7 @@ import {
   SWAP_BUTTON_SELECT_TOKENS,
   SWAP_BUTTON_SWAP,
 } from '../../constants/swap';
-import { useAccountContext, useModalContext, usePactContext, useSwapContext, useWalletContext } from '../../contexts';
+import { useAccountContext, useGameEditionContext, useModalContext, usePactContext, useSwapContext, useWalletContext } from '../../contexts';
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -51,7 +50,7 @@ const SwapButtonsForm = ({
   const wallet = useWalletContext();
   const { swapWallet } = useSwapContext();
   const pact = usePactContext();
-  const { gameEditionView, setButtons, closeModal } = useContext(GameEditionContext);
+  const { gameEditionView, setButtons, closeModal } = useGameEditionContext();
 
   const getButtonLabel = () => {
     if (!account.account) return SWAP_BUTTON_CONNECT_WALLET.label;

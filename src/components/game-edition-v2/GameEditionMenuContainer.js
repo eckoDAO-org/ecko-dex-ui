@@ -54,9 +54,8 @@ const RowMenuContainer = styled.div`
 const GameEditionMenuContainer = () => {
   const history = useHistory();
   const [activeItem, setActiveItem] = useState(gameEditionRoutes[0]);
-  const { gameEditionView } = useGameEditionContext();
+  const { gameEditionView, setButtons } = useGameEditionContext();
 
-  const { setButtons } = useGameEditionContext();
   useEffect(() => {
     setButtons({
       A: () => history.push(activeItem.route),

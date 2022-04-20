@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { useGameEditionContext } from '../../contexts';
 
 const Label = styled.span`
   text-transform: capitalize;
@@ -15,7 +15,7 @@ const Label = styled.span`
 `;
 
 const CustomLabel = ({ children, bold, fontSize, labelStyle, textAlign }) => {
-  const { gameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView } = useGameEditionContext();
 
   return (
     <Label

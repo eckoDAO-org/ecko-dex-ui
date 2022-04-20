@@ -1,9 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { useLocation } from 'react-router-dom';
-import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
-import { useAccountContext, useApplicationContext, useKaddexWalletContext, useNotificationContext, useWalletContext } from '../../contexts';
+import { GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
+import {
+  useAccountContext,
+  useApplicationContext,
+  useGameEditionContext,
+  useKaddexWalletContext,
+  useNotificationContext,
+  useWalletContext,
+} from '../../contexts';
 import { STATUSES } from '../../contexts/NotificationContext';
 import WalletWires from './components/WalletWires';
 import ConnectWalletWire from './components/ConnectWalletWire';
@@ -146,7 +153,7 @@ const GameEditionContainer = ({ children }) => {
   const { wallet, signingWallet, setSelectedWallet } = useWalletContext();
   const { resolutionConfiguration, themeMode } = useApplicationContext();
   const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens, setOutsideToken, setShowTokens } =
-    useContext(GameEditionContext);
+    useGameEditionContext();
   const { account } = useAccountContext();
 
   const onConnectionSuccess = async (wallet) => {
