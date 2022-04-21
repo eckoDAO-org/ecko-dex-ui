@@ -28,7 +28,6 @@ const PopupContainer = styled(FlexContainer)`
   align-items: center;
   flex-direction: column;
   border-radius: 10px;
-  background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
   position: absolute;
   z-index: 5;
   top: 40px;

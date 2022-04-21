@@ -10,7 +10,6 @@ import TxView from '../modals/TxView';
 import CustomButton from '../shared/CustomButton';
 import { FlexContainer } from '../shared/FlexContainer';
 import FormContainer from '../shared/FormContainer';
-import GradientBorder from '../shared/GradientBorder';
 import Label from '../shared/Label';
 import SwapForm from '../swap/SwapForm';
 import TokenSelectorModalContentGE from '../../components/modals/swap-modals/TokenSelectorModalContentGE';
@@ -472,7 +471,6 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
           )
         }
       >
-        {!gameEditionView && <GradientBorder />}
         <SwapForm
           fromValues={fromValues}
           setFromValues={setFromValues}

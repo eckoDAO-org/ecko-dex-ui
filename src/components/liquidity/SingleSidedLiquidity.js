@@ -267,7 +267,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
                 {selectedPool?.token0}/{selectedPool?.token1}
               </Label>
             </div>
-            <ArrowDown />
+            <ArrowDown className="arrow-down" />
           </div>
         </CustomButton>
 

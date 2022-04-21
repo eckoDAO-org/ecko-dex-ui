@@ -8,7 +8,6 @@ import CustomButton from '../shared/CustomButton';
 import FormContainer from '../shared/FormContainer';
 import Input from '../shared/Input';
 import tokenData from '../../constants/cryptoCurrencies';
-import GradientBorder from '../shared/GradientBorder';
 import Label from '../shared/Label';
 import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
 import { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
@@ -208,7 +207,6 @@ const RemoveLiquidityContent = ({ pair }) => {
           </ButtonContainer>
         }
       >
-        {!gameEditionView && <GradientBorder />}
         <SubContainer gameEditionView={gameEditionView}>
           <Input
             value={amount}

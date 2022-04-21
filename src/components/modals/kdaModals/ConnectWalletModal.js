@@ -6,6 +6,7 @@ import ConnectWalletZelcoreModal from './ConnectWalletZelcoreModal';
 import ConnectWalletChainweaverModal from './ConnectWalletChainweaverModal';
 import styled from 'styled-components';
 import { FlexContainer } from '../../shared/FlexContainer';
+import Label from '../../shared/Label';
 
 const ConnectWalletModal = () => {
   const modalContext = useModalContext();
@@ -82,7 +83,7 @@ const ConnectWalletModal = () => {
         }}
       >
         {!gameEditionView && WALLET.ZELCORE.logo}
-        {WALLET.ZELCORE.name}
+        <Label outGameEditionView>{WALLET.ZELCORE.name}</Label>
       </CustomButton>
       <CustomButton
         type="primary"
@@ -91,7 +92,7 @@ const ConnectWalletModal = () => {
         }}
       >
         {!gameEditionView && WALLET.CHAINWEAVER.logo}
-        {WALLET.CHAINWEAVER.name}
+        <Label outGameEditionView> {WALLET.CHAINWEAVER.name}</Label>
       </CustomButton>
     </Container>
   );

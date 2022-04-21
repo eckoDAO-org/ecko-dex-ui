@@ -6,13 +6,14 @@ import moment from 'moment';
 import { PartialScrollableScrollSection } from '../layout/Containers';
 import { FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
-import { commonColors } from '../../styles/theme';
+import theme, { commonColors } from '../../styles/theme';
 import { ROUTE_DAO_PROPOSAL } from '../../router/routes';
 import VotingPowerContainer from './VotingPowerContainer';
 import { readAllProposals } from '../../api/dao';
 import AppLoader from '../shared/AppLoader';
 import { getStatusProposal } from '../../utils/dao-utils';
 import HtmlFormatterContainer from './HtmlFormatterContainer';
+import useWindowSize from '../../hooks/useWindowSize';
 
 const AllProposalsContainer = ({ accountData }) => {
   const history = useHistory();
@@ -32,8 +33,17 @@ const AllProposalsContainer = ({ accountData }) => {
     fetchData();
   }, []);
 
+  const [, height] = useWindowSize();
   return daoALlProposalsLoading ? (
-    <AppLoader containerStyle={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} />
+    <AppLoader
+      containerStyle={{
+        height: `calc(${height}px - ${theme.header.height}px)`,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: -35,
+      }}
+    />
   ) : (
     <>
       <Label fontSize={24} fontFamily="syncopate">

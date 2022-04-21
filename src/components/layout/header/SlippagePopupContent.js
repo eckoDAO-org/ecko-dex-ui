@@ -58,7 +58,7 @@ const SlippageTolleranceValue = styled.div`
   font-family: ${({ isSelected, theme: { fontFamily } }) => (isSelected ? fontFamily.syncopate : fontFamily.basier)};
   font-size: 14px;
   padding: 6.5px 8.5px;
-  min-width: 48px;
+  min-width: 61px;
   display: flex;
   justify-content: center;
   background-color: ${({ isSelected, theme: { colors } }) => isSelected && colors.white};
