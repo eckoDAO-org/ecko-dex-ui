@@ -38,7 +38,12 @@ const VotingPowerContainer = ({ accountData }) => {
         <Label fontSize={13} info={multiplierInfo} labelStyle={{ marginBottom: 10 }}>
           Multiplier (M)
         </Label>
-        <ProgressBar containerStyle={{ marginBottom: 24 }} currentValue={accountData.multiplier} maxValue={2.5} values={[0, 0.5, 1, 1.5, 2, 2.5]} />
+        <ProgressBar
+          containerStyle={{ marginBottom: 24 }}
+          currentValue={accountData?.multiplier || 0}
+          maxValue={2.5}
+          values={[0, 0.5, 1, 1.5, 2, 2.5]}
+        />
       </FlexContainer>
     </FlexContainer>
   );
