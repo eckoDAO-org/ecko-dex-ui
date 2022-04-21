@@ -12,7 +12,6 @@ const Analytics = ({ stakedShare, totalStaked }) => {
   const [totalVolumeUSD, setTotalVolumeUSD] = useState(null);
   const [stakingAPR, setStakingAPR] = useState(null);
   const { kdxPrice } = usePactContext();
-
   useEffect(() => {
     getPairList()
       .then(async (pools) => {

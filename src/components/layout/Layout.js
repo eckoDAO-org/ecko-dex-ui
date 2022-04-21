@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
-import styled, { css } from 'styled-components/macro';
+import styled from 'styled-components/macro';
 import { useHistory, useLocation } from 'react-router';
 import useWindowSize from '../../hooks/useWindowSize';
 import { useAccountContext, useApplicationContext } from '../../contexts';
@@ -46,53 +46,6 @@ const CenterBackground = styled.img`
       opacity: 1;
     }
   }
-`;
-
-const MainContent = styled.div`
-  ${({ resolutionConfiguration }) => {
-    if (resolutionConfiguration) {
-      //const browser = browserDetection();
-      // switch (browser) {
-      //   case 'CHROME':
-      //     return css`
-      //       zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
-      //     `;
-      //   case 'FIREFOX':
-      //     return css`
-      //       & > :first-child {
-      //         -ms-zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
-      //         -webkit-zoom: ${({ resolutionConfiguration }) => resolutionConfiguration['normal-mode'].scale};
-      //         -moz-transform: ${({ resolutionConfiguration }) => `scale(${resolutionConfiguration['normal-mode'].scale})`};
-      //         -moz-transform-origin: center;
-      //       }
-      //     `;
-      //   default:
-      //     return css`
-      //       transform: ${({ resolutionConfiguration }) => `scale(${resolutionConfiguration['normal-mode'].scale})`};
-      //     `;
-      // }
-    }
-  }}
-
-  height: ${({ theme: { header } }) => `calc(100% - ${header.height}px)`};
-  ${() => {
-    if (browserDetection() === 'FIREFOX') {
-      return css`
-        height: 99%;
-      `;
-    }
-  }}
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) {
-    padding: 0 16px;
-    height: ${({ theme: { header } }) => `calc(100% - ${header.mobileHeight}px)`};
-    overflow-x: auto;
-    ::-webkit-scrollbar {
-      display: none;
-    }
-
-    scrollbar-width: none;
-  }
-  overflow: auto;
 `;
 
 const StripesContainer = styled.div`
@@ -141,7 +94,9 @@ const Layout = ({ children }) => {
             <GameEditionContainer>{children}</GameEditionContainer>
           </>
         ) : (
-          <MainContent resolutionConfiguration={resolutionConfiguration}>{children}</MainContent>
+          <div className="h-100 y-auto hide-scrollbar" resolutionConfiguration={resolutionConfiguration}>
+            {children}
+          </div>
         )}
       </WrapperContainer>
       <StripesContainer>

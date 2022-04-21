@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import GradientBorder from '../shared/GradientBorder';
 import Label from '../shared/Label';
 import { TimeRangeBar, TimeRangeBtn } from './VolumeChart';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
@@ -32,7 +31,6 @@ const VestingScheduleChart = ({ height }) => {
   const [endDate, setEndDate] = useState(endDate4Years);
   return (
     <FlexContainer withGradient className="column w-100 h-100 background-fill">
-      <GradientBorder />
       <VestingHeader>
         <Label></Label>
         <Label>KDX Vesting</Label>

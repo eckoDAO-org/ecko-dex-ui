@@ -36,14 +36,13 @@ const Title = styled.span`
   color: ${theme.colors.white};
 `;
 
-const FormContainer = ({ id, containerStyle, title, titleStyle, children, footer, withGameEditionBorder }) => {
+const FormContainer = ({ containerStyle, title, titleStyle, children, footer, withGameEditionBorder }) => {
   return (
     <FlexContainer
       withGradient
       className="relative column justify-sb w-100 background-fill"
       gameEditionClassName="relative column justify-sb w-100 h-100"
       style={{ padding: 32, ...containerStyle }}
-      withGameEditionBorder={withGameEditionBorder}
     >
       <>
         {title && (
@@ -52,8 +51,8 @@ const FormContainer = ({ id, containerStyle, title, titleStyle, children, footer
           </HeaderContainer>
         )}
         <Content id="form-container-content">{children}</Content>
+        {footer && <FooterContainer>{footer}</FooterContainer>}
       </>
-      {footer && <FooterContainer>{footer}</FooterContainer>}
     </FlexContainer>
   );
 };

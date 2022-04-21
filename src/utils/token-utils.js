@@ -138,28 +138,31 @@ export const getTokenUsdPrice = async (token, pairsList) => {
   if (tokenUsd) {
     return tokenUsd;
   } else {
-    for (const pair of filteredPairs) {
-      const liquidity0 = reduceBalance(pair.reserves[0]);
-      const liquidity1 = reduceBalance(pair.reserves[1]);
+    if (filteredPairs) {
+      for (const pair of filteredPairs) {
+        const liquidity0 = reduceBalance(pair.reserves[0]);
+        const liquidity1 = reduceBalance(pair.reserves[1]);
 
-      if (pair.token0 === token.name) {
-        const token1 = Object.values(tokenData).find((t) => t.name === pair.token1);
-        const token1Usd = await getCoingeckoUsdPrice(token1.coingeckoId);
-        if (!token1Usd) {
-          tokenUsd = null;
+        if (pair.token0 === token.name) {
+          const token1 = Object.values(tokenData).find((t) => t.name === pair.token1);
+          const token1Usd = await getCoingeckoUsdPrice(token1.coingeckoId);
+          if (!token1Usd) {
+            tokenUsd = null;
+          } else {
+            return getTokenUsdPriceByLiquidity(liquidity1, liquidity0, token1Usd);
+          }
         } else {
-          return getTokenUsdPriceByLiquidity(liquidity1, liquidity0, token1Usd);
+          const token0 = Object.values(tokenData).find((t) => t.name === pair.token0);
+          const token0Usd = await getCoingeckoUsdPrice(token0.coingeckoId);
+          if (!token0Usd) {
+            tokenUsd = null;
+          }
+          return getTokenUsdPriceByLiquidity(liquidity0, liquidity1, token0Usd);
         }
-      } else {
-        const token0 = Object.values(tokenData).find((t) => t.name === pair.token0);
-        const token0Usd = await getCoingeckoUsdPrice(token0.coingeckoId);
-        if (!token0Usd) {
-          tokenUsd = null;
-        }
-        return getTokenUsdPriceByLiquidity(liquidity0, liquidity1, token0Usd);
-      }
 
-      return tokenUsd;
+        return tokenUsd;
+      }
     }
+    return 0;
   }
 };

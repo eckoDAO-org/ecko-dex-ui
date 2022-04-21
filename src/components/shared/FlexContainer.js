@@ -5,29 +5,6 @@ import { GameEditionContext } from '../../contexts/GameEditionContext';
 import theme from '../../styles/theme';
 import browserDetection from '../../utils/browserDetection';
 
-export const STYGradientBorder = styled.div`
-  border-radius: 10px; /*1*/
-  border: 1px solid transparent; /*2*/
-  background: linear-gradient(90deg, #ed1cb5, #ffa900, #39fffc) border-box; /*3*/
-
-  -webkit-mask: /*4*/ linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: source-out !important; /*5'*/
-  mask-composite: exclude !important; /*5*/
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-
-  &.gradient-button {
-    border-radius: 20px;
-    background: linear-gradient(90deg, #10c4df, #f04ca9, #edba31) border-box; /*3*/
-  }
-`;
-
 export const FlexContainer = ({
   reference,
   className,
@@ -89,9 +66,6 @@ export const FlexContainer = ({
             }
       }
     >
-      {(withGradient || className?.includes('gradient-button')) && (!gameEditionView || outOfGameEdition) && (
-        <STYGradientBorder className={className?.includes('gradient-button') ? 'gradient-button' : ''} />
-      )}
       {children}
     </STYFlexContainer>
   );
@@ -99,24 +73,28 @@ export const FlexContainer = ({
 const STYFlexContainer = styled.div`
   display: flex;
 
-  ${({ gameEditionView, outOfGameEdition }) => {
-    if (!gameEditionView || outOfGameEdition) {
+  ${({ gameEditionView, outOfGameEdition, withGradient }) => {
+    if ((!gameEditionView || outOfGameEdition) && withGradient) {
       return css`
-        &.background-fill {
-          backdrop-filter: blur(50px);
-          background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
+        border-radius: 20px;
+        background: ${({ theme: { backgroundContainer }, className }) => {
+          return `linear-gradient(to right, ${backgroundContainer}, ${backgroundContainer}), ${
+            className?.includes('gradient-button')
+              ? 'linear-gradient(90deg, #10c4df, #f04ca9, #edba31)'
+              : 'linear-gradient(90deg, #ed1cb5, #ffaa00, #39fffc)'
+          }`;
+        }};
+
+        background-clip: padding-box, border-box;
+        background-origin: padding-box, border-box;
+        border: 1px solid transparent;
+        position: relative;
+        border-radius: 10px;
+        backdrop-filter: blur(50px);
+        padding: 16px;
+        :not(.gradient-button) {
+          box-shadow: 2px 5px 24px #21275029;
         }
-        ${({ withGradient }) =>
-          withGradient &&
-          css`
-            position: relative;
-            border-radius: 10px;
-            backdrop-filter: blur(50px);
-            padding: 16px;
-            :not(.gradient-button) {
-              box-shadow: 2px 5px 24px #21275029;
-            }
-          `}
       `;
     }
   }}

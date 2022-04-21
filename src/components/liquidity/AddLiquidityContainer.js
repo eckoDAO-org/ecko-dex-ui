@@ -19,6 +19,7 @@ import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { isValidString } from '../../utils/string-utils';
 import { AppLoader } from '../../components/shared/AppLoader';
 import { useErrorState } from '../../hooks/useErrorState';
+import theme from '../../styles/theme';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -28,7 +29,8 @@ const Container = styled(FadeIn)`
   max-width: 550px;
   overflow: visible;
 
-  .arrow-back {
+  .arrow-back,
+  .arrow-down {
     path {
       fill: ${({ theme: { colors } }) => colors.white};
     }
@@ -81,7 +83,12 @@ const AddLiquidityContainer = (props) => {
   return loading ? (
     <AppLoader className="h-100 w-100 align-ce justify-ce" />
   ) : (
-    <Container className="column w-100 relative justify-ce" gap={24} style={{ paddingTop: 50 }} mobileStyle={{ paddingTop: 24 }}>
+    <Container
+      className="column w-100 relative"
+      gap={24}
+      style={{ paddingTop: 35, paddingBottom: 35 }}
+      mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
+    >
       <FlexContainer className="w-100 justify-sb">
         <FlexContainer>
           <ArrowBack
