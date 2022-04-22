@@ -265,7 +265,7 @@ const SwapContainer = () => {
       }
     };
     getBalance();
-  }, [account.fetchAccountBalance]);
+  }, [account.fetchAccountBalance, account.account.account]);
 
   //reset fetchAccountBalance change page
   useEffect(() => {

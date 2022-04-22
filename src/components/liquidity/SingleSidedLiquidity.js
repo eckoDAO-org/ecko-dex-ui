@@ -88,14 +88,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
       }
     } else {
       try {
-        let data = await Pact.fetch.local(
-          {
-            pactCode: `(${crypto.code}.details ${JSON.stringify(account.account.account)})`,
-            keyPairs: Pact.crypto.genKeyPair(),
-            meta: Pact.lang.mkMeta('', CHAIN_ID, 0.01, 100000000, 28800, creationTime()),
-          },
-          NETWORK
-        );
+        let data = await getTokenBalanceAccount(crypto.code, account.account.account);
         if (data.result.status === 'success') {
           balance = getCorrectBalance(data.result.data.balance);
         }
