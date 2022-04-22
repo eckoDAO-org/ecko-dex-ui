@@ -6,6 +6,7 @@ import NotificationContainer from '../components/notification/NotificationContai
 import { NETWORK_TYPE } from '../constants/contextConstants';
 import { listen } from '../api/utils';
 import { useAccountContext } from '.';
+import { genRandomString } from '../utils/string-utils';
 
 export const NotificationContext = createContext();
 
@@ -21,14 +22,16 @@ export const STATUSES = {
 const getStoredNotification = JSON.parse(localStorage.getItem('Notification'));
 
 export const NotificationProvider = ({ children }) => {
-  const toastId = React.useRef(null);
   const { account, setFetchAccountBalance } = useAccountContext();
 
   const [notificationList, setNotificationList] = useState(getStoredNotification || []);
+  const [toastNotificationsId, setToastNotificationsId] = useState([]);
+
   const [notificationNotCompletedChecked, setNotificationNotCompletedChecked] = useState(false);
 
   // TOAST NOTIFICATION
   const showNotification = ({
+    toastId = '',
     title = '',
     message = '',
     autoClose = false,
@@ -52,6 +55,7 @@ export const NotificationProvider = ({ children }) => {
   }) => {
     return toast(<NotificationContainer message={message} type={type} title={title} icon={icon} titleStyle={titleStyle} />, {
       className,
+      toastId: '',
       title,
       message,
       autoClose,
@@ -124,9 +128,14 @@ export const NotificationProvider = ({ children }) => {
     setNotificationList([]);
   };
 
+  const removeToastNotificationId = (id) => {
+    let notifList = toastNotificationsId.filter((notif) => notif !== id);
+    setToastNotificationsId(notifList);
+  };
+
   // UTILS FOR THE LOGIC ON BLOCKCHAIN CALLS
   const pollingNotif = (reqKey, title, message = null) => {
-    const notificationExists = notificationList.filter((notif) => notif.type === STATUSES.INFO).find((notif) => notif.description === reqKey);
+    const notificationExists = toastNotificationsId.find((notif) => notif === reqKey);
     if (!notificationExists) {
       storeNotification({
         type: STATUSES.INFO,
@@ -136,7 +145,8 @@ export const NotificationProvider = ({ children }) => {
         isRead: false,
         isCompleted: false,
       });
-      toastId.current = showNotification({
+      showNotification({
+        toastId: reqKey,
         title: title || 'Transaction Pending',
         message: message || reqKey,
         type: STATUSES.INFO,
@@ -146,17 +156,19 @@ export const NotificationProvider = ({ children }) => {
           window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${reqKey}`, '_blank', 'noopener,noreferrer');
         },
       });
+      setToastNotificationsId((prev) => [...prev, reqKey]);
     }
   };
 
   //Show and store the Error Notification
   const showErrorNotification = (reqKey, title, message = null) => {
-    toast.dismiss(toastId.current);
+    if (reqKey) {
+      toast.dismiss(reqKey);
+    }
     setIsCompletedNotification(reqKey);
     storeNotification({
       type: STATUSES.ERROR,
       date: moment().format('DD/MM/YYYY - HH:mm:ss'),
-
       title: title || 'Transaction Error!',
       description: message || 'Check it out in the block explorer',
       link: reqKey ? `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}` : null,
@@ -164,26 +176,28 @@ export const NotificationProvider = ({ children }) => {
     });
     // open the toast FAILURE message
     showNotification({
+      toastId: reqKey || genRandomString(),
       title: title || 'Transaction Error!',
       message: message || 'Check it out in the block explorer',
       type: STATUSES.ERROR,
       onClick: async () => {
-        toast.dismiss(toastId);
         reqKey && window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`, '_blank', 'noopener,noreferrer');
       },
       autoClose: 10000,
     });
+    removeToastNotificationId(reqKey);
   };
 
   //Show and store the Success Notification
   const showSuccessNotification = (reqKey, title, message = null) => {
-    toast.dismiss(toastId.current);
+    if (reqKey) {
+      toast.dismiss(reqKey);
+    }
     setIsCompletedNotification(reqKey);
 
     storeNotification({
       type: STATUSES.SUCCESS,
       date: moment().format('DD/MM/YYYY - HH:mm:ss'),
-
       title: title || 'Transaction Success!',
       description: message || 'Check it out in the block explorer',
       link: `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
@@ -191,6 +205,7 @@ export const NotificationProvider = ({ children }) => {
     });
     // open the toast SUCCESS message
     showNotification({
+      toastId: reqKey || genRandomString(),
       title: title || 'Transaction Success!',
       message: message || 'Check it out in the block explorer',
       type: STATUSES.SUCCESS,
@@ -199,6 +214,7 @@ export const NotificationProvider = ({ children }) => {
       },
       autoClose: 10000,
     });
+    removeToastNotificationId(reqKey);
   };
 
   const transactionListen = async (reqKey) => {
@@ -224,7 +240,6 @@ export const NotificationProvider = ({ children }) => {
   return (
     <NotificationContext.Provider
       value={{
-        toastId,
         STATUSES,
         showNotification,
         notificationList,

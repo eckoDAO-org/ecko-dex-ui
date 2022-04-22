@@ -20,3 +20,9 @@ export function getFloatPrecision(floatVal) {
     return Math.abs(floatVal.toString().indexOf('.') - floatVal.toString().length + 1);
   }
 }
+
+export const genRandomString = () => {
+  //Can change 7 to 2 for longer results.
+  let r = (Math.random() + 1).toString(36).substring(2);
+  console.log('random', r);
+};
