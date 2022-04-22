@@ -83,7 +83,7 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
   return (
     <Wrapper ref={ref}>
       <div
-        style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 30 }}
         onClick={() => setShowPopup((prev) => !prev)}
       >
         {icon}

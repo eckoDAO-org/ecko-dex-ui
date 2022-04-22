@@ -3,7 +3,8 @@ import CustomButton from '../../shared/CustomButton';
 import CustomDivider from '../../shared/CustomDivider';
 import { CoinKaddexIcon } from '../../../assets';
 import { KaddexOutlineIcon } from '../../../assets';
-import { StakeModalRow, StakeModalText, IconSubTitle } from './AddStakeModal';
+import { StakeModalRow, IconSubTitle } from './AddStakeModal';
+import Label from '../../shared/Label';
 
 export const ClaimModal = ({ onConfirm, estimateUnstakeData }) => {
   return (
@@ -12,30 +13,27 @@ export const ClaimModal = ({ onConfirm, estimateUnstakeData }) => {
         <KaddexOutlineIcon />
       </IconSubTitle>
       <CustomDivider style={{ margin: '15px 0' }} />
-      <StakeModalText fontSize={16}>Staking Rewards Collected</StakeModalText>
+      <Label fontSize={16}>Staking Rewards Collected</Label>
       <StakeModalRow style={{ marginBottom: 20 }}>
         <div>
-          <span>
-            <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 16, height: 30, width: 30 }} />
-          </span>
-          <span>{estimateUnstakeData['reward-accrued']} </span>
+          <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 16, height: 30, width: 30 }} />
+          <Label>{estimateUnstakeData['reward-accrued']} </Label>
         </div>
-        <div>KDX</div>
+        <Label>KDX</Label>
       </StakeModalRow>
-      {estimateUnstakeData['reward-penalty'] && (
+
+      {estimateUnstakeData['reward-penalty'] ? (
         <>
-          <StakeModalText fontSize={16}>Rewards Penalty</StakeModalText>
+          <Label fontSize={16}>Rewards Penalty</Label>
           <StakeModalRow>
             <div>
-              <span>
-                <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 16, height: 30, width: 30 }} />
-              </span>
-              <span>{estimateUnstakeData['reward-penalty']} </span>
+              <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 16, height: 30, width: 30 }} />
+              <Label>{estimateUnstakeData['reward-penalty']} </Label>
             </div>
-            <div>KDX</div>
+            <Label>KDX</Label>
           </StakeModalRow>
         </>
-      )}
+      ) : null}
       <CustomButton type="gradient" buttonStyle={{ marginTop: 40 }} onClick={onConfirm}>
         WITHDRAW
       </CustomButton>

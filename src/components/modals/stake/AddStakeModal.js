@@ -5,6 +5,7 @@ import { CoinKaddexIcon } from '../../../assets';
 import { KaddexOutlineIcon } from '../../../assets';
 import styled from 'styled-components';
 import { STAKING_REWARDS_PERCENT } from '../../../constants/contextConstants';
+import Label from '../../shared/Label';
 
 export const StakeModalRow = styled.div`
   display: flex;
@@ -19,10 +20,14 @@ export const StakeModalRow = styled.div`
 export const IconSubTitle = styled.div`
   text-align: center;
   margin: 15px 0 24px 0;
-`;
-
-export const StakeModalText = styled.span`
-  font-size: ${({ fontSize }) => `${fontSize || 13}px`};
+  svg {
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+    g {
+      stroke: ${({ theme: { colors } }) => colors.white};
+    }
+  }
 `;
 
 export const AddStakeModal = ({ onConfirm, alreadyStakedAmount, toStakeAmount }) => {
@@ -40,18 +45,16 @@ export const AddStakeModal = ({ onConfirm, alreadyStakedAmount, toStakeAmount })
         <KaddexOutlineIcon />
       </IconSubTitle>
       <div>
-        <StakeModalText>{getModalText()}</StakeModalText>
+        <Label>{getModalText()}</Label>
       </div>
       <CustomDivider style={{ margin: '15px 0' }} />
-      <StakeModalText fontSize={16}>Stake </StakeModalText>
+      <Label fontSize={16}>Stake </Label>
       <StakeModalRow>
         <div>
-          <span>
-            <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 16, height: 30, width: 30 }} />
-          </span>
-          <span>{toStakeAmount} </span>
+          <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 16, height: 30, width: 30 }} />
+          <Label>{toStakeAmount} </Label>
         </div>
-        <div>KDX</div>
+        <Label>KDX</Label>
       </StakeModalRow>
       <CustomButton type="gradient" buttonStyle={{ marginTop: 40 }} onClick={onConfirm}>
         CONFIRM
