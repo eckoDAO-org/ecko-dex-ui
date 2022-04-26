@@ -1,8 +1,9 @@
 import moment from 'moment';
 import Pact from 'pact-lang-api';
-import { handleError, pactFetchLocal } from './pact';
+import { pactFetchLocal } from './pact';
 import { getFloatPrecision } from '../utils/string-utils';
 import { CHAIN_ID, GAS_PRICE, GAS_LIMIT, NETWORKID } from '../constants/contextConstants';
+import { handleError } from './utils';
 
 export const getPoolState = async () => {
   try {

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useErrorState } from '../../hooks/useErrorState';
 import { getDailyVolume } from '../../api/kaddex-stats';
-import { getPairList } from '../../api/pact-pair';
+import { getPairList } from '../../api/pact';
 import { humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';

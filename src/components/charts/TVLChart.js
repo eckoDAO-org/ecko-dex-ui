@@ -1,12 +1,12 @@
-import React, { useEffect, useState, useContext, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import moment from 'moment';
-import { PactContext } from '../../contexts/PactContext';
 import { LineChart, Line, Tooltip, ResponsiveContainer } from 'recharts';
 import Label from '../shared/Label';
 import { humanReadableNumber } from '../../utils/reduceBalance';
 import { FlexContainer } from '../shared/FlexContainer';
+import { getPairList } from '../../api/pact';
 
 export const GraphCardHeader = styled.div`
   width: 100%;
@@ -22,13 +22,12 @@ const TVLChart = ({ kdaPrice, height }) => {
   const [currentTVL, setCurrentTVL] = useState(null);
   const [currentDate, setCurrentDate] = useState(null);
   const [tvlData, setTVLData] = useState([]);
-  const pact = useContext(PactContext);
 
   const getTVL = useCallback(async () => {
     let totalTVL = 0;
-    await pact.getPairList();
-    if (Array.isArray(pact?.pairList)) {
-      for (const pair of pact.pairList) {
+    const pairList = await getPairList();
+    if (Array.isArray(pairList)) {
+      for (const pair of pairList) {
         const token0Balance = Number(pair.reserves[0]?.decimal) || pair.reserves[0] || 0;
         const token1Balance = Number(pair.reserves[1]?.decimal) || pair.reserves[1] || 0;
         let token0price = 0;
@@ -51,7 +50,7 @@ const TVLChart = ({ kdaPrice, height }) => {
       setCurrentTVL(totalTVL);
       setViewedTVL(totalTVL);
     }
-  }, [pact, kdaPrice]);
+  }, [kdaPrice]);
 
   useEffect(() => {
     getTVL();
@@ -66,7 +65,6 @@ const TVLChart = ({ kdaPrice, height }) => {
       )
       .then(async (res) => {
         const allTVL = [];
-        const kdaPrice = await pact.getCurrentKdaUSDPrice();
         for (const day of res.data) {
           allTVL.push({
             name: moment(day._id).format('DD/MM/YYYY'),
@@ -86,7 +84,7 @@ const TVLChart = ({ kdaPrice, height }) => {
         setTVLData(allTVL);
       })
       .catch((err) => console.log('get tvl error', err));
-  }, [pact]);
+  }, [kdaPrice]);
 
   return (
     <FlexContainer className="column align-ce w-100 h-100 background-fill" withGradient style={{ padding: 32 }}>

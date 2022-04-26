@@ -1,12 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useContext } from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components/macro';
 import PropTypes from 'prop-types';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
 import Label from './Label';
 import GameEditionButton from '../game-edition-v2/components/GameEditionButton';
 import { FlexContainer } from './FlexContainer';
 import Loader from './Loader';
+import { useGameEditionContext } from '../../contexts';
 
 const StyledButton = styled(FlexContainer)`
   cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
@@ -94,7 +94,7 @@ const CustomButton = ({
   geBasic,
   geButtonStyle,
 }) => {
-  const { gameEditionView: $gameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView: $gameEditionView } = useGameEditionContext();
 
   return $gameEditionView && geType ? (
     <GameEditionButton type={geType} disabled={disabled} onClick={onClick} style={geButtonStyle}>

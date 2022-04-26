@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components/macro';
 import useWindowSize from '../../hooks/useWindowSize';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
 import theme from '../../styles/theme';
 import browserDetection from '../../utils/browserDetection';
+import { useGameEditionContext } from '../../contexts';
 
 export const FlexContainer = ({
   reference,
@@ -26,7 +26,7 @@ export const FlexContainer = ({
   ...rest
 }) => {
   const [width] = useWindowSize();
-  const { gameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView } = useGameEditionContext();
 
   const getClassName = () => {
     let classname = className;

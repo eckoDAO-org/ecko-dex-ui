@@ -1,9 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useErrorState } from '../../hooks/useErrorState';
-import { getPairListAccountBalance } from '../../api/pact-pair';
-import { AccountContext } from '../../contexts/AccountContext';
+import { getPairListAccountBalance } from '../../api/pact';
 import { AddIcon, RemoveIcon } from '../../assets';
 import tokenData from '../../constants/cryptoCurrencies';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_MY_LIQUIDITY, ROUTE_LIQUIDITY_REMOVE_LIQUIDITY } from '../../router/routes';
@@ -11,10 +10,11 @@ import { extractDecimal, pairUnit } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
+import { useAccountContext } from '../../contexts';
 
 const LiquidityMyLiquidityTable = () => {
   const history = useHistory();
-  const { account } = useContext(AccountContext);
+  const { account } = useAccountContext();
   const [pairList, setPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(false);
 

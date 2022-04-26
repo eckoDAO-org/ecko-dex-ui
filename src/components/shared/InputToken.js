@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components/macro';
 import { ArrowDown, PixeledArrowDownIcon } from '../../assets';
 import CustomButton from './CustomButton';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
 import tokenData from '../../constants/cryptoCurrencies';
 import Label from './Label';
+import { useGameEditionContext } from '../../contexts';
 
 const Container = styled.div`
   ${({ $gameEditionView, coin }) => {
@@ -60,7 +60,7 @@ const ElementsContainer = styled.div`
 `;
 
 const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor }) => {
-  const { gameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView } = useGameEditionContext();
   return (
     <Container $gameEditionView={gameEditionView} geColor={geColor} coin={values?.coin}>
       {values?.coin ? (

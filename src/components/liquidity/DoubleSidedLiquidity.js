@@ -1,13 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { throttle, debounce } from 'throttle-debounce';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import tokenData from '../../constants/cryptoCurrencies';
-import { AccountContext } from '../../contexts/AccountContext';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
-import { LiquidityContext } from '../../contexts/LiquidityContext';
-import { ModalContext } from '../../contexts/ModalContext';
-import { PactContext } from '../../contexts/PactContext';
-import { WalletContext } from '../../contexts/WalletContext';
 import { getCorrectBalance, reduceBalance } from '../../utils/reduceBalance';
 import PixeledBlueContainer, { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
 import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
@@ -22,125 +16,68 @@ import TokenSelectorModalContentGE from '../../components/modals/swap-modals/Tok
 import WalletRequestView from '../../components/modals/WalletRequestView';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { SuccessAddView } from '../modals/liquidity/LiquidityTxView';
-import { useSwapContext } from '../../contexts';
-
-const initialStateValue = {
-  coin: '',
-  account: '',
-  guard: null,
-  balance: null,
-  amount: '',
-  precision: 12,
-};
+import { useInterval } from '../../hooks/useInterval';
+import { useAccountContext, useGameEditionContext, useLiquidityContext, useModalContext, usePactContext, useWalletContext } from '../../contexts';
 
 const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
-  const pact = useContext(PactContext);
-  const swap = useSwapContext();
-  const account = useContext(AccountContext);
-  const wallet = useContext(WalletContext);
-  const liquidity = useContext(LiquidityContext);
-  const modalContext = useContext(ModalContext);
-  const { gameEditionView, openModal, closeModal, outsideToken, showTokens, setShowTokens, setOutsideToken } = useContext(GameEditionContext);
+  const pact = usePactContext();
+  const account = useAccountContext();
+  const wallet = useWalletContext();
+  const liquidity = useLiquidityContext();
+  const modalContext = useModalContext();
+  const { gameEditionView, openModal, closeModal, outsideToken, showTokens, setShowTokens, setOutsideToken } = useGameEditionContext();
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
   const [selectedToken, setSelectedToken] = useState(null);
+  const [fetchData, setFetchData] = useState(true);
+  const [fetchingPair, setFetchingPair] = useState(false);
+  const [showTxModal, setShowTxModal] = useState(false);
   const [inputSide, setInputSide] = useState('');
   const [loading, setLoading] = useState(false);
+  const [fromValues, setFromValues] = useState({
+    amount: '',
+    balance: '',
+    coin: 'KDX',
+    precision: 12,
+  });
+  const [toValues, setToValues] = useState({
+    amount: '',
+    balance: account.account.balance || '',
+    coin: 'KDA',
+    precision: 12,
+  });
 
-  const [fromValues, setFromValues] = useState(initialStateValue);
-
-  const [toValues, setToValues] = useState(initialStateValue);
-
-  const [pairExist, setPairExist] = useState(false);
-  const [showTxModal, setShowTxModal] = useState(false);
-
-  const initData = async () => {
-    if (pair.token0 && pair.token1) {
-      await handleTokenValue('from', tokenData[pair.token0]);
-
-      await handleTokenValue('to', tokenData[pair.token1]);
-    } else {
-      await handleTokenValue('from', tokenData['KDX']);
-
-      await handleTokenValue('to', tokenData['KDA']);
-    }
-  };
-
+  // update the balance after a transaction send or change account
   useEffect(() => {
-    initData();
-  }, []);
-
-  useEffect(() => {
-    if (showTxModal === false) {
-      setFromValues({
-        coin: 'KDX',
-        account: '',
-        guard: null,
-        balance: '',
-        amount: '',
-        precision: 12,
-      });
-      setToValues(initialStateValue);
-    }
-  }, [showTxModal]);
-
-  // useEffect(() => {
-  //   if (showTxModal === false) {
-  //     setFromValues({
-  //       coin: 'KDX',
-  //       account: '',
-  //       guard: null,
-  //       balance: '',
-  //       amount: '',
-  //       precision: 12,
-  //     });
-  //     setToValues(initialStateValue);
-  //   }
-  // }, [showTxModal]);
-
-  /////// when pass pair by the container, set the token on InputToken
-  const handleTokenValue = async (by, crypto) => {
-    let balance;
-    if (crypto?.code === 'coin') {
+    const getBalance = async () => {
       if (account.account) {
-        balance = account.account.balance;
+        let acctOfFromValues = await account.getTokenAccount(tokenData[fromValues.coin]?.code, account.account.account, tokenSelectorType === 'from');
+        let acctOfToValues = await account.getTokenAccount(tokenData[toValues.coin]?.code, account.account.account, tokenSelectorType === 'to');
+        if (acctOfFromValues) {
+          let balanceFrom = getCorrectBalance(acctOfFromValues.balance);
+          setFromValues((prev) => ({
+            ...prev,
+            balance: balanceFrom,
+          }));
+        }
+        if (acctOfToValues) {
+          let balanceTo = getCorrectBalance(acctOfToValues.balance);
+          setToValues((prev) => ({
+            ...prev,
+            balance: balanceTo,
+          }));
+        }
       }
-    } else {
-      let acct = await account.getTokenAccount(crypto?.code, account.account.account, tokenSelectorType === 'from');
-      if (acct) {
-        balance = getCorrectBalance(acct.balance);
-      }
-    }
-    if (by === 'from')
-      return setFromValues((prev) => ({
-        ...prev,
-        balance: balance,
-        coin: crypto?.name,
-        precision: crypto?.precision,
-      }));
-    if (by === 'to')
-      return setToValues((prev) => ({
-        ...prev,
-        balance: balance,
-        coin: crypto?.name,
-        precision: crypto?.precision,
-      }));
-    else return null;
-  };
+    };
+    getBalance();
+  }, [account.fetchAccountBalance, account.account.account]);
 
+  //reset fetchAccountBalance change page
   useEffect(() => {
-    setInputSide('from');
-    if (pair?.token0 && fromValues === initialStateValue) {
-      handleTokenValue('from', tokenData[pair?.token0]);
-    }
-  }, [pair?.token0]);
-
-  useEffect(() => {
-    setInputSide('to');
-    if (pair?.token1 && toValues === initialStateValue) {
-      handleTokenValue('to', tokenData[pair?.token1]);
-    }
-  }, [pair?.token1]);
-  ////////
+    account.setFetchAccountBalance(true);
+    return () => {
+      account.setFetchAccountBalance(false);
+    };
+  }, []);
 
   useEffect(async () => {
     if (tokenSelectorType === 'from') setSelectedToken(fromValues?.coin);
@@ -148,21 +85,24 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
     else setSelectedToken(null);
   }, [tokenSelectorType]);
 
+  /////// TOKENS RATIO LOGIC TO UPDATE INPUT BALANCE AND VALUES //////////
   useEffect(async () => {
-    if (fromValues?.coin !== '') {
-      await account.getTokenAccount(tokenData?.[fromValues?.coin]?.code, account.account.account, true);
-    }
-    if (toValues?.coin !== '') {
-      await account.getTokenAccount(tokenData?.[toValues?.coin]?.code, account.account.account, false);
-    }
-    if (fromValues?.coin !== '' && toValues?.coin !== '') {
-      await pact.getPair(tokenData?.[fromValues?.coin]?.code, tokenData?.[toValues?.coin]?.code);
-      await pact.getReserves(tokenData?.[fromValues?.coin]?.code, tokenData?.[toValues?.coin]?.code);
-      if (pact.pair) {
-        setPairExist(true);
+    if (fetchData) {
+      setFetchingPair(true);
+      if (toValues.coin !== '' && fromValues.coin !== '') {
+        await pact.getReserves(tokenData?.[fromValues?.coin]?.code, tokenData?.[toValues?.coin]?.code);
       }
+      setFetchingPair(false);
+      setFetchData(false);
     }
-  }, [fromValues, toValues, pairExist, account.account.account]);
+  }, [fetchData]); //the getPair call is invoked when is selected a token
+
+  /// POLLING ON UPDATE PACT RATIO
+  useInterval(async () => {
+    if (!isNaN(pact.ratio)) {
+      await pact.getReserves(tokenData?.[fromValues?.coin]?.code, tokenData?.[toValues?.coin]?.code);
+    }
+  }, 10000);
 
   const onTokenClick = async ({ crypto }) => {
     let balance;
@@ -190,6 +130,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
         coin: crypto?.name,
         precision: crypto?.precision,
       }));
+    setFetchData(true);
   };
 
   const onSelectToken = async (crypto) => {
@@ -304,8 +245,10 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
       4: { msg: 'Pair does not exist yet', status: false },
       5: { msg: 'Pair Already Exists', status: false },
       6: { msg: 'Select different tokens', status: false },
+      7: { msg: 'Fetching Pair...', status: false },
     };
     if (!account.account.account) return status[0];
+    if (fetchingPair) return status[7];
     if (isNaN(pact.ratio)) {
       return status[4];
     } else if (!fromValues.amount || !toValues.amount) return status[1];
@@ -323,21 +266,13 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
     const res = await liquidity.addLiquidityWallet(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
     if (!res) {
       wallet.setIsWaitingForWalletAuth(true);
-      /* pact.setWalletError(true); */
-      /* walletError(); */
     } else {
       wallet.setWalletError(null);
       setShowTxModal(true);
     }
   };
 
-  const swapValues = () => {
-    const from = { ...fromValues };
-    const to = { ...toValues };
-    setFromValues({ ...to });
-    setToValues({ ...from });
-  };
-
+  // to reset the input data when selected the same coin
   useEffect(() => {
     if (tokenSelectorType === 'from') {
       if (fromValues.coin === toValues.coin) {
@@ -433,16 +368,31 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
     }
   };
 
-  const onAddLiquidity = async () => {
+  const onAddLiquidity = () => {
     setLoading(true);
-
-    swap.swapSend();
-
+    pact.txSend();
     setLoading(false);
+
     modalContext.closeModal();
     setShowTxModal(false);
+    setFromValues({
+      ...fromValues,
+      amount: '',
+    });
+    setToValues({
+      ...toValues,
+      amount: '',
+    });
   };
 
+  const swapValues = () => {
+    const from = { ...fromValues };
+    const to = { ...toValues };
+    setFromValues({ ...to });
+    setToValues({ ...from });
+  };
+
+  // trigger for open the preview modal
   useEffect(() => {
     if (showTxModal) {
       if (gameEditionView) {

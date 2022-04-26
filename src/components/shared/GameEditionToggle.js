@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Checkbox } from 'semantic-ui-react';
 import styled from 'styled-components/macro';
-import { GameEditionContext } from '../contexts/GameEditionContext';
+import { useGameEditionContext } from '../../contexts';
 
 const ToggleContainer = styled.div`
   display: flex;
@@ -65,7 +65,7 @@ const GameLabel = styled.div`
 `;
 
 const GameEditionToggle = ({ animation }) => {
-  const game = useContext(GameEditionContext);
+  const game = useGameEditionContext();
   return (
     <ToggleContainer animation={animation}>
       <GameLabel gameEditionView={game.gameEditionView}>Game Edition</GameLabel>

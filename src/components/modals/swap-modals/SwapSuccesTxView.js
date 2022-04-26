@@ -1,7 +1,5 @@
-import React, { useContext } from 'react';
-import { AccountContext } from '../../../contexts/AccountContext';
-import { PactContext } from '../../../contexts/PactContext';
-import { useSwapContext } from '../../../contexts';
+import React from 'react';
+import { useAccountContext, usePactContext, useSwapContext } from '../../../contexts';
 import { extractDecimal, reduceBalance } from '../../../utils/reduceBalance';
 import reduceToken from '../../../utils/reduceToken';
 import { getTokenIconByCode, getTokenName } from '../../../utils/token-utils';
@@ -15,9 +13,9 @@ import CustomDivider from '../../shared/CustomDivider';
 import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
 
 export const SwapSuccessViewGE = () => {
-  const { account } = useContext(AccountContext);
+  const { account } = useAccountContext();
 
-  const pact = useContext(PactContext);
+  const pact = usePactContext();
   const swap = useSwapContext();
   return (
     <SuccessViewContainerGE
@@ -87,8 +85,8 @@ export const SwapSuccessViewGE = () => {
 };
 
 export const SwapSuccessView = ({ loading, sendTransaction }) => {
-  const { account } = useContext(AccountContext);
-  const pact = useContext(PactContext);
+  const { account } = useAccountContext();
+  const pact = usePactContext();
 
   const swap = useSwapContext();
   return (

@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { ColumnContainer, Label, Value } from '../../components/layout/Containers';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { useGameEditionContext } from '../../contexts';
 
 const ColumnContent = ({ label, value, containerStyle, onClick }) => {
-  const { gameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView } = useGameEditionContext();
 
   return (
     <ColumnContainer style={{ flex: 1, cursor: onClick ? 'pointer' : 'default', ...containerStyle }} onClick={onClick}>

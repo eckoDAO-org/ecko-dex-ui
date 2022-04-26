@@ -1,9 +1,9 @@
-import React, { useState, createContext } from 'react';
+import React, { createContext } from 'react';
 import Pact from 'pact-lang-api';
 import tokenData from '../constants/cryptoCurrencies';
 import { reduceBalance } from '../utils/reduceBalance';
 
-import { useKaddexWalletContext, useWalletContext, useAccountContext, usePactContext, useNotificationContext } from '.';
+import { useKaddexWalletContext, useWalletContext, useAccountContext, usePactContext } from '.';
 import {
   CHAIN_ID,
   creationTime,
@@ -14,36 +14,20 @@ import {
   ENABLE_GAS_STATION,
   KADDEX_NAMESPACE,
 } from '../constants/contextConstants';
-import { pactFetchLocal } from '../api/pact';
+import { getPair, getPairAccount } from '../api/pact';
 import { mkReq, parseRes } from '../api/utils';
 
 export const SwapContext = createContext();
 
 export const SwapProvider = (props) => {
   const pact = usePactContext();
-  const notificationContext = useNotificationContext();
   const { account, localRes, setLocalRes } = useAccountContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
-
   const wallet = useWalletContext();
-  const [pairAccount, setPairAccount] = useState('');
-  const [cmd, setCmd] = useState(null);
-
-
-  const getPairAccount = async (token0, token1) => {
-    const result = await pactFetchLocal(`(at 'account (${KADDEX_NAMESPACE}.exchange.get-pair ${token0} ${token1}))`);
-    if (result.errorMessage) {
-      return result.errorMessage;
-    } else {
-      setPairAccount(result);
-      return result;
-    }
-  };
 
   const swap = async (token0, token1, isSwapIn) => {
     try {
       let pair = await getPairAccount(token0.address, token1.address);
-
       const inPactCode = `(${KADDEX_NAMESPACE}.exchange.swap-exact-in
           (read-decimal 'token0Amount)
           (read-decimal 'token1AmountWithSlippage)
@@ -89,34 +73,15 @@ export const SwapProvider = (props) => {
         networkId: NETWORKID,
         meta: Pact.lang.mkMeta(account.account, CHAIN_ID, GAS_PRICE, GAS_LIMIT, creationTime(), 600),
       };
-      setCmd(cmd);
+      pact.setPactCmd(cmd);
       await Pact.fetch.send(cmd, NETWORK);
     } catch (e) {
       console.log(e);
     }
   };
 
-  const swapSend = async () => {
-    pact.setPolling(true);
-    try {
-      let data;
-      if (cmd.pactCode) {
-        data = await Pact.fetch.send(cmd, NETWORK);
-      } else {
-        data = await Pact.wallet.sendSigned(cmd, NETWORK);
-      }
-      notificationContext.pollingNotif(data.requestKeys[0], 'Transaction Pending');
-
-      await pact.transactionListen(data.requestKeys[0]);
-      pact.setPolling(false);
-    } catch (e) {
-      pact.setPolling(false);
-      notificationContext.showErrorNotification(null, 'Transaction Error', 'Insufficient funds - attempt to buy gas failed.');
-      console.log('error', e);
-    }
-  };
-
   const swapWallet = async (token0, token1, isSwapIn) => {
+    const pair = await getPair(token0.address, token1.address);
     try {
       const inPactCode = `(${KADDEX_NAMESPACE}.exchange.swap-exact-in
           (read-decimal 'token0Amount)
@@ -142,7 +107,7 @@ export const SwapProvider = (props) => {
             : []),
           Pact.lang.mkCap('transfer capability', 'trasnsfer token in', `${token0.address}.TRANSFER`, [
             account.account,
-            pact.pair.account,
+            pair.account,
             isSwapIn
               ? reduceBalance(token0.amount, tokenData[token0.coin].precision)
               : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision),
@@ -179,7 +144,7 @@ export const SwapProvider = (props) => {
       wallet.setIsWaitingForWalletAuth(false);
       wallet.setWalletSuccess(true);
       //set signedtx
-      setCmd(command);
+      pact.setPactCmd(command);
       let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(command));
       data = await parseRes(data);
       setLocalRes(data);
@@ -208,14 +173,10 @@ export const SwapProvider = (props) => {
     <SwapContext.Provider
       value={{
         swap,
-        pairAccount,
         getPairAccount,
-        swapSend,
         swapWallet,
         tokenData,
         localRes,
-        cmd,
-        setCmd,
         mkReq,
         parseRes,
       }}

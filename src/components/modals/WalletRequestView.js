@@ -1,18 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { Transition } from 'react-spring/renderprops';
 import ModalContainer from '../shared/ModalContainer';
 import { Icon } from 'semantic-ui-react';
 import CustomButton from '../shared/CustomButton';
 import GameEditionModalsContainer from '../game-edition-v2/GameEditionModalsContainer';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
-import { WalletContext } from '../../contexts/WalletContext';
 import { WALLET } from '../../constants/wallet';
 import { openZelcore } from '../../utils/zelcore';
 import GameEditionLabel from '../game-edition-v2/components/GameEditionLabel';
 import Label from '../shared/Label';
 import LogoLoader from '../shared/Loader';
+import { useGameEditionContext, useWalletContext } from '../../contexts';
 
 const Container = styled.div`
   position: absolute;
@@ -54,7 +53,7 @@ const ContentContainer = styled.div`
 `;
 
 const WalletRequestView = ({ show, onClose, error }) => {
-  const wallet = useContext(WalletContext);
+  const wallet = useWalletContext();
 
   useEffect(() => {
     if (show && wallet?.wallet?.name === WALLET.ZELCORE.name) {
@@ -62,7 +61,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
     }
   }, [show]);
 
-  const { gameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView } = useGameEditionContext();
 
   return gameEditionView && show ? (
     <GameEditionModalsContainer

@@ -11,6 +11,7 @@ import { humanReadableNumber } from '../utils/reduceBalance';
 import LogoLoader from '../components/shared/Loader';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import AnalyticsSimpleWidget from '../components/shared/AnalyticsSimpleWidget';
+import { getCurrentKdaUSDPrice } from '../api/pact';
 import theme from '../styles/theme';
 
 const KDX_TOTAL_SUPPLY = 1000000000;
@@ -25,7 +26,7 @@ const AnalyticsContainer = () => {
 
   useEffect(() => {
     const getKdaUSDPrice = async () => {
-      const kdaPactPrice = await pact.getCurrentKdaUSDPrice();
+      const kdaPactPrice = await getCurrentKdaUSDPrice();
       // TODO: make generic price data
       axios
         .get('https://api.coingecko.com/api/v3/simple/price?ids=kadena&vs_currencies=usd')

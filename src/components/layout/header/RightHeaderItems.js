@@ -130,30 +130,31 @@ const RightHeaderItems = () => {
 
       {gameEditionView && <SlippagePopupContent className="header-item w-fit-content" />}
 
-      <BellNotification
-        hasNotification={notificationList?.some((notif) => notif.isRead === false)}
-        onClick={() => {
-          rightModalContext.openModal({
-            title: 'notifications',
-            titleStyle: { padding: '10px 22px 10px 26px' },
-            isNotificationModal: true,
-            content: <NotificationList />,
-            footer: (
-              <CustomButton
-                onClick={() => {
-                  removeAllNotifications();
-                }}
-                fontSize="12px"
-                buttonStyle={{ width: '100%' }}
-                outGameEditionView
-              >
-                Remove All Notification
-              </CustomButton>
-            ),
-          });
-        }}
-      />
-
+      {account?.account && (
+        <BellNotification
+          hasNotification={notificationList?.some((notif) => notif.isRead === false)}
+          onClick={() => {
+            rightModalContext.openModal({
+              title: 'notifications',
+              titleStyle: { padding: '10px 22px 10px 26px' },
+              isNotificationModal: true,
+              content: <NotificationList />,
+              footer: (
+                <CustomButton
+                  onClick={() => {
+                    removeAllNotifications();
+                  }}
+                  fontSize="12px"
+                  buttonStyle={{ width: '100%' }}
+                  outGameEditionView
+                >
+                  Remove All Notification
+                </CustomButton>
+              ),
+            });
+          }}
+        />
+      )}
       <PopupContentList
         icon={<ThreeDotsIcon className="menu-icon" />}
         items={headerLinks}

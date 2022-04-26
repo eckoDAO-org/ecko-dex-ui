@@ -1,7 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
 import { Accordion } from 'semantic-ui-react';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { extractDecimal, pairUnit } from '../../utils/reduceBalance';
 import CustomButton from '../../components/shared/CustomButton';
 import { theme } from '../../styles/theme';
@@ -9,6 +8,7 @@ import { ColumnContainer, Container, RowContainer, Value } from '../../component
 import { ArrowDown, PixeledArrowDownIcon } from '../../assets';
 import useWindowSize from '../../hooks/useWindowSize';
 import Label from '../../components/shared/Label';
+import { useGameEditionContext } from '../../contexts';
 
 const ResultContainer = styled.div`
   display: flex !important;
@@ -67,7 +67,7 @@ const ActionContainer = styled.div`
 `;
 
 const TokenPair = (props) => {
-  const { gameEditionView: $gameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView: $gameEditionView } = useGameEditionContext();
   let { token0, token1, balance, supply, pooledAmount } = props.pair;
 
   const handleActiveIndex = (index) => {

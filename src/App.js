@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { ThemeProvider } from 'styled-components/macro';
 import GlobalStyle from './styles/globalStyle';
 import Router from './router/router';
@@ -11,15 +11,15 @@ import ModalRender from './components/modals/ModalRender';
 import { SwapProvider } from './contexts/SwapContext';
 import { LiquidityProvider } from './contexts/LiquidityContext';
 import { GameEditionProvider } from './contexts/GameEditionContext';
-import { ApplicationContext } from './contexts/ApplicationContext';
 import { KaddexWalletProvider } from './contexts/KaddexWalletContext';
 import RightModalRender from './components/modals/RightModalRender';
 import gameEditionBackground from './assets/images/game-edition/game-edition-background.png';
 import useLazyImage from './hooks/useLazyImage';
 import AppLoader from './components/shared/AppLoader';
+import { useApplicationContext } from './contexts';
 
 function App() {
-  const { themeMode } = useContext(ApplicationContext);
+  const { themeMode } = useApplicationContext();
   const [loaded] = useLazyImage([gameEditionBackground]);
   return (
     <ThemeProvider theme={theme(themeMode)}>
@@ -29,8 +29,8 @@ function App() {
         <>
           <GlobalStyle themeMode={themeMode} />
           <GameEditionProvider>
-            <NotificationRender>
-              <AccountProvider>
+            <AccountProvider>
+              <NotificationRender>
                 <WalletProvider>
                   <PactProvider>
                     <KaddexWalletProvider>
@@ -46,8 +46,8 @@ function App() {
                     </KaddexWalletProvider>
                   </PactProvider>
                 </WalletProvider>
-              </AccountProvider>
-            </NotificationRender>
+              </NotificationRender>
+            </AccountProvider>
           </GameEditionProvider>
         </>
       )}

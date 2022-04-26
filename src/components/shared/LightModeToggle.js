@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Checkbox } from 'semantic-ui-react';
 import styled from 'styled-components/macro';
-import { ApplicationContext } from '../../contexts/ApplicationContext';
+import { useApplicationContext } from '../../contexts';
 import Label from './Label';
 
 const ToggleContainer = styled.div`
@@ -45,7 +45,7 @@ const ToggleContainer = styled.div`
 `;
 
 const LightModeToggle = ({ animation, style }) => {
-  const { themeMode, themeToggler } = useContext(ApplicationContext);
+  const { themeMode, themeToggler } = useApplicationContext();
 
   const getModeLabel = () => {
     return themeMode === 'light' ? 'dark' : 'light';

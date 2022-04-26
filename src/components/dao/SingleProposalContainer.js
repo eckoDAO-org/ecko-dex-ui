@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import Pact from 'pact-lang-api';
-import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import { hasAccountVoted, readSingleProposal, vote, voteCommandToSign, votePreview } from '../../api/dao';
 import { useAccountContext, useKaddexWalletContext, useNotificationContext } from '../../contexts';
@@ -59,7 +58,6 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
       setDaoFetchDataLoading(true);
       const res = await vote(signedCommand, notificationContext.pollingNotif);
       if (res?.listen === 'success') {
-        toast.dismiss(notificationContext.toastId.current);
         notificationContext.showSuccessNotification(res?.data.requestKeys[0], 'Vote Success!');
         setDaoSingleProposalLoading(false);
         setDaoFetchDataLoading(false);

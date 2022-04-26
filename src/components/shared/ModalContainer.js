@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
 import { ArrowBack, CloseIcon } from '../../assets';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
-
 import Label from './Label';
 import { FlexContainer } from './FlexContainer';
+import { useGameEditionContext } from '../../contexts';
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -23,8 +22,8 @@ const HeaderContainer = styled.div`
 `;
 
 const ModalContainer = ({ title, description, containerStyle, titleStyle, descriptionStyle, children, onBack, onClose }) => {
-  const { gameEditionView } = useContext(GameEditionContext);
   const containerRef = useRef(null);
+  const { gameEditionView } = useGameEditionContext();
 
   useEffect(() => {
     console.log('container', containerRef?.current?.clientHeight);

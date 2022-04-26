@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import Pact from 'pact-lang-api';
 import React, { useEffect, useState } from 'react';
+import { getTokenBalanceAccount } from '../../api/pact';
 import { ArrowDown } from '../../assets';
-import { CHAIN_ID, creationTime, NETWORK } from '../../constants/contextConstants';
 import tokenData from '../../constants/cryptoCurrencies';
-import { useAccountContext, useLiquidityContext, useModalContext, usePactContext, useSwapContext, useWalletContext } from '../../contexts';
+import { useAccountContext, useLiquidityContext, useModalContext, usePactContext, useWalletContext } from '../../contexts';
+import { useInterval } from '../../hooks/useInterval';
 import noExponents from '../../utils/noExponents';
 import { getCorrectBalance, limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
 import { SuccessAddView } from '../modals/liquidity/LiquidityTxView';
@@ -20,7 +20,6 @@ import Label from '../shared/Label';
 
 const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
   const modalContext = useModalContext();
-  const swap = useSwapContext();
   const { addOneSideLiquidityWallet } = useLiquidityContext();
   const wallet = useWalletContext();
   const pact = usePactContext();
@@ -40,22 +39,29 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
 
   const [loading, setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   onPairChange(fromValue.coin);
-  //   handleTokenValue(pair?.token0 || 'KDA');
-  // }, [pair.coin]);
+  // update the balance after a transaction send or change account
+  useEffect(() => {
+    if (account.fetchAccountBalance) {
+      handleTokenValue(pair?.token0 || 'KDX');
+    }
+  }, [account.fetchAccountBalance, account.account.account]);
+
+  //reset fetchAccountBalance change page
+  useEffect(() => {
+    account.setFetchAccountBalance(true);
+    return () => {
+      account.setFetchAccountBalance(false);
+    };
+  }, []);
 
   useEffect(() => {
     setSelectedPool(pools[0]);
-    handleTokenValue(pair?.token0 || 'KDX');
   }, []);
 
   useEffect(async () => {
     onPairChange(fromValue?.coin);
     if (selectedPool) {
       setFetchingPair(true);
-      await pact.getPair(tokenData?.[selectedPool?.token0]?.code, tokenData?.[selectedPool?.token1]?.code);
-
       if (selectedPool?.token0 === fromValue.coin) {
         await pact.getReserves(tokenData?.[selectedPool?.token0]?.code, tokenData?.[selectedPool?.token1]?.code);
       } else {
@@ -64,6 +70,13 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
       setFetchingPair(false);
     }
   }, [fromValue?.coin, selectedPool]);
+
+  /// POLLING ON UPDATE PACT RATIO
+  useInterval(async () => {
+    if (!isNaN(pact.ratio)) {
+      await pact.getReserves(tokenData?.[selectedPool?.token0]?.code, tokenData?.[selectedPool?.token1]?.code);
+    }
+  }, 10000);
 
   const handleTokenValue = async (token) => {
     const crypto = tokenData[token];
@@ -75,14 +88,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
       }
     } else {
       try {
-        let data = await Pact.fetch.local(
-          {
-            pactCode: `(${crypto.code}.details ${JSON.stringify(account.account.account)})`,
-            keyPairs: Pact.crypto.genKeyPair(),
-            meta: Pact.lang.mkMeta('', CHAIN_ID, 0.01, 100000000, 28800, creationTime()),
-          },
-          NETWORK
-        );
+        let data = await getTokenBalanceAccount(crypto.code, account.account.account);
         if (data.result.status === 'success') {
           balance = getCorrectBalance(data.result.data.balance);
         }
@@ -96,6 +102,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
       coin: crypto?.name,
       precision: crypto?.precision,
     }));
+    account.setFetchAccountBalance(false);
     // onPairChange(token);
   };
 
@@ -169,7 +176,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
 
   const onAddSingleLiquidity = () => {
     setLoading(true);
-    swap.swapSend();
+    pact.txSend();
 
     setLoading(false);
     modalContext.closeModal();

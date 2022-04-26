@@ -1,15 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
 import { useHistory } from 'react-router';
 import { ROUTE_GAME_EDITION_MENU, ROUTE_SWAP } from '../../router/routes';
 import { GameEditionWrapper } from './GameEditionWrapper';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
 import { FadeIn } from '../components/shared/animations';
 import theme from '../../styles/theme';
 import GameEditionMobileWrapper from './GameEditionMobileWrapper';
 import menuItems from '../menuItems';
 import useWindowSize from '../../hooks/useWindowSize';
+import { useGameEditionContext } from '../../contexts';
 
 const MainContainer = styled.div`
   display: flex;
@@ -34,7 +34,7 @@ const ContentContainer = styled.div`
 `;
 
 const GameEditionContainer = ({ children }) => {
-  const { modalState, closeModal } = useContext(GameEditionContext);
+  const { modalState, closeModal } = useGameEditionContext();
   const history = useHistory();
 
   const switchAppSection = (direction) => {

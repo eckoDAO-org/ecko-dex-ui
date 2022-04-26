@@ -1,4 +1,5 @@
-import { handleError, pactFetchLocal } from './pact';
+import { pactFetchLocal } from './pact';
+import { handleError } from './utils';
 
 export const getKDXTotalSupply = async () => {
   try {
