@@ -164,7 +164,6 @@ const renderColumns = () => {
       width: 160,
       render: ({ item }) => (
         <FlexContainer className="align-ce">
-          {console.log('item', item)}
           <CryptoContainer style={{ zIndex: 2 }}>{getInfoCoin(item, 3)?.icon} </CryptoContainer>
           <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{getInfoCoin(item, 5)?.icon} </CryptoContainer>
           {getInfoCoin(item, 3)?.name}/{getInfoCoin(item, 5)?.name}
