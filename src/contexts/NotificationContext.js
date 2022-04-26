@@ -55,7 +55,7 @@ export const NotificationProvider = ({ children }) => {
   }) => {
     return toast(<NotificationContainer message={message} type={type} title={title} icon={icon} titleStyle={titleStyle} />, {
       className,
-      toastId: '',
+      toastId,
       title,
       message,
       autoClose,
@@ -128,7 +128,7 @@ export const NotificationProvider = ({ children }) => {
     setNotificationList([]);
   };
 
-  const removeToastNotificationId = (id) => {
+  const removeToastNotificationId = async (id) => {
     let notifList = toastNotificationsId.filter((notif) => notif !== id);
     setToastNotificationsId(notifList);
   };
@@ -161,7 +161,7 @@ export const NotificationProvider = ({ children }) => {
   };
 
   //Show and store the Error Notification
-  const showErrorNotification = (reqKey, title, message = null) => {
+  const showErrorNotification = async (reqKey, title, message = null) => {
     if (reqKey) {
       toast.dismiss(reqKey);
     }
@@ -185,11 +185,11 @@ export const NotificationProvider = ({ children }) => {
       },
       autoClose: 10000,
     });
-    removeToastNotificationId(reqKey);
+    await removeToastNotificationId(reqKey);
   };
 
   //Show and store the Success Notification
-  const showSuccessNotification = (reqKey, title, message = null) => {
+  const showSuccessNotification = async (reqKey, title, message = null) => {
     if (reqKey) {
       toast.dismiss(reqKey);
     }
@@ -214,7 +214,7 @@ export const NotificationProvider = ({ children }) => {
       },
       autoClose: 10000,
     });
-    removeToastNotificationId(reqKey);
+    await removeToastNotificationId(reqKey);
   };
 
   const transactionListen = async (reqKey) => {
