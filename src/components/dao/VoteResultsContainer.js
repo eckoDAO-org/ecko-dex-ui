@@ -44,8 +44,6 @@ const VoteResultsContainer = ({ onClickYes, onClickNo, proposalData, hasVoted })
   const dataValidation = () =>
     !account?.account || hasVoted || moment(proposalData['start-date']?.time) >= moment() || moment(proposalData['end-date']?.time) <= moment();
 
-  console.log('validation', dataValidation());
-
   return (
     <FlexContainer className="column w-100" gap={16} style={{ marginTop: 4 }}>
       <FlexContainer gap={10} className="align-ce">

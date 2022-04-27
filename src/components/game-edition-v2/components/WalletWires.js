@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
-import { useAccountContext, useApplicationContext, useKaddexWalletContext, useWalletContext } from '../../../contexts';
-import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../../contexts/GameEditionContext';
+import { useAccountContext, useApplicationContext, useGameEditionContext, useKaddexWalletContext, useWalletContext } from '../../../contexts';
+import { GE_DESKTOP_CONFIGURATION } from '../../../contexts/GameEditionContext';
 import { FadeIn } from '../../shared/animations';
 import { HideWiresIcon } from '../../../assets';
 import { WALLET } from '../../../constants/wallet';
@@ -97,7 +97,7 @@ const BlurWire = styled(FadeIn)`
 `;
 
 export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
-  const { selectedWire, showWires } = useContext(GameEditionContext);
+  const { selectedWire, showWires } = useGameEditionContext();
   const { resolutionConfiguration } = useApplicationContext();
   const { account } = useAccountContext();
 
@@ -129,7 +129,7 @@ export const ConnectionWire = ({ wire, containerStyle, onClick }) => {
 const WalletWires = () => {
   const { wallet, removeWallet, removeSigning } = useWalletContext();
   const { disconnectWallet } = useKaddexWalletContext();
-  const { showWires, onWireSelect, selectedWire } = useContext(GameEditionContext);
+  const { showWires, onWireSelect, selectedWire } = useGameEditionContext();
   const { logout } = useAccountContext();
 
   return (

@@ -1,9 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components/macro';
-import { useGameEditionContext } from '../../contexts';
+import { useGameEditionContext, useSwapContext } from '../../contexts';
 import { ErrorIcon, PixeledCircleArrowIcon, SuccessfullIcon } from '../../assets';
-import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
-import { SwapContext } from '../../contexts/SwapContext';
+import { GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
 import CustomButton from '../shared/CustomButton';
 import Label from '../shared/Label';
 import { commonColors } from '../../styles/theme';
@@ -27,8 +26,8 @@ const TransactionsDetails = styled.div`
 `;
 
 const TxView = ({ loading, onClose, children }) => {
-  const swap = useContext(SwapContext);
-  const { gameEditionView } = useContext(GameEditionContext);
+  const swap = useSwapContext();
+  const { gameEditionView } = useGameEditionContext();
 
   const failView = () => {
     return (

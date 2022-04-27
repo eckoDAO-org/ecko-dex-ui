@@ -2,10 +2,9 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
 import { ArrowBack, CloseIcon } from '../../assets';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
-
 import Label from './Label';
 import { FlexContainer } from './FlexContainer';
+import { useGameEditionContext } from '../../contexts';
 
 const HeaderContainer = styled.div`
   display: flex;

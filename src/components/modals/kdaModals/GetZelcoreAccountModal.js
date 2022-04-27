@@ -1,16 +1,14 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import CustomButton from '../../../components/shared/CustomButton';
 import { Dropdown } from 'semantic-ui-react';
 import reduceToken from '../../../utils/reduceToken';
-import { AccountContext } from '../../../contexts/AccountContext';
-import { ModalContext } from '../../../contexts/ModalContext';
-import { GameEditionContext } from '../../../contexts/GameEditionContext';
 import { commonTheme } from '../../../styles/theme';
 import { getAccounts, openZelcore } from '../../../utils/zelcore';
 import LogoLoader from '../../shared/Loader';
 import Label from '../../shared/Label';
 import { GeArrowIcon } from '../../../assets';
+import { useAccountContext, useGameEditionContext, useModalContext } from '../../../contexts';
 
 const ActionContainer = styled.div`
   display: flex;
@@ -76,9 +74,9 @@ const DropdownContainer = styled.div`
 `;
 
 const GetZelcoreAccountModal = ({ onClose, onConnectionSuccess }) => {
-  const modalContext = useContext(ModalContext);
-  const { account, setVerifiedAccount } = useContext(AccountContext);
-  const { gameEditionView, closeModal, onWireSelect } = useContext(GameEditionContext);
+  const modalContext = useModalContext();
+  const { account, setVerifiedAccount } = useAccountContext();
+  const { gameEditionView, closeModal, onWireSelect } = useGameEditionContext();
 
   const [loading, setLoading] = useState(false);
   const [accounts, setAccounts] = useState(null);

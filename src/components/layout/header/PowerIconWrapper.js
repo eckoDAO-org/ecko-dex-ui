@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
-import { GameEditionContext } from '../../../contexts/GameEditionContext';
+import { useGameEditionContext } from '../../../contexts';
 
 const IconWrapper = styled.div`
   display: flex;
@@ -27,7 +27,7 @@ const IconWrapper = styled.div`
 `;
 
 const PowerIconWrapper = ({ onClick }) => {
-  const { gameEditionView } = useContext(GameEditionContext);
+  const { gameEditionView } = useGameEditionContext();
   return (
     <IconWrapper onClick={onClick} gameEditionView={gameEditionView}>
       <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">

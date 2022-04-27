@@ -1,10 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
-import { useApplicationContext } from '../../../contexts';
-import { PactContext } from '../../../contexts/PactContext';
-import { GameEditionContext } from '../../../contexts/GameEditionContext';
+import { useApplicationContext, useGameEditionContext, usePactContext } from '../../../contexts';
 import Input from '../../../components/shared/Input';
 import LightModeToggle from '../../../components/shared/LightModeToggle';
 import Label from '../../shared/Label';
@@ -102,8 +100,8 @@ const Row = styled.div`
 `;
 
 const SlippagePopupContent = ({ className }) => {
-  const pact = useContext(PactContext);
-  const { gameEditionView } = useContext(GameEditionContext);
+  const pact = usePactContext();
+  const { gameEditionView } = useGameEditionContext();
   const { resolutionConfiguration } = useApplicationContext();
   const [showSplippageContent, setShowSlippageContent] = useState(false);
 

@@ -31,7 +31,7 @@ const StakeContainer = () => {
   const { openModal, closeModal } = useModalContext();
   const { account } = useAccountContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
-  const { showNotification, STATUSES, pollingNotif, showErrorNotification } = useNotificationContext();
+  const { showNotification, STATUSES, pollingNotif, showErrorNotification, transactionListen } = useNotificationContext();
   const pact = usePactContext();
 
   const [poolState, setPoolState] = useState(null);
@@ -154,7 +154,7 @@ const StakeContainer = () => {
         pollingNotif(stakingResponse.requestKeys[0], 'Staking Transaction Pending');
 
         setInputAmount(0);
-        await pact.transactionListen(stakingResponse.requestKeys[0]);
+        await transactionListen(stakingResponse.requestKeys[0]);
         pact.setPolling(false);
       })
       .catch((error) => {
@@ -207,7 +207,7 @@ const StakeContainer = () => {
         console.log(' rollupAndUnstake', rollupAndUnstake);
         pollingNotif(rollupAndUnstake.requestKeys[0], 'Rollup and Unstake Transaction Pending');
 
-        await pact.transactionListen(rollupAndUnstake.requestKeys[0]);
+        await transactionListen(rollupAndUnstake.requestKeys[0]);
         pact.setPolling(false);
         setInputAmount(0);
       })
@@ -266,7 +266,7 @@ const StakeContainer = () => {
         console.log(' rollupAndClaim', rollupAndClaim);
         pollingNotif(rollupAndClaim.requestKeys[0], 'Rollup and Unstake Transaction Pending');
 
-        await pact.transactionListen(rollupAndClaim.requestKeys[0]);
+        await transactionListen(rollupAndClaim.requestKeys[0]);
         pact.setPolling(false);
         setInputAmount(0);
       })

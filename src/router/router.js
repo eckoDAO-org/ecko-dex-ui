@@ -3,13 +3,11 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import SwapContainer from '../containers/SwapContainer';
 import DaoContainer from '../containers/DaoContainer';
-import WrapContainer from '../containers/WrapContainer';
 import AnalyticsContainer from '../containers/AnalyticsContainer';
 import GameEditionMenuContainer from '../components/game-edition-v2/GameEditionMenuContainer';
 import GameEditionStartAnimation from '../components/game-edition-v2/GameEditionStartAnimation';
 import {
   ROUTE_INDEX,
-  ROUTE_WRAP,
   ROUTE_STATS,
   ROUTE_GAME_START_ANIMATION,
   ROUTE_GAME_EDITION_MENU,
@@ -61,7 +59,6 @@ export default () => {
             <Route exact path={[ROUTE_DAO, ROUTE_DAO_PROPOSAL]} component={DaoContainer} />
             <Route exact path={ROUTE_ANALYTICS} component={AnalyticsContainer} />
             <Route exact path={[ROUTE_STAKE, ROUTE_UNSTAKE]} component={StakeContainer} />
-            <Route exact path={ROUTE_WRAP} component={WrapContainer} />
           </Switch>
         )}
       </Layout>

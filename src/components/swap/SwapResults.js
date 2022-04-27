@@ -1,9 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
-import { PactContext } from '../../contexts/PactContext';
-import { LiquidityContext } from '../../contexts/LiquidityContext';
 import { reduceBalance } from '../../utils/reduceBalance';
 import Label from '../shared/Label';
+import { useLiquidityContext, usePactContext } from '../../contexts';
 
 const ResultContainer = styled.div`
   display: flex;
@@ -27,8 +26,8 @@ const RowContainer = styled.div`
 `;
 
 const SwapResults = ({ priceImpact, fromValues, toValues }) => {
-  const pact = useContext(PactContext);
-  const liquidity = useContext(LiquidityContext);
+  const pact = usePactContext();
+  const liquidity = useLiquidityContext();
   return (
     <ResultContainer>
       <RowContainer>

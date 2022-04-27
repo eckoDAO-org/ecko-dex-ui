@@ -1,14 +1,12 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import Search from '../../../components/shared/Search';
-import { SwapContext } from '../../../contexts/SwapContext';
-import { GameEditionContext } from '../../../contexts/GameEditionContext';
-import { ApplicationContext } from '../../../contexts/ApplicationContext';
 import Label from '../../shared/Label';
 import { PartialScrollableScrollSection } from '../../layout/Containers';
 import useWindowSize from '../../../hooks/useWindowSize';
 import { theme } from '../../../styles/theme';
 import { CloseIcon } from '../../../assets';
+import { useApplicationContext, useGameEditionContext, useSwapContext } from '../../../contexts';
 
 const Divider = styled.div`
   border-top: ${({ theme: { colors } }) => `1px solid ${colors.white}99 `};
@@ -59,9 +57,9 @@ const TokenItem = styled.div`
 `;
 const TokenSelectorModalContent = ({ onSelectToken, onClose, token, tokensToKeep }) => {
   const [searchValue, setSearchValue] = useState('');
-  const swap = useContext(SwapContext);
-  const { gameEditionView, onCloseTokensList } = useContext(GameEditionContext);
-  const { themeMode } = useContext(ApplicationContext);
+  const swap = useSwapContext();
+  const { gameEditionView, onCloseTokensList } = useGameEditionContext();
+  const { themeMode } = useApplicationContext();
 
   const [width] = useWindowSize();
   const cryptoCurrencies = Object.values(swap.tokenData).filter((c) => {

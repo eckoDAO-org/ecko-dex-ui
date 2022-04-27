@@ -12,7 +12,7 @@ import RewardBooster from './RewardBooster';
 import useQueryParams from '../../hooks/useQueryParams';
 import DoubleSidedLiquidity from './DoubleSidedLiquidity';
 import SingleSidedLiquidity from './SingleSidedLiquidity';
-import { getPairList } from '../../api/pact-pair';
+import { getPairList } from '../../api/pact';
 import { getDailyVolume } from '../../api/kaddex-stats';
 import { getAllPairValues } from '../../utils/token-utils';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';

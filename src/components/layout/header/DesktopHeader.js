@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { KaddexLightModeLogo, KaddexLogo } from '../../../assets';
@@ -6,7 +6,6 @@ import { ROUTE_INDEX } from '../../../router/routes';
 import menuItems from '../../menuItems';
 import RightHeaderItems from './RightHeaderItems';
 import HeaderItem from '../../../components/shared/HeaderItem';
-import { ApplicationContext } from '../../../contexts/ApplicationContext';
 import { useApplicationContext, useGameEditionContext } from '../../../contexts';
 import GameEditionModeButton from './GameEditionModeButton';
 import useWindowSize from '../../../hooks/useWindowSize';
@@ -62,7 +61,7 @@ const DesktopHeader = ({ className }) => {
   const { resolutionConfiguration } = useApplicationContext();
 
   const [width, height] = useWindowSize();
-  const { themeMode } = useContext(ApplicationContext);
+  const { themeMode } = useApplicationContext();
   return (
     <Container className={className} resolutionConfiguration={resolutionConfiguration}>
       <LeftContainer>

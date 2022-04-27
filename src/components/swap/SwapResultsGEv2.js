@@ -1,12 +1,11 @@
-import React, { useContext } from 'react';
-import { PactContext } from '../../contexts/PactContext';
-import { LiquidityContext } from '../../contexts/LiquidityContext';
+import React from 'react';
 import { reduceBalance } from '../../utils/reduceBalance';
 import PixeledBlueContainer, { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
+import { useLiquidityContext, usePactContext } from '../../contexts';
 
 const SwapResultsGEv2 = ({ priceImpact, fromValues, toValues }) => {
-  const pact = useContext(PactContext);
-  const liquidity = useContext(LiquidityContext);
+  const pact = usePactContext();
+  const liquidity = useLiquidityContext();
   return (
     <InfoContainer style={{ marginTop: 6, paddingLeft: 16, paddingRight: 16 }}>
       <PixeledBlueContainer label={`${fromValues.coin}/${toValues.coin}`} value={`${reduceBalance(pact.ratio * (1 + priceImpact))}`} />

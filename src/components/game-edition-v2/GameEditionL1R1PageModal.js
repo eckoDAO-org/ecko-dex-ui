@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { useGameEditionContext } from '../../contexts';
-import { GameEditionContext, GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
+import { GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
 import { gameEditionRoutes } from '../menuItems';
 import GameEditionLabel from './components/GameEditionLabel';
 import { PixeledArrowDownIcon } from '../../assets';
@@ -60,13 +60,12 @@ const Item = styled.div`
 const GameEditionL1R1PageModal = ({ direction }) => {
   const location = useLocation();
   const history = useHistory();
-  const { closeModal } = useGameEditionContext();
+  const { closeModal, setButtons } = useGameEditionContext();
   const [translateX, setTranslateX] = useState(0);
 
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [intervalId, setIntervalId] = useState(null);
-  const { setButtons } = useContext(GameEditionContext);
 
   // init index based on the current route when this page is rendered
   useEffect(() => {

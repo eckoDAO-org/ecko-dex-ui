@@ -1,17 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Icon } from 'semantic-ui-react';
-import { AccountContext } from '../../contexts/AccountContext';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
-import { ApplicationContext } from '../../contexts/ApplicationContext';
 import CopyPopup from '../shared/CopyPopup';
 import CustomPopup from '../shared/CustomPopup';
 import { theme } from '../../styles/theme';
 import Label from '../shared/Label';
+import { useAccountContext, useApplicationContext, useGameEditionContext } from '../../contexts';
 
 const PopupTxView = ({ isAccountPopup, popupStyle, offset }) => {
-  const { gameEditionView } = useContext(GameEditionContext);
-  const { account } = useContext(AccountContext);
-  const { themeMode } = useContext(ApplicationContext);
+  const { gameEditionView } = useGameEditionContext();
+  const { account } = useAccountContext();
+  const { themeMode } = useApplicationContext();
 
   const containerStyle = gameEditionView
     ? {

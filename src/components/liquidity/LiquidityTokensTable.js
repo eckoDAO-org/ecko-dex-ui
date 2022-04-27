@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { getDailyVolume } from '../../api/kaddex-stats';
-import { getPairList } from '../../api/pact-pair';
+import { getPairList } from '../../api/pact';
 import CommonTable from '../shared/CommonTable';
 import tokenData from '../../constants/cryptoCurrencies';
 import { humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';

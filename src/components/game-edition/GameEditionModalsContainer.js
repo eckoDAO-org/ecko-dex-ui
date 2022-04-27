@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
 import { CloseGe } from '../../assets';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
+import { useGameEditionContext } from '../../contexts';
 
 const GEModalContainer = styled.div`
   top: 0;
@@ -53,7 +53,7 @@ const ContentModalContainer = styled.div`
 `;
 
 const GameEditionModalsContainer = ({ title, description, content, onClose, modalStyle }) => {
-  const { closeModal } = useContext(GameEditionContext);
+  const { closeModal } = useGameEditionContext();
   return (
     <GEModalContainer style={modalStyle}>
       <TitleContainer>

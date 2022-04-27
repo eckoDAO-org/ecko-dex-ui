@@ -1,9 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
 import { CloseGe } from '../../assets';
-import { GameEditionContext } from '../../contexts/GameEditionContext';
 import { FadeIn } from '../shared/animations';
 import modalBackground from '../../assets/images/game-edition/modal-background.png';
 import arcadeBackground from '../../assets/images/game-edition/arcade-background.png';
@@ -12,6 +11,7 @@ import GameEditionLabel from './components/GameEditionLabel';
 import useButtonScrollEvent from '../../hooks/useButtonScrollEvent';
 import useLazyImage from '../../hooks/useLazyImage';
 import { GameEditionLoader } from '../shared/Loader';
+import { useGameEditionContext } from '../../contexts';
 
 const getBackground = (type) => {
   switch (type) {
@@ -78,7 +78,7 @@ const GameEditionModalsContainer = ({
   titleFontSize = 52,
   type,
 }) => {
-  const { closeModal, buttons, setButtons, showTokens } = useContext(GameEditionContext);
+  const { closeModal, buttons, setButtons, showTokens } = useGameEditionContext();
 
   useButtonScrollEvent('game-edition-modal-container');
 
