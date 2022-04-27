@@ -13,7 +13,6 @@ import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonT
 import { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
 import { PRECISION } from '../../constants/contextConstants';
 import { extractDecimal, limitDecimalPlaces, pairUnit, reduceBalance } from '../../utils/reduceBalance';
-import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import PixeledBlueContainer from '../game-edition-v2/components/PixeledInfoContainerBlue';
 import LogoLoader from '../shared/Loader';
 import { FadeIn } from '../shared/animations';
@@ -67,7 +66,8 @@ const RemoveLiquidityContent = ({ pair }) => {
   const wallet = useWalletContext();
   const liquidity = useLiquidityContext();
   const modalContext = useModalContext();
-  const { gameEditionView, openModal, closeModal, setButtons } = useGameEditionContext();
+  const { gameEditionView, setButtons } = useGameEditionContext();
+  const [showTxModal, setShowTxModal] = useState(false);
 
   const [amount, setAmount] = useState(100);
   const [loading, setLoading] = useState(false);
@@ -110,6 +110,7 @@ const RemoveLiquidityContent = ({ pair }) => {
     pact.txSend();
     modalContext.closeModal();
     setLoading(false);
+    setShowTxModal(false);
   };
 
   const onWalletRequestViewModalClose = () => {
@@ -118,31 +119,23 @@ const RemoveLiquidityContent = ({ pair }) => {
     setLoading(false);
   };
 
-  const openTxViewModal = () => {
-    if (gameEditionView) {
-      openModal({
-        titleFontSize: 32,
-        containerStyle: { padding: 0 },
-        titleContainerStyle: {
-          padding: 16,
-          paddingBottom: 0,
-        },
-        title: 'transaction details',
-        onClose: () => {
-          closeModal();
-        },
-        content: (
-          <TxView
-            view={LIQUIDITY_VIEW.REMOVE_LIQUIDITY}
-            token0={pair?.token0}
-            onClose={() => {
-              closeModal();
-            }}
-            token1={pair?.token1}
-          />
-        ),
-      });
+  const onRemoveLiquidity = async () => {
+    setLoading(true);
+    const res = await liquidity.removeLiquidityWallet(tokenData[pair?.token0].code, tokenData[pair?.token1].code, reduceBalance(pooled, PRECISION));
+    if (!res) {
+      wallet.setIsWaitingForWalletAuth(true);
+      setLoading(false);
+      /* pact.setWalletError(true); */
+      /* walletError(); */
     } else {
+      wallet.setWalletError(null);
+      setShowTxModal(true);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (showTxModal) {
       modalContext.openModal({
         title: 'remove liquidity?',
         description: '',
@@ -162,22 +155,7 @@ const RemoveLiquidityContent = ({ pair }) => {
         ),
       });
     }
-  };
-
-  const onRemoveLiquidity = async () => {
-    setLoading(true);
-    const res = await liquidity.removeLiquidityWallet(tokenData[pair?.token0].code, tokenData[pair?.token1].code, reduceBalance(pooled, PRECISION));
-    if (!res) {
-      wallet.setIsWaitingForWalletAuth(true);
-      setLoading(false);
-      /* pact.setWalletError(true); */
-      /* walletError(); */
-    } else {
-      wallet.setWalletError(null);
-      openTxViewModal();
-      setLoading(false);
-    }
-  };
+  }, [showTxModal]);
 
   return (
     <Container $gameEditionView={gameEditionView}>

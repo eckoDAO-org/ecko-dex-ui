@@ -1,5 +1,5 @@
 import Pact from 'pact-lang-api';
-import { CHAIN_ID, GAS_LIMIT, GAS_PRICE, KADDEX_NAMESPACE, NETWORK, NETWORKID } from '../constants/contextConstants';
+import { CHAIN_ID, ENABLE_GAS_STATION, GAS_PRICE, KADDEX_NAMESPACE, NETWORK, NETWORKID } from '../constants/contextConstants';
 import { pactFetchLocal } from './pact';
 import { mkReq, parseRes, handleError, listen } from './utils';
 
@@ -46,9 +46,14 @@ export const voteCommandToSign = (type, proposalId, account) => {
     else pactCode = `(${KADDEX_NAMESPACE}.dao.refused-vote "${proposalId}" "${account.account}" )`;
     const cmdToSign = {
       pactCode,
-      clist: [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS').cap],
-      sender: account.account,
-      gasLimit: GAS_LIMIT,
+      caps: [
+        ...(ENABLE_GAS_STATION
+          ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
+          : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
+        Pact.lang.mkCap('guard', 'account GUARD', `${KADDEX_NAMESPACE}.dao.ACCOUNT_GUARD`, [account.account]),
+      ],
+      sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
+      gasLimit: 2000,
       gasPrice: GAS_PRICE,
       chainId: CHAIN_ID,
       ttl: 600,
@@ -64,7 +69,6 @@ export const voteCommandToSign = (type, proposalId, account) => {
 export const votePreview = async (signedCommand) => {
   try {
     let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(signedCommand));
-    // let data = await Pact.fetch.local(signedCommand, `${NETWORK}/api/v1/local`);
     return parseRes(data);
   } catch (e) {
     return handleError(e);

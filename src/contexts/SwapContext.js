@@ -103,8 +103,8 @@ export const SwapProvider = (props) => {
         pactCode: isSwapIn ? inPactCode : outPactCode,
         caps: [
           ...(ENABLE_GAS_STATION
-            ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['free-gas', { int: 1 }, 1.0])]
-            : []),
+            ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
+            : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
           Pact.lang.mkCap('transfer capability', 'trasnsfer token in', `${token0.address}.TRANSFER`, [
             account.account,
             pair.account,
@@ -112,10 +112,9 @@ export const SwapProvider = (props) => {
               ? reduceBalance(token0.amount, tokenData[token0.coin].precision)
               : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision),
           ]),
-          ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : []),
         ],
         sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
-        gasLimit: GAS_LIMIT,
+        gasLimit: 6000,
         gasPrice: GAS_PRICE,
         chainId: CHAIN_ID,
         ttl: 600,
