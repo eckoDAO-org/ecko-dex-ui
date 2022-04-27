@@ -5,6 +5,8 @@ import { TimeRangeBar, TimeRangeBtn } from './VolumeChart';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { getVestingScheduleData } from './data/chartData';
 import { FlexContainer } from '../shared/FlexContainer';
+import { useApplicationContext } from '../../contexts';
+import { commonColors } from '../../styles/theme';
 
 export const VestingHeader = styled.div`
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
@@ -28,6 +30,7 @@ const endDate4Years = '2025-11-01';
 const endDate10Years = '2031-06-01';
 
 const VestingScheduleChart = ({ height }) => {
+  const { themeMode } = useApplicationContext();
   const [endDate, setEndDate] = useState(endDate4Years);
   return (
     <FlexContainer withGradient className="column w-100 h-100 background-fill">
@@ -71,7 +74,13 @@ const VestingScheduleChart = ({ height }) => {
                 );
               }}
             />
-            <Area type="monotone" dataKey="Total Supply" stackId="2" stroke="#ffffffb3" fill="#4120727a" />
+            <Area
+              type="monotone"
+              dataKey="Total Supply"
+              stackId="2"
+              stroke={themeMode === 'light' ? commonColors.purple : '#ffffffb3'}
+              fillOpacity={0}
+            />
             <Area type="monotone" dataKey="Liquidity mining" stackId="1" stroke="#8884d8" fill="#8884d8" />
             <Area type="monotone" dataKey="Community Sales" stackId="1" stroke="#ffc658" fill="#ffc658" />
             <Area type="monotone" dataKey="Team" stackId="1" stroke="#82ca9d" fill="#82ca9d" />

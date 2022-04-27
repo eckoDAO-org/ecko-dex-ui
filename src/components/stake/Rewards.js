@@ -50,8 +50,8 @@ const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onW
       </div>
       <div>
         <div className="flex align-ce">
-          <Label>Rewards Penalty</Label>
-          <InfoPopup type="modal" title="Rewards Penalty">
+          <Label>Claim Penalty</Label>
+          <InfoPopup type="modal" title="Claim Penalty">
             <PenaltyRewardsInfo />
           </InfoPopup>
         </div>

@@ -18,3 +18,21 @@ export const getKDXAccountBalance = async (account) => {
     return handleError(e);
   }
 };
+
+export const getKDXSupply = async (purpose) => {
+  try {
+    const kdxSupply = await pactFetchLocal(`(kaddex.kdx.get-supply "${purpose}")`);
+    return kdxSupply;
+  } catch (e) {
+    return handleError(e);
+  }
+};
+
+export const getKDXTotalBurnt = async () => {
+  try {
+    const kdxSupply = await pactFetchLocal(`(- (kaddex.kdx.total-minted) (kaddex.kdx.total-supply))`);
+    return kdxSupply;
+  } catch (e) {
+    return handleError(e);
+  }
+};

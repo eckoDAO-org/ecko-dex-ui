@@ -24,7 +24,7 @@ export const ClaimModal = ({ onConfirm, estimateUnstakeData }) => {
 
       {estimateUnstakeData['reward-penalty'] ? (
         <>
-          <Label fontSize={16}>Rewards Penalty</Label>
+          <Label fontSize={16}>Claim Penalty</Label>
           <StakeModalRow>
             <div>
               <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 16, height: 30, width: 30 }} />
