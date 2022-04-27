@@ -2,12 +2,12 @@ import moment from 'moment';
 import Pact from 'pact-lang-api';
 import { pactFetchLocal } from './pact';
 import { getFloatPrecision } from '../utils/string-utils';
-import { CHAIN_ID, GAS_PRICE, GAS_LIMIT, NETWORKID } from '../constants/contextConstants';
+import { CHAIN_ID, GAS_PRICE, GAS_LIMIT, NETWORKID, ENABLE_GAS_STATION, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { handleError } from './utils';
 
 export const getPoolState = async () => {
   try {
-    const stakingPoolStateData = await pactFetchLocal(`(kaddex.staking.get-pool-state)`);
+    const stakingPoolStateData = await pactFetchLocal(`(${KADDEX_NAMESPACE}.staking.get-pool-state)`);
     return stakingPoolStateData;
   } catch (e) {
     return handleError(e);
@@ -16,7 +16,7 @@ export const getPoolState = async () => {
 
 export const estimateUnstake = async (account) => {
   try {
-    const stakingPoolStateData = await pactFetchLocal(`(kaddex.staking.inspect-staker "${account}")`);
+    const stakingPoolStateData = await pactFetchLocal(`(${KADDEX_NAMESPACE}.staking.inspect-staker "${account}")`);
     return stakingPoolStateData;
   } catch (e) {
     return handleError(e);
@@ -26,21 +26,23 @@ export const estimateUnstake = async (account) => {
 export const getAddStakeCommand = (verifiedAccount, amountToStake) => {
   const parsedAmount = parseFloat(amountToStake?.toString());
   const decimalPlaces = getFloatPrecision(parsedAmount);
-  const pactCode = `(kaddex.staking.stake "${verifiedAccount.account}" ${parsedAmount.toFixed(decimalPlaces || 2)})`;
+  const pactCode = `(${KADDEX_NAMESPACE}.staking.stake "${verifiedAccount.account}" ${parsedAmount.toFixed(decimalPlaces || 2)})`;
   return {
     pactCode,
     caps: [
-      Pact.lang.mkCap('wrap capability', 'wrapping skdx', `kaddex.kdx.WRAP`, [
+      ...(ENABLE_GAS_STATION
+        ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
+        : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
+      Pact.lang.mkCap('wrap capability', 'wrapping skdx', `${KADDEX_NAMESPACE}.kdx.WRAP`, [
         'skdx',
         verifiedAccount.account,
         verifiedAccount.account,
         parsedAmount,
       ]),
-      Pact.lang.mkCap('stake capability', 'staking', `kaddex.staking.STAKE`, [verifiedAccount.account, parsedAmount]),
-      Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
+      Pact.lang.mkCap('stake capability', 'staking', `${KADDEX_NAMESPACE}.staking.STAKE`, [verifiedAccount.account, parsedAmount]),
     ],
-    sender: verifiedAccount.account,
-    gasLimit: GAS_LIMIT,
+    sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : verifiedAccount.account,
+    gasLimit: 3000,
     gasPrice: GAS_PRICE,
     chainId: CHAIN_ID,
     ttl: 600,
@@ -51,19 +53,21 @@ export const getAddStakeCommand = (verifiedAccount, amountToStake) => {
     networkId: NETWORKID,
   };
 };
-
+//NOT USED
 export const geUnstakeCommand = (verifiedAccount, amountToUnstake) => {
   const parsedAmount = parseFloat(amountToUnstake?.toString());
   const decimalPlaces = getFloatPrecision(parsedAmount);
-  const pactCode = `(kaddex.staking.unstake "${verifiedAccount.account}" ${parsedAmount.toFixed(decimalPlaces || 2)})`;
+  const pactCode = `(${KADDEX_NAMESPACE}.staking.unstake "${verifiedAccount.account}" ${parsedAmount.toFixed(decimalPlaces || 2)})`;
   return {
     pactCode,
     caps: [
-      Pact.lang.mkCap('skdx DEBIT capability', 'debit skdx', `kaddex.skdx.DEBIT`),
-      Pact.lang.mkCap('unstake capability', 'unstaking', `kaddex.staking.UNSTAKE`, [verifiedAccount.account]),
-      Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
+      ...(ENABLE_GAS_STATION
+        ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
+        : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
+      Pact.lang.mkCap('skdx DEBIT capability', 'debit skdx', `${KADDEX_NAMESPACE}.skdx.DEBIT`),
+      Pact.lang.mkCap('unstake capability', 'unstaking', `${KADDEX_NAMESPACE}.staking.UNSTAKE`, [verifiedAccount.account]),
     ],
-    sender: verifiedAccount.account,
+    sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : verifiedAccount.account,
     gasLimit: GAS_LIMIT,
     gasPrice: GAS_PRICE,
     chainId: CHAIN_ID,
@@ -75,16 +79,18 @@ export const geUnstakeCommand = (verifiedAccount, amountToUnstake) => {
     networkId: NETWORKID,
   };
 };
-
+//NOT USED
 export const getRollupRewardsCommand = (verifiedAccount) => {
-  const pactCode = `(kaddex.staking.rollup "${verifiedAccount.account}")`;
+  const pactCode = `(${KADDEX_NAMESPACE}.staking.rollup "${verifiedAccount.account}")`;
   return {
     pactCode,
     caps: [
-      Pact.lang.mkCap('rollup capability', 'rollup', `kaddex.staking.ROLLUP`, [verifiedAccount.account]),
-      Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
+      ...(ENABLE_GAS_STATION
+        ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
+        : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
+      Pact.lang.mkCap('rollup capability', 'rollup', `${KADDEX_NAMESPACE}.staking.ROLLUP`, [verifiedAccount.account]),
     ],
-    sender: verifiedAccount.account,
+    sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : verifiedAccount.account,
     gasLimit: GAS_LIMIT,
     gasPrice: GAS_PRICE,
     chainId: CHAIN_ID,
@@ -101,19 +107,21 @@ export const getRollupAndUnstakeCommand = (verifiedAccount, amountToUnstake) => 
   const parsedAmount = parseFloat(amountToUnstake?.toString());
   const decimalPlaces = getFloatPrecision(parsedAmount);
   const pactCode = `
-  (kaddex.staking.rollup "${verifiedAccount.account}")
-  (kaddex.staking.unstake "${verifiedAccount.account}" ${parsedAmount.toFixed(decimalPlaces || 2)})
+  (${KADDEX_NAMESPACE}.staking.rollup "${verifiedAccount.account}")
+  (${KADDEX_NAMESPACE}.staking.unstake "${verifiedAccount.account}" ${parsedAmount.toFixed(decimalPlaces || 2)})
   `;
   return {
     pactCode,
     caps: [
-      Pact.lang.mkCap('rollup capability', 'rollup', `kaddex.staking.ROLLUP`, [verifiedAccount.account]),
-      Pact.lang.mkCap('skdx DEBIT capability', 'debit skdx', `kaddex.skdx.DEBIT`),
-      Pact.lang.mkCap('unstake capability', 'unstaking', `kaddex.staking.UNSTAKE`, [verifiedAccount.account]),
-      Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
+      Pact.lang.mkCap('rollup capability', 'rollup', `${KADDEX_NAMESPACE}.staking.ROLLUP`, [verifiedAccount.account]),
+      Pact.lang.mkCap('skdx DEBIT capability', 'debit skdx', `${KADDEX_NAMESPACE}.skdx.DEBIT`),
+      Pact.lang.mkCap('unstake capability', 'unstaking', `${KADDEX_NAMESPACE}.staking.UNSTAKE`, [verifiedAccount.account]),
+      ...(ENABLE_GAS_STATION
+        ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
+        : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
     ],
-    sender: verifiedAccount.account,
-    gasLimit: GAS_LIMIT,
+    sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : verifiedAccount.account,
+    gasLimit: 6000,
     gasPrice: GAS_PRICE,
     chainId: CHAIN_ID,
     ttl: 600,
@@ -127,18 +135,20 @@ export const getRollupAndUnstakeCommand = (verifiedAccount, amountToUnstake) => 
 
 export const getRollupAndClaimCommand = (verifiedAccount) => {
   const pactCode = `
-  (kaddex.staking.rollup "${verifiedAccount.account}")
-  (kaddex.staking.claim "${verifiedAccount.account}")
+  (${KADDEX_NAMESPACE}.staking.rollup "${verifiedAccount.account}")
+  (${KADDEX_NAMESPACE}.staking.claim "${verifiedAccount.account}")
   `;
   return {
     pactCode,
     caps: [
-      Pact.lang.mkCap('rollup capability', 'rollup', `kaddex.staking.ROLLUP`, [verifiedAccount.account]),
-      Pact.lang.mkCap('claim capability', 'claim', `kaddex.staking.CLAIM`, [verifiedAccount.account]),
-      Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
+      ...(ENABLE_GAS_STATION
+        ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
+        : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
+      Pact.lang.mkCap('rollup capability', 'rollup', `${KADDEX_NAMESPACE}.staking.ROLLUP`, [verifiedAccount.account]),
+      Pact.lang.mkCap('claim capability', 'claim', `${KADDEX_NAMESPACE}.staking.CLAIM`, [verifiedAccount.account]),
     ],
-    sender: verifiedAccount.account,
-    gasLimit: GAS_LIMIT,
+    sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : verifiedAccount.account,
+    gasLimit: 4000,
     gasPrice: GAS_PRICE,
     chainId: CHAIN_ID,
     ttl: 600,
@@ -149,16 +159,18 @@ export const getRollupAndClaimCommand = (verifiedAccount) => {
     networkId: NETWORKID,
   };
 };
-
+// NOT USED
 export const getClaimRewardsCommand = (verifiedAccount) => {
-  const pactCode = `(kaddex.staking.claim "${verifiedAccount.account}")`;
+  const pactCode = `(${KADDEX_NAMESPACE}.staking.claim "${verifiedAccount.account}")`;
   return {
     pactCode,
     caps: [
-      Pact.lang.mkCap('claim capability', 'claim', `kaddex.staking.CLAIM`, [verifiedAccount.account]),
-      Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS'),
+      ...(ENABLE_GAS_STATION
+        ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
+        : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
+      Pact.lang.mkCap('claim capability', 'claim', `${KADDEX_NAMESPACE}.staking.CLAIM`, [verifiedAccount.account]),
     ],
-    sender: verifiedAccount.account,
+    sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : verifiedAccount.account,
     gasLimit: GAS_LIMIT,
     gasPrice: GAS_PRICE,
     chainId: CHAIN_ID,
@@ -178,7 +190,7 @@ export const calculateNewStart = async (effectiveStartDate, alreadyStakedAmount,
   try {
     const currentTime = moment().utc().format(); // "2020-01-02T00:00:00Z"
     const calcNewStartData = await pactFetchLocal(
-      `(kaddex.staking.calculate-new-start (time "${currentTime}") (time "${effectiveStartDate}") ${alreadyStakedAmount} ${addedStakedAmount})`
+      `(${KADDEX_NAMESPACE}.staking.calculate-new-start (time "${currentTime}") (time "${effectiveStartDate}") ${alreadyStakedAmount} ${addedStakedAmount})`
     );
     /**
      *  The returned value is the new effective start date, which is used in the reward penalty calculation;

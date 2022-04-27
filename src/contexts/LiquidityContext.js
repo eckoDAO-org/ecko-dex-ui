@@ -1,7 +1,7 @@
 import React, { useState, createContext } from 'react';
 import pairTokens from '../constants/pairsConfig';
 import Pact from 'pact-lang-api';
-import { CHAIN_ID, GAS_PRICE, NETWORK, NETWORKID, PRECISION, ENABLE_GAS_STATION, KADDEX_NAMESPACE, GAS_LIMIT } from '../constants/contextConstants';
+import { CHAIN_ID, GAS_PRICE, NETWORK, NETWORKID, PRECISION, ENABLE_GAS_STATION, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { useKaddexWalletContext, usePactContext, useWalletContext, useAccountContext } from '.';
 import { reduceBalance } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
@@ -39,8 +39,8 @@ export const LiquidityProvider = (props) => {
           )`,
         caps: [
           ...(ENABLE_GAS_STATION
-            ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['free-gas', { int: 1 }, 1.0])]
-            : []),
+            ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
+            : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
           Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${token0.code}.TRANSFER`, [
             account.account,
             pair,
@@ -51,10 +51,9 @@ export const LiquidityProvider = (props) => {
             pair,
             Number(amountDesired1),
           ]),
-          ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : []),
         ],
         sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
-        gasLimit: GAS_LIMIT,
+        gasLimit: 8000,
         gasPrice: GAS_PRICE,
         chainId: CHAIN_ID,
         ttl: 600,
@@ -123,18 +122,17 @@ export const LiquidityProvider = (props) => {
           )`,
         caps: [
           ...(ENABLE_GAS_STATION
-            ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['free-gas', { int: 1 }, 1.0])]
-            : []),
+            ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
+            : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
           Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${token0.code}.TRANSFER`, [
             account.account,
             pair,
             Number(amountDesired0),
           ]),
           Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${token1.code}.TRANSFER`, [account.account, pair, Number(args.amountB)]),
-          ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : []),
         ],
         sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
-        gasLimit: GAS_LIMIT,
+        gasLimit: 11000,
         gasPrice: GAS_PRICE,
         chainId: CHAIN_ID,
         ttl: 600,
@@ -215,18 +213,17 @@ export const LiquidityProvider = (props) => {
         pactCode,
         caps: [
           ...(ENABLE_GAS_STATION
-            ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['free-gas', { int: 1 }, 1.0])]
-            : []),
+            ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
+            : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
           Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${KADDEX_NAMESPACE}.tokens.TRANSFER`, [
             pairConfig.name,
             account.account,
             pair,
             Number(liquidity),
           ]),
-          ...(!ENABLE_GAS_STATION ? [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')] : []),
         ],
         sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
-        gasLimit: GAS_LIMIT,
+        gasLimit: 11000,
         gasPrice: GAS_PRICE,
         chainId: CHAIN_ID,
         ttl: 600,
