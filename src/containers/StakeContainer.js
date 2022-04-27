@@ -331,6 +331,7 @@ const StakeContainer = () => {
           onSubmitStake={() => (pathname !== ROUTE_UNSTAKE ? onStakeKDX() : onRollupAndUnstake())}
         />
         <Rewards
+          disabled={!(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || (estimateUnstakeData && !estimateUnstakeData['can-claim'])}
           rewardAccrued={(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || 0}
           rewardsPenalty={estimateUnstakeData && estimateUnstakeData['reward-penalty']}
           onWithdrawClick={() => onWithdraw()}

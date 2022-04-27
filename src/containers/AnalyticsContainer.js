@@ -21,7 +21,7 @@ const AnalyticsContainer = () => {
   const [kdaPrice, setKdaPrice] = useState(null);
   const [kdxSupply, setKdxSupply] = useState(null);
   const [kdxBurnt, setKdxBurnt] = useState(null);
-  const [kdxTreasury, setKdxTreasury] = useState(null);
+  const [, /*kdxTreasury*/ setKdxTreasury] = useState(null);
   const [kdxRewards, setKdxRewards] = useState(null);
   const { gameEditionView } = useGameEditionContext();
 
@@ -69,29 +69,35 @@ const AnalyticsContainer = () => {
             mainText={`$ ${pact?.kdxPrice || '-'}`}
             subtitle={pact?.kdxPrice && `${(pact?.kdxPrice / kdaPrice).toFixed(4)} KDA`}
           />
-          <AnalyticsSimpleWidget title={'Marketcap'} mainText={`$ ${humanReadableNumber(Number(kdxSupply * pact?.kdxPrice))}`} subtitle={null} />
+          <AnalyticsSimpleWidget
+            title={'Marketcap'}
+            mainText={(kdxSupply && `$ ${humanReadableNumber(Number(kdxSupply * pact?.kdxPrice))}`) || '-'}
+            subtitle={null}
+          />
         </FlexContainer>
         <FlexContainer mobileClassName="column" gap={24}>
           <AnalyticsSimpleWidget
             title={'Circulating supply'}
-            mainText={`${humanReadableNumber(kdxSupply, 2)} KDX`}
+            mainText={(kdxSupply && `${humanReadableNumber(kdxSupply, 2)} KDX`) || '-'}
             subtitle={`${((100 * kdxSupply) / KDX_TOTAL_SUPPLY).toFixed(2)} %`}
           />
           <AnalyticsSimpleWidget
             title={'KDX Burned'}
-            mainText={`${humanReadableNumber(kdxBurnt, 2)} KDX`}
+            mainText={(kdxBurnt && `${humanReadableNumber(kdxBurnt, 2)} KDX`) || '-'}
             subtitle={`${((100 * kdxBurnt) / KDX_TOTAL_SUPPLY).toFixed(2)} %`}
           />
         </FlexContainer>
         <FlexContainer mobileClassName="column" gap={24}>
           <AnalyticsSimpleWidget
             title={'KDX Treasury'}
-            mainText={`${humanReadableNumber(kdxTreasury, 2)} KDX`}
-            subtitle={`${((100 * kdxTreasury) / KDX_TOTAL_SUPPLY).toFixed(2)} %`}
+            // mainText={(kdxTreasury && `${humanReadableNumber(kdxTreasury, 2)} KDX`) || '-'}
+            mainText={(kdxSupply && `${humanReadableNumber(kdxSupply * 0.25, 2)} KDX`) || '-'}
+            // subtitle={`${((100 * kdxTreasury) / KDX_TOTAL_SUPPLY).toFixed(2)} %`}
+            subtitle={`${((100 * kdxSupply * 0.25) / KDX_TOTAL_SUPPLY).toFixed(2)} %`}
           />
           <AnalyticsSimpleWidget
             title={'KDX Rewards'}
-            mainText={`${humanReadableNumber(kdxRewards, 2)} KDX`}
+            mainText={(kdxRewards && `${humanReadableNumber(kdxRewards, 2)} KDX`) || '-'}
             subtitle={`${((100 * kdxRewards) / KDX_TOTAL_SUPPLY).toFixed(2)} %`}
           />
         </FlexContainer>

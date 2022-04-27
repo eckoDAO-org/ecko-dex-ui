@@ -18,7 +18,7 @@ const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onW
       const rewardPenaltyPercentage = (100 * rewardsPenalty) / rewardAccrued;
       const diffHours = moment().diff(stakedTimeStart, 'hours');
       if (diffHours < 72) {
-        return `${rewardPenaltyPercentage.toFixed(2)}%`;
+        return (rewardPenaltyPercentage && `${rewardPenaltyPercentage.toFixed(2)}%`) || '-';
       } else {
         return `${(rewardsPenalty || 0).toFixed(2)} KDX`;
       }
