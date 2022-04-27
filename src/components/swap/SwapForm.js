@@ -159,7 +159,7 @@ const SwapForm = ({ label, fromValues, setFromValues, toValues, setToValues, fro
         <SecondInputContainer gameEditionView={gameEditionView}>
           <Input
             error={isNaN(toValues.amount)}
-            topLeftLabel={label ? label : toNote ? `I WILL GET ${toNote}` : `I WILL GET`}
+            topLeftLabel={label ? label : toNote ? `I'M RECEIVING ${toNote}` : `I'M RECEIVING`}
             topRightLabel={`balance: ${reduceBalance(toValues.balance) ?? '-'}`}
             bottomLeftLabel={`balance: ${reduceBalance(toValues.balance) ?? '-'}`} //using for gameEdition
             placeholder="0.0"
