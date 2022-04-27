@@ -1,44 +1,53 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import useLazyImage from '../hooks/useLazyImage';
-import axios from 'axios';
 import { usePactContext, useGameEditionContext } from '../contexts';
 import VolumeChart from '../components/charts/VolumeChart';
 import TVLChart from '../components/charts/TVLChart';
 import VestingScheduleChart from '../components/charts/VestingScheduleChart';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
-import { humanReadableNumber } from '../utils/reduceBalance';
+import { humanReadableNumber, reduceBalance } from '../utils/reduceBalance';
 import LogoLoader from '../components/shared/Loader';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import AnalyticsSimpleWidget from '../components/shared/AnalyticsSimpleWidget';
-import { getCurrentKdaUSDPrice } from '../api/pact';
+import { getCoingeckoUsdPrice } from '../api/coingecko';
+import { getKDXSupply, getKDXTotalSupply, getKDXTotalBurnt } from '../api/kaddex.kdx';
 import theme from '../styles/theme';
 
 const KDX_TOTAL_SUPPLY = 1000000000;
-// TEMP: get real circulating supply
-const CIRCULATING_SUPPLY = KDX_TOTAL_SUPPLY * 0.025;
-// const KDX_TOTAL_BURNED_MULT = 0.9121;
 
 const AnalyticsContainer = () => {
   const pact = usePactContext();
   const [kdaPrice, setKdaPrice] = useState(null);
+  const [kdxSupply, setKdxSupply] = useState(null);
+  const [kdxBurnt, setKdxBurnt] = useState(null);
+  const [kdxTreasury, setKdxTreasury] = useState(null);
+  const [kdxRewards, setKdxRewards] = useState(null);
   const { gameEditionView } = useGameEditionContext();
 
   useEffect(() => {
-    const getKdaUSDPrice = async () => {
-      const kdaPactPrice = await getCurrentKdaUSDPrice();
-      // TODO: make generic price data
-      axios
-        .get('https://api.coingecko.com/api/v3/simple/price?ids=kadena&vs_currencies=usd')
-        .then((res) => {
-          setKdaPrice(res.data?.kadena?.usd ?? kdaPactPrice);
+    const getInitialData = async () => {
+      getCoingeckoUsdPrice('kadena')
+        .then((kdaPrice) => {
+          setKdaPrice(kdaPrice);
         })
         .catch(async (err) => {
           console.log('fetch kda price err', err);
-          setKdaPrice(kdaPactPrice);
         });
+      getKDXTotalSupply().then((supply) => {
+        setKdxSupply(reduceBalance(supply, 2));
+      });
+      getKDXTotalBurnt().then((burnt) => {
+        setKdxBurnt(reduceBalance(burnt, 2));
+      });
+      getKDXSupply('network-rewards').then((reward) => {
+        setKdxRewards(reduceBalance(reward, 2));
+      });
+      getKDXSupply('dao-treasury').then((treasury) => {
+        setKdxTreasury(reduceBalance(treasury, 2));
+      });
     };
-    getKdaUSDPrice();
+    getInitialData();
   }, [pact]);
 
   const [loaded] = useLazyImage([modalBackground]);
@@ -60,10 +69,30 @@ const AnalyticsContainer = () => {
             mainText={`$ ${pact?.kdxPrice || '-'}`}
             subtitle={pact?.kdxPrice && `${(pact?.kdxPrice / kdaPrice).toFixed(4)} KDA`}
           />
+          <AnalyticsSimpleWidget title={'Marketcap'} mainText={`$ ${humanReadableNumber(Number(kdxSupply * pact?.kdxPrice))}`} subtitle={null} />
+        </FlexContainer>
+        <FlexContainer mobileClassName="column" gap={24}>
           <AnalyticsSimpleWidget
-            title={'Marketcap'}
-            mainText={`$ ${humanReadableNumber(Number(CIRCULATING_SUPPLY * pact?.kdxPrice))}`}
-            subtitle={null}
+            title={'Circulating supply'}
+            mainText={`${humanReadableNumber(kdxSupply, 2)} KDX`}
+            subtitle={`${((100 * kdxSupply) / KDX_TOTAL_SUPPLY).toFixed(2)} %`}
+          />
+          <AnalyticsSimpleWidget
+            title={'KDX Burned'}
+            mainText={`${humanReadableNumber(kdxBurnt, 2)} KDX`}
+            subtitle={`${((100 * kdxBurnt) / KDX_TOTAL_SUPPLY).toFixed(2)} %`}
+          />
+        </FlexContainer>
+        <FlexContainer mobileClassName="column" gap={24}>
+          <AnalyticsSimpleWidget
+            title={'KDX Treasury'}
+            mainText={`${humanReadableNumber(kdxTreasury, 2)} KDX`}
+            subtitle={`${((100 * kdxTreasury) / KDX_TOTAL_SUPPLY).toFixed(2)} %`}
+          />
+          <AnalyticsSimpleWidget
+            title={'KDX Rewards'}
+            mainText={`${humanReadableNumber(kdxRewards, 2)} KDX`}
+            subtitle={`${((100 * kdxRewards) / KDX_TOTAL_SUPPLY).toFixed(2)} %`}
           />
         </FlexContainer>
         <FlexContainer mobileClassName="column" gap={24}>
