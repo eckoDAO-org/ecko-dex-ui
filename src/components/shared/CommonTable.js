@@ -31,7 +31,7 @@ const Wrapper = styled(FlexContainer)`
     width: 100%;
     position: absolute;
     z-index: 3;
-    top: 39px;
+    top: 64px;
     left: 0px;
   }
   th {
@@ -58,13 +58,13 @@ const Wrapper = styled(FlexContainer)`
 
 const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onClick }) => {
   return (
-    <Wrapper withGradient className="w-100 relative hidden column background-fill">
+    <Wrapper withGradient className="w-100 relative hidden column background-fill" style={{ paddingTop: 0 }}>
       <FlexContainer className="w-100 x-auto scrollbar-y-none">
         <table cellSpacing={0} cellPadding={24}>
           <thead>
             <tr className="tr-sticky" style={{ zIndex: 3, top: 0 }}>
               {columns?.map((c, i) => (
-                <th key={i} className={i === 0 ? 'sticky' : ''} style={{ minWidth: c.width, paddingTop: 0, zIndex: i === 0 ? 3 : 1 }}>
+                <th key={i} className={i === 0 ? 'sticky' : ''} style={{ minWidth: c.width, zIndex: i === 0 ? 3 : 1 }}>
                   {typeof c.name === 'string' ? (
                     <Label fontSize={13} className={`capitalize ${c?.align === 'right' ? 'justify-fe' : ''}`}>
                       {c.name} {c.popup && <InfoPopup>{c.popup}</InfoPopup>}
@@ -74,7 +74,7 @@ const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onCl
                   )}
                 </th>
               ))}
-              {actions && <th style={{ paddingTop: 0, zIndex: 1 }} />}
+              {actions && <th style={{ zIndex: 1 }} />}
             </tr>
           </thead>
           <tbody>
