@@ -34,7 +34,7 @@ const VotingPower = ({ daoAccountData }) => {
           multiplier value goes up to 1 and can reach 2.5 over the course of 4 years.
         </InfoPopup>
 
-        <Label labelStyle={{ marginLeft: 8 }}>{daoAccountData?.multiplier.toFixed(5)}</Label>
+        {daoAccountData?.multiplier && <Label labelStyle={{ marginLeft: 8 }}>{daoAccountData?.multiplier?.toFixed(5)}</Label>}
       </div>
 
       <div>
