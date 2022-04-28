@@ -21,6 +21,12 @@ export function getFloatPrecision(floatVal) {
   }
 }
 
+export const getTimeByBlockchain = (timestamp) => {
+  if (timestamp.time) return timestamp.time;
+  if (timestamp.timep) return timestamp.timep;
+  else return timestamp;
+};
+
 export const genRandomString = () => {
   //Can change 7 to 2 for longer results.
   let r = (Math.random() + 1).toString(36).substring(2);

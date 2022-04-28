@@ -21,8 +21,8 @@ const VotingPowerContainer = ({ accountData }) => {
         <EquationContainer className="flex align-ce">
           <VotingPowerFormulaIcon width={88} />
         </EquationContainer>
-        <Label fontSize={38} className="gradient" fontFamily="syncopate">
-          {accountData.vp ? accountData.vp.toFixed(2) : '-'}
+        <Label fontSize={38} className="gradient" fontFamily="syncopate" labelStyle={{ maxWidth: 'min-content' }}>
+          {accountData.vp ? accountData.vp.toFixed(5) : '-'}
         </Label>
       </FlexContainer>
       <FlexContainer className="column background-fill" gap={10} withGradient style={{ height: 'min-content' }} desktopStyle={{ width: 268 }}>
