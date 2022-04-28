@@ -23,7 +23,7 @@ const AllProposalsContainer = ({ accountData }) => {
 
   const [allProposal, setAllProposal] = useState([]);
   const [filteredProposals, setFilteredProposals] = useState([]);
-  const [filters, setFilters] = useState({ sort: 'All', filter: 'Newest' });
+  const [filters, setFilters] = useState({ filter: 'All', sort: 'Newest' });
 
   useEffect(() => {
     setDaoALlProposalsLoading(true);
@@ -31,7 +31,7 @@ const AllProposalsContainer = ({ accountData }) => {
   }, []);
 
   useEffect(() => {
-    proposalsSort();
+    proposalsFilterBy();
   }, [filters]);
 
   const fetchData = async () => {
@@ -44,33 +44,33 @@ const AllProposalsContainer = ({ accountData }) => {
     setDaoALlProposalsLoading(false);
   };
 
-  const proposalsSort = () => {
-    if (filters.sort === 'All') {
+  const proposalsFilterBy = () => {
+    if (filters.filter === 'All') {
       let allProps = allProposal.filter(
         (proposal) =>
           (moment(proposal['start-date'].time) <= moment() && moment(proposal['end-date'].time) >= moment()) ||
           moment(proposal['end-date'].time) < moment() ||
           moment(proposal['start-date'].time) > moment()
       );
-      proposalsFilter(allProps);
-    } else if (filters.sort === 'Active') {
+      proposalsSortBy(allProps);
+    } else if (filters.filter === 'Active') {
       let activeProposals = allProposal.filter(
         (proposal) => moment(proposal['start-date'].time) <= moment() && moment(proposal['end-date'].time) >= moment()
       );
-      proposalsFilter(activeProposals);
-    } else if (filters.sort === 'Closed') {
+      proposalsSortBy(activeProposals);
+    } else if (filters.filter === 'Closed') {
       let closedProposals = allProposal.filter((proposal) => moment(proposal['end-date'].time) < moment());
-      proposalsFilter(closedProposals);
+      proposalsSortBy(closedProposals);
     }
   };
 
-  const proposalsFilter = (array) => {
-    if (filters.filter === 'Oldest') {
+  const proposalsSortBy = (array) => {
+    if (filters.sort === 'Oldest') {
       let fromOldestProposals = array.sort(
         (x, y) => moment(getTimeByBlockchain(x['creation-date'])) - moment(getTimeByBlockchain(y['creation-date']))
       );
       setFilteredProposals(fromOldestProposals);
-    } else if (filters.filter === 'Newest') {
+    } else if (filters.sort === 'Newest') {
       let fromNewestProposals = array.sort(
         (x, y) => moment(getTimeByBlockchain(y['creation-date'])) - moment(getTimeByBlockchain(x['creation-date']))
       );
@@ -78,12 +78,12 @@ const AllProposalsContainer = ({ accountData }) => {
     }
   };
 
-  const sortByOptions = [
+  const filterByOptions = [
     { key: 0, text: `All`, value: 'All' },
     { key: 1, text: `Active`, value: 'Active' },
     { key: 2, text: `Closed`, value: 'Closed' },
   ];
-  const filterByOptions = [
+  const sortByOptions = [
     { key: 0, text: `Newest`, value: 'Newest' },
     { key: 1, text: `Oldest`, value: 'Oldest' },
   ];
@@ -107,17 +107,6 @@ const AllProposalsContainer = ({ accountData }) => {
         </Label>
         <FlexContainer gap={16} desktopStyle={{ paddingRight: 284 }}>
           <CustomDropdown
-            title="sort by:"
-            options={sortByOptions}
-            onChange={(e, { value }) => {
-              setFilters((prev) => ({
-                ...prev,
-                sort: value,
-              }));
-            }}
-            value={filters.sort}
-          />
-          <CustomDropdown
             title="filter by:"
             options={filterByOptions}
             onChange={(e, { value }) => {
@@ -127,6 +116,17 @@ const AllProposalsContainer = ({ accountData }) => {
               }));
             }}
             value={filters.filter}
+          />
+          <CustomDropdown
+            title="sort by:"
+            options={sortByOptions}
+            onChange={(e, { value }) => {
+              setFilters((prev) => ({
+                ...prev,
+                sort: value,
+              }));
+            }}
+            value={filters.sort}
           />
         </FlexContainer>
       </FlexContainer>
