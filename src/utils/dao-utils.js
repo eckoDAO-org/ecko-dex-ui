@@ -2,7 +2,7 @@ import moment from 'moment';
 
 export const getStatusProposal = (data) =>
   moment(data['start-date']?.time) <= moment() && moment(data['end-date']?.time) >= moment()
-    ? 'active'
+    ? 'Active'
     : moment(data['start-date']?.time) > moment()
-    ? 'not active yet'
-    : 'closed';
+    ? 'Not active yet'
+    : 'Closed';

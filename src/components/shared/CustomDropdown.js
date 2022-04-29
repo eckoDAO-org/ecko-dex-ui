@@ -7,7 +7,11 @@ import Label from './Label';
 const CustomDropdown = ({ title, options, onChange, value, placeholder }) => {
   return (
     <Container className="column">
-      {title && <Label fontSize={13}>{title}</Label>}
+      {title && (
+        <Label fontSize={10} labelStyle={{ marginBottom: '2px' }} fontFamily="syncopate">
+          {title}
+        </Label>
+      )}
       <Dropdown
         placeholder={placeholder}
         fluid
@@ -29,9 +33,10 @@ const Container = styled.div`
     height: 40px;
     display: flex;
     justify-content: space-between;
+    min-width: 110px;
     align-items: center;
-    background: transparent;
-    border-radius: 4px;
+    background: ${({ theme: { backgroundContainer } }) => backgroundContainer};
+    border-radius: 20px;
     padding-right: 10px;
     border: ${({ theme: { colors } }) => `1px solid ${colors.white}99`} !important;
 
@@ -39,17 +44,28 @@ const Container = styled.div`
       fill: ${({ theme: { colors } }) => colors.white};
     }
   }
+
+  .ui.selection.dropdown {
+    color: ${({ theme: { colors } }) => colors.white};
+  }
+  .ui.dropdown .menu > .item {
+    color: ${({ theme: { colors } }) => colors.white};
+  }
+
+  .ui.dropdown .menu .selected.item,
+  .ui.dropdown.selected {
+    //for selected item
+  }
+
   .ui.selection.visible.dropdown > .text:not(.default) {
     color: ${({ theme: { colors } }) => colors.white};
   }
-  .ui.selection.dropdown .menu > .item {
-    height: 40px;
-    border-color: ${({ theme: { colors } }) => `${colors.white}99`};
+  .ui.selection.active.dropdown .menu {
+    border-radius: 0px 0px 20px 20px;
   }
 
   .menu {
     border: ${({ theme: { colors } }) => `1px solid ${colors.white}99`} !important;
-
     background: ${({ theme: { backgroundContainer } }) => backgroundContainer} !important;
   }
 `;

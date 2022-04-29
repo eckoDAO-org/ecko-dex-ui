@@ -155,7 +155,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
               </FlexContainer>
               {!daoFetchDataLoading ? (
                 <ColumnLabels
-                  title="Vote Result"
+                  title="Vote Results"
                   description={
                     <VoteResultsContainer
                       onClickYes={() => handleClick('approved')}
