@@ -1,10 +1,13 @@
-import React, { createContext, useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { createContext, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
 import useLocalStorage from '../hooks/useLocalStorage';
+import { useAccountContext } from '.';
 
 export const WalletContext = createContext(null);
 
 export const WalletProvider = (props) => {
+  const { setFetchAccountBalance } = useAccountContext();
   const [wallet, setWallet, removeWallet] = useLocalStorage('wallet', null);
   const [signing, setSigning, removeSigning] = useLocalStorage('signing', { method: 'none', key: '' });
 
@@ -14,6 +17,12 @@ export const WalletProvider = (props) => {
   const [walletError, setWalletError] = useState(null);
   const [isWaitingForWalletAuth, setIsWaitingForWalletAuth] = useState(false);
   const [walletSuccess, setWalletSuccess] = useState(false);
+
+  useEffect(() => {
+    if (wallet) {
+      setFetchAccountBalance(true);
+    }
+  }, [wallet]);
 
   const storePrivKey = async (pk) => {
     setSigning({ method: 'pk', key: pk });

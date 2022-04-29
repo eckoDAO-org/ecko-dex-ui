@@ -16,6 +16,7 @@ import { KaddexOutlineIcon } from '../../../assets';
 import { Checkbox } from 'semantic-ui-react';
 import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
 import { isNumber } from 'lodash';
+import { getPairByTokensName } from '../../../constants/cryptoCurrencies';
 
 export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }) => {
   const { setButtons } = useGameEditionContext();
@@ -77,6 +78,7 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, isSingleSideL
   const { account } = useAccountContext();
   const pact = usePactContext();
   const swap = useSwapContext();
+  const pair = getPairByTokensName(token0, token1);
 
   return (
     <SuccesViewContainer swap={swap} loading={loading} onClick={onClick}>
@@ -122,22 +124,24 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, isSingleSideL
         {/* POOL SHARE*/}
         <FlexContainer className="align-ce justify-sb">
           <Label fontSize={13}>Pool Share</Label>
-          <Label fontSize={13}>{(pact.share(swap?.localRes?.result?.data?.amount0) * 100).toPrecision(4)} %</Label>
+          <Label fontSize={13}>
+            {(pact.share(swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1']) * 100).toPrecision(4)} %
+          </Label>
         </FlexContainer>
 
         <CustomDivider style={{ margin: '16px 0' }} />
 
         <Label>Amount</Label>
-
         {/* FROM VALUES */}
         <FlexContainer className="align-ce justify-sb">
           <FlexContainer>
             <CryptoContainer size={30}>{getTokenIconById(token0)}</CryptoContainer>
-            <Label>{swap?.localRes?.result?.data?.amount0}</Label>
+
+            <Label>{swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1']}</Label>
           </FlexContainer>
           <Label>{token0}</Label>
         </FlexContainer>
-        <Label fontSize={13}>{`1 ${token0} =  ${reduceBalance(1 / pact.ratio)} ${token1}`}</Label>
+        <Label fontSize={13}>{`1 ${token0} = ${reduceBalance(1 / pact.ratio)} ${token1}`}</Label>
 
         {/* TO VALUES */}
         {!isSingleSideLiquidity && (
@@ -145,7 +149,7 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, isSingleSideL
             <FlexContainer className="align-ce justify-sb">
               <FlexContainer>
                 <CryptoContainer size={30}>{getTokenIconById(token1)}</CryptoContainer>
-                <Label>{swap?.localRes?.result?.data?.amount1}</Label>
+                <Label>{swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1']}</Label>
               </FlexContainer>
               <Label>{token1}</Label>
             </FlexContainer>

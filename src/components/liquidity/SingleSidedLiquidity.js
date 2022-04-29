@@ -312,7 +312,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
         <FlexContainer className="justify-sb w-100">
           <Label fontSize={13}>Pool Share</Label>
           <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
-            {!pact.share(fromValue.amount) ? 0 : (pact.share(fromValue.amount) * 100).toPrecision(4)} %
+            {!pact.share(fromValue.amount) ? 0 : (pact.share(fromValue.amount / 2) * 100).toPrecision(4)} %
           </Label>
         </FlexContainer>
 
