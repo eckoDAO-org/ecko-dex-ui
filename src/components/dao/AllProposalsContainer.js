@@ -161,7 +161,7 @@ const AllProposalsContainer = ({ accountData }) => {
                     {data?.title}
                   </Label>
                   <HtmlFormatterContainer htmlText={data?.description} asAString />
-                  {index < allProposal.length - 1 && <Divider />}
+                  {index < filteredProposals.length - 1 && <Divider />}
                 </FlexContainer>
               ))
             ) : (
