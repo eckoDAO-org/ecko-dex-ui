@@ -17,7 +17,7 @@ const CustomDropdown = ({ title, options, onChange, value, placeholder }) => {
         fluid
         selection
         closeOnChange
-        icon={<ArrowDown className="arrow" />}
+        icon={<ArrowDown className="svg-app-color" />}
         options={options}
         onChange={onChange}
         value={value}
