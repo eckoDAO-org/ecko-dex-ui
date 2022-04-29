@@ -24,9 +24,9 @@ export const pairUnit = (decimal, toFixed = 14) => {
 };
 
 export const extractDecimal = (num) => {
-  if (num?.int) return num.int;
-  if (num?.decimal) return num.decimal;
-  else return num;
+  if (num?.int) return Number(num.int);
+  if (num?.decimal) return Number(num.decimal);
+  else return Number(num);
 };
 
 export const limitDecimalPlaces = (numStr, count) => {
