@@ -5,7 +5,9 @@ import { Checkbox } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { useAccountContext, useApplicationContext } from '../../contexts';
 import { theme } from '../../styles/theme';
+import { getPercentage } from '../../utils/string-utils';
 import { FlexContainer } from '../shared/FlexContainer';
+import Label from '../shared/Label';
 import ProgressBar from '../shared/ProgressBar';
 
 const CheckboxContainer = styled.div`
@@ -50,16 +52,26 @@ const VoteResultsContainer = ({ onClickYes, onClickNo, proposalData, hasVoted })
         <CheckboxContainer>
           <Checkbox disabled={dataValidation()} radio checked={hasVoted === 'approved'} label="Yes" value="yes" onChange={onClickYes} />
         </CheckboxContainer>
-        <FlexContainer className="align-ce w-100" style={{ border: `1px solid ${theme(themeMode).colors.white}99`, borderRadius: 10, padding: 8 }}>
+        <FlexContainer
+          gap={8}
+          className="align-ce w-100"
+          style={{ border: `1px solid ${theme(themeMode).colors.white}99`, borderRadius: 10, padding: 8 }}
+        >
           <ProgressBar currentValue={proposalData['tot-approved']} maxValue={proposalData['tot-approved'] + proposalData['tot-refused']} />
+          <Label>{getPercentage(proposalData['tot-approved'], proposalData['tot-approved'] + proposalData['tot-refused']).toFixed(0)}%</Label>
         </FlexContainer>
       </FlexContainer>
       <FlexContainer gap={10} className="align-ce">
         <CheckboxContainer>
           <Checkbox disabled={dataValidation()} radio checked={hasVoted === 'refused'} label="No" value="no" onChange={onClickNo} />
         </CheckboxContainer>
-        <FlexContainer className="align-ce w-100" style={{ border: `1px solid ${theme(themeMode).colors.white}99`, borderRadius: 10, padding: 8 }}>
+        <FlexContainer
+          gap={8}
+          className="align-ce w-100"
+          style={{ border: `1px solid ${theme(themeMode).colors.white}99`, borderRadius: 10, padding: 8 }}
+        >
           <ProgressBar darkBar currentValue={proposalData['tot-refused']} maxValue={proposalData['tot-approved'] + proposalData['tot-refused']} />
+          <Label>{getPercentage(proposalData['tot-refused'], proposalData['tot-approved'] + proposalData['tot-refused']).toFixed(0)}%</Label>
         </FlexContainer>
       </FlexContainer>
     </FlexContainer>

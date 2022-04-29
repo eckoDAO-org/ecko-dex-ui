@@ -46,12 +46,7 @@ const AllProposalsContainer = ({ accountData }) => {
 
   const proposalsFilterBy = () => {
     if (filters.filter === 'All') {
-      let allProps = allProposal.filter(
-        (proposal) =>
-          (moment(proposal['start-date'].time) <= moment() && moment(proposal['end-date'].time) >= moment()) ||
-          moment(proposal['end-date'].time) < moment() ||
-          moment(proposal['start-date'].time) > moment()
-      );
+      let allProps = allProposal.map((proposal) => proposal);
       proposalsSortBy(allProps);
     } else if (filters.filter === 'Active') {
       let activeProposals = allProposal.filter(
