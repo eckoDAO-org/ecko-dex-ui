@@ -55,7 +55,11 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
   }, []);
 
   useEffect(() => {
-    setSelectedPool(pools[0]);
+    if (pair?.token0) {
+      setSelectedPool(pools.find((p) => p.token0 === pair.token0 || p.token1 === pair.token0));
+    } else {
+      setSelectedPool(pools[0]);
+    }
   }, []);
 
   useEffect(async () => {

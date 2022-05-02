@@ -93,9 +93,7 @@ const Layout = ({ children }) => {
             <GameEditionContainer>{children}</GameEditionContainer>
           </>
         ) : (
-          <div className="h-100 y-auto hide-scrollbar" resolutionConfiguration={resolutionConfiguration}>
-            {children}
-          </div>
+          <div className="h-100 y-auto hide-scrollbar">{children}</div>
         )}
       </WrapperContainer>
       <StripesContainer>

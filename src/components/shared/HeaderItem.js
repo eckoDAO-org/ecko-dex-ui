@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { useGameEditionContext } from '../../contexts';
 import { ROUTE_INDEX } from '../../router/routes';
 
-const Item = styled.div`
+const Item = styled(Link)`
   color: ${({ theme: { colors } }) => colors.white};
   font-size: 14px;
   text-decoration: none;
@@ -67,6 +67,7 @@ const HeaderItem = ({
   return (
     <Item
       id={id}
+      to={item.route}
       className={className}
       onClick={() => {
         if (item.route) {
