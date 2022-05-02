@@ -10,8 +10,9 @@ import { PartialScrollableScrollSection } from '../layout/Containers';
 import { FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
 import VotingPowerContainer from './VotingPowerContainer';
+import VoteResultsSection from './VoteResultsSection';
 import { ArrowBack } from '../../assets';
-import VoteResultsContainer from './VoteResultsContainer';
+import VoteProposalContainer from './VoteProposalContainer';
 import AppLoader from '../shared/AppLoader';
 import theme, { commonColors } from '../../styles/theme';
 import { getStatusProposal } from '../../utils/dao-utils';
@@ -30,6 +31,8 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
 
   const [singleProposalData, setSingleProposalData] = useState({});
   const [accountVoted, setAccountVoted] = useState({});
+
+  const [, height] = useWindowSize();
 
   const fetchData = async () => {
     const readSingleProposalRes = await readSingleProposal(proposal_id);
@@ -94,7 +97,6 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
     </FlexContainer>
   );
 
-  const [, height] = useWindowSize();
   return daoSingleProposalLoading ? (
     <AppLoader
       containerStyle={{
@@ -120,59 +122,57 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
         back to proposals
       </Label>
       <FlexContainer className="row" gap={16} mobileClassName="column-reverse" mobileStyle={{ paddingBottom: 16 }}>
-        <FlexContainer className="column background-fill" withGradient style={{ height: 'min-content' }} desktopStyle={{ flex: 1, maxHeight: 550 }}>
-          <PartialScrollableScrollSection id="proposals-list" className="scrollbar-none" style={{ width: '100%' }}>
-            <FlexContainer className="column" gap={16}>
-              <FlexContainer className="justify-sb align-ce w-100">
-                <Label fontSize={24}>{singleProposalData?.title}</Label>
-                <Label
-                  fontFamily="basier"
-                  fontSize={10}
-                  color={'#fff'}
-                  labelStyle={{
-                    backgroundColor:
-                      moment(singleProposalData['start-date']?.time) <= moment() && moment(singleProposalData['end-date']?.time) >= moment()
-                        ? commonColors.active
-                        : commonColors.closed,
-                    borderRadius: 100,
-                    padding: '2px 8px',
-                  }}
-                >
-                  {getStatusProposal(singleProposalData)}
-                </Label>
-              </FlexContainer>
-              <FlexContainer className="justify-sb align-ce w-100" mobileClassName="grid" columns={2}>
-                <ColumnLabels title="Author" description={singleProposalData?.account} />
-                <ColumnLabels title="Start Date" description={moment(singleProposalData['start-date']?.time).format('LLL')} />
-                <ColumnLabels title="End Date" description={moment(singleProposalData['end-date']?.time).format('LLL')} />
-                <ColumnLabels title="Voting System" description="Single choice voting" />
-              </FlexContainer>
-              <FlexContainer className="column" gap={4}>
-                <Label fontSize={13} labelStyle={{ opacity: 0.7 }}>
-                  Description
-                </Label>
-                <HtmlFormatterContainer htmlText={singleProposalData?.description} />
-              </FlexContainer>
-              {!daoFetchDataLoading ? (
-                <ColumnLabels
-                  title="Vote Results"
-                  description={
-                    <VoteResultsContainer
-                      onClickYes={() => handleClick('approved')}
-                      onClickNo={() => handleClick('refused')}
-                      proposalData={singleProposalData}
-                      hasVoted={accountVoted[0]?.action ? accountVoted[0]?.action : ''}
-                    />
-                  }
-                />
-              ) : (
-                <Loader />
-              )}
+        <FlexContainer className="column background-fill" withGradient style={{ height: 'min-content' }} desktopStyle={{ flex: 1 }}>
+          <FlexContainer className="column" gap={16}>
+            <FlexContainer className="justify-sb align-ce w-100">
+              <Label fontSize={24}>{singleProposalData?.title}</Label>
+              <Label
+                fontFamily="basier"
+                fontSize={10}
+                color={'#fff'}
+                labelStyle={{
+                  backgroundColor:
+                    moment(singleProposalData['start-date']?.time) <= moment() && moment(singleProposalData['end-date']?.time) >= moment()
+                      ? commonColors.active
+                      : commonColors.closed,
+                  borderRadius: 100,
+                  padding: '2px 8px',
+                }}
+              >
+                {getStatusProposal(singleProposalData)}
+              </Label>
             </FlexContainer>
-          </PartialScrollableScrollSection>
+            <FlexContainer className="justify-sb align-ce w-100" mobileClassName="grid" columns={2}>
+              <ColumnLabels title="Author" description={singleProposalData?.account} />
+              <ColumnLabels title="Start Date" description={moment(singleProposalData['start-date']?.time).format('LLL')} />
+              <ColumnLabels title="End Date" description={moment(singleProposalData['end-date']?.time).format('LLL')} />
+              <ColumnLabels title="Voting System" description="Single choice voting" />
+            </FlexContainer>
+
+            <FlexContainer className="column" gap={4}>
+              <Label fontSize={13} labelStyle={{ opacity: 0.7 }}>
+                Description
+              </Label>
+              <PartialScrollableScrollSection id="proposals-list" style={{ width: '100%' }}>
+                <HtmlFormatterContainer descriptionHeight={height - height * 0.55} htmlText={singleProposalData?.description} />
+              </PartialScrollableScrollSection>
+            </FlexContainer>
+
+            {!daoFetchDataLoading ? (
+              <VoteProposalContainer
+                onClickYes={() => handleClick('approved')}
+                onClickNo={() => handleClick('refused')}
+                proposalData={singleProposalData}
+                hasVoted={accountVoted[0]?.action ? accountVoted[0]?.action : ''}
+              />
+            ) : (
+              <Loader />
+            )}
+          </FlexContainer>
         </FlexContainer>
         <FlexContainer className="column" gap={16}>
           <VotingPowerContainer accountData={accountData} />
+          <VoteResultsSection proposalData={singleProposalData} />
         </FlexContainer>
       </FlexContainer>
     </>

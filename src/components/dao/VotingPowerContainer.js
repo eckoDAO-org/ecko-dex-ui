@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import { VotingPowerFormulaIcon } from '../../assets';
+import { usePactContext } from '../../contexts';
 import { EquationContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
 import ProgressBar from '../shared/ProgressBar';
@@ -12,28 +13,31 @@ const multiplierInfo = `The Voting Power Multiplier is a time-dependent function
                          In 60 days the multiplier value goes up to 1 and can reach 2.5 over the course of 4 years.`;
 
 const VotingPowerContainer = ({ accountData }) => {
+  const { kdxPrice } = usePactContext();
   return (
     <FlexContainer className="column" mobileStyle={{ marginBottom: 16 }}>
-      <FlexContainer className="column" gap={10} style={{ height: 'min-content', marginBottom: 18 }} desktopStyle={{ width: 268 }}>
-        <Label fontSize={16} fontFamily="syncopate">
-          voting power (V)
-        </Label>
-        <EquationContainer className="flex align-ce">
-          <VotingPowerFormulaIcon width={88} />
-        </EquationContainer>
-        <Label fontSize={38} className="gradient" fontFamily="syncopate" labelStyle={{ maxWidth: 'min-content' }}>
-          {accountData.vp ? accountData.vp.toFixed(5) : '-'}
-        </Label>
-      </FlexContainer>
       <FlexContainer className="column background-fill" gap={10} withGradient style={{ height: 'min-content' }} desktopStyle={{ width: 268 }}>
+        <FlexContainer className="column" gap={4} style={{ height: 'min-content' }} desktopStyle={{ width: 268 }}>
+          <Label fontSize={16} fontFamily="syncopate">
+            voting power (V)
+          </Label>
+          <EquationContainer className="flex align-ce">
+            <VotingPowerFormulaIcon width={88} height={25} />
+          </EquationContainer>
+          <Label fontSize={38} className="gradient" fontFamily="syncopate" labelStyle={{ maxWidth: 'min-content' }}>
+            {accountData.vp ? accountData.vp.toFixed(5) : '-'}
+          </Label>
+        </FlexContainer>
+
         <FlexContainer className="column" style={{ marginBottom: 6 }}>
           <Label fontSize={13} info={positionInfo}>
             Position (P)
           </Label>
-          <FlexContainer className="justify-sb">
-            <Label fontSize={32}>{accountData['staked-amount'] ? accountData['staked-amount'].toFixed(2) : '-'}</Label>
-            <Label fontSize={32}>KDX</Label>
-          </FlexContainer>
+
+          <Label fontSize={32}>{accountData['staked-amount'] ? accountData['staked-amount'].toFixed(2) : '-'} KDX</Label>
+          <Label fontSize={20} labelStyle={{ marginTop: 6 }}>
+            {accountData['staked-amount'] ? (kdxPrice * accountData['staked-amount']).toFixed(2) : '-'} USD
+          </Label>
         </FlexContainer>
         <Label fontSize={13} info={multiplierInfo} labelStyle={{ marginBottom: 10 }}>
           Multiplier (M)

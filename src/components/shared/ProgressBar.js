@@ -36,7 +36,7 @@ const ProgressBar = ({ currentValue, maxValue, topLabelLeft, bottomValues, withB
   return (
     <FlexContainer className="column w-100" style={containerStyle}>
       {topLabelLeft && (
-        <FlexContainer className="justify-sb align-ce w-100">
+        <FlexContainer className="justify-sb align-ce w-100" style={{ marginBottom: 8 }}>
           <Label fontSize={13}>{topLabelLeft}</Label>
           <Label fontSize={13}>{getPercentage(currentValue, maxValue).toFixed(1)}%</Label>
         </FlexContainer>
