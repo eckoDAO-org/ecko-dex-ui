@@ -16,12 +16,14 @@ const multiplierInfo = `The Voting Power Multiplier is a time-dependent function
 const VotingPowerContainer = ({ accountData }) => {
   const { kdxPrice } = usePactContext();
   return (
-    <FlexContainer className="column" mobileStyle={{ marginBottom: 16 }}>
+    <FlexContainer gap={10} className="column" mobileStyle={{ marginBottom: 16 }}>
+      <FlexContainer>
+        <Label fontSize={16} fontFamily="syncopate">
+          voting power (V)
+        </Label>
+      </FlexContainer>
       <FlexContainer className="column background-fill" gap={10} withGradient style={{ height: 'min-content' }} desktopStyle={{ width: 268 }}>
         <FlexContainer className="column" gap={4} style={{ height: 'min-content' }} desktopStyle={{ width: 268 }}>
-          <Label fontSize={16} fontFamily="syncopate">
-            voting power (V)
-          </Label>
           <EquationContainer className="flex align-ce">
             <VotingPowerFormulaIcon width={88} height={25} />
           </EquationContainer>
