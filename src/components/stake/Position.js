@@ -1,6 +1,6 @@
 import React from 'react';
 import { CoinKaddexIcon } from '../../assets';
-import { useAccountContext, useModalContext } from '../../contexts';
+import { useAccountContext, useModalContext, usePactContext } from '../../contexts';
 import { humanReadableNumber, limitDecimalPlaces } from '../../utils/reduceBalance';
 import ConnectWalletModal from '../modals/kdaModals/ConnectWalletModal';
 import CustomButton from '../shared/CustomButton';
@@ -12,6 +12,7 @@ import CommonWrapper from './CommonWrapper';
 
 const Position = ({ buttonLabel, amount, pendingAmount, topRightLabel, inputAmount, isInputDisabled, setKdxAmount, onClickMax, onSubmitStake }) => {
   const modalContext = useModalContext();
+  const { kdxPrice } = usePactContext();
   const { account } = useAccountContext();
   return (
     <CommonWrapper
@@ -22,6 +23,9 @@ const Position = ({ buttonLabel, amount, pendingAmount, topRightLabel, inputAmou
       <div>
         <Label>My Stake</Label>
         <Label fontSize={32}>{humanReadableNumber(amount)} KDX</Label>
+        <Label fontSize={24} labelStyle={{ marginTop: 8 }}>
+          {humanReadableNumber(kdxPrice * amount)} USD
+        </Label>
         {pendingAmount && <Label fontSize={15}>(Pending {humanReadableNumber(pendingAmount)})</Label>}
       </div>
       <CustomDivider style={{ margin: '40px 0' }} />
@@ -36,7 +40,7 @@ const Position = ({ buttonLabel, amount, pendingAmount, topRightLabel, inputAmou
         value={inputAmount}
         inputRightComponent={
           <FlexContainer className="pointer align-ce" gap={16} onClick={onClickMax}>
-            <Label>MAX</Label>
+            <Label>MAX </Label>
 
             <CoinKaddexIcon />
 

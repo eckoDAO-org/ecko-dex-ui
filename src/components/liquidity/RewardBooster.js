@@ -15,6 +15,7 @@ const RewardBooster = ({ type, apr, handleState }) => {
         <FlexContainer gap={16} className="align-ce">
           <CoinsIcon className="coins-icon" />
           <Toggle
+            initialState={true}
             onClick={(active) => {
               if (active) {
                 handleState(true);
