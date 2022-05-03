@@ -2,6 +2,7 @@
 import React from 'react';
 import { VotingPowerFormulaIcon } from '../../assets';
 import { usePactContext } from '../../contexts';
+import { extractDecimal } from '../../utils/reduceBalance';
 import { EquationContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
 import ProgressBar from '../shared/ProgressBar';
@@ -25,7 +26,7 @@ const VotingPowerContainer = ({ accountData }) => {
             <VotingPowerFormulaIcon width={88} height={25} />
           </EquationContainer>
           <Label fontSize={38} className="gradient" fontFamily="syncopate" labelStyle={{ maxWidth: 'min-content' }}>
-            {accountData.vp ? accountData.vp.toFixed(5) : '-'}
+            {accountData.vp ? extractDecimal(accountData.vp).toFixed(5) : '-'}
           </Label>
         </FlexContainer>
 
@@ -34,9 +35,9 @@ const VotingPowerContainer = ({ accountData }) => {
             Position (P)
           </Label>
 
-          <Label fontSize={32}>{accountData['staked-amount'] ? accountData['staked-amount'].toFixed(2) : '-'} KDX</Label>
+          <Label fontSize={32}>{accountData['staked-amount'] ? extractDecimal(accountData['staked-amount']).toFixed(2) : '-'} KDX</Label>
           <Label fontSize={20} labelStyle={{ marginTop: 6 }}>
-            {accountData['staked-amount'] ? (kdxPrice * accountData['staked-amount']).toFixed(2) : '-'} USD
+            {accountData['staked-amount'] ? (kdxPrice * extractDecimal(accountData['staked-amount'])).toFixed(2) : '-'} USD
           </Label>
         </FlexContainer>
         <Label fontSize={13} info={multiplierInfo} labelStyle={{ marginBottom: 10 }}>
