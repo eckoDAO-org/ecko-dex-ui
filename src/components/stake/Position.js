@@ -1,7 +1,7 @@
 import React from 'react';
 import { CoinKaddexIcon } from '../../assets';
 import { useAccountContext, useModalContext, usePactContext } from '../../contexts';
-import { humanReadableNumber, limitDecimalPlaces } from '../../utils/reduceBalance';
+import { extractDecimal, humanReadableNumber, limitDecimalPlaces } from '../../utils/reduceBalance';
 import ConnectWalletModal from '../modals/kdaModals/ConnectWalletModal';
 import CustomButton from '../shared/CustomButton';
 import CustomDivider from '../shared/CustomDivider';
@@ -24,7 +24,7 @@ const Position = ({ buttonLabel, amount, pendingAmount, topRightLabel, inputAmou
         <Label>My Stake</Label>
         <Label fontSize={32}>{humanReadableNumber(amount)} KDX</Label>
         <Label fontSize={24} labelStyle={{ marginTop: 8 }}>
-          {humanReadableNumber(kdxPrice * amount)} USD
+          {humanReadableNumber(extractDecimal(kdxPrice) * extractDecimal(amount))} USD
         </Label>
         {pendingAmount && <Label fontSize={15}>(Pending {humanReadableNumber(pendingAmount)})</Label>}
       </div>

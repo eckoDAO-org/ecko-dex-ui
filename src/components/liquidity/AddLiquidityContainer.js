@@ -134,7 +134,7 @@ const AddLiquidityContainer = (props) => {
       {pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED && (
         <SingleSidedLiquidity
           apr={apr}
-          pools={data.pools}
+          pools={data?.pools.filter((p) => p.isBoosted)}
           pair={pair}
           onPairChange={(token0) => {
             setPair({ token0 });

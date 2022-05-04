@@ -149,7 +149,7 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, isSingleSideL
             <FlexContainer className="align-ce justify-sb">
               <FlexContainer>
                 <CryptoContainer size={30}>{getTokenIconById(token1)}</CryptoContainer>
-                <Label>{swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1']}</Label>
+                <Label>{swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0']}</Label>
               </FlexContainer>
               <Label>{token1}</Label>
             </FlexContainer>

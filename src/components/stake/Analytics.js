@@ -5,7 +5,7 @@ import CommonWrapper from './CommonWrapper';
 import { getPairList } from '../../api/pact';
 import { getDailyVolume } from '../../api/kaddex-stats';
 import { getAllPairValues, getStakingApr } from '../../utils/token-utils';
-import { humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
+import { extractDecimal, humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
 import { usePactContext } from '../../contexts';
 
 const Analytics = ({ stakedShare, totalStaked }) => {
@@ -54,7 +54,7 @@ const Analytics = ({ stakedShare, totalStaked }) => {
           <Label>Staked Share</Label>
           <InfoPopup>Your personal percentage share of KDX amongst all the KDX currently being staked.</InfoPopup>
         </div>
-        <Label fontSize={32}>{stakedShare && stakedShare.toFixed(2)}%</Label>
+        <Label fontSize={32}>{stakedShare && extractDecimal(stakedShare).toFixed(2)}%</Label>
       </div>
       <div>
         <Label>Total Staked</Label>

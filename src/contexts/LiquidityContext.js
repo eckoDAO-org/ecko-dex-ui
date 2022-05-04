@@ -3,7 +3,7 @@ import pairTokens from '../constants/pairsConfig';
 import Pact from 'pact-lang-api';
 import { CHAIN_ID, GAS_PRICE, NETWORK, NETWORKID, PRECISION, ENABLE_GAS_STATION, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { useKaddexWalletContext, usePactContext, useWalletContext, useAccountContext } from '.';
-import { reduceBalance } from '../utils/reduceBalance';
+import { extractDecimal, reduceBalance } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
 import { mkReq, parseRes } from '../api/utils';
 import { getOneSideLiquidityPairInfo, getPairAccount } from '../api/pact';
@@ -129,7 +129,11 @@ export const LiquidityProvider = (props) => {
             pair,
             Number(amountDesired0),
           ]),
-          Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${token1.code}.TRANSFER`, [account.account, pair, Number(args.amountB)]),
+          Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${token1.code}.TRANSFER`, [
+            account.account,
+            pair,
+            extractDecimal(args.amountB),
+          ]),
         ],
         sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
         gasLimit: 11000,
