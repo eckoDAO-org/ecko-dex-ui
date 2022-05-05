@@ -47,7 +47,7 @@ const Analytics = ({ stakedShare, totalStaked }) => {
       </div>
       <div>
         <Label>Volume</Label>
-        <Label fontSize={32}>{totalVolumeUSD ? humanReadableNumber(totalVolumeUSD) : '-'} USD</Label>
+        <Label fontSize={32}>{humanReadableNumber(totalVolumeUSD)} USD</Label>
       </div>
       <div>
         <div className="flex align-ce">
@@ -58,7 +58,7 @@ const Analytics = ({ stakedShare, totalStaked }) => {
       </div>
       <div>
         <Label>Total Staked</Label>
-        <Label fontSize={32}>{(totalStaked && reduceBalance(totalStaked, 2)) || '-'} KDX</Label>
+        <Label fontSize={32}>{(totalStaked && humanReadableNumber(reduceBalance(totalStaked))) || '-'} KDX</Label>
       </div>
     </CommonWrapper>
   );

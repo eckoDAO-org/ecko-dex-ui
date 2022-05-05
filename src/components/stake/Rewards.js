@@ -6,8 +6,11 @@ import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
 import PenaltyRewardsInfo from './PenaltyRewardsInfo';
+import { humanReadableNumber } from '../../utils/reduceBalance';
+import { usePactContext } from '../../contexts';
 
 const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onWithdrawClick }) => {
+  const { kdxPrice } = usePactContext();
   /*
     If you unstake during the first 72hours you will incur in a penalty: 3% flat penalty on your staked amount. 
     If you withdraw your rewards during the first 60 days, you will incur in a penalty: the penalty will only affect your accumulated rewards 
@@ -40,7 +43,10 @@ const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onW
     <CommonWrapper gap={16} title="rewards">
       <div>
         <Label>KDX Collected</Label>
-        <Label fontSize={32}>{(rewardAccrued && rewardAccrued.toFixed(6)) || '-'} KDX</Label>
+        <Label fontSize={32}>{humanReadableNumber(rewardAccrued)} KDX</Label>
+        <Label fontSize={20} labelStyle={{ marginTop: 8 }}>
+          {humanReadableNumber(kdxPrice * rewardAccrued)} USD
+        </Label>
       </div>
       <div>
         <Label>Staking Time</Label>
