@@ -48,7 +48,7 @@ const Position = ({ buttonLabel, amount, pendingAmount, topRightLabel, inputAmou
           </FlexContainer>
         }
         onChange={(e, { value }) => {
-          setKdxAmount(limitDecimalPlaces(value, 12));
+          setKdxAmount(limitDecimalPlaces(value, 7));
         }}
       />
 

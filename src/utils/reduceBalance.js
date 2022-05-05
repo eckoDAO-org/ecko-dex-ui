@@ -54,3 +54,8 @@ export const humanReadableNumber = (num, toFixed = 2) =>
   extractDecimal(num)
     ?.toFixed(toFixed)
     ?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') ?? '';
+
+export const countDecimals = (value) => {
+  if (Math.floor(value) === value) return 0;
+  return value?.toString().split('.')[1].length || 0;
+};

@@ -132,7 +132,7 @@ const SwapContainer = () => {
   useEffect(() => {
     if (!isNaN(fromValues.amount)) {
       if (inputSide === 'from' && fromValues.amount !== '') {
-        setToNote('(estimated)');
+        setToNote('(estimate)');
         setFromNote('');
         setInputSide(null);
         if (fromValues.coin !== '' && toValues.coin !== '' && !isNaN(pact.ratio)) {
@@ -171,7 +171,7 @@ const SwapContainer = () => {
   useEffect(() => {
     if (!isNaN(toValues.amount)) {
       if (inputSide === 'to' && toValues.amount !== '') {
-        setFromNote('(estimated)');
+        setFromNote('(estimate)');
         setToNote('');
         setInputSide(null);
         if (fromValues.coin !== '' && toValues.coin !== '' && !isNaN(pact.ratio)) {
@@ -308,12 +308,12 @@ const SwapContainer = () => {
     const to = { ...toValues };
     setFromValues({ ...to });
     setToValues({ ...from });
-    if (toNote === '(estimated)') {
-      setFromNote('(estimated)');
+    if (toNote === '(estimate)') {
+      setFromNote('(estimate)');
       setToNote('');
     }
-    if (fromNote === '(estimated)') {
-      setToNote('(estimated)');
+    if (fromNote === '(estimate)') {
+      setToNote('(estimate)');
       setFromNote('');
     }
   };
