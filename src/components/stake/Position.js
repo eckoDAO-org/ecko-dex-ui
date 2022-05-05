@@ -68,7 +68,7 @@ const Position = ({
         }}
       />
       {pathname === ROUTE_UNSTAKE && stakedTimeStart && moment().diff(stakedTimeStart, 'hours') < 72 && (
-        <div>
+        <div style={{ marginTop: 8 }}>
           <div className="flex align-ce">
             <Label>Position Penalty</Label>
           </div>
