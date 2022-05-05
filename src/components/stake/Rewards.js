@@ -19,12 +19,8 @@ const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onW
   const getPenaltyRewardsString = () => {
     if (stakedTimeStart) {
       const rewardPenaltyPercentage = (100 * rewardsPenalty) / rewardAccrued;
-      const diffHours = moment().diff(stakedTimeStart, 'hours');
-      if (diffHours < 72) {
-        return (rewardPenaltyPercentage && `${rewardPenaltyPercentage.toFixed(2)}%`) || '-';
-      } else {
-        return `${(rewardsPenalty || 0).toFixed(2)} KDX`;
-      }
+      const penaltyObject = [rewardsPenalty.toFixed(2), rewardPenaltyPercentage.toFixed(2)];
+      return penaltyObject;
     }
     return '-';
   };
@@ -56,14 +52,17 @@ const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onW
       </div>
       <div>
         <div className="flex align-ce">
-          <Label>Claim Penalty</Label>
+          <Label>Rewards Penalty</Label>
           <InfoPopup type="modal" title="Claim Penalty">
             <PenaltyRewardsInfo />
           </InfoPopup>
         </div>
 
         <Label fontSize={24} color={getPenaltyColor()}>
-          {getPenaltyRewardsString() || '-'}
+          {getPenaltyRewardsString()[0] || '-'} KDX
+        </Label>
+        <Label fontSize={16} color={getPenaltyColor()}>
+          {getPenaltyRewardsString()[1] || '-'} %
         </Label>
       </div>
       {/* <CustomButton type="gradient" disabled={disabled} buttonStyle={{ marginTop: 4 }} onClick={() => {}}>
