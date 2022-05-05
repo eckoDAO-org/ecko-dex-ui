@@ -23,7 +23,7 @@ import { ROUTE_STAKE, ROUTE_UNSTAKE } from '../router/routes';
 import { NETWORK } from '../constants/contextConstants';
 import { theme } from '../styles/theme';
 import { useInterval } from '../hooks/useInterval';
-import { reduceBalance } from '../utils/reduceBalance';
+import { extractDecimal, reduceBalance } from '../utils/reduceBalance';
 
 const StakeContainer = () => {
   const history = useHistory();
@@ -50,10 +50,10 @@ const StakeContainer = () => {
   const updateAccountStakingData = useCallback(() => {
     if (account?.account) {
       getKDXAccountBalance(account.account).then((kdxBalance) => {
-        setKdxAccountBalance(kdxBalance?.balance ?? 0);
+        setKdxAccountBalance(extractDecimal(kdxBalance?.balance) ?? 0);
       });
       estimateUnstake(account?.account).then((resEstimate) => {
-        setEstimateUnstakeData(resEstimate);
+        setEstimateUnstakeData({ ...resEstimate, staked: extractDecimal(resEstimate.staked) });
       });
       getAccountData(account?.account).then((daoAccountDataResponse) => setDaoAccountData(daoAccountDataResponse));
     }
@@ -281,7 +281,7 @@ const StakeContainer = () => {
     if (pathname !== ROUTE_UNSTAKE) {
       return `Balance: ${kdxAccountBalance ?? 0}`;
     } else {
-      return `Staked: ${estimateUnstakeData?.staked ?? 0}`;
+      return `Staked: ${estimateUnstakeData?.staked.toFixed(5) ?? 0}`;
     }
   };
 
