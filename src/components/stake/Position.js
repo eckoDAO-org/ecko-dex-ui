@@ -40,12 +40,16 @@ const Position = ({
       <div>
         <Label>My Stake</Label>
         <Label fontSize={32}>{humanReadableNumber(amount)} KDX</Label>
-        <Label fontSize={24} labelStyle={{ marginTop: 8 }}>
+        <Label fontSize={20} labelStyle={{ marginTop: 8 }}>
           {humanReadableNumber(extractDecimal(kdxPrice) * extractDecimal(amount))} USD
         </Label>
-        {pendingAmount && <Label fontSize={15}>(Pending {humanReadableNumber(pendingAmount)})</Label>}
+        {pendingAmount && (
+          <Label fontSize={15} labelStyle={{ marginTop: 8, color: commonColors.info }}>
+            (Pending {humanReadableNumber(pendingAmount)})
+          </Label>
+        )}
       </div>
-      <CustomDivider style={{ margin: '40px 0' }} />
+      <CustomDivider style={{ margin: '24px 0' }} />
       <Input
         disabled={isInputDisabled}
         topLeftLabel="amount"
@@ -68,7 +72,7 @@ const Position = ({
         }}
       />
       {pathname === ROUTE_UNSTAKE && stakedTimeStart && moment().diff(stakedTimeStart, 'hours') < 72 && (
-        <div style={{ marginTop: 8 }}>
+        <div style={{ marginTop: 16 }}>
           <div className="flex align-ce">
             <Label>Position Penalty</Label>
           </div>

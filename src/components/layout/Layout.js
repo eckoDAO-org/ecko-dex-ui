@@ -53,7 +53,7 @@ const StripesContainer = styled.div`
   left: 0;
   line-height: 0;
   z-index: -1;
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
+  width: @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
     display: none;
   }
 `;
