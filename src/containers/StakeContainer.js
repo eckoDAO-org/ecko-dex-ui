@@ -23,7 +23,7 @@ import { ROUTE_STAKE, ROUTE_UNSTAKE } from '../router/routes';
 import { NETWORK } from '../constants/contextConstants';
 import { theme } from '../styles/theme';
 import { useInterval } from '../hooks/useInterval';
-import { extractDecimal, reduceBalance } from '../utils/reduceBalance';
+import { countDecimals, extractDecimal, reduceBalance } from '../utils/reduceBalance';
 
 const StakeContainer = () => {
   const history = useHistory();
@@ -277,11 +277,22 @@ const StakeContainer = () => {
       });
   };
 
+  const getDecimalPlaces = (value) => {
+    const count = countDecimals(value);
+    if (count < 2) {
+      return value?.toFixed(2);
+    } else if (count > 7) {
+      return value?.toFixed(7);
+    } else {
+      return value;
+    }
+  };
+
   const getPositionLabel = () => {
     if (pathname !== ROUTE_UNSTAKE) {
-      return `Balance: ${kdxAccountBalance ?? 0}`;
+      return `Balance: ${getDecimalPlaces(kdxAccountBalance) ?? 0}`;
     } else {
-      return `Staked: ${estimateUnstakeData?.staked.toFixed(5) ?? 0}`;
+      return `Staked: ${getDecimalPlaces(estimateUnstakeData?.staked) ?? 0}`;
     }
   };
 
@@ -326,7 +337,7 @@ const StakeContainer = () => {
           inputAmount={inputAmount}
           buttonLabel={pathname === ROUTE_STAKE ? 'stake' : 'unstake'}
           pendingAmount={(estimateUnstakeData && estimateUnstakeData['stake-record'] && estimateUnstakeData['stake-record']['pending-add']) || false}
-          onClickMax={() => setInputAmount(pathname !== ROUTE_UNSTAKE ? kdxAccountBalance : estimateUnstakeData?.staked || 0)}
+          onClickMax={() => setInputAmount(pathname !== ROUTE_UNSTAKE ? kdxAccountBalance.toFixed(7) : estimateUnstakeData?.staked.toFixed(7) || 0)}
           setKdxAmount={(value) => setInputAmount(value)}
           onSubmitStake={() => (pathname !== ROUTE_UNSTAKE ? onStakeKDX() : onRollupAndUnstake())}
           stakedTimeStart={stakedTimeStart}

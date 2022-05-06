@@ -125,7 +125,7 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, isSingleSideL
         <FlexContainer className="align-ce justify-sb">
           <Label fontSize={13}>Pool Share</Label>
           <Label fontSize={13}>
-            {(pact.share(swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1']) * 100).toPrecision(4)} %
+            {(pact.share(extractDecimal(swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1'])) * 100).toPrecision(4)} %
           </Label>
         </FlexContainer>
 
@@ -137,7 +137,7 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, isSingleSideL
           <FlexContainer>
             <CryptoContainer size={30}>{getTokenIconById(token0)}</CryptoContainer>
 
-            <Label>{swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1']}</Label>
+            <Label>{extractDecimal(swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1'])}</Label>
           </FlexContainer>
           <Label>{token0}</Label>
         </FlexContainer>
@@ -149,7 +149,7 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, isSingleSideL
             <FlexContainer className="align-ce justify-sb">
               <FlexContainer>
                 <CryptoContainer size={30}>{getTokenIconById(token1)}</CryptoContainer>
-                <Label>{swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0']}</Label>
+                <Label>{extractDecimal(swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0'])}</Label>
               </FlexContainer>
               <Label>{token1}</Label>
             </FlexContainer>
@@ -179,7 +179,7 @@ export const SuccessRemoveView = ({ token0, token1, loading, onClick }) => {
           <div className="flex align-ce">
             <CryptoContainer size={24}>{getTokenIconById(token0)}</CryptoContainer>
             <Label>
-              {swap?.localRes?.result?.data?.amount0} {token0}
+              {extractDecimal(swap?.localRes?.result?.data?.amount0) || '-'} {token0}
             </Label>
           </div>
           <Label>{token0}</Label>
@@ -188,7 +188,7 @@ export const SuccessRemoveView = ({ token0, token1, loading, onClick }) => {
           <div className="flex align-ce">
             <CryptoContainer size={24}>{getTokenIconById(token1)}</CryptoContainer>
             <Label>
-              {swap?.localRes?.result?.data?.amount1} {token1}
+              {extractDecimal(swap?.localRes?.result?.data?.amount1) || '-'} {token1}
             </Label>
           </div>
 
@@ -233,7 +233,7 @@ export const SuccessRemoveWithBoosterView = ({ token0, token1, loading, onClick 
           <div className="flex align-ce">
             <CryptoContainer size={24}>{getTokenIconById(token0)}</CryptoContainer>
             <Label>
-              {swap?.localRes?.result?.data?.amount0} {token0}
+              {extractDecimal(swap?.localRes?.result?.data?.amount0)} {token0}
             </Label>
           </div>
           <Label>{token0}</Label>
@@ -242,7 +242,7 @@ export const SuccessRemoveWithBoosterView = ({ token0, token1, loading, onClick 
           <div className="flex align-ce">
             <CryptoContainer size={24}>{getTokenIconById(token1)}</CryptoContainer>
             <Label>
-              {swap?.localRes?.result?.data?.amount1} {token1}
+              {extractDecimal(swap?.localRes?.result?.data?.amount1)} {token1}
             </Label>
           </div>
 

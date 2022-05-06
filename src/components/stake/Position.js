@@ -68,7 +68,7 @@ const Position = ({
           </FlexContainer>
         }
         onChange={(e, { value }) => {
-          setKdxAmount(limitDecimalPlaces(value, 12));
+          setKdxAmount(limitDecimalPlaces(value, 7));
         }}
       />
       {pathname === ROUTE_UNSTAKE && stakedTimeStart && moment().diff(stakedTimeStart, 'hours') < 72 && (

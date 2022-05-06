@@ -98,7 +98,7 @@ const SwapButtonsForm = ({
         address: toValues.address,
         coin: toValues.coin,
       },
-      fromNote === '(estimated)' ? false : true
+      fromNote === '(estimate)' ? false : true
     );
 
     if (!res) {
