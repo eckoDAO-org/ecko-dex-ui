@@ -50,10 +50,16 @@ const StakeContainer = () => {
   const updateAccountStakingData = useCallback(() => {
     if (account?.account) {
       getKDXAccountBalance(account.account).then((kdxBalance) => {
-        setKdxAccountBalance(extractDecimal(kdxBalance?.balance) ?? 0);
+        if (!kdxBalance.errorMessage) {
+          setKdxAccountBalance(extractDecimal(kdxBalance?.balance) ?? 0);
+        } else {
+          setKdxAccountBalance(0);
+        }
       });
       estimateUnstake(account?.account).then((resEstimate) => {
-        setEstimateUnstakeData({ ...resEstimate, staked: extractDecimal(resEstimate.staked) });
+        if (!resEstimate.errorMessage) {
+          setEstimateUnstakeData({ ...resEstimate, staked: extractDecimal(resEstimate.staked) });
+        }
       });
       getAccountData(account?.account).then((daoAccountDataResponse) => setDaoAccountData(daoAccountDataResponse));
     }
@@ -290,9 +296,9 @@ const StakeContainer = () => {
 
   const getPositionLabel = () => {
     if (pathname !== ROUTE_UNSTAKE) {
-      return `Balance: ${getDecimalPlaces(kdxAccountBalance) ?? 0}`;
+      return `Balance: ${getDecimalPlaces(extractDecimal(kdxAccountBalance)) || getDecimalPlaces(0.0)}`;
     } else {
-      return `Staked: ${getDecimalPlaces(estimateUnstakeData?.staked) ?? 0}`;
+      return `Staked: ${(estimateUnstakeData?.staked && getDecimalPlaces(extractDecimal(estimateUnstakeData?.staked))) || getDecimalPlaces(0.0)}`;
     }
   };
 

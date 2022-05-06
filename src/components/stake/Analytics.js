@@ -50,7 +50,7 @@ const Analytics = ({ stakedShare, totalStaked }) => {
         <div className="flex align-ce">
           <Label>Staked Share</Label>
         </div>
-        <Label fontSize={24}>{stakedShare && extractDecimal(stakedShare).toFixed(2)}%</Label>
+        <Label fontSize={24}>{(stakedShare && extractDecimal(stakedShare).toFixed(2)) || '-'}% </Label>
       </div>
       <div>
         <Label>Total Staked</Label>

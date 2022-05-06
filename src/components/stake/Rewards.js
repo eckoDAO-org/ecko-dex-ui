@@ -5,7 +5,7 @@ import CustomButton from '../shared/CustomButton';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
 import PenaltyRewardsInfo from './PenaltyRewardsInfo';
-import { humanReadableNumber } from '../../utils/reduceBalance';
+import { extractDecimal, humanReadableNumber } from '../../utils/reduceBalance';
 import { usePactContext } from '../../contexts';
 
 const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onWithdrawClick }) => {
@@ -18,7 +18,7 @@ const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onW
   const getPenaltyRewardsString = () => {
     if (stakedTimeStart) {
       const rewardPenaltyPercentage = (100 * rewardsPenalty) / rewardAccrued;
-      const penaltyObject = [rewardsPenalty.toFixed(2), rewardPenaltyPercentage.toFixed(2)];
+      const penaltyObject = [extractDecimal(rewardsPenalty).toFixed(2), extractDecimal(rewardPenaltyPercentage).toFixed(2)];
       return penaltyObject;
     }
     return '-';
