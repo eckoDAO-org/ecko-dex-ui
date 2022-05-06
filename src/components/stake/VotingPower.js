@@ -29,12 +29,14 @@ const VotingPower = ({ daoAccountData }) => {
           multiplier (m)
         </Label>
 
-        <InfoPopup centerIcon>
-          The Voting Power Multiplier is a time-dependent function of your KDX staking amount and meaningful contributions (Vibedust). In 60 days the
-          multiplier value goes up to 1 and can reach 2.5 over the course of 4 years.
+        <InfoPopup type="modal" title="Multiplier" centerIcon>
+          <Label>
+            The Voting Power Multiplier is a time-dependent function of your KDX staking amount and meaningful contributions (Vibedust). In 60 days
+            the multiplier value goes up to 1 and can reach 2.5 over the course of 4 years.
+          </Label>
         </InfoPopup>
 
-        {daoAccountData?.multiplier && <Label labelStyle={{ marginLeft: 8 }}>{daoAccountData?.multiplier?.toFixed(5)}</Label>}
+        {daoAccountData?.multiplier && <Label labelStyle={{ marginLeft: 8 }}>{daoAccountData?.multiplier?.toFixed(5)} x</Label>}
       </div>
 
       <div>

@@ -51,6 +51,8 @@ const ProgressBar = ({ currentValue, maxValue, topLabelLeft, bottomValues, withB
               let left = 0;
               if (i === 0) {
                 left = '0px';
+              } else if (i === values.length - 1) {
+                left = `calc(${getPercentage(typeof v === 'number' ? v : v.value, maxValue)}% - ${width}px)`;
               } else {
                 left = `calc(${getPercentage(typeof v === 'number' ? v : v.value, maxValue)}% - ${width / 2}px)`;
               }

@@ -97,7 +97,7 @@ const Layout = ({ children }) => {
         )}
       </WrapperContainer>
       <StripesContainer>
-        <Stripes />
+        <Stripes style={{ width: '45%', height: '45%' }} />
       </StripesContainer>
     </FlexContainer>
   );

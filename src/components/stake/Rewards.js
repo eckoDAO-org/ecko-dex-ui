@@ -2,7 +2,6 @@ import React from 'react';
 import moment from 'moment';
 import { commonColors } from '../../styles/theme';
 import CustomButton from '../shared/CustomButton';
-import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
 import PenaltyRewardsInfo from './PenaltyRewardsInfo';
@@ -36,16 +35,16 @@ const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onW
   };
 
   return (
-    <CommonWrapper gap={16} title="rewards">
+    <CommonWrapper gap={16} title="rewards" popup={<PenaltyRewardsInfo />} popupTitle="Rewards Penalty">
       <div>
         <Label>KDX Collected</Label>
-        <Label fontSize={32}>{humanReadableNumber(rewardAccrued)} KDX</Label>
-        <Label fontSize={20} labelStyle={{ marginTop: 8 }}>
+        <Label fontSize={30}>{humanReadableNumber(rewardAccrued)} KDX</Label>
+        <Label fontSize={16} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
           {humanReadableNumber(kdxPrice * rewardAccrued)} USD
         </Label>
       </div>
       <div>
-        <Label>Staking Time</Label>
+        <Label>Elapsed Time</Label>
         <Label fontSize={24} color={getPenaltyColor()}>
           {(stakedTimeStart && moment(stakedTimeStart).fromNow()) || '-'}
         </Label>
@@ -53,9 +52,6 @@ const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onW
       <div>
         <div className="flex align-ce">
           <Label>Rewards Penalty</Label>
-          <InfoPopup type="modal" title="Claim Penalty">
-            <PenaltyRewardsInfo />
-          </InfoPopup>
         </div>
 
         <Label fontSize={24} color={getPenaltyColor()}>

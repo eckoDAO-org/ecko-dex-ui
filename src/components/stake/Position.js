@@ -34,13 +34,19 @@ const Position = ({
   return (
     <CommonWrapper
       title="position (p)"
-      popup="“Position” accrues your KDX holdings from both the Vaulting and the Staking Programs. Please note that all Second Sale participants are automatically staking their KDX while it is being vesting."
+      popup={
+        <Label>
+          Position accrues your KDX holdings from both the Vaulting and the Staking Programs. Please note that all Second Sale participants are
+          automatically staking their KDX while it is being vesting.
+        </Label>
+      }
+      popupTitle="Position"
       centerIcon
     >
       <div>
         <Label>My Stake</Label>
-        <Label fontSize={32}>{humanReadableNumber(amount)} KDX</Label>
-        <Label fontSize={20} labelStyle={{ marginTop: 8 }}>
+        <Label fontSize={30}>{humanReadableNumber(amount)} KDX</Label>
+        <Label fontSize={16} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
           {humanReadableNumber(extractDecimal(kdxPrice) * extractDecimal(amount))} USD
         </Label>
         {pendingAmount && (
