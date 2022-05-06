@@ -340,6 +340,7 @@ const StakeContainer = () => {
           onClickMax={() => setInputAmount(pathname !== ROUTE_UNSTAKE ? kdxAccountBalance.toFixed(7) : estimateUnstakeData?.staked.toFixed(7) || 0)}
           setKdxAmount={(value) => setInputAmount(value)}
           onSubmitStake={() => (pathname !== ROUTE_UNSTAKE ? onStakeKDX() : onRollupAndUnstake())}
+          stakedTimeStart={stakedTimeStart}
         />
         <Rewards
           disabled={!(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || (estimateUnstakeData && !estimateUnstakeData['can-claim'])}

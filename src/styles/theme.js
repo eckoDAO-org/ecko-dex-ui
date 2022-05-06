@@ -44,6 +44,7 @@ export const commonColors = {
   red: '#FF5757',
   active: '#2D6A18',
   closed: '#9D1D16',
+  info: '#10C4DF',
   gameEditionYellow: '#FFC107',
   gameEditionBlue: '#6D99E4',
   gameEditionPink: '#F2248D',

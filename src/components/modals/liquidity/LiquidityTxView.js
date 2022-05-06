@@ -89,8 +89,8 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, isSingleSideL
         <FlexContainer className="align-ce justify-sb">
           <Label fontSize={13}>Account</Label>
           <Label fontSize={13}>
-            {reduceToken(account.account)}
             <CopyPopup textToCopy={account.account} />
+            {reduceToken(account.account)}
           </Label>
         </FlexContainer>
         {/* CHAIN */}

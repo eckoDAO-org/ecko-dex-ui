@@ -2,9 +2,11 @@ import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import LiquidityMyLiquidityTable from '../components/liquidity/LiquidityMyLiquidityTable';
 import LiquidityPoolsTable from '../components/liquidity/LiquidityPoolsTable';
+import LiquidityTablesInfo from '../components/liquidity/LiquidityTablesInfo';
 import LiquidityTokensTable from '../components/liquidity/LiquidityTokensTable';
 import CustomButton from '../components/shared/CustomButton';
 import { FlexContainer } from '../components/shared/FlexContainer';
+import InfoPopup from '../components/shared/InfoPopup';
 import Label from '../components/shared/Label';
 import {
   ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED,
@@ -27,7 +29,7 @@ const LiquidityContainer = () => {
       mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
     >
       <FlexContainer className="w-100 justify-sb" mobileClassName="column" style={{ marginBottom: 24 }} mobileStyle={{ marginTop: 24 }}>
-        <FlexContainer gap={16} mobileStyle={{ marginBottom: 16 }}>
+        <FlexContainer className="align-ce" gap={16} mobileStyle={{ marginBottom: 16 }}>
           <Label
             withShade={pathname !== ROUTE_LIQUIDITY_TOKENS}
             className="pointer"
@@ -46,6 +48,9 @@ const LiquidityContainer = () => {
           >
             POOLS
           </Label>
+          <InfoPopup type="modal" title="Liquidity" size="large" centerIcon>
+            <LiquidityTablesInfo />
+          </InfoPopup>
         </FlexContainer>
         <FlexContainer gap={16}>
           <CustomButton

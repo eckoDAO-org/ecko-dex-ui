@@ -13,18 +13,17 @@ const CopyPopup = ({ textToCopy, title, containerStyle }) => {
       containerStyle={gameEditionView ? { padding: 8, border: '2px dashed #ffffff', borderRadius: 0, backgroundColor: '#000000' } : { padding: 8 }}
       hideGradient={gameEditionView}
       on="click"
-      position="bottom right"
-      pinned
+      position="left center"
       trigger={
         <div
-          style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', ...containerStyle }}
+          style={{ marginRight: 8, cursor: 'pointer', display: 'flex', alignItems: 'center', ...containerStyle }}
           onClick={() => {
             navigator.clipboard.writeText(textToCopy);
           }}
         >
           <Icon
             name="copy"
-            style={{ marginLeft: 8, color: gameEditionView ? '#fff' : theme(themeMode).colors.white, marginRight: 0 }}
+            style={{ color: gameEditionView ? '#fff' : theme(themeMode).colors.white, marginRight: 0 }}
             onClick={() => {
               navigator.clipboard.writeText(textToCopy);
             }}

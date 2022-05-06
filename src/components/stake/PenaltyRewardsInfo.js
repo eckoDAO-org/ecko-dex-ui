@@ -7,12 +7,11 @@ import List from '../shared/List';
 const PenaltyRewardsInfo = () => {
   return (
     <FlexContainer className="column" gap={16}>
-      <Label>To achieve 2 objectives: rewarding long-term holders and preventing manipulation and spamming of the smart contract involved.</Label>
+      <Label>The Kaddex Staking tool aims at rewarding long-term holders. For the same reason:</Label>
 
       <List
         paddingLeft={16}
         items={[
-          'If you unstake within the first 72 hours, you will incur into a 3% flat penalty on your staked amount.',
           'If you withdraw your rewards within the first 60 days, the penalty will only affect your accumulated rewards and exponentially decreases in time.',
         ]}
       />
