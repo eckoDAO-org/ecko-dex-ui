@@ -48,6 +48,18 @@ const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onW
         <Label fontSize={24} color={getPenaltyColor()}>
           {(stakedTimeStart && moment(stakedTimeStart).fromNow()) || '-'}
         </Label>
+        {moment().diff(stakedTimeStart, 'hours') > 24 && moment().diff(stakedTimeStart, 'hours') < 72 && (
+          <Label fontSize={16} color={getPenaltyColor()}>
+            {(stakedTimeStart && moment().diff(stakedTimeStart, 'hours')) || '-'} hours ago
+          </Label>
+        )}
+        {moment(stakedTimeStart).fromNow() === '60 days ago' && (
+          <Label fontSize={16} color={getPenaltyColor()}>
+            {`${(stakedTimeStart && 1440 - moment().diff(stakedTimeStart, 'hours')) || '-'} ${
+              stakedTimeStart && (1440 - moment().diff(stakedTimeStart, 'hours') > 1 ? 'hours' : 'hour')
+            } `}
+          </Label>
+        )}
       </div>
       <div>
         <div className="flex align-ce">
