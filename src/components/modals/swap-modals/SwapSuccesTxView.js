@@ -22,7 +22,7 @@ export const SwapSuccessViewGE = () => {
       containerStyle={{ marginTop: 16 }}
       leftItem={
         <>
-          <div className="flex justify-fs">
+          <div className="flex justify-fs align-ce">
             {getTokenIconByCode(swap?.localRes?.result?.data[0]?.token)}
             <GameEditionLabel fontSize={32} color="black" fontFamily="syncopate">
               {extractDecimal(swap?.localRes?.result?.data[0]?.amount)}
@@ -43,7 +43,7 @@ export const SwapSuccessViewGE = () => {
       }
       rightItem={
         <>
-          <div className="flex justify-fs">
+          <div className="flex justify-fs align-ce">
             {getTokenIconByCode(swap?.localRes?.result?.data[1]?.token)}
             <GameEditionLabel fontSize={32} color="black" fontFamily="syncopate">
               {extractDecimal(swap?.localRes?.result?.data[1]?.amount)}
