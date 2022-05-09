@@ -86,6 +86,14 @@ const Position = ({
           <Label fontSize={24} color={commonColors.red}>
             3%
           </Label>
+          {moment(stakedTimeStart).fromNow() === '3 days ago' && (
+            <Label fontSize={16} color={commonColors.red}>
+              {`${(stakedTimeStart && 72 - moment().diff(stakedTimeStart, 'hours')) || '-'} ${
+                stakedTimeStart && (72 - moment().diff(stakedTimeStart, 'hours') > 1 ? 'hours' : 'hour')
+              } `}
+              left
+            </Label>
+          )}
         </div>
       )}
       <CustomButton
