@@ -39,7 +39,7 @@ const Container = styled.div`
     width: 40px;
     position: absolute;
     top: 37%;
-    left: 48%;
+    left: 46%;
     cursor: pointer;
   }
 `;

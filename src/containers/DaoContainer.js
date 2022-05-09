@@ -7,6 +7,7 @@ import SingleProposalContainer from '../components/dao/SingleProposalContainer';
 import { useAccountContext } from '../contexts';
 import { getAccountData } from '../api/dao';
 import theme from '../styles/theme';
+import { useInterval } from '../hooks/useInterval';
 
 const DaoContainer = () => {
   const { proposal_id } = useParams();
@@ -22,6 +23,8 @@ const DaoContainer = () => {
   useEffect(() => {
     fetchData();
   }, [account]);
+
+  useInterval(fetchData, 30000);
 
   return (
     <FlexContainer

@@ -30,7 +30,6 @@ const LiquidityMyLiquidityTable = () => {
       fetchData();
     }
   }, [account.account]);
-
   return !loading ? (
     <CommonTable
       items={pairList}
@@ -71,11 +70,11 @@ const renderColumns = () => {
         </FlexContainer>
       ),
     },
-    {
-      name: 'My Pool Tokens',
-      width: 160,
-      render: ({ item }) => pairUnit(extractDecimal(item.balance), 6),
-    },
+    // {
+    //   name: 'My Pool Tokens',
+    //   width: 160,
+    //   render: ({ item }) => pairUnit(extractDecimal(item.balance), 6),
+    // },
     {
       name: 'Pooled Token 1',
       width: 160,

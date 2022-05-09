@@ -22,14 +22,14 @@ const ConnectWalletModal = () => {
         if (gameEditionView) {
           return openModal({
             title: 'ZELCORE',
-            description: 'Zelcore Signing (Safest)',
+            description: 'Zelcore Signing',
             content: <ConnectWalletZelcoreModal />,
           });
         } else {
           return modalContext.openModal({
             id: 'ZELCORE',
             title: 'connect wallet',
-            description: 'Zelcore Signing (Safest)',
+            description: 'Zelcore Signing',
             onBack: () => modalContext.onBackModal(),
             content: <ConnectWalletZelcoreModal />,
           });

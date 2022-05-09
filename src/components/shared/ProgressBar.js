@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { getPercentage } from '../../utils/string-utils';
 import { FlexContainer } from './FlexContainer';
 import Label from './Label';
 
@@ -32,15 +33,10 @@ const PercetageIndicator = styled(FlexContainer)`
 `;
 
 const ProgressBar = ({ currentValue, maxValue, topLabelLeft, bottomValues, withBottomLabel, values, darkBar, containerStyle }) => {
-  const getPercentage = (current, max) => {
-    if (maxValue === 0) return 0;
-    if (current <= maxValue) return (100 * current) / max;
-    else return 100;
-  };
   return (
     <FlexContainer className="column w-100" style={containerStyle}>
       {topLabelLeft && (
-        <FlexContainer className="justify-sb align-ce w-100">
+        <FlexContainer className="justify-sb align-ce w-100" style={{ marginBottom: 8 }}>
           <Label fontSize={13}>{topLabelLeft}</Label>
           <Label fontSize={13}>{getPercentage(currentValue, maxValue).toFixed(1)}%</Label>
         </FlexContainer>
@@ -55,6 +51,8 @@ const ProgressBar = ({ currentValue, maxValue, topLabelLeft, bottomValues, withB
               let left = 0;
               if (i === 0) {
                 left = '0px';
+              } else if (i === values.length - 1) {
+                left = `calc(${getPercentage(typeof v === 'number' ? v : v.value, maxValue)}% - ${width}px)`;
               } else {
                 left = `calc(${getPercentage(typeof v === 'number' ? v : v.value, maxValue)}% - ${width / 2}px)`;
               }

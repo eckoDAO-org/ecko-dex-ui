@@ -14,26 +14,74 @@ import AppLoader from '../shared/AppLoader';
 import { getStatusProposal } from '../../utils/dao-utils';
 import HtmlFormatterContainer from './HtmlFormatterContainer';
 import useWindowSize from '../../hooks/useWindowSize';
+import CustomDropdown from '../shared/CustomDropdown';
+import { getTimeByBlockchain } from '../../utils/string-utils';
 
 const AllProposalsContainer = ({ accountData }) => {
   const history = useHistory();
   const [daoALlProposalsLoading, setDaoALlProposalsLoading] = useState(false);
 
   const [allProposal, setAllProposal] = useState([]);
-
-  const fetchData = async () => {
-    const readAllProposalsRes = await readAllProposals();
-    const orderedProposals = !readAllProposalsRes.errorMessage
-      ? readAllProposalsRes.sort((x, y) => moment(y['start-date']?.time) - moment(x['start-date']?.time))
-      : [];
-    setAllProposal(orderedProposals);
-    setDaoALlProposalsLoading(false);
-  };
+  const [filteredProposals, setFilteredProposals] = useState([]);
+  const [filters, setFilters] = useState({ filter: 'All', sort: 'Newest' });
 
   useEffect(() => {
     setDaoALlProposalsLoading(true);
     fetchData();
   }, []);
+
+  useEffect(() => {
+    proposalsFilterBy();
+  }, [filters]);
+
+  const fetchData = async () => {
+    const readAllProposalsRes = await readAllProposals();
+    const orderedProposals = !readAllProposalsRes.errorMessage
+      ? readAllProposalsRes.sort((x, y) => moment(getTimeByBlockchain(y['creation-date'])) - moment(getTimeByBlockchain(x['creation-date'])))
+      : [];
+    setAllProposal(orderedProposals);
+    setFilteredProposals(orderedProposals);
+    setDaoALlProposalsLoading(false);
+  };
+
+  const proposalsFilterBy = () => {
+    if (filters.filter === 'All') {
+      let allProps = allProposal.map((proposal) => proposal);
+      proposalsSortBy(allProps);
+    } else if (filters.filter === 'Active') {
+      let activeProposals = allProposal.filter(
+        (proposal) => moment(proposal['start-date'].time) <= moment() && moment(proposal['end-date'].time) >= moment()
+      );
+      proposalsSortBy(activeProposals);
+    } else if (filters.filter === 'Closed') {
+      let closedProposals = allProposal.filter((proposal) => moment(proposal['end-date'].time) < moment());
+      proposalsSortBy(closedProposals);
+    }
+  };
+
+  const proposalsSortBy = (array) => {
+    if (filters.sort === 'Oldest') {
+      let fromOldestProposals = array.sort(
+        (x, y) => moment(getTimeByBlockchain(x['creation-date'])) - moment(getTimeByBlockchain(y['creation-date']))
+      );
+      setFilteredProposals(fromOldestProposals);
+    } else if (filters.sort === 'Newest') {
+      let fromNewestProposals = array.sort(
+        (x, y) => moment(getTimeByBlockchain(y['creation-date'])) - moment(getTimeByBlockchain(x['creation-date']))
+      );
+      setFilteredProposals(fromNewestProposals);
+    }
+  };
+
+  const filterByOptions = [
+    { key: 0, text: `All`, value: 'All' },
+    { key: 1, text: `Active`, value: 'Active' },
+    { key: 2, text: `Closed`, value: 'Closed' },
+  ];
+  const sortByOptions = [
+    { key: 0, text: `Newest`, value: 'Newest' },
+    { key: 1, text: `Oldest`, value: 'Oldest' },
+  ];
 
   const [, height] = useWindowSize();
   return daoALlProposalsLoading ? (
@@ -48,15 +96,41 @@ const AllProposalsContainer = ({ accountData }) => {
     />
   ) : (
     <>
-      <Label fontSize={24} fontFamily="syncopate">
-        proposals
-      </Label>
+      <FlexContainer className="justify-sb" mobileClassName="column">
+        <Label fontSize={24} fontFamily="syncopate">
+          proposals
+        </Label>
+        <FlexContainer gap={16} desktopStyle={{ paddingRight: 284 }}>
+          <CustomDropdown
+            title="filter by:"
+            options={filterByOptions}
+            onChange={(e, { value }) => {
+              setFilters((prev) => ({
+                ...prev,
+                filter: value,
+              }));
+            }}
+            value={filters.filter}
+          />
+          <CustomDropdown
+            title="sort by:"
+            options={sortByOptions}
+            onChange={(e, { value }) => {
+              setFilters((prev) => ({
+                ...prev,
+                sort: value,
+              }));
+            }}
+            value={filters.sort}
+          />
+        </FlexContainer>
+      </FlexContainer>
 
       <FlexContainer className="row" gap={16} mobileClassName="column-reverse" mobileStyle={{ paddingBottom: 16 }}>
         <FlexContainer className="column background-fill" withGradient style={{ height: 'min-content', maxHeight: 500, flex: 1 }}>
           <PartialScrollableScrollSection id="proposals-list" className="scrollbar-none" style={{ width: '100%' }}>
-            {allProposal.length > 0 ? (
-              allProposal.map((data, index) => (
+            {filteredProposals.length > 0 ? (
+              filteredProposals.map((data, index) => (
                 <FlexContainer
                   className="column pointer"
                   key={index}
@@ -64,7 +138,7 @@ const AllProposalsContainer = ({ accountData }) => {
                 >
                   <FlexContainer className="align-ce" gap={8} style={{ marginBottom: 8 }}>
                     <Label fontFamily="basier" fontSize={13} labelStyle={{ opacity: 0.7 }}>
-                      {moment(data['start-date']?.time).format('YYYY-MM-DD')}
+                      {moment(getTimeByBlockchain(data['creation-date'])).format('YYYY-MM-DD')}
                     </Label>
                     <Label
                       fontFamily="basier"
@@ -87,7 +161,7 @@ const AllProposalsContainer = ({ accountData }) => {
                     {data?.title}
                   </Label>
                   <HtmlFormatterContainer htmlText={data?.description} asAString />
-                  {index < allProposal.length - 1 && <Divider />}
+                  {index < filteredProposals.length - 1 && <Divider />}
                 </FlexContainer>
               ))
             ) : (

@@ -5,11 +5,12 @@ import Label from '../shared/Label';
 const HtmlContainer = styled.div`
   color: ${({ theme: { colors } }) => colors.white};
   div {
+    max-height: ${({ descriptionHeight }) => (descriptionHeight ? `${descriptionHeight}px` : '320px')};
     color: ${({ theme: { colors } }) => colors.white};
   }
 `;
 
-const HtmlFormatterContainer = ({ htmlText, asAString }) => {
+const HtmlFormatterContainer = ({ htmlText, asAString, descriptionHeight }) => {
   //function that return the html code without tags.
   //It's used for previews description in AllProposalContainer
   const removeHtmlTagbyString = (html) => {
@@ -27,7 +28,7 @@ const HtmlFormatterContainer = ({ htmlText, asAString }) => {
   return asAString ? (
     <Label>{removeHtmlTagbyString(htmlText)}</Label>
   ) : (
-    <HtmlContainer id="html-formatter" dangerouslySetInnerHTML={{ __html: htmlText }} />
+    <HtmlContainer descriptionHeight={descriptionHeight} id="html-formatter" dangerouslySetInnerHTML={{ __html: htmlText }} />
   );
 };
 

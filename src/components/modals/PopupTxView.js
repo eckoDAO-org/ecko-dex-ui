@@ -64,7 +64,7 @@ const PopupTxView = ({ isAccountPopup, popupStyle, offset }) => {
             );
           }}
           name="help circle"
-          style={{ marginLeft: '2px', marginRight: 0 }}
+          style={{ marginLeft: '2px', marginRight: 0, color: theme(themeMode).colors.white }}
         />
       }
       offset={offset}

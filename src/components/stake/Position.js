@@ -1,7 +1,11 @@
+import moment from 'moment';
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { CoinKaddexIcon } from '../../assets';
-import { useAccountContext, useModalContext } from '../../contexts';
-import { humanReadableNumber, limitDecimalPlaces } from '../../utils/reduceBalance';
+import { useAccountContext, useModalContext, usePactContext } from '../../contexts';
+import { ROUTE_UNSTAKE } from '../../router/routes';
+import { commonColors } from '../../styles/theme';
+import { extractDecimal, humanReadableNumber, limitDecimalPlaces } from '../../utils/reduceBalance';
 import ConnectWalletModal from '../modals/kdaModals/ConnectWalletModal';
 import CustomButton from '../shared/CustomButton';
 import CustomDivider from '../shared/CustomDivider';
@@ -10,22 +14,48 @@ import Input from '../shared/Input';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
 
-const Position = ({ buttonLabel, amount, pendingAmount, topRightLabel, inputAmount, isInputDisabled, setKdxAmount, onClickMax, onSubmitStake }) => {
+const Position = ({
+  buttonLabel,
+  amount,
+  stakedTimeStart,
+  pendingAmount,
+  topRightLabel,
+  inputAmount,
+  isInputDisabled,
+  setKdxAmount,
+  onClickMax,
+  onSubmitStake,
+}) => {
   const modalContext = useModalContext();
+  const { kdxPrice } = usePactContext();
   const { account } = useAccountContext();
+  const { pathname } = useLocation();
+
   return (
     <CommonWrapper
       title="position (p)"
-      popup="“Position” accrues your KDX holdings from both the Vaulting and the Staking Programs. Please note that all Second Sale participants are automatically staking their KDX while it is being vesting."
+      popup={
+        <Label>
+          Position accrues your KDX holdings from both the Vaulting and the Staking Programs. Please note that all Second Sale participants are
+          automatically staking their KDX while it is being vesting.
+        </Label>
+      }
+      popupTitle="Position"
       centerIcon
     >
       <div>
         <Label>My Stake</Label>
-        <Label fontSize={32}>{humanReadableNumber(amount)} KDX</Label>
-        {pendingAmount && <Label fontSize={15}>(Pending {humanReadableNumber(pendingAmount)})</Label>}
+        <Label fontSize={30}>{humanReadableNumber(amount)} KDX</Label>
+        <Label fontSize={16} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
+          {humanReadableNumber(extractDecimal(kdxPrice) * extractDecimal(amount))} USD
+        </Label>
+        {pendingAmount && (
+          <Label fontSize={15} labelStyle={{ marginTop: 8, color: commonColors.info }}>
+            (Pending {humanReadableNumber(pendingAmount)})
+          </Label>
+        )}
       </div>
-      <CustomDivider style={{ margin: '40px 0' }} />
-
+      <CustomDivider style={{ margin: '24px 0' }} />
       <Input
         disabled={isInputDisabled}
         topLeftLabel="amount"
@@ -36,7 +66,7 @@ const Position = ({ buttonLabel, amount, pendingAmount, topRightLabel, inputAmou
         value={inputAmount}
         inputRightComponent={
           <FlexContainer className="pointer align-ce" gap={16} onClick={onClickMax}>
-            <Label>MAX</Label>
+            <Label>MAX </Label>
 
             <CoinKaddexIcon />
 
@@ -44,10 +74,20 @@ const Position = ({ buttonLabel, amount, pendingAmount, topRightLabel, inputAmou
           </FlexContainer>
         }
         onChange={(e, { value }) => {
-          setKdxAmount(limitDecimalPlaces(value, 12));
+          setKdxAmount(limitDecimalPlaces(value, 7));
         }}
       />
+      {pathname === ROUTE_UNSTAKE && stakedTimeStart && moment().diff(stakedTimeStart, 'hours') < 72 && (
+        <div style={{ marginTop: 16 }}>
+          <div className="flex align-ce">
+            <Label>Position Penalty</Label>
+          </div>
 
+          <Label fontSize={24} color={commonColors.red}>
+            3%
+          </Label>
+        </div>
+      )}
       <CustomButton
         type="gradient"
         buttonStyle={{ marginTop: 40 }}

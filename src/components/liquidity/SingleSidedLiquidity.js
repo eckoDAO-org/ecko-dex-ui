@@ -55,7 +55,11 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
   }, []);
 
   useEffect(() => {
-    setSelectedPool(pools[0]);
+    if (pair?.token0) {
+      setSelectedPool(pools.find((p) => p.token0 === pair.token0 || p.token1 === pair.token0));
+    } else {
+      setSelectedPool(pools[0]);
+    }
   }, []);
 
   useEffect(async () => {
@@ -312,7 +316,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
         <FlexContainer className="justify-sb w-100">
           <Label fontSize={13}>Pool Share</Label>
           <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
-            {!pact.share(fromValue.amount) ? 0 : (pact.share(fromValue.amount) * 100).toPrecision(4)} %
+            {!pact.share(fromValue.amount) ? 0 : (pact.share(fromValue.amount / 2) * 100).toPrecision(4)} %
           </Label>
         </FlexContainer>
 

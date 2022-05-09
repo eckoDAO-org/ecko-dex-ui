@@ -15,6 +15,7 @@ const RewardBooster = ({ type, apr, handleState }) => {
         <FlexContainer gap={16} className="align-ce">
           <CoinsIcon className="coins-icon" />
           <Toggle
+            initialState={true}
             onClick={(active) => {
               if (active) {
                 handleState(true);
@@ -32,9 +33,11 @@ const RewardBooster = ({ type, apr, handleState }) => {
         <div>
           <Label fontSize={13}>
             KDX Rewards Available{' '}
-            <InfoPopup>
-              Accounting for 40% of the overall supply, Network Rewards serve a crucial function of both attracting liquidity and mitigating
-              impermanent loss. Their emission is programmatical, diminishing and time oriented.
+            <InfoPopup type="modal" title="KDX Rewards Available">
+              <Label>
+                Accounting for 40% of the overall supply, Network Rewards serve a crucial function of both attracting liquidity and mitigating
+                impermanent loss. Their emission is programmatical, diminishing and time oriented.
+              </Label>
             </InfoPopup>
           </Label>
         </div>

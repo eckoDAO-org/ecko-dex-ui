@@ -23,7 +23,7 @@ import { ROUTE_STAKE, ROUTE_UNSTAKE } from '../router/routes';
 import { NETWORK } from '../constants/contextConstants';
 import { theme } from '../styles/theme';
 import { useInterval } from '../hooks/useInterval';
-import { reduceBalance } from '../utils/reduceBalance';
+import { countDecimals, extractDecimal, reduceBalance } from '../utils/reduceBalance';
 
 const StakeContainer = () => {
   const history = useHistory();
@@ -50,10 +50,16 @@ const StakeContainer = () => {
   const updateAccountStakingData = useCallback(() => {
     if (account?.account) {
       getKDXAccountBalance(account.account).then((kdxBalance) => {
-        setKdxAccountBalance(kdxBalance?.balance ?? 0);
+        if (!kdxBalance.errorMessage) {
+          setKdxAccountBalance(extractDecimal(kdxBalance?.balance) ?? 0);
+        } else {
+          setKdxAccountBalance(0);
+        }
       });
       estimateUnstake(account?.account).then((resEstimate) => {
-        setEstimateUnstakeData(resEstimate);
+        if (!resEstimate.errorMessage) {
+          setEstimateUnstakeData({ ...resEstimate, staked: extractDecimal(resEstimate.staked) });
+        }
       });
       getAccountData(account?.account).then((daoAccountDataResponse) => setDaoAccountData(daoAccountDataResponse));
     }
@@ -277,11 +283,22 @@ const StakeContainer = () => {
       });
   };
 
+  const getDecimalPlaces = (value) => {
+    const count = countDecimals(value);
+    if (count < 2) {
+      return value?.toFixed(2);
+    } else if (count > 7) {
+      return value?.toFixed(7);
+    } else {
+      return value;
+    }
+  };
+
   const getPositionLabel = () => {
     if (pathname !== ROUTE_UNSTAKE) {
-      return `Balance: ${kdxAccountBalance ?? 0}`;
+      return `Balance: ${getDecimalPlaces(extractDecimal(kdxAccountBalance)) || getDecimalPlaces(0.0)}`;
     } else {
-      return `Staked: ${estimateUnstakeData?.staked ?? 0}`;
+      return `Staked: ${(estimateUnstakeData?.staked && getDecimalPlaces(extractDecimal(estimateUnstakeData?.staked))) || getDecimalPlaces(0.0)}`;
     }
   };
 
@@ -326,9 +343,10 @@ const StakeContainer = () => {
           inputAmount={inputAmount}
           buttonLabel={pathname === ROUTE_STAKE ? 'stake' : 'unstake'}
           pendingAmount={(estimateUnstakeData && estimateUnstakeData['stake-record'] && estimateUnstakeData['stake-record']['pending-add']) || false}
-          onClickMax={() => setInputAmount(pathname !== ROUTE_UNSTAKE ? kdxAccountBalance : estimateUnstakeData?.staked || 0)}
+          onClickMax={() => setInputAmount(pathname !== ROUTE_UNSTAKE ? kdxAccountBalance.toFixed(7) : estimateUnstakeData?.staked.toFixed(7) || 0)}
           setKdxAmount={(value) => setInputAmount(value)}
           onSubmitStake={() => (pathname !== ROUTE_UNSTAKE ? onStakeKDX() : onRollupAndUnstake())}
+          stakedTimeStart={stakedTimeStart}
         />
         <Rewards
           disabled={!(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || (estimateUnstakeData && !estimateUnstakeData['can-claim'])}

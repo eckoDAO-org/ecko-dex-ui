@@ -24,9 +24,9 @@ export const pairUnit = (decimal, toFixed = 14) => {
 };
 
 export const extractDecimal = (num) => {
-  if (num?.int) return num.int;
-  if (num?.decimal) return num.decimal;
-  else return num;
+  if (num?.int) return Number(num.int);
+  if (num?.decimal) return Number(num.decimal);
+  else return Number(num);
 };
 
 export const limitDecimalPlaces = (numStr, count) => {
@@ -50,4 +50,12 @@ export const getCorrectBalance = (balance) => {
   return balanceClean;
 };
 
-export const humanReadableNumber = (num, toFixed = 2) => num?.toFixed(toFixed)?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') ?? '';
+export const humanReadableNumber = (num, toFixed = 2) =>
+  extractDecimal(num)
+    ?.toFixed(toFixed)
+    ?.replace(/\B(?=(\d{3})+(?!\d))/g, ',') ?? '';
+
+export const countDecimals = (value) => {
+  if (Math.floor(value) === value) return 0;
+  return value?.toString().split('.')[1]?.length || 0;
+};

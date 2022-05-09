@@ -53,7 +53,7 @@ const StripesContainer = styled.div`
   left: 0;
   line-height: 0;
   z-index: -1;
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
+  width: @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
     display: none;
   }
 `;
@@ -93,13 +93,11 @@ const Layout = ({ children }) => {
             <GameEditionContainer>{children}</GameEditionContainer>
           </>
         ) : (
-          <div className="h-100 y-auto hide-scrollbar" resolutionConfiguration={resolutionConfiguration}>
-            {children}
-          </div>
+          <div className="h-100 y-auto hide-scrollbar">{children}</div>
         )}
       </WrapperContainer>
       <StripesContainer>
-        <Stripes />
+        <Stripes style={{ width: '45%', height: '45%' }} />
       </StripesContainer>
     </FlexContainer>
   );

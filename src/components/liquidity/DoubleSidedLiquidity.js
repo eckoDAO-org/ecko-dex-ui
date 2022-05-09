@@ -36,13 +36,13 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   const [fromValues, setFromValues] = useState({
     amount: '',
     balance: '',
-    coin: 'KDX',
+    coin: pair?.token0 || 'KDX',
     precision: 12,
   });
   const [toValues, setToValues] = useState({
     amount: '',
     balance: account.account.balance || '',
-    coin: 'KDA',
+    coin: pair?.token1 || (pair?.token0 === 'KDA' ? 'KDX' : 'KDA'),
     precision: 12,
   });
 

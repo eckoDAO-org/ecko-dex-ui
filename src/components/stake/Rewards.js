@@ -2,12 +2,14 @@ import React from 'react';
 import moment from 'moment';
 import { commonColors } from '../../styles/theme';
 import CustomButton from '../shared/CustomButton';
-import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
 import PenaltyRewardsInfo from './PenaltyRewardsInfo';
+import { extractDecimal, humanReadableNumber } from '../../utils/reduceBalance';
+import { usePactContext } from '../../contexts';
 
 const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onWithdrawClick }) => {
+  const { kdxPrice } = usePactContext();
   /*
     If you unstake during the first 72hours you will incur in a penalty: 3% flat penalty on your staked amount. 
     If you withdraw your rewards during the first 60 days, you will incur in a penalty: the penalty will only affect your accumulated rewards 
@@ -16,12 +18,8 @@ const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onW
   const getPenaltyRewardsString = () => {
     if (stakedTimeStart) {
       const rewardPenaltyPercentage = (100 * rewardsPenalty) / rewardAccrued;
-      const diffHours = moment().diff(stakedTimeStart, 'hours');
-      if (diffHours < 72) {
-        return (rewardPenaltyPercentage && `${rewardPenaltyPercentage.toFixed(2)}%`) || '-';
-      } else {
-        return `${(rewardsPenalty || 0).toFixed(2)} KDX`;
-      }
+      const penaltyObject = [extractDecimal(rewardsPenalty).toFixed(2), extractDecimal(rewardPenaltyPercentage).toFixed(2)];
+      return penaltyObject;
     }
     return '-';
   };
@@ -37,27 +35,30 @@ const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onW
   };
 
   return (
-    <CommonWrapper gap={16} title="rewards">
+    <CommonWrapper gap={16} title="rewards" popup={<PenaltyRewardsInfo />} popupTitle="Rewards Penalty">
       <div>
         <Label>KDX Collected</Label>
-        <Label fontSize={32}>{(rewardAccrued && rewardAccrued.toFixed(6)) || '-'} KDX</Label>
+        <Label fontSize={30}>{humanReadableNumber(rewardAccrued)} KDX</Label>
+        <Label fontSize={16} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
+          {humanReadableNumber(kdxPrice * rewardAccrued)} USD
+        </Label>
       </div>
       <div>
-        <Label>Staking Time</Label>
+        <Label>Elapsed Time</Label>
         <Label fontSize={24} color={getPenaltyColor()}>
           {(stakedTimeStart && moment(stakedTimeStart).fromNow()) || '-'}
         </Label>
       </div>
       <div>
         <div className="flex align-ce">
-          <Label>Claim Penalty</Label>
-          <InfoPopup type="modal" title="Claim Penalty">
-            <PenaltyRewardsInfo />
-          </InfoPopup>
+          <Label>Rewards Penalty</Label>
         </div>
 
         <Label fontSize={24} color={getPenaltyColor()}>
-          {getPenaltyRewardsString() || '-'}
+          {getPenaltyRewardsString()[0] || '-'} KDX
+        </Label>
+        <Label fontSize={16} color={getPenaltyColor()}>
+          {getPenaltyRewardsString()[1] || '-'} %
         </Label>
       </div>
       {/* <CustomButton type="gradient" disabled={disabled} buttonStyle={{ marginTop: 4 }} onClick={() => {}}>

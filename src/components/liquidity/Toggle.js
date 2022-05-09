@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 
-const Toggle = ({ isActive, onClick }) => {
-  const [active, setActive] = useState(isActive);
+const Toggle = ({ initialState, onClick }) => {
+  const [active, setActive] = useState(initialState);
 
   return (
     <Container
