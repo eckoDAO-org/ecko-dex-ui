@@ -3,7 +3,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
 import moment from 'moment';
 import { useHistory, useLocation } from 'react-router-dom';
-import { getPoolState, getAddStakeCommand, estimateUnstake, getRollupAndClaimCommand, getRollupAndUnstakeCommand } from '../api/kaddex.staking';
+import {
+  getPoolState,
+  getAddStakeCommand,
+  estimateUnstake,
+  getRollupAndClaimCommand,
+  getRollupAndUnstakeCommand,
+  getRollupClaimAndUnstakeCommand,
+} from '../api/kaddex.staking';
 import { getAccountData } from '../api/dao';
 import { getKDXAccountBalance } from '../api/kaddex.kdx';
 import { FlexContainer } from '../components/shared/FlexContainer';
@@ -170,6 +177,23 @@ const StakeContainer = () => {
       });
   };
 
+  const onSendUnstake = async (withdraw) => {
+    if (withdraw) {
+      const claimAndUnstakeCommand = getRollupClaimAndUnstakeCommand(account, inputAmount);
+      const claimAndUnstakeSignedCommand = await signCommand(claimAndUnstakeCommand);
+      if (claimAndUnstakeSignedCommand) {
+        sendRollupClaimAndUnstakeCommand(claimAndUnstakeSignedCommand);
+      }
+    } else {
+      const command = getRollupAndUnstakeCommand(account, inputAmount);
+      const signedCommand = await signCommand(command);
+      if (signedCommand) {
+        sendRollupAndUnstakeCommand(signedCommand);
+      }
+    }
+    closeModal();
+  };
+
   const onRollupAndUnstake = async () => {
     if (!estimateUnstakeData?.staked || inputAmount > estimateUnstakeData?.staked || !inputAmount) {
       showNotification({
@@ -181,28 +205,24 @@ const StakeContainer = () => {
       });
       return;
     }
-    const command = getRollupAndUnstakeCommand(account, inputAmount);
-    const signedCommand = await signCommand(command);
-    if (signedCommand) {
-      openModal({
-        title: getUnstakeModalTitle(),
-        description: '',
-        onClose: () => {
-          closeModal();
-        },
-        content: (
-          <UnstakeModal
-            toUnstakeAmount={inputAmount}
-            estimateUnstakeData={estimateUnstakeData}
-            stakedTimeStart={stakedTimeStart}
-            onConfirm={() => {
-              closeModal();
-              sendRollupAndUnstakeCommand(signedCommand);
-            }}
-          />
-        ),
-      });
-    }
+    openModal({
+      title: getUnstakeModalTitle(),
+      description: '',
+      onClose: () => {
+        closeModal();
+      },
+      content: (
+        <UnstakeModal
+          toUnstakeAmount={inputAmount}
+          estimateUnstakeData={estimateUnstakeData}
+          stakedTimeStart={stakedTimeStart}
+          isRewardsAvailable={estimateUnstakeData && estimateUnstakeData['reward-accrued'] && estimateUnstakeData && estimateUnstakeData['can-claim']}
+          onConfirm={(state) => {
+            onSendUnstake(state);
+          }}
+        />
+      ),
+    });
   };
 
   const sendRollupAndUnstakeCommand = async (signedCommand) => {
@@ -221,6 +241,25 @@ const StakeContainer = () => {
         console.log(`~ rollupAndUnstake error`, error);
         pact.setPolling(false);
         showErrorNotification(null, 'RollupAndUnstake error', (error.toString && error.toString()) || 'Generic rollupAndUnstake error');
+      });
+  };
+
+  const sendRollupClaimAndUnstakeCommand = async (signedCommand) => {
+    pact.setPolling(true);
+    Pact.wallet
+      .sendSigned(signedCommand, NETWORK)
+      .then(async (rollupAndUnstake) => {
+        console.log(' rollupClaimAndUnstake', rollupAndUnstake);
+        pollingNotif(rollupAndUnstake.requestKeys[0], 'Rollup, Claim and Unstake Transaction Pending');
+
+        await transactionListen(rollupAndUnstake.requestKeys[0]);
+        pact.setPolling(false);
+        setInputAmount(0);
+      })
+      .catch((error) => {
+        console.log(`~ rollupClaimAndUnstake error`, error);
+        pact.setPolling(false);
+        showErrorNotification(null, 'rollupClaimAndUnstake error', (error.toString && error.toString()) || 'Generic rollupClaimAndUnstake error');
       });
   };
 

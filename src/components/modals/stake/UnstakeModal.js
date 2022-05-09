@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 import CustomButton from '../../shared/CustomButton';
 import CustomDivider from '../../shared/CustomDivider';
@@ -7,8 +7,11 @@ import { KaddexOutlineIcon } from '../../../assets';
 import { usePactContext } from '../../../contexts';
 import { StakeModalRow, IconSubTitle } from './AddStakeModal';
 import Label from '../../shared/Label';
+import CustomCheckbox from '../../shared/CustomCheckbox';
 
-export const UnstakeModal = ({ onConfirm, estimateUnstakeData, toUnstakeAmount, stakedTimeStart }) => {
+export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeData, toUnstakeAmount, stakedTimeStart }) => {
+  const [checked, setChecked] = useState(false);
+
   const { kdxPrice } = usePactContext();
   const isThreePercentPenaltyActive = () => stakedTimeStart && moment().diff(stakedTimeStart, 'hours') <= 72;
   const isDynamicPenaltyActive = () => stakedTimeStart && moment().diff(stakedTimeStart, 'days') <= 60;
@@ -39,7 +42,8 @@ export const UnstakeModal = ({ onConfirm, estimateUnstakeData, toUnstakeAmount, 
       return (
         <>
           <Label>
-            Removing KDX from your staked amount - before the 60 day window - will incur in a dynamic penalty on your accumulated rewards.
+            Unstaking KDX will reset the rewards penalty timer to 60 days. The rewards penalty will occur only if the user chooses to claim their
+            rewards at their current penalty rate.
           </Label>
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 16, fontSize: 16 }}>
@@ -89,7 +93,12 @@ export const UnstakeModal = ({ onConfirm, estimateUnstakeData, toUnstakeAmount, 
         </div>
         <Label>KDX</Label>
       </StakeModalRow>
-      <CustomButton type="gradient" buttonStyle={{ marginTop: 40 }} onClick={onConfirm}>
+      {isRewardsAvailable && (
+        <StakeModalRow>
+          <CustomCheckbox onClick={() => setChecked(!checked)}>Withdraw your KDX staking rewards</CustomCheckbox>
+        </StakeModalRow>
+      )}
+      <CustomButton type="gradient" buttonStyle={{ marginTop: 40 }} onClick={() => onConfirm(checked)}>
         CONFIRM
       </CustomButton>
     </div>
