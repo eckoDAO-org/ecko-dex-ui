@@ -36,6 +36,9 @@ const STYText = styled.span`
   &.justify-fe {
     justify-content: flex-end;
   }
+  &.justify-ce {
+    justify-content: center;
+  }
 
   &.gradient {
     display: block;

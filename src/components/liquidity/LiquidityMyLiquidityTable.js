@@ -11,6 +11,7 @@ import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import { useAccountContext } from '../../contexts';
+import Label from '../shared/Label';
 
 const LiquidityMyLiquidityTable = () => {
   const history = useHistory();
@@ -31,26 +32,30 @@ const LiquidityMyLiquidityTable = () => {
     }
   }, [account.account]);
   return !loading ? (
-    <CommonTable
-      items={pairList}
-      columns={renderColumns()}
-      actions={[
-        {
-          icon: <AddIcon />,
-          onClick: (item) =>
-            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${item.token0}&token1=${item.token1}`), {
-              from: ROUTE_LIQUIDITY_MY_LIQUIDITY,
-            }),
-        },
-        {
-          icon: <RemoveIcon />,
-          onClick: (item) => {
-            const { token0, token1 } = item;
-            history.push(ROUTE_LIQUIDITY_REMOVE_LIQUIDITY.concat(`?token0=${token0}&token1=${token1}`), { from: ROUTE_LIQUIDITY_MY_LIQUIDITY });
+    !account.account ? (
+      <Label className="justify-ce">Please connect your wallet to see your liquidity. </Label>
+    ) : (
+      <CommonTable
+        items={pairList}
+        columns={renderColumns()}
+        actions={[
+          {
+            icon: <AddIcon />,
+            onClick: (item) =>
+              history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${item.token0}&token1=${item.token1}`), {
+                from: ROUTE_LIQUIDITY_MY_LIQUIDITY,
+              }),
           },
-        },
-      ]}
-    />
+          {
+            icon: <RemoveIcon />,
+            onClick: (item) => {
+              const { token0, token1 } = item;
+              history.push(ROUTE_LIQUIDITY_REMOVE_LIQUIDITY.concat(`?token0=${token0}&token1=${token1}`), { from: ROUTE_LIQUIDITY_MY_LIQUIDITY });
+            },
+          },
+        ]}
+      />
+    )
   ) : (
     <AppLoader containerStyle={{ height: '100%', alignItems: 'center', justifyContent: 'center' }} />
   );
