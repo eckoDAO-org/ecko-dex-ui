@@ -69,9 +69,11 @@ const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onW
         <Label fontSize={24} color={getPenaltyColor()}>
           {getPenaltyRewardsString()[0] || '-'} KDX
         </Label>
-        <Label fontSize={16} color={getPenaltyColor()}>
-          {getPenaltyRewardsString()[1] || '-'} %
-        </Label>
+        {rewardsPenalty && (
+          <Label fontSize={16} color={getPenaltyColor()}>
+            {getPenaltyRewardsString()[1] || '-'} %
+          </Label>
+        )}
       </div>
       {/* <CustomButton type="gradient" disabled={disabled} buttonStyle={{ marginTop: 4 }} onClick={() => {}}>
         stake rewards
