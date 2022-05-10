@@ -35,10 +35,10 @@ const StakeContainer = () => {
   const pact = usePactContext();
 
   const [poolState, setPoolState] = useState(null);
-  const [kdxAccountBalance, setKdxAccountBalance] = useState(0);
+  const [kdxAccountBalance, setKdxAccountBalance] = useState(0.0);
   const [estimateUnstakeData, setEstimateUnstakeData] = useState(null);
   const [daoAccountData, setDaoAccountData] = useState(null);
-  const [inputAmount, setInputAmount] = useState(0);
+  const [inputAmount, setInputAmount] = useState('');
 
   const stakedTimeStart =
     (estimateUnstakeData &&
@@ -51,9 +51,9 @@ const StakeContainer = () => {
     if (account?.account) {
       getKDXAccountBalance(account.account).then((kdxBalance) => {
         if (!kdxBalance.errorMessage) {
-          setKdxAccountBalance(extractDecimal(kdxBalance?.balance) ?? 0);
+          setKdxAccountBalance(extractDecimal(kdxBalance?.balance) ?? 0.0);
         } else {
-          setKdxAccountBalance(0);
+          setKdxAccountBalance(0.0);
         }
       });
       estimateUnstake(account?.account).then((resEstimate) => {
@@ -159,7 +159,7 @@ const StakeContainer = () => {
         console.log(' stakingResponse', stakingResponse);
         pollingNotif(stakingResponse.requestKeys[0], 'Staking Transaction Pending');
 
-        setInputAmount(0);
+        setInputAmount(0.0);
         await transactionListen(stakingResponse.requestKeys[0]);
         pact.setPolling(false);
       })
@@ -215,7 +215,7 @@ const StakeContainer = () => {
 
         await transactionListen(rollupAndUnstake.requestKeys[0]);
         pact.setPolling(false);
-        setInputAmount(0);
+        setInputAmount(0.0);
       })
       .catch((error) => {
         console.log(`~ rollupAndUnstake error`, error);
@@ -274,7 +274,7 @@ const StakeContainer = () => {
 
         await transactionListen(rollupAndClaim.requestKeys[0]);
         pact.setPolling(false);
-        setInputAmount(0);
+        setInputAmount(0.0);
       })
       .catch((error) => {
         console.log(`~ rollupAndClaim error`, error);
@@ -317,7 +317,10 @@ const StakeContainer = () => {
             className="pointer"
             fontSize={24}
             fontFamily="syncopate"
-            onClick={() => history.push(ROUTE_STAKE)}
+            onClick={() => {
+              history.push(ROUTE_STAKE);
+              setInputAmount('');
+            }}
           >
             STAKE
           </Label>
@@ -326,7 +329,10 @@ const StakeContainer = () => {
             className="pointer"
             fontSize={24}
             fontFamily="syncopate"
-            onClick={() => history.push(ROUTE_UNSTAKE)}
+            onClick={() => {
+              history.push(ROUTE_UNSTAKE);
+              setInputAmount('');
+            }}
           >
             UNSTAKE
           </Label>
@@ -338,12 +344,14 @@ const StakeContainer = () => {
 
       <FlexContainer gap={24} tabletClassName="column" mobileClassName="column">
         <Position
-          amount={estimateUnstakeData?.staked || 0}
+          amount={estimateUnstakeData?.staked || 0.0}
           topRightLabel={getPositionLabel()}
           inputAmount={inputAmount}
           buttonLabel={pathname === ROUTE_STAKE ? 'stake' : 'unstake'}
           pendingAmount={(estimateUnstakeData && estimateUnstakeData['stake-record'] && estimateUnstakeData['stake-record']['pending-add']) || false}
-          onClickMax={() => setInputAmount(pathname !== ROUTE_UNSTAKE ? kdxAccountBalance.toFixed(7) : estimateUnstakeData?.staked.toFixed(7) || 0)}
+          onClickMax={() =>
+            setInputAmount(pathname !== ROUTE_UNSTAKE ? kdxAccountBalance.toFixed(12) : estimateUnstakeData?.staked.toFixed(12) || 0.0)
+          }
           setKdxAmount={(value) => setInputAmount(value)}
           onSubmitStake={() => (pathname !== ROUTE_UNSTAKE ? onStakeKDX() : onRollupAndUnstake())}
           stakedTimeStart={stakedTimeStart}

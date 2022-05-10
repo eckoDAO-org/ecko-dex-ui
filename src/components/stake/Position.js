@@ -82,23 +82,20 @@ const Position = ({
           <div className="flex align-ce">
             <Label>Position Penalty</Label>
           </div>
-
           <Label fontSize={24} color={commonColors.red}>
             3%
           </Label>
-          {moment(stakedTimeStart).fromNow() === '3 days ago' && (
-            <Label fontSize={16} color={commonColors.red}>
-              {`${(stakedTimeStart && 72 - moment().diff(stakedTimeStart, 'hours')) || '-'} ${
-                stakedTimeStart && (72 - moment().diff(stakedTimeStart, 'hours') > 1 ? 'hours' : 'hour')
-              } `}
-              left
-            </Label>
-          )}
+          <Label fontSize={16} color={commonColors.red}>
+            {`${(stakedTimeStart && 72 - moment().diff(stakedTimeStart, 'hours')) || '-'} ${
+              stakedTimeStart && (72 - moment().diff(stakedTimeStart, 'hours') > 1 ? 'hours' : 'hour')
+            } `}
+            left
+          </Label>
         </div>
       )}
       <CustomButton
         type="gradient"
-        buttonStyle={{ marginTop: 40 }}
+        buttonStyle={{ marginTop: pathname === ROUTE_UNSTAKE && stakedTimeStart && moment().diff(stakedTimeStart, 'hours') < 72 ? 16 : 24 }}
         onClick={() => {
           if (!account.account) {
             modalContext.openModal({

@@ -32,11 +32,16 @@ const RewardBooster = ({ type, apr, handleState }) => {
       <div className="flex justify-sb align-ce">
         <div>
           <Label fontSize={13}>
-            KDX Rewards Available{' '}
+            KDX Rewards Available
             <InfoPopup type="modal" title="KDX Rewards Available">
               <Label>
                 Accounting for 40% of the overall supply, Network Rewards serve a crucial function of both attracting liquidity and mitigating
                 impermanent loss. Their emission is programmatical, diminishing and time oriented.
+              </Label>
+              <Label labelStyle={{ marginTop: 8 }}>
+                <a href="https://drive.google.com/file/d/1DS_Nr0raqzpHW_gBolorJ-4lTNSrLdLB/view" target="_blank" rel="noopener noreferrer">
+                  Read the documentation
+                </a>
               </Label>
             </InfoPopup>
           </Label>

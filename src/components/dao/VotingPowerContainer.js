@@ -27,7 +27,11 @@ const VotingPowerContainer = ({ accountData }) => {
       <FlexContainer className="column background-fill" gap={10} withGradient style={{ height: 'min-content' }} desktopStyle={{ width: 268 }}>
         <FlexContainer className="column" gap={4} style={{ height: 'min-content' }} desktopStyle={{ width: 268 }}>
           <Label fontSize={32} className="gradient" fontFamily="syncopate" labelStyle={{ maxWidth: 'min-content', marginBottom: 10 }}>
-            {accountData.vp ? extractDecimal(accountData.vp).toFixed(5) : '-'}
+            {accountData.vp
+              ? accountData.vp >= 1000
+                ? humanReadableNumber(extractDecimal(accountData.vp).toFixed(2))
+                : extractDecimal(accountData.vp).toFixed(5)
+              : '-'}
           </Label>
         </FlexContainer>
 

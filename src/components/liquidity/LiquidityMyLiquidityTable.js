@@ -76,13 +76,13 @@ const renderColumns = () => {
     //   render: ({ item }) => pairUnit(extractDecimal(item.balance), 6),
     // },
     {
-      name: 'Pooled Token 1',
+      name: 'Token 1',
       width: 160,
       render: ({ item }) => `${pairUnit(extractDecimal(item.pooledAmount[0]), 6)} ${item.token0}`,
     },
 
     {
-      name: 'Pooled Token 2',
+      name: 'Token 2',
       width: 160,
       render: ({ item }) => `${pairUnit(extractDecimal(item.pooledAmount[1]), 6)} ${item.token1}`,
     },
