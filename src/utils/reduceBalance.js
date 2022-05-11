@@ -59,3 +59,14 @@ export const countDecimals = (value) => {
   if (Math.floor(value) === value) return 0;
   return value?.toString().split('.')[1]?.length || 0;
 };
+
+export const getDecimalPlaces = (value) => {
+  const count = countDecimals(value);
+  if (count < 2) {
+    return value?.toFixed(2);
+  } else if (count > 7) {
+    return value?.toFixed(7);
+  } else {
+    return value;
+  }
+};

@@ -8,7 +8,7 @@ import PenaltyRewardsInfo from './PenaltyRewardsInfo';
 import { extractDecimal, humanReadableNumber } from '../../utils/reduceBalance';
 import { usePactContext } from '../../contexts';
 
-const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onWithdrawClick }) => {
+const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onWithdrawClick }) => {
   const { kdxPrice } = usePactContext();
   /*
     If you unstake during the first 72hours you will incur in a penalty: 3% flat penalty on your staked amount. 
@@ -46,7 +46,7 @@ const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onW
       <div>
         <Label>Elapsed Time</Label>
         <Label fontSize={24} color={getPenaltyColor()}>
-          {(stakedTimeStart && moment(stakedTimeStart).fromNow()) || '-'}
+          {stakedTimeStart && stakedAmount > 0 ? moment(stakedTimeStart).fromNow() : '-'}
         </Label>
         {moment().diff(stakedTimeStart, 'hours') > 24 && moment().diff(stakedTimeStart, 'hours') < 72 && (
           <Label fontSize={16} color={getPenaltyColor()}>

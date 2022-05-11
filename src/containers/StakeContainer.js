@@ -30,7 +30,7 @@ import { ROUTE_STAKE, ROUTE_UNSTAKE } from '../router/routes';
 import { NETWORK } from '../constants/contextConstants';
 import { theme } from '../styles/theme';
 import { useInterval } from '../hooks/useInterval';
-import { countDecimals, extractDecimal, reduceBalance } from '../utils/reduceBalance';
+import { extractDecimal, getDecimalPlaces, reduceBalance } from '../utils/reduceBalance';
 
 const StakeContainer = () => {
   const history = useHistory();
@@ -213,7 +213,7 @@ const StakeContainer = () => {
       },
       content: (
         <UnstakeModal
-          toUnstakeAmount={inputAmount}
+          toUnstakeAmount={extractDecimal(inputAmount)}
           estimateUnstakeData={estimateUnstakeData}
           stakedTimeStart={stakedTimeStart}
           isRewardsAvailable={estimateUnstakeData && estimateUnstakeData['reward-accrued'] && estimateUnstakeData && estimateUnstakeData['can-claim']}
@@ -285,7 +285,7 @@ const StakeContainer = () => {
     const signedCommand = await signCommand(command);
     if (signedCommand) {
       openModal({
-        title: 'WITHDRAW YOUR STAKED REWARDS?',
+        title: 'WITHDRAW YOUR STAKING REWARDS?',
         description: '',
         onClose: () => {
           closeModal();
@@ -320,17 +320,6 @@ const StakeContainer = () => {
         pact.setPolling(false);
         showErrorNotification(null, 'RollupAndClaim error', (error.toString && error.toString()) || 'Generic RollupAndClaim error');
       });
-  };
-
-  const getDecimalPlaces = (value) => {
-    const count = countDecimals(value);
-    if (count < 2) {
-      return value?.toFixed(2);
-    } else if (count > 7) {
-      return value?.toFixed(7);
-    } else {
-      return value;
-    }
   };
 
   const getPositionLabel = () => {
@@ -396,6 +385,7 @@ const StakeContainer = () => {
           stakedTimeStart={stakedTimeStart}
         />
         <Rewards
+          stakedAmount={estimateUnstakeData?.staked || 0.0}
           disabled={!(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || (estimateUnstakeData && !estimateUnstakeData['can-claim'])}
           rewardAccrued={(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || 0}
           rewardsPenalty={estimateUnstakeData && estimateUnstakeData['reward-penalty']}

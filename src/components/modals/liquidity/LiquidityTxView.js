@@ -83,8 +83,6 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, isSingleSideL
   return (
     <SuccesViewContainer swap={swap} loading={loading} onClick={onClick}>
       <FlexContainer className="w-100 column" gap={12}>
-        <Label>From</Label>
-
         {/* ACCOUNT */}
         <FlexContainer className="align-ce justify-sb">
           <Label fontSize={13}>Account</Label>
@@ -218,10 +216,10 @@ export const SuccessRemoveWithBoosterView = ({ token0, token1, loading, onClick 
       }
     >
       <FlexContainer className="w-100 column" gap={12}>
-        <Label labelStyle={{ lineHeight: '19px' }}>Booster rewards will unlock in 72 hours from the moment the user removes liquidity.</Label>
+        <Label labelStyle={{ lineHeight: '19px' }}>KDX Multiplier will unlock in 72 hours from the moment the user removes liquidity.</Label>
 
         <div className="flex align-ce justify-sb">
-          <Label>Rewards Booster Unlock Date</Label>
+          <Label>KDX Multiplier Unlock Date</Label>
           <Label>{moment().add(72, 'hours').format('DD/MM/YYYY HH:mm')}</Label>
         </div>
 

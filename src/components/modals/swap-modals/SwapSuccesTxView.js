@@ -98,8 +98,6 @@ export const SwapSuccessView = ({ loading, sendTransaction }) => {
       }}
     >
       <FlexContainer className="w-100 column" gap={12}>
-        <Label>From</Label>
-
         {/* ACCOUNT */}
         <FlexContainer className="align-ce justify-sb">
           <Label fontSize={13}>Account</Label>

@@ -6,6 +6,9 @@ import { KaddexOutlineIcon } from '../../../assets';
 import styled from 'styled-components';
 import { STAKING_REWARDS_PERCENT } from '../../../constants/contextConstants';
 import Label from '../../shared/Label';
+import { FlexContainer } from '../../shared/FlexContainer';
+import { getDecimalPlaces } from '../../../utils/reduceBalance';
+import { usePactContext } from '../../../contexts';
 
 export const StakeModalRow = styled.div`
   display: flex;
@@ -31,6 +34,8 @@ export const IconSubTitle = styled.div`
 `;
 
 export const AddStakeModal = ({ onConfirm, alreadyStakedAmount, toStakeAmount }) => {
+  const { kdxPrice } = usePactContext();
+
   const getModalText = () => {
     if (alreadyStakedAmount && alreadyStakedAmount > 0) {
       return `Adding more KDX to your staking amount will rebalance your multiplier depending on the amount staked and your current voting power.`;
@@ -50,11 +55,19 @@ export const AddStakeModal = ({ onConfirm, alreadyStakedAmount, toStakeAmount })
       <CustomDivider style={{ margin: '15px 0' }} />
       <Label fontSize={16}>Stake </Label>
       <StakeModalRow>
-        <div>
+        <FlexContainer className="w-100">
           <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 16, height: 30, width: 30 }} />
-          <Label>{toStakeAmount} </Label>
-        </div>
-        <Label>KDX</Label>
+          <FlexContainer className="column w-100">
+            <FlexContainer className="justify-sb w-100">
+              <Label>{getDecimalPlaces(toStakeAmount)} </Label>
+              <Label>KDX</Label>
+            </FlexContainer>
+            <FlexContainer className="justify-sb w-100">
+              <Label labelStyle={{ opacity: 0.7, fontSize: 13 }}>{(toStakeAmount * kdxPrice).toFixed(2)}</Label>
+              <Label labelStyle={{ opacity: 0.7, fontSize: 13 }}>USD</Label>
+            </FlexContainer>
+          </FlexContainer>
+        </FlexContainer>
       </StakeModalRow>
       <CustomButton type="gradient" buttonStyle={{ marginTop: 40 }} onClick={onConfirm}>
         CONFIRM
