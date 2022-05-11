@@ -23,7 +23,7 @@ const NotificationContent = ({ icon, type, message, title, titleStyle }) => {
     <Container>
       {icon}
       <TextContainer className={type}>
-        <Label fontFamily="syncopate" style={titleStyle}>
+        <Label fontFamily="syncopate" style={titleStyle} color="#fff">
           {capitalizeFirstLetter(title) || capitalizeFirstLetter(type)}
         </Label>
         <Label>{capitalizeFirstLetter(message)}</Label>

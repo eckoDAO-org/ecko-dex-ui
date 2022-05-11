@@ -20,11 +20,11 @@ const ClaimButton = styled.div`
   border-radius: 100px;
 
   padding: 8px;
-  border: 1px solid ${({ color, disabled }) => (disabled ? `${color}99` : color)};
+  border: 1px solid ${({ color, disabled, theme: { colors } }) => (color ? (disabled ? `${color}99` : color) : colors.white)};
   svg {
     margin-right: 8px;
     path {
-      fill: ${({ color, disabled }) => (disabled ? `${color}99` : color)} !important;
+      fill: ${({ color, disabled, theme: { colors } }) => (color ? color : disabled ? `${color || colors.white}99` : colors.white)} !important;
     }
   }
 `;
@@ -85,13 +85,13 @@ const LiquidityRewards = () => {
             icon: (item) => (
               <ClaimButton
                 disabled={item.remainingTime > 0 || item.status === 'approved'}
-                color={item.status === 'pending' ? commonColors.pink : '#ffffff'}
+                color={item.status === 'pending' ? commonColors.pink : null}
               >
                 <BoosterIcon />{' '}
                 <Label
                   labelStyle={{ lineHeight: 1 }}
                   withShade={item.remainingTime > 0 || item.status === 'approved'}
-                  color={item.status === 'pending' ? commonColors.pink : '#ffffff'}
+                  color={item.status === 'pending' ? commonColors.pink : null}
                   fontFamily="syncopate"
                 >
                   CLAIM
@@ -100,10 +100,13 @@ const LiquidityRewards = () => {
             ),
             disabled: (item) => item.remainingTime > 0 || item.status === 'approved',
             onClick: (item) => {
-              modalContext.openModal({
-                title: 'CLAIM YOUR KDX REWARDS',
-                content: <ClaimYourKDXRewards multiplier={item.multiplier} />,
-              });
+              const disabled = item.remainingTime > 0 || item.status === 'approved';
+              if (!disabled) {
+                modalContext.openModal({
+                  title: 'CLAIM YOUR KDX REWARDS',
+                  content: <ClaimYourKDXRewards multiplier={item.multiplier} />,
+                });
+              }
             },
           },
         ]}
