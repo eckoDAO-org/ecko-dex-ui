@@ -12,16 +12,24 @@ import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import { useAccountContext } from '../../contexts';
 import Label from '../shared/Label';
+import InfoPopup from '../shared/InfoPopup';
+import CustomDropdown from '../shared/CustomDropdown';
+
+const sortByOptions = [
+  { key: 0, text: `Ascending`, value: 'ascending' },
+  { key: 1, text: `Descending`, value: 'descending' },
+];
 
 const LiquidityMyLiquidityTable = () => {
   const history = useHistory();
   const { account } = useAccountContext();
   const [pairList, setPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(false);
+  const [orderBy, setOrderBy] = useState('ascending');
 
   const fetchData = async () => {
     const result = await getPairListAccountBalance(account.account);
-    setPairList(result);
+    orderPairs(result);
     setLoading(false);
   };
 
@@ -31,30 +39,69 @@ const LiquidityMyLiquidityTable = () => {
       fetchData();
     }
   }, [account.account]);
+
+  useEffect(() => {
+    if (pairList.length > 0) {
+      orderPairs(pairList);
+    }
+  }, [orderBy]);
+
+  const orderPairs = (pairs) => {
+    let result = pairs.map((p) => ({ ...p, poolShare: p.poolShare || 0 }));
+    if (orderBy === 'ascending') {
+      console.log('here');
+      result = result.sort((x, y) => x.poolShare - y.poolShare);
+      console.log('result', result);
+    } else {
+      result = result.sort((x, y) => y.poolShare - x.poolShare);
+    }
+
+    setPairList(result);
+  };
   return !loading ? (
     !account.account ? (
       <Label className="justify-ce">Please connect your wallet to see your liquidity. </Label>
     ) : (
-      <CommonTable
-        items={pairList}
-        columns={renderColumns()}
-        actions={[
-          {
-            icon: <AddIcon />,
-            onClick: (item) =>
-              history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${item.token0}&token1=${item.token1}`), {
-                from: ROUTE_LIQUIDITY_MY_LIQUIDITY,
-              }),
-          },
-          {
-            icon: <RemoveIcon />,
-            onClick: (item) => {
-              const { token0, token1 } = item;
-              history.push(ROUTE_LIQUIDITY_REMOVE_LIQUIDITY.concat(`?token0=${token0}&token1=${token1}`), { from: ROUTE_LIQUIDITY_MY_LIQUIDITY });
+      <div className="column">
+        <div className="flex justify-sb" style={{ marginBottom: 16 }}>
+          <div className="flex align-ce">
+            <Label fontSize={20} fontFamily="syncopate">
+              MY LIQUIDTY
+            </Label>
+            <InfoPopup size={18} type="modal" title="My Liquidty"></InfoPopup>
+          </div>
+
+          <CustomDropdown
+            containerStyle={{ minWidth: 128 }}
+            title="sort by:"
+            options={sortByOptions}
+            onChange={(e, { value }) => {
+              setOrderBy(value);
+            }}
+            value={orderBy}
+          />
+        </div>
+        <CommonTable
+          items={pairList}
+          columns={renderColumns()}
+          actions={[
+            {
+              icon: () => <AddIcon />,
+              onClick: (item) =>
+                history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${item.token0}&token1=${item.token1}`), {
+                  from: ROUTE_LIQUIDITY_MY_LIQUIDITY,
+                }),
             },
-          },
-        ]}
-      />
+            {
+              icon: () => <RemoveIcon />,
+              onClick: (item) => {
+                const { token0, token1 } = item;
+                history.push(ROUTE_LIQUIDITY_REMOVE_LIQUIDITY.concat(`?token0=${token0}&token1=${token1}`), { from: ROUTE_LIQUIDITY_MY_LIQUIDITY });
+              },
+            },
+          ]}
+        />
+      </div>
     )
   ) : (
     <AppLoader containerStyle={{ height: '100%', alignItems: 'center', justifyContent: 'center' }} />

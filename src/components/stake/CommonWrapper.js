@@ -3,7 +3,7 @@ import { FlexContainer } from '../shared/FlexContainer';
 import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
 
-const CommonWrapper = ({ centerIcon, gap, title, popup, popupTitle, children, containerStyle, cardStyle }) => {
+const CommonWrapper = ({ gap, title, popup, popupTitle, children, containerStyle, cardStyle }) => {
   return (
     <div className="flex column w-100" style={containerStyle}>
       <div className="flex align-ce">
@@ -15,7 +15,7 @@ const CommonWrapper = ({ centerIcon, gap, title, popup, popupTitle, children, co
           title
         )}
         {popup && (
-          <InfoPopup type="modal" title={popupTitle} centerIcon>
+          <InfoPopup type="modal" title={popupTitle}>
             {popup}
           </InfoPopup>
         )}

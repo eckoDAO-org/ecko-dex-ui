@@ -11,6 +11,7 @@ export const FlexContainer = ({
   gameEditionClassName,
   desktopClassName,
   desktopPixel,
+  mobilePixel,
   mobileClassName,
   tabletClassName,
   children,
@@ -40,7 +41,7 @@ export const FlexContainer = ({
       if (width < (desktopPixel || theme.mediaQueries.desktopPixel) && width >= theme.mediaQueries.mobilePixel && tabletClassName) {
         classname = `${classname} ${tabletClassName} `;
       }
-      if (width < theme.mediaQueries.mobilePixel && mobileClassName) {
+      if (width < (mobilePixel || theme.mediaQueries.mobilePixel) && mobileClassName) {
         classname = `${classname} ${mobileClassName} `;
       }
     }

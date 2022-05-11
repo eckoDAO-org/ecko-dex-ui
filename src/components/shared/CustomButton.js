@@ -2,11 +2,11 @@
 import React from 'react';
 import styled, { css } from 'styled-components/macro';
 import PropTypes from 'prop-types';
+import { useGameEditionContext } from '../../contexts';
 import Label from './Label';
 import GameEditionButton from '../game-edition-v2/components/GameEditionButton';
 import { FlexContainer } from './FlexContainer';
 import Loader from './Loader';
-import { useGameEditionContext } from '../../contexts';
 
 const StyledButton = styled(FlexContainer)`
   cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
@@ -20,7 +20,7 @@ const StyledButton = styled(FlexContainer)`
     opacity: ${({ $loading }) => ($loading ? 0 : 1)};
     white-space: nowrap;
   }
-  ${({ type, $outGameEditionView, $gameEditionView, theme: { colors }, buttonBackgroundGradient, $geBasic }) => {
+  ${({ type, $outGameEditionView, $gameEditionView, theme: { colors }, color, buttonBackgroundGradient, $geBasic }) => {
     if ($gameEditionView && !$outGameEditionView) {
       return css`
         border: ${$geBasic ? 'none' : '2px dashed #ffffff'};
@@ -38,14 +38,14 @@ const StyledButton = styled(FlexContainer)`
         case 'primary':
           return css`
             height: 42px;
-            border: 1px solid ${colors.white}99;
+            border: 1px solid ${color || colors.white};
             background: transparent;
           `;
         case 'secondary':
           return css`
             height: 42px;
-            border: 1px solid ${colors.white}99;
-            background: ${colors.white};
+            border: 1px solid ${color || colors.white};
+            background: ${color || colors.white};
           `;
         case 'basic':
           return css`
@@ -80,6 +80,7 @@ const CustomButton = ({
   geFontWeight,
   geLabelStyle,
   geColor,
+  color,
   withShade,
   geCenter,
   children,
@@ -108,6 +109,7 @@ const CustomButton = ({
           onClick();
         }
       }}
+      color={color}
       className={type === 'gradient' ? 'gradient-button relative' : ''}
       fluid={fluid}
       $gameEditionView={$gameEditionView}
