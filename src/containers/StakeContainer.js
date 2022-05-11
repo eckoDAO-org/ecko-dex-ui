@@ -66,6 +66,8 @@ const StakeContainer = () => {
       estimateUnstake(account?.account).then((resEstimate) => {
         if (!resEstimate.errorMessage) {
           setEstimateUnstakeData({ ...resEstimate, staked: extractDecimal(resEstimate.staked) });
+        } else {
+          setEstimateUnstakeData(null);
         }
       });
       getAccountData(account?.account).then((daoAccountDataResponse) => setDaoAccountData(daoAccountDataResponse));
