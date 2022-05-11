@@ -5,6 +5,7 @@ import Label from '../shared/Label';
 import ProgressBar from '../shared/ProgressBar';
 import CommonWrapper from './CommonWrapper';
 import { VotingPowerFormulaIcon } from '../../assets';
+import { extractDecimal, humanReadableNumber } from '../../utils/reduceBalance';
 
 const VotingPower = ({ daoAccountData }) => {
   return (
@@ -19,7 +20,11 @@ const VotingPower = ({ daoAccountData }) => {
           </Label>
           <VotingPowerFormulaIcon width={88} />
           <Label fontSize={38} className="gradient" fontFamily="syncopate" labelStyle={{ marginLeft: 20 }}>
-            {daoAccountData?.vp}
+            {daoAccountData?.vp
+              ? daoAccountData?.vp >= 1000
+                ? humanReadableNumber(extractDecimal(daoAccountData.vp).toFixed(2))
+                : extractDecimal(daoAccountData.vp).toFixed(5)
+              : '-'}
           </Label>
         </EquationContainer>
       }
