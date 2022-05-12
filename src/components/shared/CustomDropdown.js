@@ -8,7 +8,7 @@ const CustomDropdown = ({ title, options, onChange, value, placeholder, containe
   return (
     <Container className="column" style={containerStyle}>
       {title && (
-        <Label fontSize={10} labelStyle={{ marginBottom: '2px' }} fontFamily="syncopate">
+        <Label fontSize={12} labelStyle={{ marginBottom: '2px' }} fontFamily="syncopate">
           {title}
         </Label>
       )}

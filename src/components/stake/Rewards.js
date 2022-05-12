@@ -25,7 +25,7 @@ const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onW
   };
 
   const getPenaltyColor = () => {
-    if (!rewardsPenalty) {
+    if (!rewardsPenalty && !rewardAccrued) {
       return null;
     } else if (moment().diff(moment(stakedTimeStart), 'day') >= 60) {
       return commonColors.green;

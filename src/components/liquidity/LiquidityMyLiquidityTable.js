@@ -49,9 +49,7 @@ const LiquidityMyLiquidityTable = () => {
   const orderPairs = (pairs) => {
     let result = pairs.map((p) => ({ ...p, poolShare: p.poolShare || 0 }));
     if (orderBy === 'ascending') {
-      console.log('here');
       result = result.sort((x, y) => x.poolShare - y.poolShare);
-      console.log('result', result);
     } else {
       result = result.sort((x, y) => y.poolShare - x.poolShare);
     }
