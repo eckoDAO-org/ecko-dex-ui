@@ -1,13 +1,12 @@
 import React from 'react';
 import CustomButton from '../../shared/CustomButton';
 import CustomDivider from '../../shared/CustomDivider';
-import { CoinKaddexIcon } from '../../../assets';
 import { KaddexOutlineIcon } from '../../../assets';
 import { StakeModalRow, IconSubTitle } from './AddStakeModal';
 import Label from '../../shared/Label';
-import { FlexContainer } from '../../shared/FlexContainer';
-import { getDecimalPlaces } from '../../../utils/reduceBalance';
 import { usePactContext } from '../../../contexts';
+import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
+import { getTokenIconByCode } from '../../../utils/token-utils';
 
 export const ClaimModal = ({ onConfirm, estimateUnstakeData }) => {
   const { kdxPrice } = usePactContext();
@@ -20,19 +19,12 @@ export const ClaimModal = ({ onConfirm, estimateUnstakeData }) => {
       <CustomDivider style={{ margin: '15px 0' }} />
       <Label fontSize={16}>Staking Rewards Collected</Label>
       <StakeModalRow style={{ marginBottom: 20 }}>
-        <FlexContainer className="w-100">
-          <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 16, height: 30, width: 30 }} />
-          <FlexContainer className="column w-100">
-            <FlexContainer className="justify-sb w-100">
-              <Label>{getDecimalPlaces(estimateUnstakeData['reward-accrued'])} </Label>
-              <Label>KDX</Label>
-            </FlexContainer>
-            <FlexContainer className="justify-sb w-100">
-              <Label labelStyle={{ opacity: 0.7, fontSize: 13 }}>{(estimateUnstakeData['reward-accrued'] * kdxPrice).toFixed(2)}</Label>
-              <Label labelStyle={{ opacity: 0.7, fontSize: 13 }}>USD</Label>
-            </FlexContainer>
-          </FlexContainer>
-        </FlexContainer>
+        <RowTokenInfoPrice
+          tokenIcon={getTokenIconByCode('kaddex.kdx')}
+          tokenName="KDX"
+          amount={estimateUnstakeData['reward-accrued']}
+          tokenPrice={kdxPrice}
+        />
       </StakeModalRow>
 
       {estimateUnstakeData['reward-penalty'] ? (
@@ -44,19 +36,12 @@ export const ClaimModal = ({ onConfirm, estimateUnstakeData }) => {
             </Label>
           </Label>
           <StakeModalRow>
-            <FlexContainer className="w-100">
-              <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 16, height: 30, width: 30 }} />
-              <FlexContainer className="column w-100">
-                <FlexContainer className="justify-sb w-100">
-                  <Label>{getDecimalPlaces(estimateUnstakeData['reward-penalty'])} </Label>
-                  <Label>KDX</Label>
-                </FlexContainer>
-                <FlexContainer className="justify-sb w-100">
-                  <Label labelStyle={{ opacity: 0.7, fontSize: 13 }}>{(estimateUnstakeData['reward-penalty'] * kdxPrice).toFixed(2)}</Label>
-                  <Label labelStyle={{ opacity: 0.7, fontSize: 13 }}>USD</Label>
-                </FlexContainer>
-              </FlexContainer>
-            </FlexContainer>
+            <RowTokenInfoPrice
+              tokenIcon={getTokenIconByCode('kaddex.kdx')}
+              tokenName="KDX"
+              amount={estimateUnstakeData['reward-penalty']}
+              tokenPrice={kdxPrice}
+            />
           </StakeModalRow>
         </>
       ) : null}

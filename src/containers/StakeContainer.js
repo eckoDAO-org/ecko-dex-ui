@@ -233,7 +233,7 @@ const StakeContainer = () => {
       .sendSigned(signedCommand, NETWORK)
       .then(async (rollupAndUnstake) => {
         console.log(' rollupAndUnstake', rollupAndUnstake);
-        pollingNotif(rollupAndUnstake.requestKeys[0], 'Rollup and Unstake Transaction Pending');
+        pollingNotif(rollupAndUnstake.requestKeys[0], 'Unstake Transaction Pending');
 
         await transactionListen(rollupAndUnstake.requestKeys[0]);
         pact.setPolling(false);
@@ -252,7 +252,7 @@ const StakeContainer = () => {
       .sendSigned(signedCommand, NETWORK)
       .then(async (rollupAndUnstake) => {
         console.log(' rollupClaimAndUnstake', rollupAndUnstake);
-        pollingNotif(rollupAndUnstake.requestKeys[0], 'Rollup, Claim and Unstake Transaction Pending');
+        pollingNotif(rollupAndUnstake.requestKeys[0], 'Claim and Unstake Transaction Pending');
 
         await transactionListen(rollupAndUnstake.requestKeys[0]);
         pact.setPolling(false);
@@ -261,7 +261,7 @@ const StakeContainer = () => {
       .catch((error) => {
         console.log(`~ rollupClaimAndUnstake error`, error);
         pact.setPolling(false);
-        showErrorNotification(null, 'rollupClaimAndUnstake error', (error.toString && error.toString()) || 'Generic rollupClaimAndUnstake error');
+        showErrorNotification(null, 'Claim and Unstake error', (error.toString && error.toString()) || 'Generic Claim and Unstake error');
       });
   };
 
