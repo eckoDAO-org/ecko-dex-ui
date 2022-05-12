@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAccountContext, usePactContext, useSwapContext } from '../../../contexts';
-import { extractDecimal, reduceBalance } from '../../../utils/reduceBalance';
+import { extractDecimal, getDecimalPlaces, reduceBalance } from '../../../utils/reduceBalance';
 import reduceToken from '../../../utils/reduceToken';
 import { getTokenIconByCode, getTokenName } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
@@ -27,7 +27,7 @@ export const SwapSuccessViewGE = () => {
           <div className="flex justify-fs align-ce">
             {getTokenIconByCode(swap?.localRes?.result?.data[0]?.token)}
             <GameEditionLabel fontSize={32} color="black" fontFamily="syncopate">
-              {extractDecimal(swap?.localRes?.result?.data[0]?.amount)}
+              {getDecimalPlaces(extractDecimal(swap?.localRes?.result?.data[0]?.amount))}
             </GameEditionLabel>
           </div>
 
@@ -48,7 +48,7 @@ export const SwapSuccessViewGE = () => {
           <div className="flex justify-fs align-ce">
             {getTokenIconByCode(swap?.localRes?.result?.data[1]?.token)}
             <GameEditionLabel fontSize={32} color="black" fontFamily="syncopate">
-              {extractDecimal(swap?.localRes?.result?.data[1]?.amount)}
+              {getDecimalPlaces(extractDecimal(swap?.localRes?.result?.data[1]?.amount))}
             </GameEditionLabel>
           </div>
           <GameEditionLabel color="blue">From</GameEditionLabel>
