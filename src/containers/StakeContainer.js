@@ -391,6 +391,7 @@ const StakeContainer = () => {
           disabled={!(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || (estimateUnstakeData && !estimateUnstakeData['can-claim'])}
           rewardAccrued={(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || 0}
           rewardsPenalty={estimateUnstakeData && estimateUnstakeData['reward-penalty']}
+          lastRewardsClaim={estimateUnstakeData && estimateUnstakeData['stake-record']['last-claim']}
           onWithdrawClick={() => onWithdraw()}
           stakedTimeStart={stakedTimeStart}
         />
