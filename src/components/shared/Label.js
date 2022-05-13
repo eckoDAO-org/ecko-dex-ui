@@ -12,7 +12,20 @@ const STYText = styled.span`
   align-items: center;
   cursor: ${({ onClick }) => onClick && 'pointer'};
   z-index: 1;
-  color: ${({ withShade, theme: { colors }, color }) => (color ? color : withShade ? `${colors.white}99` : colors.white)};
+  color: ${({ withShade, theme: { colors }, color }) => {
+    if (color) {
+      if (withShade) {
+        return `${color}99`;
+      }
+      return color;
+    }
+
+    if (withShade) {
+      return `${colors.white}99`;
+    }
+
+    return colors.white;
+  }};
   ${({ inverted, theme: { colors } }) =>
     inverted &&
     css`
@@ -97,7 +110,7 @@ const Label = ({
     </GameEditionLabel>
   ) : (
     <STYText
-      className={`${fontFamily === 'syncopate' ? 'uppercase' : ''} ${className}`}
+      className={`${fontFamily === 'syncopate' ? 'uppercase ' : ''}${className || ''}`}
       inverted={inverted}
       color={color}
       fontSize={fontSize}

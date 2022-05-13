@@ -28,16 +28,23 @@ const GameEditionLabel = ({ center, withShade, children, fontSize, fontWeight, c
         return commonColors.gameEditionBlue;
       case 'blue-grey':
         return commonColors.gameEditionBlueGrey;
-      case 'red':
+      case 'error':
         return commonColors.error;
+      case 'red':
+        return commonColors.red;
       case 'green':
         return commonColors.green;
       case 'black':
         return commonColors.black;
+      case 'pink':
+        return commonColors.pink;
+      case 'orange':
+        return commonColors.orange;
       default:
         return '#ffffff';
     }
   };
+
   return (
     <STYText
       style={

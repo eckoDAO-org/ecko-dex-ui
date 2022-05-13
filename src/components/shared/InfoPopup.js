@@ -1,28 +1,38 @@
 import React from 'react';
-import { Icon } from 'semantic-ui-react';
-import { useApplicationContext, useRightModalContext } from '../../contexts';
-import { theme } from '../../styles/theme';
+import styled from 'styled-components/macro';
+import { InfoIcon } from '../../assets';
+import { useRightModalContext } from '../../contexts';
 import CustomPopup from './CustomPopup';
 import Label from './Label';
 
-const InfoPopup = ({ centerIcon, title, children, type, size }) => {
-  const { themeMode } = useApplicationContext();
+const InfoContainer = styled.div`
+  margin-left: 12px;
+  svg {
+    width: ${({ size = 24 }) => size}px;
+    height: ${({ size = 24 }) => size}px;
+    path {
+      fill: ${({ theme: { colors } }) => colors.white};
+    }
+  }
+`;
+
+const InfoPopup = ({ title, children, type, size, containerStyle }) => {
   const rightModalContext = useRightModalContext();
   return type === 'modal' ? (
-    <Icon
+    <InfoContainer
+      style={containerStyle}
       size={size}
-      name="info circle"
-      style={{ marginLeft: 4, marginRight: 0, marginBottom: centerIcon ? 3 : 0, cursor: 'pointer', color: theme(themeMode).colors.white }}
       onClick={() => rightModalContext.openModal({ className: 'info-popup', title, content: children, contentStyle: { padding: 16, paddingTop: 0 } })}
-    />
+    >
+      <InfoIcon style={{ cursor: 'pointer' }} />
+    </InfoContainer>
   ) : (
     <CustomPopup
       offset={[0, -5]}
       trigger={
-        <Icon
-          name="info circle"
-          style={{ marginLeft: 4, marginRight: 0, marginBottom: centerIcon ? 3 : 0, cursor: 'pointer', color: theme(themeMode).colors.white }}
-        />
+        <InfoContainer size={size}>
+          <InfoIcon style={{ cursor: 'pointer' }} />
+        </InfoContainer>
       }
       position="bottom center"
       on="click"

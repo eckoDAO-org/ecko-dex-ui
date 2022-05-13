@@ -41,7 +41,6 @@ const Position = ({
         </Label>
       }
       popupTitle="Position"
-      centerIcon
     >
       <div>
         <Label>My Stake</Label>

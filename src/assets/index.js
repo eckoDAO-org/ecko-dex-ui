@@ -47,5 +47,6 @@ export { ReactComponent as VotingPowerFormulaIcon } from './images/shared/voting
 export { ReactComponent as ZelcoreLogo } from './images/shared/zelcore-logo.svg';
 export { ReactComponent as XWalletLogo } from './images/header/x-wallet-logo.svg';
 export { ReactComponent as InfoIcon } from './images/shared/info-icon.svg';
+export { ReactComponent as BoosterIcon } from './images/shared/booster.svg';
 
 export * from '../assets/images/game-edition';

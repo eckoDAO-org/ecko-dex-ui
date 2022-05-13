@@ -100,14 +100,14 @@ const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onCl
                     <FlexContainer gap={8}>
                       {actions.map((action, i) => (
                         <FlexContainer
-                          className="pointer action"
+                          className={`${action?.disabled && action?.disabled(item) ? '' : 'pointer'} action`}
                           key={i}
                           onClick={(e) => {
                             e.stopPropagation();
                             action.onClick(item);
                           }}
                         >
-                          {action.icon}
+                          {action.icon(item)}
                         </FlexContainer>
                       ))}
                     </FlexContainer>

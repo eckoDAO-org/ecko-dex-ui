@@ -292,7 +292,7 @@ const dataWithBooster = async (account, tokenPairList) => {
   );
 
   if (data) {
-    const dataList = data.map((data, index) => {
+    const dataList = data.map((data) => {
       let dataObj = {
         balance: data[0]['liquidity'],
         pooledAmount: [data[0]['totalA'], data[0]['totalB']],

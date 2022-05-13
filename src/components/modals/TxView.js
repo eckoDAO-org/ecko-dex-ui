@@ -40,7 +40,7 @@ const TxView = ({ loading, onClose, children }) => {
           Error Message
         </Label>
         <TransactionsDetails>
-          <Message color="red">{swap?.localRes?.result?.error?.message}</Message>
+          <Message color="error">{swap?.localRes?.result?.error?.message}</Message>
 
           {swap?.localRes?.result?.error?.message?.includes('insufficient') && (
             <Label geColor="blue" geCenter>
@@ -72,7 +72,7 @@ const TxView = ({ loading, onClose, children }) => {
           Error Message
         </Label>
         <TransactionsDetails>
-          <Message color="red" style={{ wordBreak: 'break-all' }}>
+          <Message color="error" style={{ wordBreak: 'break-all' }}>
             {swap?.localRes}
           </Message>
         </TransactionsDetails>

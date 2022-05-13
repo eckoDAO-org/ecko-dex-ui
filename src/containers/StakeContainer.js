@@ -367,7 +367,7 @@ const StakeContainer = () => {
             UNSTAKE
           </Label>
         </FlexContainer>
-        <InfoPopup title={pathname.substring(1)} type="modal" size="large">
+        <InfoPopup title={pathname.substring(1)} type="modal">
           {pathname === ROUTE_STAKE ? <StakeInfo /> : <UnstakeInfo />}
         </InfoPopup>
       </FlexContainer>

@@ -4,11 +4,11 @@ import styled from 'styled-components/macro';
 import { ArrowDown } from '../../assets';
 import Label from './Label';
 
-const CustomDropdown = ({ title, options, onChange, value, placeholder }) => {
+const CustomDropdown = ({ title, options, onChange, value, placeholder, containerStyle }) => {
   return (
-    <Container className="column">
+    <Container className="column" style={containerStyle}>
       {title && (
-        <Label fontSize={10} labelStyle={{ marginBottom: '2px' }} fontFamily="syncopate">
+        <Label fontSize={12} labelStyle={{ marginBottom: '2px' }} fontFamily="syncopate">
           {title}
         </Label>
       )}
