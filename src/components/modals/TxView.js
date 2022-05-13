@@ -236,7 +236,7 @@ export const SuccessViewContainerGE = ({ leftItem, rightItem, infoItems, hideIco
           )}
           <PixeledInfoContainerWhite>{rightItem}</PixeledInfoContainerWhite>
         </div>
-        <InfoContainer style={{ width: GE_DESKTOP_CONFIGURATION.DISPLAY_WIDTH, marginTop: 16 }}>
+        <InfoContainer style={{ width: infoItems.length < 3 ? 'min-content' : GE_DESKTOP_CONFIGURATION.DISPLAY_WIDTH, marginTop: 16 }}>
           {infoItems?.map((item, i) => (
             <PixeledBlueContainer key={i} label={item.label} value={item.value} />
           ))}
