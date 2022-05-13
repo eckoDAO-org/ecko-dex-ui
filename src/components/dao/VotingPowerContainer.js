@@ -17,7 +17,7 @@ const VotingPowerContainer = ({ accountData }) => {
         <Label fontSize={16} fontFamily="syncopate">
           voting power (V)
         </Label>
-        <InfoPopup type="modal" title="Voting Power" centerIcon>
+        <InfoPopup type="modal" title="Voting Power (V)" centerIcon>
           <VotingPowerInfo />
         </InfoPopup>
       </FlexContainer>

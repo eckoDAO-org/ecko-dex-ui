@@ -107,7 +107,7 @@ const renderColumns = () => {
     },
 
     {
-      name: 'Rewards Booster',
+      name: 'KDX Multiplier',
       width: 160,
       render: ({ item }) => 'Coming Soon',
     },

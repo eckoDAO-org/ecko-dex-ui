@@ -77,7 +77,7 @@ const Position = ({
           setKdxAmount(limitDecimalPlaces(value, 7));
         }}
       />
-      {pathname === ROUTE_UNSTAKE && stakedTimeStart && moment().diff(stakedTimeStart, 'hours') < 72 && (
+      {pathname === ROUTE_UNSTAKE && stakedTimeStart && moment().diff(stakedTimeStart, 'hours') < 72 && extractDecimal(amount) > 0 && (
         <div style={{ marginTop: 16 }}>
           <div className="flex align-ce">
             <Label>Position Penalty</Label>
@@ -95,7 +95,10 @@ const Position = ({
       )}
       <CustomButton
         type="gradient"
-        buttonStyle={{ marginTop: pathname === ROUTE_UNSTAKE && stakedTimeStart && moment().diff(stakedTimeStart, 'hours') < 72 ? 16 : 24 }}
+        buttonStyle={{
+          marginTop:
+            pathname === ROUTE_UNSTAKE && stakedTimeStart && moment().diff(stakedTimeStart, 'hours') < 72 && extractDecimal(amount) > 0 ? 16 : 24,
+        }}
         onClick={() => {
           if (!account.account) {
             modalContext.openModal({

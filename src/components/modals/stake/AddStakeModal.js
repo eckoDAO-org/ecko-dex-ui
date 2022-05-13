@@ -1,11 +1,13 @@
 import React from 'react';
 import CustomButton from '../../shared/CustomButton';
 import CustomDivider from '../../shared/CustomDivider';
-import { CoinKaddexIcon } from '../../../assets';
 import { KaddexOutlineIcon } from '../../../assets';
 import styled from 'styled-components';
 import { STAKING_REWARDS_PERCENT } from '../../../constants/contextConstants';
 import Label from '../../shared/Label';
+import { usePactContext } from '../../../contexts';
+import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
+import { getTokenIconByCode } from '../../../utils/token-utils';
 
 export const StakeModalRow = styled.div`
   display: flex;
@@ -31,6 +33,8 @@ export const IconSubTitle = styled.div`
 `;
 
 export const AddStakeModal = ({ onConfirm, alreadyStakedAmount, toStakeAmount }) => {
+  const { kdxPrice } = usePactContext();
+
   const getModalText = () => {
     if (alreadyStakedAmount && alreadyStakedAmount > 0) {
       return `Adding more KDX to your staking amount will rebalance your multiplier depending on the amount staked and your current voting power.`;
@@ -50,11 +54,7 @@ export const AddStakeModal = ({ onConfirm, alreadyStakedAmount, toStakeAmount })
       <CustomDivider style={{ margin: '15px 0' }} />
       <Label fontSize={16}>Stake </Label>
       <StakeModalRow>
-        <div>
-          <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 16, height: 30, width: 30 }} />
-          <Label>{toStakeAmount} </Label>
-        </div>
-        <Label>KDX</Label>
+        <RowTokenInfoPrice tokenIcon={getTokenIconByCode('kaddex.kdx')} tokenName="KDX" amount={toStakeAmount} tokenPrice={kdxPrice} />
       </StakeModalRow>
       <CustomButton type="gradient" buttonStyle={{ marginTop: 40 }} onClick={onConfirm}>
         CONFIRM

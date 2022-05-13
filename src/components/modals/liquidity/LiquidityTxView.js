@@ -17,6 +17,7 @@ import { Checkbox } from 'semantic-ui-react';
 import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
 import { isNumber } from 'lodash';
 import { getPairByTokensName } from '../../../constants/cryptoCurrencies';
+import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
 
 export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }) => {
   const { setButtons } = useGameEditionContext();
@@ -83,8 +84,6 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, isSingleSideL
   return (
     <SuccesViewContainer swap={swap} loading={loading} onClick={onClick}>
       <FlexContainer className="w-100 column" gap={12}>
-        <Label>From</Label>
-
         {/* ACCOUNT */}
         <FlexContainer className="align-ce justify-sb">
           <Label fontSize={13}>Account</Label>
@@ -133,26 +132,23 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, isSingleSideL
 
         <Label>Amount</Label>
         {/* FROM VALUES */}
-        <FlexContainer className="align-ce justify-sb">
-          <FlexContainer>
-            <CryptoContainer size={30}>{getTokenIconById(token0)}</CryptoContainer>
-
-            <Label>{extractDecimal(swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1'])}</Label>
-          </FlexContainer>
-          <Label>{token0}</Label>
-        </FlexContainer>
+        <RowTokenInfoPrice
+          tokenIcon={getTokenIconById(token0)}
+          tokenName={token0}
+          amount={swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1']}
+          tokenPrice={token0 === 'KDX' ? pact.kdxPrice : null}
+        />
         <Label fontSize={13}>{`1 ${token0} = ${reduceBalance(1 / pact.ratio)} ${token1}`}</Label>
 
         {/* TO VALUES */}
         {!isSingleSideLiquidity && (
           <>
-            <FlexContainer className="align-ce justify-sb">
-              <FlexContainer>
-                <CryptoContainer size={30}>{getTokenIconById(token1)}</CryptoContainer>
-                <Label>{extractDecimal(swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0'])}</Label>
-              </FlexContainer>
-              <Label>{token1}</Label>
-            </FlexContainer>
+            <RowTokenInfoPrice
+              tokenIcon={getTokenIconById(token1)}
+              tokenName={token1}
+              amount={swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0']}
+              tokenPrice={token1 === 'KDX' ? pact.kdxPrice : null}
+            />
             <Label fontSize={13}>{`1 ${token1} =  ${reduceBalance(pact.ratio)} ${token0}`}</Label>
           </>
         )}
@@ -218,10 +214,10 @@ export const SuccessRemoveWithBoosterView = ({ token0, token1, loading, onClick 
       }
     >
       <FlexContainer className="w-100 column" gap={12}>
-        <Label labelStyle={{ lineHeight: '19px' }}>Booster rewards will unlock in 72 hours from the moment the user removes liquidity.</Label>
+        <Label labelStyle={{ lineHeight: '19px' }}>KDX Multiplier will unlock in 72 hours from the moment the user removes liquidity.</Label>
 
         <div className="flex align-ce justify-sb">
-          <Label>Rewards Booster Unlock Date</Label>
+          <Label>KDX Multiplier Unlock Date</Label>
           <Label>{moment().add(72, 'hours').format('DD/MM/YYYY HH:mm')}</Label>
         </div>
 

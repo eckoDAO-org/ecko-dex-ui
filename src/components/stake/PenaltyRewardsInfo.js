@@ -1,5 +1,6 @@
 import React from 'react';
 import { Equation } from 'react-equation';
+import { Divider } from 'semantic-ui-react';
 import { EquationContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
 import List from '../shared/List';
@@ -30,6 +31,8 @@ const PenaltyRewardsInfo = () => {
           '“0.66” is an arbitrary coefficient used to model the penalty-curve efficiently.',
         ]}
       />
+      <Divider />
+      <Label>Rewards withdrawal is accessible every 7 days</Label>
     </FlexContainer>
   );
 };
