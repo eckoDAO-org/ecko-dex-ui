@@ -127,7 +127,12 @@ const AllProposalsContainer = ({ accountData }) => {
       </FlexContainer>
 
       <FlexContainer className="row" gap={16} mobileClassName="column-reverse" mobileStyle={{ paddingBottom: 16 }}>
-        <FlexContainer className="column background-fill" withGradient style={{ height: 'min-content', maxHeight: 500, flex: 1 }}>
+        <FlexContainer
+          className="column background-fill w-100"
+          withGradient
+          desktopStyle={{ maxHeight: `calc(${height}px - ${theme.header.height}px - 184px)` }}
+          tabletStyle={{ maxHeight: `calc(${height}px - ${theme.header.height}px - 184px)` }}
+        >
           <PartialScrollableScrollSection id="proposals-list" className="scrollbar-none" style={{ width: '100%' }}>
             {filteredProposals.length > 0 ? (
               filteredProposals.map((data, index) => (

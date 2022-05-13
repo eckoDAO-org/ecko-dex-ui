@@ -122,7 +122,12 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
         back to proposals
       </Label>
       <FlexContainer className="row" gap={16} mobileClassName="column-reverse" mobileStyle={{ paddingBottom: 16 }}>
-        <FlexContainer className="column background-fill" withGradient style={{ height: 'min-content' }} desktopStyle={{ flex: 1 }}>
+        <FlexContainer
+          className="column background-fill w-100"
+          withGradient
+          desktopStyle={{ maxHeight: `calc(${height}px - ${theme.header.height}px - 180px)` }}
+          tabletStyle={{ maxHeight: `calc(${height}px - ${theme.header.height}px - 180px)` }}
+        >
           <FlexContainer className="column" gap={16}>
             <FlexContainer className="justify-sb align-ce w-100">
               <Label fontSize={24}>{singleProposalData?.title}</Label>
@@ -154,7 +159,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
                 Description
               </Label>
               <PartialScrollableScrollSection id="proposals-list" style={{ width: '100%' }}>
-                <HtmlFormatterContainer descriptionHeight={height - height * 0.55} htmlText={singleProposalData?.description} />
+                <HtmlFormatterContainer htmlText={singleProposalData?.description} />
               </PartialScrollableScrollSection>
             </FlexContainer>
 
