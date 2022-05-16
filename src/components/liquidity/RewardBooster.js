@@ -33,7 +33,7 @@ const RewardBooster = ({ type, apr, handleState }) => {
         <div>
           <Label fontSize={13}>
             KDX Rewards Available
-            <InfoPopup type="modal" title="KDX Rewards Available">
+            <InfoPopup size={16} type="modal" title="KDX Rewards Available">
               <Label>
                 Accounting for 40% of the overall supply, Network Rewards serve a crucial function of both attracting liquidity and mitigating
                 impermanent loss. Their emission is programmatical, diminishing and time oriented.

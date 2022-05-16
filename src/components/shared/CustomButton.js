@@ -20,7 +20,7 @@ const StyledButton = styled(FlexContainer)`
     opacity: ${({ $loading }) => ($loading ? 0 : 1)};
     white-space: nowrap;
   }
-  ${({ type, $outGameEditionView, $gameEditionView, theme: { colors }, color, buttonBackgroundGradient, $geBasic }) => {
+  ${({ type, $outGameEditionView, $gameEditionView, theme: { colors }, color, buttonBackgroundGradient, disabled, borderOpacity, $geBasic }) => {
     if ($gameEditionView && !$outGameEditionView) {
       return css`
         border: ${$geBasic ? 'none' : '2px dashed #ffffff'};
@@ -38,13 +38,13 @@ const StyledButton = styled(FlexContainer)`
         case 'primary':
           return css`
             height: 42px;
-            border: 1px solid ${color || colors.white};
+            border: 1px solid ${color || `${colors.white}${disabled || borderOpacity ? '99' : ''}`};
             background: transparent;
           `;
         case 'secondary':
           return css`
             height: 42px;
-            border: 1px solid ${color || colors.white};
+            border: 1px solid ${color || `${colors.white}${disabled || borderOpacity ? '99' : ''}`};
             background: ${color || colors.white};
           `;
         case 'basic':
@@ -82,6 +82,7 @@ const CustomButton = ({
   geColor,
   color,
   withShade,
+  borderOpacity,
   geCenter,
   children,
   onClick,
@@ -114,6 +115,7 @@ const CustomButton = ({
       fluid={fluid}
       $gameEditionView={$gameEditionView}
       disabled={disabled}
+      borderOpacity={borderOpacity}
       style={buttonStyle}
       $loading={loading}
       type={type}

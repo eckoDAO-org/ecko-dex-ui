@@ -15,7 +15,7 @@ const CommonWrapper = ({ gap, title, popup, popupTitle, children, containerStyle
           title
         )}
         {popup && (
-          <InfoPopup type="modal" title={popupTitle}>
+          <InfoPopup size={16} type="modal" title={popupTitle}>
             {popup}
           </InfoPopup>
         )}
