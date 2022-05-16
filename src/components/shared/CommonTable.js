@@ -54,6 +54,13 @@ const Wrapper = styled(FlexContainer)`
       }
     }
   }
+  .disabled {
+    svg {
+      path {
+        fill: ${({ theme: { colors } }) => colors.white}99;
+      }
+    }
+  }
 `;
 
 const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onClick }) => {
@@ -100,11 +107,13 @@ const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onCl
                     <FlexContainer gap={8}>
                       {actions.map((action, i) => (
                         <FlexContainer
-                          className={`${action?.disabled && action?.disabled(item) ? '' : 'pointer'} action`}
+                          className={`${action?.disabled && action?.disabled(item) ? 'disabled' : 'pointer'} action`}
                           key={i}
                           onClick={(e) => {
                             e.stopPropagation();
-                            action.onClick(item);
+                            if (!action.disabled) {
+                              action.onClick(item);
+                            }
                           }}
                         >
                           {action.icon(item)}

@@ -91,6 +91,7 @@ const LiquidityMyLiquidityTable = () => {
                 }),
             },
             {
+              disabled: (item) => item.pooledAmount[0] === 0 || item.pooledAmount[1] === 0,
               icon: () => <RemoveIcon />,
               onClick: (item) => {
                 const { token0, token1 } = item;
