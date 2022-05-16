@@ -8,7 +8,7 @@ import { extractDecimal, humanReadableNumber, reduceBalance } from '../../utils/
 import { usePactContext } from '../../contexts';
 import AnalyticsInfo from './AnalyticsInfo';
 
-const Analytics = ({ stakedShare, totalStaked }) => {
+const Analytics = ({ stakedShare, totalStaked, totalBurnt }) => {
   const [totalVolumeUSD, setTotalVolumeUSD] = useState(null);
   const [stakingAPR, setStakingAPR] = useState(null);
   const { kdxPrice } = usePactContext();
@@ -55,6 +55,10 @@ const Analytics = ({ stakedShare, totalStaked }) => {
       <div>
         <Label>Total Staked</Label>
         <Label fontSize={24}>{(totalStaked && humanReadableNumber(reduceBalance(totalStaked))) || '-'} KDX</Label>
+      </div>
+      <div>
+        <Label>Total Burnt</Label>
+        <Label fontSize={24}>{(totalBurnt && humanReadableNumber(reduceBalance(totalBurnt))) || '-'} KDX</Label>
       </div>
     </CommonWrapper>
   );

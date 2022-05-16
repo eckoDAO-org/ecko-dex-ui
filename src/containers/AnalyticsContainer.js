@@ -9,6 +9,8 @@ import modalBackground from '../assets/images/game-edition/modal-background.png'
 import { humanReadableNumber, reduceBalance } from '../utils/reduceBalance';
 import LogoLoader from '../components/shared/Loader';
 import { FlexContainer } from '../components/shared/FlexContainer';
+import Label from '../components/shared/Label';
+import InfoPopup from '../components/shared/InfoPopup';
 import AnalyticsSimpleWidget from '../components/shared/AnalyticsSimpleWidget';
 import { getCoingeckoUsdPrice } from '../api/coingecko';
 import { getKDXSupply, getKDXTotalSupply, getKDXTotalBurnt } from '../api/kaddex.kdx';
@@ -70,7 +72,16 @@ const AnalyticsContainer = () => {
             subtitle={pact?.kdxPrice && `${(pact?.kdxPrice / kdaPrice).toFixed(4)} KDA`}
           />
           <AnalyticsSimpleWidget
-            title={'Marketcap'}
+            title={
+              <>
+                Marketcap{' '}
+                <InfoPopup size={16} type="modal" title="Analytics data info">
+                  <Label>
+                    The information displayed on this page is currently under BETA testing, and is provided on an "as is" and "as available" basis
+                  </Label>
+                </InfoPopup>
+              </>
+            }
             mainText={(kdxSupply && `$ ${humanReadableNumber(Number(kdxSupply * pact?.kdxPrice))}`) || '-'}
             subtitle={null}
           />
