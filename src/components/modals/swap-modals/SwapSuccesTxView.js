@@ -1,5 +1,6 @@
-import React from 'react';
-import { useAccountContext, usePactContext, useSwapContext } from '../../../contexts';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from 'react';
+import { useAccountContext, useModalContext, usePactContext, useSwapContext } from '../../../contexts';
 import { extractDecimal, getDecimalPlaces, reduceBalance } from '../../../utils/reduceBalance';
 import reduceToken from '../../../utils/reduceToken';
 import { getTokenIconByCode, getTokenName } from '../../../utils/token-utils';
@@ -86,10 +87,16 @@ export const SwapSuccessViewGE = () => {
   );
 };
 
-export const SwapSuccessView = ({ loading, sendTransaction }) => {
+export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
   const { account } = useAccountContext();
   const pact = usePactContext();
   const swap = useSwapContext();
+  const { closeModal } = useModalContext();
+
+  useEffect(() => {
+    const timer = setTimeout(() => closeModal(), pact.ttl * 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <SuccesViewContainer
@@ -123,24 +130,30 @@ export const SwapSuccessView = ({ loading, sendTransaction }) => {
           <RowTokenInfoPrice
             tokenIcon={getTokenIconByCode(swap?.localRes?.result?.data[0]?.token)}
             tokenName={getTokenName(swap?.localRes?.result?.data[0]?.token)}
-            amount={swap?.localRes?.result?.data[0]?.amount}
-            tokenPrice={getTokenName(swap?.localRes?.result?.data[0]?.token) === 'KDX' ? pact.kdxPrice : null}
+            amount={fromValues ? fromValues.amount : swap?.localRes?.result?.data[0]?.amount}
+            tokenPrice={getTokenName(swap?.localRes?.result?.data[0]?.token) === 'KDX' || fromValues.coin === 'KDX' ? pact.kdxPrice : null}
           />
         </FlexContainer>
-        <Label fontSize={13}>{`1 ${getTokenName(swap?.localRes?.result?.data[0]?.token)} = ${reduceBalance(pact?.computeOut(1), 12)} ${getTokenName(
-          swap?.localRes?.result?.data[1]?.token
-        )}`}</Label>
+        <Label fontSize={13}>{`1 ${getTokenName(swap?.localRes?.result?.data[0]?.token)} = ${reduceBalance(
+          pact?.computeOut(fromValues.amount) / fromValues.amount,
+          12
+        )} ${getTokenName(swap?.localRes?.result?.data[1]?.token)}`}</Label>
         {/* TO VALUES */}
         <FlexContainer className="align-ce justify-sb">
           <RowTokenInfoPrice
+            isEstimated
             tokenIcon={getTokenIconByCode(swap?.localRes?.result?.data[1]?.token)}
             tokenName={getTokenName(swap?.localRes?.result?.data[1]?.token)}
-            amount={swap?.localRes?.result?.data[1]?.amount}
+            amount={
+              fromValues
+                ? fromValues.amount * reduceBalance(pact?.computeOut(fromValues.amount) / fromValues.amount, 12)
+                : swap?.localRes?.result?.data[1]?.amount
+            }
             tokenPrice={getTokenName(swap?.localRes?.result?.data[1]?.token) === 'KDX' ? pact.kdxPrice : null}
           />
         </FlexContainer>
         <Label fontSize={13}>{`1 ${getTokenName(swap?.localRes?.result?.data[1]?.token)} =  ${
-          1 / reduceBalance(pact?.computeOut(1), 12)
+          1 / reduceBalance(pact?.computeOut(fromValues.amount) / fromValues.amount, 12)
         } ${getTokenName(swap?.localRes?.result?.data[0]?.token)}`}</Label>
       </FlexContainer>
     </SuccesViewContainer>

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled, { css } from 'styled-components/macro';
-import { useGameEditionContext, useSwapContext } from '../../contexts';
+import { useGameEditionContext, useSwapContext, usePactContext } from '../../contexts';
 import { ErrorIcon, PixeledCircleArrowIcon, SuccessfullIcon } from '../../assets';
 import { GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
 import CustomButton from '../shared/CustomButton';
@@ -15,6 +15,7 @@ import { ENABLE_GAS_STATION, GAS_PRICE } from '../../constants/contextConstants'
 import PopupTxView from './PopupTxView';
 import { FlexContainer } from '../shared/FlexContainer';
 import LogoLoader from '../shared/Loader';
+import { useInterval } from '../../hooks/useInterval';
 
 const TransactionsDetails = styled.div`
   width: 100%;
@@ -29,6 +30,32 @@ const TxView = ({ loading, onClose, children }) => {
   const swap = useSwapContext();
   const { gameEditionView } = useGameEditionContext();
 
+  const Message = ({ color, children }) => {
+    const { gameEditionView } = useGameEditionContext();
+
+    const getColor = () => {
+      switch (color) {
+        case 'red':
+          return commonColors.error;
+        default:
+          return null;
+      }
+    };
+    return (
+      <MessageContainer gameEditionView={gameEditionView} color={getColor()}>
+        <Label
+          color={getColor()}
+          geColor={color}
+          className="capitalize"
+          labelStyle={{ wordBreak: 'break-all' }}
+          geLabelStyle={{ wordBreak: 'break-all' }}
+        >
+          {children}
+        </Label>
+      </MessageContainer>
+    );
+  };
+
   const failView = () => {
     return (
       <Content gameEditionView={gameEditionView}>
@@ -40,7 +67,7 @@ const TxView = ({ loading, onClose, children }) => {
           Error Message
         </Label>
         <TransactionsDetails>
-          <Message color="error">{swap?.localRes?.result?.error?.message}</Message>
+          <Message color="red">{swap?.localRes?.result?.error?.message}</Message>
 
           {swap?.localRes?.result?.error?.message?.includes('insufficient') && (
             <Label geColor="blue" geCenter>
@@ -72,7 +99,7 @@ const TxView = ({ loading, onClose, children }) => {
           Error Message
         </Label>
         <TransactionsDetails>
-          <Message color="error" style={{ wordBreak: 'break-all' }}>
+          <Message color="red" style={{ wordBreak: 'break-all' }}>
             {swap?.localRes}
           </Message>
         </TransactionsDetails>
@@ -130,32 +157,6 @@ const MessageContainer = styled.div`
   background-color: ${({ gameEditionView, theme: { colors } }) => !gameEditionView && colors.backgroundContainer};
 `;
 
-const Message = ({ color, children }) => {
-  const { gameEditionView } = useGameEditionContext();
-
-  const getColor = () => {
-    switch (color) {
-      case 'red':
-        return commonColors.error;
-      default:
-        return null;
-    }
-  };
-  return (
-    <MessageContainer gameEditionView={gameEditionView} color={getColor()}>
-      <Label
-        color={getColor()}
-        geColor={color}
-        className="capitalize"
-        labelStyle={{ wordBreak: 'break-all' }}
-        geLabelStyle={{ wordBreak: 'break-all' }}
-      >
-        {children}
-      </Label>
-    </MessageContainer>
-  );
-};
-
 // GAS COST COMPONENT
 export const GasCost = ({ swap }) => {
   return (
@@ -185,6 +186,11 @@ export const GasCost = ({ swap }) => {
 // CONTENT CONTAINER
 export const SuccesViewContainer = ({ swap, onClick, children, icon, hideSubtitle, footer }) => {
   const { gameEditionView } = useGameEditionContext();
+  const pact = usePactContext();
+  const [counter, setCounter] = useState(pact.ttl);
+
+  useInterval(() => setCounter(counter - 1), 1000);
+
   return (
     <Content gameEditionView={gameEditionView}>
       {!hideSubtitle && (
@@ -197,6 +203,9 @@ export const SuccesViewContainer = ({ swap, onClick, children, icon, hideSubtitl
       <FlexContainer className="w-100 flex column" gap={16} style={{ marginTop: 24 }}>
         {children}
         <GasCost swap={swap} />
+      </FlexContainer>
+      <FlexContainer className="w-100 flex column" gap={16}>
+        <Label>{counter} seconds left</Label>
       </FlexContainer>
 
       {footer}

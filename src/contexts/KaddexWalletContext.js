@@ -164,7 +164,7 @@ export const KaddexWalletProvider = (props) => {
         icon: WALLET.KADDEX_WALLET.notificationLogo,
         closeButton: false,
         titleStyle: { fontSize: 13 },
-        autoClose: 3000,
+        autoClose: 2000,
       });
     } else if (kaddexWalletState.isConnected) {
       console.log('X-Wallet: SETTING ACCOUNT DATA - WALLET NOT FOUND CONNECTING');

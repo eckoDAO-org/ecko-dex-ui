@@ -141,17 +141,15 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, isSingleSideL
         <Label fontSize={13}>{`1 ${token0} = ${reduceBalance(1 / pact.ratio)} ${token1}`}</Label>
 
         {/* TO VALUES */}
-        {!isSingleSideLiquidity && (
-          <>
-            <RowTokenInfoPrice
-              tokenIcon={getTokenIconById(token1)}
-              tokenName={token1}
-              amount={swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0']}
-              tokenPrice={token1 === 'KDX' ? pact.kdxPrice : null}
-            />
-            <Label fontSize={13}>{`1 ${token1} =  ${reduceBalance(pact.ratio)} ${token0}`}</Label>
-          </>
-        )}
+        <>
+          <RowTokenInfoPrice
+            tokenIcon={getTokenIconById(token1)}
+            tokenName={token1}
+            amount={swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0']}
+            tokenPrice={token1 === 'KDX' ? pact.kdxPrice : null}
+          />
+          <Label fontSize={13}>{`1 ${token1} =  ${reduceBalance(pact.ratio)} ${token0}`}</Label>
+        </>
       </FlexContainer>
     </SuccesViewContainer>
   );

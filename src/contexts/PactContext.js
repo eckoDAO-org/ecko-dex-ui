@@ -173,7 +173,7 @@ export const PactProvider = (props) => {
   };
 
   const storeTtl = async (ttl) => {
-    setTtl(slippage);
+    setTtl(ttl);
     localStorage.setItem('ttl', ttl);
   };
 

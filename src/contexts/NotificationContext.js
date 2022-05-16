@@ -217,14 +217,18 @@ export const NotificationProvider = ({ children }) => {
     await removeToastNotificationId(reqKey);
   };
 
-  const transactionListen = async (reqKey) => {
+  /* Generic listener of a transaction. The main input to work is the request key.
+     If you want, pass successTitle and erroTitle in order to customize the message notification.
+     Default messages are 'Transaction Success!' and 'Transaction Error!' 
+  */
+  const transactionListen = async (reqKey, successTitle, errorTitle) => {
     const pollRes = await listen(reqKey);
     if (pollRes === 'success') {
       setFetchAccountBalance(true);
-      showSuccessNotification(reqKey);
+      successTitle ? showSuccessNotification(reqKey, successTitle) : showSuccessNotification(reqKey);
     } else {
       setFetchAccountBalance(true);
-      showErrorNotification(reqKey);
+      errorTitle ? showErrorNotification(reqKey, errorTitle) : showErrorNotification(reqKey);
     }
   };
 
