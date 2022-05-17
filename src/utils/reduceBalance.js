@@ -60,13 +60,34 @@ export const countDecimals = (value) => {
   return value?.toString().split('.')[1]?.length || 0;
 };
 
-export const getDecimalPlaces = (value) => {
-  const count = countDecimals(value);
+export const getDecimalPositions = (value) => {
+  const myValue = Number(value);
+  const count = countDecimals(myValue);
   if (count < 2) {
-    return value?.toFixed(2);
+    return myValue?.toFixed(2);
   } else if (count > 7) {
-    return value?.toFixed(7);
+    if (countDecimals(myValue?.toFixed(7)) === 0) {
+      var newValue = myValue?.toFixed(7);
+      return newValue?.toFixed(2);
+    } else {
+      return myValue?.toFixed(7);
+    }
   } else {
-    return value;
+    if (countDecimals(myValue) === 0) {
+      return myValue?.toFixed(2);
+    } else {
+      return myValue;
+    }
+  }
+};
+
+export const getDecimalPlaces = (value) => {
+  const myValue = Number(value);
+  if (myValue < 100) {
+    return getDecimalPositions(myValue.toFixed(7));
+  } else if (myValue >= 100 && myValue < 1000) {
+    return getDecimalPositions(myValue.toFixed(5));
+  } else {
+    return humanReadableNumber(myValue);
   }
 };
