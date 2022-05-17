@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react';
-import { useAccountContext, useModalContext, usePactContext, useSwapContext } from '../../../contexts';
+import React from 'react';
+import { useAccountContext, useApplicationContext, usePactContext, useSwapContext } from '../../../contexts';
 import { extractDecimal, getDecimalPlaces, reduceBalance } from '../../../utils/reduceBalance';
 import reduceToken from '../../../utils/reduceToken';
 import { getTokenIconByCode, getTokenName } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
-import { ChainIcon } from '../../../assets';
+import { AlertIcon, ChainIcon } from '../../../assets';
 import { CHAIN_ID, ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
 import Label from '../../shared/Label';
 import { FlexContainer } from '../../shared/FlexContainer';
@@ -13,6 +13,7 @@ import CopyPopup from '../../shared/CopyPopup';
 import CustomDivider from '../../shared/CustomDivider';
 import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
 import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
+import { theme, commonColors } from '../../../styles/theme';
 
 export const SwapSuccessViewGE = () => {
   const { account } = useAccountContext();
@@ -91,17 +92,27 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
   const { account } = useAccountContext();
   const pact = usePactContext();
   const swap = useSwapContext();
-  const { closeModal } = useModalContext();
+  const { themeMode } = useApplicationContext();
 
-  useEffect(() => {
-    const timer = setTimeout(() => closeModal(), pact.ttl * 1000);
-    return () => clearTimeout(timer);
-  }, []);
+  const amountBWithSlippage = swap?.localRes?.result?.data[1]?.amount - swap?.localRes?.result?.data[1]?.amount * pact.slippage;
 
   return (
     <SuccesViewContainer
       swap={swap}
       loading={loading}
+      disableButton={fromValues.amount * reduceBalance(pact?.computeOut(fromValues.amount) / fromValues.amount, 12) < amountBWithSlippage}
+      footer={
+        fromValues.amount * reduceBalance(pact?.computeOut(fromValues.amount) / fromValues.amount, 12) < amountBWithSlippage && (
+          <FlexContainer
+            className="w-100 flex"
+            gap={4}
+            style={{ background: theme(themeMode).colors.white, borderRadius: 10, padding: 10, margin: 0 }}
+          >
+            <AlertIcon className="mobile-none svg-app-inverted-color" />
+            <Label inverted>The current price of {getTokenName(swap?.localRes?.result?.data[1]?.token)} is under the slippage value</Label>
+          </FlexContainer>
+        )
+      }
       onClick={() => {
         sendTransaction();
       }}

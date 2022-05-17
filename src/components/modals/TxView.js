@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import moment from 'moment';
 import styled, { css } from 'styled-components/macro';
-import { useGameEditionContext, useSwapContext, usePactContext } from '../../contexts';
+import { useGameEditionContext, useSwapContext, usePactContext, useModalContext } from '../../contexts';
 import { ErrorIcon, PixeledCircleArrowIcon, SuccessfullIcon } from '../../assets';
 import { GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
 import CustomButton from '../shared/CustomButton';
@@ -16,6 +17,7 @@ import PopupTxView from './PopupTxView';
 import { FlexContainer } from '../shared/FlexContainer';
 import LogoLoader from '../shared/Loader';
 import { useInterval } from '../../hooks/useInterval';
+import { getTokenName } from '../../utils/token-utils';
 
 const TransactionsDetails = styled.div`
   width: 100%;
@@ -184,12 +186,19 @@ export const GasCost = ({ swap }) => {
 };
 
 // CONTENT CONTAINER
-export const SuccesViewContainer = ({ swap, onClick, children, icon, hideSubtitle, footer }) => {
+export const SuccesViewContainer = ({ swap, onClick, children, icon, hideSubtitle, disableButton, footer }) => {
   const { gameEditionView } = useGameEditionContext();
   const pact = usePactContext();
+  const { closeModal } = useModalContext();
   const [counter, setCounter] = useState(pact.ttl);
 
   useInterval(() => setCounter(counter - 1), 1000);
+
+  useEffect(() => {
+    const timer = setTimeout(() => closeModal(), pact.ttl * 1000);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Content gameEditionView={gameEditionView}>
@@ -205,12 +214,14 @@ export const SuccesViewContainer = ({ swap, onClick, children, icon, hideSubtitl
         <GasCost swap={swap} />
       </FlexContainer>
       <FlexContainer className="w-100 flex column" gap={16}>
-        <Label>{counter} seconds left</Label>
+        <Label>{`The transaction will expire in ${`${moment.utc(counter * 1000).format('mm:ss')}`} ${
+          counter / 60 >= 1 ? 'minutes' : 'seconds'
+        }`}</Label>
       </FlexContainer>
-
       {footer}
       <CustomButton
-        type="gradient"
+        type={disableButton ? 'primary' : 'gradient'}
+        disabled={disableButton}
         buttonStyle={{
           width: '100%',
           marginTop: !gameEditionView && '16px',

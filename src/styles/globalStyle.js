@@ -246,7 +246,11 @@ export default createGlobalStyle`
         path {
           fill: ${({ theme: { colors } }) => colors.white}!important;
         }
-      
+    }
+    .svg-app-inverted-color {
+        path {
+          fill: ${({ theme: { colors } }) => colors.primary}!important;
+        }
     }
 
 `;
