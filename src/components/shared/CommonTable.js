@@ -111,7 +111,7 @@ const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onCl
                           key={i}
                           onClick={(e) => {
                             e.stopPropagation();
-                            if (!action.disabled) {
+                            if (!action.disabled || !action.disabled(item)) {
                               action.onClick(item);
                             }
                           }}
