@@ -186,7 +186,7 @@ const SlippagePopupContent = ({ className }) => {
                   numberOnly
                   value={tl}
                   onChange={(e, { value }) => {
-                    if (value >= 0) {
+                    if (value >= 0 && value <= 60) {
                       setTl(value);
                     }
                   }}
