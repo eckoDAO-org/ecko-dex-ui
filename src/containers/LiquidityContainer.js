@@ -1,7 +1,10 @@
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import styled from 'styled-components/macro';
+import { BoosterIcon } from '../assets';
 import LiquidityMyLiquidityTable from '../components/liquidity/LiquidityMyLiquidityTable';
 import LiquidityPoolsTable from '../components/liquidity/LiquidityPoolsTable';
+import LiquidityRewards from '../components/liquidity/LiquidityRewards';
 import LiquidityTablesInfo from '../components/liquidity/LiquidityTablesInfo';
 import LiquidityTokensTable from '../components/liquidity/LiquidityTokensTable';
 import CustomButton from '../components/shared/CustomButton';
@@ -13,9 +16,10 @@ import {
   ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED,
   ROUTE_LIQUIDITY_MY_LIQUIDITY,
   ROUTE_LIQUIDITY_POOLS,
+  ROUTE_LIQUIDITY_REWARDS,
   ROUTE_LIQUIDITY_TOKENS,
 } from '../router/routes';
-import theme from '../styles/theme';
+import theme, { commonColors } from '../styles/theme';
 
 const LiquidityContainer = () => {
   const { pathname } = useLocation();
@@ -48,11 +52,27 @@ const LiquidityContainer = () => {
           >
             POOLS
           </Label>
-          <InfoPopup type="modal" title="Liquidity" size="large" centerIcon>
-            <LiquidityTablesInfo />
-          </InfoPopup>
+          {(pathname === ROUTE_LIQUIDITY_TOKENS || pathname === ROUTE_LIQUIDITY_POOLS) && (
+            <InfoPopup type="modal" title="Liquidity" containerStyle={{ marginLeft: 0 }}>
+              <LiquidityTablesInfo />
+            </InfoPopup>
+          )}
         </FlexContainer>
-        <FlexContainer gap={16}>
+        <FlexContainer gap={16} mobileClassName="column" mobilePixel={530}>
+          <CustomButton
+            fontSize={13}
+            buttonStyle={{ height: 33 }}
+            type={pathname === ROUTE_LIQUIDITY_REWARDS ? 'secondary' : 'primary'}
+            color={commonColors.pink}
+            onClick={() => history.push(ROUTE_LIQUIDITY_REWARDS)}
+          >
+            <RewardsButtonContent color={pathname === ROUTE_LIQUIDITY_REWARDS ? '#fff' : commonColors.pink}>
+              <BoosterIcon />
+              <Label fontFamily="syncopate" color={pathname === ROUTE_LIQUIDITY_REWARDS ? '#fff' : commonColors.pink}>
+                REWARDS
+              </Label>
+            </RewardsButtonContent>
+          </CustomButton>
           <CustomButton
             fontSize={13}
             buttonStyle={{ height: 33 }}
@@ -84,8 +104,21 @@ const LiquidityContainer = () => {
       {pathname === ROUTE_LIQUIDITY_POOLS && <LiquidityPoolsTable />}
       {/* MY LIQUIDITY TABLE */}
       {pathname === ROUTE_LIQUIDITY_MY_LIQUIDITY && <LiquidityMyLiquidityTable />}
+      {/* MY LIQUIDITY TABLE */}
+      {pathname === ROUTE_LIQUIDITY_REWARDS && <LiquidityRewards />}
     </FlexContainer>
   );
 };
 
 export default LiquidityContainer;
+
+const RewardsButtonContent = styled.div`
+  display: flex;
+  align-items: center;
+  svg {
+    margin-right: 8px;
+    path {
+      fill: ${({ color }) => color};
+    }
+  }
+`;

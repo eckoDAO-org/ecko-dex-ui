@@ -3,7 +3,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
 import moment from 'moment';
 import { useHistory, useLocation } from 'react-router-dom';
-import { getPoolState, getAddStakeCommand, estimateUnstake, getRollupAndClaimCommand, getRollupAndUnstakeCommand } from '../api/kaddex.staking';
+import {
+  getPoolState,
+  getAddStakeCommand,
+  estimateUnstake,
+  getRollupAndClaimCommand,
+  getRollupAndUnstakeCommand,
+  getRollupClaimAndUnstakeCommand,
+} from '../api/kaddex.staking';
 import { getAccountData } from '../api/dao';
 import { getKDXAccountBalance } from '../api/kaddex.kdx';
 import { FlexContainer } from '../components/shared/FlexContainer';
@@ -23,7 +30,7 @@ import { ROUTE_STAKE, ROUTE_UNSTAKE } from '../router/routes';
 import { NETWORK } from '../constants/contextConstants';
 import { theme } from '../styles/theme';
 import { useInterval } from '../hooks/useInterval';
-import { countDecimals, extractDecimal, reduceBalance } from '../utils/reduceBalance';
+import { extractDecimal, getDecimalPlaces, reduceBalance } from '../utils/reduceBalance';
 
 const StakeContainer = () => {
   const history = useHistory();
@@ -35,10 +42,10 @@ const StakeContainer = () => {
   const pact = usePactContext();
 
   const [poolState, setPoolState] = useState(null);
-  const [kdxAccountBalance, setKdxAccountBalance] = useState(0);
+  const [kdxAccountBalance, setKdxAccountBalance] = useState(0.0);
   const [estimateUnstakeData, setEstimateUnstakeData] = useState(null);
   const [daoAccountData, setDaoAccountData] = useState(null);
-  const [inputAmount, setInputAmount] = useState(0);
+  const [inputAmount, setInputAmount] = useState('');
 
   const stakedTimeStart =
     (estimateUnstakeData &&
@@ -51,14 +58,16 @@ const StakeContainer = () => {
     if (account?.account) {
       getKDXAccountBalance(account.account).then((kdxBalance) => {
         if (!kdxBalance.errorMessage) {
-          setKdxAccountBalance(extractDecimal(kdxBalance?.balance) ?? 0);
+          setKdxAccountBalance(extractDecimal(kdxBalance?.balance) ?? 0.0);
         } else {
-          setKdxAccountBalance(0);
+          setKdxAccountBalance(0.0);
         }
       });
       estimateUnstake(account?.account).then((resEstimate) => {
         if (!resEstimate.errorMessage) {
           setEstimateUnstakeData({ ...resEstimate, staked: extractDecimal(resEstimate.staked) });
+        } else {
+          setEstimateUnstakeData(null);
         }
       });
       getAccountData(account?.account).then((daoAccountDataResponse) => setDaoAccountData(daoAccountDataResponse));
@@ -159,7 +168,7 @@ const StakeContainer = () => {
         console.log(' stakingResponse', stakingResponse);
         pollingNotif(stakingResponse.requestKeys[0], 'Staking Transaction Pending');
 
-        setInputAmount(0);
+        setInputAmount(0.0);
         await transactionListen(stakingResponse.requestKeys[0]);
         pact.setPolling(false);
       })
@@ -168,6 +177,23 @@ const StakeContainer = () => {
         pact.setPolling(false);
         showErrorNotification(null, 'Staking error', 'Generic add stake error');
       });
+  };
+
+  const onSendUnstake = async (withdraw) => {
+    if (withdraw) {
+      const claimAndUnstakeCommand = getRollupClaimAndUnstakeCommand(account, inputAmount);
+      const claimAndUnstakeSignedCommand = await signCommand(claimAndUnstakeCommand);
+      if (claimAndUnstakeSignedCommand) {
+        sendRollupClaimAndUnstakeCommand(claimAndUnstakeSignedCommand);
+      }
+    } else {
+      const command = getRollupAndUnstakeCommand(account, inputAmount);
+      const signedCommand = await signCommand(command);
+      if (signedCommand) {
+        sendRollupAndUnstakeCommand(signedCommand);
+      }
+    }
+    closeModal();
   };
 
   const onRollupAndUnstake = async () => {
@@ -181,28 +207,24 @@ const StakeContainer = () => {
       });
       return;
     }
-    const command = getRollupAndUnstakeCommand(account, inputAmount);
-    const signedCommand = await signCommand(command);
-    if (signedCommand) {
-      openModal({
-        title: getUnstakeModalTitle(),
-        description: '',
-        onClose: () => {
-          closeModal();
-        },
-        content: (
-          <UnstakeModal
-            toUnstakeAmount={inputAmount}
-            estimateUnstakeData={estimateUnstakeData}
-            stakedTimeStart={stakedTimeStart}
-            onConfirm={() => {
-              closeModal();
-              sendRollupAndUnstakeCommand(signedCommand);
-            }}
-          />
-        ),
-      });
-    }
+    openModal({
+      title: getUnstakeModalTitle(),
+      description: '',
+      onClose: () => {
+        closeModal();
+      },
+      content: (
+        <UnstakeModal
+          toUnstakeAmount={extractDecimal(inputAmount)}
+          estimateUnstakeData={estimateUnstakeData}
+          stakedTimeStart={stakedTimeStart}
+          isRewardsAvailable={estimateUnstakeData && estimateUnstakeData['reward-accrued'] && estimateUnstakeData && estimateUnstakeData['can-claim']}
+          onConfirm={(state) => {
+            onSendUnstake(state);
+          }}
+        />
+      ),
+    });
   };
 
   const sendRollupAndUnstakeCommand = async (signedCommand) => {
@@ -211,16 +233,35 @@ const StakeContainer = () => {
       .sendSigned(signedCommand, NETWORK)
       .then(async (rollupAndUnstake) => {
         console.log(' rollupAndUnstake', rollupAndUnstake);
-        pollingNotif(rollupAndUnstake.requestKeys[0], 'Rollup and Unstake Transaction Pending');
+        pollingNotif(rollupAndUnstake.requestKeys[0], 'Unstake Transaction Pending');
+
+        await transactionListen(rollupAndUnstake.requestKeys[0]);
+        pact.setPolling(false);
+        setInputAmount(0.0);
+      })
+      .catch((error) => {
+        console.log(`~ rollupAndUnstake error`, error);
+        pact.setPolling(false);
+        showErrorNotification(null, 'RollupAndUnstake error', (error.toString && error.toString()) || 'Generic rollupAndUnstake error');
+      });
+  };
+
+  const sendRollupClaimAndUnstakeCommand = async (signedCommand) => {
+    pact.setPolling(true);
+    Pact.wallet
+      .sendSigned(signedCommand, NETWORK)
+      .then(async (rollupAndUnstake) => {
+        console.log(' rollupClaimAndUnstake', rollupAndUnstake);
+        pollingNotif(rollupAndUnstake.requestKeys[0], 'Claim and Unstake Transaction Pending');
 
         await transactionListen(rollupAndUnstake.requestKeys[0]);
         pact.setPolling(false);
         setInputAmount(0);
       })
       .catch((error) => {
-        console.log(`~ rollupAndUnstake error`, error);
+        console.log(`~ rollupClaimAndUnstake error`, error);
         pact.setPolling(false);
-        showErrorNotification(null, 'RollupAndUnstake error', (error.toString && error.toString()) || 'Generic rollupAndUnstake error');
+        showErrorNotification(null, 'Claim and Unstake error', (error.toString && error.toString()) || 'Generic Claim and Unstake error');
       });
   };
 
@@ -246,7 +287,7 @@ const StakeContainer = () => {
     const signedCommand = await signCommand(command);
     if (signedCommand) {
       openModal({
-        title: 'WITHDRAW YOUR STAKED REWARDS?',
+        title: 'WITHDRAW YOUR STAKING REWARDS?',
         description: '',
         onClose: () => {
           closeModal();
@@ -274,24 +315,13 @@ const StakeContainer = () => {
 
         await transactionListen(rollupAndClaim.requestKeys[0]);
         pact.setPolling(false);
-        setInputAmount(0);
+        setInputAmount(0.0);
       })
       .catch((error) => {
         console.log(`~ rollupAndClaim error`, error);
         pact.setPolling(false);
         showErrorNotification(null, 'RollupAndClaim error', (error.toString && error.toString()) || 'Generic RollupAndClaim error');
       });
-  };
-
-  const getDecimalPlaces = (value) => {
-    const count = countDecimals(value);
-    if (count < 2) {
-      return value?.toFixed(2);
-    } else if (count > 7) {
-      return value?.toFixed(7);
-    } else {
-      return value;
-    }
   };
 
   const getPositionLabel = () => {
@@ -317,7 +347,10 @@ const StakeContainer = () => {
             className="pointer"
             fontSize={24}
             fontFamily="syncopate"
-            onClick={() => history.push(ROUTE_STAKE)}
+            onClick={() => {
+              history.push(ROUTE_STAKE);
+              setInputAmount('');
+            }}
           >
             STAKE
           </Label>
@@ -326,32 +359,39 @@ const StakeContainer = () => {
             className="pointer"
             fontSize={24}
             fontFamily="syncopate"
-            onClick={() => history.push(ROUTE_UNSTAKE)}
+            onClick={() => {
+              history.push(ROUTE_UNSTAKE);
+              setInputAmount('');
+            }}
           >
             UNSTAKE
           </Label>
         </FlexContainer>
-        <InfoPopup title={pathname.substring(1)} type="modal" size="large">
+        <InfoPopup title={pathname.substring(1)} type="modal">
           {pathname === ROUTE_STAKE ? <StakeInfo /> : <UnstakeInfo />}
         </InfoPopup>
       </FlexContainer>
 
       <FlexContainer gap={24} tabletClassName="column" mobileClassName="column">
         <Position
-          amount={estimateUnstakeData?.staked || 0}
+          amount={estimateUnstakeData?.staked || 0.0}
           topRightLabel={getPositionLabel()}
           inputAmount={inputAmount}
           buttonLabel={pathname === ROUTE_STAKE ? 'stake' : 'unstake'}
           pendingAmount={(estimateUnstakeData && estimateUnstakeData['stake-record'] && estimateUnstakeData['stake-record']['pending-add']) || false}
-          onClickMax={() => setInputAmount(pathname !== ROUTE_UNSTAKE ? kdxAccountBalance.toFixed(7) : estimateUnstakeData?.staked.toFixed(7) || 0)}
+          onClickMax={() =>
+            setInputAmount(pathname !== ROUTE_UNSTAKE ? kdxAccountBalance.toFixed(12) : estimateUnstakeData?.staked.toFixed(12) || 0.0)
+          }
           setKdxAmount={(value) => setInputAmount(value)}
           onSubmitStake={() => (pathname !== ROUTE_UNSTAKE ? onStakeKDX() : onRollupAndUnstake())}
           stakedTimeStart={stakedTimeStart}
         />
         <Rewards
+          stakedAmount={estimateUnstakeData?.staked || 0.0}
           disabled={!(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || (estimateUnstakeData && !estimateUnstakeData['can-claim'])}
           rewardAccrued={(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || 0}
           rewardsPenalty={estimateUnstakeData && estimateUnstakeData['reward-penalty']}
+          lastRewardsClaim={estimateUnstakeData && estimateUnstakeData['stake-record']['last-claim']}
           onWithdrawClick={() => onWithdraw()}
           stakedTimeStart={stakedTimeStart}
         />

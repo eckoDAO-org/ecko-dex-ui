@@ -5,6 +5,7 @@ import Label from '../shared/Label';
 import ProgressBar from '../shared/ProgressBar';
 import CommonWrapper from './CommonWrapper';
 import { VotingPowerFormulaIcon } from '../../assets';
+import { extractDecimal, humanReadableNumber } from '../../utils/reduceBalance';
 
 const VotingPower = ({ daoAccountData }) => {
   return (
@@ -19,7 +20,11 @@ const VotingPower = ({ daoAccountData }) => {
           </Label>
           <VotingPowerFormulaIcon width={88} />
           <Label fontSize={38} className="gradient" fontFamily="syncopate" labelStyle={{ marginLeft: 20 }}>
-            {daoAccountData?.vp}
+            {daoAccountData?.vp
+              ? daoAccountData?.vp >= 1000
+                ? humanReadableNumber(extractDecimal(daoAccountData.vp).toFixed(2))
+                : extractDecimal(daoAccountData.vp).toFixed(5)
+              : '-'}
           </Label>
         </EquationContainer>
       }
@@ -29,7 +34,7 @@ const VotingPower = ({ daoAccountData }) => {
           multiplier (m)
         </Label>
 
-        <InfoPopup type="modal" title="Multiplier" centerIcon>
+        <InfoPopup size={16} type="modal" title="Multiplier">
           <Label>
             The Voting Power Multiplier is a time-dependent function of your KDX staking amount and meaningful contributions (Vibedust). In 60 days
             the multiplier value goes up to 1 and can reach 2.5 over the course of 4 years.

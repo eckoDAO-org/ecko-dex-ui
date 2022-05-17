@@ -11,6 +11,12 @@ const AnalyticsInfo = () => {
       <Divider />
       <Label fontSize={16}>Staked Share</Label>
       <Label>Your personal percentage share of KDX amongst all the KDX currently being staked.</Label>
+      <Divider />
+      <Label fontSize={16}>Volume</Label>
+      <Label>Its value refers to the overall DEX Volume</Label>
+      <Divider />
+      <Label fontSize={16}>Total Staked</Label>
+      <Label>Its value refers to the overall KDX being staked</Label>
     </FlexContainer>
   );
 };

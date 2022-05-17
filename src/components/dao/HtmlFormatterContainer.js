@@ -1,20 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
+import useWindowSize from '../../hooks/useWindowSize';
 import Label from '../shared/Label';
 
 const HtmlContainer = styled.div`
   color: ${({ theme: { colors } }) => colors.white};
   div {
-    max-height: ${({ descriptionHeight }) => (descriptionHeight ? `${descriptionHeight}px` : '320px')};
+    max-height: ${({ height, theme }) => `calc(${height}px - ${theme.header.height}px - 382px)`};
     color: ${({ theme: { colors } }) => colors.white};
   }
 `;
 
-const HtmlFormatterContainer = ({ htmlText, asAString, descriptionHeight }) => {
+const HtmlFormatterContainer = ({ htmlText, asAString }) => {
+  const [, height] = useWindowSize();
   //function that return the html code without tags.
   //It's used for previews description in AllProposalContainer
   const removeHtmlTagbyString = (html) => {
-    const maxNumberCharacters = 100;
+    const maxNumberCharacters = 200;
     var div = document.createElement('div');
     div.innerHTML = html;
     //return a string with max 100 chars
@@ -28,7 +30,7 @@ const HtmlFormatterContainer = ({ htmlText, asAString, descriptionHeight }) => {
   return asAString ? (
     <Label>{removeHtmlTagbyString(htmlText)}</Label>
   ) : (
-    <HtmlContainer descriptionHeight={descriptionHeight} id="html-formatter" dangerouslySetInnerHTML={{ __html: htmlText }} />
+    <HtmlContainer height={height} id="html-formatter" dangerouslySetInnerHTML={{ __html: htmlText }} />
   );
 };
 

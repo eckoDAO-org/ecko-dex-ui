@@ -23,6 +23,7 @@ import {
   ROUTE_UNSTAKE,
   ROUTE_DAO,
   ROUTE_DAO_PROPOSAL,
+  ROUTE_LIQUIDITY_REWARDS,
   ROUTE_BUY_CRYPTO,
 } from './routes';
 import SwapHistoryContainer from '../containers/SwapHistoryContainer';
@@ -51,7 +52,11 @@ export default () => {
           <Switch>
             <Route exact path={ROUTE_INDEX} component={SwapContainer} />
             <Route exact path={ROUTE_MY_SWAP} component={SwapHistoryContainer} />
-            <Route exact path={[ROUTE_LIQUIDITY_TOKENS, ROUTE_LIQUIDITY_POOLS, ROUTE_LIQUIDITY_MY_LIQUIDITY]} component={LiquidityContainer} />
+            <Route
+              exact
+              path={[ROUTE_LIQUIDITY_TOKENS, ROUTE_LIQUIDITY_POOLS, ROUTE_LIQUIDITY_MY_LIQUIDITY, ROUTE_LIQUIDITY_REWARDS]}
+              component={LiquidityContainer}
+            />
             <Route
               exact
               path={[ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED]}

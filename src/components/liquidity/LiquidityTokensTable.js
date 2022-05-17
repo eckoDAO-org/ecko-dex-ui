@@ -65,7 +65,7 @@ const LiquidityTokensTable = () => {
       columns={renderColumns()}
       actions={[
         {
-          icon: <AddIcon />,
+          icon: () => <AddIcon />,
           onClick: (item) => {
             history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${item.name}`), {
               from: ROUTE_LIQUIDITY_TOKENS,

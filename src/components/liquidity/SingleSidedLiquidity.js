@@ -236,6 +236,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
         <Label fontSize={13}>Pool</Label>
         <CustomButton
           type="primary"
+          borderOpacity
           buttonStyle={{ borderRadius: 4, height: 40, marginBottom: 8 }}
           onClick={() => {
             modalContext.openModal({

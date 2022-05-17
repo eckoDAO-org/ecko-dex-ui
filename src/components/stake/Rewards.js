@@ -7,9 +7,11 @@ import CommonWrapper from './CommonWrapper';
 import PenaltyRewardsInfo from './PenaltyRewardsInfo';
 import { extractDecimal, humanReadableNumber } from '../../utils/reduceBalance';
 import { usePactContext } from '../../contexts';
+import { getTimeByBlockchain } from '../../utils/string-utils';
 
-const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onWithdrawClick }) => {
+const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty, lastRewardsClaim, disabled, onWithdrawClick }) => {
   const { kdxPrice } = usePactContext();
+
   /*
     If you unstake during the first 72hours you will incur in a penalty: 3% flat penalty on your staked amount. 
     If you withdraw your rewards during the first 60 days, you will incur in a penalty: the penalty will only affect your accumulated rewards 
@@ -24,10 +26,46 @@ const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onW
     return '-';
   };
 
+  const getWaitingTimeRewardsPenalty = () => {
+    if (stakedTimeStart) {
+      const daysToWait = 60 - moment().diff(stakedTimeStart, 'days');
+      //1440 = 24h * 60 days
+      const hoursToWait = 1440 - moment().diff(stakedTimeStart, 'hours');
+      if (daysToWait > 1) {
+        return `${daysToWait} days left`;
+      } else {
+        if (hoursToWait > 1) {
+          return `${hoursToWait} hours left`;
+        } else if (hoursToWait < 1) {
+          return '0 hours left';
+        } else {
+          return `${hoursToWait} hour left`;
+        }
+      }
+    }
+  };
+
+  const getRewardsClaimTime = () => {
+    if (lastRewardsClaim) {
+      const daysToWait = 7 - moment().diff(getTimeByBlockchain(lastRewardsClaim), 'days');
+      //168 = 24h * 7 days
+      const hoursToWait = 168 - moment().diff(getTimeByBlockchain(lastRewardsClaim), 'hours');
+      if (daysToWait > 1) {
+        return `withdraw in ${daysToWait} days`;
+      } else {
+        if (hoursToWait > 1) {
+          return `withdraw in ${hoursToWait} hours`;
+        } else {
+          return `withdraw in ${hoursToWait} hour`;
+        }
+      }
+    }
+  };
+
   const getPenaltyColor = () => {
-    if (!rewardsPenalty) {
+    if (!rewardsPenalty && !rewardAccrued) {
       return null;
-    } else if (moment().diff(moment(stakedTimeStart), 'day') >= 60) {
+    } else if (moment().diff(stakedTimeStart, 'days') >= 60) {
       return commonColors.green;
     } else {
       return commonColors.red;
@@ -44,9 +82,9 @@ const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onW
         </Label>
       </div>
       <div>
-        <Label>Elapsed Time</Label>
+        <Label>Waiting Time</Label>
         <Label fontSize={24} color={getPenaltyColor()}>
-          {(stakedTimeStart && moment(stakedTimeStart).fromNow()) || '-'}
+          {stakedTimeStart && stakedAmount > 0 ? getWaitingTimeRewardsPenalty() : '-'}
         </Label>
       </div>
       <div>
@@ -57,15 +95,14 @@ const Rewards = ({ rewardAccrued, stakedTimeStart, rewardsPenalty, disabled, onW
         <Label fontSize={24} color={getPenaltyColor()}>
           {getPenaltyRewardsString()[0] || '-'} KDX
         </Label>
-        <Label fontSize={16} color={getPenaltyColor()}>
-          {getPenaltyRewardsString()[1] || '-'} %
-        </Label>
+        {rewardsPenalty && (
+          <Label fontSize={16} color={getPenaltyColor()}>
+            {getPenaltyRewardsString()[1] || '-'} %
+          </Label>
+        )}
       </div>
-      {/* <CustomButton type="gradient" disabled={disabled} buttonStyle={{ marginTop: 4 }} onClick={() => {}}>
-        stake rewards
-      </CustomButton> */}
       <CustomButton type="primary" disabled={disabled} onClick={() => onWithdrawClick()}>
-        withdraw
+        {disabled && lastRewardsClaim ? getRewardsClaimTime() : 'withdraw'}
       </CustomButton>
     </CommonWrapper>
   );

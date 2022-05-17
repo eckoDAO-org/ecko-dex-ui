@@ -158,6 +158,14 @@ export const KaddexWalletProvider = (props) => {
         isInstalled: true,
         isConnected: true,
       });
+      showNotification({
+        title: `${WALLET.KADDEX_WALLET.name} was connected`,
+        type: 'game-mode',
+        icon: WALLET.KADDEX_WALLET.notificationLogo,
+        closeButton: false,
+        titleStyle: { fontSize: 13 },
+        autoClose: 3000,
+      });
     } else if (kaddexWalletState.isConnected) {
       console.log('X-Wallet: SETTING ACCOUNT DATA - WALLET NOT FOUND CONNECTING');
       const connectRes = await connectWallet();
@@ -180,7 +188,6 @@ export const KaddexWalletProvider = (props) => {
   };
 
   const onCheckStatusResponse = async (response) => {
-    console.log('X-Wallet: LISTEN res_checkStatus', response);
     // I have to use local storage directly because of state is null on callback listener
     const localState = localStorage.getItem('kaddexWalletState') && JSON.parse(localStorage.getItem('kaddexWalletState'));
     if (localState?.isConnected && response?.result?.status === 'fail' && response?.result?.message === 'Not connected') {

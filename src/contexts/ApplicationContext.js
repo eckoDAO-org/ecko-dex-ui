@@ -73,7 +73,7 @@ const RESOLUTIONS = {
 export const ApplicationContext = createContext(null);
 
 export const ApplicationProvider = (props) => {
-  const [themeMode, setThemeMode] = useState('light');
+  const [themeMode, setThemeMode] = useState('dark');
   const [mountedComponent, setMountedComponent] = useState(false);
 
   const [resolutionConfiguration, setResolutionConfiguration] = useState(null);

@@ -40,7 +40,7 @@ const TxView = ({ loading, onClose, children }) => {
           Error Message
         </Label>
         <TransactionsDetails>
-          <Message color="red">{swap?.localRes?.result?.error?.message}</Message>
+          <Message color="error">{swap?.localRes?.result?.error?.message}</Message>
 
           {swap?.localRes?.result?.error?.message?.includes('insufficient') && (
             <Label geColor="blue" geCenter>
@@ -72,7 +72,7 @@ const TxView = ({ loading, onClose, children }) => {
           Error Message
         </Label>
         <TransactionsDetails>
-          <Message color="red" style={{ wordBreak: 'break-all' }}>
+          <Message color="error" style={{ wordBreak: 'break-all' }}>
             {swap?.localRes}
           </Message>
         </TransactionsDetails>
@@ -236,7 +236,7 @@ export const SuccessViewContainerGE = ({ leftItem, rightItem, infoItems, hideIco
           )}
           <PixeledInfoContainerWhite>{rightItem}</PixeledInfoContainerWhite>
         </div>
-        <InfoContainer style={{ width: GE_DESKTOP_CONFIGURATION.DISPLAY_WIDTH, marginTop: 16 }}>
+        <InfoContainer style={{ width: infoItems.length < 3 ? 'min-content' : GE_DESKTOP_CONFIGURATION.DISPLAY_WIDTH, marginTop: 16 }}>
           {infoItems?.map((item, i) => (
             <PixeledBlueContainer key={i} label={item.label} value={item.value} />
           ))}

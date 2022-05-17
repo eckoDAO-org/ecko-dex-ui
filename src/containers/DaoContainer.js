@@ -8,12 +8,14 @@ import { useAccountContext } from '../contexts';
 import { getAccountData } from '../api/dao';
 import theme from '../styles/theme';
 import { useInterval } from '../hooks/useInterval';
+import useWindowSize from '../hooks/useWindowSize';
 
 const DaoContainer = () => {
   const { proposal_id } = useParams();
   const { account } = useAccountContext();
 
   const [accountData, setAccountData] = useState({});
+  const [, height] = useWindowSize();
 
   const fetchData = async () => {
     const getAccountDataRes = await getAccountData(account.account);
@@ -31,7 +33,11 @@ const DaoContainer = () => {
       className="column w-100"
       gap={16}
       style={{ paddingTop: 35, paddingBottom: 35 }}
-      desktopStyle={{ paddingRight: theme.layout.desktopPadding, paddingLeft: theme.layout.desktopPadding }}
+      desktopStyle={{
+        paddingRight: theme.layout.desktopPadding,
+        paddingLeft: theme.layout.desktopPadding,
+        height: `calc(${height}px - ${theme.header.height}px)`,
+      }}
       tabletStyle={{ paddingRight: theme.layout.tabletPadding, paddingLeft: theme.layout.tabletPadding }}
       mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
     >
