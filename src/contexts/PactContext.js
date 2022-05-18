@@ -6,7 +6,7 @@ import { useInterval } from '../hooks/useInterval';
 import axios from 'axios';
 import { getTokenUsdPriceByName } from '../utils/token-utils';
 import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, KADDEX_NAMESPACE } from '../constants/contextConstants';
-import { useAccountContext, useNotificationContext } from '.';
+import { useAccountContext, useNotificationContext, useWalletContext } from '.';
 import { fetchPrecision } from '../api/pact';
 
 export const PactContext = createContext();
@@ -16,6 +16,7 @@ const savedTtl = localStorage.getItem('ttl');
 
 export const PactProvider = (props) => {
   const account = useAccountContext();
+  const wallet = useWalletContext();
   const notificationContext = useNotificationContext();
 
   const [slippage, setSlippage] = useState(savedSlippage ? savedSlippage : 0.05);
@@ -46,6 +47,12 @@ export const PactProvider = (props) => {
 
   useEffect(() => {
     fetchPrecision();
+  }, []);
+
+  useEffect(() => {
+    if (!wallet.wallet) {
+      storeTtl(600);
+    }
   }, []);
 
   const getEventsSwapList = async () => {

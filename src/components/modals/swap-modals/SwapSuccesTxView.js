@@ -108,10 +108,10 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
           <FlexContainer
             className="w-100 flex"
             gap={4}
-            style={{ background: theme(themeMode).colors.white, borderRadius: 10, padding: 10, margin: 0 }}
+            style={{ background: theme(themeMode).colors.white, borderRadius: 10, padding: 10, marginBottom: 24 }}
           >
             <AlertIcon className="mobile-none svg-app-inverted-color" />
-            <Label inverted>The current price of {getTokenName(swap?.localRes?.result?.data[1]?.token)} is under the slippage value</Label>
+            <Label inverted>The current price of {getTokenName(swap?.localRes?.result?.data[1]?.token)} is below the slippage value</Label>
           </FlexContainer>
         )
       }
