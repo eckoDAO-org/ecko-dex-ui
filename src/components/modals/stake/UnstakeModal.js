@@ -8,7 +8,7 @@ import { usePactContext } from '../../../contexts';
 import { StakeModalRow, IconSubTitle } from './AddStakeModal';
 import Label from '../../shared/Label';
 import CustomCheckbox from '../../shared/CustomCheckbox';
-import { getDecimalPlaces } from '../../../utils/reduceBalance';
+import { getDecimalPlaces, humanReadableNumber } from '../../../utils/reduceBalance';
 import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
 import { getTokenIconByCode } from '../../../utils/token-utils';
 
@@ -100,7 +100,21 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
           <CustomCheckbox onClick={() => setChecked(!checked)}>Withdraw your KDX staking rewards</CustomCheckbox>
         </StakeModalRow>
       )}
-      <CustomButton type="gradient" buttonStyle={{ marginTop: 30 }} onClick={() => onConfirm(checked)}>
+
+      {checked && (
+        <div style={{ marginTop: 15 }}>
+          <Label fontSize={16}>Rewards Amount</Label>
+          <StakeModalRow>
+            <RowTokenInfoPrice
+              tokenIcon={getTokenIconByCode('kaddex.kdx')}
+              tokenName="KDX"
+              amount={(estimateUnstakeData && humanReadableNumber(estimateUnstakeData['reward-accrued'])) || 0}
+              tokenPrice={kdxPrice}
+            />
+          </StakeModalRow>
+        </div>
+      )}
+      <CustomButton type="gradient" buttonStyle={{ marginTop: 32 }} onClick={() => onConfirm(checked)}>
         CONFIRM
       </CustomButton>
     </div>

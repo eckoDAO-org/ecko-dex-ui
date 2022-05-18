@@ -33,6 +33,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   const [showTxModal, setShowTxModal] = useState(false);
   const [inputSide, setInputSide] = useState('');
   const [loading, setLoading] = useState(false);
+  const [balanceLoading, setBalanceLoading] = useState(false);
   const [fromValues, setFromValues] = useState({
     amount: '',
     balance: '',
@@ -48,6 +49,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
 
   // update the balance after a transaction send or change account
   useEffect(() => {
+    setBalanceLoading(true);
     const getBalance = async () => {
       if (account.account) {
         let acctOfFromValues = await account.getTokenAccount(tokenData[fromValues.coin]?.code, account.account.account, tokenSelectorType === 'from');
@@ -67,6 +69,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
           }));
         }
       }
+      setBalanceLoading(false);
     };
     getBalance();
   }, [account.fetchAccountBalance, account.account.account]);
@@ -386,10 +389,13 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   };
 
   const swapValues = () => {
-    const from = { ...fromValues };
-    const to = { ...toValues };
-    setFromValues({ ...to });
-    setToValues({ ...from });
+    if (!balanceLoading) {
+      const from = { ...fromValues };
+      const to = { ...toValues };
+      setFromValues({ ...to });
+      setToValues({ ...from });
+    }
+    setFetchData(true);
   };
 
   // trigger for open the preview modal

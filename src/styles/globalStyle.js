@@ -111,8 +111,9 @@ export default createGlobalStyle`
         display: none !important;
       }
     }
+
     .mobile-only {
-      @media (min-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel}px`}) {
+      @media (min-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel - 1}px`}) {
         display: none !important;
       }
     }
@@ -246,7 +247,11 @@ export default createGlobalStyle`
         path {
           fill: ${({ theme: { colors } }) => colors.white}!important;
         }
-      
+    }
+    .svg-app-inverted-color {
+        path {
+          fill: ${({ theme: { colors } }) => colors.primary}!important;
+        }
     }
 
 `;

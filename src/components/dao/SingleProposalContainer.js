@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import Pact from 'pact-lang-api';
 import { useHistory } from 'react-router-dom';
-import { hasAccountVoted, readSingleProposal, vote, voteCommandToSign, votePreview } from '../../api/dao';
-import { useAccountContext, useKaddexWalletContext, useNotificationContext } from '../../contexts';
+import { hasAccountVoted, readSingleProposal, voteCommandToSign, votePreview } from '../../api/dao';
+import { useAccountContext, useKaddexWalletContext, useNotificationContext, usePactContext } from '../../contexts';
 import { ROUTE_DAO } from '../../router/routes';
 import { PartialScrollableScrollSection } from '../layout/Containers';
 import { FlexContainer } from '../shared/FlexContainer';
@@ -19,9 +19,11 @@ import { getStatusProposal } from '../../utils/dao-utils';
 import Loader from '../shared/Loader';
 import HtmlFormatterContainer from './HtmlFormatterContainer';
 import useWindowSize from '../../hooks/useWindowSize';
+import { NETWORK } from '../../constants/contextConstants';
 
 const SingleProposalContainer = ({ proposal_id, accountData }) => {
   const { account } = useAccountContext();
+  const pact = usePactContext();
   const notificationContext = useNotificationContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
 
@@ -50,7 +52,6 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
   }, [account, daoFetchDataLoading]);
 
   const handleClick = async (type) => {
-    console.log(account);
     const commandToSign = voteCommandToSign(type, proposal_id, account);
     let signedCommand = await getSignedCommand(commandToSign);
 
@@ -59,16 +60,23 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
 
     if (votePreviewResponse?.result?.status === 'success') {
       setDaoFetchDataLoading(true);
-      const res = await vote(signedCommand, notificationContext.pollingNotif);
-      if (res?.listen === 'success') {
-        notificationContext.showSuccessNotification(res?.data.requestKeys[0], 'Vote Success!');
-        setDaoSingleProposalLoading(false);
-        setDaoFetchDataLoading(false);
-      } else {
-        notificationContext.showErrorNotification(null, 'Vote Failed');
-        setDaoFetchDataLoading(false);
-        setDaoSingleProposalLoading(false);
-      }
+      Pact.wallet
+        .sendSigned(signedCommand, NETWORK)
+        .then(async (voteProposal) => {
+          console.log(' voteProposal', voteProposal);
+          notificationContext.pollingNotif(voteProposal.requestKeys[0], 'Vote Pending');
+          await notificationContext.transactionListen(voteProposal.requestKeys[0], 'Vote Success', 'Vote Failed');
+          pact.setPolling(false);
+          setDaoFetchDataLoading(false);
+          setDaoSingleProposalLoading(false);
+        })
+        .catch((error) => {
+          console.log(`~ Vote error`, error);
+          pact.setPolling(false);
+          notificationContext.showErrorNotification(null, 'Vote error', (error.toString && error.toString()) || 'Generic Vote error');
+          setDaoFetchDataLoading(false);
+          setDaoSingleProposalLoading(false);
+        });
     } else {
       notificationContext.showErrorNotification(null, 'Vote Error', votePreviewResponse?.result?.error?.message);
     }
