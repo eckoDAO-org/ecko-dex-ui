@@ -7,7 +7,7 @@ import { useAccountContext, useLiquidityContext, useModalContext, usePactContext
 import { useInterval } from '../../hooks/useInterval';
 import noExponents from '../../utils/noExponents';
 import { getCorrectBalance, limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
-import { SuccessAddView } from '../modals/liquidity/LiquidityTxView';
+import { SuccessAddSigleSideView } from '../modals/liquidity/LiquidityTxView';
 import SelectPoolModal from '../modals/liquidity/SelectPoolModal';
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
 import TxView from '../modals/TxView';
@@ -213,9 +213,9 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
               modalContext.closeModal();
             }}
           >
-            <SuccessAddView
-              isSingleSideLiquidity
+            <SuccessAddSigleSideView
               apr={apr}
+              initialAmount={fromValue.amount}
               token0={fromValue.coin}
               token1={selectedPool?.token0 === fromValue.coin ? selectedPool?.token1 : selectedPool?.token0}
               label="Add Liquidity"

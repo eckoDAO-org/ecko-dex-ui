@@ -30,7 +30,7 @@ const ModalContainer = ({ title, description, containerStyle, titleStyle, descri
       className="relative column justify-sb w-100 background-fill"
       style={{ padding: 32, maxHeight: '90%', overflowY: 'auto', ...containerStyle }}
     >
-      <HeaderContainer style={{ justifyContent: !onBack && !onClose && 'center' }}>
+      <HeaderContainer style={{ justifyContent: !onBack && !onClose && 'center', alignItems: 'flex-start' }}>
         {onBack && (
           <ArrowBack
             style={{
@@ -57,6 +57,9 @@ const ModalContainer = ({ title, description, containerStyle, titleStyle, descri
             style={{
               cursor: 'pointer',
               opacity: 1,
+              width: 20,
+              height: 20,
+              marginTop: 2,
             }}
             onClick={onClose}
           />

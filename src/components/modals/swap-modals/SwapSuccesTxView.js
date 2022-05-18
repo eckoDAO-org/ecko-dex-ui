@@ -5,7 +5,7 @@ import { extractDecimal, getDecimalPlaces, reduceBalance } from '../../../utils/
 import reduceToken from '../../../utils/reduceToken';
 import { getTokenIconByCode, getTokenName } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
-import { AlertIcon, ChainIcon } from '../../../assets';
+import { AlertIcon, ArrowIcon, ChainIcon } from '../../../assets';
 import { CHAIN_ID, ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
 import Label from '../../shared/Label';
 import { FlexContainer } from '../../shared/FlexContainer';
@@ -13,7 +13,7 @@ import CopyPopup from '../../shared/CopyPopup';
 import CustomDivider from '../../shared/CustomDivider';
 import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
 import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
-import { theme, commonColors } from '../../../styles/theme';
+import { theme } from '../../../styles/theme';
 
 export const SwapSuccessViewGE = () => {
   const { account } = useAccountContext();
@@ -94,12 +94,14 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
   const swap = useSwapContext();
   const { themeMode } = useApplicationContext();
 
-  const amountBWithSlippage = swap?.localRes?.result?.data[1]?.amount - swap?.localRes?.result?.data[1]?.amount * pact.slippage;
+  const amountBWithSlippage =
+    extractDecimal(swap?.localRes?.result?.data[1]?.amount) - extractDecimal(swap?.localRes?.result?.data[1]?.amount) * pact.slippage;
 
   return (
     <SuccesViewContainer
       swap={swap}
       loading={loading}
+      hideSubtitle
       disableButton={fromValues.amount * reduceBalance(pact?.computeOut(fromValues.amount) / fromValues.amount, 12) < amountBWithSlippage}
       footer={
         fromValues.amount * reduceBalance(pact?.computeOut(fromValues.amount) / fromValues.amount, 12) < amountBWithSlippage && (
@@ -128,11 +130,11 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
         </FlexContainer>
         {/* CHAIN */}
         <FlexContainer className="align-ce justify-sb">
-          <Label fontSize={13}>Chain Id</Label>
+          <Label fontSize={13}>Chain ID</Label>
           <Label fontSize={13}>{CHAIN_ID}</Label>
         </FlexContainer>
 
-        <CustomDivider style={{ margin: '16px 0px' }} />
+        <CustomDivider style={{ margin: '4px 0px' }} />
 
         <Label>Amount</Label>
 
@@ -145,10 +147,7 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
             tokenPrice={getTokenName(swap?.localRes?.result?.data[0]?.token) === 'KDX' || fromValues.coin === 'KDX' ? pact.kdxPrice : null}
           />
         </FlexContainer>
-        <Label fontSize={13}>{`1 ${getTokenName(swap?.localRes?.result?.data[0]?.token)} = ${reduceBalance(
-          pact?.computeOut(fromValues.amount) / fromValues.amount,
-          12
-        )} ${getTokenName(swap?.localRes?.result?.data[1]?.token)}`}</Label>
+        <ArrowIcon style={{ marginLeft: 6 }} />
         {/* TO VALUES */}
         <FlexContainer className="align-ce justify-sb">
           <RowTokenInfoPrice
@@ -163,9 +162,12 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
             tokenPrice={getTokenName(swap?.localRes?.result?.data[1]?.token) === 'KDX' ? pact.kdxPrice : null}
           />
         </FlexContainer>
-        <Label fontSize={13}>{`1 ${getTokenName(swap?.localRes?.result?.data[1]?.token)} =  ${
-          1 / reduceBalance(pact?.computeOut(fromValues.amount) / fromValues.amount, 12)
-        } ${getTokenName(swap?.localRes?.result?.data[0]?.token)}`}</Label>
+        <FlexContainer className="row justify-sb">
+          <Label>Ratio</Label>
+          <Label fontSize={13}>{`1 ${getTokenName(swap?.localRes?.result?.data[0]?.token)} = ${getDecimalPlaces(
+            pact?.computeOut(fromValues.amount) / fromValues.amount
+          )} ${getTokenName(swap?.localRes?.result?.data[1]?.token)}`}</Label>
+        </FlexContainer>
       </FlexContainer>
     </SuccesViewContainer>
   );

@@ -4,7 +4,7 @@ import moment from 'moment';
 import styled from 'styled-components/macro';
 import { useAccountContext, useGameEditionContext, usePactContext, useSwapContext } from '../../../contexts';
 import { CHAIN_ID, ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
-import { extractDecimal, reduceBalance } from '../../../utils/reduceBalance';
+import { extractDecimal, getDecimalPlaces, reduceBalance } from '../../../utils/reduceBalance';
 import { getTokenIconById, getTokenName } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import Label from '../../shared/Label';
@@ -12,7 +12,7 @@ import { CryptoContainer, FlexContainer } from '../../shared/FlexContainer';
 import reduceToken from '../../../utils/reduceToken';
 import CopyPopup from '../../shared/CopyPopup';
 import CustomDivider from '../../shared/CustomDivider';
-import { KaddexOutlineIcon } from '../../../assets';
+import { ArrowIcon, KaddexOutlineIcon } from '../../../assets';
 import { Checkbox } from 'semantic-ui-react';
 import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
 import { isNumber } from 'lodash';
@@ -75,14 +75,16 @@ export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }
   );
 };
 
-export const SuccessAddView = ({ token0, token1, loading, onClick, isSingleSideLiquidity, apr }) => {
+export const SuccessAddView = ({ token0, token1, loading, onClick, apr }) => {
   const { account } = useAccountContext();
   const pact = usePactContext();
   const swap = useSwapContext();
   const pair = getPairByTokensName(token0, token1);
 
+  const fromValues = extractDecimal(swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1']);
+
   return (
-    <SuccesViewContainer swap={swap} loading={loading} onClick={onClick}>
+    <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle>
       <FlexContainer className="w-100 column" gap={12}>
         {/* ACCOUNT */}
         <FlexContainer className="align-ce justify-sb">
@@ -94,7 +96,7 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, isSingleSideL
         </FlexContainer>
         {/* CHAIN */}
         <FlexContainer className="align-ce justify-sb">
-          <Label fontSize={13}>Chain Id</Label>
+          <Label fontSize={13}>Chain ID</Label>
           <Label fontSize={13}>{CHAIN_ID}</Label>
         </FlexContainer>
         {/* POOL */}
@@ -123,33 +125,130 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, isSingleSideL
         {/* POOL SHARE*/}
         <FlexContainer className="align-ce justify-sb">
           <Label fontSize={13}>Pool Share</Label>
-          <Label fontSize={13}>
-            {(pact.share(extractDecimal(swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1'])) * 100).toPrecision(4)} %
-          </Label>
+          <Label fontSize={13}>{(pact.share(extractDecimal(fromValues)) * 100).toPrecision(4)} %</Label>
         </FlexContainer>
 
-        <CustomDivider style={{ margin: '16px 0' }} />
+        <CustomDivider style={{ margin: '4px 0' }} />
 
         <Label>Amount</Label>
         {/* FROM VALUES */}
         <RowTokenInfoPrice
           tokenIcon={getTokenIconById(token0)}
           tokenName={token0}
-          amount={swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1']}
+          amount={fromValues}
           tokenPrice={token0 === 'KDX' ? pact.kdxPrice : null}
         />
-        <Label fontSize={13}>{`1 ${token0} = ${reduceBalance(1 / pact.ratio)} ${token1}`}</Label>
 
         {/* TO VALUES */}
-        <>
-          <RowTokenInfoPrice
-            tokenIcon={getTokenIconById(token1)}
-            tokenName={token1}
-            amount={swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0']}
-            tokenPrice={token1 === 'KDX' ? pact.kdxPrice : null}
-          />
-          <Label fontSize={13}>{`1 ${token1} =  ${reduceBalance(pact.ratio)} ${token0}`}</Label>
-        </>
+
+        <RowTokenInfoPrice
+          tokenIcon={getTokenIconById(token1)}
+          tokenName={token1}
+          amount={
+            fromValues
+              ? fromValues * reduceBalance(pact?.computeOut(fromValues) / fromValues, 12)
+              : swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0']
+          }
+          tokenPrice={token1 === 'KDX' ? pact.kdxPrice : null}
+        />
+        <FlexContainer className="row justify-sb">
+          <Label>Ratio</Label>
+          <Label fontSize={13}>{`1 ${token0} = ${getDecimalPlaces(pact?.computeOut(fromValues) / fromValues)} ${token1}`}</Label>
+        </FlexContainer>
+      </FlexContainer>
+    </SuccesViewContainer>
+  );
+};
+export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading, onClick, apr }) => {
+  const { account } = useAccountContext();
+  const pact = usePactContext();
+  const swap = useSwapContext();
+  const pair = getPairByTokensName(token0, token1);
+
+  const fromValues = swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1'];
+
+  return (
+    <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle>
+      <FlexContainer className="w-100 column" gap={12}>
+        {/* ACCOUNT */}
+        <FlexContainer className="align-ce justify-sb">
+          <Label fontSize={13}>Account</Label>
+          <Label fontSize={13}>
+            <CopyPopup textToCopy={account.account} />
+            {reduceToken(account.account)}
+          </Label>
+        </FlexContainer>
+        {/* CHAIN */}
+        <FlexContainer className="align-ce justify-sb">
+          <Label fontSize={13}>Chain ID</Label>
+          <Label fontSize={13}>{CHAIN_ID}</Label>
+        </FlexContainer>
+        {/* POOL */}
+        <FlexContainer className="align-ce justify-sb">
+          <Label fontSize={13}>Pool</Label>
+          <FlexContainer>
+            <CryptoContainer size={24} style={{ zIndex: 2 }}>
+              {getTokenIconById(token0)}
+            </CryptoContainer>
+            <CryptoContainer size={24} style={{ marginLeft: -12, zIndex: 1 }}>
+              {getTokenIconById(token1)}
+            </CryptoContainer>
+
+            <Label fontSize={13}>
+              {token0}/{token1}
+            </Label>
+          </FlexContainer>
+        </FlexContainer>
+        {/* APR*/}
+        {isNumber(apr) && (
+          <FlexContainer className="align-ce justify-sb">
+            <Label fontSize={13}>APR</Label>
+            <Label fontSize={13}>{`${apr} %`}</Label>
+          </FlexContainer>
+        )}
+        {/* POOL SHARE*/}
+        <FlexContainer className="align-ce justify-sb">
+          <Label fontSize={13}>Pool Share</Label>
+          <Label fontSize={13}>{(pact.share(extractDecimal(fromValues)) * 100).toPrecision(4)} %</Label>
+        </FlexContainer>
+
+        <CustomDivider style={{ margin: '4px 0' }} />
+
+        <Label>Amount</Label>
+        <FlexContainer mobileClassName="column" gap={16}>
+          {/* LEFT */}
+          <FlexContainer className="w-100 justify-ce align-ce">
+            <RowTokenInfoPrice
+              tokenIcon={getTokenIconById(token0)}
+              tokenName={token0}
+              amount={initialAmount}
+              tokenPrice={token0 === 'KDX' ? pact.kdxPrice : null}
+            />
+          </FlexContainer>
+          <FlexContainer className="align-ce justify-ce" mobileClassName="w-100">
+            <ArrowIcon className="mobile-none" style={{ transform: 'rotate(-90deg)' }} />
+            <ArrowIcon className="mobile-only" />
+          </FlexContainer>
+          {/* RIGHT */}
+          <FlexContainer className="justify-ce column w-100" gap={14}>
+            <RowTokenInfoPrice
+              tokenIcon={getTokenIconById(token0)}
+              tokenName={token0}
+              amount={fromValues}
+              tokenPrice={token0 === 'KDX' ? pact.kdxPrice : null}
+            />
+            <RowTokenInfoPrice
+              tokenIcon={getTokenIconById(token1)}
+              tokenName={token1}
+              amount={
+                fromValues
+                  ? fromValues * reduceBalance(pact?.computeOut(fromValues) / fromValues, 12)
+                  : swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0']
+              }
+              tokenPrice={token1 === 'KDX' ? pact.kdxPrice : null}
+            />
+          </FlexContainer>
+        </FlexContainer>
       </FlexContainer>
     </SuccesViewContainer>
   );

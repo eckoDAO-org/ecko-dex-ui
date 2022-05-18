@@ -21,7 +21,7 @@ export const StakeModalRow = styled.div`
 
 export const IconSubTitle = styled.div`
   text-align: center;
-  margin: 15px 0 24px 0;
+  margin-bottom: 24px;
   svg {
     path {
       fill: ${({ theme: { colors } }) => colors.white};
@@ -56,7 +56,7 @@ export const AddStakeModal = ({ onConfirm, alreadyStakedAmount, toStakeAmount })
       <StakeModalRow>
         <RowTokenInfoPrice tokenIcon={getTokenIconByCode('kaddex.kdx')} tokenName="KDX" amount={toStakeAmount} tokenPrice={kdxPrice} />
       </StakeModalRow>
-      <CustomButton type="gradient" buttonStyle={{ marginTop: 40 }} onClick={onConfirm}>
+      <CustomButton type="gradient" buttonStyle={{ marginTop: 32 }} onClick={onConfirm}>
         CONFIRM
       </CustomButton>
     </div>
