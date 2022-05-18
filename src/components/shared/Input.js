@@ -120,6 +120,7 @@ const Input = ({
   fluid,
   topLeftLabel,
   topRightLabel,
+  bottomContent,
   bottomLeftLabel,
   bottomRightLabel,
   label,
@@ -192,6 +193,7 @@ const Input = ({
         }}
         style={inputStyle}
       />
+      {bottomContent}
       {(bottomLeftLabel || bottomRightLabel) && gameEditionView && (
         <BottomLabelsContainer>
           {bottomLeftLabel && (

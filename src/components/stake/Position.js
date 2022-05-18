@@ -72,6 +72,13 @@ const Position = ({
             <Label>KDX</Label>
           </FlexContainer>
         }
+        bottomContent={
+          inputAmount && (
+            <Label fontSize={16} labelStyle={{ margin: '-10px 0px 10px 2px', opacity: 0.7 }}>
+              {humanReadableNumber(extractDecimal(kdxPrice) * extractDecimal(inputAmount))} USD
+            </Label>
+          )
+        }
         onChange={(e, { value }) => {
           setKdxAmount(limitDecimalPlaces(value, 7));
         }}
