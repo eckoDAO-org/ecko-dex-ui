@@ -397,7 +397,11 @@ const StakeContainer = () => {
           onWithdrawClick={() => onWithdraw()}
           stakedTimeStart={stakedTimeStart}
         />
-        <Analytics stakedShare={getAccountStakingPercentage()} totalStaked={poolState && poolState['staked-kdx']} />
+        <Analytics
+          stakedShare={getAccountStakingPercentage()}
+          totalStaked={poolState && poolState['staked-kdx']}
+          totalBurnt={poolState && poolState['burnt-kdx']}
+        />
       </FlexContainer>
 
       <VotingPower daoAccountData={daoAccountData} />
