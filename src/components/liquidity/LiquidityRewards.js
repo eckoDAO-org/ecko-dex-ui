@@ -13,6 +13,7 @@ import InfoPopup from '../shared/InfoPopup';
 import { useModalContext } from '../../contexts';
 import ClaimYourKDXRewards from '../modals/liquidity/ClaimYourKDXRewards';
 import CustomDropdown from '../shared/CustomDropdown';
+import { Divider } from 'semantic-ui-react';
 
 const ClaimButton = styled.div`
   display: flex;
@@ -69,7 +70,27 @@ const LiquidityRewards = () => {
           <Label fontSize={20} fontFamily="syncopate">
             REWARDS
           </Label>
-          <InfoPopup size={18} type="modal" title="Rewards"></InfoPopup>
+          <InfoPopup size={18} type="modal" title="Rewards">
+            <FlexContainer className="column" gap={16}>
+              <Label fontSize={16}>Amount</Label>
+              <Label>
+                It's an estimate of the amount of KDX you will receive at claiming time. The actual sum is calculated based on the average price of
+                KDX during the 5-day waiting period after liquidity removal.
+              </Label>
+              <Divider />
+              <Label fontSize={16}>KDX Multiplier</Label>
+              <Label>
+                It represents the number by which your standard 0.25% rewards are multiplied. The shown final number is a simple average of the
+                multiplier values over the period in which you provided liquidity.
+              </Label>
+              <Divider />
+              <Label fontSize={16}>Remaining Time</Label>
+              <Label>
+                Withdrawing your rewards in the form of KDX implies a 5-day waiting period from the time you remove liquidity. Such waiting window is
+                needed to calculate the average price of KDX to be used in determining the amount of your boosted rewards.
+              </Label>
+            </FlexContainer>
+          </InfoPopup>
         </div>
 
         <CustomDropdown
@@ -144,7 +165,7 @@ const renderColumns = () => {
     },
 
     {
-      name: '~ KDX Muliplayer',
+      name: '~ KDX Multiplier',
       width: 160,
       render: ({ item }) => `X ${pairUnit(extractDecimal(item.multiplier), 2)}`,
     },

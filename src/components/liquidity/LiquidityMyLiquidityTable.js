@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useAccountContext } from '../../contexts';
 import { useErrorState } from '../../hooks/useErrorState';
 import { getPairListAccountBalance } from '../../api/pact';
 import { AddIcon, RemoveIcon } from '../../assets';
@@ -10,9 +11,7 @@ import { extractDecimal, getDecimalPlaces } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
-import { useAccountContext } from '../../contexts';
 import Label from '../shared/Label';
-import InfoPopup from '../shared/InfoPopup';
 import CustomDropdown from '../shared/CustomDropdown';
 
 const sortByOptions = [
@@ -62,12 +61,9 @@ const LiquidityMyLiquidityTable = () => {
     ) : (
       <div className="column">
         <div className="flex justify-sb" style={{ marginBottom: 16 }}>
-          <div className="flex align-ce">
-            <Label fontSize={20} fontFamily="syncopate">
-              MY LIQUIDTY
-            </Label>
-            <InfoPopup size={18} type="modal" title="My Liquidty"></InfoPopup>
-          </div>
+          <Label fontSize={20} fontFamily="syncopate">
+            MY LIQUIDTY
+          </Label>
 
           <CustomDropdown
             containerStyle={{ minWidth: 134 }}
