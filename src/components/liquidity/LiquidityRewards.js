@@ -32,6 +32,7 @@ const ClaimButton = styled.div`
 const sortByOptions = [
   { key: 0, text: `Pending`, value: 'pending' },
   { key: 1, text: `Approved`, value: 'approved' },
+  { key: 2, text: `Available`, value: 'available' },
 ];
 
 const LiquidityRewards = () => {
@@ -49,11 +50,14 @@ const LiquidityRewards = () => {
   const sortBy = () => {
     const pendingRewards = fakeData.filter((r) => r.status === 'pending');
     const approvedRewards = fakeData.filter((r) => r.status === 'approved');
+    const availableRewards = fakeData.filter((r) => r.status === 'available');
     let results = [];
     if (statusFilter === 'pending') {
-      results = [...pendingRewards, ...approvedRewards];
+      results = [...pendingRewards, ...approvedRewards, ...availableRewards];
+    } else if (statusFilter === 'approved') {
+      results = [...approvedRewards, ...pendingRewards, ...availableRewards];
     } else {
-      results = [...approvedRewards, ...pendingRewards];
+      results = [...availableRewards, ...approvedRewards, ...pendingRewards];
     }
     setRewards(results);
   };
@@ -167,8 +171,24 @@ const renderColumns = () => {
       name: 'Status',
       width: 160,
       render: ({ item }) => {
+        let color = '';
+
+        switch (item.status) {
+          case 'pending':
+            color = commonColors.orange;
+            break;
+          case 'available':
+            color = commonColors.green;
+            break;
+          case 'approved':
+            color = null;
+            break;
+          default:
+            color = null;
+            break;
+        }
         return (
-          <Label className={'capitalize'} color={item?.status === 'pending' ? 'orange' : null}>
+          <Label className={'capitalize'} color={color}>
             {item.status}
           </Label>
         );
@@ -203,7 +223,7 @@ const fakeData = [
     multiplier: 3,
     transactionID: '121dj...232jk',
     remainingTime: 0,
-    status: 'pending',
+    status: 'available',
   },
   {
     token0: 'KDX',
