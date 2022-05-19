@@ -39,7 +39,8 @@ import {
   useSwapContext,
   useWalletContext,
 } from '../contexts';
-import theme from '../styles/theme';
+import theme, { commonColors } from '../styles/theme';
+import { ENABLE_GAS_STATION } from '../constants/contextConstants';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -125,6 +126,7 @@ const SwapContainer = () => {
 
   const [showTxModal, setShowTxModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [balanceLoading, setBalanceLoading] = useState(false);
   const [fetchingPair, setFetchingPair] = useState(false);
   const [noLiquidity, setNoLiquidity] = useState(false);
   const [priceImpact, setPriceImpact] = useState('');
@@ -231,6 +233,7 @@ const SwapContainer = () => {
       }
     }
   }, [pact.ratio]);
+
   useEffect(() => {
     if (!isNaN(pact.ratio)) {
       setPriceImpact(pact.computePriceImpact(Number(fromValues.amount), Number(toValues.amount)));
@@ -244,6 +247,7 @@ const SwapContainer = () => {
   }, [fromValues.coin, toValues.coin]);
 
   useEffect(() => {
+    setBalanceLoading(true);
     const getBalance = async () => {
       if (account.account && account.fetchAccountBalance) {
         let acctOfFromValues = await account.getTokenAccount(tokenData[fromValues.coin]?.code, account.account.account, tokenSelectorType === 'from');
@@ -263,6 +267,7 @@ const SwapContainer = () => {
           }));
         }
       }
+      setBalanceLoading(false);
     };
     getBalance();
   }, [account.fetchAccountBalance, account.account.account]);
@@ -287,7 +292,7 @@ const SwapContainer = () => {
     }
   }, [fetchData]); //the getPair call is invoked when is selected a token
 
-  /// POLLING ON UPDATE PACT RATIO
+  // POLLING ON UPDATE PACT RATIO
   useInterval(async () => {
     if (!isNaN(pact.ratio)) {
       await pact.getReserves(fromValues.address, toValues.address);
@@ -304,17 +309,20 @@ const SwapContainer = () => {
   }, [swap.walletSuccess]);
 
   const swapValues = () => {
-    const from = { ...fromValues };
-    const to = { ...toValues };
-    setFromValues({ ...to });
-    setToValues({ ...from });
-    if (toNote === '(estimate)') {
-      setFromNote('(estimate)');
-      setToNote('');
-    }
-    if (fromNote === '(estimate)') {
-      setToNote('(estimate)');
-      setFromNote('');
+    if (!balanceLoading) {
+      const from = { ...fromValues };
+      const to = { ...toValues };
+      setFromValues({ ...to });
+      setToValues({ ...from });
+      if (toNote === '(estimate)') {
+        setFromNote('(estimate)');
+        setToNote('');
+      }
+      if (fromNote === '(estimate)') {
+        setToNote('(estimate)');
+        setFromNote('');
+      }
+      setFetchData(true);
     }
   };
   // Check if their is enough liquidity before setting the from amount
@@ -496,6 +504,14 @@ const SwapContainer = () => {
     pact.txSend();
     setShowTxModal(false);
     modalContext.closeModal();
+    setFromValues((prev) => ({
+      ...prev,
+      amount: '',
+    }));
+    setToValues((prev) => ({
+      ...prev,
+      amount: '',
+    }));
     setLoading(false);
   };
 
@@ -541,7 +557,7 @@ const SwapContainer = () => {
                 modalContext.closeModal();
               }}
             >
-              <SwapSuccessView loading={loading} sendTransaction={sendTransaction} />
+              <SwapSuccessView loading={loading} sendTransaction={sendTransaction} fromValues={fromValues} toValues={toValues} />
             </TxView>
           ),
         });
@@ -632,12 +648,28 @@ const SwapContainer = () => {
             {gameEditionView ? (
               <PixeledBlueContainer label="Max Slippage" value={`${pact.slippage * 100}%`} style={{ marginTop: 10 }} />
             ) : (
-              <FlexContainer className="w-100 justify-sb" style={{ margin: '16px 0' }}>
-                <Label fontSize={13} geFontSize={20} geColor="blue">
-                  Max slippage
-                </Label>
-                <Label fontSize={13} geFontSize={28}>{`${pact.slippage * 100}%`}</Label>
-              </FlexContainer>
+              <>
+                {ENABLE_GAS_STATION && (
+                  <FlexContainer className="w-100 justify-sb" style={{ margin: '16px 0' }}>
+                    <Label fontSize={13} color={commonColors.green}>
+                      Gas Cost
+                    </Label>
+                    <div style={{ display: 'flex' }}>
+                      <>
+                        <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ marginLeft: 5 }}>
+                          FREE
+                        </Label>
+                      </>
+                    </div>
+                  </FlexContainer>
+                )}
+                <FlexContainer className="w-100 justify-sb" style={{ margin: '16px 0' }}>
+                  <Label fontSize={13} geFontSize={20} geColor="blue">
+                    Max slippage
+                  </Label>
+                  <Label fontSize={13} geFontSize={28}>{`${pact.slippage * 100}%`}</Label>
+                </FlexContainer>
+              </>
             )}
           </>
         )}

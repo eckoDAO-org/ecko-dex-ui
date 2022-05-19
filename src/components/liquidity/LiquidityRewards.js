@@ -13,6 +13,7 @@ import InfoPopup from '../shared/InfoPopup';
 import { useModalContext } from '../../contexts';
 import ClaimYourKDXRewards from '../modals/liquidity/ClaimYourKDXRewards';
 import CustomDropdown from '../shared/CustomDropdown';
+import { Divider } from 'semantic-ui-react';
 
 const ClaimButton = styled.div`
   display: flex;
@@ -32,6 +33,7 @@ const ClaimButton = styled.div`
 const sortByOptions = [
   { key: 0, text: `Pending`, value: 'pending' },
   { key: 1, text: `Approved`, value: 'approved' },
+  { key: 2, text: `Available`, value: 'available' },
 ];
 
 const LiquidityRewards = () => {
@@ -49,11 +51,14 @@ const LiquidityRewards = () => {
   const sortBy = () => {
     const pendingRewards = fakeData.filter((r) => r.status === 'pending');
     const approvedRewards = fakeData.filter((r) => r.status === 'approved');
+    const availableRewards = fakeData.filter((r) => r.status === 'available');
     let results = [];
     if (statusFilter === 'pending') {
-      results = [...pendingRewards, ...approvedRewards];
+      results = [...pendingRewards, ...approvedRewards, ...availableRewards];
+    } else if (statusFilter === 'approved') {
+      results = [...approvedRewards, ...pendingRewards, ...availableRewards];
     } else {
-      results = [...approvedRewards, ...pendingRewards];
+      results = [...availableRewards, ...approvedRewards, ...pendingRewards];
     }
     setRewards(results);
   };
@@ -65,7 +70,27 @@ const LiquidityRewards = () => {
           <Label fontSize={20} fontFamily="syncopate">
             REWARDS
           </Label>
-          <InfoPopup size={18} type="modal" title="Rewards"></InfoPopup>
+          <InfoPopup size={18} type="modal" title="Rewards">
+            <FlexContainer className="column" gap={16}>
+              <Label fontSize={16}>Amount</Label>
+              <Label>
+                It's an estimate of the amount of KDX you will receive at claiming time. The actual sum is calculated based on the average price of
+                KDX during the 5-day waiting period after liquidity removal.
+              </Label>
+              <Divider />
+              <Label fontSize={16}>KDX Multiplier</Label>
+              <Label>
+                It represents the number by which your standard 0.25% rewards are multiplied. The shown final number is a simple average of the
+                multiplier values over the period in which you provided liquidity.
+              </Label>
+              <Divider />
+              <Label fontSize={16}>Remaining Time</Label>
+              <Label>
+                Withdrawing your rewards in the form of KDX implies a 5-day waiting period from the time you remove liquidity. Such waiting window is
+                needed to calculate the average price of KDX to be used in determining the amount of your boosted rewards.
+              </Label>
+            </FlexContainer>
+          </InfoPopup>
         </div>
 
         <CustomDropdown
@@ -140,7 +165,7 @@ const renderColumns = () => {
     },
 
     {
-      name: '~ KDX Muliplayer',
+      name: '~ KDX Multiplier',
       width: 160,
       render: ({ item }) => `X ${pairUnit(extractDecimal(item.multiplier), 2)}`,
     },
@@ -167,8 +192,24 @@ const renderColumns = () => {
       name: 'Status',
       width: 160,
       render: ({ item }) => {
+        let color = '';
+
+        switch (item.status) {
+          case 'pending':
+            color = commonColors.orange;
+            break;
+          case 'available':
+            color = commonColors.green;
+            break;
+          case 'approved':
+            color = null;
+            break;
+          default:
+            color = null;
+            break;
+        }
         return (
-          <Label className={'capitalize'} color={item?.status === 'pending' ? 'orange' : null}>
+          <Label className={'capitalize'} color={color}>
             {item.status}
           </Label>
         );
@@ -203,7 +244,7 @@ const fakeData = [
     multiplier: 3,
     transactionID: '121dj...232jk',
     remainingTime: 0,
-    status: 'pending',
+    status: 'available',
   },
   {
     token0: 'KDX',

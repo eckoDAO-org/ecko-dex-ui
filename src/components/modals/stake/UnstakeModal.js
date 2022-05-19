@@ -8,7 +8,7 @@ import { usePactContext } from '../../../contexts';
 import { StakeModalRow, IconSubTitle } from './AddStakeModal';
 import Label from '../../shared/Label';
 import CustomCheckbox from '../../shared/CustomCheckbox';
-import { getDecimalPlaces } from '../../../utils/reduceBalance';
+import { getDecimalPlaces, humanReadableNumber } from '../../../utils/reduceBalance';
 import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
 import { getTokenIconByCode } from '../../../utils/token-utils';
 
@@ -36,7 +36,7 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
               <Label>Amount </Label>
               <div style={{ textAlign: 'right' }}>
                 <Label>{getDecimalPlaces(toUnstakeAmount * 0.03)} KDX</Label>
-                <Label labelStyle={{ opacity: 0.7, fontSize: 13, marginTop: 4 }}>{(toUnstakeAmount * 0.03 * kdxPrice).toFixed(2)} USD</Label>
+                <Label labelStyle={{ opacity: 0.7, fontSize: 13, marginTop: 4 }}>{(toUnstakeAmount * 0.03 * kdxPrice).toFixed(2)} $</Label>
               </div>
             </div>
           </div>
@@ -60,9 +60,7 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
               <Label>Amount </Label>
               <div style={{ textAlign: 'right' }}>
                 <Label>{estimateUnstakeData['reward-penalty'].toFixed(2)} KDX</Label>
-                <Label style={{ color: 'grey', fontSize: 13, marginTop: 4 }}>
-                  {(estimateUnstakeData['reward-penalty'] * kdxPrice).toFixed(2)} USD
-                </Label>
+                <Label style={{ color: 'grey', fontSize: 13, marginTop: 4 }}>{(estimateUnstakeData['reward-penalty'] * kdxPrice).toFixed(2)} $</Label>
               </div>
             </div>
           </div>
@@ -100,7 +98,21 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
           <CustomCheckbox onClick={() => setChecked(!checked)}>Withdraw your KDX staking rewards</CustomCheckbox>
         </StakeModalRow>
       )}
-      <CustomButton type="gradient" buttonStyle={{ marginTop: 30 }} onClick={() => onConfirm(checked)}>
+
+      {checked && (
+        <div style={{ marginTop: 15 }}>
+          <Label fontSize={16}>Rewards Amount</Label>
+          <StakeModalRow>
+            <RowTokenInfoPrice
+              tokenIcon={getTokenIconByCode('kaddex.kdx')}
+              tokenName="KDX"
+              amount={(estimateUnstakeData && humanReadableNumber(estimateUnstakeData['reward-accrued'])) || 0}
+              tokenPrice={kdxPrice}
+            />
+          </StakeModalRow>
+        </div>
+      )}
+      <CustomButton type="gradient" buttonStyle={{ marginTop: 32 }} onClick={() => onConfirm(checked)}>
         CONFIRM
       </CustomButton>
     </div>

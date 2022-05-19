@@ -1,18 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useAccountContext } from '../../contexts';
 import { useErrorState } from '../../hooks/useErrorState';
 import { getPairListAccountBalance } from '../../api/pact';
 import { AddIcon, RemoveIcon } from '../../assets';
 import tokenData from '../../constants/cryptoCurrencies';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_MY_LIQUIDITY, ROUTE_LIQUIDITY_REMOVE_LIQUIDITY } from '../../router/routes';
-import { extractDecimal, pairUnit } from '../../utils/reduceBalance';
+import { extractDecimal, getDecimalPlaces } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
-import { useAccountContext } from '../../contexts';
 import Label from '../shared/Label';
-import InfoPopup from '../shared/InfoPopup';
 import CustomDropdown from '../shared/CustomDropdown';
 
 const sortByOptions = [
@@ -25,7 +24,7 @@ const LiquidityMyLiquidityTable = () => {
   const { account } = useAccountContext();
   const [pairList, setPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(false);
-  const [orderBy, setOrderBy] = useState('ascending');
+  const [orderBy, setOrderBy] = useState('descending');
 
   const fetchData = async () => {
     const result = await getPairListAccountBalance(account.account);
@@ -62,15 +61,12 @@ const LiquidityMyLiquidityTable = () => {
     ) : (
       <div className="column">
         <div className="flex justify-sb" style={{ marginBottom: 16 }}>
-          <div className="flex align-ce">
-            <Label fontSize={20} fontFamily="syncopate">
-              MY LIQUIDTY
-            </Label>
-            <InfoPopup size={18} type="modal" title="My Liquidty"></InfoPopup>
-          </div>
+          <Label fontSize={20} fontFamily="syncopate">
+            MY LIQUIDTY
+          </Label>
 
           <CustomDropdown
-            containerStyle={{ minWidth: 128 }}
+            containerStyle={{ minWidth: 134 }}
             title="sort by:"
             options={sortByOptions}
             onChange={(e, { value }) => {
@@ -111,7 +107,7 @@ export default LiquidityMyLiquidityTable;
 const renderColumns = () => {
   return [
     {
-      name: 'name',
+      name: 'Pair',
       width: 160,
       render: ({ item }) => (
         <FlexContainer className="align-ce">
@@ -127,15 +123,15 @@ const renderColumns = () => {
     //   render: ({ item }) => pairUnit(extractDecimal(item.balance), 6),
     // },
     {
-      name: 'Token 1',
+      name: 'Token A',
       width: 160,
-      render: ({ item }) => `${pairUnit(extractDecimal(item.pooledAmount[0]), 6)} ${item.token0}`,
+      render: ({ item }) => `${getDecimalPlaces(extractDecimal(item.pooledAmount[0]))} ${item.token0}`,
     },
 
     {
-      name: 'Token 2',
+      name: 'Token B',
       width: 160,
-      render: ({ item }) => `${pairUnit(extractDecimal(item.pooledAmount[1]), 6)} ${item.token1}`,
+      render: ({ item }) => `${getDecimalPlaces(extractDecimal(item.pooledAmount[1]))} ${item.token1}`,
     },
 
     {
@@ -143,7 +139,7 @@ const renderColumns = () => {
       width: 160,
       render: ({ item }) => {
         return item.poolShare >= 0
-          ? `${item?.poolShare.toPrecision(4)} %`
+          ? `${(item?.poolShare * 100).toPrecision(4)} %`
           : `${((extractDecimal(item.balance) / extractDecimal(item.supply)) * 100).toPrecision(4)} %`;
       },
     },

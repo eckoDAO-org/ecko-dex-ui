@@ -16,7 +16,7 @@ export const ClaimModal = ({ onConfirm, estimateUnstakeData }) => {
       <IconSubTitle>
         <KaddexOutlineIcon />
       </IconSubTitle>
-      <CustomDivider style={{ margin: '15px 0' }} />
+      <CustomDivider style={{ margin: '24px 0' }} />
       <Label fontSize={16}>Staking Rewards Collected</Label>
       <StakeModalRow style={{ marginBottom: 20 }}>
         <RowTokenInfoPrice
@@ -45,7 +45,7 @@ export const ClaimModal = ({ onConfirm, estimateUnstakeData }) => {
           </StakeModalRow>
         </>
       ) : null}
-      <CustomButton type="gradient" buttonStyle={{ marginTop: 40 }} onClick={onConfirm}>
+      <CustomButton type="gradient" buttonStyle={{ marginTop: 32 }} onClick={onConfirm}>
         WITHDRAW
       </CustomButton>
     </div>

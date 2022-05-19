@@ -12,7 +12,7 @@ import Label from '../shared/Label';
 import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
 import { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
 import { PRECISION } from '../../constants/contextConstants';
-import { extractDecimal, limitDecimalPlaces, pairUnit, reduceBalance } from '../../utils/reduceBalance';
+import { extractDecimal, getDecimalPlaces, limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
 import PixeledBlueContainer from '../game-edition-v2/components/PixeledInfoContainerBlue';
 import LogoLoader from '../shared/Loader';
 import { FadeIn } from '../shared/animations';
@@ -234,17 +234,17 @@ const RemoveLiquidityContent = ({ pair }) => {
           <FlexContainer className="column" gap={12} style={{ margin: '16px 0' }}>
             <FlexContainer className="justify-sb w-100">
               <Label fontSize={13}>Pooled {pair?.token0}</Label>
-              <Label fontSize={13}>{pairUnit(extractDecimal(pooledToken0), 6)}</Label>
+              <Label fontSize={13}>{getDecimalPlaces(extractDecimal(pooledToken0))}</Label>
             </FlexContainer>
             <FlexContainer className="justify-sb w-100">
               <Label fontSize={13}>Pooled {pair?.token1}</Label>
-              <Label fontSize={13}>{pairUnit(extractDecimal(pooledToken1), 6)}</Label>
+              <Label fontSize={13}>{getDecimalPlaces(extractDecimal(pooledToken1))}</Label>
             </FlexContainer>
             <FlexContainer className="justify-sb w-100">
               <Label fontSize={13}>
                 {pair?.token0}/{pair?.token1} Rate
               </Label>
-              <Label fontSize={13}>{pairUnit(extractDecimal(pooled), 6)}</Label>
+              <Label fontSize={13}>{getDecimalPlaces(extractDecimal(pooled))}</Label>
             </FlexContainer>
           </FlexContainer>
         )}

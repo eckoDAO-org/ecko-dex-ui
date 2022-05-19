@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components/macro';
 import { useApplicationContext, useGameEditionContext } from '../../contexts';
 import InputToken from '../../components/shared/InputToken';
 import { SwapIcon } from '../../assets';
-import { limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
+import { extractDecimal, getDecimalPlaces, limitDecimalPlaces } from '../../utils/reduceBalance';
 import noExponents from '../../utils/noExponents';
 import FirstInput from '../../assets/images/game-edition/pixeled-box-yellow.svg';
 import SecondInput from '../../assets/images/game-edition/pixeled-box-purple.svg';
@@ -87,8 +87,8 @@ const SwapForm = ({ label, fromValues, setFromValues, toValues, setToValues, fro
           <Input
             error={isNaN(fromValues.amount)}
             topLeftLabel={label ? label : fromNote ? `I'M GIVING ${fromNote}` : `I'M GIVING`}
-            topRightLabel={`balance: ${reduceBalance(fromValues.balance) ?? '-'}`}
-            bottomLeftLabel={`balance: ${reduceBalance(fromValues.balance) ?? '-'}`} //using for gameEdition
+            topRightLabel={`balance: ${getDecimalPlaces(fromValues.balance) ?? '-'}`}
+            bottomLeftLabel={`balance: ${getDecimalPlaces(fromValues.balance) ?? '-'}`} //using for gameEdition
             geColor="black"
             placeholder="0.0"
             maxLength="15"
@@ -105,7 +105,7 @@ const SwapForm = ({ label, fromValues, setFromValues, toValues, setToValues, fro
                   setInputSide('from');
                   setFromValues((prev) => ({
                     ...prev,
-                    amount: reduceBalance(fromValues.balance),
+                    amount: extractDecimal(fromValues.balance),
                   }));
                 }}
               />
@@ -160,8 +160,8 @@ const SwapForm = ({ label, fromValues, setFromValues, toValues, setToValues, fro
           <Input
             error={isNaN(toValues.amount)}
             topLeftLabel={label ? label : toNote ? `I'M RECEIVING ${toNote}` : `I'M RECEIVING`}
-            topRightLabel={`balance: ${reduceBalance(toValues.balance) ?? '-'}`}
-            bottomLeftLabel={`balance: ${reduceBalance(toValues.balance) ?? '-'}`} //using for gameEdition
+            topRightLabel={`balance: ${getDecimalPlaces(toValues.balance) ?? '-'}`}
+            bottomLeftLabel={`balance: ${getDecimalPlaces(toValues.balance) ?? '-'}`} //using for gameEdition
             placeholder="0.0"
             geColor="white"
             maxLength="15"
@@ -178,7 +178,7 @@ const SwapForm = ({ label, fromValues, setFromValues, toValues, setToValues, fro
                   setInputSide('to');
                   setToValues((prev) => ({
                     ...prev,
-                    amount: reduceBalance(toValues.balance),
+                    amount: extractDecimal(toValues.balance),
                   }));
                 }}
               />

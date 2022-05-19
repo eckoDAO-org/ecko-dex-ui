@@ -109,12 +109,12 @@ const SlippagePopupContent = ({ className }) => {
   useOnClickOutside(ref, () => setShowSlippageContent(false));
 
   const [slp, setSlp] = useState(pact.slippage * 100);
-  const [tl, setTl] = useState(pact.ttl * 60);
+  const [tl, setTl] = useState(pact.ttl / 60);
   useEffect(() => {
     if (slp) (async () => pact.storeSlippage(slp / 100))();
   }, [slp]);
   useEffect(() => {
-    if (tl) (async () => pact.storeTtl(tl / 60))();
+    if (tl) (async () => pact.storeTtl(tl * 60))();
   }, [tl]);
   return (
     <Wrapper ref={ref} resolutionConfiguration={resolutionConfiguration}>
@@ -186,7 +186,7 @@ const SlippagePopupContent = ({ className }) => {
                   numberOnly
                   value={tl}
                   onChange={(e, { value }) => {
-                    if (value >= 0) {
+                    if (value >= 0 && value <= 60) {
                       setTl(value);
                     }
                   }}

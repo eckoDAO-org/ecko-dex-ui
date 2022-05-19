@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <g id="Icon_feather-arrow-right" data-name="Icon feather-arrow-right" transform="translate(22 -6) rotate(90)">
+    <path id="Path_67491" data-name="Path 67491" d="M21,18.5H7a1,1,0,0,1,0-2H21a1,1,0,0,1,0,2Z" transform="translate(0 -3.5)" fill="#fff"/>
+    <path id="Path_67492" data-name="Path 67492" d="M17.5,22a1,1,0,0,1-.707-1.707L23.086,14,16.793,7.707a1,1,0,1,1,1.414-1.414l7,7a1,1,0,0,1,0,1.414l-7,7A1,1,0,0,1,17.5,22Z" transform="translate(-3.5)" fill="#fff"/>
+  </g>
+</svg>

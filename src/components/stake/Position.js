@@ -64,13 +64,20 @@ const Position = ({
         numberOnly
         value={inputAmount}
         inputRightComponent={
-          <FlexContainer className="pointer align-ce" gap={16} onClick={onClickMax}>
-            <Label>MAX </Label>
+          <FlexContainer className="align-ce" gap={16}>
+            <Label className="pointer" onClick={onClickMax}>
+              MAX
+            </Label>
 
             <CoinKaddexIcon />
-
-            <Label>KDX</Label>
           </FlexContainer>
+        }
+        bottomContent={
+          inputAmount && (
+            <Label fontSize={16} labelStyle={{ margin: '-10px 0px 10px 2px', opacity: 0.7 }}>
+              $ {humanReadableNumber(extractDecimal(kdxPrice) * extractDecimal(inputAmount))}
+            </Label>
+          )
         }
         onChange={(e, { value }) => {
           setKdxAmount(limitDecimalPlaces(value, 7));

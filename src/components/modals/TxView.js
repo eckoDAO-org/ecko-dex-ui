@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import moment from 'moment';
 import styled, { css } from 'styled-components/macro';
-import { useGameEditionContext, useSwapContext } from '../../contexts';
-import { ErrorIcon, PixeledCircleArrowIcon, SuccessfullIcon } from '../../assets';
+import { useGameEditionContext, useSwapContext, usePactContext, useModalContext } from '../../contexts';
+import { ErrorIcon, PixeledCircleArrowIcon } from '../../assets';
 import { GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
 import CustomButton from '../shared/CustomButton';
 import Label from '../shared/Label';
@@ -12,9 +13,9 @@ import { PixeledInfoContainerWhite } from '../game-edition-v2/components/Pixeled
 import PixeledBlueContainer, { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
 import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
 import { ENABLE_GAS_STATION, GAS_PRICE } from '../../constants/contextConstants';
-import PopupTxView from './PopupTxView';
 import { FlexContainer } from '../shared/FlexContainer';
 import LogoLoader from '../shared/Loader';
+import { useInterval } from '../../hooks/useInterval';
 
 const TransactionsDetails = styled.div`
   width: 100%;
@@ -29,6 +30,32 @@ const TxView = ({ loading, onClose, children }) => {
   const swap = useSwapContext();
   const { gameEditionView } = useGameEditionContext();
 
+  const Message = ({ color, children }) => {
+    const { gameEditionView } = useGameEditionContext();
+
+    const getColor = () => {
+      switch (color) {
+        case 'red':
+          return commonColors.error;
+        default:
+          return null;
+      }
+    };
+    return (
+      <MessageContainer gameEditionView={gameEditionView} color={getColor()}>
+        <Label
+          color={getColor()}
+          geColor={color}
+          className="capitalize"
+          labelStyle={{ wordBreak: 'break-all' }}
+          geLabelStyle={{ wordBreak: 'break-all' }}
+        >
+          {children}
+        </Label>
+      </MessageContainer>
+    );
+  };
+
   const failView = () => {
     return (
       <Content gameEditionView={gameEditionView}>
@@ -40,7 +67,7 @@ const TxView = ({ loading, onClose, children }) => {
           Error Message
         </Label>
         <TransactionsDetails>
-          <Message color="error">{swap?.localRes?.result?.error?.message}</Message>
+          <Message color="red">{swap?.localRes?.result?.error?.message}</Message>
 
           {swap?.localRes?.result?.error?.message?.includes('insufficient') && (
             <Label geColor="blue" geCenter>
@@ -72,7 +99,7 @@ const TxView = ({ loading, onClose, children }) => {
           Error Message
         </Label>
         <TransactionsDetails>
-          <Message color="error" style={{ wordBreak: 'break-all' }}>
+          <Message color="red" style={{ wordBreak: 'break-all' }}>
             {swap?.localRes}
           </Message>
         </TransactionsDetails>
@@ -130,45 +157,18 @@ const MessageContainer = styled.div`
   background-color: ${({ gameEditionView, theme: { colors } }) => !gameEditionView && colors.backgroundContainer};
 `;
 
-const Message = ({ color, children }) => {
-  const { gameEditionView } = useGameEditionContext();
-
-  const getColor = () => {
-    switch (color) {
-      case 'red':
-        return commonColors.error;
-      default:
-        return null;
-    }
-  };
-  return (
-    <MessageContainer gameEditionView={gameEditionView} color={getColor()}>
-      <Label
-        color={getColor()}
-        geColor={color}
-        className="capitalize"
-        labelStyle={{ wordBreak: 'break-all' }}
-        geLabelStyle={{ wordBreak: 'break-all' }}
-      >
-        {children}
-      </Label>
-    </MessageContainer>
-  );
-};
-
 // GAS COST COMPONENT
 export const GasCost = ({ swap }) => {
   return (
     <div className="flex justify-sb">
-      <Label fontSize={13}>Gas Cost</Label>
+      <Label fontSize={13} color={commonColors.green}>
+        Gas Cost
+      </Label>
       <div style={{ display: 'flex' }}>
         {ENABLE_GAS_STATION ? (
           <>
-            <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ textDecoration: 'line-through' }}>
-              {(GAS_PRICE * swap?.localRes?.gas).toPrecision(4)} KDA
-            </Label>
             <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ marginLeft: 5 }}>
-              FREE!
+              FREE
             </Label>
           </>
         ) : (
@@ -176,15 +176,26 @@ export const GasCost = ({ swap }) => {
             {(GAS_PRICE * swap?.localRes?.gas).toPrecision(4)} KDA
           </Label>
         )}
-        {ENABLE_GAS_STATION && <PopupTxView popupStyle={{ maxWidth: '400px' }} />}
       </div>
     </div>
   );
 };
 
 // CONTENT CONTAINER
-export const SuccesViewContainer = ({ swap, onClick, children, icon, hideSubtitle, footer }) => {
+export const SuccesViewContainer = ({ swap, onClick, children, icon, hideSubtitle, disableButton, footer }) => {
   const { gameEditionView } = useGameEditionContext();
+  const pact = usePactContext();
+  const { closeModal } = useModalContext();
+  const [counter, setCounter] = useState(pact.ttl);
+
+  useInterval(() => setCounter(counter - 1), 1000);
+
+  useEffect(() => {
+    const timer = setTimeout(() => closeModal(), pact.ttl * 1000);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Content gameEditionView={gameEditionView}>
       {!hideSubtitle && (
@@ -192,19 +203,23 @@ export const SuccesViewContainer = ({ swap, onClick, children, icon, hideSubtitl
           Preview Successful!
         </Label>
       )}
-      {!gameEditionView && (icon || <SuccessfullIcon />)}
+      {!gameEditionView && icon}
 
-      <FlexContainer className="w-100 flex column" gap={16} style={{ marginTop: 24 }}>
+      <FlexContainer className="w-100 flex column" gap={16}>
         {children}
         <GasCost swap={swap} />
       </FlexContainer>
-
+      <FlexContainer className="w-100 flex column" style={{ marginBottom: 24 }}>
+        <Label>{`The transaction will expire in ${`${moment.utc(counter * 1000).format('mm:ss')}`} ${
+          counter / 60 >= 1 ? 'minutes' : 'seconds'
+        }`}</Label>
+      </FlexContainer>
       {footer}
       <CustomButton
-        type="gradient"
+        type={disableButton ? 'primary' : 'gradient'}
+        disabled={disableButton}
         buttonStyle={{
           width: '100%',
-          marginTop: !gameEditionView && '16px',
           marginBottom: gameEditionView && '16px',
         }}
         onClick={async () => {
