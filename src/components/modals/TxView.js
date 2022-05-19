@@ -168,7 +168,7 @@ export const GasCost = ({ swap }) => {
         {ENABLE_GAS_STATION ? (
           <>
             <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ marginLeft: 5 }}>
-              FREE!
+              FREE
             </Label>
           </>
         ) : (

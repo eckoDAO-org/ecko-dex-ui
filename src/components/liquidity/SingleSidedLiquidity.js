@@ -6,7 +6,7 @@ import tokenData from '../../constants/cryptoCurrencies';
 import { useAccountContext, useLiquidityContext, useModalContext, usePactContext, useWalletContext } from '../../contexts';
 import { useInterval } from '../../hooks/useInterval';
 import noExponents from '../../utils/noExponents';
-import { getCorrectBalance, limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
+import { extractDecimal, getCorrectBalance, getDecimalPlaces, limitDecimalPlaces } from '../../utils/reduceBalance';
 import { SuccessAddSigleSideView } from '../modals/liquidity/LiquidityTxView';
 import SelectPoolModal from '../modals/liquidity/SelectPoolModal';
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
@@ -283,8 +283,8 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
         <Input
           error={isNaN(fromValue.amount)}
           topLeftLabel="amount"
-          topRightLabel={`balance: ${reduceBalance(fromValue.balance) ?? '-'}`}
-          bottomLeftLabel={`balance: ${reduceBalance(fromValue.balance) ?? '-'}`} //using for gameEdition
+          topRightLabel={`balance: ${getDecimalPlaces(fromValue.balance) ?? '-'}`}
+          bottomLeftLabel={`balance: ${getDecimalPlaces(fromValue.balance) ?? '-'}`} //using for gameEdition
           geColor="black"
           placeholder="0.0"
           maxLength="15"
@@ -300,7 +300,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
               onMaxClickButton={() => {
                 setFromValue((prev) => ({
                   ...prev,
-                  amount: reduceBalance(fromValue.balance),
+                  amount: extractDecimal(fromValue.balance),
                 }));
               }}
             />

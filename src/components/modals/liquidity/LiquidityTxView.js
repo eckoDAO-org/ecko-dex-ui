@@ -63,7 +63,7 @@ export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }
             <>
               <GameEditionLabel geColor="white">{(GAS_PRICE * swap?.localRes?.gas).toPrecision(4)} KDA</GameEditionLabel>
               <GameEditionLabel geColor="white" labelStyle={{ marginLeft: 5 }}>
-                FREE!
+                FREE
               </GameEditionLabel>
             </>
           ) : (

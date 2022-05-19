@@ -75,7 +75,7 @@ export const SwapSuccessViewGE = () => {
           value: ENABLE_GAS_STATION ? (
             <>
               <GameEditionLabel geColor="white" labelStyle={{ marginLeft: 5 }}>
-                FREE!
+                FREE
               </GameEditionLabel>
             </>
           ) : (

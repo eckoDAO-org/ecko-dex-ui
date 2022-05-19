@@ -64,12 +64,12 @@ const Position = ({
         numberOnly
         value={inputAmount}
         inputRightComponent={
-          <FlexContainer className="pointer align-ce" gap={16} onClick={onClickMax}>
-            <Label>MAX </Label>
+          <FlexContainer className="align-ce" gap={16}>
+            <Label className="pointer" onClick={onClickMax}>
+              MAX
+            </Label>
 
             <CoinKaddexIcon />
-
-            <Label>KDX</Label>
           </FlexContainer>
         }
         bottomContent={

@@ -134,13 +134,13 @@ const renderColumns = () => {
     },
 
     {
-      name: 'APR Booster',
+      name: 'KDX Multiplier',
       width: 160,
       render: ({ item }) => 'Coming Soon',
     },
     {
       name: 'APR',
-      width: 160,
+      width: 120,
       render: ({ item }) => `${item.apr.toFixed(2)}%`,
     },
   ];
