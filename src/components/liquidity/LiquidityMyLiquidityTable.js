@@ -25,7 +25,7 @@ const LiquidityMyLiquidityTable = () => {
   const { account } = useAccountContext();
   const [pairList, setPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(false);
-  const [orderBy, setOrderBy] = useState('ascending');
+  const [orderBy, setOrderBy] = useState('descending');
 
   const fetchData = async () => {
     const result = await getPairListAccountBalance(account.account);
@@ -70,7 +70,7 @@ const LiquidityMyLiquidityTable = () => {
           </div>
 
           <CustomDropdown
-            containerStyle={{ minWidth: 128 }}
+            containerStyle={{ minWidth: 134 }}
             title="sort by:"
             options={sortByOptions}
             onChange={(e, { value }) => {
@@ -111,7 +111,7 @@ export default LiquidityMyLiquidityTable;
 const renderColumns = () => {
   return [
     {
-      name: 'name',
+      name: 'Pair',
       width: 160,
       render: ({ item }) => (
         <FlexContainer className="align-ce">
@@ -127,13 +127,13 @@ const renderColumns = () => {
     //   render: ({ item }) => pairUnit(extractDecimal(item.balance), 6),
     // },
     {
-      name: 'Token 1',
+      name: 'Token A',
       width: 160,
       render: ({ item }) => `${pairUnit(extractDecimal(item.pooledAmount[0]), 6)} ${item.token0}`,
     },
 
     {
-      name: 'Token 2',
+      name: 'Token B',
       width: 160,
       render: ({ item }) => `${pairUnit(extractDecimal(item.pooledAmount[1]), 6)} ${item.token1}`,
     },

@@ -94,6 +94,11 @@ const renderColumns = () => {
       ),
     },
     {
+      name: 'price',
+      width: 160,
+      render: ({ item }) => '-',
+    },
+    {
       name: 'liquidity',
       width: 160,
 

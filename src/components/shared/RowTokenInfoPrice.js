@@ -21,11 +21,10 @@ const RowTokenInfoPrice = ({ tokenIcon, tokenName, amount, tokenPrice, isEstimat
           <Label>{tokenName}</Label>
         </FlexContainer>
         {tokenPrice && (
-          <FlexContainer className="justify-sb w-100">
-            <Label labelStyle={{ opacity: 0.7, fontSize: 13 }}>
-              {isEstimated ? `~${(extractDecimal(amount) * tokenPrice).toFixed(2)}` : (extractDecimal(amount) * tokenPrice).toFixed(2)}
+          <FlexContainer className=" w-100">
+            <Label labelStyle={{ opacity: 0.6, fontSize: 12 }}>
+              $ {isEstimated ? `~${(extractDecimal(amount) * tokenPrice).toFixed(2)}` : (extractDecimal(amount) * tokenPrice).toFixed(2)}
             </Label>
-            <Label labelStyle={{ opacity: 0.7, fontSize: 13 }}>$</Label>
           </FlexContainer>
         )}
       </FlexContainer>

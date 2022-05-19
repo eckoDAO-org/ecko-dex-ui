@@ -44,7 +44,7 @@ const Analytics = ({ stakedShare, totalStaked }) => {
       </div>
       <div>
         <Label>Volume</Label>
-        <Label fontSize={24}>{humanReadableNumber(totalVolumeUSD)} $</Label>
+        <Label fontSize={24}>$ {humanReadableNumber(totalVolumeUSD)}</Label>
       </div>
       <div>
         <div className="flex align-ce">

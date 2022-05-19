@@ -74,7 +74,6 @@ export const SwapSuccessViewGE = () => {
           label: 'gas cost KDA',
           value: ENABLE_GAS_STATION ? (
             <>
-              <GameEditionLabel geColor="white">{(GAS_PRICE * swap?.localRes?.gas).toPrecision(4)} KDA</GameEditionLabel>
               <GameEditionLabel geColor="white" labelStyle={{ marginLeft: 5 }}>
                 FREE!
               </GameEditionLabel>
