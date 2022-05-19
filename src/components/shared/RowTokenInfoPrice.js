@@ -8,7 +8,7 @@ const RowTokenInfoPrice = ({ tokenIcon, tokenName, amount, tokenPrice, isEstimat
       The component returns Token icon with amount and usd token price:
        --------
        | ICON |  {AMOUNT TOKEN }           {token-name}      
-       |      |  {USD token value}         USD
+       |      |  {$ token value}         $
        -------- 
     */
 
@@ -25,7 +25,7 @@ const RowTokenInfoPrice = ({ tokenIcon, tokenName, amount, tokenPrice, isEstimat
             <Label labelStyle={{ opacity: 0.7, fontSize: 13 }}>
               {isEstimated ? `~${(extractDecimal(amount) * tokenPrice).toFixed(2)}` : (extractDecimal(amount) * tokenPrice).toFixed(2)}
             </Label>
-            <Label labelStyle={{ opacity: 0.7, fontSize: 13 }}>USD</Label>
+            <Label labelStyle={{ opacity: 0.7, fontSize: 13 }}>$</Label>
           </FlexContainer>
         )}
       </FlexContainer>
