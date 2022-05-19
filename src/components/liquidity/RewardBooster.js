@@ -54,7 +54,7 @@ const RewardBooster = ({ type, apr, handleState }) => {
           <div className="column">
             <Label fontSize={16}>123.1234 KDX</Label>
             <Label fontSize={13} className="justify-fe" withShade labelStyle={{ marginTop: 4 }}>
-              123.1234 USD
+              123.1234 $
             </Label>
           </div>
         </div>

@@ -143,7 +143,7 @@ const renderColumns = () => {
       width: 160,
       render: ({ item }) => {
         return item.poolShare >= 0
-          ? `${item?.poolShare.toPrecision(4)} %`
+          ? `${(item?.poolShare * 100).toPrecision(4)} %`
           : `${((extractDecimal(item.balance) / extractDecimal(item.supply)) * 100).toPrecision(4)} %`;
       },
     },

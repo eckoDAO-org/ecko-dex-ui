@@ -50,7 +50,7 @@ const ClaimYourKDXRewards = ({ multiplier }) => {
           </div>
           <div className="flex justify-sb">
             <Label withShade>200.00</Label>
-            <Label withShade>USD</Label>
+            <Label withShade>$</Label>
           </div>
         </div>
       </div>
