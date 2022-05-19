@@ -46,7 +46,7 @@ const Position = ({
         <Label>My Stake</Label>
         <Label fontSize={30}>{humanReadableNumber(amount)} KDX</Label>
         <Label fontSize={16} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
-          {humanReadableNumber(extractDecimal(kdxPrice) * extractDecimal(amount))} USD
+          $ {humanReadableNumber(extractDecimal(kdxPrice) * extractDecimal(amount))}
         </Label>
         {pendingAmount && (
           <Label fontSize={15} labelStyle={{ marginTop: 8, color: commonColors.info }}>

@@ -8,6 +8,7 @@ import VestingScheduleChart from '../components/charts/VestingScheduleChart';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
 import { humanReadableNumber, reduceBalance } from '../utils/reduceBalance';
 import LogoLoader from '../components/shared/Loader';
+import ProgressBar from '../components/shared/ProgressBar';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import Label from '../components/shared/Label';
 import InfoPopup from '../components/shared/InfoPopup';
@@ -90,7 +91,17 @@ const AnalyticsContainer = () => {
           <AnalyticsSimpleWidget
             title={'Circulating supply'}
             mainText={(kdxSupply && `${humanReadableNumber(kdxSupply, 2)} KDX`) || '-'}
-            subtitle={`${((100 * kdxSupply) / KDX_TOTAL_SUPPLY).toFixed(2)} %`}
+            subtitle={
+              <div className="w-100 flex" style={{ paddingTop: 10 }}>
+                <ProgressBar
+                  activeBackground="white"
+                  maxValue={KDX_TOTAL_SUPPLY}
+                  currentValue={kdxSupply}
+                  containerStyle={{ flex: 1, paddingTop: 2 }}
+                />
+                <span style={{ flex: 2, marginLeft: 20 }}>{((100 * kdxSupply) / KDX_TOTAL_SUPPLY).toFixed(2)} %</span>
+              </div>
+            }
           />
           <AnalyticsSimpleWidget
             title={'KDX Burned'}
@@ -101,15 +112,13 @@ const AnalyticsContainer = () => {
         <FlexContainer mobileClassName="column" gap={24}>
           <AnalyticsSimpleWidget
             title={'KDX Treasury'}
-            // mainText={(kdxTreasury && `${humanReadableNumber(kdxTreasury, 2)} KDX`) || '-'}
-            mainText={(kdxSupply && `${humanReadableNumber(kdxSupply * 0.25, 2)} KDX`) || '-'}
-            // subtitle={`${((100 * kdxTreasury) / KDX_TOTAL_SUPPLY).toFixed(2)} %`}
-            subtitle={`${((100 * kdxSupply * 0.25) / KDX_TOTAL_SUPPLY).toFixed(2)} %`}
+            mainText={`${humanReadableNumber(KDX_TOTAL_SUPPLY * 0.25, 2)} KDX` || '-'}
+            subtitle={`${(25).toFixed(2)} %`}
           />
           <AnalyticsSimpleWidget
             title={'KDX Rewards'}
-            mainText={(kdxRewards && `${humanReadableNumber(kdxRewards, 2)} KDX`) || '-'}
-            subtitle={`${((100 * kdxRewards) / KDX_TOTAL_SUPPLY).toFixed(2)} %`}
+            mainText={`${humanReadableNumber(KDX_TOTAL_SUPPLY * 0.4, 2)} KDX` || '-'}
+            subtitle={`${(40).toFixed(2)} %`}
           />
         </FlexContainer>
         <FlexContainer mobileClassName="column" gap={24}>

@@ -14,8 +14,8 @@ const STYMaxSupplyContainer = styled.div`
 
 const STYMaxSupply = styled.div`
   height: 8px;
-  background: ${({ darkBar }) =>
-    darkBar ? 'linear-gradient(to right, #E0E0E0, #5C5C5C99, #E0E0E0)' : 'linear-gradient(to right, #5dcbe5, #e37480, #f6cc7d)'};
+  background: ${({ darkBar, activeBackground }) =>
+    darkBar ? 'linear-gradient(to right, #E0E0E0, #5C5C5C99, #E0E0E0)' : activeBackground || 'linear-gradient(to right, #5dcbe5, #e37480, #f6cc7d)'};
   border-radius: 10px;
   width: ${({ width }) => width}%;
 `;
@@ -32,7 +32,7 @@ const PercetageIndicator = styled(FlexContainer)`
   }
 `;
 
-const ProgressBar = ({ currentValue, maxValue, topLabelLeft, bottomValues, withBottomLabel, values, darkBar, containerStyle }) => {
+const ProgressBar = ({ currentValue, maxValue, topLabelLeft, bottomValues, withBottomLabel, values, darkBar, activeBackground, containerStyle }) => {
   return (
     <FlexContainer className="column w-100" style={containerStyle}>
       {topLabelLeft && (
@@ -42,7 +42,7 @@ const ProgressBar = ({ currentValue, maxValue, topLabelLeft, bottomValues, withB
         </FlexContainer>
       )}
       <STYMaxSupplyContainer>
-        <STYMaxSupply darkBar={darkBar} width={getPercentage(currentValue, maxValue)} />
+        <STYMaxSupply darkBar={darkBar} activeBackground={activeBackground} width={getPercentage(currentValue, maxValue)} />
 
         {values && (
           <FlexContainer className="align-ce w-100">

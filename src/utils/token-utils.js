@@ -36,11 +36,13 @@ export const getApr = (volume, liquidity) => {
   return apr;
 };
 
+export const getDailyUSDRewards = (totalDailyVolumeUSD) => (totalDailyVolumeUSD * STAKING_REWARDS_PERCENT) / 100;
+
 export const getStakingApr = (totalDailyVolumeUSD, totalUsdStakedKDX) => {
   if (isNaN(totalDailyVolumeUSD) || isNaN(totalUsdStakedKDX)) {
     return null;
   }
-  const dailyRewards = (totalDailyVolumeUSD * STAKING_REWARDS_PERCENT) / 100;
+  const dailyRewards = getDailyUSDRewards(totalDailyVolumeUSD);
   const yearlyRewards = dailyRewards * 365;
   return (100 * yearlyRewards) / totalUsdStakedKDX;
 };

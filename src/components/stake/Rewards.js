@@ -78,7 +78,7 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
         <Label>KDX Collected</Label>
         <Label fontSize={30}>{humanReadableNumber(rewardAccrued)} KDX</Label>
         <Label fontSize={16} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
-          {humanReadableNumber(kdxPrice * rewardAccrued)} USD
+          $ {humanReadableNumber(kdxPrice * rewardAccrued)}
         </Label>
       </div>
       <div>

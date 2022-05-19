@@ -3,10 +3,17 @@ import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
 import { getPairList } from '../../api/pact';
 import { getDailyVolume } from '../../api/kaddex-stats';
-import { getAllPairValues, getStakingApr } from '../../utils/token-utils';
+import { getAllPairValues, getStakingApr, getDailyUSDRewards } from '../../utils/token-utils';
 import { extractDecimal, humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
 import { usePactContext } from '../../contexts';
 import AnalyticsInfo from './AnalyticsInfo';
+import styled from 'styled-components';
+
+const SubLabel = styled(Label)`
+  font-size: 16px;
+  margin-op: 4px;
+  opacity: 0.7;
+`;
 
 const Analytics = ({ stakedShare, totalStaked, totalBurnt }) => {
   const [totalVolumeUSD, setTotalVolumeUSD] = useState(null);
@@ -28,37 +35,51 @@ const Analytics = ({ stakedShare, totalStaked, totalBurnt }) => {
       .catch((err) => console.log('error fetching pair list', err));
   }, []);
 
+  const dailyUSDIncome = totalVolumeUSD && (getDailyUSDRewards(totalVolumeUSD) * stakedShare) / 100;
+
   useEffect(() => {
     if (totalVolumeUSD && kdxPrice && totalStaked) {
-      setStakingAPR(getStakingApr(totalVolumeUSD, kdxPrice * totalStaked));
+      setStakingAPR(getStakingApr(totalVolumeUSD, kdxPrice * extractDecimal(totalStaked)));
     }
   }, [totalVolumeUSD, totalStaked, kdxPrice]);
 
   return (
     <CommonWrapper title="analytics" gap={24} popup={<AnalyticsInfo />} popupTitle="Analytics">
-      <div>
-        <div className="flex align-ce">
-          <Label>APR</Label>
+      <div className="flex justify-sb">
+        <div>
+          <div className="flex align-ce">
+            <Label>Daily Income</Label>
+          </div>
+          <Label fontSize={32}>{(dailyUSDIncome && kdxPrice && humanReadableNumber(dailyUSDIncome / kdxPrice)) || '-'} KDX</Label>
+          <SubLabel>$ {(dailyUSDIncome && humanReadableNumber(dailyUSDIncome)) || '-'}</SubLabel>
         </div>
-        <Label fontSize={32}>{(stakingAPR && stakingAPR.toFixed(2)) || '-'}%</Label>
-      </div>
-      <div>
-        <Label>Volume</Label>
-        <Label fontSize={24}>{humanReadableNumber(totalVolumeUSD)} USD</Label>
-      </div>
-      <div>
-        <div className="flex align-ce">
-          <Label>Staked Share</Label>
+        <div>
+          <div className="flex align-ce">
+            <Label>APR</Label>
+          </div>
+          <Label fontSize={32}>{(stakingAPR && stakingAPR.toFixed(2)) || '-'}%</Label>
         </div>
-        <Label fontSize={24}>{(stakedShare && extractDecimal(stakedShare).toFixed(2)) || '-'}% </Label>
       </div>
       <div>
-        <Label>Total Staked</Label>
-        <Label fontSize={24}>{(totalStaked && humanReadableNumber(reduceBalance(totalStaked))) || '-'} KDX</Label>
+        <Label>Daily Volume</Label>
+        <Label fontSize={24}>$ {humanReadableNumber(totalVolumeUSD)}</Label>
+      </div>
+      <div className="flex  justify-sb">
+        <div>
+          <div className="flex align-ce">
+            <Label>Staked Share</Label>
+          </div>
+          <Label fontSize={24}>{(stakedShare && extractDecimal(stakedShare).toFixed(2)) || '-'}% </Label>
+        </div>
+        <div>
+          <Label>Total Staked</Label>
+          <Label fontSize={24}>{(totalStaked && humanReadableNumber(reduceBalance(totalStaked))) || '-'} KDX</Label>
+        </div>
       </div>
       <div>
-        <Label>Total Burnt</Label>
+        <Label>KDX Burned</Label>
         <Label fontSize={24}>{(totalBurnt && humanReadableNumber(reduceBalance(totalBurnt))) || '-'} KDX</Label>
+        <SubLabel>{(totalStaked && totalBurnt && (reduceBalance(totalBurnt) * 100) / reduceBalance(totalStaked))?.toFixed(2) || '-'} %</SubLabel>
       </div>
     </CommonWrapper>
   );
