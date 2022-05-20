@@ -8,6 +8,7 @@ import { getTokenUsdPriceByName } from '../utils/token-utils';
 import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { useAccountContext, useNotificationContext, useWalletContext } from '.';
 import { fetchPrecision } from '../api/pact';
+import tokenData from '../constants/cryptoCurrencies';
 
 export const PactContext = createContext();
 
@@ -33,13 +34,22 @@ export const PactProvider = (props) => {
   const [moreSwap, setMoreSwap] = useState(true);
   const [loadingSwap, setLoadingSwap] = useState(false);
 
-  const [kdxPrice, setKdxPrice] = useState(null);
+  const [tokensUsdPrice, setTokensUsdPrice] = useState(null);
 
-  const updateKdxPrice = () => getTokenUsdPriceByName('KDX').then((price) => setKdxPrice(price || null));
+  const updateTokenUsdPrice = async () => {
+    const result = {};
+    for (const token of Object.values(tokenData)) {
+      await getTokenUsdPriceByName(token.name).then((price) => {
+        result[token.name] = price;
+      });
+    }
+    setTokensUsdPrice(result);
+  };
+
   useEffect(() => {
-    updateKdxPrice();
+    updateTokenUsdPrice();
   }, []);
-  useInterval(updateKdxPrice, 20000);
+  useInterval(updateTokenUsdPrice, 25000);
 
   useEffect(() => {
     pairReserve ? setRatio(pairReserve['token0'] / pairReserve['token1']) : setRatio(NaN);
@@ -238,7 +248,7 @@ export const PactProvider = (props) => {
 
   const contextValues = {
     setPactCmd,
-    kdxPrice,
+    tokensUsdPrice,
     slippage,
     setSlippage,
     storeSlippage,

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { getDailyVolume } from '../../api/kaddex-stats';
@@ -10,12 +11,15 @@ import { AddIcon, GasIcon } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_LIQUIDITY_TOKENS } from '../../router/routes';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
-import { get24HVolumeSingleSided, getAllPairValues, getTokenUsdPrice } from '../../utils/token-utils';
+import { get24HVolumeSingleSided, getAllPairValues } from '../../utils/token-utils';
+import { usePactContext } from '../../contexts';
 
 const LiquidityTokensTable = () => {
   const history = useHistory();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [tokens, setTokens] = useState([]);
+
+  const { tokensUsdPrice } = usePactContext();
 
   const fetchData = async () => {
     const pairsList = await getPairList();
@@ -31,7 +35,7 @@ const LiquidityTokensTable = () => {
       // calculate sum of liquidity in usd and volumes in usd for each token in each pair
       for (const token of tokens) {
         const tokenPairs = pairsList.filter((p) => p.token0 === token.name || p.token1 === token.name);
-        const tokenUsdPrice = await getTokenUsdPrice(token, pairsList);
+        const tokenUsdPrice = tokensUsdPrice?.[token.name];
         let volume24HUsd = 0;
         let volume24H = 0;
         let liquidity = 0;
@@ -48,16 +52,18 @@ const LiquidityTokensTable = () => {
         // get the highest apr for filtered apr
         const highestApr = Math.max(...filteredApr.map((apr) => apr.value));
 
-        result.push({ ...token, volume24HUsd, volume24H, apr: highestApr, liquidityUSD, liquidity });
+        result.push({ ...token, volume24HUsd, volume24H, apr: highestApr, liquidityUSD, liquidity, tokenUsdPrice });
       }
       setTokens(result);
     }
     setLoading(false);
   };
+
   useEffect(() => {
-    setLoading(true);
-    fetchData();
-  }, []);
+    if (tokensUsdPrice) {
+      fetchData();
+    }
+  }, [tokensUsdPrice]);
 
   return !loading ? (
     <CommonTable
@@ -96,7 +102,7 @@ const renderColumns = () => {
     {
       name: 'price',
       width: 160,
-      render: ({ item }) => '-',
+      render: ({ item }) => `$ ${item.tokenUsdPrice}`,
     },
     {
       name: 'liquidity',
