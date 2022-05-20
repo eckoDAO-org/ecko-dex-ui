@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
@@ -11,14 +12,14 @@ import styled from 'styled-components';
 
 const SubLabel = styled(Label)`
   font-size: 16px;
-  margin-op: 4px;
+  margin-top: 4px;
   opacity: 0.7;
 `;
 
 const Analytics = ({ stakedShare, totalStaked, totalBurnt }) => {
   const [totalVolumeUSD, setTotalVolumeUSD] = useState(null);
   const [stakingAPR, setStakingAPR] = useState(null);
-  const { kdxPrice } = usePactContext();
+  const { tokensUsdPrice } = usePactContext();
   useEffect(() => {
     getPairList()
       .then(async (pools) => {
@@ -38,10 +39,10 @@ const Analytics = ({ stakedShare, totalStaked, totalBurnt }) => {
   const dailyUSDIncome = totalVolumeUSD && (getDailyUSDRewards(totalVolumeUSD) * stakedShare) / 100;
 
   useEffect(() => {
-    if (totalVolumeUSD && kdxPrice && totalStaked) {
-      setStakingAPR(getStakingApr(totalVolumeUSD, kdxPrice * extractDecimal(totalStaked)));
+    if (totalVolumeUSD && tokensUsdPrice?.KDX && totalStaked) {
+      setStakingAPR(getStakingApr(totalVolumeUSD, tokensUsdPrice?.KDX * extractDecimal(totalStaked)));
     }
-  }, [totalVolumeUSD, totalStaked, kdxPrice]);
+  }, [totalVolumeUSD, totalStaked, tokensUsdPrice?.KDX]);
 
   return (
     <CommonWrapper title="analytics" gap={24} popup={<AnalyticsInfo />} popupTitle="Analytics">
@@ -50,19 +51,26 @@ const Analytics = ({ stakedShare, totalStaked, totalBurnt }) => {
           <div className="flex align-ce">
             <Label>Daily Income</Label>
           </div>
-          <Label fontSize={32}>{(dailyUSDIncome && kdxPrice && humanReadableNumber(dailyUSDIncome / kdxPrice)) || '-'} KDX</Label>
+          <Label fontSize={30}>
+            {(dailyUSDIncome && tokensUsdPrice?.KDX && humanReadableNumber(dailyUSDIncome / tokensUsdPrice?.KDX)) || '-'} KDX
+          </Label>
           <SubLabel>$ {(dailyUSDIncome && humanReadableNumber(dailyUSDIncome)) || '-'}</SubLabel>
         </div>
         <div>
-          <div className="flex align-ce">
+          <div className="flex column align-fe">
             <Label>APR</Label>
           </div>
-          <Label fontSize={32}>{(stakingAPR && stakingAPR.toFixed(2)) || '-'}%</Label>
+          <Label fontSize={30}>{(stakingAPR && stakingAPR.toFixed(2)) || '-'}%</Label>
         </div>
       </div>
       <div>
         <Label>Daily Volume</Label>
         <Label fontSize={24}>$ {humanReadableNumber(totalVolumeUSD)}</Label>
+      </div>
+      <div>
+        <Label>KDX Burned</Label>
+        <Label fontSize={24}>{(totalBurnt && humanReadableNumber(reduceBalance(totalBurnt))) || '-'} KDX</Label>
+        <SubLabel>{(totalStaked && totalBurnt && (reduceBalance(totalBurnt) * 100) / reduceBalance(totalStaked))?.toFixed(2) || '-'} %</SubLabel>
       </div>
       <div className="flex  justify-sb">
         <div>
@@ -70,16 +78,13 @@ const Analytics = ({ stakedShare, totalStaked, totalBurnt }) => {
             <Label>Staked Share</Label>
           </div>
           <Label fontSize={24}>{(stakedShare && extractDecimal(stakedShare).toFixed(2)) || '-'}% </Label>
+          <SubLabel labelStyle={{ fontSize: 12 }}>12,231,234.45 KDX</SubLabel>
         </div>
-        <div>
+        <div className="flex column align-fe">
           <Label>Total Staked</Label>
-          <Label fontSize={24}>{(totalStaked && humanReadableNumber(reduceBalance(totalStaked))) || '-'} KDX</Label>
+          <Label fontSize={24}>38.20 %{/* {(totalStaked && humanReadableNumber(reduceBalance(totalStaked))) || '-'} KDX */}</Label>
+          <SubLabel labelStyle={{ fontSize: 12 }}>120,231,234.45 KDX</SubLabel>
         </div>
-      </div>
-      <div>
-        <Label>KDX Burned</Label>
-        <Label fontSize={24}>{(totalBurnt && humanReadableNumber(reduceBalance(totalBurnt))) || '-'} KDX</Label>
-        <SubLabel>{(totalStaked && totalBurnt && (reduceBalance(totalBurnt) * 100) / reduceBalance(totalStaked))?.toFixed(2) || '-'} %</SubLabel>
       </div>
     </CommonWrapper>
   );

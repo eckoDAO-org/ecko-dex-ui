@@ -143,7 +143,7 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
             tokenIcon={getTokenIconByCode(swap?.localRes?.result?.data[0]?.token)}
             tokenName={getTokenName(swap?.localRes?.result?.data[0]?.token)}
             amount={fromValues ? fromValues.amount : swap?.localRes?.result?.data[0]?.amount}
-            tokenPrice={getTokenName(swap?.localRes?.result?.data[0]?.token) === 'KDX' || fromValues.coin === 'KDX' ? pact.kdxPrice : null}
+            tokenPrice={pact.tokensUsdPrice?.[getTokenName(swap?.localRes?.result?.data[0]?.token)] || null}
           />
         </FlexContainer>
         <ArrowIcon style={{ marginLeft: 6 }} />
@@ -158,7 +158,7 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
                 ? fromValues.amount * reduceBalance(pact?.computeOut(fromValues.amount) / fromValues.amount, 12)
                 : swap?.localRes?.result?.data[1]?.amount
             }
-            tokenPrice={getTokenName(swap?.localRes?.result?.data[1]?.token) === 'KDX' ? pact.kdxPrice : null}
+            tokenPrice={pact.tokensUsdPrice?.[getTokenName(swap?.localRes?.result?.data[1]?.token)] || null}
           />
         </FlexContainer>
         <FlexContainer className="row justify-sb">

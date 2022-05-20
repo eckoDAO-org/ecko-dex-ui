@@ -136,7 +136,7 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, apr }) => {
           tokenIcon={getTokenIconById(token0)}
           tokenName={token0}
           amount={fromValues}
-          tokenPrice={token0 === 'KDX' ? pact.kdxPrice : null}
+          tokenPrice={pact.tokensUsdPrice?.[token0] || null}
         />
 
         {/* TO VALUES */}
@@ -149,7 +149,7 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, apr }) => {
               ? fromValues * reduceBalance(pact?.computeOut(fromValues) / fromValues, 12)
               : swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0']
           }
-          tokenPrice={token1 === 'KDX' ? pact.kdxPrice : null}
+          tokenPrice={pact.tokensUsdPrice?.[token1] || null}
         />
         <FlexContainer className="row justify-sb">
           <Label>Ratio</Label>
@@ -222,7 +222,7 @@ export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading
               tokenIcon={getTokenIconById(token0)}
               tokenName={token0}
               amount={initialAmount}
-              tokenPrice={token0 === 'KDX' ? pact.kdxPrice : null}
+              tokenPrice={pact.tokensUsdPrice?.[token0] || null}
             />
           </FlexContainer>
           <FlexContainer className="align-ce justify-ce" mobileClassName="w-100">
@@ -235,17 +235,19 @@ export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading
               tokenIcon={getTokenIconById(token0)}
               tokenName={token0}
               amount={fromValues}
-              tokenPrice={token0 === 'KDX' ? pact.kdxPrice : null}
+              tokenPrice={pact.tokensUsdPrice?.[token0] || null}
             />
             <RowTokenInfoPrice
               tokenIcon={getTokenIconById(token1)}
               tokenName={token1}
               amount={
                 fromValues
-                  ? fromValues * reduceBalance(pact?.computeOut(fromValues) / fromValues, 12)
+                  ? token0 === pair.token0
+                    ? fromValues * reduceBalance(pact?.computeOut(fromValues) / fromValues, 12)
+                    : fromValues * reduceBalance(pact?.computeIn(fromValues) / fromValues, 12)
                   : swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0']
               }
-              tokenPrice={token1 === 'KDX' ? pact.kdxPrice : null}
+              tokenPrice={pact.tokensUsdPrice?.[token1] || null}
             />
           </FlexContainer>
         </FlexContainer>

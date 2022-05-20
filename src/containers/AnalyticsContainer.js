@@ -69,8 +69,8 @@ const AnalyticsContainer = () => {
         <FlexContainer mobileClassName="column" gap={24}>
           <AnalyticsSimpleWidget
             title={'KDX price'}
-            mainText={`$ ${pact?.kdxPrice || '-'}`}
-            subtitle={pact?.kdxPrice && `${(pact?.kdxPrice / kdaPrice).toFixed(4)} KDA`}
+            mainText={`$ ${pact?.tokensUsdPrice?.KDX || '-'}`}
+            subtitle={pact?.tokensUsdPrice?.KDX && `${(pact?.tokensUsdPrice?.KDX / kdaPrice).toFixed(4)} KDA`}
           />
           <AnalyticsSimpleWidget
             title={
@@ -83,7 +83,7 @@ const AnalyticsContainer = () => {
                 </InfoPopup>
               </>
             }
-            mainText={(kdxSupply && `$ ${humanReadableNumber(Number(kdxSupply * pact?.kdxPrice))}`) || '-'}
+            mainText={(kdxSupply && `$ ${humanReadableNumber(Number(kdxSupply * pact?.tokensUsdPrice?.KDX))}`) || '-'}
             subtitle={null}
           />
         </FlexContainer>

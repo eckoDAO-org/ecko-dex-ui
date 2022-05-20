@@ -30,10 +30,11 @@ const ClaimButton = styled.div`
   }
 `;
 
-const sortByOptions = [
-  { key: 0, text: `Pending`, value: 'pending' },
-  { key: 1, text: `Approved`, value: 'approved' },
-  { key: 2, text: `Available`, value: 'available' },
+const filterOptions = [
+  { key: 0, text: `All`, value: 'all' },
+  { key: 1, text: `Available`, value: 'available' },
+  { key: 2, text: `Pending`, value: 'pending' },
+  { key: 3, text: `Approved`, value: 'approved' },
 ];
 
 const LiquidityRewards = () => {
@@ -41,30 +42,32 @@ const LiquidityRewards = () => {
   const [loading, setLoading] = useState(false);
   const [rewards, setRewards] = useState([]);
 
-  const [statusFilter, setStatusFilter] = useState('pending');
+  const [statusFilter, setStatusFilter] = useState('all');
 
   useEffect(() => {
-    sortBy();
+    filterBy();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusFilter]);
 
-  const sortBy = () => {
+  const filterBy = () => {
     const pendingRewards = fakeData.filter((r) => r.status === 'pending');
     const approvedRewards = fakeData.filter((r) => r.status === 'approved');
     const availableRewards = fakeData.filter((r) => r.status === 'available');
     let results = [];
-    if (statusFilter === 'pending') {
-      results = [...pendingRewards, ...approvedRewards, ...availableRewards];
+    if (statusFilter === 'all') {
+      results = [...availableRewards, ...pendingRewards, ...approvedRewards];
+    } else if (statusFilter === 'pending') {
+      results = [...pendingRewards];
     } else if (statusFilter === 'approved') {
-      results = [...approvedRewards, ...pendingRewards, ...availableRewards];
+      results = [...approvedRewards];
     } else {
-      results = [...availableRewards, ...approvedRewards, ...pendingRewards];
+      results = [...availableRewards];
     }
     setRewards(results);
   };
 
   return !loading ? (
-    <div className="column">
+    <>
       <div className="flex justify-sb" style={{ marginBottom: 16 }}>
         <div className="flex align-ce">
           <Label fontSize={20} fontFamily="syncopate">
@@ -92,10 +95,10 @@ const LiquidityRewards = () => {
             </FlexContainer>
           </InfoPopup>
         </div>
-
         <CustomDropdown
-          title="sort by:"
-          options={sortByOptions}
+          containerStyle={{ minWidth: 125 }}
+          title="filter by:"
+          options={filterOptions}
           onChange={(e, { value }) => {
             setStatusFilter(value);
           }}
@@ -136,7 +139,7 @@ const LiquidityRewards = () => {
           },
         ]}
       />
-    </div>
+    </>
   ) : (
     <AppLoader containerStyle={{ height: '100%', alignItems: 'center', justifyContent: 'center' }} />
   );

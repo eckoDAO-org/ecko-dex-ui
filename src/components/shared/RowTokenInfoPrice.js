@@ -17,13 +17,13 @@ const RowTokenInfoPrice = ({ tokenIcon, tokenName, amount, tokenPrice, isEstimat
       <CryptoContainer size={30}>{tokenIcon}</CryptoContainer>
       <FlexContainer className="column w-100" style={{ alignSelf: !tokenPrice && 'center' }}>
         <FlexContainer className="justify-sb w-100">
-          <Label>{isEstimated ? `~${getDecimalPlaces(extractDecimal(amount))}` : getDecimalPlaces(extractDecimal(amount))}</Label>
+          <Label>{isEstimated ? `${getDecimalPlaces(extractDecimal(amount))}` : getDecimalPlaces(extractDecimal(amount))}</Label>
           <Label>{tokenName}</Label>
         </FlexContainer>
         {tokenPrice && (
           <FlexContainer className=" w-100">
             <Label labelStyle={{ opacity: 0.6, fontSize: 12 }}>
-              $ {isEstimated ? `~${(extractDecimal(amount) * tokenPrice).toFixed(2)}` : (extractDecimal(amount) * tokenPrice).toFixed(2)}
+              $ {isEstimated ? `${(extractDecimal(amount) * tokenPrice).toFixed(2)}` : (extractDecimal(amount) * tokenPrice).toFixed(2)}
             </Label>
           </FlexContainer>
         )}

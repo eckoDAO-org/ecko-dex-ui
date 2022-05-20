@@ -27,7 +27,7 @@ const Position = ({
   onSubmitStake,
 }) => {
   const modalContext = useModalContext();
-  const { kdxPrice } = usePactContext();
+  const { tokensUsdPrice } = usePactContext();
   const { account } = useAccountContext();
   const { pathname } = useLocation();
 
@@ -46,7 +46,7 @@ const Position = ({
         <Label>My Stake</Label>
         <Label fontSize={30}>{humanReadableNumber(amount)} KDX</Label>
         <Label fontSize={16} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
-          $ {humanReadableNumber(extractDecimal(kdxPrice) * extractDecimal(amount))}
+          $ {humanReadableNumber(extractDecimal(tokensUsdPrice?.KDX) * extractDecimal(amount))}
         </Label>
         {pendingAmount && (
           <Label fontSize={15} labelStyle={{ marginTop: 8, color: commonColors.info }}>
@@ -75,7 +75,7 @@ const Position = ({
         bottomContent={
           inputAmount && (
             <Label fontSize={16} labelStyle={{ margin: '-10px 0px 10px 2px', opacity: 0.7 }}>
-              $ {humanReadableNumber(extractDecimal(kdxPrice) * extractDecimal(inputAmount))}
+              $ {humanReadableNumber(extractDecimal(tokensUsdPrice?.KDX) * extractDecimal(inputAmount))}
             </Label>
           )
         }
