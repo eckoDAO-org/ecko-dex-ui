@@ -10,6 +10,8 @@ import KpennyContainer from "../containers/KpennyContainer";
 import KpennyRedeemContainer from "../containers/KpennyRedeemContainer";
 // import RedeemGuide from "../modals/RedeemGuide";
 import styled from "styled-components/macro";
+import { MAINTENANCE_MODE } from "../constants/contextConstants";
+import MaintenanceContainer from "../containers/MaintenanceContainer";
 
 import {
   ROUTE_INDEX,
@@ -38,8 +40,20 @@ export default () => {
         <Layout>
           <Container>
             <Switch>
-              <Route exact path={ROUTE_INDEX} component={SwapContainer} />
-              <Route exact path={ROUTE_POOL} component={PoolContainer} />
+              <Route
+                exact
+                path={ROUTE_INDEX}
+                component={
+                  MAINTENANCE_MODE ? MaintenanceContainer : SwapContainer
+                }
+              />
+              <Route
+                exact
+                path={ROUTE_POOL}
+                component={
+                  MAINTENANCE_MODE ? MaintenanceContainer : PoolContainer
+                }
+              />
               <Route exact path={ROUTE_WRAP} component={WrapContainer} />
               <Route exact path={ROUTE_STATS} component={StatsContainer} />
               <Route exact path={ROUTE_STATIC} component={StaticContainer} />
