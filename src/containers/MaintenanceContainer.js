@@ -27,10 +27,15 @@ const MaintenanceContainer = () => {
     <Container>
       <TitleContainer>
         <Title>
-          We have discovered a vulnerability of Kadenaswap code and are
-          therefore pausing trading until this vulnerability is fixed by Kadena.
-          This pause is also enacted in the smart contract protecting user
-          funds. We are also working to fix this issue on our V2 platform.
+          <p>
+            We have discovered a vulnerability of Kadenaswap code and are
+            therefore pausing trading until this vulnerability is fixed by
+            Kadena.
+          </p>
+          <p>
+            This pause is also enacted in the smart contract protecting user
+            funds. We are also working to fix this issue on our V2 platform.
+          </p>
         </Title>
       </TitleContainer>
     </Container>

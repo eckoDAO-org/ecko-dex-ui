@@ -55,7 +55,13 @@ export default () => {
                 }
               />
               <Route exact path={ROUTE_WRAP} component={WrapContainer} />
-              <Route exact path={ROUTE_STATS} component={StatsContainer} />
+              <Route
+                exact
+                path={ROUTE_STATS}
+                component={
+                  MAINTENANCE_MODE ? MaintenanceContainer : StatsContainer
+                }
+              />
               <Route exact path={ROUTE_STATIC} component={StaticContainer} />
               <Route exact path={ROUTE_KPY_RES} component={KpennyContainer} />
               <Route
