@@ -9,21 +9,21 @@ import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
 import { getTokenIconByCode } from '../../../utils/token-utils';
 
 export const ClaimModal = ({ onConfirm, estimateUnstakeData }) => {
-  const { kdxPrice } = usePactContext();
+  const { tokensUsdPrice } = usePactContext();
 
   return (
     <div>
       <IconSubTitle>
         <KaddexOutlineIcon />
       </IconSubTitle>
-      <CustomDivider style={{ margin: '15px 0' }} />
+      <CustomDivider style={{ margin: '24px 0' }} />
       <Label fontSize={16}>Staking Rewards Collected</Label>
       <StakeModalRow style={{ marginBottom: 20 }}>
         <RowTokenInfoPrice
           tokenIcon={getTokenIconByCode('kaddex.kdx')}
           tokenName="KDX"
           amount={estimateUnstakeData['reward-accrued']}
-          tokenPrice={kdxPrice}
+          tokenPrice={tokensUsdPrice?.KDX}
         />
       </StakeModalRow>
 
@@ -40,12 +40,12 @@ export const ClaimModal = ({ onConfirm, estimateUnstakeData }) => {
               tokenIcon={getTokenIconByCode('kaddex.kdx')}
               tokenName="KDX"
               amount={estimateUnstakeData['reward-penalty']}
-              tokenPrice={kdxPrice}
+              tokenPrice={tokensUsdPrice?.KDX}
             />
           </StakeModalRow>
         </>
       ) : null}
-      <CustomButton type="gradient" buttonStyle={{ marginTop: 40 }} onClick={onConfirm}>
+      <CustomButton type="gradient" buttonStyle={{ marginTop: 32 }} onClick={onConfirm}>
         WITHDRAW
       </CustomButton>
     </div>

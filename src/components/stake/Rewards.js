@@ -10,7 +10,7 @@ import { usePactContext } from '../../contexts';
 import { getTimeByBlockchain } from '../../utils/string-utils';
 
 const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty, lastRewardsClaim, disabled, onWithdrawClick }) => {
-  const { kdxPrice } = usePactContext();
+  const { tokensUsdPrice } = usePactContext();
 
   /*
     If you unstake during the first 72hours you will incur in a penalty: 3% flat penalty on your staked amount. 
@@ -78,7 +78,7 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
         <Label>KDX Collected</Label>
         <Label fontSize={30}>{humanReadableNumber(rewardAccrued)} KDX</Label>
         <Label fontSize={16} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
-          {humanReadableNumber(kdxPrice * rewardAccrued)} USD
+          $ {humanReadableNumber(tokensUsdPrice?.KDX * extractDecimal(rewardAccrued))}
         </Label>
       </div>
       <div>

@@ -10,7 +10,7 @@ import ProgressBar from '../shared/ProgressBar';
 import VotingPowerInfo from './VotingPowerInfo';
 
 const VotingPowerContainer = ({ accountData }) => {
-  const { kdxPrice } = usePactContext();
+  const { tokensUsdPrice } = usePactContext();
   return (
     <FlexContainer gap={10} className="column" mobileStyle={{ marginBottom: 16 }}>
       <FlexContainer>
@@ -44,7 +44,10 @@ const VotingPowerContainer = ({ accountData }) => {
             {accountData['staked-amount'] ? humanReadableNumber(extractDecimal(accountData['staked-amount']).toFixed(2)) : '-'} KDX
           </Label>
           <Label fontSize={14} labelStyle={{ marginTop: 6, marginBottom: 10, opacity: 0.7 }}>
-            {accountData['staked-amount'] ? humanReadableNumber((kdxPrice * extractDecimal(accountData['staked-amount']))?.toFixed(2)) : '-'} USD
+            {accountData['staked-amount']
+              ? humanReadableNumber((tokensUsdPrice?.KDX * extractDecimal(accountData['staked-amount']))?.toFixed(2))
+              : '-'}{' '}
+            $
           </Label>
         </FlexContainer>
 

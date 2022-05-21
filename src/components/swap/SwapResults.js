@@ -1,8 +1,10 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-import { reduceBalance } from '../../utils/reduceBalance';
+import { getDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
 import Label from '../shared/Label';
 import { useLiquidityContext, usePactContext } from '../../contexts';
+import { ENABLE_GAS_STATION } from '../../constants/contextConstants';
+import { commonColors } from '../../styles/theme';
 
 const ResultContainer = styled.div`
   display: flex;
@@ -30,6 +32,16 @@ const SwapResults = ({ priceImpact, fromValues, toValues }) => {
   const liquidity = useLiquidityContext();
   return (
     <ResultContainer>
+      {ENABLE_GAS_STATION && (
+        <RowContainer>
+          <Label fontSize={13} color={commonColors.green}>
+            Gas Cost
+          </Label>
+          <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ marginLeft: 5 }}>
+            FREE
+          </Label>
+        </RowContainer>
+      )}
       <RowContainer>
         <Label fontSize={13}>Price</Label>
         <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
@@ -53,7 +65,7 @@ const SwapResults = ({ priceImpact, fromValues, toValues }) => {
       <RowContainer>
         <Label fontSize={13}>Liquidity Provider Fee</Label>
         <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
-          {(liquidity.liquidityProviderFee * parseFloat(fromValues.amount)).toFixed(6)} {fromValues.coin}
+          {getDecimalPlaces(liquidity.liquidityProviderFee * parseFloat(fromValues.amount))} {fromValues.coin}
         </Label>
       </RowContainer>
     </ResultContainer>

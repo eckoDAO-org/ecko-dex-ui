@@ -6,8 +6,9 @@ import { useInterval } from '../hooks/useInterval';
 import axios from 'axios';
 import { getTokenUsdPriceByName } from '../utils/token-utils';
 import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, KADDEX_NAMESPACE } from '../constants/contextConstants';
-import { useAccountContext, useNotificationContext } from '.';
+import { useAccountContext, useNotificationContext, useWalletContext } from '.';
 import { fetchPrecision } from '../api/pact';
+import tokenData from '../constants/cryptoCurrencies';
 
 export const PactContext = createContext();
 
@@ -16,6 +17,7 @@ const savedTtl = localStorage.getItem('ttl');
 
 export const PactProvider = (props) => {
   const account = useAccountContext();
+  const wallet = useWalletContext();
   const notificationContext = useNotificationContext();
 
   const [slippage, setSlippage] = useState(savedSlippage ? savedSlippage : 0.05);
@@ -32,13 +34,22 @@ export const PactProvider = (props) => {
   const [moreSwap, setMoreSwap] = useState(true);
   const [loadingSwap, setLoadingSwap] = useState(false);
 
-  const [kdxPrice, setKdxPrice] = useState(null);
+  const [tokensUsdPrice, setTokensUsdPrice] = useState(null);
 
-  const updateKdxPrice = () => getTokenUsdPriceByName('KDX').then((price) => setKdxPrice(price || null));
+  const updateTokenUsdPrice = async () => {
+    const result = {};
+    for (const token of Object.values(tokenData)) {
+      await getTokenUsdPriceByName(token.name).then((price) => {
+        result[token.name] = price;
+      });
+    }
+    setTokensUsdPrice(result);
+  };
+
   useEffect(() => {
-    updateKdxPrice();
+    updateTokenUsdPrice();
   }, []);
-  useInterval(updateKdxPrice, 20000);
+  useInterval(updateTokenUsdPrice, 25000);
 
   useEffect(() => {
     pairReserve ? setRatio(pairReserve['token0'] / pairReserve['token1']) : setRatio(NaN);
@@ -46,6 +57,12 @@ export const PactProvider = (props) => {
 
   useEffect(() => {
     fetchPrecision();
+  }, []);
+
+  useEffect(() => {
+    if (!wallet.wallet) {
+      storeTtl(600);
+    }
   }, []);
 
   const getEventsSwapList = async () => {
@@ -173,7 +190,7 @@ export const PactProvider = (props) => {
   };
 
   const storeTtl = async (ttl) => {
-    setTtl(slippage);
+    setTtl(ttl);
     localStorage.setItem('ttl', ttl);
   };
 
@@ -231,7 +248,7 @@ export const PactProvider = (props) => {
 
   const contextValues = {
     setPactCmd,
-    kdxPrice,
+    tokensUsdPrice,
     slippage,
     setSlippage,
     storeSlippage,

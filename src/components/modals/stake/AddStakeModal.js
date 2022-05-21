@@ -21,7 +21,7 @@ export const StakeModalRow = styled.div`
 
 export const IconSubTitle = styled.div`
   text-align: center;
-  margin: 15px 0 24px 0;
+  margin-bottom: 24px;
   svg {
     path {
       fill: ${({ theme: { colors } }) => colors.white};
@@ -33,7 +33,7 @@ export const IconSubTitle = styled.div`
 `;
 
 export const AddStakeModal = ({ onConfirm, alreadyStakedAmount, toStakeAmount }) => {
-  const { kdxPrice } = usePactContext();
+  const { tokensUsdPrice } = usePactContext();
 
   const getModalText = () => {
     if (alreadyStakedAmount && alreadyStakedAmount > 0) {
@@ -54,9 +54,9 @@ export const AddStakeModal = ({ onConfirm, alreadyStakedAmount, toStakeAmount })
       <CustomDivider style={{ margin: '15px 0' }} />
       <Label fontSize={16}>Stake </Label>
       <StakeModalRow>
-        <RowTokenInfoPrice tokenIcon={getTokenIconByCode('kaddex.kdx')} tokenName="KDX" amount={toStakeAmount} tokenPrice={kdxPrice} />
+        <RowTokenInfoPrice tokenIcon={getTokenIconByCode('kaddex.kdx')} tokenName="KDX" amount={toStakeAmount} tokenPrice={tokensUsdPrice?.KDX} />
       </StakeModalRow>
-      <CustomButton type="gradient" buttonStyle={{ marginTop: 40 }} onClick={onConfirm}>
+      <CustomButton type="gradient" buttonStyle={{ marginTop: 32 }} onClick={onConfirm}>
         CONFIRM
       </CustomButton>
     </div>

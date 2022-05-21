@@ -68,7 +68,7 @@ const LiquidityContainer = () => {
           >
             <RewardsButtonContent color={pathname === ROUTE_LIQUIDITY_REWARDS ? '#fff' : commonColors.pink}>
               <BoosterIcon />
-              <Label fontFamily="syncopate" color={pathname === ROUTE_LIQUIDITY_REWARDS ? '#fff' : commonColors.pink}>
+              <Label fontFamily="syncopate" color={pathname === ROUTE_LIQUIDITY_REWARDS ? '#fff' : commonColors.pink} labelStyle={{ marginTop: 1 }}>
                 REWARDS
               </Label>
             </RewardsButtonContent>

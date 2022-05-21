@@ -61,7 +61,7 @@ const RightHeaderItems = () => {
   const { pathname } = useLocation();
   const [width] = useWindowSize();
 
-  const { kdxPrice } = usePactContext();
+  const { tokensUsdPrice } = usePactContext();
   const { account } = useAccountContext();
   const { notificationList, removeAllNotifications } = useNotificationContext();
   const modalContext = useModalContext();
@@ -75,7 +75,7 @@ const RightHeaderItems = () => {
         <div className="flex align-ce">
           <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 8 }} />
           <Label outGameEditionView fontSize={13} className="mainnet-chain-2">
-            $ {kdxPrice || '-'}
+            $ {tokensUsdPrice?.KDX || '-'}
           </Label>
         </div>
       )}

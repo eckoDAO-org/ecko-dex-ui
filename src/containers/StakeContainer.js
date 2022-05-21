@@ -168,7 +168,7 @@ const StakeContainer = () => {
         console.log(' stakingResponse', stakingResponse);
         pollingNotif(stakingResponse.requestKeys[0], 'Staking Transaction Pending');
 
-        setInputAmount(0.0);
+        setInputAmount('');
         await transactionListen(stakingResponse.requestKeys[0]);
         pact.setPolling(false);
       })
@@ -237,7 +237,7 @@ const StakeContainer = () => {
 
         await transactionListen(rollupAndUnstake.requestKeys[0]);
         pact.setPolling(false);
-        setInputAmount(0.0);
+        setInputAmount('');
       })
       .catch((error) => {
         console.log(`~ rollupAndUnstake error`, error);
@@ -256,7 +256,7 @@ const StakeContainer = () => {
 
         await transactionListen(rollupAndUnstake.requestKeys[0]);
         pact.setPolling(false);
-        setInputAmount(0);
+        setInputAmount('');
       })
       .catch((error) => {
         console.log(`~ rollupClaimAndUnstake error`, error);
@@ -315,7 +315,7 @@ const StakeContainer = () => {
 
         await transactionListen(rollupAndClaim.requestKeys[0]);
         pact.setPolling(false);
-        setInputAmount(0.0);
+        setInputAmount('');
       })
       .catch((error) => {
         console.log(`~ rollupAndClaim error`, error);
@@ -380,7 +380,9 @@ const StakeContainer = () => {
           buttonLabel={pathname === ROUTE_STAKE ? 'stake' : 'unstake'}
           pendingAmount={(estimateUnstakeData && estimateUnstakeData['stake-record'] && estimateUnstakeData['stake-record']['pending-add']) || false}
           onClickMax={() =>
-            setInputAmount(pathname !== ROUTE_UNSTAKE ? kdxAccountBalance.toFixed(12) : estimateUnstakeData?.staked.toFixed(12) || 0.0)
+            setInputAmount(
+              pathname !== ROUTE_UNSTAKE ? Number(kdxAccountBalance.toFixed(12)) : Number(estimateUnstakeData?.staked.toFixed(12)) || 0.0
+            )
           }
           setKdxAmount={(value) => setInputAmount(value)}
           onSubmitStake={() => (pathname !== ROUTE_UNSTAKE ? onStakeKDX() : onRollupAndUnstake())}
@@ -395,7 +397,11 @@ const StakeContainer = () => {
           onWithdrawClick={() => onWithdraw()}
           stakedTimeStart={stakedTimeStart}
         />
-        <Analytics stakedShare={getAccountStakingPercentage()} totalStaked={poolState && poolState['staked-kdx']} />
+        <Analytics
+          stakedShare={getAccountStakingPercentage()}
+          totalStaked={poolState && poolState['staked-kdx']}
+          totalBurnt={poolState && poolState['burnt-kdx']}
+        />
       </FlexContainer>
 
       <VotingPower daoAccountData={daoAccountData} />
