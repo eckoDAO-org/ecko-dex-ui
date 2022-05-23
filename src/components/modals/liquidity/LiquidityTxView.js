@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import styled from 'styled-components/macro';
-import { useAccountContext, useGameEditionContext, usePactContext, useSwapContext } from '../../../contexts';
+import { useAccountContext, useApplicationContext, useGameEditionContext, usePactContext, useSwapContext } from '../../../contexts';
 import { CHAIN_ID, ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
 import { extractDecimal, getDecimalPlaces, reduceBalance } from '../../../utils/reduceBalance';
 import { getTokenIconById, getTokenName } from '../../../utils/token-utils';
@@ -12,12 +12,13 @@ import { CryptoContainer, FlexContainer } from '../../shared/FlexContainer';
 import reduceToken from '../../../utils/reduceToken';
 import CopyPopup from '../../shared/CopyPopup';
 import CustomDivider from '../../shared/CustomDivider';
-import { ArrowIcon, KaddexOutlineIcon } from '../../../assets';
+import { AlertIcon, ArrowIcon, KaddexOutlineIcon } from '../../../assets';
 import { Checkbox } from 'semantic-ui-react';
 import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
 import { isNumber } from 'lodash';
 import { getPairByTokensName } from '../../../constants/cryptoCurrencies';
 import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
+import theme from '../../../styles/theme';
 
 export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }) => {
   const { setButtons } = useGameEditionContext();
@@ -79,12 +80,79 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, apr }) => {
   const { account } = useAccountContext();
   const pact = usePactContext();
   const swap = useSwapContext();
+  const { themeMode } = useApplicationContext();
+
   const pair = getPairByTokensName(token0, token1);
+
+  const [liquidityCheck, setLiquidityCheck] = useState({ disabled: false, message: '' });
 
   const fromValues = extractDecimal(swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1']);
 
+  useEffect(() => {
+    liquidityChecker(fromValues, fromValues * reduceBalance(pact?.computeOut(fromValues) / fromValues, 12), pair[0], pair[1]);
+  }, [pact.ratio]);
+
+  /* 
+amountBOptimal (quote amountADesired reserveA reserveB)
+
+enforce (>= amountBOptimal amountBMin)
+                           "add-liquidity: insufficient B amount")
+
+(amountAOptimal (quote amountBDesired reserveB reserveA)))
+
+(enforce (<= amountAOptimal amountADesired)
+                    "add-liquidity: optimal A less than desired")
+                  (enforce (>= amountAOptimal amountAMin)
+                    "add-liquidity: insufficient A amount")
+
+(defun quote
+    ( amountA:decimal
+      reserveA:decimal
+      reserveB:decimal
+    )
+    (enforce (> amountA 0.0) "quote: insufficient amount")
+    (enforce (and (> reserveA 0.0) (> reserveB 0.0)) "quote: insufficient liquidity")
+    (/ (* amountA reserveB) reserveA)
+  ) */
+
+  const liquidityQuote = (amount, reserve0, reserve1) => {
+    return (amount * reserve1) / reserve0;
+  };
+
+  const liquidityChecker = (amount0Desired, amount1Desired, reserve0, reserve1) => {
+    const amount1Min = amount1Desired - amount1Desired * pact.slippage;
+    const amount1Optimal = liquidityQuote(amount0Desired, reserve0, reserve1);
+    const amount0Min = amount0Desired - amount0Desired * pact.slippage;
+    const amount0Optimal = liquidityQuote(amount1Desired, reserve1, reserve0);
+
+    if (amount1Optimal >= amount1Min) {
+      setLiquidityCheck({ disabled: true, message: 'add-liquidity: insufficient B amount' });
+    } else if (amount0Optimal <= amount0Desired) {
+      setLiquidityCheck({ disabled: true, message: 'add-liquidity: optimal A less than desired' });
+    } else if (amount0Optimal >= amount0Min) {
+      setLiquidityCheck({ disabled: true, message: 'add-liquidity: insufficient A amount' });
+    } else {
+      setLiquidityCheck({ disabled: false, message: '' });
+    }
+  };
+
   return (
-    <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle>
+    <SuccesViewContainer
+      swap={swap}
+      loading={loading}
+      onClick={onClick}
+      hideSubtitle
+      footer={liquidityCheck.disabled(
+        <FlexContainer
+          className="w-100 flex"
+          gap={4}
+          style={{ background: theme(themeMode).colors.white, borderRadius: 10, padding: 10, marginBottom: 24 }}
+        >
+          <AlertIcon className="mobile-none svg-app-inverted-color" />
+          <Label inverted>{liquidityCheck.message}</Label>
+        </FlexContainer>
+      )}
+    >
       <FlexContainer className="w-100 column" gap={12}>
         {/* ACCOUNT */}
         <FlexContainer className="align-ce justify-sb">
