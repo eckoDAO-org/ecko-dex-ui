@@ -170,7 +170,7 @@ const renderColumns = () => {
     {
       name: '~ KDX Multiplier',
       width: 160,
-      render: ({ item }) => `X ${pairUnit(extractDecimal(item.multiplier), 2)}`,
+      render: ({ item }) => `${pairUnit(extractDecimal(item.multiplier), 2)} x`,
     },
 
     {

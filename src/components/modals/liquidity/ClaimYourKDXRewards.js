@@ -25,11 +25,10 @@ const ClaimYourKDXRewards = ({ multiplier }) => {
       <IconSubTitle>
         <KaddexOutlineIcon />
       </IconSubTitle>
-      <Label>Removing KDX from your staking amount will incur a penalty of 3% of the unstaked amount, and all earned rewards.</Label>
 
       <div className="flex justify-sb">
         <Label fontSize={16}>KDX Multiplier</Label>
-        <Label fontSize={16}>X {multiplier.toFixed(2)}</Label>
+        <Label fontSize={16}>{multiplier.toFixed(2)} x</Label>
       </div>
 
       <div className="flex justify-sb">
@@ -49,8 +48,7 @@ const ClaimYourKDXRewards = ({ multiplier }) => {
             <Label fontSize={16}>KDX</Label>
           </div>
           <div className="flex justify-sb">
-            <Label withShade>200.00</Label>
-            <Label withShade>$</Label>
+            <Label withShade>$ 200.00</Label>
           </div>
         </div>
       </div>

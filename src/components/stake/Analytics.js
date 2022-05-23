@@ -51,7 +51,7 @@ const Analytics = ({ stakedShare, totalStaked, totalBurnt }) => {
           <div className="flex align-ce">
             <Label>Daily Income</Label>
           </div>
-          <Label fontSize={30}>
+          <Label fontSize={24}>
             {(dailyUSDIncome && tokensUsdPrice?.KDX && humanReadableNumber(dailyUSDIncome / tokensUsdPrice?.KDX)) || '-'} KDX
           </Label>
           <SubLabel>$ {(dailyUSDIncome && humanReadableNumber(dailyUSDIncome)) || '-'}</SubLabel>
@@ -60,7 +60,7 @@ const Analytics = ({ stakedShare, totalStaked, totalBurnt }) => {
           <div className="flex column align-fe">
             <Label>APR</Label>
           </div>
-          <Label fontSize={30}>{(stakingAPR && stakingAPR.toFixed(2)) || '-'}%</Label>
+          <Label fontSize={24}>{(stakingAPR && stakingAPR.toFixed(2)) || '-'}%</Label>
         </div>
       </div>
       <div>
@@ -83,7 +83,7 @@ const Analytics = ({ stakedShare, totalStaked, totalBurnt }) => {
         <div className="flex column align-fe">
           <Label>Total Staked</Label>
           <Label fontSize={24}>38.20 %{/* {(totalStaked && humanReadableNumber(reduceBalance(totalStaked))) || '-'} KDX */}</Label>
-          <SubLabel labelStyle={{ fontSize: 12 }}>120,231,234.45 KDX</SubLabel>
+          <SubLabel labelStyle={{ fontSize: 12, textAlign: 'end' }}>120,231,234.45 KDX</SubLabel>
         </div>
       </div>
     </CommonWrapper>

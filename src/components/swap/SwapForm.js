@@ -86,7 +86,7 @@ const SwapForm = ({ label, fromValues, setFromValues, toValues, setToValues, fro
         <FirstInputContainer gameEditionView={gameEditionView}>
           <Input
             error={isNaN(fromValues.amount)}
-            topLeftLabel={label ? label : fromNote ? `I'M GIVING ${fromNote}` : `I'M GIVING`}
+            topLeftLabel={label ? label : fromNote ? `GIVE ${fromNote}` : `GIVE`}
             topRightLabel={`balance: ${getDecimalPlaces(fromValues.balance) ?? '-'}`}
             bottomLeftLabel={`balance: ${getDecimalPlaces(fromValues.balance) ?? '-'}`} //using for gameEdition
             geColor="black"
@@ -159,7 +159,7 @@ const SwapForm = ({ label, fromValues, setFromValues, toValues, setToValues, fro
         <SecondInputContainer gameEditionView={gameEditionView}>
           <Input
             error={isNaN(toValues.amount)}
-            topLeftLabel={label ? label : toNote ? `I'M RECEIVING ${toNote}` : `I'M RECEIVING`}
+            topLeftLabel={label ? label : toNote ? `RECEIVE ${toNote}` : `RECEIVE`}
             topRightLabel={`balance: ${getDecimalPlaces(toValues.balance) ?? '-'}`}
             bottomLeftLabel={`balance: ${getDecimalPlaces(toValues.balance) ?? '-'}`} //using for gameEdition
             placeholder="0.0"

@@ -163,7 +163,7 @@ const Input = ({
           {topRightLabel && (
             <Label
               fontFamily="basier"
-              style={{
+              labelStyle={{
                 marginLeft: !topLeftLabel ? 'auto' : 'unset',
                 textAlign: 'end',
               }}
