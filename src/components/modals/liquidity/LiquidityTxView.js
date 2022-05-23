@@ -16,9 +16,9 @@ import { AlertIcon, ArrowIcon, KaddexOutlineIcon } from '../../../assets';
 import { Checkbox } from 'semantic-ui-react';
 import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
 import { isNumber } from 'lodash';
-import { getPairByTokensName } from '../../../constants/cryptoCurrencies';
+import tokenData, { getPairByTokensName } from '../../../constants/cryptoCurrencies';
 import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
-import theme from '../../../styles/theme';
+import { theme } from '../../../styles/theme';
 
 export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }) => {
   const { setButtons } = useGameEditionContext();
@@ -92,37 +92,14 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, apr }) => {
     liquidityChecker(fromValues, fromValues * reduceBalance(pact?.computeOut(fromValues) / fromValues, 12), pair[0], pair[1]);
   }, [pact.ratio]);
 
-  /* 
-amountBOptimal (quote amountADesired reserveA reserveB)
-
-enforce (>= amountBOptimal amountBMin)
-                           "add-liquidity: insufficient B amount")
-
-(amountAOptimal (quote amountBDesired reserveB reserveA)))
-
-(enforce (<= amountAOptimal amountADesired)
-                    "add-liquidity: optimal A less than desired")
-                  (enforce (>= amountAOptimal amountAMin)
-                    "add-liquidity: insufficient A amount")
-
-(defun quote
-    ( amountA:decimal
-      reserveA:decimal
-      reserveB:decimal
-    )
-    (enforce (> amountA 0.0) "quote: insufficient amount")
-    (enforce (and (> reserveA 0.0) (> reserveB 0.0)) "quote: insufficient liquidity")
-    (/ (* amountA reserveB) reserveA)
-  ) */
-
   const liquidityQuote = (amount, reserve0, reserve1) => {
     return (amount * reserve1) / reserve0;
   };
 
   const liquidityChecker = (amount0Desired, amount1Desired, reserve0, reserve1) => {
-    const amount1Min = amount1Desired - amount1Desired * pact.slippage;
+    const amount1Min = reduceBalance(amount1Desired * (1 - parseFloat(pact.slippage)), tokenData[token1].precision);
     const amount1Optimal = liquidityQuote(amount0Desired, reserve0, reserve1);
-    const amount0Min = amount0Desired - amount0Desired * pact.slippage;
+    const amount0Min = reduceBalance(amount0Desired * (1 - parseFloat(pact.slippage)), tokenData[token0].precision);
     const amount0Optimal = liquidityQuote(amount1Desired, reserve1, reserve0);
 
     if (amount1Optimal >= amount1Min) {
@@ -142,16 +119,18 @@ enforce (>= amountBOptimal amountBMin)
       loading={loading}
       onClick={onClick}
       hideSubtitle
-      footer={liquidityCheck.disabled(
-        <FlexContainer
-          className="w-100 flex"
-          gap={4}
-          style={{ background: theme(themeMode).colors.white, borderRadius: 10, padding: 10, marginBottom: 24 }}
-        >
-          <AlertIcon className="mobile-none svg-app-inverted-color" />
-          <Label inverted>{liquidityCheck.message}</Label>
-        </FlexContainer>
-      )}
+      footer={
+        liquidityCheck?.disabled && (
+          <FlexContainer
+            className="w-100 flex"
+            gap={4}
+            style={{ background: theme(themeMode).colors.white, borderRadius: 10, padding: 10, marginBottom: 24 }}
+          >
+            <AlertIcon className="mobile-none svg-app-inverted-color" />
+            <Label inverted>{liquidityCheck.message}</Label>
+          </FlexContainer>
+        )
+      }
     >
       <FlexContainer className="w-100 column" gap={12}>
         {/* ACCOUNT */}
