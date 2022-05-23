@@ -35,9 +35,7 @@ const SwapButtonsForm = ({
   fetchingPair,
   setLoading,
   fromValues,
-  setFromValues,
   toValues,
-  setToValues,
   fromNote,
   noLiquidity,
   ratio,
@@ -130,7 +128,6 @@ const SwapButtonsForm = ({
               isNaN(fromValues.amount) ||
               isNaN(toValues.amount))
           }
-          loading={loading}
           onClick={async () => {
             if (!account.account) {
               return modalContext.openModal({

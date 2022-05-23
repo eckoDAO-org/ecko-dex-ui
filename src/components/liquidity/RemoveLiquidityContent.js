@@ -175,7 +175,6 @@ const RemoveLiquidityContent = ({ pair }) => {
               <CustomButton
                 fluid
                 type="gradient"
-                loading={loading}
                 disabled={isNaN(amount) || reduceBalance(amount) === 0}
                 onClick={async () => await onRemoveLiquidity()}
               >

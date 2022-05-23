@@ -2,9 +2,9 @@ import moment from 'moment';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { CoinKaddexIcon } from '../../assets';
-import { useAccountContext, useModalContext, usePactContext } from '../../contexts';
+import { useAccountContext, useApplicationContext, useModalContext, usePactContext } from '../../contexts';
 import { ROUTE_UNSTAKE } from '../../router/routes';
-import { commonColors } from '../../styles/theme';
+import { theme, commonColors } from '../../styles/theme';
 import { extractDecimal, humanReadableNumber, limitDecimalPlaces } from '../../utils/reduceBalance';
 import ConnectWalletModal from '../modals/kdaModals/ConnectWalletModal';
 import CustomButton from '../shared/CustomButton';
@@ -29,6 +29,7 @@ const Position = ({
   const modalContext = useModalContext();
   const { tokensUsdPrice } = usePactContext();
   const { account } = useAccountContext();
+  const { themeMode } = useApplicationContext();
   const { pathname } = useLocation();
 
   return (
@@ -64,12 +65,19 @@ const Position = ({
         numberOnly
         value={inputAmount}
         inputRightComponent={
-          <FlexContainer className="align-ce" gap={16}>
+          <FlexContainer className="align-ce" gap={8}>
             <Label className="pointer" onClick={onClickMax}>
               MAX
             </Label>
 
-            <CoinKaddexIcon />
+            <FlexContainer
+              gap={10}
+              className="flex"
+              style={{ background: `${theme(themeMode).colors.white}33`, borderRadius: '20px', padding: '4px 8px' }}
+            >
+              <CoinKaddexIcon />
+              <Label>KDX</Label>
+            </FlexContainer>
           </FlexContainer>
         }
         bottomContent={

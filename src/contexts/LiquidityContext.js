@@ -17,7 +17,7 @@ export const LiquidityProvider = (props) => {
   const wallet = useWalletContext();
   const [liquidityProviderFee, setLiquidityProviderFee] = useState(0.003);
   const [pairListAccount, setPairListAccount] = useState(pairTokens);
-  const [wantsKdxRewards, setWantsKdxRewards] = useState(false);
+  const [wantsKdxRewards, setWantsKdxRewards] = useState(true);
 
   const addLiquidityWallet = async (token0, token1, amountDesired0, amountDesired1) => {
     try {
@@ -282,6 +282,7 @@ export const LiquidityProvider = (props) => {
     addLiquidityWallet,
     addOneSideLiquidityWallet,
     removeLiquidityWallet,
+    wantsKdxRewards,
     setWantsKdxRewards,
   };
 

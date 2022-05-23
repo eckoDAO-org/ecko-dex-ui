@@ -135,7 +135,7 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
 
         <CustomDivider style={{ margin: '4px 0px' }} />
 
-        <Label>Amount</Label>
+        <Label>Amount (Estimate)</Label>
 
         {/* FROM VALUES */}
         <FlexContainer className="align-ce justify-sb">

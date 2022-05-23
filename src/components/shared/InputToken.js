@@ -5,7 +5,8 @@ import { ArrowDown, PixeledArrowDownIcon } from '../../assets';
 import CustomButton from './CustomButton';
 import tokenData from '../../constants/cryptoCurrencies';
 import Label from './Label';
-import { useGameEditionContext } from '../../contexts';
+import { useApplicationContext, useGameEditionContext } from '../../contexts';
+import { theme } from '../../styles/theme';
 
 const Container = styled.div`
   ${({ $gameEditionView, coin }) => {
@@ -45,6 +46,7 @@ const ElementsContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   svg {
     margin-left: 8px;
   }
@@ -61,6 +63,8 @@ const ElementsContainer = styled.div`
 
 const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor }) => {
   const { gameEditionView } = useGameEditionContext();
+  const { themeMode } = useApplicationContext();
+
   return (
     <Container $gameEditionView={gameEditionView} geColor={geColor} coin={values?.coin}>
       {values?.coin ? (
@@ -80,12 +84,21 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
               Max
             </CustomButton>
           )}
-          <ElementsContainer $gameEditionView={gameEditionView} geColor={geColor} onClick={onClick}>
+          <ElementsContainer
+            $gameEditionView={gameEditionView}
+            geColor={geColor}
+            onClick={onClick}
+            style={{
+              background: !gameEditionView && `${theme(themeMode).colors.white}33`,
+              borderRadius: !gameEditionView && '20px',
+              padding: !gameEditionView && '4px 8px',
+            }}
+          >
             {tokenData[values.coin]?.icon}
-            <Label geFontSize={24} geColor={geColor}>
+            <Label geFontSize={24} geColor={geColor} style={{ opacity: 1 }}>
               {tokenData[values.coin]?.name}
             </Label>
-            {gameEditionView ? <PixeledArrowDownIcon /> : <ArrowDown />}
+            {gameEditionView ? <PixeledArrowDownIcon /> : <ArrowDown style={{ opacity: 1 }} />}
           </ElementsContainer>
         </>
       ) : (
@@ -98,9 +111,11 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
             onClick={onClick}
             geFontSize={24}
             buttonStyle={{
-              padding: 0,
+              background: !gameEditionView && `${theme(themeMode).colors.white}33`,
+              borderRadius: !gameEditionView && '20px',
+              padding: !gameEditionView && '4px 8px',
               marginRight: 0,
-              boder: 'unset',
+              height: !gameEditionView && '28px',
             }}
           >
             <Label fontSize={13}>Select</Label>
