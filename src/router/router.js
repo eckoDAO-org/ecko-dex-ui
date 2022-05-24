@@ -24,6 +24,8 @@ import {
   ROUTE_DAO,
   ROUTE_DAO_PROPOSAL,
   ROUTE_LIQUIDITY_REWARDS,
+  ROUTE_ANALYTICS_KDX,
+  ROUTE_ANALYTICS_STATS,
 } from './routes';
 import SwapHistoryContainer from '../containers/SwapHistoryContainer';
 import { useGameEditionContext } from '../contexts';
@@ -62,7 +64,7 @@ export default () => {
             />
             <Route exact path={ROUTE_LIQUIDITY_REMOVE_LIQUIDITY} component={RemoveLiquidityContainer} />
             <Route exact path={[ROUTE_DAO, ROUTE_DAO_PROPOSAL]} component={DaoContainer} />
-            <Route exact path={ROUTE_ANALYTICS} component={AnalyticsContainer} />
+            <Route exact path={[ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS]} component={AnalyticsContainer} />
             <Route exact path={[ROUTE_STAKE, ROUTE_UNSTAKE]} component={StakeContainer} />
           </Switch>
         )}

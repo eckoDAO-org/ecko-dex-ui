@@ -2,11 +2,13 @@ import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import moment from 'moment';
-import { LineChart, Line, Tooltip, ResponsiveContainer } from 'recharts';
+import { Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import Label from '../shared/Label';
 import { humanReadableNumber } from '../../utils/reduceBalance';
 import { FlexContainer } from '../shared/FlexContainer';
 import { getPairList } from '../../api/pact';
+import CustomDropdown from '../shared/CustomDropdown';
+import { tvlRanges, TVL_3M_RANGE, TVL_CHART_OPTIONS } from '../../constants/chartOptionsConstants';
 
 export const GraphCardHeader = styled.div`
   width: 100%;
@@ -17,10 +19,24 @@ export const GraphCardHeader = styled.div`
   }
 `;
 
+const STYChartContainer = styled(ResponsiveContainer)`
+  .recharts-wrapper {
+    width: 100% !important;
+  }
+  .recharts-surface {
+    width: 100%;
+  }
+  .recharts-cartesian-grid {
+    display: none;
+  }
+`;
+
 const TVLChart = ({ kdaPrice, height }) => {
   const [viewedTVL, setViewedTVL] = useState(null);
   const [currentTVL, setCurrentTVL] = useState(null);
   const [currentDate, setCurrentDate] = useState(null);
+  const [tvlRange, setTvlRange] = useState(TVL_3M_RANGE.value);
+
   const [tvlData, setTVLData] = useState([]);
 
   const getTVL = useCallback(async () => {
@@ -59,9 +75,9 @@ const TVLChart = ({ kdaPrice, height }) => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/tvl/daily?dateStart=${moment()
-          .subtract(90, 'days')
-          .format('YYYY-MM-DD')}&dateEnd=${moment().format('YYYY-MM-DD')}`
+        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/tvl/daily?dateStart=${
+          tvlRanges[tvlRange]?.dateStart ?? moment().subtract(90, 'days').format('YYYY-MM-DD').format('YYYY-MM-DD')
+        }&dateEnd=${moment().format('YYYY-MM-DD')}`
       )
       .then(async (res) => {
         const allTVL = [];
@@ -84,19 +100,29 @@ const TVLChart = ({ kdaPrice, height }) => {
         setTVLData(allTVL);
       })
       .catch((err) => console.log('get tvl error', err));
-  }, [kdaPrice]);
+  }, [kdaPrice, tvlRange]);
 
   return (
     <FlexContainer className="column align-ce w-100 h-100 background-fill" withGradient style={{ padding: 32 }}>
-      <div className="column w-100">
-        <Label fontSize={16}>TVL</Label>
-        <Label fontSize={24}>$ {humanReadableNumber(Number(viewedTVL))}</Label>
-        <Label fontSize={16}>{currentDate || moment().format('DD/MM/YYYY')}</Label>
+      <div className=" flex justify-sb w-100">
+        <div className="column w-100">
+          <Label fontSize={16}>TVL</Label>
+          <Label fontSize={24}>$ {humanReadableNumber(Number(viewedTVL))}</Label>
+          <Label fontSize={16}>{currentDate || moment().format('DD/MM/YYYY')}</Label>
+        </div>
+        <CustomDropdown
+          options={TVL_CHART_OPTIONS}
+          dropdownStyle={{ minWidth: '66px', padding: 10, height: 30 }}
+          onChange={(e, { value }) => {
+            setTvlRange(value);
+          }}
+          value={tvlRange}
+        />
       </div>
 
       <div style={{ width: '100%', height }}>
-        <ResponsiveContainer>
-          <LineChart
+        <STYChartContainer>
+          <AreaChart
             data={tvlData}
             onMouseMove={({ activePayload }) => {
               if (activePayload) {
@@ -115,10 +141,16 @@ const TVLChart = ({ kdaPrice, height }) => {
               bottom: 0,
             }}
           >
+            <defs>
+              <linearGradient id="color" x1="2" y1="0" x2="1" y2="2">
+                <stop offset="0%" stopColor="#ED1CB5" stopOpacity={0.9} />
+                <stop offset="75%" stopColor="#ED1CB5." stopOpacity={0.25} />
+              </linearGradient>
+            </defs>
             <Tooltip label="TVL" content={() => ''} />
-            <Line type="monotone" dataKey="tvl" stroke="#ED1CB5" activeDot={{ r: 5 }} dot={{ r: 0 }} />
-          </LineChart>
-        </ResponsiveContainer>
+            <Area type="monotone" dataKey="tvl" stroke="#ED1CB5" fill="url(#color)" activeDot={{ r: 5 }} dot={{ r: 0 }} />
+          </AreaChart>
+        </STYChartContainer>
       </div>
     </FlexContainer>
   );

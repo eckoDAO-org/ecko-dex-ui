@@ -16,10 +16,17 @@ import AnalyticsSimpleWidget from '../components/shared/AnalyticsSimpleWidget';
 import { getCoingeckoUsdPrice } from '../api/coingecko';
 import { getKDXSupply, getKDXTotalSupply, getKDXTotalBurnt } from '../api/kaddex.kdx';
 import theme from '../styles/theme';
+import { useHistory, useLocation } from 'react-router-dom';
+import { ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS } from '../router/routes';
+import Dex from '../components/analytics/Dex';
+import Kdx from '../components/analytics/Kdx';
+import StatsTable from '../components/analytics/StatsTable';
 
 const KDX_TOTAL_SUPPLY = 1000000000;
 
 const AnalyticsContainer = () => {
+  const { pathname } = useLocation();
+  const history = useHistory();
   const pact = usePactContext();
   const [kdaPrice, setKdaPrice] = useState(null);
   const [kdxSupply, setKdxSupply] = useState(null);
@@ -66,7 +73,42 @@ const AnalyticsContainer = () => {
         tabletStyle={{ paddingRight: theme.layout.tabletPadding, paddingLeft: theme.layout.tabletPadding }}
         mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
       >
-        <FlexContainer mobileClassName="column" gap={24}>
+        <FlexContainer className="align-ce" gap={16} mobileStyle={{ marginBottom: 16 }}>
+          <Label
+            withShade={pathname !== ROUTE_ANALYTICS}
+            className="pointer"
+            fontSize={24}
+            fontFamily="syncopate"
+            onClick={() => history.push(ROUTE_ANALYTICS)}
+          >
+            DEX
+          </Label>
+          <Label
+            withShade={pathname !== ROUTE_ANALYTICS_KDX}
+            className="pointer"
+            fontSize={24}
+            fontFamily="syncopate"
+            onClick={() => history.push(ROUTE_ANALYTICS_KDX)}
+          >
+            KDX
+          </Label>
+          <Label
+            withShade={pathname !== ROUTE_ANALYTICS_STATS}
+            className="pointer"
+            fontSize={24}
+            fontFamily="syncopate"
+            onClick={() => history.push(ROUTE_ANALYTICS_STATS)}
+          >
+            STATS
+          </Label>
+        </FlexContainer>
+        {/* DEX */}
+        {pathname === ROUTE_ANALYTICS && <Dex kdaPrice={kdaPrice} />}
+        {/* KDX */}
+        {pathname === ROUTE_ANALYTICS_KDX && <Kdx />}
+        {/* DEX */}
+        {pathname === ROUTE_ANALYTICS_STATS && <StatsTable />}
+        {/* <FlexContainer mobileClassName="column" gap={24}>
           <AnalyticsSimpleWidget
             title={'KDX price'}
             mainText={`$ ${pact?.tokensUsdPrice?.KDX || '-'}`}
@@ -126,7 +168,7 @@ const AnalyticsContainer = () => {
 
           <VolumeChart kdaPrice={kdaPrice} height={300} />
         </FlexContainer>
-        <VestingScheduleChart height={300} />
+        <VestingScheduleChart height={300} /> */}
       </FlexContainer>
     )
   );
