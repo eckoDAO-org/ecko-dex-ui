@@ -13,6 +13,7 @@ import {
   ROUTE_UNSTAKE,
   ROUTE_DAO,
   ROUTE_LIQUIDITY_REWARDS,
+  ROUTE_BUY_CRYPTO,
 } from '../router/routes';
 
 export const SWAP = {
@@ -57,8 +58,13 @@ export const VAULT = {
   target: '_self',
   link: 'http://134.209.219.136/',
 };
+export const BUY_CRYPTO = {
+  id: 5,
+  label: 'buy crypto',
+  route: ROUTE_BUY_CRYPTO,
+};
 
-export default [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS, VAULT];
+export default [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS, VAULT, BUY_CRYPTO];
 
 export const gameEditionRoutes = [
   {

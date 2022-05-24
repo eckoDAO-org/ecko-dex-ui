@@ -359,7 +359,7 @@ export const SuccessRemoveWithBoosterView = ({ token0, token1, loading, onClick 
   );
 };
 
-const CheckboxContainer = styled.div`
+export const CheckboxContainer = styled.div`
   border-radius: 10px;
   margin-top: 24px;
   padding: 16px;

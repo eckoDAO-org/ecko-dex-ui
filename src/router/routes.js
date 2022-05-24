@@ -21,3 +21,6 @@ export const ROUTE_LIQUIDITY_REWARDS = '/liquidity/rewards';
 // STAKE
 export const ROUTE_STAKE = '/stake';
 export const ROUTE_UNSTAKE = '/unstake';
+
+// BUY CRYPTO - SIMPLEX
+export const ROUTE_BUY_CRYPTO = '/buy-crypto';
