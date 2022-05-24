@@ -70,10 +70,19 @@ const BuyCryptoForm = () => {
         });
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [showNotification, STATUSES]);
 
   const onQuote = useCallback(() => {
+    if (!account) {
+      showNotification({
+        title: 'CONNECT WALLET',
+        message: 'Please connect your wallet before buying crypto',
+        type: STATUSES.WARNING,
+        autoClose: 3000,
+        hideProgressBar: false,
+      });
+      return;
+    }
     setQuoteError(null);
     setQuoteResponse(null);
     setIsLoading(true);
@@ -107,7 +116,7 @@ const BuyCryptoForm = () => {
         console.log('err quote', err);
         setIsLoading(false);
       });
-  }, [quoteRequestData, debounceAssetAmount, account]);
+  }, [quoteRequestData, debounceAssetAmount, account, showNotification, STATUSES]);
 
   useEffect(() => {
     if (debounceAssetAmount) {
