@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
-import styled, { css } from 'styled-components/macro';
-import { AutoCenterContainer } from './SwapContainer';
+import styled from 'styled-components/macro';
 import theme from '../styles/theme';
 import Label from '../components/shared/Label';
 import BuyCryptoForm from '../components/buy-crypto/BuyCryptoForm';

@@ -6,14 +6,13 @@ import Label from '../shared/Label';
 import { simplexQuote, simplexPaymentRequest } from '../../api/kaddex-be-tools';
 import CustomButton from '../shared/CustomButton';
 import { useDebounce } from '../../hooks/useDebounce';
-import { useAccountContext } from '../../contexts';
+import { useAccountContext, useNotificationContext } from '../../contexts';
 import { commonColors } from '../../styles/theme';
 import { FlexContainer } from '../shared/FlexContainer';
 import { SimplexLogo } from '../../assets';
 import { ROUTE_BUY_CRYPTO } from '../../router/routes';
-// import CustomCheckbox from '../shared/CustomCheckbox';
-// import { CheckboxContainer } from '../modals/liquidity/LiquidityTxView';
-// import { Checkbox } from 'semantic-ui-react';
+import { CheckboxContainer } from '../modals/liquidity/LiquidityTxView';
+import { Checkbox } from 'semantic-ui-react';
 
 const Container = styled.div`
   position: relative;
@@ -25,9 +24,14 @@ const Container = styled.div`
 const FormRow = styled.div`
   margin: 10px 0px;
 `;
+const initialDisclaimerData = {
+  isShowing: false,
+  isAccepted: false,
+};
 
-const BuyCryptoForm = ({}) => {
+const BuyCryptoForm = () => {
   const formRef = useRef(null);
+
   const [quoteRequestData, setQuoteRequestData] = useState({
     endUserId: null,
     fiatCurrency: 'USD',
@@ -35,13 +39,39 @@ const BuyCryptoForm = ({}) => {
     requestedCurrency: 'KDA',
   });
   const [quoteResponse, setQuoteResponse] = useState(null);
+  const { showNotification, STATUSES } = useNotificationContext();
 
   const [assetAmount, setAssetAmount] = useState(null);
   const [quoteError, setQuoteError] = useState(null);
+  const [disclaimerData, setDisclaimerData] = useState(initialDisclaimerData);
   const debounceAssetAmount = useDebounce(assetAmount, 500);
   const {
     account: { account },
   } = useAccountContext();
+
+  useEffect(() => {
+    const successPayment = new URLSearchParams(window.location?.search).get('success');
+    if (successPayment) {
+      if (successPayment === 'true') {
+        showNotification({
+          title: 'SUCCESS',
+          message: 'Crypto purchase made successfully',
+          type: STATUSES.SUCCESS,
+          autoClose: 5000,
+          hideProgressBar: false,
+        });
+      } else {
+        showNotification({
+          title: 'ERROR',
+          message: 'Something went wrong while buying cryptocurrencies',
+          type: STATUSES.ERROR,
+          autoClose: 5000,
+          hideProgressBar: false,
+        });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onQuote = useCallback(() => {
     setQuoteError(null);
@@ -154,13 +184,34 @@ const BuyCryptoForm = ({}) => {
           <input type="text" name="return_url_fail" value={`${window.location.origin}${ROUTE_BUY_CRYPTO}?success=false`} readOnly />
           <input type="text" name="payment_id" value={paymentId || ''} readOnly />
         </form>
-        {/* <CheckboxContainer checked={false}>
-          <Label fontFamily="syncopate" fontSize={16}>
-            stake my rewards
+        <CheckboxContainer style={{ margin: '0px 0px 20px 0px' }}>
+          <Label fontSize={12}>
+            <span>
+              I have read the{' '}
+              <DisclaimerLabel
+                onClick={() =>
+                  setDisclaimerData((prev) => ({
+                    ...prev,
+                    isShowing: !prev.isShowing,
+                  }))
+                }
+              >
+                disclaimer
+              </DisclaimerLabel>{' '}
+              and consent to Kaddex providing my deposit address and user name to Simplex.
+            </span>
           </Label>
-          <Checkbox checked={false} />
-        </CheckboxContainer> */}
-        <CustomButton disabled={!quoteResponse} loading={isLoading} onClick={() => formRef.current.submit()}>
+          <Checkbox
+            checked={disclaimerData?.isAccepted}
+            onClick={() =>
+              setDisclaimerData((prev) => ({
+                ...prev,
+                isAccepted: !prev.isAccepted,
+              }))
+            }
+          />
+        </CheckboxContainer>
+        <CustomButton disabled={!disclaimerData?.isAccepted || !quoteResponse} loading={isLoading} onClick={() => formRef.current.submit()}>
           Buy
         </CustomButton>
         <FlexContainer className="justify-ce" style={{ marginTop: 20 }}>
@@ -168,12 +219,34 @@ const BuyCryptoForm = ({}) => {
             Powered by Simplex <SimplexLogo />
           </Label>
         </FlexContainer>
+        {disclaimerData.isShowing && (
+          <FlexContainer className="justify-ce" style={{ marginTop: 20 }}>
+            <Label fontSize={12}>
+              <span>
+                Please read and agree to the Terms of Use of Simplex before using this service. Kaddex does not currently support purchases of
+                cryptocurrency using debit or credit cards. These transactions must be completed with a third-party. While Kaddex will direct you to
+                Simplex to complete the transaction above, you are not required to purchase cryptocurrency through Simplex and there may be other ways
+                to purchase cryptocurrency using your debit or credit card. Simplex is not owned or operated by Kaddex and as such we cannot guarantee
+                that your transaction will process successfully. As a convenience to our customers, Kaddex will provide your deposit address and
+                username to Simplex should you choose to complete this transaction. By checking the box below, you consent to Kaddex providing this
+                information to Simplex on your behalf and acknowledge your agreement to this disclaimer. For any questions about your card payment,
+                please contact <a href={`mailto:support@simplex.com`}>support@simplex.com</a>. Kaddex does not assume responsibility for any loss or
+                damage caused by the use of the service.
+              </span>
+            </Label>
+          </FlexContainer>
+        )}
       </FormRow>
     </Container>
   );
 };
 
 export default BuyCryptoForm;
+
+const DisclaimerLabel = styled.span`
+  font-weight: bold;
+  cursor: pointer;
+`;
 
 export const simplexSupportedFiat = [
   'USD',
