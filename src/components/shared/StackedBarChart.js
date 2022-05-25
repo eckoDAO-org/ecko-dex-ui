@@ -22,7 +22,12 @@ shortLine.y1.baseVal.value = 500
   .recharts-cartesian-axis-tick {
     line {
       stroke: #ffffff;
-      height: 120;
+    }
+  }
+  .recharts-cartesian-axis-ticks > :first-child,
+  .recharts-cartesian-axis-ticks > :last-child {
+    line {
+      display: none;
     }
   }
 `;
@@ -48,8 +53,12 @@ const StackedBarChart = ({}) => {
 
   const ticks = document.getElementsByClassName('recharts-cartesian-axis-tick-line');
   for (const element of ticks) {
-    if (element !== ticks[0] && element !== ticks[ticks.length - 1]) element.setAttribute('y2', -10);
-    else element.style.stroke = 'transparent';
+    element.setAttribute('y2', -10);
+    // if (element !== ticks[0] && element !== ticks[ticks.length - 1]) {
+    //   element.setAttribute('y2', -10);
+    // } else {
+    //   element.style.stroke = 'transparent';
+    // }
   }
 
   // const tspan = document.getElementsByClassName('recharts-text recharts-cartesian-axis-tick-value');
@@ -83,7 +92,13 @@ const StackedBarChart = ({}) => {
             fill="#76a8dd"
             stackId="a"
           />
-          <XAxis ticks={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]} dy={5} domain={[10, 100]} type="number" tickFormatter={(v) => `${v}%`} />
+          <XAxis
+            ticks={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+            dy={5}
+            domain={['dataMin - 1', '100']}
+            type="number"
+            tickFormatter={(v) => `${v}%`}
+          />
         </BarChart>
       </ResponsiveContainer>
     </StackedBarChartContainer>
