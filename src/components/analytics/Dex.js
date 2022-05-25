@@ -77,9 +77,21 @@ const Dex = ({ kdaPrice }) => {
           .format('YYYY-MM-DD')}`
       )
       .then(async (res) => {
-        const tvl = res.data.slice(-1)[0];
+        const lastTvl = res.data.slice(-1)[0];
         const allTVL = [];
-        pairTokens.map();
+        const mainTVL = lastTvl.tvl.filter((t) => {
+          const name0 = `${t.tokenTo}:${t.tokenFrom}`;
+          const name1 = `${t.tokenFrom}:${t.tokenTo}`;
+
+          return (pairTokens[name0] && pairTokens[name0].main) || (pairTokens[name1] && pairTokens[name1].main);
+        });
+        const otherTVL = lastTvl.tvl.filter((t) => {
+          const name0 = `${t.tokenTo}:${t.tokenFrom}`;
+          const name1 = `${t.tokenFrom}:${t.tokenTo}`;
+          return (pairTokens[name0] && !pairTokens[name0].main) || (pairTokens[name1] && !pairTokens[name1].main);
+        });
+        console.log('mainTVL', mainTVL);
+        console.log('otherTVL', otherTVL);
         for (const day of res.data) {
           allTVL.push({
             name: moment(day._id).format('DD/MM/YYYY'),
@@ -102,6 +114,7 @@ const Dex = ({ kdaPrice }) => {
   };
 
   useEffect(() => {
+    console.log('pair', pairTokens);
     if (tokensUsdPrice) {
       getTokensVolume();
       getTokensTvl();
