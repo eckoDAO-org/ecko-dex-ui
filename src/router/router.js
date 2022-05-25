@@ -26,6 +26,7 @@ import {
   ROUTE_LIQUIDITY_REWARDS,
   ROUTE_ANALYTICS_KDX,
   ROUTE_ANALYTICS_STATS,
+  ROUTE_BUY_CRYPTO,
 } from './routes';
 import SwapHistoryContainer from '../containers/SwapHistoryContainer';
 import { useGameEditionContext } from '../contexts';
@@ -34,6 +35,7 @@ import LiquidityContainer from '../containers/LiquidityContainer';
 import AddLiquidityContainer from '../components/liquidity/AddLiquidityContainer';
 import RemoveLiquidityContainer from '../containers/RemoveLiquidityContainer';
 import StakeContainer from '../containers/StakeContainer';
+import BuyCryptoContainer from '../containers/BuyCryptoContainer';
 
 export default () => {
   const { gameEditionView } = useGameEditionContext();
@@ -66,6 +68,7 @@ export default () => {
             <Route exact path={[ROUTE_DAO, ROUTE_DAO_PROPOSAL]} component={DaoContainer} />
             <Route exact path={[ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS]} component={AnalyticsContainer} />
             <Route exact path={[ROUTE_STAKE, ROUTE_UNSTAKE]} component={StakeContainer} />
+            <Route exact path={ROUTE_BUY_CRYPTO} component={BuyCryptoContainer} />
           </Switch>
         )}
       </Layout>

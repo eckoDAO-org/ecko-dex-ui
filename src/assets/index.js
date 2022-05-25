@@ -51,5 +51,6 @@ export { ReactComponent as ZelcoreLogo } from './images/shared/zelcore-logo.svg'
 export { ReactComponent as XWalletLogo } from './images/header/x-wallet-logo.svg';
 export { ReactComponent as InfoIcon } from './images/shared/info-icon.svg';
 export { ReactComponent as BoosterIcon } from './images/shared/booster.svg';
+export { ReactComponent as SimplexLogo } from './images/shared/simplex-logo.svg';
 
 export * from '../assets/images/game-edition';
