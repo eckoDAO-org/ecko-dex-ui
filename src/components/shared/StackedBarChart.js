@@ -1,7 +1,8 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import styled from 'styled-components';
-import { FlexContainer } from './FlexContainer';
+import { getTokenIconById } from '../../utils/token-utils';
+import { CryptoContainer, FlexContainer } from './FlexContainer';
 import Label from './Label';
 
 const StackedBarChartContainer = styled(FlexContainer)`
@@ -18,12 +19,18 @@ const StackedBarChartContainer = styled(FlexContainer)`
   var shortLine = document.getElementById('ShortLine')
 shortLine.y1.baseVal.value = 500
   */
+  .recharts-text,
+  .recharts-cartesian-axis-tick-value {
+    fill: ${({ theme: { colors } }) => colors.white};
+    font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
+  }
 
   .recharts-cartesian-axis-tick {
     line {
       stroke: #ffffff;
     }
   }
+
   .recharts-cartesian-axis-ticks > :first-child,
   .recharts-cartesian-axis-ticks > :last-child {
     line {
@@ -38,10 +45,11 @@ const TooltipContent = styled.div`
   height: 50px;
 `;
 
-const StackedBarChart = ({}) => {
+const StackedBarChart = ({ title }) => {
   const [barOnHover, setBarOnHover] = useState('');
-  console.log('LOG --> barOnHover', barOnHover);
-  const data = [{ completed: 60, failed: 20, inprogress: 20 }];
+  const data = [{ KDA: 50, KDX: 20, XYZ: 10, OTHER: 20 }];
+
+  const colors = ['#5dcbe5', '#e37480', ' #f6cc7d', '#A9AAB4'];
 
   const CustomTooltip = (props) => {
     return (
@@ -54,44 +62,31 @@ const StackedBarChart = ({}) => {
   const ticks = document.getElementsByClassName('recharts-cartesian-axis-tick-line');
   for (const element of ticks) {
     element.setAttribute('y2', -10);
-    // if (element !== ticks[0] && element !== ticks[ticks.length - 1]) {
-    //   element.setAttribute('y2', -10);
-    // } else {
-    //   element.style.stroke = 'transparent';
-    // }
   }
 
-  // const tspan = document.getElementsByClassName('recharts-text recharts-cartesian-axis-tick-value');
-  // console.log('LOG --> tspan', tspan);
-  // for (const element of tspan) {
-  //   element.;
-  // }
-
   return (
-    <StackedBarChartContainer withGradient className="background-fill w-100">
+    <StackedBarChartContainer gap={24} withGradient className=" column background-fill w-100">
+      <Label fontSize={16}>{title}</Label>
+
       <ResponsiveContainer height={80} width={'100%'}>
         <BarChart layout="vertical" data={data}>
           <YAxis type="category" dataKey="name" stroke="#FFFFFF" fontSize="12" width={0} />
           <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
-          <Bar
-            onMouseEnter={() => {
-              setBarOnHover('completed');
-            }}
-            onMouseLeave={() => setBarOnHover('')}
-            radius={[10, 0, 0, 10]}
-            dataKey="completed"
-            fill="#82ba7f"
-            stackId="a"
-          />
-          <Bar onMouseEnter={() => setBarOnHover('failed')} onMouseLeave={() => setBarOnHover('')} dataKey="failed" fill="#dd7876" stackId="a" />
-          <Bar
-            onMouseEnter={() => setBarOnHover('inprogress')}
-            onMouseLeave={() => setBarOnHover('')}
-            radius={[0, 10, 10, 0]}
-            dataKey="inprogress"
-            fill="#76a8dd"
-            stackId="a"
-          />
+          {Object.keys(data[0]).map((item, index) => {
+            return (
+              <Bar
+                onMouseEnter={() => {
+                  setBarOnHover(item);
+                }}
+                data={{ value: item.value }}
+                onMouseLeave={() => setBarOnHover('')}
+                radius={index === 0 ? [10, 0, 0, 10] : index === 3 ? [0, 10, 10, 0] : [0, 0, 0, 0]}
+                dataKey={item}
+                fill={colors[index]}
+                stackId="a"
+              />
+            );
+          })}
           <XAxis
             ticks={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
             dy={5}
@@ -101,6 +96,17 @@ const StackedBarChart = ({}) => {
           />
         </BarChart>
       </ResponsiveContainer>
+      <div className="flex w-100">
+        {Object.entries(data[0]).map((item, index) => (
+          <div className="flex align-fs" style={{ marginRight: 32 }}>
+            <div style={{ width: 32, height: 16, borderRadius: 4, background: colors[index], marginRight: 8 }}></div>
+            {getTokenIconById(item[0]) && <CryptoContainer size={16}>{getTokenIconById(item[0])}</CryptoContainer>}
+            <Label>
+              {item[0]} {item[1]}%
+            </Label>
+          </div>
+        ))}
+      </div>
     </StackedBarChartContainer>
   );
 };
