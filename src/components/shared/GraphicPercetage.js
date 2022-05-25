@@ -17,7 +17,7 @@ const GraphicPercetage = ({ prevValue, currentValue }) => {
       className="align-ce"
       style={{ background: percentage >= 0 ? commonColors.green : commonColors.red, padding: '2px 8px', borderRadius: 20, marginTop: 10 }}
     >
-      {percentage >= 0 ? <TradeUpIcon /> : <TradeDownIcon />}
+      {percentage >= 0 ? <TradeUpIcon className="svg-app-color" /> : <TradeDownIcon className="svg-app-color" />}
       <Label>
         {percentage >= 0 ? '+' : '-'} {Math.abs(percentage.toFixed(1))}%
       </Label>
