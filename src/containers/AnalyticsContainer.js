@@ -105,7 +105,9 @@ const AnalyticsContainer = () => {
         {/* DEX */}
         {pathname === ROUTE_ANALYTICS && <Dex kdaPrice={kdaPrice} />}
         {/* KDX */}
-        {pathname === ROUTE_ANALYTICS_KDX && <Kdx />}
+        {pathname === ROUTE_ANALYTICS_KDX && (
+          <Kdx KDX_TOTAL_SUPPLY={KDX_TOTAL_SUPPLY} kdxSupply={kdxSupply} kdaPrice={kdaPrice} kdxBurnt={kdxBurnt} />
+        )}
         {/* DEX */}
         {pathname === ROUTE_ANALYTICS_STATS && <StatsTable />}
         {/* <FlexContainer mobileClassName="column" gap={24}>

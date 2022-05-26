@@ -193,7 +193,7 @@ const STYFlexContainer = styled.div`
   &.grid {
     display: grid;
     grid-template-columns: ${({ columns, px }) => `repeat(${columns}, ${px ? `${px}px` : '1fr'})`};
-    row-gap: 30px;
+    row-gap: ${({ gridColumnGap = 30 }) => gridColumnGap}px;
     column-gap: ${({ gridColumnGap = 30 }) => gridColumnGap}px;
   }
 `;

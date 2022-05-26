@@ -1,20 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import moment from 'moment';
 import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts';
-import { useApplicationContext } from '../../contexts';
 import { FlexContainer } from '../shared/FlexContainer';
-import { getBurningData, getVestingScheduleData } from './data/chartData';
+import { getVestingScheduleData } from './data/chartData';
 import ProgressBar from '../shared/ProgressBar';
-import { getKDXTotalSupply } from '../../api/kaddex.kdx';
-import { reduceBalance } from '../../utils/reduceBalance';
+
 import Label from '../shared/Label';
 import { Divider } from 'semantic-ui-react';
 import useWindowSize from '../../hooks/useWindowSize';
-const KDX_TOTAL_SUPPLY = 1000000000;
 
-const VestingPieChart = () => {
+const VestingPieChart = ({ kdxSupply, KDX_TOTAL_SUPPLY }) => {
   const [width] = useWindowSize();
-  const [kdxSupply, setKdxSupply] = useState(null);
 
   const vesting = getVestingScheduleData('2021-06-01', moment().format('YYYY-MM-DD')).slice(-1)[0];
   const notCirculating =
@@ -27,12 +23,6 @@ const VestingPieChart = () => {
     DAOTreasury: { name: 'DAO Treasury', color: '#39FFFC', value: vesting['DAO treasury'] },
     NotCirculation: { name: 'Not Circulating', color: '#9797A4', value: notCirculating },
   };
-
-  useEffect(() => {
-    getKDXTotalSupply().then((supply) => {
-      setKdxSupply(reduceBalance(supply, 2));
-    });
-  }, []);
 
   const getPieSize = () => {
     if (width < 900) {

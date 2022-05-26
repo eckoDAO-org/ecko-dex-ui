@@ -63,7 +63,7 @@ export const VAULT = {
 };
 export const BUY_CRYPTO = {
   id: 5,
-  label: 'buy crypto',
+  label: 'buy',
   route: ROUTE_BUY_CRYPTO,
 };
 
