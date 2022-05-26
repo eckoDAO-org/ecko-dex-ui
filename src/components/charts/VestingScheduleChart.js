@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Label from '../shared/Label';
-import { TimeRangeBar, TimeRangeBtn } from './VolumeChart';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { getVestingScheduleData } from './data/chartData';
 import { FlexContainer } from '../shared/FlexContainer';
@@ -31,6 +30,18 @@ export const VestingPopup = styled.div`
 const VestingScheduleChart = ({ height }) => {
   const { themeMode } = useApplicationContext();
   const [vestingEndDate, setVestingEndDate] = useState(VESTING_4Y_RANGE.value);
+
+  const getDefs = (id, color) => {
+    return (
+      <defs>
+        <linearGradient id={id} x1="2" y1="0" x2="1" y2="2">
+          <stop offset="0%" stopColor={color} stopOpacity={0.9} />
+          <stop offset="75%" stopColor={color} stopOpacity={0.25} />
+        </linearGradient>
+      </defs>
+    );
+  };
+
   return (
     <FlexContainer withGradient className="column w-100 h-100 background-fill">
       <div className="flex justify-sb align-ce w-100">
@@ -72,17 +83,26 @@ const VestingScheduleChart = ({ height }) => {
                 );
               }}
             />
+
+            {[
+              { id: 'total-supply', color: themeMode === 'light' ? commonColors.purple : '#AFB0BA' },
+              { id: 'liquidity-mining', color: '#8884d8' },
+              { id: 'community-sales', color: '#ED1CB5' },
+              { id: 'team', color: '#D0A032' },
+              { id: 'dao-tresury', color: '#39FFFC' },
+            ].map((v) => getDefs(v.id, v.color))}
             <Area
               type="monotone"
               dataKey="Total Supply"
               stackId="2"
-              stroke={themeMode === 'light' ? commonColors.purple : '#ffffffb3'}
-              fillOpacity={0}
+              stroke={themeMode === 'light' ? commonColors.purple : '#AFB0BA'}
+              fill="url(#total-supply)"
+              fillOpacity={0.7}
             />
-            <Area type="monotone" dataKey="Liquidity mining" stackId="1" stroke="#8884d8" fill="#8884d8" />
-            <Area type="monotone" dataKey="Community Sales" stackId="1" stroke="#ffc658" fill="#ffc658" />
-            <Area type="monotone" dataKey="Team" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
-            <Area type="monotone" dataKey="DAO treasury" stackId="1" stroke="#ed1cb5" fill="#ed1cb5" />
+            <Area type="monotone" dataKey="Liquidity mining" stackId="1" stroke="#8884d8" fill="url(#liquidity-mining)" />
+            <Area type="monotone" dataKey="Community Sales" stackId="1" stroke="#ED1CB5" fill="url(#community-sales)" />
+            <Area type="monotone" dataKey="Team" stackId="1" stroke="#D0A032" fill="url(#team)" />
+            <Area type="monotone" dataKey="DAO treasury" stackId="1" stroke="#39FFFC" fill="url(#dao-tresury)" />
           </AreaChart>
         </ResponsiveContainer>
       </div>

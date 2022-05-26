@@ -103,11 +103,13 @@ export const vestingRanges = {
     endDate: '2025-11-01',
     title: (payload) => moment(payload._id).format('DD/MM/YYYY'),
     timeLabel: '4y',
+    interval: 2,
   },
   [VESTING_10Y_RANGE.value]: {
     name: (_id) => _id,
     endDate: '2031-06-01',
     title: (payload) => moment(payload.volumes[0]?.startDay).format('DD/MM/YYYY'),
     timeLabel: '10y',
+    interval: 4,
   },
 };

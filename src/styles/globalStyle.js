@@ -231,6 +231,9 @@ export default createGlobalStyle`
     .wrap {
       flex-wrap: wrap;
     }
+    .no-wrap {
+      white-space: nowrap;
+    }
 
     .x-auto {
       overflow-x: auto;
