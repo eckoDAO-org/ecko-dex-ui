@@ -86,23 +86,24 @@ const VestingScheduleChart = ({ height }) => {
 
             {[
               { id: 'total-supply', color: themeMode === 'light' ? commonColors.purple : '#AFB0BA' },
-              { id: 'liquidity-mining', color: '#8884d8' },
-              { id: 'community-sales', color: '#ED1CB5' },
-              { id: 'team', color: '#D0A032' },
-              { id: 'dao-tresury', color: '#39FFFC' },
+              { id: 'liquidity-mining', color: '#E77E76' },
+              { id: 'community-sales', color: '#897DBC' },
+              { id: 'team', color: '#5AC2DD' },
+              { id: 'dao-tresury', color: '#E7638E' },
             ].map((v) => getDefs(v.id, v.color))}
             <Area
               type="monotone"
               dataKey="Total Supply"
               stackId="2"
               stroke={themeMode === 'light' ? commonColors.purple : '#AFB0BA'}
-              fill="url(#total-supply)"
+              fill="transparent"
               fillOpacity={0.7}
+              strokeWidth={2}
             />
-            <Area type="monotone" dataKey="Liquidity mining" stackId="1" stroke="#8884d8" fill="url(#liquidity-mining)" />
-            <Area type="monotone" dataKey="Community Sales" stackId="1" stroke="#ED1CB5" fill="url(#community-sales)" />
-            <Area type="monotone" dataKey="Team" stackId="1" stroke="#D0A032" fill="url(#team)" />
-            <Area type="monotone" dataKey="DAO treasury" stackId="1" stroke="#39FFFC" fill="url(#dao-tresury)" />
+            <Area type="monotone" dataKey="Liquidity mining" stackId="1" stroke="#E77E76" fill="url(#liquidity-mining)" strokeWidth={2} />
+            <Area type="monotone" dataKey="Community Sales" stackId="1" stroke="#897DBC" fill="url(#community-sales)" strokeWidth={2} />
+            <Area type="monotone" dataKey="Team" stackId="1" stroke="#5AC2DD" fill="url(#team)" strokeWidth={2} />
+            <Area type="monotone" dataKey="DAO treasury" stackId="1" stroke="#E7638E" fill="url(#dao-tresury)" strokeWidth={2} />
           </AreaChart>
         </ResponsiveContainer>
       </div>

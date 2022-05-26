@@ -1,15 +1,13 @@
 import React from 'react';
-import { Label } from 'recharts';
+import { BoosterIcon, BurnedIcon, DaoIcon } from '../../assets';
 import { usePactContext } from '../../contexts';
 import useWindowSize from '../../hooks/useWindowSize';
 import theme from '../../styles/theme';
 import { humanReadableNumber } from '../../utils/reduceBalance';
 import VestingPieChart from '../charts/VestingPieChart';
-
 import VestingScheduleChart from '../charts/VestingScheduleChart';
 import AnalyticsSimpleWidget from '../shared/AnalyticsSimpleWidget';
 import { FlexContainer } from '../shared/FlexContainer';
-import InfoPopup from '../shared/InfoPopup';
 import ProgressBar from '../shared/ProgressBar';
 
 const Kdx = ({ KDX_TOTAL_SUPPLY, kdxSupply, kdaPrice, kdxBurnt }) => {
@@ -25,21 +23,12 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdxSupply, kdaPrice, kdxBurnt }) => {
     <FlexContainer className="column" gap={16}>
       <FlexContainer className="grid" columns={getColumns()} gridColumnGap={16}>
         <AnalyticsSimpleWidget
-          title={'KDX price'}
+          title={'Price'}
           mainText={`$ ${pact?.tokensUsdPrice?.KDX || '-'}`}
           subtitle={pact?.tokensUsdPrice?.KDX && `${(pact?.tokensUsdPrice?.KDX / kdaPrice).toFixed(4)} KDA`}
         />
         <AnalyticsSimpleWidget
-          title={
-            <>
-              Marketcap{' '}
-              <InfoPopup size={16} type="modal" title="Analytics data info">
-                <Label>
-                  The information displayed on this page is currently under BETA testing, and is provided on an "as is" and "as available" basis
-                </Label>
-              </InfoPopup>
-            </>
-          }
+          title="Marketcap"
           mainText={(kdxSupply && `$ ${humanReadableNumber(Number(kdxSupply * pact?.tokensUsdPrice?.KDX))}`) || '-'}
           subtitle={null}
         />
@@ -60,20 +49,23 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdxSupply, kdaPrice, kdxBurnt }) => {
           }
         />
         <AnalyticsSimpleWidget
-          title={'KDX Burned'}
+          title={'Burned'}
           mainText={(kdxBurnt && `${humanReadableNumber(kdxBurnt, 2)} KDX`) || '-'}
           subtitle={`${((100 * kdxBurnt) / KDX_TOTAL_SUPPLY).toFixed(2)} %`}
+          icon={<BurnedIcon />}
         />
 
         <AnalyticsSimpleWidget
-          title={'KDX Treasury'}
+          title={'DAO Treasury'}
           mainText={`${humanReadableNumber(KDX_TOTAL_SUPPLY * 0.25, 2)} KDX` || '-'}
           subtitle={`${(25).toFixed(2)} %`}
+          icon={<DaoIcon />}
         />
         <AnalyticsSimpleWidget
-          title={'KDX Rewards'}
+          title={'Liquidity Mining'}
           mainText={`${humanReadableNumber(KDX_TOTAL_SUPPLY * 0.4, 2)} KDX` || '-'}
           subtitle={`${(40).toFixed(2)} %`}
+          icon={<BoosterIcon />}
         />
       </FlexContainer>
       <VestingScheduleChart height={300} />

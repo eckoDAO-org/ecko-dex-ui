@@ -2,17 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import useLazyImage from '../hooks/useLazyImage';
 import { usePactContext, useGameEditionContext } from '../contexts';
-import VolumeChart from '../components/charts/VolumeChart';
-import TVLChart from '../components/charts/TVLChart';
-import VestingScheduleChart from '../components/charts/VestingScheduleChart';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
-import { humanReadableNumber, reduceBalance } from '../utils/reduceBalance';
+import { reduceBalance } from '../utils/reduceBalance';
 import LogoLoader from '../components/shared/Loader';
-import ProgressBar from '../components/shared/ProgressBar';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import Label from '../components/shared/Label';
 import InfoPopup from '../components/shared/InfoPopup';
-import AnalyticsSimpleWidget from '../components/shared/AnalyticsSimpleWidget';
 import { getCoingeckoUsdPrice } from '../api/coingecko';
 import { getKDXSupply, getKDXTotalSupply, getKDXTotalBurnt } from '../api/kaddex.kdx';
 import theme from '../styles/theme';
@@ -73,35 +68,43 @@ const AnalyticsContainer = () => {
         tabletStyle={{ paddingRight: theme.layout.tabletPadding, paddingLeft: theme.layout.tabletPadding }}
         mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
       >
-        <FlexContainer className="align-ce" gap={16} mobileStyle={{ marginBottom: 16 }}>
-          <Label
-            withShade={pathname !== ROUTE_ANALYTICS}
-            className="pointer"
-            fontSize={24}
-            fontFamily="syncopate"
-            onClick={() => history.push(ROUTE_ANALYTICS)}
-          >
-            DEX
-          </Label>
-          <Label
-            withShade={pathname !== ROUTE_ANALYTICS_KDX}
-            className="pointer"
-            fontSize={24}
-            fontFamily="syncopate"
-            onClick={() => history.push(ROUTE_ANALYTICS_KDX)}
-          >
-            KDX
-          </Label>
-          <Label
-            withShade={pathname !== ROUTE_ANALYTICS_STATS}
-            className="pointer"
-            fontSize={24}
-            fontFamily="syncopate"
-            onClick={() => history.push(ROUTE_ANALYTICS_STATS)}
-          >
-            STATS
-          </Label>
-        </FlexContainer>
+        <div className="flex align-ce justify-sb">
+          <FlexContainer className="align-ce" gap={16} mobileStyle={{ marginBottom: 16 }}>
+            <Label
+              withShade={pathname !== ROUTE_ANALYTICS}
+              className="pointer"
+              fontSize={24}
+              fontFamily="syncopate"
+              onClick={() => history.push(ROUTE_ANALYTICS)}
+            >
+              DEX
+            </Label>
+            <Label
+              withShade={pathname !== ROUTE_ANALYTICS_KDX}
+              className="pointer"
+              fontSize={24}
+              fontFamily="syncopate"
+              onClick={() => history.push(ROUTE_ANALYTICS_KDX)}
+            >
+              KDX
+            </Label>
+            <Label
+              withShade={pathname !== ROUTE_ANALYTICS_STATS}
+              className="pointer"
+              fontSize={24}
+              fontFamily="syncopate"
+              onClick={() => history.push(ROUTE_ANALYTICS_STATS)}
+            >
+              STATS
+            </Label>
+          </FlexContainer>
+
+          <InfoPopup size={16} type="modal" title="Analytics data info">
+            <Label>
+              The information displayed on this page is currently under BETA testing, and is provided on an "as is" and "as available" basis
+            </Label>
+          </InfoPopup>
+        </div>
         {/* DEX */}
         {pathname === ROUTE_ANALYTICS && <Dex kdaPrice={kdaPrice} />}
         {/* KDX */}

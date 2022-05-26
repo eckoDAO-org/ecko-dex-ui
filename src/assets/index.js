@@ -52,5 +52,9 @@ export { ReactComponent as XWalletLogo } from './images/header/x-wallet-logo.svg
 export { ReactComponent as InfoIcon } from './images/shared/info-icon.svg';
 export { ReactComponent as BoosterIcon } from './images/shared/booster.svg';
 export { ReactComponent as SimplexLogo } from './images/shared/simplex-logo.svg';
+export { ReactComponent as SalesIcon } from './images/shared/sales.svg';
+export { ReactComponent as TeamIcon } from './images/shared/team.svg';
+export { ReactComponent as BurnedIcon } from './images/shared/burned.svg';
+export { ReactComponent as DaoIcon } from './images/shared/dao.svg';
 
 export * from '../assets/images/game-edition';

@@ -98,7 +98,7 @@ const VolumeChart = ({ kdaPrice, width, height }) => {
             }}
           >
             <Tooltip label="Volume" content={() => ''} />
-            <Bar dataKey="Volume" fill="#F68862" radius={[10, 10, 10, 10]} />
+            <Bar dataKey="Volume" fill="#ffa900" radius={[10, 10, 10, 10]} />
           </BarChart>
         </ResponsiveContainer>
       </div>

@@ -148,7 +148,7 @@ const TVLChart = ({ kdaPrice, height }) => {
               </linearGradient>
             </defs>
             <Tooltip label="TVL" content={() => ''} />
-            <Area type="monotone" dataKey="tvl" stroke="#ED1CB5" fill="url(#color)" activeDot={{ r: 5 }} dot={{ r: 0 }} />
+            <Area type="monotone" dataKey="tvl" stroke="#ED1CB5" strokeWidth={2} fill="url(#color)" activeDot={{ r: 5 }} dot={{ r: 0 }} />
           </AreaChart>
         </STYChartContainer>
       </div>

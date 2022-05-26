@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
+import axios from 'axios';
 import { getDailyVolume } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact';
 import { CHART_OPTIONS, DAILY_VOLUME_RANGE } from '../../constants/chartOptionsConstants';
 import tokenData from '../../constants/cryptoCurrencies';
 import { usePactContext } from '../../contexts';
-import { humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
+import { humanReadableNumber } from '../../utils/reduceBalance';
 import { get24HVolumeSingleSided } from '../../utils/token-utils';
 import TVLChart from '../charts/TVLChart';
 import VolumeChart from '../charts/VolumeChart';
@@ -15,7 +16,6 @@ import { FlexContainer } from '../shared/FlexContainer';
 import GraphicPercetage from '../shared/GraphicPercetage';
 import ProgressBar from '../shared/ProgressBar';
 import StackedBarChart from '../shared/StackedBarChart';
-import axios from 'axios';
 import pairTokens from '../../constants/pairsConfig';
 
 const KDX_TOTAL_SUPPLY = 1000000000;
