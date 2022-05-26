@@ -82,3 +82,32 @@ export const tvlRanges = {
     timeLabel: '1y',
   },
 };
+
+///VESTING
+export const VESTING_4Y_RANGE = {
+  key: 0,
+  text: '4y',
+  value: '4y',
+};
+export const VESTING_10Y_RANGE = {
+  key: 1,
+  text: '10y',
+  value: '10y',
+};
+
+export const VESTING_CHART_OPTIONS = [VESTING_4Y_RANGE, VESTING_10Y_RANGE];
+
+export const vestingRanges = {
+  [VESTING_4Y_RANGE.value]: {
+    name: (_id) => moment(_id).format('DD/MM/YYYY'),
+    endDate: '2025-11-01',
+    title: (payload) => moment(payload._id).format('DD/MM/YYYY'),
+    timeLabel: '4y',
+  },
+  [VESTING_10Y_RANGE.value]: {
+    name: (_id) => _id,
+    endDate: '2031-06-01',
+    title: (payload) => moment(payload.volumes[0]?.startDay).format('DD/MM/YYYY'),
+    timeLabel: '10y',
+  },
+};

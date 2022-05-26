@@ -7,6 +7,8 @@ import { getVestingScheduleData } from './data/chartData';
 import { FlexContainer } from '../shared/FlexContainer';
 import { useApplicationContext } from '../../contexts';
 import { commonColors } from '../../styles/theme';
+import CustomDropdown from '../shared/CustomDropdown';
+import { vestingRanges, VESTING_4Y_RANGE, VESTING_CHART_OPTIONS } from '../../constants/chartOptionsConstants';
 
 export const VestingHeader = styled.div`
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
@@ -26,31 +28,27 @@ export const VestingPopup = styled.div`
   }
 `;
 
-const endDate4Years = '2025-11-01';
-const endDate10Years = '2031-06-01';
-
 const VestingScheduleChart = ({ height }) => {
   const { themeMode } = useApplicationContext();
-  const [endDate, setEndDate] = useState(endDate4Years);
+  const [vestingEndDate, setVestingEndDate] = useState(VESTING_4Y_RANGE.value);
   return (
     <FlexContainer withGradient className="column w-100 h-100 background-fill">
-      <VestingHeader>
-        <Label></Label>
-        <Label>KDX Vesting</Label>
+      <div className="flex justify-sb align-ce w-100">
+        <Label fontSize={16}>Vesting Schedule</Label>
+        <CustomDropdown
+          options={VESTING_CHART_OPTIONS}
+          dropdownStyle={{ minWidth: '66px', padding: 10, height: 30 }}
+          onChange={(e, { value }) => {
+            setVestingEndDate(value);
+          }}
+          value={vestingEndDate}
+        />
+      </div>
 
-        <TimeRangeBar>
-          <TimeRangeBtn className={endDate === endDate4Years ? 'active' : ''} onClick={() => setEndDate(endDate4Years)}>
-            4y
-          </TimeRangeBtn>
-          <TimeRangeBtn className={endDate === endDate10Years ? 'active' : ''} onClick={() => setEndDate(endDate10Years)}>
-            10y
-          </TimeRangeBtn>
-        </TimeRangeBar>
-      </VestingHeader>
       <div style={{ width: '100%', height }}>
         <ResponsiveContainer>
           <AreaChart
-            data={getVestingScheduleData('2021-06-01', endDate)}
+            data={getVestingScheduleData('2021-06-01', vestingRanges[vestingEndDate].endDate)}
             margin={{
               top: 10,
               right: 30,
@@ -58,7 +56,7 @@ const VestingScheduleChart = ({ height }) => {
               bottom: 0,
             }}
           >
-            <XAxis dataKey="name" interval={endDate === endDate4Years ? 2 : 4} />
+            <XAxis dataKey="name" interval={vestingRanges[vestingEndDate].interval} />
             <YAxis domain={[0, 100]} tickFormatter={(value) => `${value}%`} />
             <Tooltip
               content={(data) => {
