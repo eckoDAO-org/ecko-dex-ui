@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { TradeUpIcon } from '../../assets';
 import tokenData from '../../constants/cryptoCurrencies';
 import { useApplicationContext } from '../../contexts';
+import { ROUTE_TOKEN_INFO } from '../../router/routes';
 import { theme } from '../../styles/theme';
 import { extractDecimal, humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
@@ -11,32 +13,33 @@ import GraphicPercetage from '../shared/GraphicPercetage';
 
 const StatsTable = () => {
   const { themeMode } = useApplicationContext();
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
 
   const fakeData = [
     {
-      pair: 'KDA',
+      token: 'KDA',
       price: 284630080,
       dailyPriceChange: [12312300, 23423400],
       dailyVolume: 12312300,
       dailyVolumeChange: [12312300, 23423400],
     },
     {
-      pair: 'KDX',
+      token: 'KDX',
       price: 284630080,
       dailyPriceChange: [312312300, 23423400],
       dailyVolume: 12312300,
       dailyVolumeChange: [312312300, 23423400],
     },
     {
-      pair: 'XYZ',
+      token: 'XYZ',
       price: 284630080,
       dailyPriceChange: [12312300, 23423400],
       dailyVolume: 12312300,
       dailyVolumeChange: [12312300, 23423400],
     },
     {
-      pair: 'ABC',
+      token: 'ABC',
       price: 284630080,
       dailyPriceChange: [312312300, 23423400],
       dailyVolume: 12312300,
@@ -65,6 +68,7 @@ const StatsTable = () => {
           ),
           onClick: (item) => {
             console.log('item', item);
+            history.push(ROUTE_TOKEN_INFO.replace(':token', item.token));
           },
           // history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${item.token0}&token1=${item.token1}`), {
           //   from: ROUTE_LIQUIDITY_POOLS,
@@ -82,12 +86,12 @@ export default StatsTable;
 const renderColumns = () => {
   return [
     {
-      name: 'Pair',
+      name: 'Token',
       width: 160,
       render: ({ item }) => (
         <FlexContainer className="align-ce">
-          <CryptoContainer style={{ zIndex: 2 }}>{tokenData[item.pair].icon} </CryptoContainer>
-          {item.pair}
+          <CryptoContainer style={{ zIndex: 2 }}>{tokenData[item.token].icon} </CryptoContainer>
+          {item.token}
         </FlexContainer>
       ),
     },
