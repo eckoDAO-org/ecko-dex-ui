@@ -15,12 +15,12 @@ const IconContainer = styled.div`
     height: 24px;
     width: auto;
     path {
-      fill: ${({ theme: { colors } }) => `${colors.white}99`};
+      fill: ${({ theme: { colors }, iconColor }) => (iconColor ? iconColor : `${colors.white}99`)};
     }
   }
 `;
 
-const AnalyticsSimpleWidget = ({ title, mainText, subtitle, rightComponent, icon }) => {
+const AnalyticsSimpleWidget = ({ title, mainText, subtitle, rightComponent, icon, iconColor }) => {
   return (
     <FlexContainer withGradient className="relative w-100 column  background-fill" style={{ padding: 32, zIndex: 1 }}>
       <div className=" w-100 flex">
@@ -32,7 +32,7 @@ const AnalyticsSimpleWidget = ({ title, mainText, subtitle, rightComponent, icon
       </div>
 
       <Label>{subtitle}</Label>
-      {icon && <IconContainer>{icon}</IconContainer>}
+      {icon && <IconContainer iconColor={iconColor}>{icon}</IconContainer>}
     </FlexContainer>
   );
 };

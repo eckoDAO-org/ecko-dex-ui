@@ -99,7 +99,7 @@ const AnalyticsContainer = () => {
             </Label>
           </FlexContainer>
 
-          <InfoPopup size={16} type="modal" title="Analytics data info">
+          <InfoPopup type="modal" title="Analytics data info">
             <Label>
               The information displayed on this page is currently under BETA testing, and is provided on an "as is" and "as available" basis
             </Label>

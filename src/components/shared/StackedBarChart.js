@@ -51,7 +51,7 @@ const TooltipContent = styled.div`
   height: 50px;
 `;
 
-const StackedBarChart = ({ title }) => {
+const StackedBarChart = ({ title, withDropdown }) => {
   const [barOnHover, setBarOnHover] = useState('');
   const [volumeRange, setVolumeRange] = useState(DAILY_VOLUME_RANGE.value);
   const data = [{ KDA: 50, KDX: 20, XYZ: 10, OTHER: 20 }];
@@ -70,15 +70,16 @@ const StackedBarChart = ({ title }) => {
     <StackedBarChartContainer gap={24} withGradient className="column background-fill w-100" style={{ padding: 32 }}>
       <div className="w-100 flex justify-sb">
         <Label fontSize={16}>{title}</Label>
-
-        <CustomDropdown
-          options={CHART_OPTIONS}
-          dropdownStyle={{ minWidth: '66px', padding: 10, height: 30 }}
-          onChange={(e, { value }) => {
-            setVolumeRange(value);
-          }}
-          value={volumeRange}
-        />
+        {withDropdown && (
+          <CustomDropdown
+            options={CHART_OPTIONS}
+            dropdownStyle={{ minWidth: '66px', padding: 10, height: 30 }}
+            onChange={(e, { value }) => {
+              setVolumeRange(value);
+            }}
+            value={volumeRange}
+          />
+        )}
       </div>
       <ResponsiveContainer height={50} width={'100%'} m>
         <BarChart layout="vertical" data={data}>

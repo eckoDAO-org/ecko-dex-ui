@@ -168,7 +168,7 @@ const Dex = ({ kdaPrice }) => {
         <StackedBarChart title="Tvl Details" data={tokensTvl} />
       </FlexContainer>
       <FlexContainer>
-        <StackedBarChart title="Volume Details" data={tokensVolumes} />
+        <StackedBarChart title="Volume Details" data={tokensVolumes} withDropdown />
       </FlexContainer>
     </FlexContainer>
   );
