@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components/macro';
-import { useApplicationContext, useGameEditionContext } from '../../contexts';
+import { useApplicationContext, useGameEditionContext, usePactContext } from '../../contexts';
 import InputToken from '../../components/shared/InputToken';
 import { SwapIcon } from '../../assets';
-import { extractDecimal, getDecimalPlaces, limitDecimalPlaces } from '../../utils/reduceBalance';
+import { extractDecimal, getDecimalPlaces, humanReadableNumber, limitDecimalPlaces } from '../../utils/reduceBalance';
 import noExponents from '../../utils/noExponents';
 import FirstInput from '../../assets/images/game-edition/pixeled-box-yellow.svg';
 import SecondInput from '../../assets/images/game-edition/pixeled-box-purple.svg';
@@ -12,6 +12,7 @@ import { PixeledCircleDoubleArrowIcon } from '../../assets';
 import Input from '../shared/Input';
 import CustomDivider from '../shared/CustomDivider';
 import { theme } from '../../styles/theme';
+import Label from '../shared/Label';
 
 const Container = styled.div`
   position: relative;
@@ -76,6 +77,7 @@ const SecondInputContainer = styled.div`
 
 const SwapForm = ({ label, fromValues, setFromValues, toValues, setToValues, fromNote, toNote, setTokenSelectorType, setInputSide, swapValues }) => {
   const { themeMode } = useApplicationContext();
+  const { tokensUsdPrice } = usePactContext();
   const { gameEditionView } = useGameEditionContext();
   const [rotation, setRotation] = useState(0);
 
@@ -109,6 +111,13 @@ const SwapForm = ({ label, fromValues, setFromValues, toValues, setToValues, fro
                   }));
                 }}
               />
+            }
+            bottomContent={
+              fromValues.amount && (
+                <Label fontSize={16} labelStyle={{ margin: '-10px 0px 10px 2px', opacity: 0.7 }}>
+                  $ {humanReadableNumber(extractDecimal(tokensUsdPrice?.[fromValues.coin]) * extractDecimal(fromValues.amount))}
+                </Label>
+              )
             }
             value={noExponents(fromValues.amount)}
             onSelectButtonClick={() => {
@@ -182,6 +191,13 @@ const SwapForm = ({ label, fromValues, setFromValues, toValues, setToValues, fro
                   }));
                 }}
               />
+            }
+            bottomContent={
+              toValues.amount && (
+                <Label fontSize={16} labelStyle={{ margin: '-10px 0px 10px 2px', opacity: 0.7 }}>
+                  $ {humanReadableNumber(extractDecimal(tokensUsdPrice?.[toValues.coin]) * extractDecimal(toValues.amount))}
+                </Label>
+              )
             }
             value={noExponents(toValues.amount)}
             onSelectButtonClick={() => {
