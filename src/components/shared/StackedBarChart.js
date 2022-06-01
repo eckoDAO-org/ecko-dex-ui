@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import styled from 'styled-components';
-import { CHART_OPTIONS, DAILY_VOLUME_RANGE } from '../../constants/chartOptionsConstants';
+import { humanReadableNumber } from '../../utils/reduceBalance';
 import { getTokenIconById } from '../../utils/token-utils';
-import CustomDropdown from './CustomDropdown';
 import { CryptoContainer, FlexContainer } from './FlexContainer';
 import Label from './Label';
 
@@ -45,24 +44,33 @@ shortLine.y1.baseVal.value = 500
   }
 `;
 
-const TooltipContent = styled.div`
+const TooltipContent = styled(FlexContainer)`
   background: ${({ theme: { colors } }) => colors.primary};
-  min-width: 50px;
-  height: 50px;
+  padding: 16px;
+  z-index: 1;
 `;
 
-const StackedBarChart = ({ title, withDropdown }) => {
+const StackedBarChart = ({ title, rightComponent, data }) => {
   const [barOnHover, setBarOnHover] = useState('');
-  const [volumeRange, setVolumeRange] = useState(DAILY_VOLUME_RANGE.value);
-  const data = [{ KDA: 50, KDX: 20, XYZ: 10, OTHER: 20 }];
 
-  const colors = ['#5dcbe5', '#e37480', ' #f6cc7d', '#A9AAB4'];
+  const obj = data.reduce((res, item) => {
+    res = { ...res, [item.name]: item.percentage };
+    return res;
+  }, {});
 
-  const CustomTooltip = (props) => {
-    return (
-      <TooltipContent>
-        <Label>{barOnHover}</Label>
+  const CustomTooltip = () => {
+    const tokenInfo = data.find((token) => token.name === barOnHover);
+    return tokenInfo ? (
+      <TooltipContent gap={16} className="column">
+        <div className="flex">
+          <CryptoContainer size={24}>{getTokenIconById(tokenInfo.name)}</CryptoContainer>
+          <Label>{tokenInfo.name}</Label>
+        </div>
+        <Label>{tokenInfo.percentage.toFixed(2)} %</Label>
+        <Label>$ {humanReadableNumber(tokenInfo.volumeUsd)}</Label>
       </TooltipContent>
+    ) : (
+      <></>
     );
   };
 
@@ -70,32 +78,23 @@ const StackedBarChart = ({ title, withDropdown }) => {
     <StackedBarChartContainer gap={24} withGradient className="column background-fill w-100" style={{ padding: 32 }}>
       <div className="w-100 flex justify-sb">
         <Label fontSize={16}>{title}</Label>
-        {withDropdown && (
-          <CustomDropdown
-            options={CHART_OPTIONS}
-            dropdownStyle={{ minWidth: '66px', padding: 10, height: 30 }}
-            onChange={(e, { value }) => {
-              setVolumeRange(value);
-            }}
-            value={volumeRange}
-          />
-        )}
+        {rightComponent}
       </div>
-      <ResponsiveContainer height={50} width={'100%'} m>
-        <BarChart layout="vertical" data={data}>
+      <ResponsiveContainer height={50} width={'100%'}>
+        <BarChart layout="vertical" data={[obj]}>
           <YAxis type="category" dataKey="name" stroke="#FFFFFF" fontSize="12" width={0} />
           <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
-          {Object.keys(data[0]).map((item, index) => {
+          {Object.keys(obj).map((item, index) => {
             return (
               <Bar
                 onMouseEnter={() => {
                   setBarOnHover(item);
                 }}
-                data={{ value: item.value }}
-                onMouseLeave={() => setBarOnHover('')}
-                radius={index === 0 ? [10, 0, 0, 10] : index === 3 ? [0, 10, 10, 0] : [0, 0, 0, 0]}
+                key={index}
                 dataKey={item}
-                fill={colors[index]}
+                onMouseLeave={() => setBarOnHover('')}
+                radius={index === 0 ? [10, 0, 0, 10] : index === data.length - 1 ? [0, 10, 10, 0] : [0, 0, 0, 0]}
+                fill={data[index].color || '#A9AAB4'}
                 stackId="a"
               />
             );
@@ -104,12 +103,12 @@ const StackedBarChart = ({ title, withDropdown }) => {
         </BarChart>
       </ResponsiveContainer>
       <div className="flex w-100">
-        {Object.entries(data[0]).map((item, index) => (
-          <div className="flex align-fs" style={{ marginRight: 32 }}>
-            <div style={{ width: 32, height: 16, borderRadius: 4, background: colors[index], marginRight: 8 }}></div>
-            {getTokenIconById(item[0]) && <CryptoContainer size={16}>{getTokenIconById(item[0])}</CryptoContainer>}
+        {data.map((item, index) => (
+          <div className="flex align-fs" style={{ marginRight: 32, zIndex: -1 }}>
+            <div style={{ width: 32, height: 16, borderRadius: 4, background: item.color || '#A9AAB4', marginRight: 8 }}></div>
+            {getTokenIconById(item.name) && <CryptoContainer size={16}>{getTokenIconById(item.name)}</CryptoContainer>}
             <Label>
-              {item[0]} {item[1]}%
+              {item.name} {item.percentage.toFixed(2)}%
             </Label>
           </div>
         ))}

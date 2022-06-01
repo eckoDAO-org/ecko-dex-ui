@@ -3,8 +3,8 @@ import moment from 'moment';
 import axios from 'axios';
 import { getDailyVolume } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact';
-import { CHART_OPTIONS, DAILY_VOLUME_RANGE } from '../../constants/chartOptionsConstants';
-import tokenData from '../../constants/cryptoCurrencies';
+import { chartTimeRanges, CHART_OPTIONS, DAILY_VOLUME_RANGE } from '../../constants/chartOptionsConstants';
+import tokenData, { pairsData } from '../../constants/cryptoCurrencies';
 import { usePactContext } from '../../contexts';
 import { humanReadableNumber } from '../../utils/reduceBalance';
 import { get24HVolumeSingleSided } from '../../utils/token-utils';
@@ -22,10 +22,11 @@ const KDX_TOTAL_SUPPLY = 1000000000;
 
 const Dex = ({ kdaPrice }) => {
   const [stakeDataRange, setStakeDataRange] = useState(DAILY_VOLUME_RANGE.value);
+  const [volumeRange, setVolumeRange] = useState(DAILY_VOLUME_RANGE.value);
+
   const [loading, setLoading] = useState(true);
   const [tokensVolumes, setTokensVolumes] = useState([]);
-  const [tokensTvl, setTokensTvl] = useState([]);
-  console.log('LOG --> tokens', tokensVolumes);
+  const [pairsVolume, setPairsVolume] = useState([]);
 
   const { tokensUsdPrice } = usePactContext();
 
@@ -42,24 +43,25 @@ const Dex = ({ kdaPrice }) => {
       for (const token of tokens) {
         const tokenPairs = pairsList.filter((p) => p.token0 === token.name || p.token1 === token.name);
         const tokenUsdPrice = tokensUsdPrice?.[token.name];
-        let volume24HUsd = 0;
+        let volumeUsd = 0;
         let volume24H = 0;
         for (let i = 0; i < tokenPairs.length; i++) {
           volume24H += get24HVolumeSingleSided(volumes, token.tokenNameKaddexStats);
-          volume24HUsd += volume24H * tokenUsdPrice;
+          volumeUsd += volume24H * tokenUsdPrice;
         }
-        result.push({ ...token, volume24HUsd, volume24H, tokenUsdPrice });
+        result.push({ ...token, volumeUsd, volume24H, tokenUsdPrice });
       }
-      const totalVolume = result.reduce((acc, t) => acc + t.volume24HUsd, 0);
+      const totalVolume = result.reduce((acc, t) => acc + t.volumeUsd, 0);
 
-      const mainTokens = result.filter((t) => t.main).map((token) => ({ ...token, volume24HPercentage: (token.volume24HUsd / totalVolume) * 100 }));
-      const otherTokensVolume = result.filter((t) => !t.main).reduce((acc, t) => acc + t.volume24HUsd, 0);
+      const mainTokens = result.filter((t) => t.main).map((token) => ({ ...token, percentage: (token.volumeUsd / totalVolume) * 100 }));
+      const otherTokensVolume = result.filter((t) => !t.main).reduce((acc, t) => acc + t.volumeUsd, 0);
       const otherTokens = {
         name: 'OTHER',
-        volume24HUsd: otherTokensVolume,
-        volume24HPercentage: (otherTokensVolume / totalVolume) * 100,
+        volumeUsd: otherTokensVolume,
+        percentage: (otherTokensVolume / totalVolume) * 100,
       };
-      setTokensVolumes([...mainTokens, otherTokens]);
+
+      setTokensVolumes(otherTokensVolume.length > 0 ? [...mainTokens, otherTokens] : [...mainTokens]);
     }
     setLoading(false);
   };
@@ -69,17 +71,19 @@ const Dex = ({ kdaPrice }) => {
   // }, [kdaPrice, tvlRange]);
 
   // work in progress
-  const getTokensTvl = async () => {
+  const getPairsVolume = async () => {
     axios
       .get(
-        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/tvl/daily?dateStart=${moment().subtract(4, 'day').format('YYYY-MM-DD')}&dateEnd=${moment()
+        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/tvl/daily?dateStart=${chartTimeRanges[volumeRange].dateStartTvl}&dateEnd=${moment()
           .subtract(1, 'day')
           .format('YYYY-MM-DD')}`
       )
       .then(async (res) => {
-        const lastTvl = res.data.slice(-1)[0];
+        console.log('res -->', res.data);
+        const lastTvl = res.data[0];
         const allTVL = [];
-        const mainTVL = lastTvl.tvl.filter((t) => {
+
+        const mainsTVL = lastTvl.tvl.filter((t) => {
           const name0 = `${t.tokenTo}:${t.tokenFrom}`;
           const name1 = `${t.tokenFrom}:${t.tokenTo}`;
 
@@ -90,36 +94,59 @@ const Dex = ({ kdaPrice }) => {
           const name1 = `${t.tokenFrom}:${t.tokenTo}`;
           return (pairTokens[name0] && !pairTokens[name0].main) || (pairTokens[name1] && !pairTokens[name1].main);
         });
-        console.log('mainTVL', mainTVL);
-        console.log('otherTVL', otherTVL);
-        for (const day of res.data) {
+
+        const otherTvlTotalSum = otherTVL.reduce((partialSum, currVol) => {
+          if (currVol.tokenFrom === 'coin') {
+            const tokenToPrice = (currVol.tokenFromTVL / currVol.tokenToTVL) * kdaPrice;
+            return partialSum + currVol.tokenFromTVL * kdaPrice + currVol.tokenToTVL * tokenToPrice;
+          } else {
+            const tokenFromPrice = (currVol.tokenToTVL / currVol.tokenFromTVL) * kdaPrice;
+            return partialSum + currVol.tokenFromTVL * tokenFromPrice + currVol.tokenToTVL * kdaPrice;
+          }
+        }, 0);
+
+        let totalTvl = otherTvlTotalSum;
+
+        for (const mainTVL of mainsTVL) {
+          let sum = 0;
+          const name0 = `${mainTVL.tokenTo}:${mainTVL.tokenFrom}`;
+          const name1 = `${mainTVL.tokenFrom}:${mainTVL.tokenTo}`;
+          const pair = Object.values(pairsData).find((p) => p.name === name0 || p.name === name1);
+          if (mainTVL.tokenFrom === 'coin') {
+            const tokenToPrice = (mainTVL.tokenFromTVL / mainTVL.tokenToTVL) * kdaPrice;
+            sum = mainTVL.tokenFromTVL * kdaPrice + mainTVL.tokenToTVL * tokenToPrice;
+          } else {
+            const tokenFromPrice = (mainTVL.tokenToTVL / mainTVL.tokenFromTVL) * kdaPrice;
+            sum = mainTVL.tokenFromTVL * tokenFromPrice + mainTVL.tokenToTVL * kdaPrice;
+          }
+          totalTvl += sum;
           allTVL.push({
-            name: moment(day._id).format('DD/MM/YYYY'),
-            tvl: +day.tvl
-              .reduce((partialSum, currVol) => {
-                if (currVol.tokenFrom === 'coin') {
-                  const tokenToPrice = (currVol.tokenFromTVL / currVol.tokenToTVL) * kdaPrice;
-                  return partialSum + currVol.tokenFromTVL * kdaPrice + currVol.tokenToTVL * tokenToPrice;
-                } else {
-                  const tokenFromPrice = (currVol.tokenToTVL / currVol.tokenFromTVL) * kdaPrice;
-                  return partialSum + currVol.tokenFromTVL * tokenFromPrice + currVol.tokenToTVL * kdaPrice;
-                }
-              }, 0)
-              .toFixed(2),
+            ...mainTVL,
+            volumeUsd: sum,
+            name: `${pair.token0}/${pair.token1}`,
+            color: pair.color,
           });
         }
-        // setTVLData(allTVL);
+        allTVL.push({
+          name: 'OTHER',
+          volumeUsd: otherTvlTotalSum,
+        });
+
+        for (const tvl of allTVL) {
+          tvl.percentage = (tvl.volumeUsd / totalTvl) * 100;
+        }
+
+        setPairsVolume(allTVL);
       })
-      .catch((err) => console.log('get tvl error', err));
+      .catch((err) => console.error('get tvl error', err));
   };
 
   useEffect(() => {
-    console.log('pair', pairTokens);
     if (tokensUsdPrice) {
       getTokensVolume();
-      getTokensTvl();
+      getPairsVolume();
     }
-  }, [tokensUsdPrice]);
+  }, [tokensUsdPrice, volumeRange]);
 
   const fakeData = {
     totalStaked: 150002300.75,
@@ -165,10 +192,23 @@ const Dex = ({ kdaPrice }) => {
         />
       </FlexContainer>
       <FlexContainer>
-        <StackedBarChart title="Tvl Details" data={tokensTvl} />
+        <StackedBarChart title="Tvl Details" data={tokensVolumes} />
       </FlexContainer>
       <FlexContainer>
-        <StackedBarChart title="Volume Details" data={tokensVolumes} withDropdown />
+        <StackedBarChart
+          title="Volume Details"
+          data={pairsVolume}
+          rightComponent={
+            <CustomDropdown
+              options={CHART_OPTIONS}
+              dropdownStyle={{ minWidth: '66px', padding: 10, height: 30 }}
+              onChange={(e, { value }) => {
+                setVolumeRange(value);
+              }}
+              value={volumeRange}
+            />
+          }
+        />
       </FlexContainer>
     </FlexContainer>
   );
