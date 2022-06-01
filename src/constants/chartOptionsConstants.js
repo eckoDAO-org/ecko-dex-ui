@@ -22,6 +22,7 @@ export const chartTimeRanges = {
   [DAILY_VOLUME_RANGE.value]: {
     name: (_id) => moment(_id).format('DD/MM/YYYY'),
     dateStart: moment().subtract(60, 'days').format('YYYY-MM-DD'),
+    dateStartTvl: moment().subtract(2, 'days').format('YYYY-MM-DD'),
     title: (payload) => moment(payload._id).format('DD/MM/YYYY'),
     timeLabel: '24h',
   },
@@ -30,6 +31,7 @@ export const chartTimeRanges = {
     dateStart: moment()
       .subtract(7 * 40, 'days')
       .format('YYYY-MM-DD'),
+    dateStartTvl: moment().subtract(8, 'days').format('YYYY-MM-DD'),
     title: (payload) => moment(payload.volumes[0]?.startDay).format('DD/MM/YYYY'),
     timeLabel: 'weekly',
   },
@@ -39,6 +41,7 @@ export const chartTimeRanges = {
       .subtract(30 * 6, 'days')
       .days(0)
       .format('YYYY-MM-DD'),
+    dateStartTvl: moment().subtract(31, 'days').format('YYYY-MM-DD'),
     title: (payload) => moment(payload.volumes[0]?.startDay).format('MMM YY'),
     timeLabel: 'monthly',
   },
