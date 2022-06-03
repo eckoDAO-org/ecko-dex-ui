@@ -124,15 +124,15 @@ const Dex = ({ kdaPrice }) => {
             color: pair.color,
           });
         }
-        allTVL.push({
-          name: 'OTHER',
-          volumeUsd: otherTvlTotalSum,
-        });
+        if (otherTvlTotalSum > 0)
+          allTVL.push({
+            name: 'OTHER',
+            volumeUsd: otherTvlTotalSum,
+          });
 
         for (const tvl of allTVL) {
           tvl.percentage = (tvl.volumeUsd / totalTvl) * 100;
         }
-
         setPairsVolume(allTVL);
         setLoading(false);
       })

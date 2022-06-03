@@ -34,6 +34,7 @@
         "name": "coin:hypercent.prod-hype-coin",
         "token0": "KDA",
         "token1": "HYPE",
+        "main":true,
         "isBoosted": false,
         "color":"#ed1cb5"
 

@@ -91,6 +91,38 @@ const StackedBarChart = ({ title, rightComponent, data, withDoubleToken }) => {
     );
   };
 
+  const BottomChartData = ({ item }) => {
+    console.log('LOG --> item', item);
+    if (withDoubleToken) {
+      const s = item?.name.split('/') || [];
+      let tokens = s[0] !== 'OTHER' ? s : null;
+      return (
+        <>
+          <div style={{ width: 32, height: 16, borderRadius: 4, background: item.color || '#A9AAB4', marginRight: 8 }}></div>
+          <CryptoContainer size={16} style={{ zIndex: 2 }}>
+            {tokens && tokenData[tokens[0]].icon}
+          </CryptoContainer>
+          <CryptoContainer size={16} style={{ marginLeft: -12, zIndex: 1 }}>
+            {tokens && tokenData[tokens[1]].icon}
+          </CryptoContainer>
+          <Label>
+            {item.name} {item.percentage.toFixed(2)}%
+          </Label>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <div style={{ width: 32, height: 16, borderRadius: 4, background: item.color || '#A9AAB4', marginRight: 8 }}></div>
+          {getTokenIconById(item.name) && <CryptoContainer size={16}>{getTokenIconById(item.name)}</CryptoContainer>}
+          <Label>
+            {item.name} {item.percentage.toFixed(2)}%
+          </Label>
+        </>
+      );
+    }
+  };
+
   return (
     <StackedBarChartContainer gap={24} withGradient className="column background-fill w-100" style={{ padding: 32 }}>
       <div className="w-100 flex justify-sb">
@@ -119,14 +151,10 @@ const StackedBarChart = ({ title, rightComponent, data, withDoubleToken }) => {
           <XAxis ticks={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]} height={0} dy={5} domain={['dataMin', '100']} type="number" />
         </BarChart>
       </ResponsiveContainer>
-      <div className="flex w-100">
+      <div className="flex w-100 wrap">
         {data.map((item, index) => (
           <div className="flex align-fs" style={{ marginRight: 32, zIndex: -1 }} key={index}>
-            <div style={{ width: 32, height: 16, borderRadius: 4, background: item.color || '#A9AAB4', marginRight: 8 }}></div>
-            {getTokenIconById(item.name) && <CryptoContainer size={16}>{getTokenIconById(item.name)}</CryptoContainer>}
-            <Label>
-              {item.name} {item.percentage.toFixed(2)}%
-            </Label>
+            <BottomChartData item={item} />
           </div>
         ))}
       </div>
