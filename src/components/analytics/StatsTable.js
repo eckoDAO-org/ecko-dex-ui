@@ -16,36 +16,13 @@ const StatsTable = () => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
 
-  const fakeData = [
-    {
-      token: 'KDA',
-      price: 284630080,
-      dailyPriceChange: [12312300, 23423400],
-      dailyVolume: 12312300,
-      dailyVolumeChange: [12312300, 23423400],
-    },
-    {
-      token: 'KDX',
-      price: 284630080,
-      dailyPriceChange: [312312300, 23423400],
-      dailyVolume: 12312300,
-      dailyVolumeChange: [312312300, 23423400],
-    },
-    {
-      token: 'XYZ',
-      price: 284630080,
-      dailyPriceChange: [12312300, 23423400],
-      dailyVolume: 12312300,
-      dailyVolumeChange: [12312300, 23423400],
-    },
-    {
-      token: 'ABC',
-      price: 284630080,
-      dailyPriceChange: [312312300, 23423400],
-      dailyVolume: 12312300,
-      dailyVolumeChange: [312312300, 23423400],
-    },
-  ];
+  const fakeData = Object.values(tokenData).map((t) => ({
+    ...t,
+    price: 284630080,
+    dailyPriceChange: [12312300, 23423400],
+    dailyVolume: 12312300,
+    dailyVolumeChange: [12312300, 23423400],
+  }));
 
   return !loading ? (
     <CommonTable
@@ -68,11 +45,8 @@ const StatsTable = () => {
           ),
           onClick: (item) => {
             console.log('item', item);
-            history.push(ROUTE_TOKEN_INFO.replace(':token', item.token));
+            history.push(ROUTE_TOKEN_INFO.replace(':token', item.name));
           },
-          // history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${item.token0}&token1=${item.token1}`), {
-          //   from: ROUTE_LIQUIDITY_POOLS,
-          // }),
         },
       ]}
     />
@@ -90,8 +64,8 @@ const renderColumns = () => {
       width: 160,
       render: ({ item }) => (
         <FlexContainer className="align-ce">
-          <CryptoContainer style={{ zIndex: 2 }}>{tokenData[item.token].icon} </CryptoContainer>
-          {item.token}
+          <CryptoContainer style={{ zIndex: 2 }}>{item.icon} </CryptoContainer>
+          {item.name}
         </FlexContainer>
       ),
     },

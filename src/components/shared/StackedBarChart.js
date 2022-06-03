@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import styled from 'styled-components';
+import tokenData from '../../constants/cryptoCurrencies';
 import { humanReadableNumber } from '../../utils/reduceBalance';
 import { getTokenIconById } from '../../utils/token-utils';
 import { CryptoContainer, FlexContainer } from './FlexContainer';
@@ -50,7 +51,7 @@ const TooltipContent = styled(FlexContainer)`
   z-index: 1;
 `;
 
-const StackedBarChart = ({ title, rightComponent, data }) => {
+const StackedBarChart = ({ title, rightComponent, data, withDoubleToken }) => {
   const [barOnHover, setBarOnHover] = useState('');
 
   const obj = data.reduce((res, item) => {
@@ -60,12 +61,28 @@ const StackedBarChart = ({ title, rightComponent, data }) => {
 
   const CustomTooltip = () => {
     const tokenInfo = data.find((token) => token.name === barOnHover);
+    let tokens = null;
+    if (withDoubleToken && tokenInfo) {
+      const s = tokenInfo?.name.split('/');
+      tokens = s[0] !== 'OTHER' ? s : null;
+    }
     return tokenInfo ? (
       <TooltipContent gap={16} className="column">
-        <div className="flex">
-          <CryptoContainer size={24}>{getTokenIconById(tokenInfo.name)}</CryptoContainer>
+        <FlexContainer className="align-ce">
+          {withDoubleToken && tokens ? (
+            <>
+              <CryptoContainer size={24} style={{ zIndex: 2 }}>
+                {tokens && tokenData[tokens[0]].icon}
+              </CryptoContainer>
+              <CryptoContainer size={24} style={{ marginLeft: -12, zIndex: 1 }}>
+                {tokens && tokenData[tokens[1]].icon}{' '}
+              </CryptoContainer>
+            </>
+          ) : (
+            <CryptoContainer size={24}>{getTokenIconById(tokenInfo.name)}</CryptoContainer>
+          )}
           <Label>{tokenInfo.name}</Label>
-        </div>
+        </FlexContainer>
         <Label>{tokenInfo.percentage.toFixed(2)} %</Label>
         <Label>$ {humanReadableNumber(tokenInfo.volumeUsd)}</Label>
       </TooltipContent>
@@ -104,7 +121,7 @@ const StackedBarChart = ({ title, rightComponent, data }) => {
       </ResponsiveContainer>
       <div className="flex w-100">
         {data.map((item, index) => (
-          <div className="flex align-fs" style={{ marginRight: 32, zIndex: -1 }}>
+          <div className="flex align-fs" style={{ marginRight: 32, zIndex: -1 }} key={index}>
             <div style={{ width: 32, height: 16, borderRadius: 4, background: item.color || '#A9AAB4', marginRight: 8 }}></div>
             {getTokenIconById(item.name) && <CryptoContainer size={16}>{getTokenIconById(item.name)}</CryptoContainer>}
             <Label>

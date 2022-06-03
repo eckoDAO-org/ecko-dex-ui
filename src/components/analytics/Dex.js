@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import axios from 'axios';
@@ -17,6 +18,7 @@ import GraphicPercetage from '../shared/GraphicPercetage';
 import ProgressBar from '../shared/ProgressBar';
 import StackedBarChart from '../shared/StackedBarChart';
 import pairTokens from '../../constants/pairsConfig';
+import AppLoader from '../shared/AppLoader';
 
 const KDX_TOTAL_SUPPLY = 1000000000;
 
@@ -66,11 +68,6 @@ const Dex = ({ kdaPrice }) => {
     setLoading(false);
   };
 
-  // useEffect(() => {
-
-  // }, [kdaPrice, tvlRange]);
-
-  // work in progress
   const getPairsVolume = async () => {
     axios
       .get(
@@ -137,8 +134,12 @@ const Dex = ({ kdaPrice }) => {
         }
 
         setPairsVolume(allTVL);
+        setLoading(false);
       })
-      .catch((err) => console.error('get tvl error', err));
+      .catch((err) => {
+        console.error('get tvl error', err);
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -152,7 +153,9 @@ const Dex = ({ kdaPrice }) => {
     totalStaked: 150002300.75,
   };
 
-  return (
+  return loading ? (
+    <AppLoader containerStyle={{ height: '100%', alignItems: 'center', justifyContent: 'center' }} />
+  ) : (
     <FlexContainer className="w-100 column" mobileClassName="column" gap={24}>
       <FlexContainer className="w-100" mobileClassName="column" gap={24}>
         <TVLChart kdaPrice={kdaPrice} height={300} />
@@ -198,6 +201,7 @@ const Dex = ({ kdaPrice }) => {
         <StackedBarChart
           title="Volume Details"
           data={pairsVolume}
+          withDoubleToken
           rightComponent={
             <CustomDropdown
               options={CHART_OPTIONS}

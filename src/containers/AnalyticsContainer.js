@@ -11,7 +11,7 @@ import InfoPopup from '../components/shared/InfoPopup';
 import { getCoingeckoUsdPrice } from '../api/coingecko';
 import { getKDXSupply, getKDXTotalSupply, getKDXTotalBurnt } from '../api/kaddex.kdx';
 import theme from '../styles/theme';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS } from '../router/routes';
 import Dex from '../components/analytics/Dex';
 import Kdx from '../components/analytics/Kdx';
@@ -22,8 +22,7 @@ const KDX_TOTAL_SUPPLY = 1000000000;
 const AnalyticsContainer = () => {
   const { pathname } = useLocation();
   const history = useHistory();
-  const { token } = useParams();
-  console.log('LOG --> params', token);
+
   const pact = usePactContext();
   const [kdaPrice, setKdaPrice] = useState(null);
   const [kdxSupply, setKdxSupply] = useState(null);
