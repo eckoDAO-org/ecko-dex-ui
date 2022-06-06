@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-import { BoosterIcon, CoinKaddexIcon, CoinsIcon } from '../../assets';
+import { BoosterIcon, CoinKaddexIcon, CoinsIcon, KaddexOutlineIcon } from '../../assets';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { useLiquidityContext } from '../../contexts';
 import { FlexContainer } from '../shared/FlexContainer';
@@ -34,7 +34,7 @@ const RewardBooster = ({ type, apr, handleState }) => {
               }
             }}
           />
-          <CoinKaddexIcon />
+          {wantsKdxRewards ? <CoinKaddexIcon width={24} height={24} /> : <KaddexOutlineIcon width={24} height={24} />}
         </FlexContainer>
         <div className="flex column">
           <Label fontSize={24}>{apr?.toFixed(2)}% APR</Label>

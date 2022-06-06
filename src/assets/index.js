@@ -44,11 +44,17 @@ export { ReactComponent as SwapIcon } from './images/shared/swap-icon.svg';
 export { ReactComponent as TelegramIcon } from './images/header/telegram.svg';
 export { ReactComponent as ThreeDotsIcon } from './images/header/three_dots.svg';
 export { ReactComponent as TorusLogo } from './images/shared/torus-logo.svg';
+export { ReactComponent as TradeDownIcon } from './images/shared/trade-down.svg';
+export { ReactComponent as TradeUpIcon } from './images/shared/trade-up.svg';
 export { ReactComponent as VotingPowerFormulaIcon } from './images/shared/voting-power-formula.svg';
 export { ReactComponent as ZelcoreLogo } from './images/shared/zelcore-logo.svg';
 export { ReactComponent as XWalletLogo } from './images/header/x-wallet-logo.svg';
 export { ReactComponent as InfoIcon } from './images/shared/info-icon.svg';
 export { ReactComponent as BoosterIcon } from './images/shared/booster.svg';
 export { ReactComponent as SimplexLogo } from './images/shared/simplex-logo.svg';
+export { ReactComponent as SalesIcon } from './images/shared/sales.svg';
+export { ReactComponent as TeamIcon } from './images/shared/team.svg';
+export { ReactComponent as BurnedIcon } from './images/shared/burned.svg';
+export { ReactComponent as DaoIcon } from './images/shared/dao.svg';
 
 export * from '../assets/images/game-edition';

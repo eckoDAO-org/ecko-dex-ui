@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Label from '../shared/Label';
-import { TimeRangeBar, TimeRangeBtn } from './VolumeChart';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { getVestingScheduleData } from './data/chartData';
 import { FlexContainer } from '../shared/FlexContainer';
 import { useApplicationContext } from '../../contexts';
 import { commonColors } from '../../styles/theme';
+import CustomDropdown from '../shared/CustomDropdown';
+import { vestingRanges, VESTING_4Y_RANGE, VESTING_CHART_OPTIONS } from '../../constants/chartOptionsConstants';
 
 export const VestingHeader = styled.div`
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
@@ -26,31 +27,39 @@ export const VestingPopup = styled.div`
   }
 `;
 
-const endDate4Years = '2025-11-01';
-const endDate10Years = '2031-06-01';
-
 const VestingScheduleChart = ({ height }) => {
   const { themeMode } = useApplicationContext();
-  const [endDate, setEndDate] = useState(endDate4Years);
+  const [vestingEndDate, setVestingEndDate] = useState(VESTING_4Y_RANGE.value);
+
+  const getDefs = (id, color) => {
+    return (
+      <defs>
+        <linearGradient id={id} x1="2" y1="0" x2="1" y2="2">
+          <stop offset="0%" stopColor={color} stopOpacity={0.9} />
+          <stop offset="75%" stopColor={color} stopOpacity={0.25} />
+        </linearGradient>
+      </defs>
+    );
+  };
+
   return (
     <FlexContainer withGradient className="column w-100 h-100 background-fill">
-      <VestingHeader>
-        <Label></Label>
-        <Label>KDX Vesting</Label>
+      <div className="flex justify-sb align-ce w-100">
+        <Label fontSize={16}>Vesting Schedule</Label>
+        <CustomDropdown
+          options={VESTING_CHART_OPTIONS}
+          dropdownStyle={{ minWidth: '66px', padding: 10, height: 30 }}
+          onChange={(e, { value }) => {
+            setVestingEndDate(value);
+          }}
+          value={vestingEndDate}
+        />
+      </div>
 
-        <TimeRangeBar>
-          <TimeRangeBtn className={endDate === endDate4Years ? 'active' : ''} onClick={() => setEndDate(endDate4Years)}>
-            4y
-          </TimeRangeBtn>
-          <TimeRangeBtn className={endDate === endDate10Years ? 'active' : ''} onClick={() => setEndDate(endDate10Years)}>
-            10y
-          </TimeRangeBtn>
-        </TimeRangeBar>
-      </VestingHeader>
       <div style={{ width: '100%', height }}>
         <ResponsiveContainer>
           <AreaChart
-            data={getVestingScheduleData('2021-06-01', endDate)}
+            data={getVestingScheduleData('2021-06-01', vestingRanges[vestingEndDate].endDate)}
             margin={{
               top: 10,
               right: 30,
@@ -58,7 +67,7 @@ const VestingScheduleChart = ({ height }) => {
               bottom: 0,
             }}
           >
-            <XAxis dataKey="name" interval={endDate === endDate4Years ? 2 : 4} />
+            <XAxis dataKey="name" interval={vestingRanges[vestingEndDate].interval} />
             <YAxis domain={[0, 100]} tickFormatter={(value) => `${value}%`} />
             <Tooltip
               content={(data) => {
@@ -74,17 +83,27 @@ const VestingScheduleChart = ({ height }) => {
                 );
               }}
             />
+
+            {[
+              { id: 'total-supply', color: themeMode === 'light' ? commonColors.purple : '#AFB0BA' },
+              { id: 'liquidity-mining', color: '#E77E76' },
+              { id: 'community-sales', color: '#897DBC' },
+              { id: 'team', color: '#5AC2DD' },
+              { id: 'dao-tresury', color: '#E7638E' },
+            ].map((v) => getDefs(v.id, v.color))}
             <Area
               type="monotone"
               dataKey="Total Supply"
               stackId="2"
-              stroke={themeMode === 'light' ? commonColors.purple : '#ffffffb3'}
-              fillOpacity={0}
+              stroke={themeMode === 'light' ? commonColors.purple : '#AFB0BA'}
+              fill="transparent"
+              fillOpacity={0.7}
+              strokeWidth={2}
             />
-            <Area type="monotone" dataKey="Liquidity mining" stackId="1" stroke="#8884d8" fill="#8884d8" />
-            <Area type="monotone" dataKey="Community Sales" stackId="1" stroke="#ffc658" fill="#ffc658" />
-            <Area type="monotone" dataKey="Team" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
-            <Area type="monotone" dataKey="DAO treasury" stackId="1" stroke="#ed1cb5" fill="#ed1cb5" />
+            <Area type="monotone" dataKey="Liquidity mining" stackId="1" stroke="#E77E76" fill="url(#liquidity-mining)" strokeWidth={2} />
+            <Area type="monotone" dataKey="Community Sales" stackId="1" stroke="#897DBC" fill="url(#community-sales)" strokeWidth={2} />
+            <Area type="monotone" dataKey="Team" stackId="1" stroke="#5AC2DD" fill="url(#team)" strokeWidth={2} />
+            <Area type="monotone" dataKey="DAO treasury" stackId="1" stroke="#E7638E" fill="url(#dao-tresury)" strokeWidth={2} />
           </AreaChart>
         </ResponsiveContainer>
       </div>

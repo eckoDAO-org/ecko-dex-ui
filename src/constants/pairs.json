@@ -25,13 +25,19 @@
         "name": "coin:runonflux.flux",
         "token0": "KDA",
         "token1": "FLUX",
-        "isBoosted": false
+        "main":true,
+        "isBoosted": false,
+        "color":"#5dcbe5"
+
       },
       "coin:hypercent.prod-hype-coin": {
         "name": "coin:hypercent.prod-hype-coin",
         "token0": "KDA",
         "token1": "HYPE",
-        "isBoosted": false
+        "main":true,
+        "isBoosted": false,
+        "color":"#ed1cb5"
+
       }
     }
   }

@@ -20,6 +20,7 @@ import { isValidString } from '../../utils/string-utils';
 import { AppLoader } from '../../components/shared/AppLoader';
 import { useErrorState } from '../../hooks/useErrorState';
 import theme from '../../styles/theme';
+import { useLiquidityContext } from '../../contexts';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -39,7 +40,7 @@ const Container = styled(FadeIn)`
 
 const AddLiquidityContainer = (props) => {
   const history = useHistory();
-
+  const { setWantsKdxRewards } = useLiquidityContext();
   const { pathname } = useLocation();
 
   const query = useQueryParams();
@@ -108,7 +109,7 @@ const AddLiquidityContainer = (props) => {
         </FlexContainer>
         <SlippagePopupContent />
       </FlexContainer>
-      <RewardBooster apr={apr} type={LIQUIDITY_VIEW.ADD_LIQUIDITY} handleState={() => {}} />
+      <RewardBooster apr={apr} type={LIQUIDITY_VIEW.ADD_LIQUIDITY} handleState={setWantsKdxRewards} />
 
       <FlexContainer gap={24}>
         <Label

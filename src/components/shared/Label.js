@@ -32,6 +32,15 @@ const STYText = styled.span`
       color: ${colors.primary};
     `}
   font-size: ${({ fontSize }) => fontSize}px;
+
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    font-size: ${({ mobileFontSize, fontSize }) => mobileFontSize || fontSize}px;
+  }
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel}px`}) and (min-width: ${({ theme: { mediaQueries } }) =>
+      `${mediaQueries.mobilePixel}px`}) {
+    font-size: ${({ tabletFontSize, fontSize }) => tabletFontSize || fontSize}px;
+  }
+
   /* svg {
     path {
       fill: ${({ theme: { colors } }) => colors.white};
@@ -79,6 +88,8 @@ const Label = ({
   children,
   fontFamily = 'basier',
   fontSize = 13,
+  mobileFontSize,
+  tabletFontSize,
   labelStyle,
   geFontSize,
   geFontWeight,
@@ -114,6 +125,8 @@ const Label = ({
       inverted={inverted}
       color={color}
       fontSize={fontSize}
+      tabletFontSize={tabletFontSize}
+      mobileFontSize={mobileFontSize}
       onClick={onClick}
       withShade={withShade}
       style={{ fontFamily: commonTheme.fontFamily[fontFamily], ...labelStyle }}

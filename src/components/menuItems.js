@@ -13,6 +13,8 @@ import {
   ROUTE_UNSTAKE,
   ROUTE_DAO,
   ROUTE_LIQUIDITY_REWARDS,
+  ROUTE_ANALYTICS_KDX,
+  ROUTE_ANALYTICS_STATS,
   ROUTE_BUY_CRYPTO,
 } from '../router/routes';
 
@@ -45,6 +47,7 @@ export const ANALYTICS = {
   id: 4,
   label: 'analytics',
   route: ROUTE_ANALYTICS,
+  activeRoutes: [ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS],
 };
 export const STAKE = {
   id: 3,
@@ -60,7 +63,7 @@ export const VAULT = {
 };
 export const BUY_CRYPTO = {
   id: 5,
-  label: 'buy crypto',
+  label: 'buy',
   route: ROUTE_BUY_CRYPTO,
 };
 

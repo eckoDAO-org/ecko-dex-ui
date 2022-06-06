@@ -4,7 +4,7 @@ import styled from 'styled-components/macro';
 import { ArrowDown } from '../../assets';
 import Label from './Label';
 
-const CustomDropdown = ({ title, options, onChange, value, placeholder, containerStyle }) => {
+const CustomDropdown = ({ title, options, onChange, value, placeholder, containerStyle, dropdownStyle }) => {
   return (
     <Container className="column" style={containerStyle}>
       {title && (
@@ -15,6 +15,7 @@ const CustomDropdown = ({ title, options, onChange, value, placeholder, containe
       <Dropdown
         placeholder={placeholder}
         fluid
+        style={dropdownStyle}
         selection
         closeOnChange
         icon={<ArrowDown className="svg-app-color" />}

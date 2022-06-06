@@ -18,6 +18,7 @@ const SubLabel = styled(Label)`
 
 const Analytics = ({ stakedShare, totalStaked, totalBurnt }) => {
   const [totalVolumeUSD, setTotalVolumeUSD] = useState(null);
+  console.log('LOG --> totalVolumeUSD', totalVolumeUSD);
   const [stakingAPR, setStakingAPR] = useState(null);
   const { tokensUsdPrice } = usePactContext();
   useEffect(() => {
@@ -25,6 +26,7 @@ const Analytics = ({ stakedShare, totalStaked, totalBurnt }) => {
       .then(async (pools) => {
         const volumes = await getDailyVolume();
         const allPairValues = await getAllPairValues(pools, volumes);
+        console.log('LOG --> allPairValues', allPairValues);
         let totalUsd = 0;
         if (allPairValues?.length) {
           for (const pair of allPairValues) {

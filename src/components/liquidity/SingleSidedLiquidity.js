@@ -6,7 +6,7 @@ import tokenData from '../../constants/cryptoCurrencies';
 import { useAccountContext, useLiquidityContext, useModalContext, usePactContext, useWalletContext } from '../../contexts';
 import { useInterval } from '../../hooks/useInterval';
 import noExponents from '../../utils/noExponents';
-import { extractDecimal, getCorrectBalance, getDecimalPlaces, limitDecimalPlaces } from '../../utils/reduceBalance';
+import { extractDecimal, getCorrectBalance, getDecimalPlaces, humanReadableNumber, limitDecimalPlaces } from '../../utils/reduceBalance';
 import { SuccessAddSigleSideView } from '../modals/liquidity/LiquidityTxView';
 import SelectPoolModal from '../modals/liquidity/SelectPoolModal';
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
@@ -304,6 +304,13 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
                 }));
               }}
             />
+          }
+          bottomContent={
+            fromValue.amount && (
+              <Label fontSize={16} labelStyle={{ margin: '-10px 0px 10px 2px', opacity: 0.7 }}>
+                $ {humanReadableNumber(extractDecimal(pact.tokensUsdPrice?.[fromValue.coin]) * extractDecimal(fromValue.amount))}
+              </Label>
+            )
           }
           value={noExponents(fromValue.amount)}
           onChange={async (e, { value }) => {

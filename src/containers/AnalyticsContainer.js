@@ -2,24 +2,27 @@
 import React, { useEffect, useState } from 'react';
 import useLazyImage from '../hooks/useLazyImage';
 import { usePactContext, useGameEditionContext } from '../contexts';
-import VolumeChart from '../components/charts/VolumeChart';
-import TVLChart from '../components/charts/TVLChart';
-import VestingScheduleChart from '../components/charts/VestingScheduleChart';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
-import { humanReadableNumber, reduceBalance } from '../utils/reduceBalance';
+import { reduceBalance } from '../utils/reduceBalance';
 import LogoLoader from '../components/shared/Loader';
-import ProgressBar from '../components/shared/ProgressBar';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import Label from '../components/shared/Label';
 import InfoPopup from '../components/shared/InfoPopup';
-import AnalyticsSimpleWidget from '../components/shared/AnalyticsSimpleWidget';
 import { getCoingeckoUsdPrice } from '../api/coingecko';
 import { getKDXSupply, getKDXTotalSupply, getKDXTotalBurnt } from '../api/kaddex.kdx';
 import theme from '../styles/theme';
+import { useHistory, useLocation } from 'react-router-dom';
+import { ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS } from '../router/routes';
+import Dex from '../components/analytics/Dex';
+import Kdx from '../components/analytics/Kdx';
+import StatsTable from '../components/analytics/StatsTable';
 
 const KDX_TOTAL_SUPPLY = 1000000000;
 
 const AnalyticsContainer = () => {
+  const { pathname } = useLocation();
+  const history = useHistory();
+
   const pact = usePactContext();
   const [kdaPrice, setKdaPrice] = useState(null);
   const [kdxSupply, setKdxSupply] = useState(null);
@@ -66,7 +69,52 @@ const AnalyticsContainer = () => {
         tabletStyle={{ paddingRight: theme.layout.tabletPadding, paddingLeft: theme.layout.tabletPadding }}
         mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
       >
-        <FlexContainer mobileClassName="column" gap={24}>
+        <div className="flex align-ce justify-sb">
+          <FlexContainer className="align-ce" gap={16} mobileStyle={{ marginBottom: 16 }}>
+            <Label
+              withShade={pathname !== ROUTE_ANALYTICS}
+              className="pointer"
+              fontSize={24}
+              fontFamily="syncopate"
+              onClick={() => history.push(ROUTE_ANALYTICS)}
+            >
+              DEX
+            </Label>
+            <Label
+              withShade={pathname !== ROUTE_ANALYTICS_KDX}
+              className="pointer"
+              fontSize={24}
+              fontFamily="syncopate"
+              onClick={() => history.push(ROUTE_ANALYTICS_KDX)}
+            >
+              KDX
+            </Label>
+            <Label
+              withShade={pathname !== ROUTE_ANALYTICS_STATS}
+              className="pointer"
+              fontSize={24}
+              fontFamily="syncopate"
+              onClick={() => history.push(ROUTE_ANALYTICS_STATS)}
+            >
+              STATS
+            </Label>
+          </FlexContainer>
+
+          <InfoPopup type="modal" title="Analytics data info">
+            <Label>
+              The information displayed on this page is currently under BETA testing, and is provided on an "as is" and "as available" basis
+            </Label>
+          </InfoPopup>
+        </div>
+        {/* DEX */}
+        {pathname === ROUTE_ANALYTICS && <Dex kdaPrice={kdaPrice} />}
+        {/* KDX */}
+        {pathname === ROUTE_ANALYTICS_KDX && (
+          <Kdx KDX_TOTAL_SUPPLY={KDX_TOTAL_SUPPLY} kdxSupply={kdxSupply} kdaPrice={kdaPrice} kdxBurnt={kdxBurnt} />
+        )}
+        {/* DEX */}
+        {pathname === ROUTE_ANALYTICS_STATS && <StatsTable />}
+        {/* <FlexContainer mobileClassName="column" gap={24}>
           <AnalyticsSimpleWidget
             title={'KDX price'}
             mainText={`$ ${pact?.tokensUsdPrice?.KDX || '-'}`}
@@ -126,7 +174,7 @@ const AnalyticsContainer = () => {
 
           <VolumeChart kdaPrice={kdaPrice} height={300} />
         </FlexContainer>
-        <VestingScheduleChart height={300} />
+        <VestingScheduleChart height={300} /> */}
       </FlexContainer>
     )
   );
