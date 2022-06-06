@@ -92,19 +92,22 @@ const StackedBarChart = ({ title, rightComponent, data, withDoubleToken }) => {
   };
 
   const BottomChartData = ({ item }) => {
-    console.log('LOG --> item', item);
     if (withDoubleToken) {
       const s = item?.name.split('/') || [];
       let tokens = s[0] !== 'OTHER' ? s : null;
       return (
         <>
           <div style={{ width: 32, height: 16, borderRadius: 4, background: item.color || '#A9AAB4', marginRight: 8 }}></div>
-          <CryptoContainer size={16} style={{ zIndex: 2 }}>
-            {tokens && tokenData[tokens[0]].icon}
-          </CryptoContainer>
-          <CryptoContainer size={16} style={{ marginLeft: -12, zIndex: 1 }}>
-            {tokens && tokenData[tokens[1]].icon}
-          </CryptoContainer>
+          {tokens && (
+            <>
+              <CryptoContainer size={16} style={{ zIndex: 2 }}>
+                {tokens && tokenData[tokens[0]].icon}
+              </CryptoContainer>
+              <CryptoContainer size={16} style={{ marginLeft: -12, zIndex: 1 }}>
+                {tokens && tokenData[tokens[1]].icon}
+              </CryptoContainer>
+            </>
+          )}
           <Label>
             {item.name} {item.percentage.toFixed(2)}%
           </Label>
