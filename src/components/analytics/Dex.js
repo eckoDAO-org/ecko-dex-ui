@@ -42,7 +42,7 @@ const Dex = ({ kdaPrice }) => {
     },
     {
       ...tokenData['KDX'],
-      percentage: 30,
+      percentage: 25,
       precision: 12,
       tokenNameKaddexStats: 'kdx',
       tokenUsdPrice: 2.05,
@@ -51,7 +51,7 @@ const Dex = ({ kdaPrice }) => {
     },
     {
       ...tokenData['ABC'],
-      percentage: 20,
+      percentage: 25,
       precision: 12,
       tokenNameKaddexStats: 'abc',
       tokenUsdPrice: 2.05,
