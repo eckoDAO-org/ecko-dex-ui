@@ -10,6 +10,7 @@ import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import GraphicPercetage from '../shared/GraphicPercetage';
+import Label from '../shared/Label';
 
 const StatsTable = () => {
   const { themeMode } = useApplicationContext();
@@ -37,7 +38,6 @@ const StatsTable = () => {
                 background: theme(themeMode).colors.white,
                 padding: '8px 4px',
                 borderRadius: 100,
-                marginTop: 10,
               }}
             >
               <TradeUpIcon className="svg-app-inverted-color" />
@@ -80,7 +80,7 @@ const renderColumns = () => {
       name: '24H Price Change',
       width: 160,
       render: ({ item }) => {
-        return <GraphicPercetage prevValue={item.dailyPriceChange[0]} currentValue={item.dailyPriceChange[1]} />;
+        return <GraphicPercetage componentStyle={{ margin: 0 }} prevValue={item.dailyPriceChange[0]} currentValue={item.dailyPriceChange[1]} />;
       },
     },
 
@@ -95,7 +95,7 @@ const renderColumns = () => {
       name: '24H Volume Change',
       width: 160,
       render: ({ item }) => {
-        return <GraphicPercetage prevValue={item.dailyVolumeChange[0]} currentValue={item.dailyVolumeChange[1]} />;
+        return <GraphicPercetage componentStyle={{ margin: 0 }} prevValue={item.dailyVolumeChange[0]} currentValue={item.dailyVolumeChange[1]} />;
       },
     },
   ];

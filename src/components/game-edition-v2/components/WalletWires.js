@@ -158,7 +158,7 @@ const WalletWires = () => {
           if (wallet && selectedWire && wallet?.id !== selectedWire?.id) {
             oldWire = WALLET[wallet.id];
           } else {
-            if (wallet.id === WALLET.KADDEX_WALLET) {
+            if (wallet?.id === WALLET.KADDEX_WALLET) {
               disconnectWallet();
             } else {
               logout();

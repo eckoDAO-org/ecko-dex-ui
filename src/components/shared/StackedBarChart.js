@@ -135,7 +135,7 @@ const StackedBarChart = ({ title, rightComponent, data, withDoubleToken }) => {
       <ResponsiveContainer height={50} width={'100%'}>
         <BarChart layout="vertical" data={[obj]}>
           <YAxis type="category" dataKey="name" stroke="#FFFFFF" fontSize="12" width={0} />
-          <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
+          <Tooltip wrapperStyle={{ marginTop: -55, zIndex: 2 }} content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
           {Object.keys(obj).map((item, index) => {
             return (
               <Bar

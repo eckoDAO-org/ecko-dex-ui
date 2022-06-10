@@ -19,6 +19,7 @@ import ProgressBar from '../shared/ProgressBar';
 import StackedBarChart from '../shared/StackedBarChart';
 import pairTokens from '../../constants/pairsConfig';
 import AppLoader from '../shared/AppLoader';
+import { NETWORK_TYPE } from '../../constants/contextConstants';
 
 const KDX_TOTAL_SUPPLY = 1000000000;
 
@@ -272,12 +273,12 @@ const Dex = ({ kdaPrice }) => {
         />
       </FlexContainer>
       <FlexContainer>
-        <StackedBarChart title="Tvl Details" data={fakeTokensVolume} />
+        <StackedBarChart title="Tvl Details" data={NETWORK_TYPE === 'mainnet' ? tokensVolumes : fakeTokensVolume} />
       </FlexContainer>
       <FlexContainer>
         <StackedBarChart
           title="Volume Details"
-          data={fakePairsVolume}
+          data={NETWORK_TYPE === 'mainnet' ? pairsVolume : fakePairsVolume}
           withDoubleToken
           rightComponent={
             <CustomDropdown

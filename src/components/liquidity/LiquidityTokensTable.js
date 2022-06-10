@@ -7,15 +7,18 @@ import CommonTable from '../shared/CommonTable';
 import tokenData from '../../constants/cryptoCurrencies';
 import { humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
-import { AddIcon, GasIcon } from '../../assets';
-import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_LIQUIDITY_TOKENS } from '../../router/routes';
+import { AddIcon, GasIcon, TradeUpIcon } from '../../assets';
+import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_LIQUIDITY_TOKENS, ROUTE_TOKEN_INFO } from '../../router/routes';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
 import { get24HVolumeSingleSided, getAllPairValues } from '../../utils/token-utils';
-import { usePactContext } from '../../contexts';
+import { useApplicationContext, usePactContext } from '../../contexts';
+import { theme } from '../../styles/theme';
+import styled from 'styled-components';
 
 const LiquidityTokensTable = () => {
   const history = useHistory();
+  const { themeMode } = useApplicationContext();
   const [loading, setLoading] = useState(true);
   const [tokens, setTokens] = useState([]);
 
@@ -68,7 +71,7 @@ const LiquidityTokensTable = () => {
   return !loading ? (
     <CommonTable
       items={tokens}
-      columns={renderColumns()}
+      columns={renderColumns(history)}
       actions={[
         {
           icon: () => <AddIcon />,
@@ -87,16 +90,28 @@ const LiquidityTokensTable = () => {
 
 export default LiquidityTokensTable;
 
-const renderColumns = () => {
+const ScalableCryptoContainer = styled(FlexContainer)`
+  img {
+    transition: all 0.3s ease-in-out;
+  }
+
+  :hover {
+    img {
+      transform: scale(1.15);
+    }
+  }
+`;
+
+const renderColumns = (history) => {
   return [
     {
-      name: 'name',
+      name: '',
       width: 160,
       render: ({ item }) => (
-        <FlexContainer className="align-ce">
+        <ScalableCryptoContainer className="align-ce pointer" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
           <CryptoContainer style={{ zIndex: 2 }}> {tokenData[item.name].icon}</CryptoContainer>
           {item.name}
-        </FlexContainer>
+        </ScalableCryptoContainer>
       ),
     },
     {
@@ -139,11 +154,6 @@ const renderColumns = () => {
       ),
     },
 
-    {
-      name: 'KDX Multiplier',
-      width: 160,
-      render: ({ item }) => 'Coming Soon',
-    },
     {
       name: 'APR',
       width: 120,

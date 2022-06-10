@@ -26,7 +26,7 @@ const TokenInfoContainer = () => {
     >
       <FlexContainer className="w-100 align-ce">
         <ArrowBack
-          className="arrow-back"
+          className="arrow-back svg-app-color"
           style={{
             cursor: 'pointer',
             marginRight: '16px',

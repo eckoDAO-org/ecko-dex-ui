@@ -61,7 +61,7 @@ export default LiquidityPoolsTable;
 const renderColumns = () => {
   return [
     {
-      name: 'name',
+      name: '',
       width: 160,
       render: ({ item }) => (
         <FlexContainer className="align-ce">
