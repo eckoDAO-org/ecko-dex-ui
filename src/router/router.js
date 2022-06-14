@@ -71,7 +71,9 @@ export default () => {
             <Route exact path={[ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS]} component={AnalyticsContainer} />
             <Route exact path={[ROUTE_STAKE, ROUTE_UNSTAKE]} component={StakeContainer} />
             <Route exact path={ROUTE_TOKEN_INFO} component={TokenInfoContainer} />
-            <Route exact path={ROUTE_BUY_CRYPTO} component={BuyCryptoContainer} />
+            {/*
+             Remember to delete
+            <Route exact path={ROUTE_BUY_CRYPTO} component={BuyCryptoContainer} /> */}
           </Switch>
         )}
       </Layout>

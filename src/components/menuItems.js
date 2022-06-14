@@ -64,7 +64,8 @@ export const VAULT = {
 export const BUY_CRYPTO = {
   id: 5,
   label: 'buy',
-  route: ROUTE_BUY_CRYPTO,
+  target: '_self',
+  link: 'https://stage.buy.kaddex.com/',
 };
 
 export default [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS, VAULT, BUY_CRYPTO];
