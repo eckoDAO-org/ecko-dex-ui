@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import moment from 'moment';
 import { useHistory, useParams } from 'react-router-dom';
 import { ArrowBack } from '../assets';
+import { getDailyCandles, getTotalVolume } from '../api/kaddex-stats';
 import TokenPriceChart from '../components/charts/TokenPriceChart';
 import AnalyticsSimpleWidget from '../components/shared/AnalyticsSimpleWidget';
 import { CryptoContainer, FlexContainer } from '../components/shared/FlexContainer';
@@ -11,10 +13,46 @@ import { usePactContext } from '../contexts';
 import theme from '../styles/theme';
 import { getDecimalPlaces, humanReadableNumber } from '../utils/reduceBalance';
 
+const initialMonthlyRange = {
+  initial: 0,
+  final: 0,
+};
+
 const TokenInfoContainer = () => {
   const history = useHistory();
   const { token } = useParams();
   const pact = usePactContext();
+
+  const [monthlyRange, setMonthlyRange] = useState(initialMonthlyRange);
+  const [monthlyVolumeRange, setMonthlyVolumeRange] = useState(initialMonthlyRange);
+
+  useEffect(() => {
+    getDailyCandles(tokenData[token]?.code, 'coin', moment().subtract(30, 'days').toDate()).then((res) => {
+      if (res?.data) {
+        const initial = res?.data[0]?.usdPrice?.close || 0;
+        const final = res?.data[res?.data?.length - 1]?.usdPrice?.close || 0;
+        setMonthlyRange({
+          initial,
+          final,
+        });
+      }
+    });
+    getTotalVolume(moment().subtract(1, 'months').toDate(), new Date(), tokenData[token]?.code).then((lastMonthVolume) => {
+      if (lastMonthVolume) {
+        getTotalVolume(moment().subtract(2, 'months').toDate(), moment().subtract(1, 'months').toDate(), tokenData[token]?.code).then(
+          (pastLastMonthVolume) => {
+            if (pastLastMonthVolume) {
+              setMonthlyVolumeRange({
+                initial: pastLastMonthVolume,
+                final: lastMonthVolume,
+              });
+            }
+          }
+        );
+      }
+    });
+  }, []);
+
   return (
     <FlexContainer
       className="column w-100"
@@ -54,16 +92,18 @@ const TokenInfoContainer = () => {
         />
         <AnalyticsSimpleWidget
           title="1m Trading Volume"
-          mainText={`$ ${humanReadableNumber(Number(99999999))}`}
-          subtitle={<GraphicPercetage prevValue={99} currentValue={2} />}
+          mainText={`$ ${humanReadableNumber(monthlyVolumeRange?.final * monthlyRange?.final)}`}
+          subtitle={
+            monthlyVolumeRange?.initial && <GraphicPercetage prevValue={monthlyVolumeRange?.initial} currentValue={monthlyVolumeRange?.final} />
+          }
         />
         <AnalyticsSimpleWidget
           title="1m Price Delta"
-          mainText={`$ ${humanReadableNumber(Number(99999999))}`}
-          subtitle={<GraphicPercetage prevValue={99} currentValue={2} />}
+          mainText={`$ ${humanReadableNumber(monthlyRange?.final - monthlyRange?.initial)}`}
+          subtitle={<GraphicPercetage prevValue={monthlyRange?.initial} currentValue={monthlyRange?.final} />}
         />
       </FlexContainer>
-      <TokenPriceChart token={token} height={300} />
+      <TokenPriceChart tokenData={tokenData[token]} height={300} />
     </FlexContainer>
     // <div>
     //   <CustomButton onClick={() => history.goBack()}>Token Info</CustomButton>

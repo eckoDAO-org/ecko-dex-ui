@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
+import { getDailyCandles } from '../../api/kaddex-stats';
 import { humanReadableNumber } from '../../utils/reduceBalance';
 import { FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
 import CustomDropdown from '../shared/CustomDropdown';
-import { CHART_OPTIONS, DAILY_VOLUME_RANGE } from '../../constants/chartOptionsConstants';
 import styled from 'styled-components';
 import { Area, AreaChart, ResponsiveContainer, Tooltip } from 'recharts';
 
@@ -29,39 +29,76 @@ const STYChartContainer = styled(ResponsiveContainer)`
   }
 `;
 
-const TokenPriceChart = ({ token, height }) => {
-  const [priceRange, setPriceRange] = useState(DAILY_VOLUME_RANGE.value);
+const initialCurrentData = {
+  date: new Date(),
+  price: 0,
+};
+
+const TokenPriceChart = ({ tokenData, height }) => {
+  const [candles, setCandles] = useState([]);
+  const [currentData, setCurrentData] = useState(initialCurrentData);
+  const [dateStart, setDateStart] = useState(moment().subtract(3, 'months').format('YYYY-MM-DD'));
+
+  useEffect(() => {
+    if (tokenData?.code) {
+      fetchCandles();
+    }
+  }, [dateStart]);
+
+  const fetchCandles = async () => {
+    const candles = await getDailyCandles(tokenData.code, 'coin', moment(dateStart).toDate());
+    setCandles(candles?.data || []);
+    if (candles?.data?.length) {
+      setCurrentData({
+        ...currentData,
+        price: candles?.data[candles.data.length - 1]?.usdPrice?.close || '-',
+      });
+    }
+    return candles;
+  };
 
   return (
     <FlexContainer className="column align-ce w-100 h-100 background-fill" withGradient style={{ padding: 32 }}>
       <div className="flex justify-sb w-100">
         <div className="column w-100">
-          <Label fontSize={24}>$ {humanReadableNumber(Number())}</Label>
-          <Label fontSize={16}>{/*currentDate || */ moment().format('DD/MM/YYYY')}</Label>
+          <Label fontSize={24}>$ {humanReadableNumber(currentData?.price)}</Label>
+          <Label fontSize={16}>{moment(currentData?.date).format('DD/MM/YYYY')}</Label>
         </div>
         <CustomDropdown
-          options={CHART_OPTIONS}
+          options={[
+            { key: 0, text: '7d', value: moment().subtract(7, 'day').format('YYYY-MM-DD') },
+            { key: 1, text: '1m', value: moment().subtract(1, 'months').format('YYYY-MM-DD') },
+            { key: 1, text: '3m', value: moment().subtract(3, 'months').format('YYYY-MM-DD') },
+            { key: 1, text: '6m', value: moment().subtract(6, 'months').format('YYYY-MM-DD') },
+          ]}
           dropdownStyle={{ minWidth: '66px', padding: 10, height: 30 }}
           onChange={(e, { value }) => {
-            setPriceRange(value);
+            setDateStart(value);
           }}
-          value={priceRange}
+          value={dateStart}
         />
       </div>
 
       <div style={{ width: '100%', height }}>
         <STYChartContainer>
           <AreaChart
-            data={fakeData}
+            data={candles?.map((candle) => ({
+              name: candle?.day,
+              price: candle?.usdPrice?.close,
+            }))}
             onMouseMove={({ activePayload }) => {
-              // if (activePayload) {
-              //   setViewedTVL((activePayload && activePayload[0]?.payload?.tvl) || '');
-              //   setCurrentDate((activePayload && activePayload[0]?.payload?.name) || null);
-              // }
+              if (activePayload) {
+                setCurrentData({
+                  date: activePayload[0]?.payload?.name,
+                  price: activePayload && activePayload[0]?.payload?.price,
+                });
+              }
             }}
             onMouseLeave={() => {
-              // setViewedTVL(currentTVL);
-              // setCurrentDate(null);
+              setCurrentData({
+                date: candles[candles.length - 1]?.date ?? new Date(),
+                price: candles[candles.length - 1]?.usdPrice?.close ?? '-',
+              });
             }}
             margin={{
               top: 10,
@@ -86,10 +123,3 @@ const TokenPriceChart = ({ token, height }) => {
 };
 
 export default TokenPriceChart;
-
-const fakeData = [
-  { date: '2021-09-10', price: 0.1235 },
-
-  { date: '2021-09-11', price: 1 },
-  { date: '2021-09-12', price: 2 },
-];
