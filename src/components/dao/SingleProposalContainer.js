@@ -133,6 +133,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
         <FlexContainer
           className="column background-fill w-100"
           withGradient
+          style={{ height: 'min-content' }}
           desktopStyle={{ maxHeight: `calc(${height}px - ${theme.header.height}px - 180px)` }}
           tabletStyle={{ maxHeight: `calc(${height}px - ${theme.header.height}px - 180px)` }}
         >

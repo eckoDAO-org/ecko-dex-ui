@@ -46,7 +46,9 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
   };
 
   const getRewardsClaimTime = () => {
-    if (lastRewardsClaim) {
+    if (rewardAccrued === 0) {
+      return 'withdraw';
+    } else if (lastRewardsClaim) {
       const daysToWait = 7 - moment().diff(getTimeByBlockchain(lastRewardsClaim), 'days');
       //168 = 24h * 7 days
       const hoursToWait = 168 - moment().diff(getTimeByBlockchain(lastRewardsClaim), 'hours');
