@@ -27,7 +27,9 @@ const TokenInfoContainer = () => {
   const [monthlyVolumeRange, setMonthlyVolumeRange] = useState(initialMonthlyRange);
 
   useEffect(() => {
-    getDailyCandles(tokenData[token]?.code, 'coin', moment().subtract(30, 'days').toDate()).then((res) => {
+    const asset = tokenData[token]?.code === 'coin' ? 'KDA' : tokenData[token]?.code;
+    const currency = tokenData[token]?.code === 'coin' ? 'USDT' : 'coin';
+    getDailyCandles(asset, currency, moment().subtract(30, 'days').toDate()).then((res) => {
       if (res?.data) {
         const initial = res?.data[0]?.usdPrice?.close || 0;
         const final = res?.data[res?.data?.length - 1]?.usdPrice?.close || 0;

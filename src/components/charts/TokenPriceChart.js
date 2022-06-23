@@ -46,12 +46,15 @@ const TokenPriceChart = ({ tokenData, height }) => {
   }, [dateStart]);
 
   const fetchCandles = async () => {
-    const candles = await getDailyCandles(tokenData.code, 'coin', moment(dateStart).toDate());
+    const asset = tokenData?.code === 'coin' ? 'KDA' : tokenData?.code;
+    const currency = tokenData?.code === 'coin' ? 'USDT' : 'coin';
+    const candles = await getDailyCandles(asset, currency, moment(dateStart).toDate());
     setCandles(candles?.data || []);
     if (candles?.data?.length) {
+      const last = candles?.data[candles.data.length - 1];
       setCurrentData({
         ...currentData,
-        price: candles?.data[candles.data.length - 1]?.usdPrice?.close || '-',
+        price: last?.usdPrice?.close || last?.price?.close || '-',
       });
     }
     return candles;
@@ -68,8 +71,8 @@ const TokenPriceChart = ({ tokenData, height }) => {
           options={[
             { key: 0, text: '7d', value: moment().subtract(7, 'day').format('YYYY-MM-DD') },
             { key: 1, text: '1m', value: moment().subtract(1, 'months').format('YYYY-MM-DD') },
-            { key: 1, text: '3m', value: moment().subtract(3, 'months').format('YYYY-MM-DD') },
-            { key: 1, text: '6m', value: moment().subtract(6, 'months').format('YYYY-MM-DD') },
+            { key: 2, text: '3m', value: moment().subtract(3, 'months').format('YYYY-MM-DD') },
+            { key: 3, text: '6m', value: moment().subtract(6, 'months').format('YYYY-MM-DD') },
           ]}
           dropdownStyle={{ minWidth: '66px', padding: 10, height: 30 }}
           onChange={(e, { value }) => {
@@ -84,7 +87,7 @@ const TokenPriceChart = ({ tokenData, height }) => {
           <AreaChart
             data={candles?.map((candle) => ({
               name: candle?.day,
-              price: candle?.usdPrice?.close,
+              price: candle?.usdPrice?.close || candle?.price?.close,
             }))}
             onMouseMove={({ activePayload }) => {
               if (activePayload) {
@@ -97,7 +100,7 @@ const TokenPriceChart = ({ tokenData, height }) => {
             onMouseLeave={() => {
               setCurrentData({
                 date: candles[candles.length - 1]?.date ?? new Date(),
-                price: candles[candles.length - 1]?.usdPrice?.close ?? '-',
+                price: candles[candles.length - 1]?.usdPrice?.close || candles[candles.length - 1]?.price?.close || '-',
               });
             }}
             margin={{
