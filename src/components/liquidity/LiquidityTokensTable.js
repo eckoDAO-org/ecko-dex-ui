@@ -91,14 +91,10 @@ const LiquidityTokensTable = () => {
 export default LiquidityTokensTable;
 
 const ScalableCryptoContainer = styled(FlexContainer)`
-  img {
-    transition: all 0.3s ease-in-out;
-  }
+  transition: all 0.3s ease-in-out;
 
   :hover {
-    img {
-      transform: scale(1.15);
-    }
+    transform: scale(1.25);
   }
 `;
 
