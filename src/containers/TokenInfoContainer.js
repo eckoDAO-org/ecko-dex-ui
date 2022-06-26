@@ -44,12 +44,16 @@ const TokenInfoContainer = () => {
           final,
         });
       }
-      const lastMonthVolume = await getTotalVolume(moment().subtract(1, 'months').toDate(), new Date(), tokenData[token].code);
+      const lastMonthVolume = await getTotalVolume(
+        moment().subtract(1, 'months').toDate(),
+        new Date(),
+        tokenData[token].statsID || tokenData[token].code
+      );
       if (lastMonthVolume) {
         const pastLastMonthVolume = await getTotalVolume(
           moment().subtract(2, 'months').toDate(),
           moment().subtract(1, 'months').toDate(),
-          tokenData[token].code
+          tokenData[token].statsID || tokenData[token].code
         );
         if (pastLastMonthVolume) {
           setMonthlyVolumeRange({
