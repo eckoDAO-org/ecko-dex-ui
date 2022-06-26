@@ -40,10 +40,10 @@ export const getTotalVolume = async (startDate, endDate, token) => {
     for (const day of stats?.data) {
       if (day?.volumes) {
         for (const vol of day?.volumes) {
-          if (vol?.tokenFromName === name && vol?.tokenFromNamespace === namespace) {
+          if ((vol?.tokenFromName === name && vol?.tokenFromNamespace === namespace) || (vol?.tokenFromName === 'coin' && token === 'coin')) {
             totalVolume += vol?.tokenFromVolume;
           }
-          if (vol?.tokenToName === name && vol?.tokenToNamespace === namespace) {
+          if ((vol?.tokenToName === name && vol?.tokenToNamespace === namespace) || (vol?.tokenToName === 'coin' && token === 'coin')) {
             totalVolume += vol?.tokenToVolume;
           }
         }
@@ -52,6 +52,35 @@ export const getTotalVolume = async (startDate, endDate, token) => {
   }
 
   return totalVolume;
+};
+
+export const getTokenVolumeDiff = async (startDate, endDate, asset) => {
+  const final = await getTotalVolume(endDate, new Date(), asset);
+  const initial = await getTotalVolume(startDate, endDate, asset);
+  return {
+    initial,
+    final,
+  };
+};
+
+export const getUSDPriceDiff = async (dateStart, dateEnd, asset, currency) => {
+  const candles = await getDailyCandles(asset, currency, dateStart, dateEnd);
+  return candles?.data?.length
+    ? {
+        initial: candles?.data[0]?.usdPrice?.close,
+        final: candles?.data[candles?.data?.length - 1]?.usdPrice?.close,
+      }
+    : null;
+};
+
+export const getKDAPriceDiff = async (dateStart, dateEnd, asset, currency) => {
+  const candles = await getDailyCandles(asset, currency, dateStart, dateEnd);
+  return candles?.data?.length
+    ? {
+        initial: candles?.data[0]?.price?.close,
+        final: candles?.data[candles?.data?.length - 1]?.price?.close,
+      }
+    : null;
 };
 
 export const getDailyCandles = (asset, currency, dateStart, dateEnd = new Date()) => {

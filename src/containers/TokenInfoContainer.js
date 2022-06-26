@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { useHistory, useParams } from 'react-router-dom';
+import { usePactContext } from '../contexts';
 import { ArrowBack } from '../assets';
-import { getDailyCandles, getTotalVolume } from '../api/kaddex-stats';
+import { getDailyCandles, getTotalVolume, getUSDPriceDiff, getKDAPriceDiff } from '../api/kaddex-stats';
 import TokenPriceChart from '../components/charts/TokenPriceChart';
 import AnalyticsSimpleWidget from '../components/shared/AnalyticsSimpleWidget';
 import { CryptoContainer, FlexContainer } from '../components/shared/FlexContainer';
-import GraphicPercetage from '../components/shared/GraphicPercetage';
+import GraphicPercentage from '../components/shared/GraphicPercentage';
 import Label from '../components/shared/Label';
 import tokenData from '../constants/cryptoCurrencies';
-import { usePactContext } from '../contexts';
-import theme from '../styles/theme';
 import { getDecimalPlaces, humanReadableNumber } from '../utils/reduceBalance';
+import theme from '../styles/theme';
 
 const initialMonthlyRange = {
   initial: 0,
@@ -23,37 +23,51 @@ const TokenInfoContainer = () => {
   const { token } = useParams();
   const pact = usePactContext();
 
+  const asset = (tokenData[token].statsID || tokenData[token].code) === 'coin' ? 'KDA' : tokenData[token].statsID || tokenData[token].code;
+  const currency = (tokenData[token].statsID || tokenData[token].code) === 'coin' ? 'USDT' : 'coin';
+
   const [monthlyRange, setMonthlyRange] = useState(initialMonthlyRange);
   const [monthlyVolumeRange, setMonthlyVolumeRange] = useState(initialMonthlyRange);
+  const [price24h, setPrice24h] = useState({
+    initial: null,
+    final: null,
+  });
 
   useEffect(() => {
-    const asset = tokenData[token]?.code === 'coin' ? 'KDA' : tokenData[token]?.code;
-    const currency = tokenData[token]?.code === 'coin' ? 'USDT' : 'coin';
-    getDailyCandles(asset, currency, moment().subtract(30, 'days').toDate()).then((res) => {
-      if (res?.data) {
-        const initial = res?.data[0]?.usdPrice?.close || 0;
-        const final = res?.data[res?.data?.length - 1]?.usdPrice?.close || 0;
+    const initData = async () => {
+      const { data } = await getDailyCandles(asset, currency, moment().subtract(30, 'days').toDate());
+      if (data) {
+        const initial = data[0]?.usdPrice?.close || data[0]?.price?.close || 0;
+        const final = data[data?.length - 1]?.usdPrice?.close || data[data?.length - 1]?.price?.close || 0;
         setMonthlyRange({
           initial,
           final,
         });
       }
-    });
-    getTotalVolume(moment().subtract(1, 'months').toDate(), new Date(), tokenData[token]?.code).then((lastMonthVolume) => {
+      const lastMonthVolume = await getTotalVolume(moment().subtract(1, 'months').toDate(), new Date(), tokenData[token].code);
       if (lastMonthVolume) {
-        getTotalVolume(moment().subtract(2, 'months').toDate(), moment().subtract(1, 'months').toDate(), tokenData[token]?.code).then(
-          (pastLastMonthVolume) => {
-            if (pastLastMonthVolume) {
-              setMonthlyVolumeRange({
-                initial: pastLastMonthVolume,
-                final: lastMonthVolume,
-              });
-            }
-          }
+        const pastLastMonthVolume = await getTotalVolume(
+          moment().subtract(2, 'months').toDate(),
+          moment().subtract(1, 'months').toDate(),
+          tokenData[token].code
         );
+        if (pastLastMonthVolume) {
+          setMonthlyVolumeRange({
+            initial: pastLastMonthVolume,
+            final: lastMonthVolume,
+          });
+        }
       }
-    });
-  }, []);
+      let price24Diff = null;
+      if (asset === 'KDA') {
+        price24Diff = await getKDAPriceDiff(moment().subtract(1, 'days').toDate(), new Date(), asset, currency);
+      } else {
+        price24Diff = await getUSDPriceDiff(moment().subtract(1, 'days').toDate(), new Date(), asset, currency);
+      }
+      setPrice24h(price24Diff);
+    };
+    initData();
+  }, [asset, currency, token]);
 
   return (
     <FlexContainer
@@ -85,7 +99,7 @@ const TokenInfoContainer = () => {
           mainText={
             <div className="flex align-ce" style={{ marginBottom: 10 }}>
               {`$ ${pact?.tokensUsdPrice?.[token] || '-'}`}
-              <GraphicPercetage prevValue={50} currentValue={99} componentStyle={{ marginLeft: 10, marginTop: 0 }} />
+              <GraphicPercentage prevValue={price24h?.initial} currentValue={price24h?.final} componentStyle={{ marginLeft: 10, marginTop: 0 }} />
             </div>
           }
           subtitle={
@@ -96,13 +110,13 @@ const TokenInfoContainer = () => {
           title="1m Trading Volume"
           mainText={`$ ${humanReadableNumber(monthlyVolumeRange?.final * monthlyRange?.final)}`}
           subtitle={
-            monthlyVolumeRange?.initial && <GraphicPercetage prevValue={monthlyVolumeRange?.initial} currentValue={monthlyVolumeRange?.final} />
+            monthlyVolumeRange?.initial && <GraphicPercentage prevValue={monthlyVolumeRange?.initial} currentValue={monthlyVolumeRange?.final} />
           }
         />
         <AnalyticsSimpleWidget
           title="1m Price Delta"
           mainText={`$ ${humanReadableNumber(monthlyRange?.final - monthlyRange?.initial)}`}
-          subtitle={<GraphicPercetage prevValue={monthlyRange?.initial} currentValue={monthlyRange?.final} />}
+          subtitle={<GraphicPercentage prevValue={monthlyRange?.initial} currentValue={monthlyRange?.final} />}
         />
       </FlexContainer>
       <TokenPriceChart tokenData={tokenData[token]} height={300} />

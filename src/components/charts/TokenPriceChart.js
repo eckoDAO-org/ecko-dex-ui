@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { getDailyCandles } from '../../api/kaddex-stats';
 import { humanReadableNumber } from '../../utils/reduceBalance';
 import { FlexContainer } from '../shared/FlexContainer';
+import AppLoader from '../shared/AppLoader';
 import Label from '../shared/Label';
 import CustomDropdown from '../shared/CustomDropdown';
 import styled from 'styled-components';
@@ -35,19 +37,18 @@ const initialCurrentData = {
 };
 
 const TokenPriceChart = ({ tokenData, height }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [candles, setCandles] = useState([]);
   const [currentData, setCurrentData] = useState(initialCurrentData);
   const [dateStart, setDateStart] = useState(moment().subtract(3, 'months').format('YYYY-MM-DD'));
 
   useEffect(() => {
-    if (tokenData?.code) {
-      fetchCandles();
-    }
+    fetchCandles();
   }, [dateStart]);
 
   const fetchCandles = async () => {
-    const asset = tokenData?.code === 'coin' ? 'KDA' : tokenData?.code;
-    const currency = tokenData?.code === 'coin' ? 'USDT' : 'coin';
+    const asset = (tokenData?.statsID || tokenData?.code) === 'coin' ? 'KDA' : tokenData?.statsID || tokenData?.code;
+    const currency = (tokenData?.statsID || tokenData?.code) === 'coin' ? 'USDT' : 'coin';
     const candles = await getDailyCandles(asset, currency, moment(dateStart).toDate());
     setCandles(candles?.data || []);
     if (candles?.data?.length) {
@@ -57,10 +58,13 @@ const TokenPriceChart = ({ tokenData, height }) => {
         price: last?.usdPrice?.close || last?.price?.close || '-',
       });
     }
+    setIsLoading(false);
     return candles;
   };
 
-  return (
+  return isLoading ? (
+    <AppLoader containerStyle={{ height: '100%', alignItems: 'center', justifyContent: 'center' }} />
+  ) : (
     <FlexContainer className="column align-ce w-100 h-100 background-fill" withGradient style={{ padding: 32 }}>
       <div className="flex justify-sb w-100">
         <div className="column w-100">
