@@ -8,7 +8,7 @@ import VestingPieChart from '../charts/VestingPieChart';
 import VestingScheduleChart from '../charts/VestingScheduleChart';
 import AnalyticsSimpleWidget from '../shared/AnalyticsSimpleWidget';
 import { FlexContainer } from '../shared/FlexContainer';
-import GraphicPercetage from '../shared/GraphicPercetage';
+import GraphicPercentage from '../shared/GraphicPercentage';
 import ProgressBar from '../shared/ProgressBar';
 
 const Kdx = ({ KDX_TOTAL_SUPPLY, kdxSupply, kdaPrice, kdxBurnt }) => {
@@ -28,7 +28,7 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdxSupply, kdaPrice, kdxBurnt }) => {
           mainText={
             <div className="flex align-ce">
               {`$ ${pact?.tokensUsdPrice?.KDX || '-'}`}
-              <GraphicPercetage prevValue={50} currentValue={99} componentStyle={{ marginLeft: 10, marginTop: 0 }} />
+              <GraphicPercentage prevValue={50} currentValue={99} componentStyle={{ marginLeft: 10, marginTop: 0 }} />
             </div>
           }
           subtitle={pact?.tokensUsdPrice?.KDX && `${(pact?.tokensUsdPrice?.KDX / kdaPrice).toFixed(4)} KDA`}
@@ -36,7 +36,7 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdxSupply, kdaPrice, kdxBurnt }) => {
         <AnalyticsSimpleWidget
           title="Marketcap"
           mainText={(kdxSupply && `$ ${humanReadableNumber(Number(kdxSupply * pact?.tokensUsdPrice?.KDX))}`) || '-'}
-          subtitle={<GraphicPercetage prevValue={99} currentValue={2} />}
+          subtitle={<GraphicPercentage prevValue={99} currentValue={2} />}
         />
 
         <AnalyticsSimpleWidget
