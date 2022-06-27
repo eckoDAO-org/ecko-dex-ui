@@ -108,7 +108,7 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
             <RowTokenInfoPrice
               tokenIcon={getTokenIconByCode('kaddex.kdx')}
               tokenName="KDX"
-              amount={(estimateUnstakeData && humanReadableNumber(estimateUnstakeData['reward-accrued'])) || 0}
+              amount={(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || 0}
               tokenPrice={tokensUsdPrice?.KDX}
             />
           </StakeModalRow>

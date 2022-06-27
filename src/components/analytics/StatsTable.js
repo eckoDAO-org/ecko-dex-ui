@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import styled from 'styled-components';
 import { TradeUpIcon } from '../../assets';
 import tokenData from '../../constants/cryptoCurrencies';
 import { useApplicationContext } from '../../contexts';
@@ -28,7 +29,7 @@ const StatsTable = () => {
   return !loading ? (
     <CommonTable
       items={fakeData}
-      columns={renderColumns()}
+      columns={renderColumns(history)}
       actions={[
         {
           icon: () => (
@@ -38,6 +39,8 @@ const StatsTable = () => {
                 background: theme(themeMode).colors.white,
                 padding: '8px 4px',
                 borderRadius: 100,
+                width: 24,
+                height: 24,
               }}
             >
               <TradeUpIcon className="svg-app-inverted-color" />
@@ -57,23 +60,35 @@ const StatsTable = () => {
 
 export default StatsTable;
 
-const renderColumns = () => {
+const ScalableCryptoContainer = styled(FlexContainer)`
+  transition: all 0.3s ease-in-out;
+
+  :hover {
+    transform: scale(1.18);
+  }
+`;
+
+const renderColumns = (history) => {
   return [
     {
-      name: 'Token',
+      name: '',
       width: 160,
       render: ({ item }) => (
-        <FlexContainer className="align-ce">
+        <ScalableCryptoContainer className="align-ce pointer" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
           <CryptoContainer style={{ zIndex: 2 }}>{item.icon} </CryptoContainer>
           {item.name}
-        </FlexContainer>
+        </ScalableCryptoContainer>
       ),
     },
 
     {
       name: 'Price',
       width: 160,
-      render: ({ item }) => `$ ${humanReadableNumber(extractDecimal(item.price))}`,
+      render: ({ item }) => (
+        <ScalableCryptoContainer className="align-ce pointer h-100" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
+          $ {humanReadableNumber(extractDecimal(item.price))}
+        </ScalableCryptoContainer>
+      ),
     },
 
     {

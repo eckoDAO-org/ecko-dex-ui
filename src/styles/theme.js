@@ -70,6 +70,7 @@ export const lightTheme = {
   buttonBackgroundGradient: '#212750',
   backgroundInput: '#2127501A',
   backgroundContainer: '#F7F7F7',
+  backgroundTableHighlight: '#E6E6E6',
   backgroundProgressBar: '#212750',
 };
 
@@ -85,6 +86,7 @@ export const darkTheme = {
   buttonBackgroundGradient: 'rgb(17,8,23)',
   backgroundInput: 'transparent',
   backgroundContainer: '#292A45',
+  backgroundTableHighlight: '#38395E',
   backgroundProgressBar: '#5C5C5C99',
 };
 
