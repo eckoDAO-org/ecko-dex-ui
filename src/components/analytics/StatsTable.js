@@ -61,7 +61,7 @@ const StatsTable = () => {
   return !loading ? (
     <CommonTable
       items={statsData}
-      columns={renderColumns()}
+      columns={renderColumns(history)}
       actions={[
         {
           icon: () => (
