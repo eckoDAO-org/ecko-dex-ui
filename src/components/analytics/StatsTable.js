@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import moment from 'moment';
 import styled from 'styled-components';
 import { TradeUpIcon } from '../../assets';
 import tokenData from '../../constants/cryptoCurrencies';
+import { getTokenVolumeDiff, getUSDPriceDiff, getKDAPriceDiff } from '../../api/kaddex-stats';
+import { usePactContext } from '../../contexts';
 import { useApplicationContext } from '../../contexts';
 import { ROUTE_TOKEN_INFO } from '../../router/routes';
 import { theme } from '../../styles/theme';
@@ -10,26 +14,54 @@ import { extractDecimal, humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
-import GraphicPercetage from '../shared/GraphicPercetage';
-import Label from '../shared/Label';
+import GraphicPercentage from '../shared/GraphicPercentage';
 
 const StatsTable = () => {
   const { themeMode } = useApplicationContext();
+  const pact = usePactContext();
   const history = useHistory();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [statsData, setStatsData] = useState([]);
 
-  const fakeData = Object.values(tokenData).map((t) => ({
-    ...t,
-    price: 284630080,
-    dailyPriceChange: [12312300, 23423400],
-    dailyVolume: 12312300,
-    dailyVolumeChange: [12312300, 23423400],
-  }));
+  useEffect(() => {
+    const setInitData = async () => {
+      if (pact?.tokensUsdPrice) {
+        const data = [];
+        for (const t of Object.values(tokenData)) {
+          const asset = (t.statsID || t.code) === 'coin' ? 'KDA' : t.statsID || t.code;
+          const currency = (t.statsID || t.code) === 'coin' ? 'USDT' : 'coin';
+          const price = pact?.tokensUsdPrice && pact?.tokensUsdPrice[t?.name];
+          const kdaUsdPrice = pact?.tokensUsdPrice?.KDA;
+          const volume24 = await getTokenVolumeDiff(
+            moment().subtract(2, 'days').toDate(),
+            moment().subtract(1, 'days').toDate(),
+            t.statsID || t.code
+          );
+          let price24Diff = null;
+          if (asset === 'KDA') {
+            price24Diff = await getKDAPriceDiff(moment().subtract(1, 'days').toDate(), new Date(), asset, currency);
+          } else {
+            price24Diff = await getUSDPriceDiff(moment().subtract(1, 'days').toDate(), new Date(), asset, currency);
+          }
+          data.push({
+            ...t,
+            price,
+            dailyPriceChange: [price24Diff?.initial, price24Diff?.final],
+            dailyVolume: volume24?.final * price24Diff?.final,
+            dailyVolumeChange: [volume24?.initial * kdaUsdPrice, volume24?.final * kdaUsdPrice],
+          });
+        }
+        setLoading(false);
+        setStatsData(data);
+      }
+    };
+    setInitData();
+  }, [pact?.tokensUsdPrice]);
 
   return !loading ? (
     <CommonTable
-      items={fakeData}
-      columns={renderColumns(history)}
+      items={statsData}
+      columns={renderColumns()}
       actions={[
         {
           icon: () => (
@@ -47,7 +79,6 @@ const StatsTable = () => {
             </FlexContainer>
           ),
           onClick: (item) => {
-            console.log('item', item);
             history.push(ROUTE_TOKEN_INFO.replace(':token', item.name));
           },
         },
@@ -95,7 +126,7 @@ const renderColumns = (history) => {
       name: '24H Price Change',
       width: 160,
       render: ({ item }) => {
-        return <GraphicPercetage componentStyle={{ margin: 0 }} prevValue={item.dailyPriceChange[0]} currentValue={item.dailyPriceChange[1]} />;
+        return <GraphicPercentage componentStyle={{ margin: 0 }} prevValue={item.dailyPriceChange[0]} currentValue={item.dailyPriceChange[1]} />;
       },
     },
 
@@ -110,7 +141,7 @@ const renderColumns = (history) => {
       name: '24H Volume Change',
       width: 160,
       render: ({ item }) => {
-        return <GraphicPercetage componentStyle={{ margin: 0 }} prevValue={item.dailyVolumeChange[0]} currentValue={item.dailyVolumeChange[1]} />;
+        return <GraphicPercentage componentStyle={{ margin: 0 }} prevValue={item.dailyVolumeChange[0]} currentValue={item.dailyVolumeChange[1]} />;
       },
     },
   ];

@@ -14,7 +14,7 @@ import VolumeChart from '../charts/VolumeChart';
 import AnalyticsSimpleWidget from '../shared/AnalyticsSimpleWidget';
 import CustomDropdown from '../shared/CustomDropdown';
 import { FlexContainer } from '../shared/FlexContainer';
-import GraphicPercetage from '../shared/GraphicPercetage';
+import GraphicPercentage from '../shared/GraphicPercentage';
 import ProgressBar from '../shared/ProgressBar';
 import StackedBarChart from '../shared/StackedBarChart';
 import pairTokens from '../../constants/pairsConfig';
@@ -251,7 +251,7 @@ const Dex = ({ kdaPrice }) => {
         <AnalyticsSimpleWidget
           title={'Staking Data'}
           mainText={
-            <GraphicPercetage prevValue={80} currentValue={100} />
+            <GraphicPercentage prevValue={80} currentValue={100} />
             // (fakeData && `${humanReadableNumber(fakeData.totalStaked, 2)} KDX`) || '-'
           }
           subtitle={
