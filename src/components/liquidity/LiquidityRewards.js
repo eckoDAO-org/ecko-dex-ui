@@ -199,13 +199,13 @@ const renderColumns = () => {
 
         switch (item.status) {
           case 'pending':
-            color = commonColors.orange;
+            color = commonColors.red;
             break;
           case 'available':
             color = commonColors.green;
             break;
           case 'approved':
-            color = null;
+            color = commonColors.green;
             break;
           default:
             color = null;
