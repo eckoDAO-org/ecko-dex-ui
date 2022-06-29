@@ -17,6 +17,21 @@ const Wrapper = styled(FlexContainer)`
     position: relative;
     overflow: auto;
   }
+
+  table tr:hover {
+    td:not(:first-child),
+    td:not(:last-child) {
+      background-color: ${({ theme: { backgroundTableHighlight } }) => backgroundTableHighlight};
+    }
+    td:first-child {
+      background-image: ${({ theme: { backgroundContainer, backgroundTableHighlight } }) =>
+        `linear-gradient(to right, ${backgroundContainer}, ${backgroundTableHighlight})`};
+    }
+    td:last-child {
+      background-image: ${({ theme: { backgroundContainer, backgroundTableHighlight } }) =>
+        `linear-gradient(to right, ${backgroundTableHighlight}, ${backgroundContainer})`};
+    }
+  }
   .tr-sticky,
   .sticky {
     position: -webkit-sticky;

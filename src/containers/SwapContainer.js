@@ -65,7 +65,7 @@ const Container = styled(FadeIn)`
       `;
     } else {
       return css`
-        padding-top: 80px;
+        padding-top: 35px;
         padding-bottom: 35px;
         max-width: 550px;
         overflow: visible;
@@ -649,25 +649,21 @@ const SwapContainer = () => {
               <PixeledBlueContainer label="Max Slippage" value={`${pact.slippage * 100}%`} style={{ marginTop: 10 }} />
             ) : (
               <>
-                {ENABLE_GAS_STATION && (
-                  <FlexContainer className="w-100 justify-sb" style={{ margin: '16px 0' }}>
-                    <Label fontSize={13} color={commonColors.green}>
-                      Gas Cost
-                    </Label>
-                    <div style={{ display: 'flex' }}>
-                      <>
-                        <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ marginLeft: 5 }}>
-                          FREE
-                        </Label>
-                      </>
-                    </div>
-                  </FlexContainer>
-                )}
                 <FlexContainer className="w-100 justify-sb" style={{ margin: '16px 0' }}>
-                  <Label fontSize={13} geFontSize={20} geColor="blue">
-                    Max slippage
-                  </Label>
-                  <Label fontSize={13} geFontSize={28}>{`${pact.slippage * 100}%`}</Label>
+                  {ENABLE_GAS_STATION && (
+                    <>
+                      <Label fontSize={13} color={commonColors.green}>
+                        Gas Cost
+                      </Label>
+                      <div style={{ display: 'flex' }}>
+                        <>
+                          <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ marginLeft: 5 }}>
+                            FREE
+                          </Label>
+                        </>
+                      </div>
+                    </>
+                  )}
                 </FlexContainer>
               </>
             )}

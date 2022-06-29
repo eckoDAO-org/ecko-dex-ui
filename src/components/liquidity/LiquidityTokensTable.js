@@ -81,6 +81,26 @@ const LiquidityTokensTable = () => {
             });
           },
         },
+        {
+          icon: () => (
+            <FlexContainer
+              className="align-ce"
+              style={{
+                background: theme(themeMode).colors.white,
+                padding: '8px 4px',
+                borderRadius: 100,
+                width: 24,
+                height: 24,
+              }}
+            >
+              <TradeUpIcon className="svg-app-inverted-color" />
+            </FlexContainer>
+          ),
+          onClick: (item) => {
+            console.log('item', item);
+            history.push(ROUTE_TOKEN_INFO.replace(':token', item.name));
+          },
+        },
       ]}
     />
   ) : (
@@ -91,14 +111,10 @@ const LiquidityTokensTable = () => {
 export default LiquidityTokensTable;
 
 const ScalableCryptoContainer = styled(FlexContainer)`
-  img {
-    transition: all 0.3s ease-in-out;
-  }
+  transition: all 0.3s ease-in-out;
 
   :hover {
-    img {
-      transform: scale(1.15);
-    }
+    transform: scale(1.18);
   }
 `;
 
@@ -117,7 +133,11 @@ const renderColumns = (history) => {
     {
       name: 'price',
       width: 160,
-      render: ({ item }) => `$ ${item.tokenUsdPrice}`,
+      render: ({ item }) => (
+        <ScalableCryptoContainer className="align-ce pointer h-100" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
+          $ {item.tokenUsdPrice}
+        </ScalableCryptoContainer>
+      ),
     },
     {
       name: 'liquidity',

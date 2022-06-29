@@ -113,13 +113,13 @@ const LiquidityRewards = () => {
             icon: (item) => (
               <ClaimButton
                 disabled={item.remainingTime > 0 || item.status === 'approved'}
-                color={item.status === 'pending' ? commonColors.pink : null}
+                color={item.status === 'pending' ? commonColors.info : null}
               >
                 <BoosterIcon />{' '}
                 <Label
                   labelStyle={{ lineHeight: 1 }}
                   withShade={item.remainingTime > 0 || item.status === 'approved'}
-                  color={item.status === 'pending' ? commonColors.pink : null}
+                  color={item.status === 'pending' ? commonColors.info : null}
                   fontFamily="syncopate"
                 >
                   CLAIM
@@ -185,7 +185,7 @@ const renderColumns = () => {
       width: 160,
       render: ({ item }) => {
         return (
-          <Label color={item?.remainingTime === 0 ? commonColors.green : commonColors.red}>
+          <Label color={item?.remainingTime === 0 ? commonColors.green : commonColors.info}>
             {item.remainingTime === 0 ? '0 Days' : moment.utc(1000 * item.remainingTime).format('D[ days] H[ hours]')}
           </Label>
         );
@@ -199,13 +199,13 @@ const renderColumns = () => {
 
         switch (item.status) {
           case 'pending':
-            color = commonColors.orange;
+            color = commonColors.info;
             break;
           case 'available':
             color = commonColors.green;
             break;
           case 'approved':
-            color = null;
+            color = commonColors.green;
             break;
           default:
             color = null;
