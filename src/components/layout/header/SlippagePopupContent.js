@@ -108,6 +108,7 @@ const SlippagePopupContent = ({ className }) => {
   useOnClickOutside(ref, () => setShowSlippageContent(false));
 
   const [slp, setSlp] = useState(pact.slippage * 100);
+  console.log('🚀 log --> slp', slp);
   const [tl, setTl] = useState(pact.ttl / 60);
   useEffect(() => {
     if (slp) (async () => pact.storeSlippage(slp / 100))();
@@ -135,13 +136,13 @@ const SlippagePopupContent = ({ className }) => {
             </Label>
 
             <Row style={{ marginTop: 8 }}>
-              <SlippageTolleranceValue isSelected={slp === 0.1} onClick={() => setSlp(0.1)}>
+              <SlippageTolleranceValue isSelected={Number(slp) === 0.1} onClick={() => setSlp(0.1)}>
                 0.1%
               </SlippageTolleranceValue>
-              <SlippageTolleranceValue isSelected={slp === 0.5} style={{ marginLeft: 4, marginRight: 4 }} onClick={() => setSlp(0.5)}>
+              <SlippageTolleranceValue isSelected={Number(slp) === 0.5} style={{ marginLeft: 4, marginRight: 4 }} onClick={() => setSlp(0.5)}>
                 0.5%
               </SlippageTolleranceValue>
-              <SlippageTolleranceValue isSelected={slp === 1} style={{ marginRight: 8 }} onClick={() => setSlp(1)}>
+              <SlippageTolleranceValue isSelected={Number(slp) === 1} style={{ marginRight: 8 }} onClick={() => setSlp(1)}>
                 1%
               </SlippageTolleranceValue>
 
