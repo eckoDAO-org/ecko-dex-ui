@@ -16,9 +16,8 @@ const SubLabel = styled(Label)`
   opacity: 0.7;
 `;
 
-const Analytics = ({ stakedShare, totalStaked, totalBurnt }) => {
+const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt }) => {
   const [totalVolumeUSD, setTotalVolumeUSD] = useState(null);
-  console.log('LOG --> totalVolumeUSD', totalVolumeUSD);
   const [stakingAPR, setStakingAPR] = useState(null);
   const { tokensUsdPrice } = usePactContext();
   useEffect(() => {
@@ -80,12 +79,12 @@ const Analytics = ({ stakedShare, totalStaked, totalBurnt }) => {
             <Label>Staked Share</Label>
           </div>
           <Label fontSize={24}>{(stakedShare && extractDecimal(stakedShare).toFixed(2)) || '-'} % </Label>
-          <SubLabel labelStyle={{ fontSize: 12 }}>12,231,234.45 KDX</SubLabel>
+          <SubLabel labelStyle={{ fontSize: 12 }}>{staked} KDX</SubLabel>
         </div>
         <div className="flex column align-fe">
           <Label>Total Staked</Label>
           <Label fontSize={24}>38.20 %{/* {(totalStaked && humanReadableNumber(reduceBalance(totalStaked))) || '-'} KDX */}</Label>
-          <SubLabel labelStyle={{ fontSize: 12, textAlign: 'end' }}>120,231,234.45 KDX</SubLabel>
+          <SubLabel labelStyle={{ fontSize: 12, textAlign: 'end' }}>{extractDecimal(totalStaked).toFixed(2)} KDX</SubLabel>
         </div>
       </div>
     </CommonWrapper>

@@ -398,6 +398,7 @@ const StakeContainer = () => {
           stakedTimeStart={stakedTimeStart}
         />
         <Analytics
+          staked={estimateUnstakeData?.staked}
           stakedShare={getAccountStakingPercentage()}
           totalStaked={poolState && poolState['staked-kdx']}
           totalBurnt={poolState && poolState['burnt-kdx']}
