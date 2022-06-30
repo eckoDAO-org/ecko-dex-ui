@@ -62,7 +62,7 @@ const Analytics = ({ stakedShare, totalStaked, totalBurnt }) => {
           <div className="flex column align-fe">
             <Label>APR</Label>
           </div>
-          <Label fontSize={24}>{(stakingAPR && stakingAPR.toFixed(2)) || '-'}%</Label>
+          <Label fontSize={24}>{(stakingAPR && stakingAPR.toFixed(2)) || '-'} %</Label>
         </div>
       </div>
       <div>
@@ -79,7 +79,7 @@ const Analytics = ({ stakedShare, totalStaked, totalBurnt }) => {
           <div className="flex align-ce">
             <Label>Staked Share</Label>
           </div>
-          <Label fontSize={24}>{(stakedShare && extractDecimal(stakedShare).toFixed(2)) || '-'}% </Label>
+          <Label fontSize={24}>{(stakedShare && extractDecimal(stakedShare).toFixed(2)) || '-'} % </Label>
           <SubLabel labelStyle={{ fontSize: 12 }}>12,231,234.45 KDX</SubLabel>
         </div>
         <div className="flex column align-fe">
