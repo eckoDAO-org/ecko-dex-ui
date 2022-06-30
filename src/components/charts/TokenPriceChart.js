@@ -7,7 +7,6 @@ import { getDailyCandles } from '../../api/kaddex-stats';
 import { humanReadableNumber } from '../../utils/reduceBalance';
 import { useApplicationContext } from '../../contexts';
 import { FlexContainer } from '../shared/FlexContainer';
-import { CandlestickChartIcon, LineChartIcon } from '../../assets';
 import AppLoader from '../shared/AppLoader';
 import Label from '../shared/Label';
 import CustomDropdown from '../shared/CustomDropdown';
@@ -32,6 +31,15 @@ const STYChartContainer = styled(ResponsiveContainer)`
   }
   .recharts-cartesian-grid {
     display: none;
+  }
+`;
+
+const StyledApexChart = styled(ApexCharts)`
+  .apexcharts-tooltip {
+    color: ${commonColors.purple};
+  }
+  .apexcharts-toolbar {
+    z-index: 1;
   }
 `;
 
@@ -87,8 +95,6 @@ const TokenPriceChart = ({ tokenData, height }) => {
     ],
   }));
 
-  const getIconSize = (mode) => (mode === chartMode ? 30 : 25);
-
   return isLoading ? (
     <AppLoader containerStyle={{ height: '100%', alignItems: 'center', justifyContent: 'center' }} />
   ) : (
@@ -99,12 +105,18 @@ const TokenPriceChart = ({ tokenData, height }) => {
           <Label fontSize={16}>{moment(currentData?.date).format('DD/MM/YYYY')}</Label>
         </div>
         <ThemeIconContainer className="flex">
-          <Label labelStyle={{ marginRight: 10 }} onClick={() => setChartMode(CHART_MODES[0])}>
-            <LineChartIcon width={getIconSize(CHART_MODES[0])} height={getIconSize(CHART_MODES[0])} />
-          </Label>
-          <Label labelStyle={{ marginRight: 10 }} onClick={() => setChartMode(CHART_MODES[1])}>
-            <CandlestickChartIcon width={getIconSize(CHART_MODES[1])} height={getIconSize(CHART_MODES[1])} />
-          </Label>
+          <CustomDropdown
+            options={[
+              { key: 0, text: 'Line', value: CHART_MODES[0] },
+              { key: 1, text: 'Candles', value: CHART_MODES[1] },
+            ]}
+            containerStyle={{ marginRight: 5 }}
+            dropdownStyle={{ padding: 10, height: 30 }}
+            onChange={(e, { value }) => {
+              setChartMode(value);
+            }}
+            value={chartMode}
+          />
           <CustomDropdown
             options={[
               { key: 0, text: '7d', value: moment().subtract(7, 'day').format('YYYY-MM-DD') },
@@ -163,7 +175,8 @@ const TokenPriceChart = ({ tokenData, height }) => {
         </div>
       ) : (
         <div style={{ width: '100%', height }}>
-          <ApexCharts
+          <StyledApexChart
+            themeMode={themeMode}
             type="candlestick"
             height={350}
             series={[
@@ -179,6 +192,9 @@ const TokenPriceChart = ({ tokenData, height }) => {
               },
               tooltip: {
                 enabled: true,
+                style: {
+                  colors: themeMode === 'light' ? commonColors.purple : '#AFB0BA',
+                },
               },
               xaxis: {
                 type: 'category',
@@ -190,6 +206,7 @@ const TokenPriceChart = ({ tokenData, height }) => {
                     colors: themeMode === 'light' ? commonColors.purple : '#AFB0BA',
                   },
                 },
+                tickAmount: 20,
               },
               yaxis: {
                 tooltip: {
