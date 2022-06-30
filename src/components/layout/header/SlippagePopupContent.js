@@ -58,7 +58,8 @@ const SlippageTolleranceValue = styled.div`
   font-family: ${({ isSelected, theme: { fontFamily } }) => (isSelected ? fontFamily.syncopate : fontFamily.basier)};
   font-size: 14px;
   padding: 6.5px 8.5px;
-  min-width: 61px;
+  min-width: 62px;
+  min-height: 32px;
   display: flex;
   justify-content: center;
   background-color: ${({ isSelected, theme: { colors } }) => isSelected && colors.white};
@@ -68,21 +69,19 @@ const SlippageTolleranceValue = styled.div`
 const ContainerInputTypeNumber = styled.div`
   display: flex;
   align-items: center;
-  height: 35px;
+  min-height: 32px;
   justify-content: center;
   padding: 0px 8.5px;
   border-radius: 16px;
-  border: ${({ theme: { colors } }) => `1px solid ${colors.white}`};
+  border: ${({ theme: { colors } }) => `1px solid ${colors.info}`};
   color: ${({ theme: { colors } }) => colors.white};
+  min-width: 62px !important;
   .ui.input > input {
     border: unset;
     padding: 0px;
     text-align: right;
     font-size: 14px;
     margin: 0px;
-  }
-  .ui.fluid.input > input {
-    width: 80px !important;
   }
 `;
 
