@@ -51,7 +51,7 @@ const Position = ({
         </Label>
         {pendingAmount && (
           <Label fontSize={15} labelStyle={{ marginTop: 8, color: commonColors.info }}>
-            (Pending {humanReadableNumber(pendingAmount)})
+            (Pending {humanReadableNumber(pendingAmount)} KDX)
           </Label>
         )}
       </div>
@@ -97,7 +97,7 @@ const Position = ({
             <Label>Position Penalty</Label>
           </div>
           <Label fontSize={24} color={commonColors.red}>
-            3%
+            3 %
           </Label>
           <Label fontSize={16} color={commonColors.red}>
             {`${(stakedTimeStart && 72 - moment().diff(stakedTimeStart, 'hours')) || '-'} ${

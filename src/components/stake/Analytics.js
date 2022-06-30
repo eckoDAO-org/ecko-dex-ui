@@ -61,7 +61,7 @@ const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt }) => {
           <div className="flex column align-fe">
             <Label>APR</Label>
           </div>
-          <Label fontSize={24}>{(stakingAPR && stakingAPR.toFixed(2)) || '-'}%</Label>
+          <Label fontSize={24}>{(stakingAPR && stakingAPR.toFixed(2)) || '-'} %</Label>
         </div>
       </div>
       <div>

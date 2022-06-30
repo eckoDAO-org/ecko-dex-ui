@@ -58,7 +58,8 @@ const SlippageTolleranceValue = styled.div`
   font-family: ${({ isSelected, theme: { fontFamily } }) => (isSelected ? fontFamily.syncopate : fontFamily.basier)};
   font-size: 14px;
   padding: 6.5px 8.5px;
-  min-width: 61px;
+  min-width: 62px;
+  min-height: 32px;
   display: flex;
   justify-content: center;
   background-color: ${({ isSelected, theme: { colors } }) => isSelected && colors.white};
@@ -68,21 +69,19 @@ const SlippageTolleranceValue = styled.div`
 const ContainerInputTypeNumber = styled.div`
   display: flex;
   align-items: center;
-  height: 35px;
+  min-height: 32px;
   justify-content: center;
   padding: 0px 8.5px;
   border-radius: 16px;
-  border: ${({ theme: { colors } }) => `1px solid ${colors.white}`};
+  border: ${({ theme: { colors } }) => `1px solid ${colors.info}`};
   color: ${({ theme: { colors } }) => colors.white};
+  min-width: 62px !important;
   .ui.input > input {
     border: unset;
     padding: 0px;
     text-align: right;
     font-size: 14px;
     margin: 0px;
-  }
-  .ui.fluid.input > input {
-    width: 80px !important;
   }
 `;
 
@@ -109,6 +108,7 @@ const SlippagePopupContent = ({ className }) => {
   useOnClickOutside(ref, () => setShowSlippageContent(false));
 
   const [slp, setSlp] = useState(pact.slippage * 100);
+  console.log('🚀 log --> slp', slp);
   const [tl, setTl] = useState(pact.ttl / 60);
   useEffect(() => {
     if (slp) (async () => pact.storeSlippage(slp / 100))();
@@ -136,13 +136,13 @@ const SlippagePopupContent = ({ className }) => {
             </Label>
 
             <Row style={{ marginTop: 8 }}>
-              <SlippageTolleranceValue isSelected={slp === 0.1} onClick={() => setSlp(0.1)}>
+              <SlippageTolleranceValue isSelected={Number(slp) === 0.1} onClick={() => setSlp(0.1)}>
                 0.1%
               </SlippageTolleranceValue>
-              <SlippageTolleranceValue isSelected={slp === 0.5} style={{ marginLeft: 4, marginRight: 4 }} onClick={() => setSlp(0.5)}>
+              <SlippageTolleranceValue isSelected={Number(slp) === 0.5} style={{ marginLeft: 4, marginRight: 4 }} onClick={() => setSlp(0.5)}>
                 0.5%
               </SlippageTolleranceValue>
-              <SlippageTolleranceValue isSelected={slp === 1} style={{ marginRight: 8 }} onClick={() => setSlp(1)}>
+              <SlippageTolleranceValue isSelected={Number(slp) === 1} style={{ marginRight: 8 }} onClick={() => setSlp(1)}>
                 1%
               </SlippageTolleranceValue>
 

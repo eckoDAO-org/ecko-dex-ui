@@ -30,6 +30,20 @@ const RowContainer = styled.div`
 const SwapResults = ({ priceImpact, fromValues, toValues }) => {
   const pact = usePactContext();
   const liquidity = useLiquidityContext();
+
+  const getPriceImpactColor = () => {
+    if (pact.priceImpactWithoutFee(priceImpact)) {
+      const priceImpactPercentage = reduceBalance(pact.priceImpactWithoutFee(priceImpact) * 100, 4);
+      if (priceImpactPercentage < 1) {
+        return commonColors.green;
+      } else if (priceImpactPercentage >= 1 && priceImpactPercentage < 5) {
+        return commonColors.yellow;
+      } else if (priceImpactPercentage >= 5) {
+        return commonColors.red;
+      }
+    }
+  };
+
   return (
     <ResultContainer>
       {ENABLE_GAS_STATION && (
@@ -43,17 +57,19 @@ const SwapResults = ({ priceImpact, fromValues, toValues }) => {
         </RowContainer>
       )}
       <RowContainer>
-        <Label fontSize={13}>Price</Label>
-        <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
-          {reduceBalance(pact.ratio * (1 + priceImpact))} {fromValues.coin}/{toValues.coin}
+        <Label fontSize={13} color={getPriceImpactColor()}>
+          Price Impact
         </Label>
-      </RowContainer>
-      <RowContainer>
-        <Label fontSize={13}>Price Impact</Label>
-        <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
+        <Label fontSize={13} labelStyle={{ textAlign: 'end' }} color={getPriceImpactColor()}>
           {pact.priceImpactWithoutFee(priceImpact) < 0.0001 && pact.priceImpactWithoutFee(priceImpact)
             ? '< 0.01%'
             : `${reduceBalance(pact.priceImpactWithoutFee(priceImpact) * 100, 4)}%`}
+        </Label>
+      </RowContainer>
+      <RowContainer>
+        <Label fontSize={13}>Price</Label>
+        <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
+          {reduceBalance(pact.ratio * (1 + priceImpact))} {fromValues.coin}/{toValues.coin}
         </Label>
       </RowContainer>
       <RowContainer>
