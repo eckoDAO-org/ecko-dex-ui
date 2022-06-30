@@ -78,7 +78,7 @@ const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt }) => {
           <div className="flex align-ce">
             <Label>Staked Share</Label>
           </div>
-          <Label fontSize={24}>{(stakedShare && extractDecimal(stakedShare).toFixed(2)) || '-'}% </Label>
+          <Label fontSize={24}>{(stakedShare && extractDecimal(stakedShare).toFixed(2)) || '-'} % </Label>
           <SubLabel labelStyle={{ fontSize: 12 }}>{staked} KDX</SubLabel>
         </div>
         <div className="flex column align-fe">
