@@ -38,7 +38,7 @@ const ProgressBar = ({ currentValue, maxValue, topLabelLeft, bottomValues, withB
       {topLabelLeft && (
         <FlexContainer className="justify-sb align-ce w-100" style={{ marginBottom: 8 }}>
           <Label fontSize={13}>{topLabelLeft}</Label>
-          <Label fontSize={13}>{getPercentage(currentValue, maxValue).toFixed(1)}%</Label>
+          <Label fontSize={13}>{getPercentage(currentValue, maxValue).toFixed(1)} %</Label>
         </FlexContainer>
       )}
       <STYMaxSupplyContainer>

@@ -132,7 +132,7 @@ const SwapButtonsForm = ({
             if (!account.account) {
               return modalContext.openModal({
                 title: account?.account ? 'wallet connected' : SWAP_BUTTON_CONNECT_WALLET.label,
-                description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
+                description: account?.account ? `Account ID: ${reduceToken(account.account)}` : '',
                 content: <ConnectWalletModal />,
               });
             }

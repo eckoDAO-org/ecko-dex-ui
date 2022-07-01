@@ -62,8 +62,8 @@ const SwapResults = ({ priceImpact, fromValues, toValues }) => {
         </Label>
         <Label fontSize={13} labelStyle={{ textAlign: 'end' }} color={getPriceImpactColor()}>
           {pact.priceImpactWithoutFee(priceImpact) < 0.0001 && pact.priceImpactWithoutFee(priceImpact)
-            ? '< 0.01%'
-            : `${reduceBalance(pact.priceImpactWithoutFee(priceImpact) * 100, 4)}%`}
+            ? '< 0.01 %'
+            : `${reduceBalance(pact.priceImpactWithoutFee(priceImpact) * 100, 4)} %`}
         </Label>
       </RowContainer>
       <RowContainer>
@@ -75,7 +75,7 @@ const SwapResults = ({ priceImpact, fromValues, toValues }) => {
       <RowContainer>
         <Label fontSize={13}>Max Slippage</Label>
         <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
-          {pact.slippage * 100}%
+          {pact.slippage * 100} %
         </Label>
       </RowContainer>
       <RowContainer>

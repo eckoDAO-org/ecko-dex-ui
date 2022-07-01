@@ -78,15 +78,17 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
     <CommonWrapper gap={16} title="rewards" popup={<PenaltyRewardsInfo />} popupTitle="Rewards Penalty">
       <div>
         <Label>KDX Collected</Label>
-        <Label fontSize={30}>{humanReadableNumber(rewardAccrued)} KDX</Label>
-        <Label fontSize={16} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
-          $ {humanReadableNumber(tokensUsdPrice?.KDX * extractDecimal(rewardAccrued))}
-        </Label>
+        <Label fontSize={30}>{rewardAccrued !== 0 ? humanReadableNumber(rewardAccrued) : '-'} KDX</Label>
+        {rewardAccrued !== 0 && (
+          <Label fontSize={16} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
+            $ {humanReadableNumber(tokensUsdPrice?.KDX * extractDecimal(rewardAccrued))}
+          </Label>
+        )}
       </div>
       <div>
         <Label>Waiting Time</Label>
         <Label fontSize={24} color={getPenaltyColor()}>
-          {stakedTimeStart && stakedAmount > 0 ? getWaitingTimeRewardsPenalty() : '-'}
+          {stakedTimeStart && rewardAccrued > 0 ? getWaitingTimeRewardsPenalty() : '-'}
         </Label>
       </div>
       <div>
@@ -95,7 +97,7 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
         </div>
 
         <Label fontSize={24} color={getPenaltyColor()}>
-          {getPenaltyRewardsString()[0] || '-'} KDX
+          {getPenaltyRewardsString()[0] !== '0.00' ? getPenaltyRewardsString()[0] : '-'} KDX
         </Label>
         {rewardsPenalty && (
           <Label fontSize={16} color={getPenaltyColor()}>

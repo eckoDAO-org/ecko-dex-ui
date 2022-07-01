@@ -107,7 +107,7 @@ export default LiquidityMyLiquidityTable;
 const renderColumns = () => {
   return [
     {
-      name: 'Pair',
+      name: '',
       width: 160,
       render: ({ item }) => (
         <FlexContainer className="align-ce">

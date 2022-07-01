@@ -117,7 +117,7 @@ const Position = ({
           if (!account.account) {
             modalContext.openModal({
               title: 'connect wallet',
-              description: 'Connect a wallet using one of the methods below',
+              description: '',
               content: <ConnectWalletModal />,
             });
           } else {

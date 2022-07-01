@@ -109,7 +109,7 @@ const StackedBarChart = ({ title, rightComponent, data, withDoubleToken }) => {
             </>
           )}
           <Label>
-            {item.name} {item.percentage.toFixed(2)}%
+            {item.name} {item.percentage.toFixed(2)} %
           </Label>
         </>
       );
@@ -119,7 +119,7 @@ const StackedBarChart = ({ title, rightComponent, data, withDoubleToken }) => {
           <div style={{ width: 32, height: 16, borderRadius: 4, background: item.color || '#A9AAB4', marginRight: 8 }}></div>
           {getTokenIconById(item.name) && <CryptoContainer size={16}>{getTokenIconById(item.name)}</CryptoContainer>}
           <Label>
-            {item.name} {item.percentage.toFixed(2)}%
+            {item.name} {item.percentage.toFixed(2)} %
           </Label>
         </>
       );

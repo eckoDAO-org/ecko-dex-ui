@@ -3,7 +3,7 @@ import moment from 'moment';
 import styled from 'styled-components/macro';
 import { BoosterIcon } from '../../assets';
 import tokenData from '../../constants/cryptoCurrencies';
-import { extractDecimal, pairUnit } from '../../utils/reduceBalance';
+import { extractDecimal, getDecimalPlaces } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
@@ -150,7 +150,7 @@ export default LiquidityRewards;
 const renderColumns = () => {
   return [
     {
-      name: 'name',
+      name: '',
       width: 160,
       render: ({ item }) => (
         <FlexContainer className="align-ce">
@@ -164,13 +164,13 @@ const renderColumns = () => {
     {
       name: 'Amount',
       width: 160,
-      render: ({ item }) => `${pairUnit(extractDecimal(item.amount), 6)} KDX`,
+      render: ({ item }) => `${getDecimalPlaces(extractDecimal(item.amount))} KDX`,
     },
 
     {
       name: '~ KDX Multiplier',
       width: 160,
-      render: ({ item }) => `${pairUnit(extractDecimal(item.multiplier), 2)} x`,
+      render: ({ item }) => `${getDecimalPlaces(extractDecimal(item.multiplier))} x`,
     },
 
     {

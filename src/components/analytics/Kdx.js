@@ -3,7 +3,7 @@ import { BoosterIcon, BurnedIcon, DaoIcon } from '../../assets';
 import { usePactContext } from '../../contexts';
 import useWindowSize from '../../hooks/useWindowSize';
 import theme, { commonColors } from '../../styles/theme';
-import { humanReadableNumber } from '../../utils/reduceBalance';
+import { extractDecimal, getDecimalPlaces, humanReadableNumber } from '../../utils/reduceBalance';
 import VestingPieChart from '../charts/VestingPieChart';
 import VestingScheduleChart from '../charts/VestingScheduleChart';
 import AnalyticsSimpleWidget from '../shared/AnalyticsSimpleWidget';
@@ -31,7 +31,7 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdxSupply, kdaPrice, kdxBurnt }) => {
               <GraphicPercentage prevValue={50} currentValue={99} componentStyle={{ marginLeft: 10, marginTop: 0 }} />
             </div>
           }
-          subtitle={pact?.tokensUsdPrice?.KDX && `${(pact?.tokensUsdPrice?.KDX / kdaPrice).toFixed(4)} KDA`}
+          subtitle={pact?.tokensUsdPrice?.KDX && `${getDecimalPlaces(extractDecimal(pact?.tokensUsdPrice?.KDX / kdaPrice))} KDA`}
         />
         <AnalyticsSimpleWidget
           title="Marketcap"

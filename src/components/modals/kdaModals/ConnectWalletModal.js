@@ -1,15 +1,17 @@
 import React from 'react';
 import CustomButton from '../../../components/shared/CustomButton';
 import { WALLET } from '../../../constants/wallet';
-import { useKaddexWalletContext, useNotificationContext, useModalContext, useGameEditionContext } from '../../../contexts';
+import { useKaddexWalletContext, useNotificationContext, useModalContext, useGameEditionContext, useAccountContext } from '../../../contexts';
 import ConnectWalletZelcoreModal from './ConnectWalletZelcoreModal';
 import ConnectWalletChainweaverModal from './ConnectWalletChainweaverModal';
 import styled from 'styled-components';
 import { FlexContainer } from '../../shared/FlexContainer';
 import Label from '../../shared/Label';
+import { AccountConsumer } from '../../../contexts/AccountContext';
 
 const ConnectWalletModal = () => {
   const modalContext = useModalContext();
+  const { account } = useAccountContext();
   const { STATUSES, showNotification } = useNotificationContext();
   const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
   const { gameEditionView, openModal, closeModal } = useGameEditionContext();
@@ -67,7 +69,7 @@ const ConnectWalletModal = () => {
   };
 
   return (
-    <Container className="column" gap={16}>
+    <Container className="column" gap={16} style={{ marginTop: !account.account && 24 }}>
       <CustomButton
         type="gradient"
         onClick={() => {

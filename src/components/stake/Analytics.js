@@ -55,7 +55,7 @@ const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt }) => {
           <Label fontSize={24}>
             {(dailyUSDIncome && tokensUsdPrice?.KDX && humanReadableNumber(dailyUSDIncome / tokensUsdPrice?.KDX)) || '-'} KDX
           </Label>
-          <SubLabel>$ {(dailyUSDIncome && humanReadableNumber(dailyUSDIncome)) || '-'}</SubLabel>
+          {dailyUSDIncome && <SubLabel>$ {(dailyUSDIncome && humanReadableNumber(dailyUSDIncome)) || '-'}</SubLabel>}
         </div>
         <div>
           <div className="flex column align-fe">
@@ -66,7 +66,7 @@ const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt }) => {
       </div>
       <div>
         <Label>Daily Volume</Label>
-        <Label fontSize={24}>$ {humanReadableNumber(totalVolumeUSD)}</Label>
+        <Label fontSize={24}>$ {(totalVolumeUSD && humanReadableNumber(totalVolumeUSD)) || '-'}</Label>
       </div>
       <div>
         <Label>KDX Burned</Label>
@@ -79,12 +79,12 @@ const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt }) => {
             <Label>Staked Share</Label>
           </div>
           <Label fontSize={24}>{(stakedShare && extractDecimal(stakedShare).toFixed(2)) || '-'} % </Label>
-          <SubLabel labelStyle={{ fontSize: 12 }}>{staked} KDX</SubLabel>
+          <SubLabel labelStyle={{ fontSize: 12 }}>{staked !== 0 ? humanReadableNumber(extractDecimal(staked)) : '-'} KDX</SubLabel>
         </div>
         <div className="flex column align-fe">
           <Label>Total Staked</Label>
           <Label fontSize={24}>38.20 %{/* {(totalStaked && humanReadableNumber(reduceBalance(totalStaked))) || '-'} KDX */}</Label>
-          <SubLabel labelStyle={{ fontSize: 12, textAlign: 'end' }}>{extractDecimal(totalStaked).toFixed(2)} KDX</SubLabel>
+          <SubLabel labelStyle={{ fontSize: 12, textAlign: 'end' }}>{humanReadableNumber(extractDecimal(totalStaked))} KDX</SubLabel>
         </div>
       </div>
     </CommonWrapper>

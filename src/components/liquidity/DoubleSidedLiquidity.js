@@ -18,6 +18,8 @@ import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { SuccessAddView } from '../modals/liquidity/LiquidityTxView';
 import { useInterval } from '../../hooks/useInterval';
 import { useAccountContext, useGameEditionContext, useLiquidityContext, useModalContext, usePactContext, useWalletContext } from '../../contexts';
+import reduceToken from '../../utils/reduceToken';
+import ConnectWalletModal from '../modals/kdaModals/ConnectWalletModal';
 
 const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   const pact = usePactContext();
@@ -238,7 +240,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
 
   const buttonStatus = () => {
     let status = {
-      0: { msg: 'Connect your KDA wallet', status: false },
+      0: { msg: 'Connect Wallet', status: true },
       1: { msg: 'Enter Amount', status: false },
       2: { msg: 'Supply', status: true },
       3: {
@@ -470,7 +472,22 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
             </FlexContainer>
           ) : (
             <FlexContainer className="justify-ce w-100" style={{ marginTop: 16 }}>
-              <CustomButton fluid type="gradient" disabled={!buttonStatus().status} onClick={() => supply()}>
+              <CustomButton
+                fluid
+                type="gradient"
+                disabled={!buttonStatus().status}
+                onClick={() => {
+                  if (!account.account.account) {
+                    return modalContext.openModal({
+                      title: account?.account.account ? 'wallet connected' : 'Connect Wallet',
+                      description: account?.account.account ? `Account ID: ${reduceToken(account.account.account)}` : '',
+                      content: <ConnectWalletModal />,
+                    });
+                  } else {
+                    supply();
+                  }
+                }}
+              >
                 {buttonStatus().msg}
               </CustomButton>
             </FlexContainer>

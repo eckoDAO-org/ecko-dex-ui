@@ -39,7 +39,7 @@ export const AddStakeModal = ({ onConfirm, alreadyStakedAmount, toStakeAmount })
     if (alreadyStakedAmount && alreadyStakedAmount > 0) {
       return `Adding more KDX to your staking amount will rebalance your multiplier depending on the amount staked and your current voting power.`;
     }
-    return `Stakers will earn ${STAKING_REWARDS_PERCENT}% on all swaps taking place on Kaddex. This will give holders a simple way to earn passive income while at the same
+    return `Stakers will earn ${STAKING_REWARDS_PERCENT} % on all swaps taking place on Kaddex. This will give holders a simple way to earn passive income while at the same
       time participating in our governance program.`;
   };
 

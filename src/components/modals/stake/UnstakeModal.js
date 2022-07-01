@@ -54,7 +54,7 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 16, fontSize: 16 }}>
               <Label>Rewards Penalty</Label>
-              <Label>{rewardPenalty.toFixed(2)}%</Label>
+              <Label>{rewardPenalty.toFixed(2)} %</Label>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 16, fontSize: 16 }}>
               <Label>Amount </Label>

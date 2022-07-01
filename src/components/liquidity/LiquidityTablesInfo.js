@@ -1,22 +1,28 @@
 import React from 'react';
 import { Divider } from 'semantic-ui-react';
+import { ROUTE_LIQUIDITY_POOLS } from '../../router/routes';
 import { FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
 
-const LiquidityTablesInfo = () => {
+const LiquidityTablesInfo = ({ pathname }) => {
   return (
     <FlexContainer className="column" gap={16}>
       <Label fontSize={16}>Fees</Label>
       <Label>Forget about gas-fees.</Label>
+      {pathname === ROUTE_LIQUIDITY_POOLS && (
+        <>
+          <Divider />
 
-      <Divider />
+          <Label fontSize={16}>KDX Multiplier</Label>
 
-      <Label fontSize={16}>KDX Multiplier</Label>
-      <Label>
-        The KDX liquidity mining programme is designed to both incentivize user participation and deepen pool liquidity, while ensuring that the KDX
-        vesting schedule remains predictable and sustainable over the long term. Withdrawing your rewards in the form of KDX will result in a boosted
-        APR.
-      </Label>
+          <Label>
+            The KDX liquidity mining programme is designed to both incentivize user participation and deepen pool liquidity, while ensuring that the
+            KDX vesting schedule remains predictable and sustainable over the long term. Withdrawing your rewards in the form of KDX will result in a
+            boosted APR.
+          </Label>
+        </>
+      )}
+
       <Divider />
       <Label fontSize={16}>APR</Label>
       <Label>

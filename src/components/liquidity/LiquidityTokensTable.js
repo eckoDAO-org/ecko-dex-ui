@@ -177,7 +177,7 @@ const renderColumns = (history) => {
     {
       name: 'APR',
       width: 120,
-      render: ({ item }) => `${item.apr.toFixed(2)}%`,
+      render: ({ item }) => `${item.apr.toFixed(2)} %`,
     },
   ];
 };

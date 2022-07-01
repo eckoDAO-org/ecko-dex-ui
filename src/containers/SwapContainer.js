@@ -646,7 +646,7 @@ const SwapContainer = () => {
         ) : (
           <>
             {gameEditionView ? (
-              <PixeledBlueContainer label="Max Slippage" value={`${pact.slippage * 100}%`} style={{ marginTop: 10 }} />
+              <PixeledBlueContainer label="Max Slippage" value={`${pact.slippage * 100} %`} style={{ marginTop: 10 }} />
             ) : (
               <>
                 <FlexContainer className="w-100 justify-sb" style={{ margin: '16px 0' }}>

@@ -139,7 +139,7 @@ const AccountModal = ({ pathname }) => {
             onClick={() => {
               modalContext.openModal({
                 title: account?.account ? 'wallet connected' : 'connect wallet',
-                description: account?.account ? `Account ID: ${reduceToken(account.account)}` : 'Connect a wallet using one of the methods below',
+                description: account?.account ? `Account ID: ${reduceToken(account.account)}` : '',
                 content: <ConnectWalletModal />,
               });
             }}

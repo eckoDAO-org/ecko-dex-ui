@@ -16,6 +16,7 @@ import HtmlFormatterContainer from './HtmlFormatterContainer';
 import useWindowSize from '../../hooks/useWindowSize';
 import CustomDropdown from '../shared/CustomDropdown';
 import { getTimeByBlockchain } from '../../utils/string-utils';
+import styled from 'styled-components';
 
 const AllProposalsContainer = ({ accountData }) => {
   const history = useHistory();
@@ -83,6 +84,15 @@ const AllProposalsContainer = ({ accountData }) => {
     { key: 1, text: `Oldest`, value: 'Oldest' },
   ];
 
+  const RowProposal = styled(FlexContainer)`
+    padding: 16px;
+    border-radius: 20px;
+    :hover {
+      background-image: ${({ theme: { backgroundContainer, backgroundTableHighlight } }) =>
+        `linear-gradient(to right, ${backgroundContainer}, ${backgroundTableHighlight},${backgroundContainer})`};
+    }
+  `;
+
   const [, height] = useWindowSize();
   return daoALlProposalsLoading ? (
     <AppLoader
@@ -130,45 +140,47 @@ const AllProposalsContainer = ({ accountData }) => {
         <FlexContainer
           className="column background-fill w-100"
           withGradient
-          style={{ height: 'min-content' }}
+          style={{ height: 'min-content', padding: 0 }}
           desktopStyle={{ maxHeight: `calc(${height}px - ${theme.header.height}px - 184px)` }}
           tabletStyle={{ maxHeight: `calc(${height}px - ${theme.header.height}px - 184px)` }}
         >
           <PartialScrollableScrollSection id="proposals-list" className="scrollbar-none" style={{ width: '100%' }}>
             {filteredProposals.length > 0 ? (
               filteredProposals.map((data, index) => (
-                <FlexContainer
-                  className="column pointer"
-                  key={index}
-                  onClick={() => history.push(ROUTE_DAO_PROPOSAL.replace(':proposal_id', data.id))}
-                >
-                  <FlexContainer className="align-ce" gap={8} style={{ marginBottom: 8 }}>
-                    <Label fontFamily="basier" fontSize={13} labelStyle={{ opacity: 0.7 }}>
-                      {moment(getTimeByBlockchain(data['creation-date'])).format('YYYY-MM-DD')}
-                    </Label>
-                    <Label
-                      fontFamily="basier"
-                      fontSize={10}
-                      color={'#fff'}
-                      labelStyle={{
-                        backgroundColor:
-                          moment(data['start-date'].time) <= moment() && moment(data['end-date'].time) >= moment()
-                            ? commonColors.active
-                            : commonColors.closed,
-                        borderRadius: 100,
-                        padding: '2px 8px',
-                      }}
-                    >
-                      {getStatusProposal(data)}
-                    </Label>
-                  </FlexContainer>
+                <>
+                  <RowProposal
+                    className="column pointer"
+                    key={index}
+                    onClick={() => history.push(ROUTE_DAO_PROPOSAL.replace(':proposal_id', data.id))}
+                  >
+                    <FlexContainer className="align-ce" gap={8} style={{ marginBottom: 8 }}>
+                      <Label fontFamily="basier" fontSize={13} labelStyle={{ opacity: 0.7 }}>
+                        {moment(getTimeByBlockchain(data['creation-date'])).format('YYYY-MM-DD')}
+                      </Label>
+                      <Label
+                        fontFamily="basier"
+                        fontSize={10}
+                        color={'#fff'}
+                        labelStyle={{
+                          backgroundColor:
+                            moment(data['start-date'].time) <= moment() && moment(data['end-date'].time) >= moment()
+                              ? commonColors.active
+                              : commonColors.closed,
+                          borderRadius: 100,
+                          padding: '2px 8px',
+                        }}
+                      >
+                        {getStatusProposal(data)}
+                      </Label>
+                    </FlexContainer>
 
-                  <Label fontFamily="basier" fontSize={16} labelStyle={{ marginBottom: 4 }}>
-                    {data?.title}
-                  </Label>
-                  <HtmlFormatterContainer htmlText={data?.description} asAString />
-                  {index < filteredProposals.length - 1 && <Divider />}
-                </FlexContainer>
+                    <Label fontFamily="basier" fontSize={16} labelStyle={{ marginBottom: 4 }}>
+                      {data?.title}
+                    </Label>
+                    <HtmlFormatterContainer htmlText={data?.description} asAString />
+                  </RowProposal>
+                  {index < filteredProposals.length - 1 && <Divider style={{ margin: '0px', margin: '0px 16px' }} />}
+                </>
               ))
             ) : (
               <Label className="justify-ce">No proposals</Label>

@@ -18,8 +18,8 @@ const VotingPower = ({ daoAccountData }) => {
           <Label fontFamily="syncopate" fontSize={24} labelStyle={{ marginRight: 16 }}>
             Voting Power (V)
           </Label>
-          <VotingPowerFormulaIcon width={88} />
-          <Label fontSize={38} className="gradient" fontFamily="syncopate" labelStyle={{ marginLeft: 20 }}>
+          <VotingPowerFormulaIcon width={88} height={37} />
+          <Label fontSize={32} className="gradient" fontFamily="syncopate" labelStyle={{ marginLeft: 20 }}>
             {daoAccountData?.vp
               ? daoAccountData?.vp >= 1000
                 ? humanReadableNumber(extractDecimal(daoAccountData.vp).toFixed(2))
@@ -29,7 +29,7 @@ const VotingPower = ({ daoAccountData }) => {
         </EquationContainer>
       }
     >
-      <div className="flex align-ce">
+      <div className="flex align-ce" style={{ marginTop: 16 }}>
         <Label fontFamily="syncopate" fontSize={16}>
           multiplier (m)
         </Label>

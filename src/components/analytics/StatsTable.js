@@ -123,7 +123,7 @@ const renderColumns = (history) => {
     },
 
     {
-      name: '24H Price Change',
+      name: '24h Price Change',
       width: 160,
       render: ({ item }) => {
         return <GraphicPercentage componentStyle={{ margin: 0 }} prevValue={item.dailyPriceChange[0]} currentValue={item.dailyPriceChange[1]} />;
@@ -131,14 +131,14 @@ const renderColumns = (history) => {
     },
 
     {
-      name: '24H Volume',
+      name: '24h Volume',
       width: 160,
       render: ({ item }) => {
         return `$ ${humanReadableNumber(extractDecimal(item.dailyVolume))}`;
       },
     },
     {
-      name: '24H Volume Change',
+      name: '24h Volume Change',
       width: 160,
       render: ({ item }) => {
         return <GraphicPercentage componentStyle={{ margin: 0 }} prevValue={item.dailyVolumeChange[0]} currentValue={item.dailyVolumeChange[1]} />;

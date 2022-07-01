@@ -3,6 +3,7 @@ import styled from 'styled-components/macro';
 import { BoosterIcon, CoinKaddexIcon, CoinsIcon, KaddexOutlineIcon } from '../../assets';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { useLiquidityContext } from '../../contexts';
+import theme from '../../styles/theme';
 import { FlexContainer } from '../shared/FlexContainer';
 import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
@@ -15,7 +16,7 @@ const RewardBooster = ({ type, apr, handleState }) => {
       <Label fontFamily="syncopate">
         {wantsKdxRewards ? (
           <>
-            <BoosterIcon style={{ marginRight: 10 }} /> KDX MULTIPLIER
+            <BoosterIcon className="svg-app-color" style={{ marginRight: 10 }} /> KDX MULTIPLIER
           </>
         ) : (
           'STANDARD REWARDS'
@@ -34,10 +35,19 @@ const RewardBooster = ({ type, apr, handleState }) => {
               }
             }}
           />
-          {wantsKdxRewards ? <CoinKaddexIcon width={24} height={24} /> : <KaddexOutlineIcon width={24} height={24} />}
+          {wantsKdxRewards ? (
+            <CoinKaddexIcon width={24} height={24} />
+          ) : (
+            <KaddexOutlineIcon
+              className="svg-app-color"
+              style={{ border: `1px solid ${theme.colors.white}`, borderRadius: '100%' }}
+              width={24}
+              height={24}
+            />
+          )}
         </FlexContainer>
         <div className="flex column">
-          <Label fontSize={24}>{apr?.toFixed(2)}% APR</Label>
+          <Label fontSize={24}>{apr?.toFixed(2)} % APR</Label>
           {wantsKdxRewards && (
             <Label className="justify-fe" fontSize={13} withShade labelStyle={{ marginTop: 4 }}>
               3.00 x
@@ -53,7 +63,7 @@ const RewardBooster = ({ type, apr, handleState }) => {
               KDX Rewards Available
               <InfoPopup size={16} type="modal" title="KDX Rewards Available">
                 <Label>
-                  Accounting for 40% of the overall supply, Network Rewards serve a crucial function of both attracting liquidity and mitigating
+                  Accounting for 40 % of the overall supply, Network Rewards serve a crucial function of both attracting liquidity and mitigating
                   impermanent loss. Their emission is programmatical, diminishing and time oriented.
                 </Label>
                 <Label labelStyle={{ marginTop: 8 }}>
@@ -64,7 +74,7 @@ const RewardBooster = ({ type, apr, handleState }) => {
               </InfoPopup>
             </Label>
           </div>
-          <Label fontSize={13}>{apr?.toFixed(2)}%</Label>
+          <Label fontSize={13}>{apr?.toFixed(2)} %</Label>
         </div>
       )}
       {type === LIQUIDITY_VIEW.REMOVE_LIQUIDITY && (

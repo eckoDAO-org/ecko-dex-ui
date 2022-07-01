@@ -32,7 +32,7 @@ const PenaltyRewardsInfo = () => {
         ]}
       />
       <Divider />
-      <Label>Rewards withdrawal is accessible every 7 days</Label>
+      <Label>Rewards withdrawal is accessible every 7 days.</Label>
     </FlexContainer>
   );
 };

@@ -54,7 +54,7 @@ const LiquidityContainer = () => {
           </Label>
           {(pathname === ROUTE_LIQUIDITY_TOKENS || pathname === ROUTE_LIQUIDITY_POOLS) && (
             <InfoPopup type="modal" title="Liquidity" containerStyle={{ marginLeft: 0 }}>
-              <LiquidityTablesInfo />
+              <LiquidityTablesInfo pathname={pathname} />
             </InfoPopup>
           )}
         </FlexContainer>

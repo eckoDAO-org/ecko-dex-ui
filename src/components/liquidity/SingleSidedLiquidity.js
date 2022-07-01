@@ -7,6 +7,8 @@ import { useAccountContext, useLiquidityContext, useModalContext, usePactContext
 import { useInterval } from '../../hooks/useInterval';
 import noExponents from '../../utils/noExponents';
 import { extractDecimal, getCorrectBalance, getDecimalPlaces, humanReadableNumber, limitDecimalPlaces } from '../../utils/reduceBalance';
+import reduceToken from '../../utils/reduceToken';
+import ConnectWalletModal from '../modals/kdaModals/ConnectWalletModal';
 import { SuccessAddSigleSideView } from '../modals/liquidity/LiquidityTxView';
 import SelectPoolModal from '../modals/liquidity/SelectPoolModal';
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
@@ -146,7 +148,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
 
   const buttonStatus = () => {
     let status = {
-      0: { msg: 'Connect your KDA wallet', status: false },
+      0: { msg: 'Connect Wallet', status: true },
       1: { msg: 'Enter Amount', status: false },
       2: { msg: 'Supply', status: true },
       3: {
@@ -158,7 +160,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
       6: { msg: 'Select different tokens', status: false },
       7: { msg: 'Fetching Pair...', status: false },
     };
-    if (!account.account) return status[0];
+    if (!account.account.account) return status[0];
     if (fetchingPair) {
       return status[7];
     }
@@ -283,7 +285,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
         <Input
           error={isNaN(fromValue.amount)}
           topLeftLabel="amount"
-          topRightLabel={`balance: ${getDecimalPlaces(fromValue.balance) ?? '-'}`}
+          topRightLabel={`balance: ${fromValue.balance ? getDecimalPlaces(fromValue.balance) : '-'}`}
           bottomLeftLabel={`balance: ${getDecimalPlaces(fromValue.balance) ?? '-'}`} //using for gameEdition
           geColor="black"
           placeholder="0.0"
@@ -328,7 +330,22 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
           </Label>
         </FlexContainer>
 
-        <CustomButton fluid type="gradient" disabled={!buttonStatus().status} onClick={() => supply()}>
+        <CustomButton
+          fluid
+          type="gradient"
+          disabled={!buttonStatus().status}
+          onClick={() => {
+            if (!account.account.account) {
+              return modalContext.openModal({
+                title: account?.account.account ? 'wallet connected' : 'Connect Wallet',
+                description: account?.account.account ? `Account ID: ${reduceToken(account.account.account)}` : '',
+                content: <ConnectWalletModal />,
+              });
+            } else {
+              supply();
+            }
+          }}
+        >
           {buttonStatus().msg}
         </CustomButton>
       </FlexContainer>

@@ -18,6 +18,12 @@ const AnalyticsInfo = () => {
       <Label fontSize={16}>Daily Volume:</Label>
       <Label>Its value refers to the overall DEX Volume.</Label>
       <Divider />
+      <Label fontSize={16}>KDX Burned:</Label>
+      <Label>
+        It represents the total amount of KDX that has been burned through penalties on the position or rewards consequent to unstaking within the
+        first 72h or withdrawing rewards within the initial 60-day window, respectively.
+      </Label>
+      <Divider />
       <Label fontSize={16}>Staked Share:</Label>
       <Label>Your personal percentage share of KDX amongst all the KDX currently being staked.</Label>
       <Divider />

@@ -98,7 +98,7 @@ export const LiquidityProvider = (props) => {
           error: true,
           title: 'Wallet Signing Failure',
           content:
-            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kadenaswap.',
+            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kaddex.',
         });
       console.log(e);
     }
@@ -180,7 +180,7 @@ export const LiquidityProvider = (props) => {
           error: true,
           title: 'Wallet Signing Failure',
           content:
-            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kadenaswap.',
+            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kaddex.',
         });
       console.log(e);
     }
@@ -268,7 +268,7 @@ export const LiquidityProvider = (props) => {
           error: true,
           title: 'Wallet Signing Failure',
           content:
-            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kadenaswap.',
+            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kaddex.',
         });
       console.log(e);
     }

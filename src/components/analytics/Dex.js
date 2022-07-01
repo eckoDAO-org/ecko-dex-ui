@@ -273,7 +273,7 @@ const Dex = ({ kdaPrice }) => {
         />
       </FlexContainer>
       <FlexContainer>
-        <StackedBarChart title="Tvl Details" data={NETWORK_TYPE === 'mainnet' ? tokensVolumes : fakeTokensVolume} />
+        <StackedBarChart title="TVL Details" data={NETWORK_TYPE === 'mainnet' ? tokensVolumes : fakeTokensVolume} />
       </FlexContainer>
       <FlexContainer>
         <StackedBarChart

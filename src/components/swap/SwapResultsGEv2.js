@@ -13,11 +13,11 @@ const SwapResultsGEv2 = ({ priceImpact, fromValues, toValues }) => {
         label="price impact"
         value={
           pact.priceImpactWithoutFee(priceImpact) < 0.0001 && pact.priceImpactWithoutFee(priceImpact)
-            ? '< 0.01%'
-            : `${reduceBalance(pact.priceImpactWithoutFee(priceImpact) * 100, 4)}%`
+            ? '< 0.01 %'
+            : `${reduceBalance(pact.priceImpactWithoutFee(priceImpact) * 100, 4)} %`
         }
       />
-      <PixeledBlueContainer label="max slippage" value={`${pact.slippage * 100}%`} />
+      <PixeledBlueContainer label="max slippage" value={`${pact.slippage * 100} %`} />
 
       <PixeledBlueContainer
         label="lp fee"

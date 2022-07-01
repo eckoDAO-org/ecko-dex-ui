@@ -108,7 +108,6 @@ const SlippagePopupContent = ({ className }) => {
   useOnClickOutside(ref, () => setShowSlippageContent(false));
 
   const [slp, setSlp] = useState(pact.slippage * 100);
-  console.log('🚀 log --> slp', slp);
   const [tl, setTl] = useState(pact.ttl / 60);
   useEffect(() => {
     if (slp) (async () => pact.storeSlippage(slp / 100))();
