@@ -47,7 +47,7 @@ const StatsTable = () => {
             ...t,
             price,
             dailyPriceChange: [price24Diff?.initial, price24Diff?.final],
-            dailyVolume: volume24?.final * price24Diff?.final,
+            dailyVolume: price24Diff?.final && volume24?.final ? volume24?.final * price24Diff?.final : 0,
             dailyVolumeChange: [volume24?.initial * kdaUsdPrice, volume24?.final * kdaUsdPrice],
           });
         }
