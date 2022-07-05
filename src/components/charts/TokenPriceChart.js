@@ -174,7 +174,7 @@ const TokenPriceChart = ({ tokenData, height }) => {
           </STYChartContainer>
         </div>
       ) : (
-        <div style={{ width: '100%', height }}>
+        <div style={{ width: '100%', height: 'auto' }}>
           <StyledApexChart
             themeMode={themeMode}
             type="candlestick"
@@ -187,7 +187,6 @@ const TokenPriceChart = ({ tokenData, height }) => {
             ]}
             options={{
               chart: {
-                height: 350,
                 type: 'candlestick',
               },
               tooltip: {

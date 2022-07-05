@@ -23,10 +23,10 @@ const GraphicPercentage = ({ prevValue, currentValue, componentStyle }) => {
         ...componentStyle,
       }}
     >
-      {percentage >= 0 ? <TradeUpIcon className="svg-app-color" /> : <TradeDownIcon className="svg-app-color" />}
+      {percentage >= 0 ? <TradeUpIcon /> : <TradeDownIcon />}
       {
-        <Label>
-          {percentage >= 0 ? '+' : '-'} {Math.abs(percentage.toFixed(1))} %
+        <Label color="white">
+          {percentage >= 0 ? '+' : '-'} {Math.abs((percentage || 0).toFixed(1))} %
         </Label>
       }
     </FlexContainer>
