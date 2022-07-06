@@ -193,7 +193,7 @@ const Input = ({
         }}
         style={inputStyle}
       />
-      {bottomContent}
+      {bottomContent || ''}
       {(bottomLeftLabel || bottomRightLabel) && gameEditionView && (
         <BottomLabelsContainer>
           {bottomLeftLabel && (
