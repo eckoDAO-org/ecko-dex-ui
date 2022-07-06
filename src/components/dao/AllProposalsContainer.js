@@ -110,7 +110,7 @@ const AllProposalsContainer = ({ accountData }) => {
         <Label fontSize={24} fontFamily="syncopate">
           proposals
         </Label>
-        <FlexContainer gap={16} desktopStyle={{ paddingRight: 284 }}>
+        <FlexContainer gap={16} desktopStyle={{ paddingRight: 284 }} mobileStyle={{ marginTop: 16 }}>
           <CustomDropdown
             title="filter by:"
             options={filterByOptions}

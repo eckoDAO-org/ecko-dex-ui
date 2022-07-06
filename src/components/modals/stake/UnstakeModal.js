@@ -60,8 +60,8 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
               <Label>Amount </Label>
               <div style={{ textAlign: 'right' }}>
                 <Label>{estimateUnstakeData['reward-penalty'].toFixed(2)} KDX</Label>
-                <Label style={{ color: 'grey', fontSize: 13, marginTop: 4 }}>
-                  {(estimateUnstakeData['reward-penalty'] * tokensUsdPrice?.KDX).toFixed(2)} $
+                <Label className="justify-fe" style={{ color: 'grey', fontSize: 13, marginTop: 4 }}>
+                  $ {(estimateUnstakeData['reward-penalty'] * tokensUsdPrice?.KDX).toFixed(2)}
                 </Label>
               </div>
             </div>

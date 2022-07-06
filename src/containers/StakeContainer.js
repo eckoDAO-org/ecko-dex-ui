@@ -123,6 +123,9 @@ const StakeContainer = () => {
     if (!inputAmount) {
       errorMessage = 'The amount to stake is not valid';
     }
+    if (!(inputAmount > 0)) {
+      errorMessage = 'Amount must be positive';
+    }
     if (inputAmount > kdxAccountBalance) {
       errorMessage = "You dont't have enough KDX";
     }
@@ -197,7 +200,7 @@ const StakeContainer = () => {
   };
 
   const onRollupAndUnstake = async () => {
-    if (!estimateUnstakeData?.staked || inputAmount > estimateUnstakeData?.staked || !inputAmount) {
+    if (!estimateUnstakeData?.staked || inputAmount > estimateUnstakeData?.staked || !inputAmount || !(inputAmount > 0)) {
       showNotification({
         title: 'Unstake error',
         message: 'The amount to unstake is not valid',
@@ -384,6 +387,7 @@ const StakeContainer = () => {
               pathname !== ROUTE_UNSTAKE ? Number(kdxAccountBalance.toFixed(12)) : Number(estimateUnstakeData?.staked.toFixed(12)) || 0.0
             )
           }
+          kdxAccountBalance={kdxAccountBalance}
           setKdxAmount={(value) => setInputAmount(value)}
           onSubmitStake={() => (pathname !== ROUTE_UNSTAKE ? onStakeKDX() : onRollupAndUnstake())}
           stakedTimeStart={stakedTimeStart}

@@ -20,6 +20,7 @@ const Position = ({
   stakedTimeStart,
   pendingAmount,
   topRightLabel,
+  kdxAccountBalance,
   inputAmount,
   isInputDisabled,
   setKdxAmount,
@@ -125,7 +126,17 @@ const Position = ({
           }
         }}
       >
-        {!account.account ? 'Connect Wallet' : buttonLabel}
+        {!account.account
+          ? 'Connect Wallet'
+          : inputAmount === '' || !(inputAmount > 0)
+          ? 'enter amount'
+          : pathname === ROUTE_UNSTAKE
+          ? inputAmount > amount
+            ? 'insufficient kdx amount'
+            : buttonLabel
+          : inputAmount > kdxAccountBalance
+          ? 'insufficient kdx amount'
+          : buttonLabel}
       </CustomButton>
     </CommonWrapper>
   );

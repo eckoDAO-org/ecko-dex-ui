@@ -235,7 +235,7 @@ const Dex = ({ kdaPrice }) => {
     <AppLoader containerStyle={{ height: '100%', alignItems: 'center', justifyContent: 'center' }} />
   ) : (
     <FlexContainer className="w-100 column" mobileClassName="column" gap={24}>
-      <FlexContainer className="w-100" mobileClassName="column" gap={24}>
+      <FlexContainer className="w-100" mobileClassName="column" tabletClassName="column" gap={24}>
         <TVLChart kdaPrice={kdaPrice} height={300} />
 
         <VolumeChart kdaPrice={kdaPrice} height={300} />
