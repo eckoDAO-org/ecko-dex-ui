@@ -55,7 +55,7 @@ const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt }) => {
           <Label fontSize={24}>
             {(dailyUSDIncome && tokensUsdPrice?.KDX && humanReadableNumber(dailyUSDIncome / tokensUsdPrice?.KDX)) || '-'} KDX
           </Label>
-          {dailyUSDIncome && <SubLabel>$ {(dailyUSDIncome && humanReadableNumber(dailyUSDIncome)) || '-'}</SubLabel>}
+          {dailyUSDIncome ? <SubLabel>$ {(dailyUSDIncome && humanReadableNumber(dailyUSDIncome)) || ''}</SubLabel> : ''}
         </div>
         <div>
           <div className="flex column align-fe">

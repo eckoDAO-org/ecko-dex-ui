@@ -41,7 +41,7 @@ const VotingPower = ({ daoAccountData }) => {
           </Label>
         </InfoPopup>
 
-        {daoAccountData?.multiplier && <Label labelStyle={{ marginLeft: 8 }}>{daoAccountData?.multiplier?.toFixed(5)} x</Label>}
+        {daoAccountData?.multiplier ? <Label labelStyle={{ marginLeft: 8 }}>{daoAccountData?.multiplier?.toFixed(5)} x</Label> : ''}
       </div>
 
       <div>

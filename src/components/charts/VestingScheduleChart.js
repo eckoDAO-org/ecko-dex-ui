@@ -68,7 +68,7 @@ const VestingScheduleChart = ({ height }) => {
             }}
           >
             <XAxis dataKey="name" interval={vestingRanges[vestingEndDate].interval} />
-            <YAxis domain={[0, 100]} tickFormatter={(value) => `${value}%`} />
+            <YAxis domain={[0, 100]} tickFormatter={(value) => `${value} %`} />
             <Tooltip
               content={(data) => {
                 return (
@@ -76,7 +76,7 @@ const VestingScheduleChart = ({ height }) => {
                     <span className="popupTitle">{data.payload[0]?.payload?.name}</span>
                     {data.payload?.map((p, j) => (
                       <div key={j} style={{ color: p.color, marginTop: 10 }}>
-                        {p.name}: {p.value}%
+                        {p.name}: {p.value} %
                       </div>
                     ))}
                   </VestingPopup>

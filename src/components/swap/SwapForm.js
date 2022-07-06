@@ -179,18 +179,12 @@ const SwapForm = ({ label, fromValues, setFromValues, toValues, setToValues, fro
             numberOnly
             inputRightComponent={
               <InputToken
+                withoutMAX
                 geColor="white"
                 values={toValues}
                 disabledButton={!toValues.balance}
                 onClick={() => {
                   setTokenSelectorType('to');
-                }}
-                onMaxClickButton={() => {
-                  setInputSide('to');
-                  setToValues((prev) => ({
-                    ...prev,
-                    amount: extractDecimal(toValues.balance),
-                  }));
                 }}
               />
             }

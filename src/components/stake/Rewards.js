@@ -28,9 +28,16 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
 
   const getWaitingTimeRewardsPenalty = () => {
     if (stakedTimeStart) {
-      const daysToWait = 60 - moment().diff(stakedTimeStart, 'days');
+      {
+        /* change back to 60 (60days) */
+      }
+      /* const daysToWait = 60 - moment().diff(stakedTimeStart, 'days'); */
+      const daysToWait = 0;
       //1440 = 24h * 60 days
-      const hoursToWait = 1440 - moment().diff(stakedTimeStart, 'hours');
+      {
+        /* change back to 1440 (24h * 60 days) */
+      }
+      const hoursToWait = 6 - moment().diff(stakedTimeStart, 'hours');
       if (daysToWait > 1) {
         return `${daysToWait} days left`;
       } else {
@@ -49,9 +56,16 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
     if (rewardAccrued === 0) {
       return 'withdraw';
     } else if (lastRewardsClaim) {
-      const daysToWait = 7 - moment().diff(getTimeByBlockchain(lastRewardsClaim), 'days');
+      {
+        /* change back to 7 (7days) */
+      }
+      /* const daysToWait = 7 - moment().diff(getTimeByBlockchain(lastRewardsClaim), 'days'); */
+      const daysToWait = 0;
       //168 = 24h * 7 days
-      const hoursToWait = 168 - moment().diff(getTimeByBlockchain(lastRewardsClaim), 'hours');
+      {
+        /* change back to 168 (24h * 7 days) */
+      }
+      const hoursToWait = 2 - moment().diff(getTimeByBlockchain(lastRewardsClaim), 'hours');
       if (daysToWait > 1) {
         return `withdraw in ${daysToWait} days`;
       } else {
@@ -67,7 +81,7 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
   const getPenaltyColor = () => {
     if (!rewardsPenalty && !rewardAccrued) {
       return null;
-    } else if (moment().diff(stakedTimeStart, 'days') >= 60) {
+    } /* change back to: else if (moment().diff(stakedTimeStart, 'hours') >= 60) */ else if (moment().diff(stakedTimeStart, 'hours') >= 6) {
       return commonColors.green;
     } else {
       return commonColors.red;
@@ -99,10 +113,12 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
         <Label fontSize={24} color={getPenaltyColor()}>
           {getPenaltyRewardsString()[0] !== '0.00' ? getPenaltyRewardsString()[0] : '-'} KDX
         </Label>
-        {rewardsPenalty && (
+        {rewardsPenalty ? (
           <Label fontSize={16} color={getPenaltyColor()}>
             {getPenaltyRewardsString()[1] || '-'} %
           </Label>
+        ) : (
+          ''
         )}
       </div>
       <CustomButton type="primary" disabled={disabled} onClick={() => onWithdrawClick()}>

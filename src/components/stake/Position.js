@@ -92,27 +92,36 @@ const Position = ({
           setKdxAmount(limitDecimalPlaces(value, 7));
         }}
       />
-      {pathname === ROUTE_UNSTAKE && stakedTimeStart && moment().diff(stakedTimeStart, 'hours') < 72 && extractDecimal(amount) > 0 && (
-        <div style={{ marginTop: 16 }}>
-          <div className="flex align-ce">
-            <Label>Position Penalty</Label>
+      {pathname === ROUTE_UNSTAKE &&
+        stakedTimeStart &&
+        /*change back to: moment().diff(stakedTimeStart, 'hours') < 72 */ moment().diff(stakedTimeStart, 'hours') < 1 &&
+        extractDecimal(amount) > 0 && (
+          <div style={{ marginTop: 16 }}>
+            <div className="flex align-ce">
+              <Label>Position Penalty</Label>
+            </div>
+            <Label fontSize={24} color={commonColors.red}>
+              3 %
+            </Label>
+            <Label fontSize={16} color={commonColors.red}>
+              {/* change back to 72 (3days) */}
+              {`${(stakedTimeStart && 1 - moment().diff(stakedTimeStart, 'hours')) || '-'} ${
+                stakedTimeStart && (1 - moment().diff(stakedTimeStart, 'hours') > 1 ? 'hours' : 'hour')
+              } `}
+              left
+            </Label>
           </div>
-          <Label fontSize={24} color={commonColors.red}>
-            3 %
-          </Label>
-          <Label fontSize={16} color={commonColors.red}>
-            {`${(stakedTimeStart && 72 - moment().diff(stakedTimeStart, 'hours')) || '-'} ${
-              stakedTimeStart && (72 - moment().diff(stakedTimeStart, 'hours') > 1 ? 'hours' : 'hour')
-            } `}
-            left
-          </Label>
-        </div>
-      )}
+        )}
       <CustomButton
         type="gradient"
         buttonStyle={{
           marginTop:
-            pathname === ROUTE_UNSTAKE && stakedTimeStart && moment().diff(stakedTimeStart, 'hours') < 72 && extractDecimal(amount) > 0 ? 16 : 24,
+            pathname === ROUTE_UNSTAKE &&
+            stakedTimeStart &&
+            /*change back to: moment().diff(stakedTimeStart, 'hours') < 72 */ moment().diff(stakedTimeStart, 'hours') < 1 &&
+            extractDecimal(amount) > 0
+              ? 16
+              : 24,
         }}
         onClick={() => {
           if (!account.account) {

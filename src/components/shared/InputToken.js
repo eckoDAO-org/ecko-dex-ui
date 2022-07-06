@@ -61,7 +61,7 @@ const ElementsContainer = styled.div`
   }
 `;
 
-const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor }) => {
+const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor, withoutMAX }) => {
   const { gameEditionView } = useGameEditionContext();
   const { themeMode } = useApplicationContext();
 
@@ -69,7 +69,7 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
     <Container $gameEditionView={gameEditionView} geColor={geColor} coin={values?.coin}>
       {values?.coin ? (
         <>
-          {!gameEditionView && (
+          {!gameEditionView && !withoutMAX && (
             <CustomButton
               buttonStyle={{
                 padding: '12px 8px',
