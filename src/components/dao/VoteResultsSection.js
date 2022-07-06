@@ -6,13 +6,13 @@ import ProgressBar from '../shared/ProgressBar';
 
 const VoteResultsSection = ({ proposalData }) => {
   return (
-    <FlexContainer className="column" mobileStyle={{ marginBottom: 16 }}>
+    <FlexContainer gap={16} className="column" mobileStyle={{ marginBottom: 16 }}>
+      <FlexContainer className="column" gap={10} style={{ height: 'min-content' }} desktopStyle={{ width: 268 }}>
+        <Label fontSize={16} fontFamily="syncopate">
+          voting results
+        </Label>
+      </FlexContainer>
       <FlexContainer className="column background-fill" gap={16} withGradient style={{ height: 'min-content' }} desktopStyle={{ width: 268 }}>
-        <FlexContainer className="column" gap={10} style={{ height: 'min-content' }} desktopStyle={{ width: 268 }}>
-          <Label fontSize={16} fontFamily="syncopate">
-            voting results
-          </Label>
-        </FlexContainer>
         <ProgressBar
           topLabelLeft="Yes"
           currentValue={proposalData['tot-approved']}

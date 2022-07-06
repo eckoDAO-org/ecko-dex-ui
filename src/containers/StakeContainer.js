@@ -95,7 +95,7 @@ const StakeContainer = () => {
 
   const getAddStakeModalTitle = () => {
     if (estimateUnstakeData?.staked && estimateUnstakeData?.staked > 0) {
-      return `ADDING MORE KDX TO YOUR STAKING AMOUNT?`;
+      return `ADDING MORE KDX TO YOUR STAKING AMOUNT`;
     }
     return `Transaction details`;
   };
@@ -104,7 +104,7 @@ const StakeContainer = () => {
     if (estimateUnstakeData?.staked && estimateUnstakeData?.staked > 0) {
       const diffDays = moment().diff(stakedTimeStart, 'days');
       const isPenaltyActive = diffDays <= 60;
-      return `CLOSING YOUR STAKING PLAN${isPenaltyActive && ' EARLY'}?`;
+      return `CLOSING YOUR STAKING PLAN${isPenaltyActive && ' EARLY'}`;
     }
     return `Transaction details`;
   };
@@ -290,7 +290,7 @@ const StakeContainer = () => {
     const signedCommand = await signCommand(command);
     if (signedCommand) {
       openModal({
-        title: 'WITHDRAW YOUR STAKING REWARDS?',
+        title: 'WITHDRAW YOUR STAKING REWARDS',
         description: '',
         onClose: () => {
           closeModal();

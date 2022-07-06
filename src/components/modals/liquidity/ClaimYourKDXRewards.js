@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-import { KaddexOutlineIcon } from '../../../assets';
 import { getTokenIconById } from '../../../utils/token-utils';
 import CustomButton from '../../shared/CustomButton';
 import CustomDivider from '../../shared/CustomDivider';
@@ -22,10 +21,6 @@ export const IconSubTitle = styled.div`
 const ClaimYourKDXRewards = ({ multiplier }) => {
   return (
     <FlexContainer className="column" gap={16}>
-      <IconSubTitle>
-        <KaddexOutlineIcon />
-      </IconSubTitle>
-
       <div className="flex justify-sb">
         <Label fontSize={16}>KDX Multiplier</Label>
         <Label fontSize={16}>{multiplier.toFixed(2)} x</Label>

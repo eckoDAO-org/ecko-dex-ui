@@ -4,7 +4,6 @@ import styled, { css } from 'styled-components/macro';
 import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
 import { useApplicationContext, useGameEditionContext, usePactContext } from '../../../contexts';
 import Input from '../../../components/shared/Input';
-import LightModeToggle from '../../../components/shared/LightModeToggle';
 import Label from '../../shared/Label';
 import { CogIcon } from '../../../assets';
 import { FlexContainer } from '../../shared/FlexContainer';
@@ -124,11 +123,6 @@ const SlippagePopupContent = ({ className }) => {
             <Label outGameEditionView fontSize={13} fontFamily="syncopate">
               Transactions Settings
             </Label>
-            {!gameEditionView && (
-              <Row style={{ marginTop: 16 }}>
-                <LightModeToggle />
-              </Row>
-            )}
 
             <Label outGameEditionView fontSize={13} labelStyle={{ marginTop: 16 }}>
               Slippage Tolerance

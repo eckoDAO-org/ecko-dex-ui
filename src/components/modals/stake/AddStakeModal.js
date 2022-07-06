@@ -1,7 +1,6 @@
 import React from 'react';
 import CustomButton from '../../shared/CustomButton';
 import CustomDivider from '../../shared/CustomDivider';
-import { KaddexOutlineIcon } from '../../../assets';
 import styled from 'styled-components';
 import { STAKING_REWARDS_PERCENT } from '../../../constants/contextConstants';
 import Label from '../../shared/Label';
@@ -45,9 +44,6 @@ export const AddStakeModal = ({ onConfirm, alreadyStakedAmount, toStakeAmount })
 
   return (
     <div>
-      <IconSubTitle>
-        <KaddexOutlineIcon />
-      </IconSubTitle>
       <div>
         <Label>{getModalText()}</Label>
       </div>

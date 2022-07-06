@@ -137,7 +137,7 @@ const RemoveLiquidityContent = ({ pair }) => {
   useEffect(() => {
     if (showTxModal) {
       modalContext.openModal({
-        title: 'remove liquidity?',
+        title: 'remove liquidity',
         description: '',
         onClose: () => {
           modalContext.closeModal();
@@ -197,6 +197,7 @@ const RemoveLiquidityContent = ({ pair }) => {
             topComponent={<Label labelStyle={{ marginBottom: 16 }}>Amount</Label>}
             inputRightComponent={
               <FlexContainer className="align-ce h-fit-content">
+                <Label labelStyle={{ marginRight: 4 }}>%</Label>
                 <CustomButton
                   buttonStyle={{
                     padding: 0,
@@ -210,7 +211,6 @@ const RemoveLiquidityContent = ({ pair }) => {
                 >
                   Max
                 </CustomButton>
-                <Label labelStyle={{ marginLeft: 4 }}>%</Label>
               </FlexContainer>
             }
             onChange={(e) => {

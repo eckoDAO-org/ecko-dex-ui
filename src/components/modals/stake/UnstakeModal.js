@@ -3,12 +3,11 @@ import moment from 'moment';
 import CustomButton from '../../shared/CustomButton';
 import CustomDivider from '../../shared/CustomDivider';
 import { CoinKaddexIcon } from '../../../assets';
-import { KaddexOutlineIcon } from '../../../assets';
 import { usePactContext } from '../../../contexts';
-import { StakeModalRow, IconSubTitle } from './AddStakeModal';
+import { StakeModalRow } from './AddStakeModal';
 import Label from '../../shared/Label';
 import CustomCheckbox from '../../shared/CustomCheckbox';
-import { getDecimalPlaces, humanReadableNumber } from '../../../utils/reduceBalance';
+import { getDecimalPlaces } from '../../../utils/reduceBalance';
 import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
 import { getTokenIconByCode } from '../../../utils/token-utils';
 
@@ -36,7 +35,9 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
               <Label>Amount </Label>
               <div style={{ textAlign: 'right' }}>
                 <Label>{getDecimalPlaces(toUnstakeAmount * 0.03)} KDX</Label>
-                <Label labelStyle={{ opacity: 0.7, fontSize: 13, marginTop: 4 }}>{(toUnstakeAmount * 0.03 * tokensUsdPrice?.KDX).toFixed(2)} $</Label>
+                <Label className="justify-fe" labelStyle={{ opacity: 0.7, fontSize: 13, marginTop: 4 }}>
+                  $ {(toUnstakeAmount * 0.03 * tokensUsdPrice?.KDX).toFixed(2)}
+                </Label>
               </div>
             </div>
           </div>
@@ -87,18 +88,17 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
 
   return (
     <div>
-      <IconSubTitle>
-        <KaddexOutlineIcon />
-      </IconSubTitle>
       {getUnstakeModalContent()}
       <Label fontSize={16}>Unstaked Amount</Label>
       <StakeModalRow>
         <RowTokenInfoPrice tokenIcon={getTokenIconByCode('kaddex.kdx')} tokenName="KDX" amount={toUnstakeAmount} tokenPrice={tokensUsdPrice?.KDX} />
       </StakeModalRow>
-      {isRewardsAvailable && (
+      {isRewardsAvailable ? (
         <StakeModalRow style={{ margin: '8px 0px 0px 4px' }}>
           <CustomCheckbox onClick={() => setChecked(!checked)}>Withdraw your KDX staking rewards</CustomCheckbox>
         </StakeModalRow>
+      ) : (
+        ''
       )}
 
       {checked && (

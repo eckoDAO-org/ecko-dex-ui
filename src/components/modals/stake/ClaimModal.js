@@ -1,8 +1,6 @@
 import React from 'react';
 import CustomButton from '../../shared/CustomButton';
-import CustomDivider from '../../shared/CustomDivider';
-import { KaddexOutlineIcon } from '../../../assets';
-import { StakeModalRow, IconSubTitle } from './AddStakeModal';
+import { StakeModalRow } from './AddStakeModal';
 import Label from '../../shared/Label';
 import { usePactContext } from '../../../contexts';
 import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
@@ -13,10 +11,6 @@ export const ClaimModal = ({ onConfirm, estimateUnstakeData }) => {
 
   return (
     <div>
-      <IconSubTitle>
-        <KaddexOutlineIcon />
-      </IconSubTitle>
-      <CustomDivider style={{ margin: '24px 0' }} />
       <Label fontSize={16}>Staking Rewards Collected</Label>
       <StakeModalRow style={{ marginBottom: 20 }}>
         <RowTokenInfoPrice

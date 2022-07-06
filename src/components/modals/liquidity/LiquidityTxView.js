@@ -259,7 +259,7 @@ export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading
 export const SuccessRemoveView = ({ token0, token1, loading, onClick }) => {
   const swap = useSwapContext();
   return (
-    <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle icon={<KaddexOutlineIcon />}>
+    <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle>
       <FlexContainer className="w-100 column" gap={12}>
         <Label>Are you sure you want to remove your liquidity?</Label>
 

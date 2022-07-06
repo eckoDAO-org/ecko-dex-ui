@@ -12,7 +12,7 @@ export const SWAP_BUTTON_FETCHING_PAIR = {
 };
 export const SWAP_BUTTON_PAIR_NOT_ESIST = {
   id: 'PAIR_NOT_ESIST',
-  label: 'Pair does not exist!',
+  label: 'Pair does not exist',
 };
 export const SWAP_BUTTON_NOT_LIQUIDITY = {
   id: 'NOT_LIQUIDITY',
