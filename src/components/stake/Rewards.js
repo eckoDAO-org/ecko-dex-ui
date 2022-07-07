@@ -38,15 +38,20 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
         /* change back to 1440 (24h * 60 days) */
       }
       const hoursToWait = 6 - moment().diff(stakedTimeStart, 'hours');
+      const minutesToWait = 360 - moment().diff(stakedTimeStart, 'minutes');
       if (daysToWait > 1) {
         return `${daysToWait} days left`;
       } else {
         if (hoursToWait > 1) {
           return `${hoursToWait} hours left`;
-        } else if (hoursToWait < 1) {
-          return '0 hours left';
         } else {
-          return `${hoursToWait} hour left`;
+          if (minutesToWait > 1) {
+            return `${minutesToWait} minutes left`;
+          } else if (minutesToWait == 1) {
+            return `${minutesToWait} minute left`;
+          } else {
+            return '0 time left';
+          }
         }
       }
     }
@@ -111,9 +116,9 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
         </div>
 
         <Label fontSize={24} color={getPenaltyColor()}>
-          {getPenaltyRewardsString()[0] !== '0.00' ? getPenaltyRewardsString()[0] : '-'} KDX
+          {getPenaltyRewardsString()[0] !== '0.00' ? `${getPenaltyRewardsString()[0]} KDX` : '-'}
         </Label>
-        {rewardsPenalty ? (
+        {rewardsPenalty && getPenaltyRewardsString()[0] !== '0.00' ? (
           <Label fontSize={16} color={getPenaltyColor()}>
             {getPenaltyRewardsString()[1] || '-'} %
           </Label>
