@@ -7,7 +7,7 @@ import { getPairList } from '../../api/pact';
 import { chartTimeRanges, CHART_OPTIONS, DAILY_VOLUME_RANGE } from '../../constants/chartOptionsConstants';
 import tokenData, { pairsData } from '../../constants/cryptoCurrencies';
 import { usePactContext } from '../../contexts';
-import { humanReadableNumber } from '../../utils/reduceBalance';
+import { humanReadableNumber, extractDecimal } from '../../utils/reduceBalance';
 import { get24HVolumeSingleSided } from '../../utils/token-utils';
 import TVLChart from '../charts/TVLChart';
 import VolumeChart from '../charts/VolumeChart';
@@ -23,7 +23,7 @@ import { NETWORK_TYPE } from '../../constants/contextConstants';
 
 const KDX_TOTAL_SUPPLY = 1000000000;
 
-const Dex = ({ kdaPrice }) => {
+const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
   const [stakeDataRange, setStakeDataRange] = useState(DAILY_VOLUME_RANGE.value);
   const [volumeRange, setVolumeRange] = useState(DAILY_VOLUME_RANGE.value);
 
@@ -244,8 +244,8 @@ const Dex = ({ kdaPrice }) => {
         {/* MISSING REAL FORMULA */}
         <AnalyticsSimpleWidget
           title={'KDX Staked'}
-          mainText={(fakeData && `${humanReadableNumber(fakeData.totalStaked, 2)} KDX`) || '-'}
-          subtitle={`${((100 * fakeData.totalStaked) / KDX_TOTAL_SUPPLY).toFixed(1)} %`}
+          mainText={(fakeData && `${humanReadableNumber(poolState && poolState['staked-kdx'], 2)} KDX`) || '-'}
+          subtitle={`${((100 * (extractDecimal(poolState && poolState['staked-kdx']) || 0)) / kdxSupply).toFixed(2)} %`}
         />
         {/* MISSING REAL FORMULA */}
         <AnalyticsSimpleWidget

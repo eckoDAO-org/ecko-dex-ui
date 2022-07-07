@@ -32,6 +32,11 @@ export const getGroupedVolume = (startDate, endDate, type = 'daily') => {
   return kaddexStatsRequest(url);
 };
 
+export const getGroupedTVL = (startDate, endDate, type = 'daily') => {
+  const url = `tvl/${type}?dateStart=${moment(startDate).format('YYYY-MM-DD')}&dateEnd=${moment(endDate).format('YYYY-MM-DD')}`;
+  return kaddexStatsRequest(url);
+};
+
 export const getTotalVolume = async (startDate, endDate, token) => {
   const [namespace, name] = token.split('.');
   const stats = await getGroupedVolume(startDate, endDate, 'daily');
