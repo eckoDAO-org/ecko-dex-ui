@@ -53,7 +53,7 @@ export const LiquidityProvider = (props) => {
           ]),
         ],
         sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
-        gasLimit: 8000,
+        gasLimit: 16000,
         gasPrice: GAS_PRICE,
         chainId: CHAIN_ID,
         ttl: 600,
@@ -136,7 +136,7 @@ export const LiquidityProvider = (props) => {
           ]),
         ],
         sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
-        gasLimit: 11000,
+        gasLimit: 16000,
         gasPrice: GAS_PRICE,
         chainId: CHAIN_ID,
         ttl: 600,
@@ -274,63 +274,6 @@ export const LiquidityProvider = (props) => {
     }
   };
 
-  const claimRewardsWallet = async (requestId, account) => {
-    try {
-      const pactCode = `(${KADDEX_NAMESPACE}.wrapper.withdraw-claim
-        ${JSON.stringify(requestId)}
-        ${JSON.stringify(account.account)}
-      )`;
-      const signCmd = {
-        pactCode,
-        caps: [
-          ...(ENABLE_GAS_STATION
-            ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
-            : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
-        ],
-        sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
-        gasLimit: 11000,
-        gasPrice: GAS_PRICE,
-        chainId: CHAIN_ID,
-        ttl: 600,
-        signingPubKey: account.guard.keys[0],
-        networkId: NETWORKID,
-      };
-      //alert to sign tx
-      wallet.setIsWaitingForWalletAuth(true);
-      let cmd = null;
-      if (isXWalletConnected) {
-        const res = await xWalletRequestSign(signCmd);
-        cmd = res.signedCmd;
-      } else {
-        cmd = await Pact.wallet.sign(signCmd);
-      }
-      //close alert programmatically
-      wallet.setIsWaitingForWalletAuth(false);
-      wallet.setWalletSuccess(true);
-      pact.setPactCmd(cmd);
-      let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(cmd));
-      data = await parseRes(data);
-      setLocalRes(data);
-      return data;
-    } catch (e) {
-      setLocalRes({});
-      if (e.message.includes('Failed to fetch'))
-        wallet.setWalletError({
-          error: true,
-          title: 'No Wallet',
-          content: 'Please make sure you open and login to your wallet.',
-        });
-      else
-        wallet.setWalletError({
-          error: true,
-          title: 'Wallet Signing Failure',
-          content:
-            'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kaddex.',
-        });
-      console.log(e);
-    }
-  };
-
   const contextValue = {
     liquidityProviderFee,
     setLiquidityProviderFee,
@@ -339,7 +282,6 @@ export const LiquidityProvider = (props) => {
     addLiquidityWallet,
     addOneSideLiquidityWallet,
     removeLiquidityWallet,
-    claimRewardsWallet,
     wantsKdxRewards,
     setWantsKdxRewards,
   };

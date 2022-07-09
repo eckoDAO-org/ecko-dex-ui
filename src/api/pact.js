@@ -315,37 +315,6 @@ const dataWithBooster = async (account, tokenPairList) => {
   }
 };
 
-const getLiquidityRewards = async (account) => {
-  try {
-    let data = await pactFetchLocal(`(${KADDEX_NAMESPACE}.wrapper.get-user-pending-requests-info ${JSON.stringify(account)})`);
-    if (data) {
-      return data;
-    }
-  } catch (e) {
-    return handleError(e);
-  }
-};
-// used in rewards table
-export const getAccountLiquidityRewards = async (account) => {
-  try {
-    const res = await getLiquidityRewards(account);
-
-    return res;
-  } catch (e) {
-    return handleError(e);
-  }
-};
-export const getLiquidityRewardsByRequestId = async (requestId) => {
-  try {
-    let data = await pactFetchLocal(`(${KADDEX_NAMESPACE}.wrapper.get-request-info ${JSON.stringify(requestId)})`);
-    if (data) {
-      return data;
-    }
-  } catch (e) {
-    return handleError(e);
-  }
-};
-
 export const getPairAccount = async (token0, token1) => {
   const result = await pactFetchLocal(`(at 'account (${KADDEX_NAMESPACE}.exchange.get-pair ${token0} ${token1}))`);
   if (result.errorMessage) {
