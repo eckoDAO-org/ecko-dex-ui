@@ -10,6 +10,7 @@ import Label from '../components/shared/Label';
 import InfoPopup from '../components/shared/InfoPopup';
 import { getCoingeckoUsdPrice } from '../api/coingecko';
 import { getKDXSupply, getKDXTotalSupply, getKDXTotalBurnt } from '../api/kaddex.kdx';
+import { getPoolState } from '../api/kaddex.staking';
 import theme from '../styles/theme';
 import { useHistory, useLocation } from 'react-router-dom';
 import { ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS } from '../router/routes';
@@ -29,6 +30,7 @@ const AnalyticsContainer = () => {
   const [kdxBurnt, setKdxBurnt] = useState(null);
   const [, /*kdxTreasury*/ setKdxTreasury] = useState(null);
   const [kdxRewards, setKdxRewards] = useState(null);
+  const [poolState, setPoolState] = useState(null);
   const { gameEditionView } = useGameEditionContext();
 
   useEffect(() => {
@@ -51,6 +53,9 @@ const AnalyticsContainer = () => {
       });
       getKDXSupply('dao-treasury').then((treasury) => {
         setKdxTreasury(reduceBalance(treasury, 2));
+      });
+      getPoolState().then((res) => {
+        setPoolState(res);
       });
     };
     getInitialData();
@@ -107,7 +112,7 @@ const AnalyticsContainer = () => {
           </InfoPopup>
         </div>
         {/* DEX */}
-        {pathname === ROUTE_ANALYTICS && <Dex kdaPrice={kdaPrice} />}
+        {pathname === ROUTE_ANALYTICS && <Dex kdxSupply={kdxSupply} kdaPrice={kdaPrice} poolState={poolState} />}
         {/* KDX */}
         {pathname === ROUTE_ANALYTICS_KDX && (
           <Kdx KDX_TOTAL_SUPPLY={KDX_TOTAL_SUPPLY} kdxSupply={kdxSupply} kdaPrice={kdaPrice} kdxBurnt={kdxBurnt} />

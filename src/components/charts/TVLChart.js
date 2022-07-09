@@ -7,6 +7,7 @@ import Label from '../shared/Label';
 import { humanReadableNumber } from '../../utils/reduceBalance';
 import { FlexContainer } from '../shared/FlexContainer';
 import { getPairList } from '../../api/pact';
+import { getGroupedTVL } from '../../api/kaddex-stats';
 import CustomDropdown from '../shared/CustomDropdown';
 import { tvlRanges, TVL_3M_RANGE, TVL_CHART_OPTIONS } from '../../constants/chartOptionsConstants';
 
@@ -73,12 +74,10 @@ const TVLChart = ({ kdaPrice, height }) => {
   }, [getTVL]);
 
   useEffect(() => {
-    axios
-      .get(
-        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/tvl/daily?dateStart=${
-          tvlRanges[tvlRange]?.dateStart ?? moment().subtract(90, 'days').format('YYYY-MM-DD').format('YYYY-MM-DD')
-        }&dateEnd=${moment().format('YYYY-MM-DD')}`
-      )
+    getGroupedTVL(
+      tvlRanges[tvlRange]?.dateStart ?? moment().subtract(90, 'days').format('YYYY-MM-DD').format('YYYY-MM-DD'),
+      moment().format('YYYY-MM-DD')
+    )
       .then(async (res) => {
         const allTVL = [];
         for (const day of res.data) {
