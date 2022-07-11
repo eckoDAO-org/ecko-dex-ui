@@ -2,15 +2,17 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import { BoosterIcon, CoinKaddexIcon, CoinsIcon, KaddexOutlineIcon } from '../../assets';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
-import { useLiquidityContext } from '../../contexts';
+import { useLiquidityContext, usePactContext } from '../../contexts';
 import theme from '../../styles/theme';
+import { extractDecimal, getDecimalPlaces, humanReadableNumber } from '../../utils/reduceBalance';
 import { FlexContainer } from '../shared/FlexContainer';
 import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
 import Toggle from './Toggle';
 
-const RewardBooster = ({ type, apr, handleState }) => {
+const RewardBooster = ({ type, apr, handleState, previewObject, pair }) => {
   const { wantsKdxRewards } = useLiquidityContext();
+  const { tokensUsdPrice } = usePactContext();
   return (
     <>
       <Label fontFamily="syncopate">
@@ -81,18 +83,35 @@ const RewardBooster = ({ type, apr, handleState }) => {
         {type === LIQUIDITY_VIEW.REMOVE_LIQUIDITY && (
           <div className="flex justify-sb align-fs">
             <Label fontSize={16}>Fees Collected</Label>
-            <div className="column">
-              <Label fontSize={16}>123.1234 KDX</Label>
-              <Label fontSize={13} className="justify-fe" withShade labelStyle={{ marginTop: 4 }}>
-                $ 123.1234
-              </Label>
-              <Label fontSize={16} labelStyle={{ marginTop: 10 }}>
-                123.1234 KDA
-              </Label>
-              <Label fontSize={13} className="justify-fe" withShade labelStyle={{ marginTop: 4 }}>
-                $ 123.1234
-              </Label>
-            </div>
+            {wantsKdxRewards ? (
+              <div className="column">
+                <Label className="justify-fe" fontSize={16}>
+                  {getDecimalPlaces(extractDecimal(previewObject['estimated-kdx-rewards']))} KDX
+                </Label>
+                <Label fontSize={13} className="justify-fe" withShade labelStyle={{ marginTop: 4 }}>
+                  {tokensUsdPrice ? `$ ${humanReadableNumber(tokensUsdPrice?.KDX * extractDecimal(previewObject['estimated-kdx-rewards']))}` : ''}
+                </Label>
+              </div>
+            ) : (
+              <div className="column">
+                <Label className="justify-fe" fontSize={16}>
+                  {getDecimalPlaces(extractDecimal(previewObject['tokenA-fees-received']))} {pair?.token0}
+                </Label>
+                <Label fontSize={13} className="justify-fe" withShade labelStyle={{ marginTop: 4 }}>
+                  {tokensUsdPrice
+                    ? `$ ${humanReadableNumber(tokensUsdPrice[pair?.token0] * extractDecimal(previewObject['tokenA-fees-received']))}`
+                    : ''}
+                </Label>
+                <Label className="justify-fe" fontSize={16} labelStyle={{ marginTop: 10 }}>
+                  {getDecimalPlaces(extractDecimal(previewObject['tokenB-fees-received']))} {pair?.token1}
+                </Label>
+                <Label fontSize={13} className="justify-fe" withShade labelStyle={{ marginTop: 4 }}>
+                  {tokensUsdPrice
+                    ? `$ ${humanReadableNumber(tokensUsdPrice[pair?.token1] * extractDecimal(previewObject['tokenB-fees-received']))}`
+                    : ''}
+                </Label>
+              </div>
+            )}
           </div>
         )}
       </Wrapper>

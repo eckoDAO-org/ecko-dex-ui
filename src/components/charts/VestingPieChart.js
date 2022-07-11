@@ -90,7 +90,7 @@ const VestingPieChart = ({ kdxSupply, KDX_TOTAL_SUPPLY }) => {
                   {d.name}:
                 </Label>
               </div>
-              <Label fontSize={16} color={d.color}>
+              <Label fontSize={16} color={d.color} labelStyle={{ whiteSpace: 'nowrap' }}>
                 {d.value.toFixed(2)} %
               </Label>
             </FlexContainer>
@@ -113,7 +113,7 @@ const VestingPieChart = ({ kdxSupply, KDX_TOTAL_SUPPLY }) => {
             <Label fontSize={16} color={NotCirculating.color} labelStyle={{ marginRight: 50 }}>
               {NotCirculating.name}:
             </Label>
-            <Label fontSize={16} color={NotCirculating.color}>
+            <Label fontSize={16} color={NotCirculating.color} labelStyle={{ whiteSpace: 'nowrap' }}>
               {NotCirculating.value.toFixed(2)} %
             </Label>
           </FlexContainer>

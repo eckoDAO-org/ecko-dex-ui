@@ -274,7 +274,7 @@ export const SuccessRemoveView = ({ token0, token1, loading, onClick }) => {
           <div className="flex align-ce">
             <CryptoContainer size={24}>{getTokenIconById(token0)}</CryptoContainer>
             <Label>
-              {extractDecimal(swap?.localRes?.result?.data?.amount0) || '-'} {token0}
+              {getDecimalPlaces(extractDecimal(swap?.localRes?.result?.data?.amountA)) || '-'} {token0}
             </Label>
           </div>
           <Label>{token0}</Label>
@@ -283,7 +283,7 @@ export const SuccessRemoveView = ({ token0, token1, loading, onClick }) => {
           <div className="flex align-ce">
             <CryptoContainer size={24}>{getTokenIconById(token1)}</CryptoContainer>
             <Label>
-              {extractDecimal(swap?.localRes?.result?.data?.amount1) || '-'} {token1}
+              {getDecimalPlaces(extractDecimal(swap?.localRes?.result?.data?.amountB)) || '-'} {token1}
             </Label>
           </div>
 

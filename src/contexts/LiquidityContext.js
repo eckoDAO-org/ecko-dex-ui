@@ -5,8 +5,8 @@ import { CHAIN_ID, GAS_PRICE, NETWORK, NETWORKID, PRECISION, ENABLE_GAS_STATION,
 import { useKaddexWalletContext, usePactContext, useWalletContext, useAccountContext } from '.';
 import { extractDecimal, reduceBalance } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
-import { mkReq, parseRes } from '../api/utils';
-import { getOneSideLiquidityPairInfo, getPairAccount } from '../api/pact';
+import { handleError, mkReq, parseRes } from '../api/utils';
+import { getOneSideLiquidityPairInfo, getPairAccount, pactFetchLocal } from '../api/pact';
 
 export const LiquidityContext = createContext(null);
 
@@ -227,7 +227,7 @@ export const LiquidityProvider = (props) => {
           ]),
         ],
         sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
-        gasLimit: 11000,
+        gasLimit: 12000,
         gasPrice: GAS_PRICE,
         chainId: CHAIN_ID,
         ttl: 600,
@@ -254,6 +254,7 @@ export const LiquidityProvider = (props) => {
       let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(cmd));
       data = await parseRes(data);
       setLocalRes(data);
+      console.log('🚀 log --> data', data);
       return data;
     } catch (e) {
       setLocalRes({});
@@ -274,6 +275,20 @@ export const LiquidityProvider = (props) => {
     }
   };
 
+  const removeLiquidityPreview = async (token0, token1) => {
+    try {
+      const pactCode = `(${KADDEX_NAMESPACE}.wrapper.preview-remove-liquidity
+        ${token0}
+        ${token1}
+        ${JSON.stringify(account.account)}
+        (at 'liquidity-tokens (kaddex.wrapper.get-liquidity-position  ${token0} ${token1} ${JSON.stringify(account.account)}))
+      )`;
+      return await pactFetchLocal(pactCode);
+    } catch (e) {
+      return handleError(e);
+    }
+  };
+
   const contextValue = {
     liquidityProviderFee,
     setLiquidityProviderFee,
@@ -282,6 +297,7 @@ export const LiquidityProvider = (props) => {
     addLiquidityWallet,
     addOneSideLiquidityWallet,
     removeLiquidityWallet,
+    removeLiquidityPreview,
     wantsKdxRewards,
     setWantsKdxRewards,
   };

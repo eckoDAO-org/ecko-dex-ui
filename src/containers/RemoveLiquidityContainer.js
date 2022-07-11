@@ -18,6 +18,7 @@ import { LIQUIDITY_VIEW } from '../constants/liquidityView';
 import { getAllPairValues } from '../utils/token-utils';
 import { getDailyVolume } from '../api/kaddex-stats';
 import theme from '../styles/theme';
+import tokenData from '../constants/cryptoCurrencies';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -38,12 +39,13 @@ const RemoveLiquidityContainer = () => {
   const history = useHistory();
   const query = useQueryParams();
   const { setWantsKdxRewards } = useLiquidityContext();
-
+  const liquidity = useLiquidityContext();
   const { account } = useAccountContext();
 
   const [loading, setLoading] = useState(false);
   const [pair, setPair] = useState(null);
   const [apr, setApr] = useState(null);
+  const [previewObject, setPreviewObject] = useState(null);
 
   const calculateApr = async (resultPairList, currentPair) => {
     const volumes = await getDailyVolume();
@@ -64,9 +66,20 @@ const RemoveLiquidityContainer = () => {
       setPair(currentPair);
       if (currentPair) {
         await calculateApr(resultPairList, currentPair);
+        await removePreview(currentPair);
       }
     }
     setLoading(false);
+  };
+
+  const removePreview = async (currentPair) => {
+    /* const res = await liquidity.removeLiquidityPreview('coin', 'kaddex.kdx', 3.2); */
+    const res = await liquidity.removeLiquidityPreview(tokenData[currentPair?.token0].code, tokenData[currentPair?.token1].code);
+    if (res) {
+      console.log('🚀 log --> remove preview res', res);
+
+      setPreviewObject(res);
+    }
   };
 
   useEffect(() => {
@@ -111,7 +124,13 @@ const RemoveLiquidityContainer = () => {
             </FlexContainer>
             <SlippagePopupContent />
           </FlexContainer>
-          <RewardBooster apr={apr} type={LIQUIDITY_VIEW.REMOVE_LIQUIDITY} handleState={setWantsKdxRewards} />
+          <RewardBooster
+            apr={apr}
+            type={LIQUIDITY_VIEW.REMOVE_LIQUIDITY}
+            handleState={setWantsKdxRewards}
+            previewObject={previewObject}
+            pair={pair}
+          />
           <RemoveLiquidityContent pair={pair} />
         </>
       )}
