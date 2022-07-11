@@ -66,7 +66,6 @@ const LiquidityRewards = () => {
   const fetchData = async () => {
     if (account.account) {
       const result = await getAccountLiquidityRewards(account.account);
-      console.log('LOG --> result', result);
       if (!result.errorMessage) {
         setRewardsFiltered(result);
         setRewards(result);
@@ -268,7 +267,6 @@ const renderColumns = () => {
       render: ({ item }) => {
         return (
           <Label color={item?.['remaining-time'] === 0 ? commonColors.green : commonColors.info}>
-            {console.log('time', item?.['remaining-time'])}
             {item?.['remaining-time'] === 0 ? '0 Days' : timeRender(item?.['remaining-time'])}
           </Label>
         );
