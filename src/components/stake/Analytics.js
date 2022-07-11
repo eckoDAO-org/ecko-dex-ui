@@ -16,7 +16,7 @@ const SubLabel = styled(Label)`
   opacity: 0.7;
 `;
 
-const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt }) => {
+const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt, kdxSupply }) => {
   const [totalVolumeUSD, setTotalVolumeUSD] = useState(null);
   const [stakingAPR, setStakingAPR] = useState(null);
   const { tokensUsdPrice } = usePactContext();
@@ -83,7 +83,7 @@ const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt }) => {
         </div>
         <div className="flex column align-fe">
           <Label>Total Staked</Label>
-          <Label fontSize={24}>38.20 %{/* {(totalStaked && humanReadableNumber(reduceBalance(totalStaked))) || '-'} KDX */}</Label>
+          <Label fontSize={24}>{(kdxSupply && totalStaked && ((100 * (extractDecimal(totalStaked) || 0)) / kdxSupply).toFixed(2)) || '-'} %</Label>
           <SubLabel labelStyle={{ fontSize: 12, textAlign: 'end' }}>{humanReadableNumber(extractDecimal(totalStaked))} KDX</SubLabel>
         </div>
       </div>

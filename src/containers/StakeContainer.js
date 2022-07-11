@@ -12,7 +12,7 @@ import {
   getRollupClaimAndUnstakeCommand,
 } from '../api/kaddex.staking';
 import { getAccountData } from '../api/dao';
-import { getKDXAccountBalance } from '../api/kaddex.kdx';
+import { getKDXAccountBalance, getKDXTotalSupply } from '../api/kaddex.kdx';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import InfoPopup from '../components/shared/InfoPopup';
 import Label from '../components/shared/Label';
@@ -42,6 +42,7 @@ const StakeContainer = () => {
   const pact = usePactContext();
 
   const [poolState, setPoolState] = useState(null);
+  const [kdxSupply, setKdxSupply] = useState(null);
   const [kdxAccountBalance, setKdxAccountBalance] = useState(0.0);
   const [estimateUnstakeData, setEstimateUnstakeData] = useState(null);
   const [daoAccountData, setDaoAccountData] = useState(null);
@@ -83,6 +84,9 @@ const StakeContainer = () => {
   useEffect(() => {
     getPoolState().then((res) => {
       setPoolState(res);
+    });
+    getKDXTotalSupply().then((supply) => {
+      setKdxSupply(reduceBalance(supply, 2));
     });
   }, []);
 
@@ -402,6 +406,7 @@ const StakeContainer = () => {
           stakedTimeStart={stakedTimeStart}
         />
         <Analytics
+          kdxSupply={kdxSupply}
           staked={estimateUnstakeData?.staked}
           stakedShare={getAccountStakingPercentage()}
           totalStaked={poolState && poolState['staked-kdx']}

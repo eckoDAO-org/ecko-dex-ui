@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/macro';
+import { usePactContext } from '../../../contexts';
+import { extractDecimal, getDecimalPlaces, humanReadableNumber } from '../../../utils/reduceBalance';
 import { getTokenIconById } from '../../../utils/token-utils';
 import CustomButton from '../../shared/CustomButton';
 import CustomDivider from '../../shared/CustomDivider';
@@ -18,7 +20,9 @@ export const IconSubTitle = styled.div`
   }
 `;
 
-const ClaimYourKDXRewards = ({ multiplier }) => {
+const ClaimYourKDXRewards = ({ multiplier, amount, onClick }) => {
+  const { tokensUsdPrice } = usePactContext();
+
   return (
     <FlexContainer className="column" gap={16}>
       <div className="flex justify-sb">
@@ -28,6 +32,7 @@ const ClaimYourKDXRewards = ({ multiplier }) => {
 
       <div className="flex justify-sb">
         <Label fontSize={16}>5 Days Average Price</Label>
+        {/* TODO: get average price KDX */}
         <Label fontSize={16}>$</Label>
       </div>
 
@@ -39,15 +44,19 @@ const ClaimYourKDXRewards = ({ multiplier }) => {
         <CryptoContainer size={30}>{getTokenIconById('KDX')}</CryptoContainer>
         <div className="column w-100">
           <div className="flex justify-sb">
-            <Label fontSize={16}>1234.50</Label>
+            <Label fontSize={16}>{getDecimalPlaces(extractDecimal(amount))}</Label>
             <Label fontSize={16}>KDX</Label>
           </div>
           <div className="flex justify-sb">
-            <Label withShade>$ 200.00</Label>
+            <Label fontSize={13} labelStyle={{ opacity: 0.7 }}>
+              $ {humanReadableNumber(extractDecimal(tokensUsdPrice?.KDX) * extractDecimal(amount))}
+            </Label>
           </div>
         </div>
       </div>
-      <CustomButton type="gradient">confirm</CustomButton>
+      <CustomButton type="gradient" onClick={onClick}>
+        confirm
+      </CustomButton>
     </FlexContainer>
   );
 };
