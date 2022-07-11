@@ -2,6 +2,7 @@ import moment from 'moment';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { CoinKaddexIcon } from '../../assets';
+import { STAKING_CONSTANTS } from '../../constants/stakingConstants';
 import { useAccountContext, useApplicationContext, useModalContext, usePactContext } from '../../contexts';
 import { ROUTE_UNSTAKE } from '../../router/routes';
 import { theme, commonColors } from '../../styles/theme';
@@ -94,7 +95,7 @@ const Position = ({
       />
       {pathname === ROUTE_UNSTAKE &&
         stakedTimeStart &&
-        /*change back to: moment().diff(stakedTimeStart, 'hours') < 72 */ moment().diff(stakedTimeStart, 'hours') < 1 &&
+        moment().diff(stakedTimeStart, 'hours') < STAKING_CONSTANTS.percentagePenaltyHours &&
         extractDecimal(amount) > 0 && (
           <div style={{ marginTop: 16 }}>
             <div className="flex align-ce">
@@ -105,8 +106,8 @@ const Position = ({
             </Label>
             <Label fontSize={16} color={commonColors.red}>
               {/* change back to 72 (3days) */}
-              {`${(stakedTimeStart && 1 - moment().diff(stakedTimeStart, 'hours')) || '-'} ${
-                stakedTimeStart && (1 - moment().diff(stakedTimeStart, 'hours') > 1 ? 'hours' : 'hour')
+              {`${(stakedTimeStart && STAKING_CONSTANTS.percentagePenaltyHours - moment().diff(stakedTimeStart, 'hours')) || '-'} ${
+                stakedTimeStart && (STAKING_CONSTANTS.percentagePenaltyHours - moment().diff(stakedTimeStart, 'hours') > 1 ? 'hours' : 'hour')
               } `}
               left
             </Label>
@@ -118,7 +119,7 @@ const Position = ({
           marginTop:
             pathname === ROUTE_UNSTAKE &&
             stakedTimeStart &&
-            /*change back to: moment().diff(stakedTimeStart, 'hours') < 72 */ moment().diff(stakedTimeStart, 'hours') < 1 &&
+            moment().diff(stakedTimeStart, 'hours') < STAKING_CONSTANTS.percentagePenaltyHours &&
             extractDecimal(amount) > 0
               ? 16
               : 24,

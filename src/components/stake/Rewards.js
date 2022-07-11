@@ -8,6 +8,7 @@ import PenaltyRewardsInfo from './PenaltyRewardsInfo';
 import { extractDecimal, humanReadableNumber } from '../../utils/reduceBalance';
 import { usePactContext } from '../../contexts';
 import { getTimeByBlockchain } from '../../utils/string-utils';
+import { STAKING_CONSTANTS } from '../../constants/stakingConstants';
 
 const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty, lastRewardsClaim, disabled, onWithdrawClick }) => {
   const { tokensUsdPrice } = usePactContext();
@@ -28,17 +29,11 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
 
   const getWaitingTimeRewardsPenalty = () => {
     if (stakedTimeStart) {
-      {
-        /* change back to 60 (60days) */
-      }
-      /* const daysToWait = 60 - moment().diff(stakedTimeStart, 'days'); */
-      const daysToWait = 0;
+      /* 60 days */
+      const daysToWait = STAKING_CONSTANTS.rewardsPenaltyDaysToWait(stakedTimeStart);
       //1440 = 24h * 60 days
-      {
-        /* change back to 1440 (24h * 60 days) */
-      }
-      const hoursToWait = 6 - moment().diff(stakedTimeStart, 'hours');
-      const minutesToWait = 360 - moment().diff(stakedTimeStart, 'minutes');
+      const hoursToWait = STAKING_CONSTANTS.rewardsPenaltyHoursToWait - moment().diff(stakedTimeStart, 'hours');
+      const minutesToWait = STAKING_CONSTANTS.rewardsPenaltyHoursToWait * 60 - moment().diff(stakedTimeStart, 'minutes');
       if (daysToWait > 1) {
         return `${daysToWait} days left`;
       } else {
@@ -47,7 +42,7 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
         } else {
           if (minutesToWait > 1) {
             return `${minutesToWait} minutes left`;
-          } else if (minutesToWait == 1) {
+          } else if (minutesToWait === 1) {
             return `${minutesToWait} minute left`;
           } else {
             return '0 time left';
@@ -61,16 +56,10 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
     if (rewardAccrued === 0) {
       return 'withdraw';
     } else if (lastRewardsClaim) {
-      {
-        /* change back to 7 (7days) */
-      }
-      /* const daysToWait = 7 - moment().diff(getTimeByBlockchain(lastRewardsClaim), 'days'); */
-      const daysToWait = 0;
+      // 7 days
+      const daysToWait = STAKING_CONSTANTS.rewardsClaimDaysToWait(lastRewardsClaim);
       //168 = 24h * 7 days
-      {
-        /* change back to 168 (24h * 7 days) */
-      }
-      const hoursToWait = 2 - moment().diff(getTimeByBlockchain(lastRewardsClaim), 'hours');
+      const hoursToWait = STAKING_CONSTANTS.rewardsClaimHoursToWait - moment().diff(getTimeByBlockchain(lastRewardsClaim), 'hours');
       if (daysToWait > 1) {
         return `withdraw in ${daysToWait} days`;
       } else {
@@ -86,7 +75,7 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
   const getPenaltyColor = () => {
     if (!rewardsPenalty && !rewardAccrued) {
       return null;
-    } /* change back to: else if (moment().diff(stakedTimeStart, 'hours') >= 60) */ else if (moment().diff(stakedTimeStart, 'hours') >= 6) {
+    } else if (moment().diff(stakedTimeStart, 'hours') >= STAKING_CONSTANTS.rewardsPenaltyHoursToWait) {
       return commonColors.green;
     } else {
       return commonColors.red;

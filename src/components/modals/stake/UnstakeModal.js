@@ -10,13 +10,14 @@ import CustomCheckbox from '../../shared/CustomCheckbox';
 import { getDecimalPlaces } from '../../../utils/reduceBalance';
 import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
 import { getTokenIconByCode } from '../../../utils/token-utils';
+import { STAKING_CONSTANTS } from '../../../constants/stakingConstants';
 
 export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeData, toUnstakeAmount, stakedTimeStart }) => {
   const [checked, setChecked] = useState(false);
 
   const { tokensUsdPrice } = usePactContext();
-  const isThreePercentPenaltyActive = () => stakedTimeStart && moment().diff(stakedTimeStart, 'hours') <= 72;
-  const isDynamicPenaltyActive = () => stakedTimeStart && moment().diff(stakedTimeStart, 'days') <= 60;
+  const isThreePercentPenaltyActive = () => stakedTimeStart && moment().diff(stakedTimeStart, 'hours') <= STAKING_CONSTANTS.percentagePenaltyHours;
+  const isDynamicPenaltyActive = () => stakedTimeStart && moment().diff(stakedTimeStart, 'hours') <= STAKING_CONSTANTS.rewardsPenaltyHoursToWait;
 
   const getUnstakeModalContent = () => {
     if (isThreePercentPenaltyActive()) {
@@ -49,8 +50,12 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
       return (
         <>
           <Label>
-            Unstaking KDX will reset the rewards penalty timer to 60 days. The rewards penalty will occur only if the user chooses to claim their
-            rewards at their current penalty rate.
+            {`Unstaking KDX will reset the rewards penalty timer to ${
+              STAKING_CONSTANTS.rewardsPenaltyHoursToWait < 24
+                ? `${STAKING_CONSTANTS.rewardsPenaltyHoursToWait} hours`
+                : `${STAKING_CONSTANTS.rewardsPenaltyHoursToWait / 24} days`
+            }. The rewards penalty will occur only if the user chooses to claim their
+            rewards at their current penalty rate.`}
           </Label>
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 16, fontSize: 16 }}>
