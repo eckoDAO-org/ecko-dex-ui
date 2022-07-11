@@ -5,6 +5,14 @@ import { bigNumberConverter } from './bignumber';
 import { getPairList } from '../api/pact';
 import { reduceBalance } from './reduceBalance';
 
+export const getTokenByModuleV2 = (token) => {
+  const tokenCode = token.refName.namespace ? `${token.refName.namespace}.${token.refName.name}` : `${token.refName.name}`;
+  const token0 = Object.values(tokenData).find((t) => t.code === tokenCode);
+  if (token0?.name) {
+    return token0?.name?.toUpperCase();
+  }
+  return token0?.toUpperCase();
+};
 export const getTokenName = (code) => {
   const token0 = Object.values(tokenData).find((t) => t.code === code);
   if (token0?.name) {

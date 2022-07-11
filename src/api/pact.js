@@ -264,17 +264,17 @@ const dataWithBooster = async (account, tokenPairList) => {
           (reserveA (${KADDEX_NAMESPACE}.exchange.reserve-for p token0))
           (reserveB (${KADDEX_NAMESPACE}.exchange.reserve-for p token1))
           (result (try {
-"initialA": 0.0,
-"feesB": 0.0,
-"totalB": 0.0,
-"initialB": 0.0,
-"feesA": 0.0,
-"liquidity": 0.0,
-"user-pool-share": 0.0,
-"totalA": 0.0,
-"reserveA":0.0,
-"reserveB":0.0
-} (${KADDEX_NAMESPACE}.wrapper.get-user-position-stats token0 token1 ${JSON.stringify(account)})))
+            "initialA": 0.0,
+            "feesB": 0.0,
+            "totalB": 0.0,
+            "initialB": 0.0,
+            "feesA": 0.0,
+            "liquidity": 0.0,
+            "user-pool-share": 0.0,
+            "totalA": 0.0,
+            "reserveA":0.0,
+            "reserveB":0.0
+            } (${KADDEX_NAMESPACE}.wrapper.get-user-position-stats token0 token1 ${JSON.stringify(account)})))
         )
         [{"initialA":(at 'initialA result),
         "feesB":(at 'feesB result),
