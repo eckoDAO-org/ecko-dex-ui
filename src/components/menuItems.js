@@ -15,7 +15,6 @@ import {
   ROUTE_LIQUIDITY_REWARDS,
   ROUTE_ANALYTICS_KDX,
   ROUTE_ANALYTICS_STATS,
-  ROUTE_BUY_CRYPTO,
 } from '../router/routes';
 
 export const SWAP = {

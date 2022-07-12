@@ -28,7 +28,8 @@ const LiquidityMyLiquidityTable = () => {
 
   const fetchData = async () => {
     const result = await getPairListAccountBalance(account.account);
-    orderPairs(result);
+    const resultWithLiquidity = result.filter((r) => r.pooledAmount[0] !== 0 && r.pooledAmount[1] !== 0);
+    orderPairs(resultWithLiquidity);
     setLoading(false);
   };
 
@@ -58,6 +59,8 @@ const LiquidityMyLiquidityTable = () => {
   return !loading ? (
     !account.account ? (
       <Label className="justify-ce">Please connect your wallet to see your liquidity. </Label>
+    ) : pairList.length === 0 ? (
+      <Label className="justify-ce">Your active Kaddex liquidity positions will appear here.</Label>
     ) : (
       <div className="column">
         <div className="flex justify-sb" style={{ marginBottom: 16 }}>

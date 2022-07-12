@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import moment from 'moment';
 import styled from 'styled-components/macro';
 import Pact from 'pact-lang-api';
 import { BoosterIcon } from '../../assets';
@@ -11,15 +10,7 @@ import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
 import { commonColors } from '../../styles/theme';
 import InfoPopup from '../shared/InfoPopup';
-import {
-  useAccountContext,
-  useKaddexWalletContext,
-  useLiquidityContext,
-  useModalContext,
-  useNotificationContext,
-  usePactContext,
-  useWalletContext,
-} from '../../contexts';
+import { useAccountContext, useKaddexWalletContext, useModalContext, useNotificationContext, usePactContext } from '../../contexts';
 import ClaimYourKDXRewards from '../modals/liquidity/ClaimYourKDXRewards';
 import CustomDropdown from '../shared/CustomDropdown';
 import { Divider } from 'semantic-ui-react';
@@ -152,6 +143,10 @@ const LiquidityRewards = () => {
   return !loading ? (
     !account.account ? (
       <Label className="justify-ce">Please connect your wallet to see your rewards. </Label>
+    ) : rewardsFiltered.length === 0 ? (
+      <Label className="justify-ce align-ce" labelStyle={{ textAlign: 'center' }}>
+        Participate in the liquidity mining program to activate boosted rewards.
+      </Label>
     ) : (
       <>
         <div className="flex justify-sb" style={{ marginBottom: 16 }}>

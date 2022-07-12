@@ -25,7 +25,6 @@ const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt, kdxSupply }) 
       .then(async (pools) => {
         const volumes = await getDailyVolume();
         const allPairValues = await getAllPairValues(pools, volumes);
-        console.log('LOG --> allPairValues', allPairValues);
         let totalUsd = 0;
         if (allPairValues?.length) {
           for (const pair of allPairValues) {
