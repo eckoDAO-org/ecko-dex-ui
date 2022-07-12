@@ -22,11 +22,11 @@ const RewardBooster = ({ type, apr, handleState, previewObject, pair }) => {
   const [rewardsAvailable, setRewardsAvailable] = useState(null);
 
   const fetchData = async () => {
+    const res = await getKdxRewardsAvailable();
+    if (!res.errorMessage) {
+      setRewardsAvailable(extractDecimal(res));
+    }
     if (pair) {
-      const res = await getKdxRewardsAvailable();
-      if (!res.errorMessage) {
-        setRewardsAvailable(extractDecimal(res));
-      }
       const result = await getPairMultiplier(tokenData[pair?.token0].code, tokenData[pair?.token1].code);
       if (!result.errorMessage) {
         setMultiplier(result);
