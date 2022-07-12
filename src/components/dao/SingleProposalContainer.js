@@ -117,7 +117,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
     />
   ) : (
     <>
-      <Label fontSize={24} fontFamily="syncopate">
+      <Label fontSize={24} fontFamily="syncopate" onClick={() => history.push(ROUTE_DAO)}>
         <ArrowBack
           className="svg-app-color"
           style={{
@@ -125,7 +125,6 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
             marginRight: '15px',
             justifyContent: 'center',
           }}
-          onClick={() => history.push(ROUTE_DAO)}
         />
         back to proposals
       </Label>

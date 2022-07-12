@@ -1,16 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
+import { getKdxRewardsAvailable, getPairMultiplier } from '../../api/liquidity-rewards';
 import { BoosterIcon, CoinKaddexIcon, CoinsIcon, KaddexOutlineIcon } from '../../assets';
+import { KDX_TOTAL_SUPPLY } from '../../constants/contextConstants';
+import tokenData from '../../constants/cryptoCurrencies';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
-import { useLiquidityContext } from '../../contexts';
+import { useLiquidityContext, usePactContext } from '../../contexts';
 import theme from '../../styles/theme';
+import { extractDecimal, getDecimalPlaces, humanReadableNumber } from '../../utils/reduceBalance';
 import { FlexContainer } from '../shared/FlexContainer';
 import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
 import Toggle from './Toggle';
 
-const RewardBooster = ({ type, apr, handleState }) => {
+const RewardBooster = ({ type, apr, handleState, previewObject, pair }) => {
   const { wantsKdxRewards } = useLiquidityContext();
+  const { tokensUsdPrice } = usePactContext();
+  const [loading, setLoading] = useState(false);
+
+  const [multiplier, setMultiplier] = useState(null);
+  const [rewardsAvailable, setRewardsAvailable] = useState(null);
+
+  const fetchData = async () => {
+    if (pair) {
+      const res = await getKdxRewardsAvailable();
+      if (!res.errorMessage) {
+        setRewardsAvailable(extractDecimal(res));
+      }
+      const result = await getPairMultiplier(tokenData[pair?.token0].code, tokenData[pair?.token1].code);
+      if (!result.errorMessage) {
+        setMultiplier(result);
+      }
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    handleState(true);
+    fetchData();
+  }, [pair]);
+
   return (
     <>
       <Label fontFamily="syncopate">
@@ -22,8 +52,8 @@ const RewardBooster = ({ type, apr, handleState }) => {
           'STANDARD REWARDS'
         )}
       </Label>
-      <Wrapper gap={28} withGradient className="background-fill w-100 column" style={{ padding: 24 }}>
-        <div className="flex justify-sb align-ce">
+      <Wrapper gap={16} withGradient className="background-fill w-100 column" style={{ padding: 24 }}>
+        <div className="flex justify-sb align-fs">
           <FlexContainer gap={16} className="align-ce">
             <CoinsIcon className="coins-icon" />
             <Toggle
@@ -49,9 +79,9 @@ const RewardBooster = ({ type, apr, handleState }) => {
           </FlexContainer>
           <div className="flex column">
             <Label fontSize={24}> APR {apr?.toFixed(2)} %</Label>
-            {wantsKdxRewards && (
+            {wantsKdxRewards && multiplier && (
               <Label className="justify-fe" fontSize={13} withShade labelStyle={{ marginTop: 4 }}>
-                3.00 x
+                {multiplier?.toFixed(2)} x
               </Label>
             )}
           </div>
@@ -75,24 +105,41 @@ const RewardBooster = ({ type, apr, handleState }) => {
                 </InfoPopup>
               </Label>
             </div>
-            <Label fontSize={13}>{apr?.toFixed(2)} %</Label>
+            <Label fontSize={13}>{((rewardsAvailable * 100) / (KDX_TOTAL_SUPPLY * 0.4)).toFixed(2)} %</Label>
           </div>
         )}
         {type === LIQUIDITY_VIEW.REMOVE_LIQUIDITY && (
           <div className="flex justify-sb align-fs">
             <Label fontSize={16}>Fees Collected</Label>
-            <div className="column">
-              <Label fontSize={16}>123.1234 KDX</Label>
-              <Label fontSize={13} className="justify-fe" withShade labelStyle={{ marginTop: 4 }}>
-                $ 123.1234
-              </Label>
-              <Label fontSize={16} labelStyle={{ marginTop: 10 }}>
-                123.1234 KDA
-              </Label>
-              <Label fontSize={13} className="justify-fe" withShade labelStyle={{ marginTop: 4 }}>
-                $ 123.1234
-              </Label>
-            </div>
+            {wantsKdxRewards ? (
+              <div className="column">
+                <Label className="justify-fe" fontSize={16}>
+                  {getDecimalPlaces(extractDecimal(previewObject['estimated-kdx-rewards']))} KDX
+                </Label>
+                <Label fontSize={13} className="justify-fe" withShade labelStyle={{ marginTop: 4 }}>
+                  {tokensUsdPrice ? `$ ${humanReadableNumber(tokensUsdPrice?.KDX * extractDecimal(previewObject['estimated-kdx-rewards']))}` : ''}
+                </Label>
+              </div>
+            ) : (
+              <div className="column">
+                <Label className="justify-fe" fontSize={16}>
+                  {getDecimalPlaces(extractDecimal(previewObject['tokenA-fees-received']))} {pair?.token0}
+                </Label>
+                <Label fontSize={13} className="justify-fe" withShade labelStyle={{ marginTop: 4 }}>
+                  {tokensUsdPrice
+                    ? `$ ${humanReadableNumber(tokensUsdPrice[pair?.token0] * extractDecimal(previewObject['tokenA-fees-received']))}`
+                    : ''}
+                </Label>
+                <Label className="justify-fe" fontSize={16} labelStyle={{ marginTop: 10 }}>
+                  {getDecimalPlaces(extractDecimal(previewObject['tokenB-fees-received']))} {pair?.token1}
+                </Label>
+                <Label fontSize={13} className="justify-fe" withShade labelStyle={{ marginTop: 4 }}>
+                  {tokensUsdPrice
+                    ? `$ ${humanReadableNumber(tokensUsdPrice[pair?.token1] * extractDecimal(previewObject['tokenB-fees-received']))}`
+                    : ''}
+                </Label>
+              </div>
+            )}
           </div>
         )}
       </Wrapper>

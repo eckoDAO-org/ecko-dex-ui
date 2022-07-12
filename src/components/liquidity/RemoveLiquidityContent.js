@@ -61,11 +61,13 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const RemoveLiquidityContent = ({ pair }) => {
+const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, previewAmount }) => {
   const pact = usePactContext();
   const wallet = useWalletContext();
   const liquidity = useLiquidityContext();
   const modalContext = useModalContext();
+  const { wantsKdxRewards } = useLiquidityContext();
+
   const { gameEditionView, setButtons } = useGameEditionContext();
   const [showTxModal, setShowTxModal] = useState(false);
 
@@ -76,14 +78,29 @@ const RemoveLiquidityContent = ({ pair }) => {
   const [pooledToken0, setPooledToken0] = useState(reduceBalance(pair?.pooledAmount?.[0], 12));
 
   const [pooledToken1, setPooledToken1] = useState(reduceBalance(pair?.pooledAmount?.[1], 12));
+  const [previewFees, setPreviewFees] = useState(previewObject['estimated-kdx-rewards']);
 
   useEffect(() => {
     if (!isNaN(amount) && pair) {
       setPooled(reduceBalance((extractDecimal(pair?.balance) * amount) / 100, PRECISION));
-      setPooledToken0(reduceBalance((extractDecimal(pair?.pooledAmount[0]) * amount) / 100, PRECISION));
-      setPooledToken1(reduceBalance((extractDecimal(pair?.pooledAmount[1]) * amount) / 100, PRECISION));
+      setPooledToken0(
+        reduceBalance(
+          (extractDecimal(wantsKdxRewards && pair.isBoosted ? previewObject['tokenA-amount-received'] : pair?.pooledAmount[0]) * amount) / 100,
+          PRECISION
+        )
+      );
+      setPooledToken1(
+        reduceBalance(
+          (extractDecimal(wantsKdxRewards && pair.isBoosted ? previewObject['tokenB-amount-received'] : pair?.pooledAmount[1]) * amount) / 100,
+          PRECISION
+        )
+      );
+      setPreviewFees(
+        reduceBalance((extractDecimal(wantsKdxRewards && pair.isBoosted && previewObject['estimated-kdx-rewards']) * amount) / 100, PRECISION)
+      );
+      setPreviewAmount(amount / 100);
     }
-  }, [amount, pair]);
+  }, [amount, pair, wantsKdxRewards]);
 
   useEffect(() => {
     if (!isNaN(amount) && reduceBalance(amount) !== 0) {
@@ -121,7 +138,12 @@ const RemoveLiquidityContent = ({ pair }) => {
 
   const onRemoveLiquidity = async () => {
     setLoading(true);
-    const res = await liquidity.removeLiquidityWallet(tokenData[pair?.token0].code, tokenData[pair?.token1].code, reduceBalance(pooled, PRECISION));
+    const res = await liquidity.removeLiquidityWallet(
+      tokenData[pair?.token0].code,
+      tokenData[pair?.token1].code,
+      reduceBalance(pooled, PRECISION),
+      previewAmount
+    );
     if (!res) {
       wallet.setIsWaitingForWalletAuth(true);
       setLoading(false);
@@ -140,17 +162,26 @@ const RemoveLiquidityContent = ({ pair }) => {
         title: 'remove liquidity',
         description: '',
         onClose: () => {
+          setShowTxModal(false);
           modalContext.closeModal();
         },
         content: (
           <TxView
             onClose={() => {
+              setShowTxModal(false);
               modalContext.closeModal();
             }}
             loading={loading}
           >
             {/* SuccessRemoveWithBoosterView to remove liquidy with booster */}
-            <SuccessRemoveView token0={pair.token0} token1={pair.token1} label="Remove Liquidity" loading={loading} onClick={sendTransaction} />
+            <SuccessRemoveView
+              token0={pair.token0}
+              token1={pair.token1}
+              label="Remove Liquidity"
+              loading={loading}
+              onClick={sendTransaction}
+              pair={pair}
+            />
           </TxView>
         ),
       });
@@ -239,11 +270,17 @@ const RemoveLiquidityContent = ({ pair }) => {
               <Label fontSize={13}>Pooled {pair?.token1}</Label>
               <Label fontSize={13}>{getDecimalPlaces(extractDecimal(pooledToken1))}</Label>
             </FlexContainer>
+            {wantsKdxRewards && pair.isBoosted && (
+              <FlexContainer className="justify-sb w-100">
+                <Label fontSize={13}>Fees Collected KDX</Label>
+                <Label fontSize={13}>{getDecimalPlaces(extractDecimal(previewFees))}</Label>
+              </FlexContainer>
+            )}
             <FlexContainer className="justify-sb w-100">
               <Label fontSize={13}>
                 {pair?.token0}/{pair?.token1} Rate
               </Label>
-              <Label fontSize={13}>{getDecimalPlaces(extractDecimal(pooled))}</Label>
+              <Label fontSize={13}>{getDecimalPlaces(extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1]))}</Label>
             </FlexContainer>
           </FlexContainer>
         )}
