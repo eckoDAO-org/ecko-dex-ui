@@ -61,7 +61,7 @@ const LiquidityMyLiquidityTable = () => {
     ) : (
       <div className="column">
         <div className="flex justify-sb" style={{ marginBottom: 16 }}>
-          <Label fontSize={20} fontFamily="syncopate">
+          <Label fontSize={16} fontFamily="syncopate">
             MY LIQUIDITY
           </Label>
 

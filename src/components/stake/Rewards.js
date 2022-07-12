@@ -85,7 +85,7 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
   return (
     <CommonWrapper gap={16} title="rewards" popup={<PenaltyRewardsInfo />} popupTitle="Rewards Penalty">
       <div>
-        <Label>KDX Collected</Label>
+        <Label fontSize={24}>KDX Collected</Label>
         <Label fontSize={30}>{rewardAccrued !== 0 ? humanReadableNumber(rewardAccrued) : '-'} KDX</Label>
         {rewardAccrued !== 0 && (
           <Label fontSize={16} labelStyle={{ marginTop: 4, opacity: 0.7 }}>

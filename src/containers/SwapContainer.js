@@ -65,10 +65,15 @@ const Container = styled(FadeIn)`
       `;
     } else {
       return css`
-        padding-top: 35px;
-        padding-bottom: 35px;
+        padding-top: 32px;
+        padding-bottom: 32px;
         max-width: 550px;
         overflow: visible;
+
+        @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+          padding-top: 24px;
+          padding-bottom: 24px;
+        }
       `;
     }
   }}

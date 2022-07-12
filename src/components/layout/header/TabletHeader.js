@@ -17,7 +17,7 @@ const Container = styled.div`
   align-items: start;
   min-height: ${({ theme: { header } }) => `${header.mobileHeight}px`};
   width: 100%;
-  padding: 0 24px;
+  padding: 0 32px;
   padding-top: 16px;
 
   .hamburger-icon {

@@ -257,4 +257,13 @@ export default createGlobalStyle`
         }
     }
 
+    .main {
+      padding-top: 32px;
+      padding-bottom: 32px;
+      @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel - 1}px`}) {
+        padding-top: 24px;
+        padding-bottom: 24px;
+      }
+    }
+
 `;

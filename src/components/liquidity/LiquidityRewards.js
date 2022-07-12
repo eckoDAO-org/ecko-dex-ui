@@ -156,7 +156,7 @@ const LiquidityRewards = () => {
       <>
         <div className="flex justify-sb" style={{ marginBottom: 16 }}>
           <div className="flex align-ce">
-            <Label fontSize={20} fontFamily="syncopate">
+            <Label fontSize={16} fontFamily="syncopate">
               REWARDS
             </Label>
             <InfoPopup size={18} type="modal" title="Rewards">

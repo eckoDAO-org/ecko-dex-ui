@@ -13,7 +13,6 @@ const ResultContainer = styled.div`
   flex-flow: column;
   width: 100%;
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
-    margin: 10px 0px;
     flex-flow: column;
   }
   & > *:not(:last-child) {

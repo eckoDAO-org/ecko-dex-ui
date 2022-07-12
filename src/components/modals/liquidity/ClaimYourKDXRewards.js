@@ -30,11 +30,11 @@ const ClaimYourKDXRewards = ({ multiplier, amount, onClick }) => {
         <Label fontSize={16}>{multiplier.toFixed(2)} x</Label>
       </div>
 
-      <div className="flex justify-sb">
+      {/* <div className="flex justify-sb">
         <Label fontSize={16}>5 Days Average Price</Label>
-        {/* TODO: get average price KDX */}
+         TODO: get average price KDX 
         <Label fontSize={16}>$</Label>
-      </div>
+      </div> */}
 
       <CustomDivider />
 

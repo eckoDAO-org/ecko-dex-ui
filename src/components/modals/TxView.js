@@ -59,7 +59,6 @@ const TxView = ({ loading, onClose, children }) => {
   const failView = () => {
     return (
       <Content gameEditionView={gameEditionView}>
-        {!gameEditionView && <ErrorIcon style={{ marginTop: 16 }} />}
         <Label geCenter geColor="yellow">
           Preview Failed!
         </Label>
@@ -94,7 +93,6 @@ const TxView = ({ loading, onClose, children }) => {
         <Label fontFamily="syncopate" geCenter geColor="yellow" labelStyle={{ marginTop: 16 }}>
           Transaction Error!
         </Label>
-        {!gameEditionView && <ErrorIcon style={{ width: '60px', height: ' 60px', margin: '16px 0' }} />}
         <Label fontFamily="syncopate" labelStyle={{ marginBottom: ' 12px', width: '100%' }}>
           Error Message
         </Label>

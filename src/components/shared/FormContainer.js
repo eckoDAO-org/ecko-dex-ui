@@ -42,7 +42,7 @@ const FormContainer = ({ containerStyle, title, titleStyle, children, footer, wi
       withGradient
       className="relative column justify-sb w-100 background-fill"
       gameEditionClassName="relative column justify-sb w-100 h-100"
-      style={{ padding: 32, ...containerStyle }}
+      style={{ padding: 24, ...containerStyle }}
     >
       <>
         {title && (

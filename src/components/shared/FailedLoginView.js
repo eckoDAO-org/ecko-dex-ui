@@ -58,7 +58,6 @@ const FailedLoginView = ({ onClose, show, accountName }) => {
               onClose={onClose}
             >
               <Content>
-                <ErrorIcon />
                 <Title>No Account</Title>
                 <SubTitle>
                   {`Please make sure the account ${accountName} exist on kadena

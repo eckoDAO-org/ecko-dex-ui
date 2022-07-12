@@ -341,13 +341,12 @@ const StakeContainer = () => {
 
   return (
     <FlexContainer
-      className="column w-100"
-      style={{ paddingTop: 35, paddingBottom: 35 }}
+      className="column w-100 main"
       desktopStyle={{ paddingRight: theme().layout.desktopPadding, paddingLeft: theme().layout.desktopPadding }}
       tabletStyle={{ paddingRight: theme().layout.tabletPadding, paddingLeft: theme().layout.tabletPadding }}
       mobileStyle={{ paddingRight: theme().layout.mobilePadding, paddingLeft: theme().layout.mobilePadding }}
     >
-      <FlexContainer className="w-100 justify-sb" style={{ marginBottom: 24 }} mobileStyle={{ marginTop: 24 }}>
+      <FlexContainer className="w-100 justify-sb" style={{ marginBottom: 24 }}>
         <FlexContainer gap={16} mobileStyle={{ marginBottom: 16 }}>
           <Label
             withShade={pathname !== ROUTE_STAKE}

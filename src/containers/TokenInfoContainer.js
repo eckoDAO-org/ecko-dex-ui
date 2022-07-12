@@ -75,9 +75,8 @@ const TokenInfoContainer = () => {
 
   return (
     <FlexContainer
-      className="column w-100"
+      className="column w-100 main"
       gap={24}
-      style={{ paddingTop: 35, paddingBottom: 35 }}
       desktopStyle={{ paddingRight: theme.layout.desktopPadding, paddingLeft: theme.layout.desktopPadding }}
       tabletStyle={{ paddingRight: theme.layout.tabletPadding, paddingLeft: theme.layout.tabletPadding }}
       mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
