@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import styled from 'styled-components/macro';
-import { useAccountContext, useGameEditionContext, usePactContext, useSwapContext } from '../../../contexts';
+import { useAccountContext, useGameEditionContext, useLiquidityContext, usePactContext, useSwapContext } from '../../../contexts';
 import { CHAIN_ID, ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
 import { extractDecimal, getDecimalPlaces, reduceBalance } from '../../../utils/reduceBalance';
 import { getTokenIconById, getTokenName } from '../../../utils/token-utils';
@@ -256,8 +256,10 @@ export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading
   );
 };
 
-export const SuccessRemoveView = ({ token0, token1, loading, onClick }) => {
+export const SuccessRemoveView = ({ token0, token1, loading, onClick, pair }) => {
   const swap = useSwapContext();
+  const { wantsKdxRewards } = useLiquidityContext();
+
   return (
     <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle>
       <FlexContainer className="w-100 column" gap={12}>
@@ -265,16 +267,16 @@ export const SuccessRemoveView = ({ token0, token1, loading, onClick }) => {
 
         <CustomDivider style={{ margin: '16px 0' }} />
 
-        <div className="flex align-ce justify-sb">
+        <div className="flex">
           <Label fontSize={16}>Amount</Label>
-          <Label fontSize={16}>Rewards</Label>
         </div>
 
         <div className="flex align-ce justify-sb">
           <div className="flex align-ce">
             <CryptoContainer size={24}>{getTokenIconById(token0)}</CryptoContainer>
             <Label>
-              {getDecimalPlaces(extractDecimal(swap?.localRes?.result?.data?.amountA)) || '-'} {token0}
+              {getDecimalPlaces(extractDecimal(pair.isBoosted ? swap?.localRes?.result?.data?.amountA : swap?.localRes?.result?.data?.amount0)) ||
+                '-'}
             </Label>
           </div>
           <Label>{token0}</Label>
@@ -283,12 +285,28 @@ export const SuccessRemoveView = ({ token0, token1, loading, onClick }) => {
           <div className="flex align-ce">
             <CryptoContainer size={24}>{getTokenIconById(token1)}</CryptoContainer>
             <Label>
-              {getDecimalPlaces(extractDecimal(swap?.localRes?.result?.data?.amountB)) || '-'} {token1}
+              {getDecimalPlaces(extractDecimal(pair.isBoosted ? swap?.localRes?.result?.data?.amountB : swap?.localRes?.result?.data?.amount1)) ||
+                '-'}
             </Label>
           </div>
 
           <Label>{token1}</Label>
         </div>
+
+        {wantsKdxRewards && pair.isBoosted && (
+          <>
+            <div className="flex" style={{ marginTop: 6 }}>
+              <Label fontSize={16}>Rewards</Label>
+            </div>
+            <div className="flex align-ce justify-sb">
+              <div className="flex align-ce">
+                <CryptoContainer size={24}>{getTokenIconById('KDX')}</CryptoContainer>
+                <Label>{getDecimalPlaces(extractDecimal(swap?.localRes?.resPreview['estimated-kdx-rewards'])) || '-'}</Label>
+              </div>
+              <Label>KDX</Label>
+            </div>
+          </>
+        )}
       </FlexContainer>
     </SuccesViewContainer>
   );

@@ -135,7 +135,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
 
   const supply = async () => {
     const token1 = selectedPool?.token0 === fromValue.coin ? selectedPool?.token1 : selectedPool?.token0;
-    const res = await addOneSideLiquidityWallet(tokenData[fromValue.coin], tokenData[token1], fromValue.amount.toFixed(fromValue.precision));
+    const res = await addOneSideLiquidityWallet(tokenData[fromValue.coin], tokenData[token1], Number(fromValue?.amount).toFixed(fromValue.precision));
     if (!res) {
       wallet.setIsWaitingForWalletAuth(true);
       /* pact.setWalletError(true); */

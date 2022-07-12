@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
+import { getKdxRewardsAvailable, getPairMultiplier } from '../../api/liquidity-rewards';
 import { BoosterIcon, CoinKaddexIcon, CoinsIcon, KaddexOutlineIcon } from '../../assets';
+import { KDX_TOTAL_SUPPLY } from '../../constants/contextConstants';
+import tokenData from '../../constants/cryptoCurrencies';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { useLiquidityContext, usePactContext } from '../../contexts';
 import theme from '../../styles/theme';
@@ -13,6 +16,31 @@ import Toggle from './Toggle';
 const RewardBooster = ({ type, apr, handleState, previewObject, pair }) => {
   const { wantsKdxRewards } = useLiquidityContext();
   const { tokensUsdPrice } = usePactContext();
+  const [loading, setLoading] = useState(false);
+
+  const [multiplier, setMultiplier] = useState(null);
+  const [rewardsAvailable, setRewardsAvailable] = useState(null);
+
+  const fetchData = async () => {
+    if (pair) {
+      const res = await getKdxRewardsAvailable();
+      if (!res.errorMessage) {
+        setRewardsAvailable(extractDecimal(res));
+      }
+      const result = await getPairMultiplier(tokenData[pair?.token0].code, tokenData[pair?.token1].code);
+      if (!result.errorMessage) {
+        setMultiplier(result);
+      }
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    handleState(true);
+    fetchData();
+  }, [pair]);
+
   return (
     <>
       <Label fontFamily="syncopate">
@@ -24,8 +52,8 @@ const RewardBooster = ({ type, apr, handleState, previewObject, pair }) => {
           'STANDARD REWARDS'
         )}
       </Label>
-      <Wrapper gap={28} withGradient className="background-fill w-100 column" style={{ padding: 24 }}>
-        <div className="flex justify-sb align-ce">
+      <Wrapper gap={16} withGradient className="background-fill w-100 column" style={{ padding: 24 }}>
+        <div className="flex justify-sb align-fs">
           <FlexContainer gap={16} className="align-ce">
             <CoinsIcon className="coins-icon" />
             <Toggle
@@ -51,9 +79,9 @@ const RewardBooster = ({ type, apr, handleState, previewObject, pair }) => {
           </FlexContainer>
           <div className="flex column">
             <Label fontSize={24}> APR {apr?.toFixed(2)} %</Label>
-            {wantsKdxRewards && (
+            {wantsKdxRewards && multiplier && (
               <Label className="justify-fe" fontSize={13} withShade labelStyle={{ marginTop: 4 }}>
-                3.00 x
+                {multiplier?.toFixed(2)} x
               </Label>
             )}
           </div>
@@ -77,7 +105,7 @@ const RewardBooster = ({ type, apr, handleState, previewObject, pair }) => {
                 </InfoPopup>
               </Label>
             </div>
-            <Label fontSize={13}>{apr?.toFixed(2)} %</Label>
+            <Label fontSize={13}>{((rewardsAvailable * 100) / (KDX_TOTAL_SUPPLY * 0.4)).toFixed(2)} %</Label>
           </div>
         )}
         {type === LIQUIDITY_VIEW.REMOVE_LIQUIDITY && (
