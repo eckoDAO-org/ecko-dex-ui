@@ -9,11 +9,24 @@ import { extractDecimal, humanReadableNumber, reduceBalance } from '../../utils/
 import { usePactContext } from '../../contexts';
 import AnalyticsInfo from './AnalyticsInfo';
 import styled from 'styled-components';
+import { BurnedIcon } from '../../assets';
+import { commonColors } from '../../styles/theme';
 
 const SubLabel = styled(Label)`
   font-size: 16px;
   margin-top: 4px;
   opacity: 0.7;
+`;
+
+const IconContainer = styled.div`
+  margin-right: 6px;
+  svg {
+    width: 16px;
+    height: 14px;
+    path {
+      fill: ${({ theme: { colors }, iconColor }) => (iconColor ? iconColor : `${colors.white}99`)};
+    }
+  }
 `;
 
 const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt, kdxSupply }) => {
@@ -68,7 +81,12 @@ const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt, kdxSupply }) 
         <Label fontSize={24}>$ {(totalVolumeUSD && humanReadableNumber(totalVolumeUSD)) || '-'}</Label>
       </div>
       <div>
-        <Label>KDX Burned</Label>
+        <Label>
+          <IconContainer iconColor={commonColors.redComponent}>
+            <BurnedIcon />
+          </IconContainer>
+          KDX Burned
+        </Label>
         <Label fontSize={24}>{(totalBurnt && humanReadableNumber(reduceBalance(totalBurnt))) || '-'} KDX</Label>
         <SubLabel>{(totalStaked && totalBurnt && (reduceBalance(totalBurnt) * 100) / reduceBalance(totalStaked))?.toFixed(2) || '-'} %</SubLabel>
       </div>
