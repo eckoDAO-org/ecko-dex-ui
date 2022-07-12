@@ -88,7 +88,7 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
         <Label fontSize={24}>KDX Collected</Label>
         <Label fontSize={30}>{rewardAccrued !== 0 ? humanReadableNumber(rewardAccrued) : '-'} KDX</Label>
         {rewardAccrued !== 0 && (
-          <Label fontSize={16} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
+          <Label fontSize={16} mobileFontSize={13} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
             $ {humanReadableNumber(tokensUsdPrice?.KDX * extractDecimal(rewardAccrued))}
           </Label>
         )}

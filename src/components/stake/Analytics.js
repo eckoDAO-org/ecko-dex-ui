@@ -16,6 +16,10 @@ const SubLabel = styled(Label)`
   font-size: 16px;
   margin-top: 4px;
   opacity: 0.7;
+
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+    font-size: 13px;
+  }
 `;
 
 const IconContainer = styled.div`

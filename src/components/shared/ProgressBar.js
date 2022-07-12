@@ -32,6 +32,12 @@ const PercetageIndicator = styled(FlexContainer)`
   }
 `;
 
+const SubLabel = styled(Label)`
+  font-size: 16px;
+  margin-top: 4px;
+  opacity: 0.7;
+`;
+
 const ProgressBar = ({ currentValue, maxValue, topLabelLeft, bottomValues, withBottomLabel, values, darkBar, activeBackground, containerStyle }) => {
   return (
     <FlexContainer className="column w-100" style={containerStyle}>
@@ -69,7 +75,7 @@ const ProgressBar = ({ currentValue, maxValue, topLabelLeft, bottomValues, withB
                   {/* <Indicator /> */}
                   {/* <Indicator style={{ visibility: i === 0 || i === values.length - 1 ? 'hidden' : 'visible' }} />*/}
                   <Label>{typeof v === 'number' ? v.toString() : v.value.toString()}</Label>
-                  {v?.label && <Label labelStyle={{ fontWeight: 'bold' }}>{v.label}</Label>}
+                  {v?.label && <SubLabel labelStyle={{ fontWeight: 'bold' }}>{v.label}</SubLabel>}
                 </PercetageIndicator>
               );
             })}

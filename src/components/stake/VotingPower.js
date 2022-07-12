@@ -49,7 +49,7 @@ const VotingPower = ({ daoAccountData }) => {
           maxValue={2.5}
           currentValue={daoAccountData?.multiplier || 0}
           values={[
-            { value: 0, label: 'START' },
+            { value: 0, label: 'Start' },
             { value: 0.5, label: '7d' },
             { value: 1, label: '2m' },
             { value: 1.5, label: '8.25m' },
