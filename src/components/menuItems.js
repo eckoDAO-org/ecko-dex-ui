@@ -59,13 +59,13 @@ export const VAULT = {
   id: 3,
   label: 'vault',
   target: '_self',
-  link: 'http://134.209.219.136/',
+  link: process.env.REACT_APP_VAULTING_URL,
 };
 export const BUY_CRYPTO = {
   id: 5,
   label: 'buy',
   target: '_self',
-  link: 'https://stage.buy.kaddex.com/',
+  link: process.env.REACT_APP_BUY_CRYPTO_URL,
 };
 
 export default NETWORK_TYPE === 'development'
