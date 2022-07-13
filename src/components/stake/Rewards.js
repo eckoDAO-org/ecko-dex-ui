@@ -35,17 +35,17 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
       const hoursToWait = STAKING_CONSTANTS.rewardsPenaltyHoursToWait - moment().diff(stakedTimeStart, 'hours');
       const minutesToWait = STAKING_CONSTANTS.rewardsPenaltyHoursToWait * 60 - moment().diff(stakedTimeStart, 'minutes');
       if (daysToWait > 1) {
-        return `${daysToWait} days left`;
+        return `${daysToWait} days`;
       } else {
         if (hoursToWait > 1) {
-          return `${hoursToWait} hours left`;
+          return `${hoursToWait} hours`;
         } else {
           if (minutesToWait > 1) {
-            return `${minutesToWait} minutes left`;
-          } else if (minutesToWait === 1) {
-            return `${minutesToWait} minute left`;
+            return `${minutesToWait} minutes`;
+          } else if (minutesToWait == 1) {
+            return `${minutesToWait} minute`;
           } else {
-            return '0 time left';
+            return '0 seconds';
           }
         }
       }
@@ -105,7 +105,7 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
         </div>
 
         <Label fontSize={24} color={getPenaltyColor()}>
-          {getPenaltyRewardsString()[0] !== '0.00' ? `${getPenaltyRewardsString()[0]} KDX` : '-'}
+          {getPenaltyRewardsString()[0] !== '0.00' ? `${getPenaltyRewardsString()[0]} KDX` : 'None'}
         </Label>
         {rewardsPenalty && getPenaltyRewardsString()[0] !== '0.00' ? (
           <Label fontSize={16} color={getPenaltyColor()}>

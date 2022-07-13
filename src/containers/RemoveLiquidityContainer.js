@@ -18,6 +18,8 @@ import { LIQUIDITY_VIEW } from '../constants/liquidityView';
 import { getAllPairValues } from '../utils/token-utils';
 import { getDailyVolume } from '../api/kaddex-stats';
 import theme from '../styles/theme';
+import tokenData from '../constants/cryptoCurrencies';
+import { useInterval } from '../hooks/useInterval';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -38,12 +40,15 @@ const RemoveLiquidityContainer = () => {
   const history = useHistory();
   const query = useQueryParams();
   const { setWantsKdxRewards } = useLiquidityContext();
-
+  const liquidity = useLiquidityContext();
   const { account } = useAccountContext();
 
   const [loading, setLoading] = useState(false);
   const [pair, setPair] = useState(null);
   const [apr, setApr] = useState(null);
+  const [previewObject, setPreviewObject] = useState(null);
+
+  const [previewAmount, setPreviewAmount] = useState(1);
 
   const calculateApr = async (resultPairList, currentPair) => {
     const volumes = await getDailyVolume();
@@ -64,9 +69,23 @@ const RemoveLiquidityContainer = () => {
       setPair(currentPair);
       if (currentPair) {
         await calculateApr(resultPairList, currentPair);
+        await removePreview(currentPair);
       }
     }
     setLoading(false);
+  };
+
+  /* useInterval(async () => {
+    if (pair) {
+      await removePreview(pair);
+    }
+  }, 60000); */
+
+  const removePreview = async (currentPair) => {
+    const res = await liquidity.removeLiquidityPreview(tokenData[currentPair?.token0].code, tokenData[currentPair?.token1].code, previewAmount);
+    if (!res.errorMessage) {
+      setPreviewObject(res);
+    }
   };
 
   useEffect(() => {
@@ -110,8 +129,18 @@ const RemoveLiquidityContainer = () => {
             </FlexContainer>
             <SlippagePopupContent />
           </FlexContainer>
-          <RewardBooster apr={apr} type={LIQUIDITY_VIEW.REMOVE_LIQUIDITY} handleState={setWantsKdxRewards} />
-          <RemoveLiquidityContent pair={pair} />
+          {pair.isBoosted && (
+            <>
+              <RewardBooster
+                apr={apr}
+                type={LIQUIDITY_VIEW.REMOVE_LIQUIDITY}
+                handleState={setWantsKdxRewards}
+                previewObject={previewObject}
+                pair={pair}
+              />
+            </>
+          )}
+          <RemoveLiquidityContent pair={pair} previewObject={previewObject} previewAmount={previewAmount} setPreviewAmount={setPreviewAmount} />
         </>
       )}
     </Container>

@@ -17,8 +17,7 @@ import { ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS } from '../
 import Dex from '../components/analytics/Dex';
 import Kdx from '../components/analytics/Kdx';
 import StatsTable from '../components/analytics/StatsTable';
-
-const KDX_TOTAL_SUPPLY = 1000000000;
+import { KDX_TOTAL_SUPPLY } from '../constants/contextConstants';
 
 const AnalyticsContainer = () => {
   const { pathname } = useLocation();

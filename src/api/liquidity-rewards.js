@@ -16,6 +16,28 @@ const getLiquidityRewards = async (account) => {
   }
 };
 
+export const getPairMultiplier = async (tokenA, tokenB) => {
+  try {
+    let data = await pactFetchLocal(`(${KADDEX_NAMESPACE}.wrapper.get-pair-multiplier ${tokenA} ${tokenB})`);
+    if (data) {
+      return data;
+    }
+  } catch (e) {
+    return handleError(e);
+  }
+};
+
+export const getKdxRewardsAvailable = async () => {
+  try {
+    let data = await pactFetchLocal(`(${KADDEX_NAMESPACE}.wrapper.total-kdx-rewards-available)`);
+    if (data) {
+      return data;
+    }
+  } catch (e) {
+    return handleError(e);
+  }
+};
+
 export const getAccountLiquidityRewards = async (account) => {
   try {
     const res = await getLiquidityRewards(account);
