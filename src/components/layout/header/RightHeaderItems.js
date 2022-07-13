@@ -157,7 +157,8 @@ const RightHeaderItems = () => {
       <PopupContentList
         icon={<ThreeDotsIcon className="menu-icon" />}
         items={headerLinks}
-        className="w-fit-content"
+        disableUnderline
+        className="w-fit-content align-ce"
         viewOtherComponents
         withLogout
         PopupContentListStyle={{ minWidth: 120 }}
