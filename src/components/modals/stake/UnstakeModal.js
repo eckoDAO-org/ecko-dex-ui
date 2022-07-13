@@ -29,7 +29,7 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
           </Label>
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 16, fontSize: 16 }}>
-              <Label>Penalty</Label>
+              <Label>Position Penalty</Label>
               <Label>3%</Label>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 16, fontSize: 16 }}>
@@ -102,6 +102,14 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
       <StakeModalRow>
         <RowTokenInfoPrice tokenIcon={getTokenIconByCode('kaddex.kdx')} tokenName="KDX" amount={toUnstakeAmount} tokenPrice={tokensUsdPrice?.KDX} />
       </StakeModalRow>
+      {toUnstakeAmount ? (
+        <StakeModalRow>
+          <Label color={commonColors.red}>Position penalty</Label>
+          <Label color={commonColors.red}>{getDecimalPlaces(toUnstakeAmount * 0.03)} KDX</Label>
+        </StakeModalRow>
+      ) : (
+        ''
+      )}
       {isRewardsAvailable ? (
         <StakeModalRow style={{ margin: '8px 0px 0px 4px' }}>
           <CustomCheckbox onClick={() => setChecked(!checked)}>Withdraw your KDX staking rewards</CustomCheckbox>

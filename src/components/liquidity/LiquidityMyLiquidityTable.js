@@ -28,7 +28,7 @@ const LiquidityMyLiquidityTable = () => {
 
   const fetchData = async () => {
     const result = await getPairListAccountBalance(account.account);
-    const resultWithLiquidity = result.filter((r) => r.pooledAmount[0] !== 0 && r.pooledAmount[1] !== 0);
+    const resultWithLiquidity = result.filter((r) => extractDecimal(r.pooledAmount[0]) !== 0 && extractDecimal(r.pooledAmount[1]) !== 0);
     orderPairs(resultWithLiquidity);
     setLoading(false);
   };
