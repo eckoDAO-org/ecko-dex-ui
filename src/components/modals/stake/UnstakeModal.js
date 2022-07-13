@@ -121,11 +121,13 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
               tokenPrice={tokensUsdPrice?.KDX}
             />
           </StakeModalRow>
-          {estimateUnstakeData && estimateUnstakeData?.['reward-penalty'] && (
+          {estimateUnstakeData && estimateUnstakeData?.['reward-penalty'] ? (
             <StakeModalRow>
               <Label color={commonColors.red}>Rewards penalty</Label>
               <Label color={commonColors.red}>{humanReadableNumber(extractDecimal(estimateUnstakeData?.['reward-penalty']))} KDX</Label>
             </StakeModalRow>
+          ) : (
+            ''
           )}
         </div>
       )}
