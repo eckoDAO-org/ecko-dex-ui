@@ -31,6 +31,7 @@ import { NETWORK } from '../constants/contextConstants';
 import { theme } from '../styles/theme';
 import { useInterval } from '../hooks/useInterval';
 import { extractDecimal, getDecimalPlaces, reduceBalance } from '../utils/reduceBalance';
+import { STAKING_CONSTANTS } from '../constants/stakingConstants';
 
 const StakeContainer = () => {
   const history = useHistory();
@@ -106,9 +107,9 @@ const StakeContainer = () => {
 
   const getUnstakeModalTitle = () => {
     if (estimateUnstakeData?.staked && estimateUnstakeData?.staked > 0) {
-      const diffDays = moment().diff(stakedTimeStart, 'days');
-      const isPenaltyActive = diffDays <= 60;
-      return `CLOSING YOUR STAKING PLAN${isPenaltyActive && ' EARLY'}`;
+      const diffDays = moment().diff(stakedTimeStart, 'hours');
+      const isPenaltyActive = diffDays <= STAKING_CONSTANTS.rewardsPenaltyHoursToWait;
+      return `CLOSING YOUR STAKING PLAN${isPenaltyActive ? ' EARLY' : ''}`;
     }
     return `Transaction details`;
   };

@@ -259,7 +259,6 @@ export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading
 export const SuccessRemoveView = ({ token0, token1, loading, onClick, pair }) => {
   const swap = useSwapContext();
   const { wantsKdxRewards } = useLiquidityContext();
-
   return (
     <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle>
       <FlexContainer className="w-100 column" gap={12}>
@@ -301,7 +300,7 @@ export const SuccessRemoveView = ({ token0, token1, loading, onClick, pair }) =>
             <div className="flex align-ce justify-sb">
               <div className="flex align-ce">
                 <CryptoContainer size={24}>{getTokenIconById('KDX')}</CryptoContainer>
-                <Label>{getDecimalPlaces(extractDecimal(swap?.localRes?.resPreview['estimated-kdx-rewards'])) || '-'}</Label>
+                <Label>{getDecimalPlaces(extractDecimal(swap?.localRes?.resPreview?.['estimated-kdx-rewards'])) || '-'}</Label>
               </div>
               <Label>KDX</Label>
             </div>

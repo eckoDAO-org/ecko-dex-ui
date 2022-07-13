@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import CustomButton from '../../shared/CustomButton';
 import CustomDivider from '../../shared/CustomDivider';
-import { CoinKaddexIcon } from '../../../assets';
 import { usePactContext } from '../../../contexts';
 import { StakeModalRow } from './AddStakeModal';
 import Label from '../../shared/Label';
 import CustomCheckbox from '../../shared/CustomCheckbox';
-import { getDecimalPlaces } from '../../../utils/reduceBalance';
+import { extractDecimal, getDecimalPlaces, humanReadableNumber } from '../../../utils/reduceBalance';
 import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
 import { getTokenIconByCode } from '../../../utils/token-utils';
 import { STAKING_CONSTANTS } from '../../../constants/stakingConstants';
+import theme, { commonColors } from '../../../styles/theme';
 
 export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeData, toUnstakeAmount, stakedTimeStart }) => {
   const [checked, setChecked] = useState(false);
@@ -78,14 +78,18 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
     } else {
       return (
         <>
-          <Label fontSize={16}>Rewards Collected</Label>
-          <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 12, marginBottom: 20 }}>
+          <Label fontSize={13} labelStyle={{ marginBottom: 20 }}>
+            Are you sure you want to close your staking plan? Partially or completely removing your staking position will have a negative effect on
+            your Voting power.
+          </Label>
+
+          {/* <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 12, marginBottom: 20 }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 16, height: 30, width: 30 }} />
               <Label>{estimateUnstakeData['reward-accrued']} </Label>
             </div>
             <Label>KDX</Label>
-          </div>
+          </div> */}
         </>
       );
     }
@@ -113,10 +117,16 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
             <RowTokenInfoPrice
               tokenIcon={getTokenIconByCode('kaddex.kdx')}
               tokenName="KDX"
-              amount={(estimateUnstakeData && estimateUnstakeData['reward-accrued']) || 0}
+              amount={(estimateUnstakeData && estimateUnstakeData?.['reward-accrued']) || 0}
               tokenPrice={tokensUsdPrice?.KDX}
             />
           </StakeModalRow>
+          {estimateUnstakeData && estimateUnstakeData?.['reward-penalty'] && (
+            <StakeModalRow>
+              <Label color={commonColors.red}>Rewards penalty</Label>
+              <Label color={commonColors.red}>{humanReadableNumber(extractDecimal(estimateUnstakeData?.['reward-penalty']))} KDX</Label>
+            </StakeModalRow>
+          )}
         </div>
       )}
       <CustomButton type="gradient" buttonStyle={{ marginTop: 32 }} onClick={() => onConfirm(checked)}>
