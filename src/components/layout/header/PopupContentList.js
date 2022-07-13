@@ -68,7 +68,16 @@ const CustomDivider = styled(Divider)`
   border-bottom: 0px !important;
 `;
 
-const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContentListStyle, withoutAccountInfo, icon, className }) => {
+const PopupContentList = ({
+  items,
+  viewOtherComponents,
+  withLogout,
+  PopupContentListStyle,
+  withoutAccountInfo,
+  icon,
+  className,
+  disableUnderline,
+}) => {
   const { pathname } = useLocation();
   const { account, logout } = useAccountContext();
   const { gameEditionView, openModal } = useGameEditionContext();
@@ -94,15 +103,14 @@ const PopupContentList = ({ items, viewOtherComponents, withLogout, PopupContent
             {items.map((item, index) => (
               <HeaderItem
                 key={index}
-                disableUnderline
                 item={item}
+                disableUnderline={disableUnderline}
                 className={item?.className}
                 onClick={() => {
                   setShowPopup(false);
                 }}
                 headerItemStyle={{
                   display: 'flex',
-                  alignItems: 'center',
                   fontSize: 16,
                   fontFamily: commonTheme.fontFamily.basier,
                 }}

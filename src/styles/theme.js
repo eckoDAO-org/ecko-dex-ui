@@ -1,7 +1,7 @@
 export const commonTheme = {
   layout: {
     desktopPadding: 88,
-    tabletPadding: 24,
+    tabletPadding: 32,
     mobilePadding: 16,
   },
   header: {

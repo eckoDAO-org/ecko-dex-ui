@@ -30,9 +30,8 @@ const DaoContainer = () => {
 
   return (
     <FlexContainer
-      className="column w-100"
+      className="column w-100 main"
       gap={16}
-      style={{ paddingTop: 35, paddingBottom: 35 }}
       desktopStyle={{
         paddingRight: theme.layout.desktopPadding,
         paddingLeft: theme.layout.desktopPadding,

@@ -12,6 +12,12 @@ const Item = styled(Link)`
   background: transparent;
   z-index: 1;
 
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
+    flex-direction: column;
+    text-align: left;
+    max-width: min-content;
+  }
+
   .underline {
     width: ${({ $isHover }) => ($isHover ? '100%' : 0)};
     transition: width 0.3s;

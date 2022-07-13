@@ -102,8 +102,9 @@ const SwapHistoryContainer = () => {
   return (
     <CardContainer
       gameEditionView={gameEditionView}
-      desktopStyle={{ padding: `35px ${theme.layout.desktopPadding}px` }}
-      mobileStyle={{ paddingBottom: 40 }}
+      desktopStyle={{ padding: `32px ${theme.layout.desktopPadding}px` }}
+      tabletStyle={{ padding: 32 }}
+      mobileStyle={{ padding: '24px 16px 40px' }}
     >
       <FlexContainer className="w-100 justify-sb" style={{ marginBottom: 24 }} gameEditionStyle={{ marginBottom: 14 }}>
         <Label fontSize={24} geFontSize={32} fontFamily="syncopate">

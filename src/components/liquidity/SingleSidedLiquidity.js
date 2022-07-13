@@ -309,7 +309,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
           }
           bottomContent={
             fromValue.amount && (
-              <Label fontSize={16} labelStyle={{ margin: '-10px 0px 10px 2px', opacity: 0.7 }}>
+              <Label labelStyle={{ margin: '-10px 0px 10px 2px', opacity: 0.7 }}>
                 $ {humanReadableNumber(extractDecimal(pact.tokensUsdPrice?.[fromValue.coin]) * extractDecimal(fromValue.amount))}
               </Label>
             )

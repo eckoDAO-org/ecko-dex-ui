@@ -165,7 +165,7 @@ export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading
   const swap = useSwapContext();
   const pair = getPairByTokensName(token0, token1);
 
-  const fromValues = swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1'];
+  const fromValues = extractDecimal(swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1']);
 
   return (
     <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle>
@@ -245,7 +245,7 @@ export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading
                   ? token0 === pair.token0
                     ? fromValues * reduceBalance(pact?.computeOut(fromValues) / fromValues, 12)
                     : fromValues * reduceBalance(pact?.computeIn(fromValues) / fromValues, 12)
-                  : swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0']
+                  : extractDecimal(swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0'])
               }
               tokenPrice={pact.tokensUsdPrice?.[token1] || null}
             />
@@ -259,7 +259,6 @@ export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading
 export const SuccessRemoveView = ({ token0, token1, loading, onClick, pair }) => {
   const swap = useSwapContext();
   const { wantsKdxRewards } = useLiquidityContext();
-
   return (
     <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle>
       <FlexContainer className="w-100 column" gap={12}>
@@ -301,7 +300,7 @@ export const SuccessRemoveView = ({ token0, token1, loading, onClick, pair }) =>
             <div className="flex align-ce justify-sb">
               <div className="flex align-ce">
                 <CryptoContainer size={24}>{getTokenIconById('KDX')}</CryptoContainer>
-                <Label>{getDecimalPlaces(extractDecimal(swap?.localRes?.resPreview['estimated-kdx-rewards'])) || '-'}</Label>
+                <Label>{getDecimalPlaces(extractDecimal(swap?.localRes?.resPreview?.['estimated-kdx-rewards'])) || '-'}</Label>
               </div>
               <Label>KDX</Label>
             </div>

@@ -28,7 +28,7 @@ const ModalContainer = ({ title, description, containerStyle, titleStyle, descri
     <FlexContainer
       withGradient
       className="relative column justify-sb w-100 background-fill"
-      style={{ padding: 32, maxHeight: '90%', overflowY: 'auto', ...containerStyle }}
+      style={{ padding: 24, maxHeight: '90%', overflowY: 'auto', ...containerStyle }}
     >
       <HeaderContainer style={{ justifyContent: !onBack && !onClose && 'center', alignItems: 'flex-start' }}>
         {onBack && (

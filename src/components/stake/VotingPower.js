@@ -15,7 +15,7 @@ const VotingPower = ({ daoAccountData }) => {
       cardStyle={{ paddingBottom: 60 }}
       title={
         <EquationContainer className="flex align-ce" mobileStyle={{ flexDirection: 'column', display: 'flex', alignItems: 'flex-start' }}>
-          <Label fontFamily="syncopate" fontSize={24} labelStyle={{ marginRight: 16 }}>
+          <Label fontFamily="syncopate" fontSize={16} labelStyle={{ marginRight: 16 }}>
             Voting Power (V)
           </Label>
           <VotingPowerFormulaIcon width={88} height={37} style={{ marginRight: 20 }} />
@@ -49,7 +49,7 @@ const VotingPower = ({ daoAccountData }) => {
           maxValue={2.5}
           currentValue={daoAccountData?.multiplier || 0}
           values={[
-            { value: 0, label: 'START' },
+            { value: 0, label: 'Start' },
             { value: 0.5, label: '7d' },
             { value: 1, label: '2m' },
             { value: 1.5, label: '8.25m' },

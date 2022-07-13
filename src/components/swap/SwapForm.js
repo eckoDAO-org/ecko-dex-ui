@@ -116,7 +116,7 @@ const SwapForm = ({ label, fromValues, setFromValues, toValues, setToValues, fro
               fromValues.amount &&
               !gameEditionView &&
               Number(fromValues.amount) !== 0 && (
-                <Label fontSize={16} labelStyle={{ margin: '-10px 0px 10px 2px', opacity: 0.7 }}>
+                <Label labelStyle={{ margin: '-10px 0px 10px 2px', opacity: 0.7 }}>
                   $ {humanReadableNumber(extractDecimal(tokensUsdPrice?.[fromValues.coin]) * extractDecimal(fromValues.amount))}
                 </Label>
               )
@@ -192,7 +192,7 @@ const SwapForm = ({ label, fromValues, setFromValues, toValues, setToValues, fro
               toValues.amount &&
               !gameEditionView &&
               Number(toValues.amount) !== 0 && (
-                <Label fontSize={16} labelStyle={{ margin: '-10px 0px 10px 2px', opacity: 0.7 }}>
+                <Label labelStyle={{ margin: '-10px 0px 10px 2px', opacity: 0.7 }}>
                   $ {humanReadableNumber(extractDecimal(tokensUsdPrice?.[toValues.coin]) * extractDecimal(toValues.amount))}
                 </Label>
               )

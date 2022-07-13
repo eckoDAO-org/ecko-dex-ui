@@ -1,5 +1,25 @@
 {
   "pairs": {
+    "stage": {
+      "coin:kaddex.kdx": {
+        "name": "coin:kaddex.kdx",
+        "token0": "KDA",
+        "token1": "KDX",
+        "isBoosted": true
+      },
+      "coin:kaddex.abc": {
+        "name": "coin:kaddex.abc",
+        "token0": "KDA",
+        "token1": "ABC",
+        "isBoosted": true
+      },
+      "coin:kaddex.xyz": {
+        "name": "coin:kaddex.xyz",
+        "token0": "KDA",
+        "token1": "XYZ",
+        "isBoosted": false
+      }
+    },
     "development": {
       "coin:kaddex.kdx": {
         "name": "coin:kaddex.kdx",

@@ -1,3 +1,4 @@
+import { NETWORK_TYPE } from '../constants/contextConstants';
 import {
   ROUTE_STATS,
   ROUTE_SWAP,
@@ -15,7 +16,6 @@ import {
   ROUTE_LIQUIDITY_REWARDS,
   ROUTE_ANALYTICS_KDX,
   ROUTE_ANALYTICS_STATS,
-  ROUTE_BUY_CRYPTO,
 } from '../router/routes';
 
 export const SWAP = {
@@ -59,16 +59,18 @@ export const VAULT = {
   id: 3,
   label: 'vault',
   target: '_self',
-  link: 'http://134.209.219.136/',
+  link: process.env.REACT_APP_VAULTING_URL,
 };
 export const BUY_CRYPTO = {
   id: 5,
   label: 'buy',
   target: '_self',
-  link: 'https://stage.buy.kaddex.com/',
+  link: process.env.REACT_APP_BUY_CRYPTO_URL,
 };
 
-export default [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS, VAULT, BUY_CRYPTO];
+export default NETWORK_TYPE === 'development'
+  ? [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS, VAULT]
+  : [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS, VAULT, BUY_CRYPTO];
 
 export const gameEditionRoutes = [
   {

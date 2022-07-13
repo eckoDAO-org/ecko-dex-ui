@@ -31,6 +31,7 @@ import { NETWORK } from '../constants/contextConstants';
 import { theme } from '../styles/theme';
 import { useInterval } from '../hooks/useInterval';
 import { extractDecimal, getDecimalPlaces, reduceBalance } from '../utils/reduceBalance';
+import { STAKING_CONSTANTS } from '../constants/stakingConstants';
 
 const StakeContainer = () => {
   const history = useHistory();
@@ -106,9 +107,9 @@ const StakeContainer = () => {
 
   const getUnstakeModalTitle = () => {
     if (estimateUnstakeData?.staked && estimateUnstakeData?.staked > 0) {
-      const diffDays = moment().diff(stakedTimeStart, 'days');
-      const isPenaltyActive = diffDays <= 60;
-      return `CLOSING YOUR STAKING PLAN${isPenaltyActive && ' EARLY'}`;
+      const diffDays = moment().diff(stakedTimeStart, 'hours');
+      const isPenaltyActive = diffDays <= STAKING_CONSTANTS.rewardsPenaltyHoursToWait;
+      return `CLOSING YOUR STAKING PLAN${isPenaltyActive ? ' EARLY' : ''}`;
     }
     return `Transaction details`;
   };
@@ -341,13 +342,12 @@ const StakeContainer = () => {
 
   return (
     <FlexContainer
-      className="column w-100"
-      style={{ paddingTop: 35, paddingBottom: 35 }}
+      className="column w-100 main"
       desktopStyle={{ paddingRight: theme().layout.desktopPadding, paddingLeft: theme().layout.desktopPadding }}
       tabletStyle={{ paddingRight: theme().layout.tabletPadding, paddingLeft: theme().layout.tabletPadding }}
       mobileStyle={{ paddingRight: theme().layout.mobilePadding, paddingLeft: theme().layout.mobilePadding }}
     >
-      <FlexContainer className="w-100 justify-sb" style={{ marginBottom: 24 }} mobileStyle={{ marginTop: 24 }}>
+      <FlexContainer className="w-100 justify-sb" style={{ marginBottom: 24 }}>
         <FlexContainer gap={16} mobileStyle={{ marginBottom: 16 }}>
           <Label
             withShade={pathname !== ROUTE_STAKE}

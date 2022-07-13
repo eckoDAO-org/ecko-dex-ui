@@ -26,7 +26,6 @@ import {
   ROUTE_LIQUIDITY_REWARDS,
   ROUTE_ANALYTICS_KDX,
   ROUTE_ANALYTICS_STATS,
-  ROUTE_BUY_CRYPTO,
   ROUTE_TOKEN_INFO,
 } from './routes';
 import SwapHistoryContainer from '../containers/SwapHistoryContainer';
@@ -36,7 +35,6 @@ import LiquidityContainer from '../containers/LiquidityContainer';
 import AddLiquidityContainer from '../components/liquidity/AddLiquidityContainer';
 import RemoveLiquidityContainer from '../containers/RemoveLiquidityContainer';
 import StakeContainer from '../containers/StakeContainer';
-import BuyCryptoContainer from '../containers/BuyCryptoContainer';
 import TokenInfoContainer from '../containers/TokenInfoContainer';
 
 export default () => {

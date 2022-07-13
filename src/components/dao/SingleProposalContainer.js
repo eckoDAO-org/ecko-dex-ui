@@ -155,7 +155,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
                 {getStatusProposal(singleProposalData)}
               </Label>
             </FlexContainer>
-            <FlexContainer className="justify-sb align-ce w-100" mobileClassName="grid" columns={2}>
+            <FlexContainer className="justify-sb align-ce w-100" mobileClassName="grid" tabletClassName="grid" columns={2}>
               <ColumnLabels title="Author" description={singleProposalData?.account} />
               <ColumnLabels title="Start Date" description={moment(singleProposalData['start-date']?.time).format('LLL')} />
               <ColumnLabels title="End Date" description={moment(singleProposalData['end-date']?.time).format('LLL')} />
