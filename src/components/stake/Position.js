@@ -48,9 +48,13 @@ const Position = ({
       <div>
         <Label fontSize={24}>My Stake</Label>
         <Label fontSize={30}>{humanReadableNumber(amount)} KDX</Label>
-        <Label fontSize={16} mobileFontSize={13} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
-          $ {humanReadableNumber(extractDecimal(tokensUsdPrice?.KDX) * extractDecimal(amount))}
-        </Label>
+        {tokensUsdPrice?.KDX ? (
+          <Label fontSize={16} mobileFontSize={13} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
+            $ {humanReadableNumber(extractDecimal(tokensUsdPrice?.KDX) * extractDecimal(amount))}
+          </Label>
+        ) : (
+          ''
+        )}
         {pendingAmount && (
           <Label fontSize={15} labelStyle={{ marginTop: 8, color: commonColors.info }}>
             (Pending {humanReadableNumber(pendingAmount)} KDX)
