@@ -1,3 +1,4 @@
+import { NETWORK_TYPE } from '../constants/contextConstants';
 import {
   ROUTE_STATS,
   ROUTE_SWAP,
@@ -67,7 +68,9 @@ export const BUY_CRYPTO = {
   link: 'https://stage.buy.kaddex.com/',
 };
 
-export default [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS, VAULT, BUY_CRYPTO];
+export default NETWORK_TYPE === 'development'
+  ? [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS, VAULT]
+  : [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS, VAULT, BUY_CRYPTO];
 
 export const gameEditionRoutes = [
   {
