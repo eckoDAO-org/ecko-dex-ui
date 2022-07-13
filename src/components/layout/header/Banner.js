@@ -44,7 +44,7 @@ const Banner = () => {
     >
       <AlertIcon className="mobile-none" />
       <Label inverted fontSize={13} labelStyle={{ display: 'inline-block' }}>
-        When using Kaddex, first, make sure to have your Kadena native assets on chain 2.
+        Welcome to our devnet environment, first, make sure to have devnet network information added to x-wallet, and funds on chain 0.
       </Label>
     </STYBannerContainer>
   );
