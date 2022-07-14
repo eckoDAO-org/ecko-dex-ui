@@ -109,11 +109,14 @@ const AccountModal = ({ pathname }) => {
               <RightContainer
                 $gameEditionView={gameEditionView}
                 onClick={() =>
+                  process.env.REACT_APP_KDA_NETWORK_TYPE !== 'development' &&
                   window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/eventsearch?q=${account.account}`, '_blank', 'noopener,noreferrer')
                 }
               >
                 <ExplorerIcon />
-                <Label geFontSize={20}>View in Explorer</Label>
+                <Label geFontSize={20}>
+                  {process.env.REACT_APP_KDA_NETWORK_TYPE !== 'development' ? 'View in Explorer' : 'Explorer not available in devnet'}
+                </Label>
               </RightContainer>
             </div>
             <div className="flex justify-sb w-100">

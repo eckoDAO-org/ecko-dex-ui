@@ -16,8 +16,8 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
   const [checked, setChecked] = useState(false);
 
   const { tokensUsdPrice } = usePactContext();
-  const isThreePercentPenaltyActive = () => stakedTimeStart && moment().diff(stakedTimeStart, 'hours') <= STAKING_CONSTANTS.percentagePenaltyHours;
-  const isDynamicPenaltyActive = () => stakedTimeStart && moment().diff(stakedTimeStart, 'hours') <= STAKING_CONSTANTS.rewardsPenaltyHoursToWait;
+  const isThreePercentPenaltyActive = () => stakedTimeStart && moment().diff(stakedTimeStart, 'hours') < STAKING_CONSTANTS.percentagePenaltyHours;
+  const isDynamicPenaltyActive = () => stakedTimeStart && moment().diff(stakedTimeStart, 'hours') < STAKING_CONSTANTS.rewardsPenaltyHoursToWait;
 
   const getUnstakeModalContent = () => {
     if (isThreePercentPenaltyActive()) {
@@ -102,7 +102,7 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
       <StakeModalRow>
         <RowTokenInfoPrice tokenIcon={getTokenIconByCode('kaddex.kdx')} tokenName="KDX" amount={toUnstakeAmount} tokenPrice={tokensUsdPrice?.KDX} />
       </StakeModalRow>
-      {toUnstakeAmount ? (
+      {isThreePercentPenaltyActive() ? (
         <StakeModalRow>
           <Label color={commonColors.red}>Position penalty</Label>
           <Label color={commonColors.red}>{getDecimalPlaces(toUnstakeAmount * 0.03)} KDX</Label>

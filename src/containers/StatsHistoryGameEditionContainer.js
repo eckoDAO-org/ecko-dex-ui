@@ -54,7 +54,8 @@ const StatsHistoryGameEditionContainer = () => {
           items={Object.values(pairList)}
           columns={renderColumns()}
           onClick={(item) => {
-            window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${item?.requestKey}`, '_blank', 'noopener,noreferrer');
+            process.env.REACT_APP_KDA_NETWORK_TYPE !== 'development' &&
+              window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${item?.requestKey}`, '_blank', 'noopener,noreferrer');
           }}
         />
       ) : (

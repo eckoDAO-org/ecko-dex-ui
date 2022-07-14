@@ -153,7 +153,8 @@ export const NotificationProvider = ({ children }) => {
         closeOnClick: false,
         hideProgressBar: false,
         onClick: async () => {
-          window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${reqKey}`, '_blank', 'noopener,noreferrer');
+          process.env.REACT_APP_KDA_NETWORK_TYPE !== 'development' &&
+            window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${reqKey}`, '_blank', 'noopener,noreferrer');
         },
       });
       setToastNotificationsId((prev) => [...prev, reqKey]);
@@ -171,7 +172,10 @@ export const NotificationProvider = ({ children }) => {
       date: moment().format('DD/MM/YYYY - HH:mm:ss'),
       title: title || 'Transaction Error!',
       description: message || 'Check it out in the block explorer',
-      link: reqKey ? `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}` : null,
+      link:
+        process.env.REACT_APP_KDA_NETWORK_TYPE !== 'development' && reqKey
+          ? `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`
+          : null,
       isRead: false,
     });
     // open the toast FAILURE message
@@ -181,7 +185,9 @@ export const NotificationProvider = ({ children }) => {
       message: message || 'Check it out in the block explorer',
       type: STATUSES.ERROR,
       onClick: async () => {
-        reqKey && window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`, '_blank', 'noopener,noreferrer');
+        process.env.REACT_APP_KDA_NETWORK_TYPE !== 'development' &&
+          reqKey &&
+          window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`, '_blank', 'noopener,noreferrer');
       },
       autoClose: 10000,
     });
@@ -200,7 +206,7 @@ export const NotificationProvider = ({ children }) => {
       date: moment().format('DD/MM/YYYY - HH:mm:ss'),
       title: title || 'Transaction Success!',
       description: message || 'Check it out in the block explorer',
-      link: `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`,
+      link: process.env.REACT_APP_KDA_NETWORK_TYPE !== 'development' ? `https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}` : null,
       isRead: false,
     });
     // open the toast SUCCESS message
@@ -210,7 +216,8 @@ export const NotificationProvider = ({ children }) => {
       message: message || 'Check it out in the block explorer',
       type: STATUSES.SUCCESS,
       onClick: async () => {
-        window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`, '_blank', 'noopener,noreferrer');
+        process.env.REACT_APP_KDA_NETWORK_TYPE !== 'development' &&
+          window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/txdetail/${reqKey}`, '_blank', 'noopener,noreferrer');
       },
       autoClose: 10000,
     });

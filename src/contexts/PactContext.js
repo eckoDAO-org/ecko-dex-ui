@@ -87,7 +87,7 @@ export const PactProvider = (props) => {
             setSwapList(swap);
           } else setSwapList({ error: 'No swaps found' });
         } else {
-          setSwapList({ error: 'No movement was performed' });
+          setSwapList({ error: 'This Devnet environment does not have a block explorer.' });
         }
         setLoadingSwap(false);
       } else {
