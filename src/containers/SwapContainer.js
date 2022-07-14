@@ -272,7 +272,7 @@ const SwapContainer = () => {
           }));
         }
       }
-      setBalanceLoading(false);
+      setTimeout(() => setBalanceLoading(false), 1000);
     };
     getBalance();
   }, [account.fetchAccountBalance, account.account.account]);
@@ -315,19 +315,21 @@ const SwapContainer = () => {
 
   const swapValues = () => {
     if (!balanceLoading) {
-      const from = { ...fromValues };
-      const to = { ...toValues };
-      setFromValues({ ...to });
-      setToValues({ ...from });
-      if (toNote === '(estimate)') {
-        setFromNote('(estimate)');
-        setToNote('');
-      }
-      if (fromNote === '(estimate)') {
-        setToNote('(estimate)');
-        setFromNote('');
-      }
-      setFetchData(true);
+      setTimeout(() => {
+        const from = { ...fromValues };
+        const to = { ...toValues };
+        setFromValues({ ...to });
+        setToValues({ ...from });
+        if (toNote === '(estimate)') {
+          setFromNote('(estimate)');
+          setToNote('');
+        }
+        if (fromNote === '(estimate)') {
+          setToNote('(estimate)');
+          setFromNote('');
+        }
+        setFetchData(true);
+      }, 250);
     }
   };
   // Check if their is enough liquidity before setting the from amount
@@ -631,6 +633,7 @@ const SwapContainer = () => {
         }
       >
         <SwapForm
+          balanceLoading={balanceLoading}
           fromValues={fromValues}
           setFromValues={setFromValues}
           toValues={toValues}

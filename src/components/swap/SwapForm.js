@@ -75,7 +75,19 @@ const SecondInputContainer = styled.div`
   }}
 `;
 
-const SwapForm = ({ label, fromValues, setFromValues, toValues, setToValues, fromNote, toNote, setTokenSelectorType, setInputSide, swapValues }) => {
+const SwapForm = ({
+  label,
+  fromValues,
+  setFromValues,
+  toValues,
+  setToValues,
+  fromNote,
+  toNote,
+  setTokenSelectorType,
+  setInputSide,
+  swapValues,
+  balanceLoading,
+}) => {
   const { themeMode } = useApplicationContext();
   const { tokensUsdPrice } = usePactContext();
   const { gameEditionView } = useGameEditionContext();
@@ -152,14 +164,14 @@ const SwapForm = ({ label, fromValues, setFromValues, toValues, setToValues, fro
             style={{
               cursor: 'pointer',
               transform: `rotate(${rotation}deg)`,
-              transition: 'width 0.3s, transform 0.3s',
+              transition: 'width 0.5s, transform 0.5s',
               zIndex: 2,
               borderRadius: '50%',
               backgroundColor: theme(themeMode).backgroundContainer,
             }}
             onClick={() => {
-              swapValues();
-              setRotation((prev) => prev + 180);
+              fromValues.balance && toValues.balance && !balanceLoading && setTimeout(() => swapValues(), 250);
+              fromValues.balance && toValues.balance && !balanceLoading && setRotation((prev) => prev + 180);
             }}
           />
         </div>
