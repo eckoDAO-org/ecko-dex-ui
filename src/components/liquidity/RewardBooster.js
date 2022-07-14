@@ -81,7 +81,7 @@ const RewardBooster = ({ type, apr, handleState, previewObject, pair }) => {
             <Label fontSize={24}> APR {apr?.toFixed(2)} %</Label>
             {wantsKdxRewards && multiplier && (
               <Label className="justify-fe" fontSize={13} withShade labelStyle={{ marginTop: 4 }}>
-                {multiplier?.toFixed(2)} x
+                {extractDecimal(multiplier)?.toFixed(2)} x
               </Label>
             )}
           </div>
