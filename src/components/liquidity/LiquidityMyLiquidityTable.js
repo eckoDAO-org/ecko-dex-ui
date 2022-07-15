@@ -23,10 +23,11 @@ const LiquidityMyLiquidityTable = () => {
   const history = useHistory();
   const { account } = useAccountContext();
   const [pairList, setPairList] = useErrorState([], true);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [orderBy, setOrderBy] = useState('descending');
 
   const fetchData = async () => {
+    setLoading(true);
     const result = await getPairListAccountBalance(account.account);
     const resultWithLiquidity = result.filter((r) => extractDecimal(r.pooledAmount[0]) !== 0 && extractDecimal(r.pooledAmount[1]) !== 0);
     orderPairs(resultWithLiquidity);
@@ -35,8 +36,9 @@ const LiquidityMyLiquidityTable = () => {
 
   useEffect(() => {
     if (account.account) {
-      setLoading(true);
       fetchData();
+    } else {
+      setLoading(false);
     }
   }, [account.account]);
 

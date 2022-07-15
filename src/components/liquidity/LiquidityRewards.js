@@ -48,13 +48,14 @@ const LiquidityRewards = () => {
   const pact = usePactContext();
   const { pollingNotif, showErrorNotification, transactionListen } = useNotificationContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [rewards, setRewards] = useState([]);
   const [rewardsFiltered, setRewardsFiltered] = useState([]);
 
   const [statusFilter, setStatusFilter] = useState('all');
 
   const fetchData = async () => {
+    setLoading(true);
     if (account.account) {
       const result = await getAccountLiquidityRewards(account.account);
       if (!result.errorMessage) {
@@ -66,7 +67,6 @@ const LiquidityRewards = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
     fetchData();
   }, [account?.account, pact.polling]);
 
