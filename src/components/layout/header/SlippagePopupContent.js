@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
-import { useApplicationContext, useGameEditionContext, usePactContext } from '../../../contexts';
+import { useApplicationContext, usePactContext } from '../../../contexts';
 import Input from '../../../components/shared/Input';
 import Label from '../../shared/Label';
 import { CogIcon } from '../../../assets';
@@ -99,7 +99,6 @@ const Row = styled.div`
 
 const SlippagePopupContent = ({ className }) => {
   const pact = usePactContext();
-  const { gameEditionView } = useGameEditionContext();
   const { resolutionConfiguration } = useApplicationContext();
   const [showSplippageContent, setShowSlippageContent] = useState(false);
 

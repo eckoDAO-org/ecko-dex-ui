@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import moment from 'moment';
 import { BoosterIcon, BurnedIcon, DaoIcon } from '../../assets';
 import { usePactContext } from '../../contexts';
 import useWindowSize from '../../hooks/useWindowSize';
 import theme, { commonColors } from '../../styles/theme';
+import tokenData from '../../constants/cryptoCurrencies';
 import { extractDecimal, getDecimalPlaces, humanReadableNumber } from '../../utils/reduceBalance';
+import { getDailyCandles } from '../../api/kaddex-stats';
 import VestingPieChart from '../charts/VestingPieChart';
 import VestingScheduleChart from '../charts/VestingScheduleChart';
 import AnalyticsSimpleWidget from '../shared/AnalyticsSimpleWidget';
@@ -14,6 +17,25 @@ import ProgressBar from '../shared/ProgressBar';
 const Kdx = ({ KDX_TOTAL_SUPPLY, kdxSupply, kdaPrice, kdxBurnt }) => {
   const [width] = useWindowSize();
   const pact = usePactContext();
+  const kdxPrice = pact?.tokensUsdPrice?.KDX;
+  const [kdxPriceDiff, setKdxPriceDiff] = useState(null);
+
+  const kdxToken = tokenData.KDX ?? null;
+  const asset = (kdxToken.statsID || kdxToken.code) === 'coin' ? 'KDA' : kdxToken.statsID || kdxToken.code;
+  const currency = (kdxToken.statsID || kdxToken.code) === 'coin' ? 'USDT' : 'coin';
+
+  useEffect(() => {
+    const initData = async () => {
+      if (kdxToken && asset && currency) {
+        const { data } = await getDailyCandles(asset, currency, moment().subtract(2, 'days').toDate(), new Date());
+        if (data?.length) {
+          const lastKDXPrice = data[data?.length - 1]?.usdPrice?.close;
+          setKdxPriceDiff({ initial: lastKDXPrice, final: kdxPrice });
+        }
+      }
+    };
+    initData();
+  }, [kdxToken, asset, currency, kdxPrice]);
 
   const getColumns = () => {
     if (width <= theme.mediaQueries.mobilePixel) {
@@ -27,16 +49,20 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdxSupply, kdaPrice, kdxBurnt }) => {
           title={'Price'}
           mainText={
             <div className="flex align-ce">
-              {`$ ${pact?.tokensUsdPrice?.KDX || '-'}`}
-              <GraphicPercentage prevValue={50} currentValue={99} componentStyle={{ marginLeft: 10, marginTop: 0 }} />
+              {`$ ${kdxPrice || '-'}`}
+              <GraphicPercentage
+                prevValue={kdxPriceDiff?.initial}
+                currentValue={kdxPriceDiff?.final}
+                componentStyle={{ marginLeft: 10, marginTop: 0 }}
+              />
             </div>
           }
-          subtitle={pact?.tokensUsdPrice?.KDX && `${getDecimalPlaces(extractDecimal(pact?.tokensUsdPrice?.KDX / kdaPrice))} KDA`}
+          subtitle={kdxPrice && `${getDecimalPlaces(extractDecimal(kdxPrice / kdaPrice))} KDA`}
         />
         <AnalyticsSimpleWidget
           title="Marketcap"
-          mainText={(kdxSupply && `$ ${humanReadableNumber(Number(kdxSupply * pact?.tokensUsdPrice?.KDX))}`) || '-'}
-          subtitle={<GraphicPercentage prevValue={99} currentValue={2} />}
+          mainText={(kdxSupply && kdxPrice && `$ ${humanReadableNumber(Number(kdxSupply * kdxPrice))}`) || '-'}
+          subtitle={<GraphicPercentage prevValue={kdxPriceDiff?.initial} currentValue={kdxPriceDiff?.final} />}
         />
 
         <AnalyticsSimpleWidget
