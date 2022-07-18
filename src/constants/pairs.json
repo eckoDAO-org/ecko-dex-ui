@@ -8,6 +8,10 @@
     "name": "coin:hypercent.prod-hype-coin",
     "token0": "KDA",
     "token1": "HYPE"
+  },
+  "coin:mok.token": {
+    "name": "coin:mok.token",
+    "token0": "KDA",
+    "token1": "MOK"
   }
-  
 }
