@@ -10,7 +10,7 @@ import { extractDecimal, getDecimalPlaces, humanReadableNumber } from '../../../
 import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
 import { getTokenIconByCode } from '../../../utils/token-utils';
 import { STAKING_CONSTANTS } from '../../../constants/stakingConstants';
-import theme, { commonColors } from '../../../styles/theme';
+import { commonColors } from '../../../styles/theme';
 
 export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeData, toUnstakeAmount, stakedTimeStart }) => {
   const [checked, setChecked] = useState(false);

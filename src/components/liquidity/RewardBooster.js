@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import { getKdxRewardsAvailable, getPairMultiplier } from '../../api/liquidity-rewards';
@@ -16,7 +17,7 @@ import Toggle from './Toggle';
 const RewardBooster = ({ type, apr, handleState, previewObject, pair }) => {
   const { wantsKdxRewards } = useLiquidityContext();
   const { tokensUsdPrice } = usePactContext();
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
 
   const [multiplier, setMultiplier] = useState(null);
   const [rewardsAvailable, setRewardsAvailable] = useState(null);

@@ -17,6 +17,7 @@ import ProgressBar from '../shared/ProgressBar';
 const Kdx = ({ KDX_TOTAL_SUPPLY, kdxSupply, kdaPrice, kdxBurnt }) => {
   const [width] = useWindowSize();
   const pact = usePactContext();
+  const kdxPrice = pact?.tokensUsdPrice?.KDX;
   const [kdxPriceDiff, setKdxPriceDiff] = useState(null);
 
   const kdxToken = tokenData.KDX ?? null;
@@ -29,12 +30,12 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdxSupply, kdaPrice, kdxBurnt }) => {
         const { data } = await getDailyCandles(asset, currency, moment().subtract(2, 'days').toDate(), new Date());
         if (data?.length) {
           const lastKDXPrice = data[data?.length - 1]?.usdPrice?.close;
-          setKdxPriceDiff({ initial: lastKDXPrice, final: pact?.tokensUsdPrice?.KDX });
+          setKdxPriceDiff({ initial: lastKDXPrice, final: kdxPrice });
         }
       }
     };
     initData();
-  }, [kdxToken, asset, currency, pact?.tokensUsdPrice?.KDX]);
+  }, [kdxToken, asset, currency, kdxPrice]);
 
   const getColumns = () => {
     if (width <= theme.mediaQueries.mobilePixel) {
@@ -48,7 +49,7 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdxSupply, kdaPrice, kdxBurnt }) => {
           title={'Price'}
           mainText={
             <div className="flex align-ce">
-              {`$ ${pact?.tokensUsdPrice?.KDX || '-'}`}
+              {`$ ${kdxPrice || '-'}`}
               <GraphicPercentage
                 prevValue={kdxPriceDiff?.initial}
                 currentValue={kdxPriceDiff?.final}
@@ -56,11 +57,11 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdxSupply, kdaPrice, kdxBurnt }) => {
               />
             </div>
           }
-          subtitle={pact?.tokensUsdPrice?.KDX && `${getDecimalPlaces(extractDecimal(pact?.tokensUsdPrice?.KDX / kdaPrice))} KDA`}
+          subtitle={kdxPrice && `${getDecimalPlaces(extractDecimal(kdxPrice / kdaPrice))} KDA`}
         />
         <AnalyticsSimpleWidget
           title="Marketcap"
-          mainText={(kdxSupply && pact?.tokensUsdPrice?.KDX && `$ ${humanReadableNumber(Number(kdxSupply * pact?.tokensUsdPrice?.KDX))}`) || '-'}
+          mainText={(kdxSupply && kdxPrice && `$ ${humanReadableNumber(Number(kdxSupply * kdxPrice))}`) || '-'}
           subtitle={<GraphicPercentage prevValue={kdxPriceDiff?.initial} currentValue={kdxPriceDiff?.final} />}
         />
 

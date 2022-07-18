@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import styled, { css } from 'styled-components/macro';
 import { useGameEditionContext, useSwapContext, usePactContext, useModalContext } from '../../contexts';
-import { ErrorIcon, PixeledCircleArrowIcon } from '../../assets';
+import { PixeledCircleArrowIcon } from '../../assets';
 import { GE_DESKTOP_CONFIGURATION } from '../../contexts/GameEditionContext';
 import CustomButton from '../shared/CustomButton';
 import Label from '../shared/Label';

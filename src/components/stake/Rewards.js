@@ -42,7 +42,7 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
         } else {
           if (minutesToWait > 1) {
             return `${minutesToWait} minutes`;
-          } else if (minutesToWait == 1) {
+          } else if (minutesToWait === 1) {
             return `${minutesToWait} minute`;
           } else {
             return '0 seconds';
