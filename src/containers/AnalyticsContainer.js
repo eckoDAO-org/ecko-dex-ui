@@ -28,7 +28,7 @@ const AnalyticsContainer = () => {
   const [kdxSupply, setKdxSupply] = useState(null);
   const [kdxBurnt, setKdxBurnt] = useState(null);
   const [, /*kdxTreasury*/ setKdxTreasury] = useState(null);
-  const [kdxRewards, setKdxRewards] = useState(null);
+  const [, /*kdxRewards*/ setKdxRewards] = useState(null);
   const [poolState, setPoolState] = useState(null);
   const { gameEditionView } = useGameEditionContext();
 

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import Pact from 'pact-lang-api';
@@ -50,6 +51,7 @@ const LiquidityRewards = () => {
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
   const [loading, setLoading] = useState(true);
   const [rewards, setRewards] = useState([]);
+  console.log('LOG --> rewards', rewards);
   const [rewardsFiltered, setRewardsFiltered] = useState([]);
 
   const [statusFilter, setStatusFilter] = useState('all');
@@ -128,6 +130,11 @@ const LiquidityRewards = () => {
         },
         content: (
           <ClaimYourKDXRewards
+            hasObservedPrice={item?.['has-observed-price']}
+            tokenA={item?.tokenA}
+            tokenB={item?.tokenB}
+            tokenAObservedPrice={item?.['tokenA-observed-price']}
+            tokenBObservedPrice={item?.['tokenB-observed-price']}
             multiplier={item?.multiplier}
             amount={item?.['estimated-kdx']}
             onClick={() => {

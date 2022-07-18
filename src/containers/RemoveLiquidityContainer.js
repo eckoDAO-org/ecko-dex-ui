@@ -19,7 +19,6 @@ import { getAllPairValues } from '../utils/token-utils';
 import { getDailyVolume } from '../api/kaddex-stats';
 import theme from '../styles/theme';
 import tokenData from '../constants/cryptoCurrencies';
-import { useInterval } from '../hooks/useInterval';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;

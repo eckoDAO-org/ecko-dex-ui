@@ -179,7 +179,7 @@ const AllProposalsContainer = ({ accountData }) => {
                     </Label>
                     <HtmlFormatterContainer htmlText={data?.description} asAString />
                   </RowProposal>
-                  {index < filteredProposals.length - 1 && <Divider style={{ margin: '0px', margin: '0px 16px' }} />}
+                  {index < filteredProposals.length - 1 && <Divider style={{ margin: '0px 16px' }} />}
                 </>
               ))
             ) : (

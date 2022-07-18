@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 import moment from 'moment';
 import { Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
