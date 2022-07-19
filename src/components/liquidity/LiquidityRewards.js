@@ -129,6 +129,11 @@ const LiquidityRewards = () => {
         },
         content: (
           <ClaimYourKDXRewards
+            hasObservedPrice={item?.['has-observed-price']}
+            tokenA={item?.tokenA}
+            tokenB={item?.tokenB}
+            tokenAObservedPrice={item?.['tokenA-observed-price']}
+            tokenBObservedPrice={item?.['tokenB-observed-price']}
             multiplier={item?.multiplier}
             amount={item?.['estimated-kdx']}
             onClick={() => {
