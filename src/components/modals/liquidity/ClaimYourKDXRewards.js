@@ -22,8 +22,6 @@ export const IconSubTitle = styled.div`
 `;
 
 const ClaimYourKDXRewards = ({ multiplier, amount, onClick, hasObservedPrice, tokenA, tokenB, tokenAObservedPrice, tokenBObservedPrice }) => {
-  console.log('LOG --> tokenBObservedPrice', tokenBObservedPrice);
-  console.log('LOG --> tokenAObservedPrice', tokenAObservedPrice);
   const { tokensUsdPrice } = usePactContext();
 
   return (

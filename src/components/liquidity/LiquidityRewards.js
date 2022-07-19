@@ -51,7 +51,6 @@ const LiquidityRewards = () => {
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
   const [loading, setLoading] = useState(true);
   const [rewards, setRewards] = useState([]);
-  console.log('LOG --> rewards', rewards);
   const [rewardsFiltered, setRewardsFiltered] = useState([]);
 
   const [statusFilter, setStatusFilter] = useState('all');
