@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import axios from 'axios';
-import { getDailyVolume } from '../../api/kaddex-stats';
+import { getDailyVolume, getGroupedTVL } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact';
-import { chartTimeRanges, CHART_OPTIONS, DAILY_VOLUME_RANGE } from '../../constants/chartOptionsConstants';
+import { chartTimeRanges, CHART_OPTIONS, DAILY_VOLUME_RANGE, MONTHLY_VOLUME_RANGE, WEEKLY_VOLUME_RANGE } from '../../constants/chartOptionsConstants';
 import tokenData, { pairsData } from '../../constants/cryptoCurrencies';
 import { usePactContext } from '../../contexts';
 import { humanReadableNumber, extractDecimal } from '../../utils/reduceBalance';
@@ -30,6 +30,9 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
   const [loading, setLoading] = useState(true);
   const [tokensVolumes, setTokensVolumes] = useState([]);
   const [pairsVolume, setPairsVolume] = useState([]);
+  const [stakingDiff, setStakingDiff] = useState(null);
+
+  const stakedKdx = extractDecimal((poolState && poolState['staked-kdx']) || 0);
 
   const fakeTokensVolume = [
     {
@@ -220,6 +223,32 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
       });
   };
 
+  const getStakingData = async () => {
+    let startDate = moment().subtract(1, 'days').format('YYYY-MM-DD');
+    if (stakeDataRange === WEEKLY_VOLUME_RANGE.value) {
+      startDate = moment().subtract(7, 'days').format('YYYY-MM-DD');
+    }
+    if (stakeDataRange === MONTHLY_VOLUME_RANGE.value) {
+      startDate = moment().subtract(1, 'months').format('YYYY-MM-DD');
+    }
+    getGroupedTVL(startDate, moment().format('YYYY-MM-DD'))
+      .then(async ({ data }) => {
+        if (data?.length) {
+          const lastStakingTVL = data[data.length - 1]?.tvl?.find((tvl) => tvl?.tokenFrom === 'kaddex.staking-pool-state');
+          const firstTVL = data
+            .find((allTvl) => allTvl?.tvl?.find((tvl) => tvl?.tokenFrom === 'kaddex.staking-pool-state'))
+            ?.tvl?.find((tvl) => tvl?.tokenFrom === 'kaddex.staking-pool-state');
+          if (lastStakingTVL?.tokenFromTVL && firstTVL?.tokenFromTVL) {
+            setStakingDiff({
+              initial: firstTVL?.tokenFromTVL,
+              final: lastStakingTVL?.tokenFromTVL,
+            });
+          }
+        }
+      })
+      .catch((err) => console.log('get tvl error', err));
+  };
+
   useEffect(() => {
     if (tokensUsdPrice) {
       getTokensVolume();
@@ -227,9 +256,11 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
     }
   }, [tokensUsdPrice, volumeRange]);
 
-  const fakeData = {
-    totalStaked: 150002300.75,
-  };
+  useEffect(() => {
+    if (stakeDataRange) {
+      getStakingData();
+    }
+  }, [stakeDataRange]);
 
   return loading ? (
     <AppLoader containerStyle={{ height: '100%', alignItems: 'center', justifyContent: 'center' }} />
@@ -241,23 +272,18 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
         <VolumeChart kdaPrice={kdaPrice} height={300} />
       </FlexContainer>
       <FlexContainer mobileClassName="column" gap={24}>
-        {/* MISSING REAL FORMULA */}
         <AnalyticsSimpleWidget
           title={'KDX Staked'}
-          mainText={(fakeData && `${humanReadableNumber(poolState && poolState['staked-kdx'], 2)} KDX`) || '-'}
-          subtitle={`${((100 * (extractDecimal(poolState && poolState['staked-kdx']) || 0)) / kdxSupply).toFixed(2)} %`}
+          mainText={`${humanReadableNumber(stakedKdx, 2)} KDX` || '-'}
+          subtitle={`${((100 * stakedKdx) / kdxSupply).toFixed(2)} %`}
         />
-        {/* MISSING REAL FORMULA */}
         <AnalyticsSimpleWidget
           title={'Staking Data'}
-          mainText={
-            <GraphicPercentage prevValue={80} currentValue={100} />
-            // (fakeData && `${humanReadableNumber(fakeData.totalStaked, 2)} KDX`) || '-'
-          }
+          mainText={<GraphicPercentage prevValue={stakingDiff?.initial} currentValue={stakingDiff?.final} />}
           subtitle={
             <div className="w-100 flex" style={{ paddingTop: 10 }}>
-              <ProgressBar maxValue={KDX_TOTAL_SUPPLY} currentValue={fakeData.totalStaked} containerStyle={{ paddingTop: 2, width: '100%' }} />
-              <span style={{ marginLeft: 20, whiteSpace: 'nowrap' }}>{((100 * fakeData.totalStaked) / KDX_TOTAL_SUPPLY).toFixed(1)} %</span>
+              <ProgressBar maxValue={KDX_TOTAL_SUPPLY} currentValue={stakedKdx} containerStyle={{ paddingTop: 2, width: '100%' }} />
+              <span style={{ marginLeft: 20, whiteSpace: 'nowrap' }}>{((100 * stakedKdx) / KDX_TOTAL_SUPPLY).toFixed(3)} %</span>
             </div>
           }
           rightComponent={

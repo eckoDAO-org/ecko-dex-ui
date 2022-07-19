@@ -33,7 +33,7 @@ const VestingScheduleChart = ({ height }) => {
 
   const getDefs = (id, color) => {
     return (
-      <defs>
+      <defs key={id}>
         <linearGradient id={id} x1="2" y1="0" x2="1" y2="2">
           <stop offset="0%" stopColor={color} stopOpacity={0.9} />
           <stop offset="75%" stopColor={color} stopOpacity={0.25} />

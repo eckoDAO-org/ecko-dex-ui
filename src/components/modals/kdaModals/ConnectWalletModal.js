@@ -7,7 +7,6 @@ import ConnectWalletChainweaverModal from './ConnectWalletChainweaverModal';
 import styled from 'styled-components';
 import { FlexContainer } from '../../shared/FlexContainer';
 import Label from '../../shared/Label';
-import { AccountConsumer } from '../../../contexts/AccountContext';
 
 const ConnectWalletModal = () => {
   const modalContext = useModalContext();

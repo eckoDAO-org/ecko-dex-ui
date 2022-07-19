@@ -17,7 +17,10 @@ import { ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS } from '../
 import Dex from '../components/analytics/Dex';
 import Kdx from '../components/analytics/Kdx';
 import StatsTable from '../components/analytics/StatsTable';
-import { KDX_TOTAL_SUPPLY } from '../constants/contextConstants';
+import { isMainnet, KDX_TOTAL_SUPPLY } from '../constants/contextConstants';
+
+export const FIXED_SUPPLY = 200577508;
+export const FIXED_BURNT = 99422492;
 
 const AnalyticsContainer = () => {
   const { pathname } = useLocation();
@@ -28,7 +31,7 @@ const AnalyticsContainer = () => {
   const [kdxSupply, setKdxSupply] = useState(null);
   const [kdxBurnt, setKdxBurnt] = useState(null);
   const [, /*kdxTreasury*/ setKdxTreasury] = useState(null);
-  const [, /*kdxRewards*/ setKdxRewards] = useState(null);
+  const [, /* kdxRewards */ setKdxRewards] = useState(null);
   const [poolState, setPoolState] = useState(null);
   const { gameEditionView } = useGameEditionContext();
 
@@ -113,7 +116,12 @@ const AnalyticsContainer = () => {
         {pathname === ROUTE_ANALYTICS && <Dex kdxSupply={kdxSupply} kdaPrice={kdaPrice} poolState={poolState} />}
         {/* KDX */}
         {pathname === ROUTE_ANALYTICS_KDX && (
-          <Kdx KDX_TOTAL_SUPPLY={KDX_TOTAL_SUPPLY} kdxSupply={kdxSupply} kdaPrice={kdaPrice} kdxBurnt={kdxBurnt} />
+          <Kdx
+            KDX_TOTAL_SUPPLY={KDX_TOTAL_SUPPLY}
+            kdxSupply={isMainnet() ? kdxSupply : FIXED_SUPPLY}
+            kdaPrice={kdaPrice}
+            kdxBurnt={isMainnet() ? kdxBurnt : FIXED_BURNT}
+          />
         )}
         {/* DEX */}
         {pathname === ROUTE_ANALYTICS_STATS && <StatsTable />}

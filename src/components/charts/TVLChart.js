@@ -73,10 +73,7 @@ const TVLChart = ({ kdaPrice, height }) => {
   }, [getTVL]);
 
   useEffect(() => {
-    getGroupedTVL(
-      tvlRanges[tvlRange]?.dateStart ?? moment().subtract(90, 'days').format('YYYY-MM-DD').format('YYYY-MM-DD'),
-      moment().format('YYYY-MM-DD')
-    )
+    getGroupedTVL(tvlRanges[tvlRange]?.dateStart ?? moment().subtract(90, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'))
       .then(async (res) => {
         const allTVL = [];
         for (const day of res.data) {
