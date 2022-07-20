@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useAccountContext } from '../../contexts';
+import { useAccountContext, usePactContext } from '../../contexts';
 import { useErrorState } from '../../hooks/useErrorState';
 import { getPairListAccountBalance } from '../../api/pact';
 import { AddIcon, RemoveIcon } from '../../assets';
 import tokenData from '../../constants/cryptoCurrencies';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_MY_LIQUIDITY, ROUTE_LIQUIDITY_REMOVE_LIQUIDITY } from '../../router/routes';
-import { extractDecimal, getDecimalPlaces } from '../../utils/reduceBalance';
+import { extractDecimal, getDecimalPlaces, humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
@@ -22,6 +22,7 @@ const sortByOptions = [
 const LiquidityMyLiquidityTable = () => {
   const history = useHistory();
   const { account } = useAccountContext();
+  const { tokensUsdPrice } = usePactContext();
   const [pairList, setPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(true);
   const [orderBy, setOrderBy] = useState('descending');
@@ -82,7 +83,7 @@ const LiquidityMyLiquidityTable = () => {
         </div>
         <CommonTable
           items={pairList}
-          columns={renderColumns()}
+          columns={renderColumns(tokensUsdPrice)}
           actions={[
             {
               icon: () => <AddIcon />,
@@ -109,7 +110,7 @@ const LiquidityMyLiquidityTable = () => {
 };
 
 export default LiquidityMyLiquidityTable;
-const renderColumns = () => {
+const renderColumns = (tokensUsdPrice) => {
   return [
     {
       name: '',
@@ -130,13 +131,39 @@ const renderColumns = () => {
     {
       name: 'Token A',
       width: 160,
-      render: ({ item }) => `${getDecimalPlaces(extractDecimal(item.pooledAmount[0]))} ${item.token0}`,
+      render: ({ item }) => (
+        <div className="column flex">
+          <Label>
+            {getDecimalPlaces(extractDecimal(item.pooledAmount[0]))} {item.token0}
+          </Label>
+          {tokensUsdPrice ? (
+            <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
+              $ {humanReadableNumber(tokensUsdPrice?.[item.token0] * extractDecimal(item.pooledAmount[0]))}
+            </Label>
+          ) : (
+            ''
+          )}
+        </div>
+      ),
     },
 
     {
       name: 'Token B',
       width: 160,
-      render: ({ item }) => `${getDecimalPlaces(extractDecimal(item.pooledAmount[1]))} ${item.token1}`,
+      render: ({ item }) => (
+        <div className="column flex">
+          <Label>
+            {getDecimalPlaces(extractDecimal(item.pooledAmount[1]))} {item.token1}
+          </Label>
+          {tokensUsdPrice ? (
+            <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
+              $ {humanReadableNumber(tokensUsdPrice?.[item.token1] * extractDecimal(item.pooledAmount[1]))}
+            </Label>
+          ) : (
+            ''
+          )}
+        </div>
+      ),
     },
 
     {

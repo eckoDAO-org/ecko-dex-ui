@@ -161,7 +161,7 @@ const RightHeaderItems = () => {
         className="w-fit-content align-ce"
         viewOtherComponents
         withLogout
-        PopupContentListStyle={{ minWidth: 120 }}
+        PopupContentListStyle={{ minWidth: 120, whiteSpace: 'nowrap' }}
       />
     </RightContainerHeader>
   );
