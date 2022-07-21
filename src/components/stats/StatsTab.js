@@ -109,7 +109,6 @@ const StatsTab = () => {
                   <Table.Cell
                     style={{
                       display: "flex",
-                      justifyContent: "space-between",
                       alignItems: "center",
                     }}
                   >
