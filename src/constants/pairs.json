@@ -13,5 +13,10 @@
     "name": "coin:mok.token",
     "token0": "KDA",
     "token1": "MOK"
+  },
+  "coin:lago.kwUSDC": {
+    "name": "coin:lago.kwUSDC",
+    "token0": "KDA",
+    "token1": "kwUSDC"
   }
 }
