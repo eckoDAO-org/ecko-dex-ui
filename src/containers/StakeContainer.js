@@ -67,7 +67,7 @@ const StakeContainer = () => {
       });
       estimateUnstake(account?.account).then((resEstimate) => {
         if (!resEstimate.errorMessage) {
-          setEstimateUnstakeData({ ...resEstimate, staked: extractDecimal(resEstimate.staked) });
+          setEstimateUnstakeData({ ...resEstimate, staked: extractDecimal(resEstimate?.['staked-unlocked']) });
         } else {
           setEstimateUnstakeData(null);
         }
@@ -336,7 +336,7 @@ const StakeContainer = () => {
     if (pathname !== ROUTE_UNSTAKE) {
       return `Balance: ${getDecimalPlaces(extractDecimal(kdxAccountBalance)) || getDecimalPlaces(0.0)}`;
     } else {
-      return `Staked: ${(estimateUnstakeData?.staked && getDecimalPlaces(extractDecimal(estimateUnstakeData?.staked))) || getDecimalPlaces(0.0)}`;
+      return `Available: ${(estimateUnstakeData?.staked && getDecimalPlaces(extractDecimal(estimateUnstakeData?.staked))) || getDecimalPlaces(0.0)}`;
     }
   };
 
@@ -381,7 +381,8 @@ const StakeContainer = () => {
 
       <FlexContainer gap={24} tabletClassName="column" mobileClassName="column">
         <Position
-          amount={estimateUnstakeData?.staked || 0.0}
+          stakeData={estimateUnstakeData}
+          amount={estimateUnstakeData?.['stake-record']?.['amount'] || 0.0}
           topRightLabel={getPositionLabel()}
           inputAmount={inputAmount}
           buttonLabel={pathname === ROUTE_STAKE ? 'stake' : 'unstake'}
