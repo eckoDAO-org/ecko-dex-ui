@@ -54,6 +54,7 @@ const Position = ({
           <CustomButton
             buttonStyle={{ padding: '4px 8px', width: 'min-content', height: 'min-content' }}
             fontSize={8}
+            disabled={!stakeData}
             onClick={() =>
               rightModalContext.openModal({
                 className: 'info-popup',

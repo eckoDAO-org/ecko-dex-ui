@@ -10,15 +10,13 @@ import List from '../shared/List';
 
 const MyStakeDetails = ({ stakeData }) => {
   const { tokensUsdPrice } = usePactContext();
+  const filteredLocks = stakeData?.['stake-record']?.locks?.filter((x) => moment(getTimeByBlockchain(x?.until)) > moment());
 
   const totalLocks = () => {
-    return stakeData?.['stake-record']?.locks?.reduce((accum, t) => accum + extractDecimal(t.amount), 0);
+    return filteredLocks?.reduce((accum, t) => accum + extractDecimal(t.amount), 0);
   };
-  //array.sort((x, y) => moment(getTimeByBlockchain(x['creation-date'])) - moment(getTimeByBlockchain(y['creation-date'])))
   const nextUnlock = () => {
-    return stakeData?.['stake-record']?.locks?.sort(
-      (x, y) => moment(getTimeByBlockchain(x?.['until'])) - moment(getTimeByBlockchain(y?.['until']))
-    )[0];
+    return filteredLocks?.sort((x, y) => moment(getTimeByBlockchain(x?.['until'])) - moment(getTimeByBlockchain(y?.['until'])))[0];
   };
 
   nextUnlock();
@@ -38,34 +36,52 @@ const MyStakeDetails = ({ stakeData }) => {
         {/* AVAILABLE */}
         <FlexContainer className="column" gap={4}>
           <Label>Available</Label>
-          <Label fontSize={16}>{humanReadableNumber(stakeData?.staked)} KDX</Label>
+          <Label fontSize={16}>
+            {humanReadableNumber(extractDecimal(stakeData?.staked) + extractDecimal(stakeData?.['stake-record']?.['pending-add']))} KDX
+          </Label>
           {tokensUsdPrice && (
             <Label fontSize={12} mobileFontSize={12} labelStyle={{ opacity: 0.7 }}>
-              $ {humanReadableNumber(extractDecimal(tokensUsdPrice?.KDX) * extractDecimal(stakeData?.staked))}
+              ${' '}
+              {humanReadableNumber(
+                extractDecimal(tokensUsdPrice?.KDX) * extractDecimal(stakeData?.staked) + extractDecimal(stakeData?.['stake-record']?.['pending-add'])
+              )}
             </Label>
           )}
         </FlexContainer>
         {/* LOCKED */}
         <FlexContainer className="column" gap={4}>
           <Label>Locked</Label>
-          <Label fontSize={16}>{humanReadableNumber(totalLocks())} KDX</Label>
-          {tokensUsdPrice && (
-            <Label fontSize={12} mobileFontSize={12} labelStyle={{ opacity: 0.7 }}>
-              $ {humanReadableNumber(extractDecimal(tokensUsdPrice?.KDX) * extractDecimal(totalLocks()))}
-            </Label>
+          {totalLocks() ? (
+            <>
+              <Label fontSize={16}>{humanReadableNumber(totalLocks())} KDX</Label>
+              {tokensUsdPrice && (
+                <Label fontSize={12} mobileFontSize={12} labelStyle={{ opacity: 0.7 }}>
+                  $ {humanReadableNumber(extractDecimal(tokensUsdPrice?.KDX) * extractDecimal(totalLocks()))}
+                </Label>
+              )}
+            </>
+          ) : (
+            <Label>-</Label>
           )}
         </FlexContainer>
         {/* NEXT UNLOCK */}
+
         <FlexContainer className="column" gap={4}>
-          <Label>Locked</Label>
-          <div className="flex justify-sb">
-            <Label fontSize={16}>{humanReadableNumber(nextUnlock()?.amount)} KDX</Label>
-            <Label fontSize={16}>{moment(getTimeByBlockchain(nextUnlock()?.until)).format('YYYY/MM/DD')}</Label>
-          </div>
-          {tokensUsdPrice && (
-            <Label fontSize={12} mobileFontSize={12} labelStyle={{ opacity: 0.7 }}>
-              $ {humanReadableNumber(extractDecimal(tokensUsdPrice?.KDX) * extractDecimal(nextUnlock()?.amount))}
-            </Label>
+          <Label>Next Unlock</Label>
+          {nextUnlock() ? (
+            <>
+              <div className="flex justify-sb">
+                <Label fontSize={16}>{humanReadableNumber(nextUnlock()?.amount)} KDX</Label>
+                <Label fontSize={16}>{moment(getTimeByBlockchain(nextUnlock()?.until)).format('YYYY/MM/DD')}</Label>
+              </div>
+              {tokensUsdPrice && (
+                <Label fontSize={12} mobileFontSize={12} labelStyle={{ opacity: 0.7 }}>
+                  $ {humanReadableNumber(extractDecimal(tokensUsdPrice?.KDX) * extractDecimal(nextUnlock()?.amount))}
+                </Label>
+              )}
+            </>
+          ) : (
+            <Label fontSize={16}>-</Label>
           )}
         </FlexContainer>
       </FlexContainer>
