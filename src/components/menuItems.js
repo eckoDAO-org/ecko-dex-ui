@@ -41,6 +41,7 @@ export const DAO = {
   id: 2,
   label: 'DAO',
   route: ROUTE_DAO,
+  activeRoutes: [ROUTE_DAO],
   className: '',
 };
 export const ANALYTICS = {

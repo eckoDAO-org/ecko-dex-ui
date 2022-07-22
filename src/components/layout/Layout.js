@@ -15,6 +15,7 @@ import TabletHeader from './header/TabletHeader';
 import { FlexContainer } from '../shared/FlexContainer';
 import theme from '../../styles/theme';
 import Banner from './header/Banner';
+import FooterPolicy from './FooterPolicy';
 
 const WrapperContainer = styled.div`
   flex-direction: column;
@@ -99,6 +100,7 @@ const Layout = ({ children }) => {
       <StripesContainer>
         <Stripes style={{ width: '45%', height: '45%' }} />
       </StripesContainer>
+      {!gameEditionView && pathname === ROUTE_INDEX && <FooterPolicy />}
     </FlexContainer>
   );
 };

@@ -67,7 +67,7 @@ const HeaderItem = ({
   const [buttonHover, setButtonHover] = useState(null);
 
   const isActive = () => {
-    return pathname === item?.route || item?.activeRoutes?.includes(pathname);
+    return pathname === item?.route || item?.activeRoutes?.includes(pathname) || pathname.includes(item?.activeRoutes);
   };
 
   return (

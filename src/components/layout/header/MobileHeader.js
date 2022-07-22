@@ -2,10 +2,11 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import RightHeaderItems from './RightHeaderItems';
 import PopupContentList from './PopupContentList';
-import { HamburgerIcon, KaddexLetterLogo } from '../../../assets';
+import { HamburgerIcon, KaddexLightModeLogo, KaddexLogo } from '../../../assets';
 import menuItems from '../../menuItems';
 import { useHistory } from 'react-router';
-import { ROUTE_SWAP } from '../../../router/routes';
+import { ROUTE_INDEX } from '../../../router/routes';
+import { useApplicationContext } from '../../../contexts';
 
 const Container = styled.div`
   display: flex;
@@ -51,13 +52,18 @@ const LeftContainer = styled.div`
 
 const MobileHeader = ({ className }) => {
   const history = useHistory();
+  const { themeMode } = useApplicationContext();
 
   return (
     <Container className={className}>
       <RowContainer>
         <LeftContainer>
           <PopupContentList withoutAccountInfo items={menuItems} icon={<HamburgerIcon className="hamburger-icon" />} className="hamburger" />
-          <KaddexLetterLogo onClick={() => history.push(ROUTE_SWAP)} />
+          {themeMode === 'dark' ? (
+            <KaddexLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
+          ) : (
+            <KaddexLightModeLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
+          )}
         </LeftContainer>
 
         {/* <GameEditionModeButton /> */}

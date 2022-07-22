@@ -58,5 +58,7 @@ export { ReactComponent as BurnedIcon } from './images/shared/burned.svg';
 export { ReactComponent as DaoIcon } from './images/shared/dao.svg';
 export { ReactComponent as CandlestickChartIcon } from './images/shared/candlestick-chart.svg';
 export { ReactComponent as LineChartIcon } from './images/shared/line-chart.svg';
+export { ReactComponent as NccLogo } from './images/shared/ncc-logo.svg';
+export { ReactComponent as NccLogoLightMode } from './images/shared/ncc-logo-light.svg';
 
 export * from '../assets/images/game-edition';
