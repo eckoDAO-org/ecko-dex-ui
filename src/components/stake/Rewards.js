@@ -85,10 +85,10 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
   return (
     <CommonWrapper gap={16} title="rewards" popup={<PenaltyRewardsInfo />} popupTitle="Rewards Penalty">
       <div>
-        <Label fontSize={24}>KDX Collected</Label>
-        <Label fontSize={30}>{rewardAccrued !== 0 ? humanReadableNumber(rewardAccrued) : '-'} KDX</Label>
+        <Label fontSize={13}>KDX Collected</Label>
+        <Label fontSize={24}>{rewardAccrued !== 0 ? humanReadableNumber(rewardAccrued) : '-'} KDX</Label>
         {rewardAccrued !== 0 && tokensUsdPrice?.KDX ? (
-          <Label fontSize={16} mobileFontSize={13} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
+          <Label fontSize={12} mobileFontSize={12} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
             $ {humanReadableNumber(tokensUsdPrice?.KDX * extractDecimal(rewardAccrued))}
           </Label>
         ) : (

@@ -3,7 +3,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { CoinKaddexIcon } from '../../assets';
 import { STAKING_CONSTANTS } from '../../constants/stakingConstants';
-import { useAccountContext, useApplicationContext, useModalContext, usePactContext } from '../../contexts';
+import { useAccountContext, useApplicationContext, useModalContext, usePactContext, useRightModalContext } from '../../contexts';
 import { ROUTE_UNSTAKE } from '../../router/routes';
 import { theme, commonColors } from '../../styles/theme';
 import { extractDecimal, humanReadableNumber, limitDecimalPlaces } from '../../utils/reduceBalance';
@@ -14,8 +14,10 @@ import { FlexContainer } from '../shared/FlexContainer';
 import Input from '../shared/Input';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
+import MyStakeDetails from './MyStakeDetails';
 
 const Position = ({
+  stakeData,
   buttonLabel,
   amount,
   stakedTimeStart,
@@ -28,6 +30,7 @@ const Position = ({
   onClickMax,
   onSubmitStake,
 }) => {
+  const rightModalContext = useRightModalContext();
   const modalContext = useModalContext();
   const { tokensUsdPrice } = usePactContext();
   const { account } = useAccountContext();
@@ -46,10 +49,27 @@ const Position = ({
       popupTitle="Position"
     >
       <div>
-        <Label fontSize={24}>My Stake</Label>
-        <Label fontSize={30}>{humanReadableNumber(amount)} KDX</Label>
+        <div className="flex justify-sb">
+          <Label fontSize={13}>My Stake</Label>
+          <CustomButton
+            buttonStyle={{ padding: '4px 8px', width: 'min-content', height: 'min-content' }}
+            fontSize={8}
+            disabled={!stakeData}
+            onClick={() =>
+              rightModalContext.openModal({
+                className: 'info-popup',
+                title: 'details',
+                content: <MyStakeDetails stakeData={stakeData} />,
+                contentStyle: { padding: 16, paddingTop: 0 },
+              })
+            }
+          >
+            details
+          </CustomButton>
+        </div>
+        <Label fontSize={24}>{humanReadableNumber(amount)} KDX</Label>
         {tokensUsdPrice?.KDX ? (
-          <Label fontSize={16} mobileFontSize={13} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
+          <Label fontSize={12} mobileFontSize={12} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
             $ {humanReadableNumber(extractDecimal(tokensUsdPrice?.KDX) * extractDecimal(amount))}
           </Label>
         ) : (
