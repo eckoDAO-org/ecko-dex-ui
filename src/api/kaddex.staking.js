@@ -34,7 +34,7 @@ export const getAddStakeCommand = (verifiedAccount, amountToStake) => {
         ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
         : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
       Pact.lang.mkCap('wrap capability', 'wrapping skdx', `${KADDEX_NAMESPACE}.kdx.WRAP`, [
-        'skdx',
+        'kaddex.skdx',
         verifiedAccount.account,
         verifiedAccount.account,
         parsedAmount,
