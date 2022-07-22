@@ -58,8 +58,8 @@ export const AccountProvider = (props) => {
       } else {
         await setAccount({ account: null, guard: null, balance: 0 });
         await swal({
-          text: `Please make sure the account ${reduceToken(accountName)} exist on kadena blockchain`,
-          title: 'No Account',
+          text: `Please make sure the account ${reduceToken(accountName)} exist on chain 2 of the kadena blockchain`,
+          title: 'Connection Issue: How to fix this?',
         });
       }
     } catch (e) {

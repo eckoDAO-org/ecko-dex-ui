@@ -58,9 +58,9 @@ const FailedLoginView = ({ onClose, show, accountName }) => {
               onClose={onClose}
             >
               <Content>
-                <Title>No Account</Title>
+                <Title>Connection Issue: How to fix this?</Title>
                 <SubTitle>
-                  {`Please make sure the account ${accountName} exist on kadena
+                  {`Please make sure the account ${accountName} exist on chain 2 of the kadena
                   blockchain`}
                 </SubTitle>
                 <CustomButton
