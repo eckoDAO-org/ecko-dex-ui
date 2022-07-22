@@ -53,7 +53,7 @@ export const SwapSuccessViewGE = () => {
               {getDecimalPlaces(extractDecimal(swap?.localRes?.result?.data[1]?.amount))}
             </GameEditionLabel>
           </div>
-          <GameEditionLabel color="blue">From</GameEditionLabel>
+          <GameEditionLabel color="blue">To</GameEditionLabel>
           <div className="flex justify-fs">
             <GameEditionLabel fontSize={22} color="blue-grey">
               {reduceToken(account.account)}

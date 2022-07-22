@@ -94,7 +94,7 @@ const MyStakeDetails = ({ stakeData }) => {
 
       <FlexContainer className="column" gap={16}>
         <Label fontSize={16}>Available</Label>
-        <Label>Refers to the portion of your total “My Stake” position that is available to be unstaked.</Label>
+        <Label>Refers to the portion of your total “My Stake” position that is available to use.</Label>
       </FlexContainer>
       <Divider style={{ margin: '8px 0px' }} />
 
