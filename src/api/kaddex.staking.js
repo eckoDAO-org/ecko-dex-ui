@@ -64,7 +64,18 @@ export const geUnstakeCommand = (verifiedAccount, amountToUnstake) => {
       ...(ENABLE_GAS_STATION
         ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
         : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
-      Pact.lang.mkCap('skdx DEBIT capability', 'debit skdx', `${KADDEX_NAMESPACE}.skdx.DEBIT`),
+      Pact.lang.mkCap('unwrap capability for rewards', 'unwrapping skdx for user', `${KADDEX_NAMESPACE}.kdx.UNWRAP`, [
+        'kaddex.skdx',
+        verifiedAccount.account,
+        verifiedAccount.account,
+        amountToUnstake,
+      ]),
+      Pact.lang.mkCap('unwrap capability for penalty', 'unwrapping skdx for penalty', `${KADDEX_NAMESPACE}.kdx.UNWRAP`, [
+        'kaddex.skdx',
+        verifiedAccount.account,
+        'kdx-staking',
+        amountToUnstake,
+      ]),
       Pact.lang.mkCap('unstake capability', 'unstaking', `${KADDEX_NAMESPACE}.staking.UNSTAKE`, [verifiedAccount.account]),
     ],
     sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : verifiedAccount.account,
@@ -114,7 +125,18 @@ export const getRollupAndUnstakeCommand = (verifiedAccount, amountToUnstake) => 
     pactCode,
     caps: [
       Pact.lang.mkCap('rollup capability', 'rollup', `${KADDEX_NAMESPACE}.staking.ROLLUP`, [verifiedAccount.account]),
-      Pact.lang.mkCap('skdx DEBIT capability', 'debit skdx', `${KADDEX_NAMESPACE}.skdx.DEBIT`),
+      Pact.lang.mkCap('unwrap capability for rewards', 'unwrapping skdx for user', `${KADDEX_NAMESPACE}.kdx.UNWRAP`, [
+        'kaddex.skdx',
+        verifiedAccount.account,
+        verifiedAccount.account,
+        amountToUnstake,
+      ]),
+      Pact.lang.mkCap('unwrap capability for penalty', 'unwrapping skdx for penalty', `${KADDEX_NAMESPACE}.kdx.UNWRAP`, [
+        'kaddex.skdx',
+        verifiedAccount.account,
+        'kdx-staking',
+        amountToUnstake,
+      ]),
       Pact.lang.mkCap('unstake capability', 'unstaking', `${KADDEX_NAMESPACE}.staking.UNSTAKE`, [verifiedAccount.account]),
       ...(ENABLE_GAS_STATION
         ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
@@ -175,7 +197,18 @@ export const getRollupClaimAndUnstakeCommand = (verifiedAccount, amountToUnstake
         : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
       Pact.lang.mkCap('rollup capability', 'rollup', `${KADDEX_NAMESPACE}.staking.ROLLUP`, [verifiedAccount.account]),
       Pact.lang.mkCap('claim capability', 'claim', `${KADDEX_NAMESPACE}.staking.CLAIM`, [verifiedAccount.account]),
-      Pact.lang.mkCap('skdx DEBIT capability', 'debit skdx', `${KADDEX_NAMESPACE}.skdx.DEBIT`),
+      Pact.lang.mkCap('unwrap capability for rewards', 'unwrapping skdx for user', `${KADDEX_NAMESPACE}.kdx.UNWRAP`, [
+        'kaddex.skdx',
+        verifiedAccount.account,
+        verifiedAccount.account,
+        amountToUnstake,
+      ]),
+      Pact.lang.mkCap('unwrap capability for penalty', 'unwrapping skdx for penalty', `${KADDEX_NAMESPACE}.kdx.UNWRAP`, [
+        'kaddex.skdx',
+        verifiedAccount.account,
+        'kdx-staking',
+        amountToUnstake,
+      ]),
       Pact.lang.mkCap('unstake capability', 'unstaking', `${KADDEX_NAMESPACE}.staking.UNSTAKE`, [verifiedAccount.account]),
     ],
     sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : verifiedAccount.account,
