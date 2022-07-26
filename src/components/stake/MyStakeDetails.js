@@ -111,7 +111,7 @@ const MyStakeDetails = ({ stakeData }) => {
           <Label>Please note that each quantity will unlock according to the following schedule:</Label>
           <List
             listType="circle"
-            items={['50% - in 6 months from purchase time', '25% - in 9 months from purchase time', '75% - in 12 months from purchase time']}
+            items={['50 % - in 6 months from purchase time', '25 % - in 9 months from purchase time', '25 % - in 12 months from purchase time']}
           />
         </FlexContainer>
       </FlexContainer>

@@ -87,7 +87,7 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdxSupply, kdaPrice, kdxBurnt }) => {
           icon={<BurnedIcon />}
           iconColor={commonColors.redComponent}
         />
-
+        {/* TODO: add Dao tresury and Liquidity Mining */}
         <AnalyticsSimpleWidget
           title={'DAO Treasury'}
           mainText={`${humanReadableNumber(KDX_TOTAL_SUPPLY * 0.25, 2)} KDX` || '-'}
