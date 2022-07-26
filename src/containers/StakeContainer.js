@@ -32,6 +32,7 @@ import { theme } from '../styles/theme';
 import { useInterval } from '../hooks/useInterval';
 import { extractDecimal, getDecimalPlaces, reduceBalance } from '../utils/reduceBalance';
 import { STAKING_CONSTANTS } from '../constants/stakingConstants';
+import { getTimeByBlockchain } from '../utils/string-utils';
 
 const StakeContainer = () => {
   const history = useHistory();
@@ -50,11 +51,11 @@ const StakeContainer = () => {
   const [inputAmount, setInputAmount] = useState('');
 
   const stakedTimeStart =
-    (estimateUnstakeData &&
-      estimateUnstakeData['stake-record'] &&
-      estimateUnstakeData['stake-record']['effective-start'] &&
-      estimateUnstakeData['stake-record']['effective-start']['timep']) ||
+    (estimateUnstakeData && estimateUnstakeData['stake-record'] && getTimeByBlockchain(estimateUnstakeData['stake-record']['effective-start'])) ||
     false;
+
+  const lastStakedTime =
+    (estimateUnstakeData && estimateUnstakeData['stake-record'] && getTimeByBlockchain(estimateUnstakeData['stake-record']['last-stake'])) || false;
 
   const updateAccountStakingData = useCallback(() => {
     if (account?.account) {
@@ -107,7 +108,7 @@ const StakeContainer = () => {
 
   const getUnstakeModalTitle = () => {
     if (estimateUnstakeData?.staked && estimateUnstakeData?.staked > 0) {
-      const diffDays = moment().diff(stakedTimeStart, 'hours');
+      const diffDays = moment().diff(lastStakedTime, 'hours');
       const isPenaltyActive = diffDays <= STAKING_CONSTANTS.rewardsPenaltyHoursToWait;
       return `CLOSING YOUR STAKING PLAN${isPenaltyActive ? ' EARLY' : ''}`;
     }
@@ -225,7 +226,7 @@ const StakeContainer = () => {
         <UnstakeModal
           toUnstakeAmount={extractDecimal(inputAmount)}
           estimateUnstakeData={estimateUnstakeData}
-          stakedTimeStart={stakedTimeStart}
+          stakedTimeStart={lastStakedTime}
           isRewardsAvailable={estimateUnstakeData && estimateUnstakeData['reward-accrued'] && estimateUnstakeData && estimateUnstakeData['can-claim']}
           onConfirm={(state) => {
             onSendUnstake(state);
@@ -395,7 +396,7 @@ const StakeContainer = () => {
           kdxAccountBalance={kdxAccountBalance}
           setKdxAmount={(value) => setInputAmount(value)}
           onSubmitStake={() => (pathname !== ROUTE_UNSTAKE ? onStakeKDX() : onRollupAndUnstake())}
-          stakedTimeStart={stakedTimeStart}
+          stakedTimeStart={lastStakedTime}
         />
         <Rewards
           stakedAmount={estimateUnstakeData?.staked || 0.0}
