@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { useErrorState } from '../../hooks/useErrorState';
 import { getDailyVolume } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact';
-import { humanReadableNumber } from '../../utils/reduceBalance';
+import { extractDecimal, humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
@@ -13,6 +13,7 @@ import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS } fro
 import Label from '../shared/Label';
 import tokenData from '../../constants/cryptoCurrencies';
 import { getAllPairValues } from '../../utils/token-utils';
+import { getPairMultiplier } from '../../api/liquidity-rewards';
 
 const LiquidityPoolsTable = () => {
   const history = useHistory();
@@ -25,10 +26,15 @@ const LiquidityPoolsTable = () => {
       const volumes = await getDailyVolume();
 
       const result = await getAllPairValues(pools, volumes);
-
+      for (let i = 0; i < result.length; i++) {
+        let pair = result[i].name.split(':');
+        let mult = await getPairMultiplier(pair[0], pair[1]);
+        if (!mult.errorMessage) {
+          result[i].multiplier = extractDecimal(mult);
+        }
+      }
       setPairList(result);
     }
-
     setLoading(false);
   };
 
@@ -105,11 +111,10 @@ const renderColumns = () => {
         </FlexContainer>
       ),
     },
-
     {
       name: 'KDX Multiplier',
       width: 160,
-      render: ({ item }) => 'Coming Soon',
+      render: ({ item }) => (item.multiplier ? `${item.multiplier.toFixed(2)} x` : '-'),
     },
     {
       name: 'APR',
