@@ -40,7 +40,6 @@ import {
   useWalletContext,
 } from '../contexts';
 import theme, { commonColors } from '../styles/theme';
-import { ENABLE_GAS_STATION } from '../constants/contextConstants';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -658,7 +657,7 @@ const SwapContainer = () => {
             ) : (
               <>
                 <FlexContainer className="w-100 justify-sb" style={{ margin: '16px 0' }}>
-                  {ENABLE_GAS_STATION && (
+                  {pact.enableGasStation && (
                     <>
                       <Label fontSize={13} color={commonColors.green}>
                         Gas Cost

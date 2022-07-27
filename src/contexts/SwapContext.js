@@ -4,16 +4,7 @@ import tokenData from '../constants/cryptoCurrencies';
 import { reduceBalance } from '../utils/reduceBalance';
 
 import { useKaddexWalletContext, useWalletContext, useAccountContext, usePactContext } from '.';
-import {
-  CHAIN_ID,
-  creationTime,
-  GAS_PRICE,
-  GAS_LIMIT,
-  NETWORK,
-  NETWORKID,
-  ENABLE_GAS_STATION,
-  KADDEX_NAMESPACE,
-} from '../constants/contextConstants';
+import { CHAIN_ID, creationTime, GAS_PRICE, GAS_LIMIT, NETWORK, NETWORKID, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { getPair, getPairAccount } from '../api/pact';
 import { mkReq, parseRes } from '../api/utils';
 
@@ -102,7 +93,7 @@ export const SwapProvider = (props) => {
       const signCmd = {
         pactCode: isSwapIn ? inPactCode : outPactCode,
         caps: [
-          ...(ENABLE_GAS_STATION
+          ...(pact.enableGasStation
             ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
             : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
           Pact.lang.mkCap('transfer capability', 'trasnsfer token in', `${token0.address}.TRANSFER`, [
@@ -113,9 +104,9 @@ export const SwapProvider = (props) => {
               : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision),
           ]),
         ],
-        sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
-        gasLimit: 6000,
-        gasPrice: GAS_PRICE,
+        sender: pact.enableGasStation ? 'kaddex-free-gas' : account.account,
+        gasLimit: pact.gasConfiguration.gasLimit,
+        gasPrice: pact.gasConfiguration.gasPrice,
         chainId: CHAIN_ID,
         ttl: 600,
         envData: {

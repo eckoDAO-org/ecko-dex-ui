@@ -9,6 +9,7 @@ import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, KADDEX_NAMESPACE } fro
 import { useAccountContext, useNotificationContext, useWalletContext } from '.';
 import { fetchPrecision } from '../api/pact';
 import tokenData from '../constants/cryptoCurrencies';
+import { GAS_OPTIONS } from '../constants/gasConfiguration';
 
 export const PactContext = createContext();
 
@@ -35,6 +36,14 @@ export const PactProvider = (props) => {
   const [loadingSwap, setLoadingSwap] = useState(false);
 
   const [tokensUsdPrice, setTokensUsdPrice] = useState(null);
+
+  const [enableGasStation, setEnableGasStation] = useState(true);
+  const [gasConfiguration, setGasConfiguration] = useState(GAS_OPTIONS.DEFAULT.SWAP);
+  console.log('LOG --> gasConfiguration', gasConfiguration);
+
+  const handleGasConfiguration = (key, value) => {
+    setGasConfiguration((prev) => ({ ...prev, [key]: value }));
+  };
 
   const updateTokenUsdPrice = async () => {
     const result = {};
@@ -255,6 +264,11 @@ export const PactProvider = (props) => {
     ttl,
     setTtl,
     storeTtl,
+    enableGasStation,
+    setEnableGasStation,
+    gasConfiguration,
+    setGasConfiguration,
+    handleGasConfiguration,
     precision,
     setPrecision,
     fetchPrecision,
