@@ -17,13 +17,16 @@ import gameEditionBackground from './assets/images/game-edition/game-edition-bac
 import useLazyImage from './hooks/useLazyImage';
 import AppLoader from './components/shared/AppLoader';
 import { useApplicationContext } from './contexts';
+import MaintenanceContainer from './containers/MaintenanceContainer';
 
 function App() {
   const { themeMode } = useApplicationContext();
   const [loaded] = useLazyImage([gameEditionBackground]);
   return (
     <ThemeProvider theme={theme(themeMode)}>
-      {!loaded ? (
+      {process.env.REACT_APP_MAINTENANCE_PAGE === 'true' ? (
+        <MaintenanceContainer />
+      ) : !loaded ? (
         <AppLoader containerStyle={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} />
       ) : (
         <>
