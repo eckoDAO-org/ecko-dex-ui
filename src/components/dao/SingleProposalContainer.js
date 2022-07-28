@@ -53,7 +53,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
   }, [account, daoFetchDataLoading]);
 
   const handleClick = async (type) => {
-    const commandToSign = voteCommandToSign(
+    const commandToSign = await voteCommandToSign(
       type,
       proposal_id,
       account,

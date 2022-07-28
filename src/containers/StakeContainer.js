@@ -145,7 +145,13 @@ const StakeContainer = () => {
       });
       return;
     }
-    const command = getAddStakeCommand(account, inputAmount, pact.enableGasStation, pact.gasConfiguration.gasLimit, pact.gasConfiguration.gasPrice);
+    const command = await getAddStakeCommand(
+      account,
+      inputAmount,
+      pact.enableGasStation,
+      pact.gasConfiguration.gasLimit,
+      pact.gasConfiguration.gasPrice
+    );
     if (!command) {
       showNotification({
         title: 'Invalid Action',
@@ -200,7 +206,7 @@ const StakeContainer = () => {
 
   const onSendUnstake = async (withdraw) => {
     if (withdraw) {
-      const claimAndUnstakeCommand = getRollupClaimAndUnstakeCommand(
+      const claimAndUnstakeCommand = await getRollupClaimAndUnstakeCommand(
         account,
         inputAmount,
         pact.enableGasStation,
@@ -222,7 +228,7 @@ const StakeContainer = () => {
         sendRollupClaimAndUnstakeCommand(claimAndUnstakeSignedCommand);
       }
     } else {
-      const command = getRollupAndUnstakeCommand(
+      const command = await getRollupAndUnstakeCommand(
         account,
         inputAmount,
         pact.enableGasStation,
@@ -334,7 +340,7 @@ const StakeContainer = () => {
       });
       return;
     }
-    const command = getRollupAndClaimCommand(account, pact.enableGasStation, pact.gasConfiguration.gasLimit, pact.gasConfiguration.gasPrice);
+    const command = await getRollupAndClaimCommand(account, pact.enableGasStation, pact.gasConfiguration.gasLimit, pact.gasConfiguration.gasPrice);
     if (!command) {
       showNotification({
         title: 'Invalid Action',
