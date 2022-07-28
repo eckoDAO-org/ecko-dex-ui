@@ -19,12 +19,13 @@ import { getStatusProposal } from '../../utils/dao-utils';
 import Loader from '../shared/Loader';
 import HtmlFormatterContainer from './HtmlFormatterContainer';
 import useWindowSize from '../../hooks/useWindowSize';
-import { NETWORK } from '../../constants/contextConstants';
+import { NETWORK, CHAIN_ID } from '../../constants/contextConstants';
 
 const SingleProposalContainer = ({ proposal_id, accountData }) => {
   const { account } = useAccountContext();
   const pact = usePactContext();
   const notificationContext = useNotificationContext();
+  const { showNotification, STATUSES } = useNotificationContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
 
   const history = useHistory();
@@ -52,7 +53,17 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
   }, [account, daoFetchDataLoading]);
 
   const handleClick = async (type) => {
-    const commandToSign = voteCommandToSign(type, proposal_id, account);
+    const commandToSign = await voteCommandToSign(type, proposal_id, account);
+    if (!commandToSign) {
+      showNotification({
+        title: 'Invalid Action',
+        message: `Make sure you have KDX account on chain ${CHAIN_ID}`,
+        type: STATUSES.WARNING,
+        autoClose: 5000,
+        hideProgressBar: false,
+      });
+      return;
+    }
     let signedCommand = await getSignedCommand(commandToSign);
 
     const votePreviewResponse = await votePreview(signedCommand);

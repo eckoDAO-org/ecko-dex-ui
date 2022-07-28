@@ -183,7 +183,9 @@ const AllProposalsContainer = ({ accountData }) => {
                 </>
               ))
             ) : (
-              <Label className="justify-ce">No proposals</Label>
+              <Label className="justify-ce" labelStyle={{ padding: '20px 0px' }}>
+                No proposals
+              </Label>
             )}
           </PartialScrollableScrollSection>
         </FlexContainer>
