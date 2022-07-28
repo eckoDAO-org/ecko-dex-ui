@@ -11,7 +11,8 @@ import { openZelcore } from '../../utils/zelcore';
 import GameEditionLabel from '../game-edition-v2/components/GameEditionLabel';
 import Label from '../shared/Label';
 import LogoLoader from '../shared/Loader';
-import { useGameEditionContext, useWalletContext } from '../../contexts';
+import { useApplicationContext, useGameEditionContext, useWalletContext } from '../../contexts';
+import { theme } from '../../styles/theme';
 
 const Container = styled.div`
   position: absolute;
@@ -54,14 +55,14 @@ const ContentContainer = styled.div`
 
 const WalletRequestView = ({ show, onClose, error }) => {
   const wallet = useWalletContext();
+  const { themeMode } = useApplicationContext();
+  const { gameEditionView } = useGameEditionContext();
 
   useEffect(() => {
     if (show && wallet?.wallet?.name === WALLET.ZELCORE.name) {
       openZelcore();
     }
   }, [show]);
-
-  const { gameEditionView } = useGameEditionContext();
 
   return gameEditionView && show ? (
     <GameEditionModalsContainer
@@ -111,6 +112,7 @@ const WalletRequestView = ({ show, onClose, error }) => {
               >
                 <Label labelStyle={{ marginBottom: 30, marginTop: 24 }}>{error?.content}</Label>
                 <CustomButton
+                  buttonStyle={{ color: theme(themeMode).colors.white }}
                   onClick={() => {
                     onClose();
                   }}

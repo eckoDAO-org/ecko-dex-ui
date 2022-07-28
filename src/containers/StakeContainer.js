@@ -27,7 +27,7 @@ import { UnstakeModal } from '../components/modals/stake/UnstakeModal';
 import { ClaimModal } from '../components/modals/stake/ClaimModal';
 import { useAccountContext, useKaddexWalletContext, useNotificationContext, usePactContext, useModalContext } from '../contexts';
 import { ROUTE_STAKE, ROUTE_UNSTAKE } from '../router/routes';
-import { NETWORK } from '../constants/contextConstants';
+import { CHAIN_ID, NETWORK } from '../constants/contextConstants';
 import { theme } from '../styles/theme';
 import { useInterval } from '../hooks/useInterval';
 import { extractDecimal, getDecimalPlaces, reduceBalance } from '../utils/reduceBalance';
@@ -145,7 +145,23 @@ const StakeContainer = () => {
       });
       return;
     }
-    const command = getAddStakeCommand(account, inputAmount, pact.enableGasStation, pact.gasConfiguration.gasLimit, pact.gasConfiguration.gasPrice);
+    const command = await getAddStakeCommand(
+      account,
+      inputAmount,
+      pact.enableGasStation,
+      pact.gasConfiguration.gasLimit,
+      pact.gasConfiguration.gasPrice
+    );
+    if (!command) {
+      showNotification({
+        title: 'Invalid Action',
+        message: `Make sure you have KDX account on chain ${CHAIN_ID}`,
+        type: STATUSES.WARNING,
+        autoClose: 5000,
+        hideProgressBar: false,
+      });
+      return;
+    }
     const signedCommand = await signCommand(command);
     if (!signedCommand) {
       return;
@@ -190,25 +206,45 @@ const StakeContainer = () => {
 
   const onSendUnstake = async (withdraw) => {
     if (withdraw) {
-      const claimAndUnstakeCommand = getRollupClaimAndUnstakeCommand(
+      const claimAndUnstakeCommand = await getRollupClaimAndUnstakeCommand(
         account,
         inputAmount,
         pact.enableGasStation,
         pact.gasConfiguration.gasLimit,
         pact.gasConfiguration.gasPrice
       );
+      if (!claimAndUnstakeCommand) {
+        showNotification({
+          title: 'Invalid Action',
+          message: `Make sure you have KDX account on chain ${CHAIN_ID}`,
+          type: STATUSES.WARNING,
+          autoClose: 5000,
+          hideProgressBar: false,
+        });
+        return;
+      }
       const claimAndUnstakeSignedCommand = await signCommand(claimAndUnstakeCommand);
       if (claimAndUnstakeSignedCommand) {
         sendRollupClaimAndUnstakeCommand(claimAndUnstakeSignedCommand);
       }
     } else {
-      const command = getRollupAndUnstakeCommand(
+      const command = await getRollupAndUnstakeCommand(
         account,
         inputAmount,
         pact.enableGasStation,
         pact.gasConfiguration.gasLimit,
         pact.gasConfiguration.gasPrice
       );
+      if (!command) {
+        showNotification({
+          title: 'Invalid Action',
+          message: `Make sure you have KDX account on chain ${CHAIN_ID}`,
+          type: STATUSES.WARNING,
+          autoClose: 5000,
+          hideProgressBar: false,
+        });
+        return;
+      }
       const signedCommand = await signCommand(command);
       if (signedCommand) {
         sendRollupAndUnstakeCommand(signedCommand);
@@ -304,7 +340,17 @@ const StakeContainer = () => {
       });
       return;
     }
-    const command = getRollupAndClaimCommand(account, pact.enableGasStation, pact.gasConfiguration.gasLimit, pact.gasConfiguration.gasPrice);
+    const command = await getRollupAndClaimCommand(account, pact.enableGasStation, pact.gasConfiguration.gasLimit, pact.gasConfiguration.gasPrice);
+    if (!command) {
+      showNotification({
+        title: 'Invalid Action',
+        message: `Make sure you have KDX account on chain ${CHAIN_ID}`,
+        type: STATUSES.WARNING,
+        autoClose: 5000,
+        hideProgressBar: false,
+      });
+      return;
+    }
     const signedCommand = await signCommand(command);
     if (signedCommand) {
       openModal({

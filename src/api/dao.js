@@ -1,6 +1,6 @@
 import Pact from 'pact-lang-api';
 import { CHAIN_ID, KADDEX_NAMESPACE, NETWORK, NETWORKID } from '../constants/contextConstants';
-import { pactFetchLocal } from './pact';
+import { getTokenBalanceAccount, pactFetchLocal } from './pact';
 import { mkReq, parseRes, handleError, listen } from './utils';
 
 export const getAccountData = async (account) => {
@@ -39,7 +39,18 @@ export const readSingleProposal = async (proposalId) => {
   }
 };
 
-export const voteCommandToSign = (type, proposalId, account, gasStation, gasLimit, gasPrice) => {
+export const voteCommandToSign = async (type, proposalId, verifiedAccount, gasStation, gasLimit, gasPrice) => {
+  let account = null;
+  if (verifiedAccount.guard) {
+    account = verifiedAccount;
+  } else {
+    const accountDetails = await getTokenBalanceAccount(`${KADDEX_NAMESPACE}.kdx`, verifiedAccount.account);
+    if (accountDetails.result.status === 'success') {
+      account = accountDetails.result.data;
+    } else {
+      return null;
+    }
+  }
   try {
     let pactCode = '';
     if (type === 'approved') pactCode = `(${KADDEX_NAMESPACE}.dao.approved-vote "${proposalId}" "${account.account}" )`;

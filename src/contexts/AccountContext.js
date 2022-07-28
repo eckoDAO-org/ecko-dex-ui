@@ -1,12 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
-import swal from '@sweetalert/with-react';
 import { getCorrectBalance } from '../utils/reduceBalance';
 import { CHAIN_ID, creationTime, GAS_PRICE, NETWORK } from '../constants/contextConstants';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { useGameEditionContext } from '.';
-import reduceToken from '../utils/reduceToken';
 import { getTokenBalanceAccount } from '../api/pact';
 
 export const AccountContext = createContext();
@@ -56,11 +54,11 @@ export const AccountProvider = (props) => {
           onConnectionSuccess();
         }
       } else {
-        await setAccount({ account: null, guard: null, balance: 0 });
-        await swal({
+        await setAccount({ account: accountName, guard: null, balance: 0 });
+        /* await swal({
           text: `Please make sure the account ${reduceToken(accountName)} exist on chain 2 of the kadena blockchain`,
           title: 'Connection Issue: How to fix this?',
-        });
+        }); */
       }
     } catch (e) {
       console.log(e);

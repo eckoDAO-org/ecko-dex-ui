@@ -170,8 +170,8 @@ const SwapForm = ({
               backgroundColor: theme(themeMode).backgroundContainer,
             }}
             onClick={() => {
-              fromValues.balance && toValues.balance && !balanceLoading && setTimeout(() => swapValues(), 250);
-              fromValues.balance && toValues.balance && !balanceLoading && setRotation((prev) => prev + 180);
+              fromValues.balance !== '' && toValues.balance !== '' && !balanceLoading && setTimeout(() => swapValues(), 250);
+              fromValues.balance !== '' && toValues.balance !== '' && !balanceLoading && setRotation((prev) => prev + 180);
             }}
           />
         </div>
