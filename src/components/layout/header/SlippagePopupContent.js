@@ -324,14 +324,13 @@ const SlippagePopupContent = ({ className, hasNotification }) => {
                   </GasButton>
                 </Row>
                 <Label labelStyle={{ marginTop: 16 }}>
-                  Maximum gas paid for transaction failure : {pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit} KDA
+                  Maximum gas paid for transaction failure : {getDecimalPlaces(pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit)} KDA
                 </Label>
               </>
             ) : null}
 
             {pact.networkGasData.networkCongested && (
               <>
-                {' '}
                 <Label color={commonColors.error} fontSize={16} outGameEditionView labelStyle={{ marginTop: 16 }}>
                   The network is congested!
                 </Label>
