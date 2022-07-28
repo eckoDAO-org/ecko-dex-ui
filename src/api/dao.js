@@ -1,5 +1,5 @@
 import Pact from 'pact-lang-api';
-import { CHAIN_ID, ENABLE_GAS_STATION, GAS_PRICE, KADDEX_NAMESPACE, NETWORK, NETWORKID } from '../constants/contextConstants';
+import { CHAIN_ID, KADDEX_NAMESPACE, NETWORK, NETWORKID } from '../constants/contextConstants';
 import { pactFetchLocal } from './pact';
 import { mkReq, parseRes, handleError, listen } from './utils';
 
@@ -39,7 +39,7 @@ export const readSingleProposal = async (proposalId) => {
   }
 };
 
-export const voteCommandToSign = (type, proposalId, account) => {
+export const voteCommandToSign = (type, proposalId, account, gasStation, gasLimit, gasPrice) => {
   try {
     let pactCode = '';
     if (type === 'approved') pactCode = `(${KADDEX_NAMESPACE}.dao.approved-vote "${proposalId}" "${account.account}" )`;
@@ -47,14 +47,14 @@ export const voteCommandToSign = (type, proposalId, account) => {
     const cmdToSign = {
       pactCode,
       caps: [
-        ...(ENABLE_GAS_STATION
+        ...(gasStation
           ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
           : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
         Pact.lang.mkCap('guard', 'account GUARD', `${KADDEX_NAMESPACE}.dao.ACCOUNT_GUARD`, [account.account]),
       ],
-      sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
-      gasLimit: 2000,
-      gasPrice: GAS_PRICE,
+      sender: gasStation ? 'kaddex-free-gas' : account.account,
+      gasLimit: Number(gasLimit),
+      gasPrice: parseFloat(gasPrice),
       chainId: CHAIN_ID,
       ttl: 600,
       signingPubKey: account.guard.keys[0],

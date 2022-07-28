@@ -65,8 +65,8 @@ export const LiquidityProvider = (props) => {
           ]),
         ],
         sender: pact.enableGasStation ? 'kaddex-free-gas' : account.account,
-        gasLimit: pact.gasConfiguration.gasLimit,
-        gasPrice: pact.gasConfiguration.gasPrice,
+        gasLimit: Number(pact.gasConfiguration.gasLimit),
+        gasPrice: parseFloat(pact.gasConfiguration.gasPrice),
         chainId: CHAIN_ID,
         ttl: 600,
         envData: {
@@ -148,8 +148,8 @@ export const LiquidityProvider = (props) => {
           ]),
         ],
         sender: pact.enableGasStation ? 'kaddex-free-gas' : account.account,
-        gasLimit: pact.gasConfiguration.gasLimit,
-        gasPrice: pact.gasConfiguration.gasPrice,
+        gasLimit: Number(pact.gasConfiguration.gasLimit),
+        gasPrice: parseFloat(pact.gasConfiguration.gasPrice),
         chainId: CHAIN_ID,
         ttl: 600,
         envData: {
@@ -239,8 +239,8 @@ export const LiquidityProvider = (props) => {
           ]),
         ],
         sender: pact.enableGasStation ? 'kaddex-free-gas' : account.account,
-        gasLimit: pact.gasConfiguration.gasLimit,
-        gasPrice: pact.gasConfiguration.gasPrice,
+        gasLimit: Number(pact.gasConfiguration.gasLimit),
+        gasPrice: parseFloat(pact.gasConfiguration.gasPrice),
         chainId: CHAIN_ID,
         ttl: 600,
         envData: {

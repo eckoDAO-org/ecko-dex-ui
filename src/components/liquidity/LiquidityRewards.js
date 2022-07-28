@@ -118,7 +118,13 @@ const LiquidityRewards = () => {
   };
 
   const onClaimRewards = async (item) => {
-    const command = claimLiquidityRewardsCommandToSign(item?.['request-id'], account);
+    const command = claimLiquidityRewardsCommandToSign(
+      item?.['request-id'],
+      account,
+      pact.enableGasStation,
+      pact.gasConfiguration.gasLimit,
+      pact.gasConfiguration.gasPrice
+    );
     const signedCommand = await signCommand(command);
     if (signedCommand) {
       modalContext.openModal({

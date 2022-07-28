@@ -60,5 +60,6 @@ export { ReactComponent as CandlestickChartIcon } from './images/shared/candlest
 export { ReactComponent as LineChartIcon } from './images/shared/line-chart.svg';
 export { ReactComponent as NccLogo } from './images/shared/ncc-logo.svg';
 export { ReactComponent as NccLogoLightMode } from './images/shared/ncc-logo-light.svg';
+export { ReactComponent as WarningIcon } from './images/header/warning-icon.svg';
 
 export * from '../assets/images/game-edition';
