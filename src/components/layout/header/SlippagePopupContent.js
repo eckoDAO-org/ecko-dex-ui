@@ -12,7 +12,7 @@ import { GAS_OPTIONS, PATH_CONFIGURATION } from '../../../constants/gasConfigura
 import { useLocation } from 'react-router-dom';
 import { ROUTE_DAO } from '../../../router/routes';
 import { commonColors } from '../../../styles/theme';
-import { getDecimalPlaces, humanReadableNumber } from '../../../utils/reduceBalance';
+import { getDecimalPlaces } from '../../../utils/reduceBalance';
 
 const Wrapper = styled.div`
   height: 100%;

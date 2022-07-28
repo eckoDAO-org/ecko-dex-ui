@@ -32,7 +32,6 @@ export const IconSubTitle = styled.div`
 `;
 
 export const AddStakeModal = ({ onConfirm, alreadyStakedAmount, toStakeAmount }) => {
-  console.log('LOG --> alreadyStakedAmount', alreadyStakedAmount);
   const { tokensUsdPrice } = usePactContext();
 
   const getModalText = () => {
