@@ -32,14 +32,14 @@ export const IconSubTitle = styled.div`
 `;
 
 export const AddStakeModal = ({ onConfirm, alreadyStakedAmount, toStakeAmount }) => {
+  console.log('LOG --> alreadyStakedAmount', alreadyStakedAmount);
   const { tokensUsdPrice } = usePactContext();
 
   const getModalText = () => {
     if (alreadyStakedAmount && alreadyStakedAmount > 0) {
-      return `Adding more KDX to your staking amount will rebalance your multiplier depending on the amount staked and your current voting power.`;
+      return `Adding more KDX to your stake, will simply increase your waiting time proportionally, and it will also activate a 3% flat penalty fee on any unstaked amount for 72hours. Once the 72 hours have passed, you can unstake your tokens normally without paying this penalty.`;
     }
-    return `Stakers will earn ${STAKING_REWARDS_PERCENT} % on all swaps taking place on Kaddex. This will give holders a simple way to earn passive income while at the same
-      time participating in our governance program.`;
+    return `Stakers will earn ${STAKING_REWARDS_PERCENT} % on all swaps taking place on Kaddex. This will give holders a simple way to earn passive income while at the same time participating in our governance program. Supplying KDX to our staking program will activate a 3% flat penalty fee on any unstaked amount for 72hours. Once the 72 hours have passed, you can unstake your tokens normally without paying this penalty.`;
   };
 
   return (
