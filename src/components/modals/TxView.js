@@ -12,7 +12,6 @@ import GameEditionLabel from '../game-edition-v2/components/GameEditionLabel';
 import { PixeledInfoContainerWhite } from '../game-edition-v2/components/PixeledInfoContainerWhite';
 import PixeledBlueContainer, { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
 import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
-import { ENABLE_GAS_STATION, GAS_PRICE } from '../../constants/contextConstants';
 import { FlexContainer } from '../shared/FlexContainer';
 import LogoLoader from '../shared/Loader';
 import { useInterval } from '../../hooks/useInterval';
@@ -157,13 +156,14 @@ const MessageContainer = styled.div`
 
 // GAS COST COMPONENT
 export const GasCost = ({ swap }) => {
+  const pact = usePactContext();
   return (
     <div className="flex justify-sb">
       <Label fontSize={13} color={commonColors.green}>
         Gas Cost
       </Label>
       <div style={{ display: 'flex' }}>
-        {ENABLE_GAS_STATION ? (
+        {pact.enableGasStation ? (
           <>
             <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ marginLeft: 5 }}>
               FREE
@@ -171,7 +171,7 @@ export const GasCost = ({ swap }) => {
           </>
         ) : (
           <Label fontSize={13} color={commonColors.green} geColor="green">
-            {(GAS_PRICE * swap?.localRes?.gas).toPrecision(4)} KDA
+            {(pact.gasConfiguration.gasPrice * swap?.localRes?.gas).toPrecision(4)} KDA
           </Label>
         )}
       </div>

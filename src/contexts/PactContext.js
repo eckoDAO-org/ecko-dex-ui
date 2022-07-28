@@ -5,15 +5,23 @@ import pairTokens from '../constants/pairsConfig';
 import { useInterval } from '../hooks/useInterval';
 import axios from 'axios';
 import { getTokenUsdPriceByName } from '../utils/token-utils';
-import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, KADDEX_NAMESPACE } from '../constants/contextConstants';
+import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, KADDEX_NAMESPACE, KADDEX_API_URL } from '../constants/contextConstants';
 import { useAccountContext, useNotificationContext, useWalletContext } from '.';
 import { fetchPrecision } from '../api/pact';
 import tokenData from '../constants/cryptoCurrencies';
+import { GAS_OPTIONS } from '../constants/gasConfiguration';
 
 export const PactContext = createContext();
 
 const savedSlippage = localStorage.getItem('slippage');
 const savedTtl = localStorage.getItem('ttl');
+
+const initialNetworkGasData = {
+  highestGasPrice: 0,
+  networkCongested: false,
+  suggestedGasPrice: 0,
+  lowestGasPrice: 0,
+};
 
 export const PactProvider = (props) => {
   const account = useAccountContext();
@@ -35,6 +43,30 @@ export const PactProvider = (props) => {
   const [loadingSwap, setLoadingSwap] = useState(false);
 
   const [tokensUsdPrice, setTokensUsdPrice] = useState(null);
+
+  const [enableGasStation, setEnableGasStation] = useState(true);
+  const [gasConfiguration, setGasConfiguration] = useState(GAS_OPTIONS.DEFAULT.SWAP);
+  const [networkGasData, setNetworkGasData] = useState(initialNetworkGasData);
+
+  const handleGasConfiguration = (key, value) => {
+    setGasConfiguration((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const getNetworkGasData = async () => {
+    try {
+      let response = await axios.get(`${KADDEX_API_URL}/api/mempool/getgasdata`, {
+        params: {
+          chain: CHAIN_ID,
+        },
+      });
+      setNetworkGasData(response.data);
+    } catch (err) {}
+  };
+
+  useEffect(() => {
+    getNetworkGasData();
+  }, []);
+  useInterval(getNetworkGasData, 10000);
 
   const updateTokenUsdPrice = async () => {
     const result = {};
@@ -255,6 +287,12 @@ export const PactProvider = (props) => {
     ttl,
     setTtl,
     storeTtl,
+    enableGasStation,
+    setEnableGasStation,
+    gasConfiguration,
+    setGasConfiguration,
+    handleGasConfiguration,
+    networkGasData,
     precision,
     setPrecision,
     fetchPrecision,

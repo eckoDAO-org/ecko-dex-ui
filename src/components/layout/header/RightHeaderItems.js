@@ -26,6 +26,7 @@ import {
 import CustomButton from '../../../components/shared/CustomButton';
 import NotificationList from '../../right-modal-notification/NotificationList';
 import { CHAIN_ID } from '../../../constants/contextConstants';
+import { pactFetchLocal } from '../../../api/pact';
 
 const RightContainerHeader = styled.div`
   display: flex;
@@ -61,7 +62,7 @@ const RightHeaderItems = () => {
   const { pathname } = useLocation();
   const [width] = useWindowSize();
 
-  const { tokensUsdPrice } = usePactContext();
+  const { tokensUsdPrice, networkCongested } = usePactContext();
   const { account } = useAccountContext();
   const { notificationList, removeAllNotifications } = useNotificationContext();
   const modalContext = useModalContext();
@@ -127,7 +128,7 @@ const RightHeaderItems = () => {
         </FadeContainer>
       )}
 
-      {gameEditionView && <SlippagePopupContent className="header-item w-fit-content" />}
+      <SlippagePopupContent className="header-item w-fit-content" hasNotification={networkCongested} />
 
       {account?.account && (
         <BellNotification

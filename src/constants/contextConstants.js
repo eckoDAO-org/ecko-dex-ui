@@ -8,6 +8,7 @@ export const NETWORK_TYPE = process.env.REACT_APP_KDA_NETWORK_TYPE || 'testnet';
 export const ENABLE_GAS_STATION = process.env.REACT_APP_ENABLE_GAS_STATION || false;
 export const KADDEX_NAMESPACE = process.env.REACT_APP_KADDEX_NAMESPACE || 'kaddex'; //
 export const STAKING_REWARDS_PERCENT = process.env.REACT_APP_STAKING_REWARDS_PERCENT || 0.05;
+export const KADDEX_API_URL = process.env.REACT_APP_KADDEX_API_URL || 'https://kaddex-api.azurewebsites.net';
 
 export const KDX_TOTAL_SUPPLY = 1000000000;
 

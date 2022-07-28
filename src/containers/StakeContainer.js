@@ -145,7 +145,7 @@ const StakeContainer = () => {
       });
       return;
     }
-    const command = getAddStakeCommand(account, inputAmount);
+    const command = getAddStakeCommand(account, inputAmount, pact.enableGasStation, pact.gasConfiguration.gasLimit, pact.gasConfiguration.gasPrice);
     const signedCommand = await signCommand(command);
     if (!signedCommand) {
       return;
@@ -190,13 +190,25 @@ const StakeContainer = () => {
 
   const onSendUnstake = async (withdraw) => {
     if (withdraw) {
-      const claimAndUnstakeCommand = getRollupClaimAndUnstakeCommand(account, inputAmount);
+      const claimAndUnstakeCommand = getRollupClaimAndUnstakeCommand(
+        account,
+        inputAmount,
+        pact.enableGasStation,
+        pact.gasConfiguration.gasLimit,
+        pact.gasConfiguration.gasPrice
+      );
       const claimAndUnstakeSignedCommand = await signCommand(claimAndUnstakeCommand);
       if (claimAndUnstakeSignedCommand) {
         sendRollupClaimAndUnstakeCommand(claimAndUnstakeSignedCommand);
       }
     } else {
-      const command = getRollupAndUnstakeCommand(account, inputAmount);
+      const command = getRollupAndUnstakeCommand(
+        account,
+        inputAmount,
+        pact.enableGasStation,
+        pact.gasConfiguration.gasLimit,
+        pact.gasConfiguration.gasPrice
+      );
       const signedCommand = await signCommand(command);
       if (signedCommand) {
         sendRollupAndUnstakeCommand(signedCommand);
@@ -292,7 +304,7 @@ const StakeContainer = () => {
       });
       return;
     }
-    const command = getRollupAndClaimCommand(account);
+    const command = getRollupAndClaimCommand(account, pact.enableGasStation, pact.gasConfiguration.gasLimit, pact.gasConfiguration.gasPrice);
     const signedCommand = await signCommand(command);
     if (signedCommand) {
       openModal({

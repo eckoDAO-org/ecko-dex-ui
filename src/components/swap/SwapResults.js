@@ -3,7 +3,6 @@ import styled from 'styled-components/macro';
 import { getDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
 import Label from '../shared/Label';
 import { useLiquidityContext, usePactContext } from '../../contexts';
-import { ENABLE_GAS_STATION } from '../../constants/contextConstants';
 import { commonColors } from '../../styles/theme';
 
 const ResultContainer = styled.div`
@@ -45,7 +44,7 @@ const SwapResults = ({ priceImpact, fromValues, toValues }) => {
 
   return (
     <ResultContainer>
-      {ENABLE_GAS_STATION && (
+      {pact.enableGasStation && (
         <RowContainer>
           <Label fontSize={13} color={commonColors.green}>
             Gas Cost

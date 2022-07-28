@@ -77,6 +77,7 @@ const AddLiquidityContainer = (props) => {
       calculateApr();
     }
   }, [pair, data]);
+
   useEffect(() => {
     fetchData();
   }, []);

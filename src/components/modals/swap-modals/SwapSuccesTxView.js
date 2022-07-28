@@ -6,7 +6,7 @@ import reduceToken from '../../../utils/reduceToken';
 import { getTokenIconByCode, getTokenName } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import { AlertIcon, ArrowIcon, ChainIcon } from '../../../assets';
-import { CHAIN_ID, ENABLE_GAS_STATION, GAS_PRICE } from '../../../constants/contextConstants';
+import { CHAIN_ID } from '../../../constants/contextConstants';
 import Label from '../../shared/Label';
 import { FlexContainer } from '../../shared/FlexContainer';
 import CopyPopup from '../../shared/CopyPopup';
@@ -72,14 +72,14 @@ export const SwapSuccessViewGE = () => {
         },
         {
           label: 'gas cost KDA',
-          value: ENABLE_GAS_STATION ? (
+          value: pact.enableGasStation ? (
             <>
               <GameEditionLabel geColor="white" labelStyle={{ marginLeft: 5 }}>
                 FREE
               </GameEditionLabel>
             </>
           ) : (
-            <GameEditionLabel geColor="white">{(GAS_PRICE * swap?.localRes?.gas).toPrecision(4)} KDA</GameEditionLabel>
+            <GameEditionLabel geColor="white">{(pact.gasConfiguration.gasPrice * swap?.localRes?.gas).toPrecision(4)} KDA</GameEditionLabel>
           ),
         },
       ]}

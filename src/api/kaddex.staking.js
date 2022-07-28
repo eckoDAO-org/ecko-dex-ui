@@ -23,14 +23,14 @@ export const estimateUnstake = async (account) => {
   }
 };
 
-export const getAddStakeCommand = (verifiedAccount, amountToStake) => {
+export const getAddStakeCommand = (verifiedAccount, amountToStake, gasStation, gasLimit, gasPrice) => {
   const parsedAmount = parseFloat(amountToStake?.toString());
   const decimalPlaces = getFloatPrecision(parsedAmount);
   const pactCode = `(${KADDEX_NAMESPACE}.staking.stake "${verifiedAccount.account}" ${parsedAmount.toFixed(decimalPlaces || 2)})`;
   return {
     pactCode,
     caps: [
-      ...(ENABLE_GAS_STATION
+      ...(gasStation
         ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
         : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
       Pact.lang.mkCap('wrap capability', 'wrapping skdx', `${KADDEX_NAMESPACE}.kdx.WRAP`, [
@@ -41,9 +41,9 @@ export const getAddStakeCommand = (verifiedAccount, amountToStake) => {
       ]),
       Pact.lang.mkCap('stake capability', 'staking', `${KADDEX_NAMESPACE}.staking.STAKE`, [verifiedAccount.account, parsedAmount]),
     ],
-    sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : verifiedAccount.account,
-    gasLimit: 3000,
-    gasPrice: GAS_PRICE,
+    sender: gasStation ? 'kaddex-free-gas' : verifiedAccount.account,
+    gasLimit: Number(gasLimit),
+    gasPrice: parseFloat(gasPrice),
     chainId: CHAIN_ID,
     ttl: 600,
     envData: {
@@ -114,7 +114,7 @@ export const getRollupRewardsCommand = (verifiedAccount) => {
   };
 };
 
-export const getRollupAndUnstakeCommand = (verifiedAccount, amountToUnstake) => {
+export const getRollupAndUnstakeCommand = (verifiedAccount, amountToUnstake, gasStation, gasLimit, gasPrice) => {
   const parsedAmount = parseFloat(amountToUnstake?.toString());
   const decimalPlaces = getFloatPrecision(parsedAmount);
   const pactCode = `
@@ -138,13 +138,13 @@ export const getRollupAndUnstakeCommand = (verifiedAccount, amountToUnstake) => 
         amountToUnstake,
       ]),
       Pact.lang.mkCap('unstake capability', 'unstaking', `${KADDEX_NAMESPACE}.staking.UNSTAKE`, [verifiedAccount.account]),
-      ...(ENABLE_GAS_STATION
+      ...(gasStation
         ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
         : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
     ],
-    sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : verifiedAccount.account,
-    gasLimit: 6000,
-    gasPrice: GAS_PRICE,
+    sender: gasStation ? 'kaddex-free-gas' : verifiedAccount.account,
+    gasLimit: Number(gasLimit),
+    gasPrice: parseFloat(gasPrice),
     chainId: CHAIN_ID,
     ttl: 600,
     envData: {
@@ -155,7 +155,7 @@ export const getRollupAndUnstakeCommand = (verifiedAccount, amountToUnstake) => 
   };
 };
 
-export const getRollupAndClaimCommand = (verifiedAccount) => {
+export const getRollupAndClaimCommand = (verifiedAccount, gasStation, gasLimit, gasPrice) => {
   const pactCode = `
   (${KADDEX_NAMESPACE}.staking.rollup "${verifiedAccount.account}")
   (${KADDEX_NAMESPACE}.staking.claim "${verifiedAccount.account}")
@@ -163,15 +163,15 @@ export const getRollupAndClaimCommand = (verifiedAccount) => {
   return {
     pactCode,
     caps: [
-      ...(ENABLE_GAS_STATION
+      ...(gasStation
         ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
         : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
       Pact.lang.mkCap('rollup capability', 'rollup', `${KADDEX_NAMESPACE}.staking.ROLLUP`, [verifiedAccount.account]),
       Pact.lang.mkCap('claim capability', 'claim', `${KADDEX_NAMESPACE}.staking.CLAIM`, [verifiedAccount.account]),
     ],
-    sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : verifiedAccount.account,
-    gasLimit: 4000,
-    gasPrice: GAS_PRICE,
+    sender: gasStation ? 'kaddex-free-gas' : verifiedAccount.account,
+    gasLimit: Number(gasLimit),
+    gasPrice: parseFloat(gasPrice),
     chainId: CHAIN_ID,
     ttl: 600,
     envData: {
@@ -181,7 +181,7 @@ export const getRollupAndClaimCommand = (verifiedAccount) => {
     networkId: NETWORKID,
   };
 };
-export const getRollupClaimAndUnstakeCommand = (verifiedAccount, amountToUnstake) => {
+export const getRollupClaimAndUnstakeCommand = (verifiedAccount, amountToUnstake, gasStation, gasLimit, gasPrice) => {
   const parsedAmount = parseFloat(amountToUnstake?.toString());
   const decimalPlaces = getFloatPrecision(parsedAmount);
   const pactCode = `
@@ -192,7 +192,7 @@ export const getRollupClaimAndUnstakeCommand = (verifiedAccount, amountToUnstake
   return {
     pactCode,
     caps: [
-      ...(ENABLE_GAS_STATION
+      ...(gasStation
         ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
         : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
       Pact.lang.mkCap('rollup capability', 'rollup', `${KADDEX_NAMESPACE}.staking.ROLLUP`, [verifiedAccount.account]),
@@ -211,9 +211,9 @@ export const getRollupClaimAndUnstakeCommand = (verifiedAccount, amountToUnstake
       ]),
       Pact.lang.mkCap('unstake capability', 'unstaking', `${KADDEX_NAMESPACE}.staking.UNSTAKE`, [verifiedAccount.account]),
     ],
-    sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : verifiedAccount.account,
-    gasLimit: 7000,
-    gasPrice: GAS_PRICE,
+    sender: gasStation ? 'kaddex-free-gas' : verifiedAccount.account,
+    gasLimit: Number(gasLimit),
+    gasPrice: parseFloat(gasPrice),
     chainId: CHAIN_ID,
     ttl: 600,
     envData: {
