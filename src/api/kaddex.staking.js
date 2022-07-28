@@ -23,7 +23,7 @@ export const estimateUnstake = async (account) => {
   }
 };
 
-export const getAddStakeCommand = (verifiedAccount, amountToStake, gasStation, gasLimit, gasPrice) => {
+export const getAddStakeCommand = async (verifiedAccount, amountToStake, gasStation, gasLimit, gasPrice) => {
   let account = null;
   if (verifiedAccount.guard) {
     account = verifiedAccount;
@@ -125,7 +125,7 @@ export const getRollupRewardsCommand = (verifiedAccount) => {
   };
 };
 
-export const getRollupAndUnstakeCommand = (verifiedAccount, amountToUnstake, gasStation, gasLimit, gasPrice) => {
+export const getRollupAndUnstakeCommand = async (verifiedAccount, amountToUnstake, gasStation, gasLimit, gasPrice) => {
   let account = null;
   if (verifiedAccount.guard) {
     account = verifiedAccount;
@@ -177,7 +177,7 @@ export const getRollupAndUnstakeCommand = (verifiedAccount, amountToUnstake, gas
   };
 };
 
-export const getRollupAndClaimCommand = (verifiedAccount, gasStation, gasLimit, gasPrice) => {
+export const getRollupAndClaimCommand = async (verifiedAccount, gasStation, gasLimit, gasPrice) => {
   let account = null;
   if (verifiedAccount.guard) {
     account = verifiedAccount;
@@ -214,7 +214,7 @@ export const getRollupAndClaimCommand = (verifiedAccount, gasStation, gasLimit, 
     networkId: NETWORKID,
   };
 };
-export const getRollupClaimAndUnstakeCommand = (verifiedAccount, amountToUnstake, gasStation, gasLimit, gasPrice) => {
+export const getRollupClaimAndUnstakeCommand = async (verifiedAccount, amountToUnstake, gasStation, gasLimit, gasPrice) => {
   let account = null;
   if (verifiedAccount.guard) {
     account = verifiedAccount;

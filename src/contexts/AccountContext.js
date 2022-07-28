@@ -1,12 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
-import swal from '@sweetalert/with-react';
 import { getCorrectBalance } from '../utils/reduceBalance';
 import { CHAIN_ID, creationTime, GAS_PRICE, NETWORK } from '../constants/contextConstants';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { useGameEditionContext } from '.';
-import reduceToken from '../utils/reduceToken';
 import { getTokenBalanceAccount } from '../api/pact';
 
 export const AccountContext = createContext();

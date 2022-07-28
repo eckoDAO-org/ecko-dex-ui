@@ -135,7 +135,7 @@ export const LiquidityProvider = (props) => {
             (read-keyset 'user-ks)
           )`,
           caps: [
-            ...(ENABLE_GAS_STATION
+            ...(pact.enableGasStation
               ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
               : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
             Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${token0.code}.TRANSFER`, [
@@ -149,9 +149,9 @@ export const LiquidityProvider = (props) => {
               extractDecimal(args.amountB),
             ]),
           ],
-          sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
-          gasLimit: 16000,
-          gasPrice: GAS_PRICE,
+          sender: pact.enableGasStation ? 'kaddex-free-gas' : account.account,
+          gasLimit: Number(pact.gasConfiguration.gasLimit),
+          gasPrice: parseFloat(pact.gasConfiguration.gasPrice),
           chainId: CHAIN_ID,
           ttl: 600,
           envData: {

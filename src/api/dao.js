@@ -39,7 +39,7 @@ export const readSingleProposal = async (proposalId) => {
   }
 };
 
-export const voteCommandToSign = (type, proposalId, verifiedAccount, gasStation, gasLimit, gasPrice) => {
+export const voteCommandToSign = async (type, proposalId, verifiedAccount, gasStation, gasLimit, gasPrice) => {
   let account = null;
   if (verifiedAccount.guard) {
     account = verifiedAccount;
