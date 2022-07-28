@@ -1,5 +1,5 @@
 import Pact from 'pact-lang-api';
-import { CHAIN_ID, ENABLE_GAS_STATION, GAS_PRICE, KADDEX_NAMESPACE, NETWORK, NETWORKID } from '../constants/contextConstants';
+import { CHAIN_ID, KADDEX_NAMESPACE, NETWORK, NETWORKID } from '../constants/contextConstants';
 import { pactFetchLocal } from './pact';
 import { handleError, listen } from './utils';
 
@@ -58,7 +58,7 @@ export const getLiquidityRewardsByRequestId = async (requestId) => {
   }
 };
 
-export const claimLiquidityRewardsCommandToSign = (requestId, account) => {
+export const claimLiquidityRewardsCommandToSign = (requestId, account, gasStation, gasLimit, gasPrice) => {
   try {
     const pactCode = `(${KADDEX_NAMESPACE}.wrapper.withdraw-claim
         ${JSON.stringify(account.account)}
@@ -69,13 +69,13 @@ export const claimLiquidityRewardsCommandToSign = (requestId, account) => {
     const cmdToSign = {
       pactCode,
       caps: [
-        ...(ENABLE_GAS_STATION
+        ...(gasStation
           ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
           : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
       ],
-      sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
-      gasLimit: 100000,
-      gasPrice: GAS_PRICE,
+      sender: gasStation ? 'kaddex-free-gas' : account.account,
+      gasLimit: Number(gasLimit),
+      gasPrice: parseFloat(gasPrice),
       chainId: CHAIN_ID,
       ttl: 600,
       signingPubKey: account.guard.keys[0],

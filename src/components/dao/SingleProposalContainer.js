@@ -53,7 +53,14 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
   }, [account, daoFetchDataLoading]);
 
   const handleClick = async (type) => {
-    const commandToSign = await voteCommandToSign(type, proposal_id, account);
+    const commandToSign = voteCommandToSign(
+      type,
+      proposal_id,
+      account,
+      pact.enableGasStation,
+      pact.gasConfiguration.gasLimit,
+      pact.gasConfiguration.gasPrice
+    );
     if (!commandToSign) {
       showNotification({
         title: 'Invalid Action',

@@ -4,16 +4,7 @@ import tokenData from '../constants/cryptoCurrencies';
 import { reduceBalance } from '../utils/reduceBalance';
 
 import { useKaddexWalletContext, useWalletContext, useAccountContext, usePactContext } from '.';
-import {
-  CHAIN_ID,
-  creationTime,
-  GAS_PRICE,
-  GAS_LIMIT,
-  NETWORK,
-  NETWORKID,
-  ENABLE_GAS_STATION,
-  KADDEX_NAMESPACE,
-} from '../constants/contextConstants';
+import { CHAIN_ID, creationTime, GAS_PRICE, GAS_LIMIT, NETWORK, NETWORKID, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { getPair, getPairAccount, getTokenBalanceAccount } from '../api/pact';
 import { mkReq, parseRes } from '../api/utils';
 

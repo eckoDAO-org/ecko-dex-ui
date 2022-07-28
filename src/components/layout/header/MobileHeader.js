@@ -60,9 +60,9 @@ const MobileHeader = ({ className }) => {
         <LeftContainer>
           <PopupContentList withoutAccountInfo items={menuItems} icon={<HamburgerIcon className="hamburger-icon" />} className="hamburger" />
           {themeMode === 'dark' ? (
-            <KaddexLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
+            <KaddexLogo className="w-100" style={{ cursor: 'pointer', zIndex: 1, height: 20 }} onClick={() => history.push(ROUTE_INDEX)} />
           ) : (
-            <KaddexLightModeLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
+            <KaddexLightModeLogo className="w-100" style={{ cursor: 'pointer', zIndex: 1, height: 20 }} onClick={() => history.push(ROUTE_INDEX)} />
           )}
         </LeftContainer>
 

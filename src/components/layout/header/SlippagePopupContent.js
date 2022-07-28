@@ -74,7 +74,7 @@ const ContainerInputTypeNumber = styled.div`
   border-radius: 16px;
   border: ${({ theme: { colors } }) => `1px solid ${colors.info}`};
   color: ${({ theme: { colors } }) => colors.white};
-  min-width: 62px !important;
+  min-width: 62px;
   .ui.input > input {
     border: unset;
     padding: 0px;
@@ -113,6 +113,7 @@ const SlippagePopupContent = ({ className }) => {
   useEffect(() => {
     if (tl) (async () => pact.storeTtl(tl * 60))();
   }, [tl]);
+
   return (
     <Wrapper ref={ref} resolutionConfiguration={resolutionConfiguration}>
       <CogIcon onClick={() => setShowSlippageContent((prev) => !prev)} style={{ cursor: 'pointer' }} />

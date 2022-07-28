@@ -23,7 +23,7 @@ export const estimateUnstake = async (account) => {
   }
 };
 
-export const getAddStakeCommand = async (verifiedAccount, amountToStake) => {
+export const getAddStakeCommand = (verifiedAccount, amountToStake, gasStation, gasLimit, gasPrice) => {
   let account = null;
   if (verifiedAccount.guard) {
     account = verifiedAccount;
@@ -41,7 +41,7 @@ export const getAddStakeCommand = async (verifiedAccount, amountToStake) => {
   return {
     pactCode,
     caps: [
-      ...(ENABLE_GAS_STATION
+      ...(gasStation
         ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
         : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
       Pact.lang.mkCap('wrap capability', 'wrapping skdx', `${KADDEX_NAMESPACE}.kdx.WRAP`, [
@@ -52,9 +52,9 @@ export const getAddStakeCommand = async (verifiedAccount, amountToStake) => {
       ]),
       Pact.lang.mkCap('stake capability', 'staking', `${KADDEX_NAMESPACE}.staking.STAKE`, [account.account, parsedAmount]),
     ],
-    sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
-    gasLimit: 3000,
-    gasPrice: GAS_PRICE,
+    sender: gasStation ? 'kaddex-free-gas' : account.account,
+    gasLimit: Number(gasLimit),
+    gasPrice: parseFloat(gasPrice),
     chainId: CHAIN_ID,
     ttl: 600,
     envData: {
@@ -125,7 +125,7 @@ export const getRollupRewardsCommand = (verifiedAccount) => {
   };
 };
 
-export const getRollupAndUnstakeCommand = async (verifiedAccount, amountToUnstake) => {
+export const getRollupAndUnstakeCommand = (verifiedAccount, amountToUnstake, gasStation, gasLimit, gasPrice) => {
   let account = null;
   if (verifiedAccount.guard) {
     account = verifiedAccount;
@@ -160,13 +160,13 @@ export const getRollupAndUnstakeCommand = async (verifiedAccount, amountToUnstak
         amountToUnstake,
       ]),
       Pact.lang.mkCap('unstake capability', 'unstaking', `${KADDEX_NAMESPACE}.staking.UNSTAKE`, [account.account]),
-      ...(ENABLE_GAS_STATION
+      ...(gasStation
         ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
         : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
     ],
-    sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
-    gasLimit: 6000,
-    gasPrice: GAS_PRICE,
+    sender: gasStation ? 'kaddex-free-gas' : account.account,
+    gasLimit: Number(gasLimit),
+    gasPrice: parseFloat(gasPrice),
     chainId: CHAIN_ID,
     ttl: 600,
     envData: {
@@ -177,7 +177,7 @@ export const getRollupAndUnstakeCommand = async (verifiedAccount, amountToUnstak
   };
 };
 
-export const getRollupAndClaimCommand = async (verifiedAccount) => {
+export const getRollupAndClaimCommand = (verifiedAccount, gasStation, gasLimit, gasPrice) => {
   let account = null;
   if (verifiedAccount.guard) {
     account = verifiedAccount;
@@ -196,15 +196,15 @@ export const getRollupAndClaimCommand = async (verifiedAccount) => {
   return {
     pactCode,
     caps: [
-      ...(ENABLE_GAS_STATION
+      ...(gasStation
         ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
         : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
       Pact.lang.mkCap('rollup capability', 'rollup', `${KADDEX_NAMESPACE}.staking.ROLLUP`, [account.account]),
       Pact.lang.mkCap('claim capability', 'claim', `${KADDEX_NAMESPACE}.staking.CLAIM`, [account.account]),
     ],
-    sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
-    gasLimit: 4000,
-    gasPrice: GAS_PRICE,
+    sender: gasStation ? 'kaddex-free-gas' : account.account,
+    gasLimit: Number(gasLimit),
+    gasPrice: parseFloat(gasPrice),
     chainId: CHAIN_ID,
     ttl: 600,
     envData: {
@@ -214,7 +214,7 @@ export const getRollupAndClaimCommand = async (verifiedAccount) => {
     networkId: NETWORKID,
   };
 };
-export const getRollupClaimAndUnstakeCommand = async (verifiedAccount, amountToUnstake) => {
+export const getRollupClaimAndUnstakeCommand = (verifiedAccount, amountToUnstake, gasStation, gasLimit, gasPrice) => {
   let account = null;
   if (verifiedAccount.guard) {
     account = verifiedAccount;
@@ -236,7 +236,7 @@ export const getRollupClaimAndUnstakeCommand = async (verifiedAccount, amountToU
   return {
     pactCode,
     caps: [
-      ...(ENABLE_GAS_STATION
+      ...(gasStation
         ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
         : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
       Pact.lang.mkCap('rollup capability', 'rollup', `${KADDEX_NAMESPACE}.staking.ROLLUP`, [account.account]),
@@ -255,9 +255,9 @@ export const getRollupClaimAndUnstakeCommand = async (verifiedAccount, amountToU
       ]),
       Pact.lang.mkCap('unstake capability', 'unstaking', `${KADDEX_NAMESPACE}.staking.UNSTAKE`, [account.account]),
     ],
-    sender: ENABLE_GAS_STATION ? 'kaddex-free-gas' : account.account,
-    gasLimit: 7000,
-    gasPrice: GAS_PRICE,
+    sender: gasStation ? 'kaddex-free-gas' : account.account,
+    gasLimit: Number(gasLimit),
+    gasPrice: parseFloat(gasPrice),
     chainId: CHAIN_ID,
     ttl: 600,
     envData: {

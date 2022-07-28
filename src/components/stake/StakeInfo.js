@@ -19,7 +19,10 @@ const StakeInfo = () => {
         ]}
       />
       <Divider />
-      <Label>Adding more KDX to your stake, will simply increase your waiting time proportionally</Label>
+      <Label>
+        Adding more KDX to your stake, will simply increase your waiting time proportionally, and it will also activate a 3% flat penalty fee on any
+        unstaked amount for 72hours. Once the 72 hours have passed, you can unstake your tokens normally without paying this penalty.
+      </Label>
       <Label>Waiting Time Formula: </Label>
       <EquationContainer>
         <Equation className="equation" value="w = (60*n + r*p)/(n+p)" />
