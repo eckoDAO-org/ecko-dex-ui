@@ -9,7 +9,6 @@ import Button from '../../../components/shared/CustomButton';
 import headerLinks from '../../headerLinks';
 import PopupContentList from './PopupContentList';
 import reduceToken from '../../../utils/reduceToken';
-import SlippagePopupContent from './SlippagePopupContent';
 import AccountModal from '../../modals/kdaModals/AccountModal';
 import theme, { commonTheme } from '../../../styles/theme';
 import { CoinKaddexIcon, ThreeDotsIcon } from '../../../assets';
@@ -26,7 +25,7 @@ import {
 import CustomButton from '../../../components/shared/CustomButton';
 import NotificationList from '../../right-modal-notification/NotificationList';
 import { CHAIN_ID } from '../../../constants/contextConstants';
-import { pactFetchLocal } from '../../../api/pact';
+import GasStationSettings from './GasStationSettings';
 
 const RightContainerHeader = styled.div`
   display: flex;
@@ -128,7 +127,7 @@ const RightHeaderItems = () => {
         </FadeContainer>
       )}
 
-      <SlippagePopupContent className="header-item w-fit-content" hasNotification={networkCongested} />
+      <GasStationSettings className="header-item w-fit-content" hasNotification={networkCongested} />
 
       {account?.account && (
         <BellNotification
