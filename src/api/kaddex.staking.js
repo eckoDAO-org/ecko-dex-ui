@@ -24,9 +24,6 @@ export const estimateUnstake = async (account) => {
 };
 
 export const getAddStakeCommand = (verifiedAccount, amountToStake, gasStation, gasLimit, gasPrice) => {
-  console.log('LOG --> gasPrice', gasPrice);
-  console.log('LOG --> gasLimit', gasLimit);
-  console.log('LOG --> gasStation', gasStation);
   const parsedAmount = parseFloat(amountToStake?.toString());
   const decimalPlaces = getFloatPrecision(parsedAmount);
   const pactCode = `(${KADDEX_NAMESPACE}.staking.stake "${verifiedAccount.account}" ${parsedAmount.toFixed(decimalPlaces || 2)})`;

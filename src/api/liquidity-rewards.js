@@ -59,9 +59,6 @@ export const getLiquidityRewardsByRequestId = async (requestId) => {
 };
 
 export const claimLiquidityRewardsCommandToSign = (requestId, account, gasStation, gasLimit, gasPrice) => {
-  console.log('LOG --> gasPrice', gasPrice);
-  console.log('LOG --> gasLimit', gasLimit);
-  console.log('LOG --> gasStation', gasStation);
   try {
     const pactCode = `(${KADDEX_NAMESPACE}.wrapper.withdraw-claim
         ${JSON.stringify(account.account)}

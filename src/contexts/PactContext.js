@@ -48,8 +48,6 @@ export const PactProvider = (props) => {
   const [gasConfiguration, setGasConfiguration] = useState(GAS_OPTIONS.DEFAULT.SWAP);
   const [networkGasData, setNetworkGasData] = useState(initialNetworkGasData);
 
-  console.log('LOG --> gasConfiguration', gasConfiguration);
-
   const handleGasConfiguration = (key, value) => {
     setGasConfiguration((prev) => ({ ...prev, [key]: value }));
   };

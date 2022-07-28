@@ -11,6 +11,8 @@ import Toggle from '../../liquidity/Toggle';
 import { GAS_OPTIONS, PATH_CONFIGURATION } from '../../../constants/gasConfiguration';
 import { useLocation } from 'react-router-dom';
 import { ROUTE_DAO } from '../../../router/routes';
+import { commonColors } from '../../../styles/theme';
+import { getDecimalPlaces, humanReadableNumber } from '../../../utils/reduceBalance';
 
 const Wrapper = styled.div`
   height: 100%;
@@ -321,16 +323,23 @@ const SlippagePopupContent = ({ className, hasNotification }) => {
                     FAST
                   </GasButton>
                 </Row>
-                {pact.networkGasData.networkCongested && (
-                  <>
-                    {' '}
-                    <Label color="red" fontSize={13} outGameEditionView labelStyle={{ marginTop: 16 }}>
-                      The network is congested!
-                    </Label>
-                  </>
-                )}
+                <Label labelStyle={{ marginTop: 16 }}>
+                  Maximum gas paid for transaction failure : {pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit} KDA
+                </Label>
               </>
             ) : null}
+
+            {pact.networkGasData.networkCongested && (
+              <>
+                {' '}
+                <Label color={commonColors.error} fontSize={16} outGameEditionView labelStyle={{ marginTop: 16 }}>
+                  The network is congested!
+                </Label>
+                <Label fontSize={13} outGameEditionView labelStyle={{ marginTop: 4 }}>
+                  By disabling the gas station, Gas Limit and Gas Price will be optimized so that transactions can be successful
+                </Label>
+              </>
+            )}
           </Container>
         </PopupContainer>
       )}
