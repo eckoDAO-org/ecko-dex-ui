@@ -170,7 +170,19 @@ export const GasCost = ({ swap }) => {
             </Label>
           </>
         ) : (
-          <Label fontSize={13} color={commonColors.green} geColor="green">
+          <Label
+            fontSize={13}
+            color={
+              pact.gasConfiguration.gasPrice * swap?.localRes?.gas > 0.5
+                ? commonColors.error
+                : [
+                    pact.gasConfiguration.gasPrice * swap?.localRes?.gas <= 0.5 && pact.gasConfiguration.gasPrice * swap?.localRes?.gas > 0.01
+                      ? commonColors.orange
+                      : commonColors.green,
+                  ]
+            }
+            geColor="green"
+          >
             {(pact.gasConfiguration.gasPrice * swap?.localRes?.gas).toPrecision(4)} KDA
           </Label>
         )}

@@ -13,6 +13,7 @@ import { useLocation } from 'react-router-dom';
 import { ROUTE_DAO } from '../../../router/routes';
 import { commonColors } from '../../../styles/theme';
 import { getDecimalPlaces } from '../../../utils/reduceBalance';
+import CustomDivider from '../../shared/CustomDivider';
 
 const Wrapper = styled.div`
   height: 100%;
@@ -41,11 +42,14 @@ const PopupContainer = styled(FlexContainer)`
   border-radius: 10px;
   position: absolute;
 
-  right: 28px;
+  right: 80px;
   top: -20px;
   &.header-item {
     top: 40px;
     right: 0px;
+    @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
+      right: -40px;
+    }
   }
 `;
 
@@ -54,7 +58,7 @@ const Container = styled.div`
   flex-direction: column;
   position: relative;
   background: transparent;
-  min-width: 235px;
+  min-width: 270px;
 `;
 
 const GasButton = styled.div`
@@ -78,11 +82,11 @@ const ContainerInputTypeNumber = styled.div`
   align-items: center;
   min-height: 32px;
   justify-content: center;
+  min-width: 120px;
   padding: 0px 8.5px;
   border-radius: 16px;
   border: ${({ theme: { colors } }) => `1px solid ${colors.info}`};
   color: ${({ theme: { colors } }) => colors.white};
-  min-width: 62px;
   .ui.input > input {
     border: unset;
     padding: 0px;
@@ -101,6 +105,35 @@ const Row = styled.div`
       .ui.fluid.input > input {
         width: 30px !important;
       }
+    }
+  }
+`;
+
+const WarningAnimated = styled(WarningIcon)`
+  position: absolute;
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
+  bottom: 2px;
+  right: -6px;
+  animation: hithere 1s ease infinite;
+
+  @keyframes hithere {
+    30% {
+      transform: scale(1.2);
+    }
+    40%,
+    60% {
+      transform: rotate(-20deg) scale(1.2);
+    }
+    50% {
+      transform: rotate(20deg) scale(1.2);
+    }
+    70% {
+      transform: rotate(0deg) scale(1.2);
+    }
+    100% {
+      transform: scale(1);
     }
   }
 `;
@@ -139,20 +172,15 @@ const GasStationSettings = ({ className, hasNotification }) => {
 
   return (
     <Wrapper ref={ref} resolutionConfiguration={resolutionConfiguration}>
-      <PumpIcon
-        onClick={() => setShowGasStationSettings((prev) => !prev)}
-        style={{ cursor: 'pointer', width: 32, height: 32, marginLeft: -8, marginRight: -10 }}
-      />
-      {hasNotification && <WarningIcon className="absolute" style={{ width: 15, height: 15, bottom: 2, right: -6 }} />}
+      <div className="flex" onClick={() => setShowGasStationSettings((prev) => !prev)}>
+        <PumpIcon style={{ cursor: 'pointer', width: 34, height: 34, marginLeft: -8, marginRight: -10 }} />
+        {hasNotification && <WarningAnimated />}
+      </div>
       {showGasStationSettings && (
         <PopupContainer outOfGameEdition withGradient className={`background-fill ${className}`} style={{ width: 'unset', zIndex: 1 }}>
           <Container>
-            <Label outGameEditionView fontSize={13} fontFamily="syncopate">
-              Transaction Gas Settings
-            </Label>
-
-            <Label fontSize={13} outGameEditionView labelStyle={{ marginTop: 16 }}>
-              Enable Gas Station
+            <Label fontSize={13} outGameEditionView fontFamily="syncopate">
+              Gas Station
             </Label>
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               <Label labelStyle={{ marginRight: 8, marginTop: 8 }}>Off</Label>
@@ -163,11 +191,12 @@ const GasStationSettings = ({ className, hasNotification }) => {
             </div>
             {!pact.enableGasStation ? (
               <>
-                <Label fontSize={13} outGameEditionView labelStyle={{ marginTop: 16 }}>
+                <CustomDivider style={{ marginTop: 16 }} />
+                <Label fontSize={13} outGameEditionView labelStyle={{ marginTop: 16 }} fontFamily="syncopate">
                   Gas Configuration
                 </Label>
                 <Row style={{ marginTop: 8 }}>
-                  <ContainerInputTypeNumber style={{ minWidth: '90px' }}>
+                  <ContainerInputTypeNumber>
                     <Input
                       outGameEditionView
                       noInputBackground
@@ -187,7 +216,7 @@ const GasStationSettings = ({ className, hasNotification }) => {
                   </Label>
                 </Row>
                 <Row style={{ marginTop: 8 }}>
-                  <ContainerInputTypeNumber style={{ minWidth: '90px' }}>
+                  <ContainerInputTypeNumber>
                     <Input
                       outGameEditionView
                       noInputBackground
@@ -243,8 +272,22 @@ const GasStationSettings = ({ className, hasNotification }) => {
                     FAST
                   </GasButton>
                 </Row>
-                <Label labelStyle={{ marginTop: 16 }}>
-                  Maximum gas paid for transaction failure : {getDecimalPlaces(pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit)} KDA
+                <Label labelStyle={{ marginTop: 16 }}>Potential gas cost for transaction failure:</Label>
+                <Label
+                  labelStyle={{ marginTop: 8 }}
+                  fontSize={16}
+                  color={
+                    getDecimalPlaces(pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit) > 0.5
+                      ? commonColors.error
+                      : [
+                          getDecimalPlaces(pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit) <= 0.5 &&
+                          getDecimalPlaces(pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit) > 0.01
+                            ? commonColors.orange
+                            : commonColors.green,
+                        ]
+                  }
+                >
+                  {getDecimalPlaces(pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit)} KDA
                 </Label>
               </>
             ) : null}
@@ -252,10 +295,10 @@ const GasStationSettings = ({ className, hasNotification }) => {
             {pact.networkGasData.networkCongested && (
               <>
                 <Label color={commonColors.error} fontSize={16} outGameEditionView labelStyle={{ marginTop: 16 }}>
-                  The network is congested!
+                  Speed up your transaction!
                 </Label>
                 <Label fontSize={13} outGameEditionView labelStyle={{ marginTop: 4 }}>
-                  By disabling the gas station, Gas Limit and Gas Price will be optimized so that transactions can be successful
+                  By disabling the gas station, Gas Limit and Gas Price will be optimized so that transactions can be successful.
                 </Label>
               </>
             )}
