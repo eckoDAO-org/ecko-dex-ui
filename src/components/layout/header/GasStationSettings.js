@@ -154,9 +154,13 @@ const GasStationSettings = ({ className, hasNotification }) => {
             <Label fontSize={13} outGameEditionView labelStyle={{ marginTop: 16 }}>
               Enable Gas Station
             </Label>
-            <Row style={{ marginTop: 8 }}>
-              <Toggle initialState={pact.enableGasStation} onClick={pact.setEnableGasStation} />
-            </Row>
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <Label labelStyle={{ marginRight: 8, marginTop: 8 }}>Off</Label>
+              <Row style={{ marginTop: 8 }}>
+                <Toggle initialState={pact.enableGasStation} onClick={pact.setEnableGasStation} />
+              </Row>
+              <Label labelStyle={{ marginLeft: 8, marginTop: 8 }}>On</Label>
+            </div>
             {!pact.enableGasStation ? (
               <>
                 <Label fontSize={13} outGameEditionView labelStyle={{ marginTop: 16 }}>

@@ -52,8 +52,8 @@ export const listen = async (reqKey) => {
   }
   console.log(reqKey);
   console.log(pollRes);
-  console.log(pollRes[reqKey]);
-  console.log(pollRes[reqKey].result);
+  console.log(pollRes?.[reqKey]);
+  console.log(pollRes?.[reqKey].result);
   if (pollRes?.[reqKey]?.result?.status === 'success') {
     console.log('SUCCESS!!!');
     return 'success';
