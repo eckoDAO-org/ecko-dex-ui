@@ -5,7 +5,7 @@ import CustomButton from '../shared/CustomButton';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
 import PenaltyRewardsInfo from './PenaltyRewardsInfo';
-import { extractDecimal, humanReadableNumber } from '../../utils/reduceBalance';
+import { extractDecimal, getDecimalPlaces, humanReadableNumber } from '../../utils/reduceBalance';
 import { usePactContext } from '../../contexts';
 import { getTimeByBlockchain } from '../../utils/string-utils';
 import { STAKING_CONSTANTS } from '../../constants/stakingConstants';
@@ -21,7 +21,7 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
   const getPenaltyRewardsString = () => {
     if (stakedTimeStart) {
       const rewardPenaltyPercentage = (100 * rewardsPenalty) / rewardAccrued;
-      const penaltyObject = [extractDecimal(rewardsPenalty).toFixed(2), extractDecimal(rewardPenaltyPercentage).toFixed(2)];
+      const penaltyObject = [getDecimalPlaces(extractDecimal(rewardsPenalty)), extractDecimal(rewardPenaltyPercentage).toFixed(2)];
       return penaltyObject;
     }
     return '-';
@@ -86,7 +86,7 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
     <CommonWrapper gap={16} title="rewards" popup={<PenaltyRewardsInfo />} popupTitle="Rewards Penalty">
       <div>
         <Label fontSize={13}>KDX Collected</Label>
-        <Label fontSize={24}>{rewardAccrued !== 0 ? humanReadableNumber(rewardAccrued) : '-'} KDX</Label>
+        <Label fontSize={24}>{rewardAccrued !== 0 ? getDecimalPlaces(extractDecimal(rewardAccrued)) : '-'} KDX</Label>
         {rewardAccrued !== 0 && tokensUsdPrice?.KDX ? (
           <Label fontSize={12} mobileFontSize={12} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
             $ {humanReadableNumber(tokensUsdPrice?.KDX * extractDecimal(rewardAccrued))}
@@ -107,9 +107,9 @@ const Rewards = ({ stakedAmount, rewardAccrued, stakedTimeStart, rewardsPenalty,
         </div>
 
         <Label fontSize={24} color={getPenaltyColor()}>
-          {getPenaltyRewardsString()[0] !== '0.00' ? `${getPenaltyRewardsString()[0]} KDX` : 'None'}
+          {Number(getPenaltyRewardsString()[0]) > 0 ? `${getPenaltyRewardsString()[0]} KDX` : 'None'}
         </Label>
-        {rewardsPenalty && getPenaltyRewardsString()[0] !== '0.00' ? (
+        {rewardsPenalty && Number(getPenaltyRewardsString()[0]) > 0 ? (
           <Label fontSize={16} color={getPenaltyColor()}>
             {getPenaltyRewardsString()[1] || '-'} %
           </Label>
