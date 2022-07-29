@@ -141,9 +141,9 @@ const GasStationSettings = ({ className, hasNotification }) => {
     <Wrapper ref={ref} resolutionConfiguration={resolutionConfiguration}>
       <PumpIcon
         onClick={() => setShowGasStationSettings((prev) => !prev)}
-        style={{ cursor: 'pointer', width: 40, height: 40, marginLeft: -8, marginRight: -10 }}
+        style={{ cursor: 'pointer', width: 32, height: 32, marginLeft: -8, marginRight: -10 }}
       />
-      {hasNotification && <WarningIcon className="absolute" style={{ width: 15, height: 15, bottom: 2, right: -4 }} />}
+      {hasNotification && <WarningIcon className="absolute" style={{ width: 15, height: 15, bottom: 2, right: -6 }} />}
       {showGasStationSettings && (
         <PopupContainer outOfGameEdition withGradient className={`background-fill ${className}`} style={{ width: 'unset', zIndex: 1 }}>
           <Container>

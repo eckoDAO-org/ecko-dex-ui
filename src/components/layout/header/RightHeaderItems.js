@@ -61,7 +61,7 @@ const RightHeaderItems = () => {
   const { pathname } = useLocation();
   const [width] = useWindowSize();
 
-  const { tokensUsdPrice, networkCongested } = usePactContext();
+  const { tokensUsdPrice, networkGasData } = usePactContext();
   const { account } = useAccountContext();
   const { notificationList, removeAllNotifications } = useNotificationContext();
   const modalContext = useModalContext();
@@ -127,7 +127,7 @@ const RightHeaderItems = () => {
         </FadeContainer>
       )}
 
-      <GasStationSettings className="header-item w-fit-content" hasNotification={networkCongested} />
+      <GasStationSettings className="header-item w-fit-content" hasNotification={networkGasData.networkCongested} />
 
       {account?.account && (
         <BellNotification
