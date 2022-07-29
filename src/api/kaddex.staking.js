@@ -4,6 +4,7 @@ import { getTokenBalanceAccount, pactFetchLocal } from './pact';
 import { getFloatPrecision } from '../utils/string-utils';
 import { CHAIN_ID, GAS_PRICE, GAS_LIMIT, NETWORKID, ENABLE_GAS_STATION, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { handleError } from './utils';
+import { reduceBalance } from '../utils/reduceBalance';
 
 export const getPoolState = async () => {
   try {
@@ -151,13 +152,13 @@ export const getRollupAndUnstakeCommand = async (verifiedAccount, amountToUnstak
         'kaddex.skdx',
         account.account,
         account.account,
-        amountToUnstake,
+        reduceBalance(parsedAmount.toFixed(decimalPlaces || 2), decimalPlaces || 2),
       ]),
       Pact.lang.mkCap('unwrap capability for penalty', 'unwrapping skdx for penalty', `${KADDEX_NAMESPACE}.kdx.UNWRAP`, [
         'kaddex.skdx',
         account.account,
         'kdx-staking',
-        amountToUnstake,
+        reduceBalance(parsedAmount.toFixed(decimalPlaces || 2), decimalPlaces || 2),
       ]),
       Pact.lang.mkCap('unstake capability', 'unstaking', `${KADDEX_NAMESPACE}.staking.UNSTAKE`, [account.account]),
       ...(gasStation
@@ -245,13 +246,13 @@ export const getRollupClaimAndUnstakeCommand = async (verifiedAccount, amountToU
         'kaddex.skdx',
         account.account,
         account.account,
-        amountToUnstake,
+        reduceBalance(parsedAmount.toFixed(decimalPlaces || 2), decimalPlaces || 2),
       ]),
       Pact.lang.mkCap('unwrap capability for penalty', 'unwrapping skdx for penalty', `${KADDEX_NAMESPACE}.kdx.UNWRAP`, [
         'kaddex.skdx',
         account.account,
         'kdx-staking',
-        amountToUnstake,
+        reduceBalance(parsedAmount.toFixed(decimalPlaces || 2), decimalPlaces || 2),
       ]),
       Pact.lang.mkCap('unstake capability', 'unstaking', `${KADDEX_NAMESPACE}.staking.UNSTAKE`, [account.account]),
     ],
