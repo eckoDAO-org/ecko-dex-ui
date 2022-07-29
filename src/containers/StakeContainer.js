@@ -190,7 +190,6 @@ const StakeContainer = () => {
     Pact.wallet
       .sendSigned(signedCommand, NETWORK)
       .then(async (stakingResponse) => {
-        console.log(' stakingResponse', stakingResponse);
         pollingNotif(stakingResponse.requestKeys[0], 'Staking Transaction Pending');
 
         setInputAmount('');
@@ -289,7 +288,6 @@ const StakeContainer = () => {
     Pact.wallet
       .sendSigned(signedCommand, NETWORK)
       .then(async (rollupAndUnstake) => {
-        console.log(' rollupAndUnstake', rollupAndUnstake);
         pollingNotif(rollupAndUnstake.requestKeys[0], 'Unstake Transaction Pending');
 
         await transactionListen(rollupAndUnstake.requestKeys[0]);
@@ -308,7 +306,6 @@ const StakeContainer = () => {
     Pact.wallet
       .sendSigned(signedCommand, NETWORK)
       .then(async (rollupAndUnstake) => {
-        console.log(' rollupClaimAndUnstake', rollupAndUnstake);
         pollingNotif(rollupAndUnstake.requestKeys[0], 'Claim and Unstake Transaction Pending');
 
         await transactionListen(rollupAndUnstake.requestKeys[0]);
@@ -377,7 +374,6 @@ const StakeContainer = () => {
     Pact.wallet
       .sendSigned(signedCommand, NETWORK)
       .then(async (rollupAndClaim) => {
-        console.log(' rollupAndClaim', rollupAndClaim);
         pollingNotif(rollupAndClaim.requestKeys[0], 'Rollup and Unstake Transaction Pending');
 
         await transactionListen(rollupAndClaim.requestKeys[0]);

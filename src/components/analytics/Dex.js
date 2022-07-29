@@ -157,7 +157,6 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
           .format('YYYY-MM-DD')}`
       )
       .then(async (res) => {
-        console.log('res -->', res.data);
         const lastTvl = res.data[0];
         const allTVL = [];
 

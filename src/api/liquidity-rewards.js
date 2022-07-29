@@ -95,6 +95,5 @@ export const claimRewards = async (signedCmd, notification) => {
     data = await Pact.wallet.sendSigned(signedCmd, NETWORK);
   }
   if (notification) notification(data.requestKeys[0], 'Claim rewards Pending');
-  console.log('liquidity claim data', data);
   return { listen: await listen(data.requestKeys[0]), data };
 };

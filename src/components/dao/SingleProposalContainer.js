@@ -74,14 +74,12 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
     let signedCommand = await getSignedCommand(commandToSign);
 
     const votePreviewResponse = await votePreview(signedCommand);
-    console.log('votePreview -> votePreviewResponse', votePreviewResponse);
 
     if (votePreviewResponse?.result?.status === 'success') {
       setDaoFetchDataLoading(true);
       Pact.wallet
         .sendSigned(signedCommand, NETWORK)
         .then(async (voteProposal) => {
-          console.log(' voteProposal', voteProposal);
           notificationContext.pollingNotif(voteProposal.requestKeys[0], 'Vote Pending');
           await notificationContext.transactionListen(voteProposal.requestKeys[0], 'Vote Success', 'Vote Failed');
           pact.setPolling(false);

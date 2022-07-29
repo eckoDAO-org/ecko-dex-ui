@@ -104,7 +104,6 @@ const LiquidityRewards = () => {
     Pact.wallet
       .sendSigned(signedCommand, NETWORK)
       .then(async (stakingResponse) => {
-        console.log(' ClaimRewardsResponse', stakingResponse);
         pollingNotif(stakingResponse.requestKeys[0], 'Claim Rewards Transaction Pending');
 
         await transactionListen(stakingResponse.requestKeys[0]);

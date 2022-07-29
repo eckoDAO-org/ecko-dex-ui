@@ -101,7 +101,6 @@ const BuyCryptoForm = () => {
             httpRefUrl: window.location.origin,
           })
             .then((resPayment) => {
-              console.log('resPayment', resPayment);
               setPaymentId(resPayment.data.paymentId);
               setIsLoading(false);
             })

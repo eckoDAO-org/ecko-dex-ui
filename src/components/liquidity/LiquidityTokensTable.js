@@ -97,7 +97,6 @@ const LiquidityTokensTable = () => {
             </FlexContainer>
           ),
           onClick: (item) => {
-            console.log('item', item);
             history.push(ROUTE_TOKEN_INFO.replace(':token', item.name));
           },
         },

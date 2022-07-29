@@ -145,7 +145,6 @@ export const PactProvider = (props) => {
             limit: limit,
           },
         });
-        // console.log('get more events list response: ',response);
         let swap = Object.values(response?.data);
         if (swap.length !== 0) {
           const newResults = [...swapList, ...swap];
