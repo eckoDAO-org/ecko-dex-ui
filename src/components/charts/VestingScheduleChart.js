@@ -5,6 +5,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'rec
 import { getVestingScheduleData } from './data/chartData';
 import { FlexContainer } from '../shared/FlexContainer';
 import { useApplicationContext } from '../../contexts';
+import useWindowSize from '../../hooks/useWindowSize';
 import { commonColors } from '../../styles/theme';
 import CustomDropdown from '../shared/CustomDropdown';
 import { vestingRanges, VESTING_4Y_RANGE, VESTING_CHART_OPTIONS } from '../../constants/chartOptionsConstants';
@@ -29,7 +30,13 @@ export const VestingPopup = styled.div`
 
 const VestingScheduleChart = ({ height }) => {
   const { themeMode } = useApplicationContext();
+  const [width] = useWindowSize();
   const [vestingEndDate, setVestingEndDate] = useState(VESTING_4Y_RANGE.value);
+
+  // TODO: set in useWIndowsSize
+  const isMobile = () => width && width < 530;
+
+  const xAxisMultiplier = isMobile() ? 3 : 1;
 
   const getDefs = (id, color) => {
     return (
@@ -67,7 +74,7 @@ const VestingScheduleChart = ({ height }) => {
               bottom: 0,
             }}
           >
-            <XAxis dataKey="name" interval={vestingRanges[vestingEndDate].interval} />
+            <XAxis dataKey="name" interval={vestingRanges[vestingEndDate].interval * xAxisMultiplier} />
             <YAxis domain={[0, 100]} tickFormatter={(value) => `${value} %`} />
             <Tooltip
               content={(data) => {
