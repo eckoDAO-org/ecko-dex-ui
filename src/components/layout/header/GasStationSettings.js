@@ -306,7 +306,8 @@ const GasStationSettings = ({ className, hasNotification }) => {
                   Speed up your transaction!
                 </Label>
                 <Label fontSize={13} outGameEditionView labelStyle={{ marginTop: 4 }}>
-                  By disabling the gas station, Gas Limit and Gas Price will be optimized so that transactions can be successful.
+                  By disabling Kaddex's free gas station, gas limit and gas price amounts will update automatically to meet gas requirements for a
+                  successful transaction.
                 </Label>
               </>
             )}
