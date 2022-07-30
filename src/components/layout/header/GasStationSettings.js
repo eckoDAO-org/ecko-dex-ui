@@ -155,20 +155,36 @@ const GasStationSettings = ({ className, hasNotification }) => {
     )?.name;
     if (section) {
       setCurrentSection(section);
-      if (pact.enableGasStation) pact.setGasConfiguration(GAS_OPTIONS.DEFAULT[section]);
-      else pact.setGasConfiguration(GAS_OPTIONS.NORMAL[section]);
+      setClickedButton('NORMAL');
+      if (pact.enableGasStation) {
+        pact.setGasConfiguration(GAS_OPTIONS.DEFAULT[section]);
+      } else pact.setGasConfiguration(GAS_OPTIONS.NORMAL[section]);
     } else pact.setGasConfiguration(GAS_OPTIONS.NORMAL.SWAP);
   }, [pact.enableGasStation, pathname]);
 
   useEffect(() => {
     if (!pact.enableGasStation && pact.networkGasData.networkCongested) {
-      if (clickedButton === 'NORMAL') {
-        pact.handleGasConfiguration('gasPrice', pact.networkGasData.suggestedGasPrice);
-      } else if (clickedButton === 'FAST') {
-        pact.handleGasConfiguration('gasPrice', pact.networkGasData.highestGasPrice);
-      } else pact.handleGasConfiguration('gasPrice', pact.networkGasData.lowestGasPrice);
+      handleSuggestedPrice(clickedButton);
     }
-  }, [pact.networkGasData.suggestedGasPrice, pact.networkGasData.highestGasPrice, pact.networkGasData.lowestGasPrice]);
+  }, [
+    pact.networkGasData.networkCongested,
+    pact.networkGasData.suggestedGasPrice,
+    pact.networkGasData.highestGasPrice,
+    pact.networkGasData.lowestGasPrice,
+  ]);
+
+  const handleSuggestedPrice = (type) => {
+    let networkGas =
+      type === 'ECONOMY'
+        ? pact.networkGasData.lowestGasPrice
+        : type === 'NORMAL'
+        ? pact.networkGasData.suggestedGasPrice
+        : pact.networkGasData.highestGasPrice;
+
+    pact.networkGasData.networkCongested && networkGas > GAS_OPTIONS[type][currentSection].gasPrice
+      ? pact.handleGasConfiguration('gasPrice', networkGas)
+      : pact.setGasConfiguration(GAS_OPTIONS[type][currentSection]);
+  };
 
   return (
     <Wrapper ref={ref} resolutionConfiguration={resolutionConfiguration}>
@@ -239,11 +255,7 @@ const GasStationSettings = ({ className, hasNotification }) => {
                   <GasButton
                     isSelected={clickedButton === 'ECONOMY'}
                     onClick={() => {
-                      pact.networkGasData.networkCongested &&
-                      pact.handleGasConfiguration('gasPrice', pact.networkGasData.lowestGasPrice) >
-                        pact.setGasConfiguration(GAS_OPTIONS.ECONOMY[currentSection])
-                        ? pact.handleGasConfiguration('gasPrice', pact.networkGasData.lowestGasPrice)
-                        : pact.setGasConfiguration(GAS_OPTIONS.ECONOMY[currentSection]);
+                      handleSuggestedPrice('ECONOMY');
                       setClickedButton('ECONOMY');
                     }}
                   >
@@ -253,11 +265,7 @@ const GasStationSettings = ({ className, hasNotification }) => {
                     isSelected={clickedButton === 'NORMAL'}
                     style={{ marginLeft: 4, marginRight: 4 }}
                     onClick={() => {
-                      pact.networkGasData.networkCongested &&
-                      pact.handleGasConfiguration('gasPrice', pact.networkGasData.suggestedGasPrice) >
-                        pact.setGasConfiguration(GAS_OPTIONS.NORMAL[currentSection])
-                        ? pact.handleGasConfiguration('gasPrice', pact.networkGasData.suggestedGasPrice)
-                        : pact.setGasConfiguration(GAS_OPTIONS.NORMAL[currentSection]);
+                      handleSuggestedPrice('NORMAL');
                       setClickedButton('NORMAL');
                     }}
                   >
@@ -267,11 +275,7 @@ const GasStationSettings = ({ className, hasNotification }) => {
                     isSelected={clickedButton === 'FAST'}
                     style={{ marginRight: 8 }}
                     onClick={() => {
-                      pact.networkGasData.networkCongested &&
-                      pact.handleGasConfiguration('gasPrice', pact.networkGasData.highestGasPrice) >
-                        pact.setGasConfiguration(GAS_OPTIONS.FAST[currentSection])
-                        ? pact.handleGasConfiguration('gasPrice', pact.networkGasData.highestGasPrice)
-                        : pact.setGasConfiguration(GAS_OPTIONS.FAST[currentSection]);
+                      handleSuggestedPrice('FAST');
                       setClickedButton('FAST');
                     }}
                   >

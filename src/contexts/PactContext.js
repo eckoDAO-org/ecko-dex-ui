@@ -66,7 +66,7 @@ export const PactProvider = (props) => {
   useEffect(() => {
     getNetworkGasData();
   }, []);
-  useInterval(getNetworkGasData, 10000);
+  useInterval(getNetworkGasData, 20000);
 
   const updateTokenUsdPrice = async () => {
     const result = {};
