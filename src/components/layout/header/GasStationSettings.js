@@ -287,14 +287,12 @@ const GasStationSettings = ({ className, hasNotification }) => {
                   labelStyle={{ marginTop: 8 }}
                   fontSize={16}
                   color={
-                    getDecimalPlaces(pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit) > 0.5
+                    pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit > 0.5
                       ? commonColors.error
-                      : [
-                          getDecimalPlaces(pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit) <= 0.5 &&
-                          getDecimalPlaces(pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit) > 0.01
-                            ? commonColors.orange
-                            : commonColors.green,
-                        ]
+                      : pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit <= 0.5 &&
+                        pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit > 0.01
+                      ? commonColors.orange
+                      : commonColors.green
                   }
                 >
                   {getDecimalPlaces(pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit)} KDA
