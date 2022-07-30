@@ -1,6 +1,6 @@
-import React from "react";
-import { ModalConsumer, ModalProvider } from "../../contexts/ModalContext";
-import LayoutModal from "./LayoutModal";
+import React from 'react';
+import { ModalConsumer, ModalProvider } from '../../contexts/ModalContext';
+import LayoutModal from './LayoutModal';
 
 const ModalRender = ({ children }) => {
   return (
@@ -13,6 +13,7 @@ const ModalRender = ({ children }) => {
             description={value.description}
             open={value.open}
             onClose={value.onClose || value.closeModal}
+            onBack={null || value.onBack}
             containerStyle={value.containerStyle}
             content={value.content}
           />

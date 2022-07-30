@@ -1,79 +1,86 @@
-import React from "react";
-import styled from "styled-components";
-import { reduceBalance } from "../../utils/reduceBalance";
+import React from 'react';
+import styled from 'styled-components/macro';
+import { getDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
+import Label from '../shared/Label';
+import { useLiquidityContext, usePactContext } from '../../contexts';
+import { commonColors } from '../../styles/theme';
 
 const ResultContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 15px 0px;
-  flex-flow: row;
+  margin: 16px 0px;
+  flex-flow: column;
   width: 100%;
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
+  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     flex-flow: column;
-    margin-bottom: 0px;
+  }
+  & > *:not(:last-child) {
+    margin-bottom: 12px;
   }
 `;
 
 const RowContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  flex-flow: column;
-  @media (max-width: ${({ theme: { mediaQueries } }) =>
-      `${mediaQueries.mobilePixel + 1}px`}) {
-    flex-flow: row;
-  }
-`;
-
-const Label = styled.span`
-  font: normal normal normal 14px/15px
-    ${({ theme: { fontFamily } }) => fontFamily.regular};
-  color: #ffffff;
-  text-transform: capitalize;
-`;
-
-const Value = styled.span`
-  font-family: ${({ theme: { fontFamily } }) => fontFamily.regular};
-  font-size: 16px;
-  line-height: 20px;
-  color: #ffffff;
+  flex-flow: row;
 `;
 
 const SwapResults = ({ priceImpact, fromValues, toValues }) => {
+  const pact = usePactContext();
+  const liquidity = useLiquidityContext();
+
+  const getPriceImpactColor = () => {
+    if (pact.priceImpactWithoutFee(priceImpact)) {
+      const priceImpactPercentage = reduceBalance(pact.priceImpactWithoutFee(priceImpact) * 100, 4);
+      if (priceImpactPercentage < 1) {
+        return commonColors.green;
+      } else if (priceImpactPercentage >= 1 && priceImpactPercentage < 5) {
+        return commonColors.yellow;
+      } else if (priceImpactPercentage >= 5) {
+        return commonColors.red;
+      }
+    }
+  };
+
   return (
     <ResultContainer>
+      {pact.enableGasStation && (
+        <RowContainer>
+          <Label fontSize={13} color={commonColors.green}>
+            Gas Cost
+          </Label>
+          <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ marginLeft: 5 }}>
+            FREE
+          </Label>
+        </RowContainer>
+      )}
       <RowContainer>
-        <Label>price</Label>
-        <Value>
-          {/* {`${reduceBalance(pact.ratio * (1 + priceImpact))} ${
-          fromValues.coin
-          } per ${toValues.coin}`} */}
-        </Value>
+        <Label fontSize={13} color={getPriceImpactColor()}>
+          Price Impact
+        </Label>
+        <Label fontSize={13} labelStyle={{ textAlign: 'end' }} color={getPriceImpactColor()}>
+          {pact.priceImpactWithoutFee(priceImpact) < 0.0001 && pact.priceImpactWithoutFee(priceImpact)
+            ? '< 0.01 %'
+            : `${reduceBalance(pact.priceImpactWithoutFee(priceImpact) * 100, 4)} %`}
+        </Label>
       </RowContainer>
       <RowContainer>
-        <Label>Price Impact</Label>
-        <Value>
-          {/* {pact.priceImpactWithoutFee(priceImpact) < 0.0001 &&
-          pact.priceImpactWithoutFee(priceImpact)
-            ? "< 0.01%"
-            : `${reduceBalance(
-                pact.priceImpactWithoutFee(priceImpact) * 100,
-                4
-              )}%`} */}
-        </Value>
+        <Label fontSize={13}>Price</Label>
+        <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
+          {reduceBalance(pact.ratio * (1 + priceImpact))} {fromValues.coin}/{toValues.coin}
+        </Label>
       </RowContainer>
       <RowContainer>
-        <Label>max slippage</Label>
-        <Value>{/* {`${pact.slippage * 100}%`} */}</Value>
+        <Label fontSize={13}>Max Slippage</Label>
+        <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
+          {pact.slippage * 100} %
+        </Label>
       </RowContainer>
       <RowContainer>
-        <Label>liquidity provider fee</Label>
-        <Value>
-          {/* {`${reduceBalance(
-          pact.liquidityProviderFee * parseFloat(fromValues.amount),
-          14
-          )} ${fromValues.coin}`} */}
-        </Value>
+        <Label fontSize={13}>Liquidity Provider Fee</Label>
+        <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
+          {getDecimalPlaces(liquidity.liquidityProviderFee * parseFloat(fromValues.amount))} {fromValues.coin}
+        </Label>
       </RowContainer>
     </ResultContainer>
   );

@@ -1,9 +1,16 @@
 .swal-modal {
-  background-color: #232323;
-  border: none !important;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  border: 1px solid #ffffff;
+  opacity: 1;
+  background: #292a45 0% 0% no-repeat padding-box;
+  color: #ffffff;
+  backdrop-filter: blur(50px);
 }
 .swal-title {
-  color: #e0e0e0 !important;
+  color: #ffffff !important;
+  font-family: syncopate-bold;
 }
 .swal-text {
   /* background-color: #FEFAE3; */
@@ -13,25 +20,40 @@
   margin: 22px;
   text-align: center;
   color: #e0e0e0 !important;
-  font-family: montserrat-bold !important;
+  font-family: basier-square-mono-regular !important;
 }
 
 .swal-footer {
-  background-color: #232323;
+  text-align: center;
+  background-color: #292a45;
+  backdrop-filter: blur(50px);
   margin-top: 32px;
   overflow: hidden;
-  font-family: montserrat-bold !important;
+  font-family: basier-square-mono-regular !important;
 }
+
 .swal-input {
   border: 1px solid purple;
 }
+.swal-button-container {
+  width: 100%;
+  margin: 0px;
+}
 .swal-button {
+  width: 100%;
+  cursor: pointer;
   padding: 7px 19px;
-  border-radius: 2px;
-  background-color: #27b7e6;
-  font-size: 12px;
-  color: white;
-  border-radius: 20px;
+  background-color: #292a45;
+  backdrop-filter: blur(50px);
+  border: 1px solid #ffffff;
+  font-size: 16px;
+  color: #ffffff;
+  border-radius: 10px;
   font-family: montserrat-bold !important;
-  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.3);
+}
+
+.swal-button:hover {
+  cursor: pointer;
+  background-color: #ffffff !important;
+  color: #292a45;
 }

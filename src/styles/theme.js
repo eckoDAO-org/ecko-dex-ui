@@ -1,33 +1,97 @@
-export const theme = {
+export const commonTheme = {
   layout: {
-    desktopWidth: "80%",
-    mobileWidth: "95%",
-    mainContentPadding: 24,
+    desktopPadding: 88,
+    tabletPadding: 32,
+    mobilePadding: 16,
   },
   header: {
-    height: 56,
+    height: 65,
+    mobileHeight: 65,
   },
-  mediaQueries: {
-    mobileBreakpoint: "48rem",
-    mobilePixel: 768,
-    desktopPixel: 1024,
-    footerMinWidth: "50rem",
-  },
-  colors: {
-    primary: "#3A4750",
-    border: "#ECEBEC",
-    pink: "#D20790",
-    purple: "#240B2F",
+  footer: {
+    modalFooter: 57,
   },
   fontFamily: {
-    regular: "montserrat-regular",
-    italic: "montserrat-italic",
-    bold: "montserrat-bold",
-    boldItalic: "montserrat-bold-italic",
+    regular: 'montserrat-regular',
+    italic: 'montserrat-italic',
+    bold: 'montserrat-bold',
+    boldItalic: 'montserrat-bold-italic',
+    pressStartRegular: 'press-start-regular',
+    pixeboy: 'pixeboy',
+    syncopate: 'syncopate-bold',
+    basier: 'basier-square-mono-regular',
+  },
+  mediaQueries: {
+    mobileBreakpoint: '48rem',
+    mobileSmallPixel: 320,
+    mobilePixel: 768,
+    desktopPixel: 1024,
+    gameEditionDesktopHeightPixel: 768,
+    footerMinWidth: '50rem',
   },
   inputTokenWidth: 78,
   inputSelectButtonWidth: 81,
-  buttonBackgroundGradient: "transparent",
 };
 
-export default theme;
+export const commonColors = {
+  pink: '#D20790',
+  purple: '#240B2F',
+  black: '#000000',
+  yellow: '#FEDE75',
+  green: '#41CC41',
+  grey: '#5C5C5C',
+  error: '#DB2828',
+  red: '#FF5757',
+  redComponent: '#CC4141',
+  active: '#2D6A18',
+  closed: '#9D1D16',
+  info: '#10C4DF',
+  orange: '#FFA900',
+  gold: '#DAAF37',
+  appColor: '#212750',
+  gameEditionYellow: '#FFC107',
+  gameEditionBlue: '#6D99E4',
+  gameEditionPink: '#F2248D',
+  gameEditionWhiteGrey: '#FFFFFF80',
+  gameEditionBlackGrey: '#00000080',
+  gameEditionBlueGrey: '#5F7498',
+};
+export const lightTheme = {
+  ...commonTheme,
+  backgroundBody:
+    'radial-gradient(at 90% 10%, hsla(298,34%,85%,1) 0, transparent 37%),radial-gradient(at 18% 73%, hsla(179,100%,94%,1) 0, transparent 71%),radial-gradient(at 81% 69%, hsla(40,100%,93%,1) 0, transparent 79%);',
+
+  colors: {
+    primary: '#FFFFFF',
+    border: '#240B2F',
+    white: '#212750',
+    ...commonColors,
+  },
+  buttonBackgroundGradient: '#212750',
+  backgroundInput: '#2127501A',
+  backgroundContainer: '#F7F7F7',
+  backgroundTableHighlight: '#E6E6E6',
+  backgroundProgressBar: '#212750',
+};
+
+export const darkTheme = {
+  ...commonTheme,
+  backgroundBody: '#0A0B1D',
+  colors: {
+    primary: '#212750',
+    border: '#ECEBEC',
+    white: '#FFFFFF',
+    ...commonColors,
+  },
+  buttonBackgroundGradient: 'rgb(17,8,23)',
+  backgroundInput: 'transparent',
+  backgroundContainer: '#292A45',
+  backgroundTableHighlight: '#38395E',
+  backgroundProgressBar: '#5C5C5C99',
+};
+
+export const theme = (mode = 'light') => {
+  return mode === 'light' ? lightTheme : darkTheme;
+};
+
+export default theme();
