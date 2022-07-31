@@ -17,3 +17,4 @@ export { ReactComponent as CloseIcon } from "./images/shared/cross.svg";
 export { ReactComponent as ArrowBack } from "./images/shared/arrow-back.svg";
 export { ReactComponent as SuccessfullIcon } from "./images/shared/successful-circle.svg";
 export { ReactComponent as ErrorIcon } from "./images/shared/error-circle.svg";
+export { ReactComponent as KaddexCoinIcon } from "./images/header/coin-kaddex.svg";

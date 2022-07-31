@@ -1,7 +1,13 @@
 import React from "react";
-import { AboutIcon, CodeIcon, DiscordIcon, TelegramIcon } from "../assets";
+import { AboutIcon, CodeIcon, DiscordIcon, KaddexCoinIcon, TelegramIcon } from "../assets";
 
 export default [
+  {
+    id: 4,
+    label: "Kaddex V1",
+    icon: <KaddexCoinIcon />,
+    link: "https://swap.kaddex.com",
+  },
   {
     id: 0,
     label: "about",
@@ -26,4 +32,5 @@ export default [
     icon: <DiscordIcon />,
     link: "https://discord.gg/QSJpHRFDcv",
   },
+ 
 ];
