@@ -41,6 +41,14 @@
       }
     },
     "mainnet": {
+      "coin:kaddex.kdx": {
+        "name": "coin:kaddex.kdx",
+        "token0": "KDA",
+        "token1": "KDX",
+        "main": true,
+        "isBoosted": true,
+        "color": "#ed1cb5"
+      },
       "coin:runonflux.flux": {
         "name": "coin:runonflux.flux",
         "token0": "KDA",
@@ -55,7 +63,39 @@
         "token1": "HYPE",
         "main": true,
         "isBoosted": false,
-        "color": "#ed1cb5"
+        "color": "#ffa900"
+      },
+      "coin:mok.token": {
+        "name": "coin:mok.token",
+        "token0": "KDA",
+        "token1": "MOK",
+        "main": false,
+        "isBoosted": false,
+        "color": "#92187B"
+      },
+      "coin:lago.kwUSDC": {
+        "name": "coin:lago.kwUSDC",
+        "token0": "KDA",
+        "token1": "kwUSDC", 
+        "main": false,
+        "isBoosted": false,
+        "color": "#292A45"
+      },
+      "coin:kdlaunch.token": {
+        "name": "coin:kdlaunch.token",
+        "token0": "KDA",
+        "token1": "KDL", 
+        "main": false,
+        "isBoosted": false,
+        "color": "#4aa5b1"
+      },
+      "coin:kdlaunch.kdswap-token": {
+        "name": "coin:kdlaunch.kdswap-token",
+        "token0": "KDA",
+        "token1": "KDS", 
+        "main": false,
+        "isBoosted": false,
+        "color": "#6ebbf2"
       }
     }
   }
