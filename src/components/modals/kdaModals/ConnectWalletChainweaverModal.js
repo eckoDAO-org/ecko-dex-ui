@@ -33,15 +33,14 @@ const ConnectWalletChainweaverModal = ({ onClose }) => {
       let keyToCheck = key;
       if (key.startsWith('k:')) {
         keyToCheck = key.split(':')[1];
-      }
 
-      if (keyToCheck.length !== 64) {
-        return false;
+        if (keyToCheck.length !== 64) {
+          return false;
+        }
+        if (!is_hexadecimal(keyToCheck)) {
+          return false;
+        }
       }
-      if (!is_hexadecimal(keyToCheck)) {
-        return false;
-      }
-
       return true;
     } catch (e) {
       console.log(e);

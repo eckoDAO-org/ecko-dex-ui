@@ -287,14 +287,12 @@ const GasStationSettings = ({ className, hasNotification }) => {
                   labelStyle={{ marginTop: 8 }}
                   fontSize={16}
                   color={
-                    getDecimalPlaces(pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit) > 0.5
+                    pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit > 0.5
                       ? commonColors.error
-                      : [
-                          getDecimalPlaces(pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit) <= 0.5 &&
-                          getDecimalPlaces(pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit) > 0.01
-                            ? commonColors.orange
-                            : commonColors.green,
-                        ]
+                      : pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit <= 0.5 &&
+                        pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit > 0.01
+                      ? commonColors.orange
+                      : commonColors.green
                   }
                 >
                   {getDecimalPlaces(pact.gasConfiguration?.gasPrice * pact.gasConfiguration?.gasLimit)} KDA
@@ -308,7 +306,8 @@ const GasStationSettings = ({ className, hasNotification }) => {
                   Speed up your transaction!
                 </Label>
                 <Label fontSize={13} outGameEditionView labelStyle={{ marginTop: 4 }}>
-                  By disabling the gas station, Gas Limit and Gas Price will be optimized so that transactions can be successful.
+                  By disabling Kaddex's free gas station, gas limit and gas price amounts will update automatically to meet gas requirements for a
+                  successful transaction.
                 </Label>
               </>
             )}

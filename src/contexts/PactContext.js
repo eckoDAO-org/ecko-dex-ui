@@ -119,7 +119,11 @@ export const PactProvider = (props) => {
             setSwapList(swap);
           } else setSwapList({ error: 'No swaps found' });
         } else {
-          setSwapList({ error: 'This Devnet environment does not have a block explorer.' });
+          if (process.env.REACT_APP_KDA_NETWORK_TYPE === 'development') {
+            setSwapList({ error: 'This Devnet environment does not have a block explorer.' });
+          } else {
+            setSwapList({ error: 'No movement was performed' });
+          }
         }
         setLoadingSwap(false);
       } else {

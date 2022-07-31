@@ -96,8 +96,14 @@ export const getUsdTokenLiquidity = (liquidty, usdPrice) => {
   return usdPrice * liquidty;
 };
 
+export const isMatchingStatToken = (statNamespace, statName, code) => {
+  const [namespace, name] = code.split('.');
+  const isMatch = (namespace === statNamespace && name === statName) || (namespace === 'coin' && !name);
+  return isMatch;
+};
+
 const getVolume = (volume, tokenNameKaddexStats) => {
-  if (volume.tokenFromName === tokenNameKaddexStats) {
+  if (isMatchingStatToken(volume.tokenFromNamespace, volume.tokenFromName, tokenNameKaddexStats)) {
     return volume.tokenFromVolume;
   } else {
     return volume.tokenToVolume;
@@ -110,16 +116,23 @@ export const get24HVolumeDoubleSided = (volumes, token0NameKaddexStats, token1Na
     ?.filter(
       (v) =>
         v.chain === Number(CHAIN_ID) &&
-        ((v.tokenFromName === token0NameKaddexStats && v.tokenToName === token1NameKaddexStats) ||
-          (v.tokenFromName === token1NameKaddexStats && v.tokenToName === token0NameKaddexStats))
+        ((isMatchingStatToken(v.tokenFromNamespace, v.tokenFromName, token0NameKaddexStats) &&
+          isMatchingStatToken(v.tokenToNamespace, v.tokenToName, token1NameKaddexStats)) ||
+          (isMatchingStatToken(v.tokenFromNamespace, v.tokenFromName, token1NameKaddexStats) &&
+            isMatchingStatToken(v.tokenToNamespace, v.tokenToName, token0NameKaddexStats)))
     )
     .reduce((total, v) => total + getVolume(v, tokenNameKaddexStats), 0);
 };
 
 export const get24HVolumeSingleSided = (volumes, tokenNameKaddexStats) => {
-  const last24hDailyVolume = volumes.slice(-1)[0];
+  const last24hDailyVolume = volumes?.slice(-1)[0];
   return last24hDailyVolume.volumes
-    ?.filter((v) => v.chain === Number(CHAIN_ID) && (v.tokenFromName === tokenNameKaddexStats || v.tokenToName === tokenNameKaddexStats))
+    ?.filter(
+      (v) =>
+        v.chain === Number(CHAIN_ID) &&
+        (isMatchingStatToken(v.tokenFromNamespace, v.tokenFromName, tokenNameKaddexStats) ||
+          isMatchingStatToken(v.tokenToNamespace, v.tokenToName, tokenNameKaddexStats))
+    )
     .reduce((total, v) => total + getVolume(v, tokenNameKaddexStats), 0);
 };
 

@@ -110,16 +110,16 @@ const SwapContainer = () => {
   const [fromValues, setFromValues] = useState({
     amount: '',
     balance: '',
-    coin: 'KDX',
-    address: 'kaddex.kdx',
+    coin: 'KDA',
+    address: 'coin',
     precision: 12,
   });
 
   const [toValues, setToValues] = useState({
     amount: '',
     balance: account.account.balance || '',
-    coin: 'KDA',
-    address: 'coin',
+    coin: 'KDX',
+    address: 'kaddex.kdx',
     precision: 12,
   });
 

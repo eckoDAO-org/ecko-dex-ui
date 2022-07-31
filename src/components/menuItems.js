@@ -69,9 +69,7 @@ export const BUY_CRYPTO = {
   link: process.env.REACT_APP_BUY_CRYPTO_URL,
 };
 
-export default NETWORK_TYPE === 'development'
-  ? [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS, VAULT]
-  : [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS, VAULT, BUY_CRYPTO];
+export default NETWORK_TYPE === 'development' ? [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS, VAULT] : [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS, VAULT];
 
 export const gameEditionRoutes = [
   {
