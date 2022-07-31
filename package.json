@@ -13,6 +13,7 @@
     "bignumber.js": "^9.0.1",
     "crypto-js": "^4.0.0",
     "formik": "^2.2.0",
+    "glob": "^8.0.3",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "pact-lang-api": "^4.2.0",
@@ -41,7 +42,7 @@
     "start:pact": "rm -Rf ./log && mkdir log && pact --serve ./pact-local/server.conf",
     "start:deploy": "./pact-local/initialize.sh 9001",
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && node post-build.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

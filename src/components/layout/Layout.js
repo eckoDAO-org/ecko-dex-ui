@@ -16,6 +16,7 @@ import { FlexContainer } from '../shared/FlexContainer';
 import theme from '../../styles/theme';
 import Banner from './header/Banner';
 import FooterPolicy from './FooterPolicy';
+import { isMainnet } from '../../constants/contextConstants';
 
 const WrapperContainer = styled.div`
   flex-direction: column;
@@ -87,7 +88,7 @@ const Layout = ({ children }) => {
         {width <= theme.mediaQueries.mobilePixel && <MobileHeader />}
         {width > theme.mediaQueries.mobilePixel && width < theme.mediaQueries.desktopPixel && <TabletHeader />}
         {width >= theme.mediaQueries.desktopPixel && <DesktopHeader gameEditionView={gameEditionView} />}
-        {!account.account && !gameEditionView && <Banner />}
+        {!account.account && !gameEditionView && !isMainnet() && <Banner />}
         {gameEditionView && resolutionConfiguration && width >= resolutionConfiguration.width && height >= resolutionConfiguration.height ? (
           <>
             <CenterBackground src={gameEditionBackground} alt="" />
