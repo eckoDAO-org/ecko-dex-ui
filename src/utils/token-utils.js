@@ -138,7 +138,7 @@ export const get24HVolumeSingleSided = (volumes, tokenNameKaddexStats) => {
 
 export const getTokenUsdPriceByLiquidity = (liquidity0, liquidity1, usdPrice) => {
   const liquidityRatio = liquidity0 / liquidity1;
-  return bigNumberConverter(liquidityRatio * usdPrice);
+  return bigNumberConverter(liquidityRatio * usdPrice, 3);
 };
 
 /**
