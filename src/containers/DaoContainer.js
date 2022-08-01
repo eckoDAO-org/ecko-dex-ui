@@ -7,7 +7,7 @@ import SingleProposalContainer from '../components/dao/SingleProposalContainer';
 import { useAccountContext } from '../contexts';
 import { getAccountData } from '../api/dao';
 import theme from '../styles/theme';
-import { useInterval } from '../hooks/useInterval';
+// import { useInterval } from '../hooks/useInterval';
 import useWindowSize from '../hooks/useWindowSize';
 
 const DaoContainer = () => {
@@ -26,7 +26,7 @@ const DaoContainer = () => {
     fetchData();
   }, [account]);
 
-  useInterval(fetchData, 30000);
+  // useInterval(fetchData, 30000);
 
   return (
     <FlexContainer

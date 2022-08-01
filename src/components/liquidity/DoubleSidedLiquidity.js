@@ -16,7 +16,7 @@ import TokenSelectorModalContentGE from '../../components/modals/swap-modals/Tok
 import WalletRequestView from '../../components/modals/WalletRequestView';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { SuccessAddView } from '../modals/liquidity/LiquidityTxView';
-import { useInterval } from '../../hooks/useInterval';
+// import { useInterval } from '../../hooks/useInterval';
 import { useAccountContext, useGameEditionContext, useLiquidityContext, useModalContext, usePactContext, useWalletContext } from '../../contexts';
 import reduceToken from '../../utils/reduceToken';
 import ConnectWalletModal from '../modals/kdaModals/ConnectWalletModal';
@@ -103,11 +103,11 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   }, [fetchData]); //the getPair call is invoked when is selected a token
 
   /// POLLING ON UPDATE PACT RATIO
-  useInterval(async () => {
-    if (!isNaN(pact.ratio)) {
-      await pact.getReserves(tokenData?.[fromValues?.coin]?.code, tokenData?.[toValues?.coin]?.code);
-    }
-  }, 10000);
+  // useInterval(async () => {
+  //   if (!isNaN(pact.ratio)) {
+  //     await pact.getReserves(tokenData?.[fromValues?.coin]?.code, tokenData?.[toValues?.coin]?.code);
+  //   }
+  // }, 10000);
 
   const onTokenClick = async ({ crypto }) => {
     let balance;
