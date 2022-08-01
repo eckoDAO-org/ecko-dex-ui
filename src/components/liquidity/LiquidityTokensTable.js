@@ -38,7 +38,7 @@ const LiquidityTokensTable = () => {
       // calculate sum of liquidity in usd and volumes in usd for each token in each pair
       for (const token of tokens) {
         const tokenPairs = pairsList.filter((p) => p.token0 === token.name || p.token1 === token.name);
-        const tokenUsdPrice = tokensUsdPrice?.[token.name];
+        const tokenUsdPrice = tokensUsdPrice?.[token.name] ? tokensUsdPrice?.[token.name] : 0;
         let volume24HUsd = 0;
         let volume24H = 0;
         let liquidity = 0;
@@ -134,7 +134,7 @@ const renderColumns = (history) => {
       width: 160,
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer h-100" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
-          $ {item.tokenUsdPrice}
+          $ {humanReadableNumber(item.tokenUsdPrice)}
         </ScalableCryptoContainer>
       ),
     },
