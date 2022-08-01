@@ -134,7 +134,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
         }
         result.push({ ...token, volumeUsd, volume24H, tokenUsdPrice });
       }
-      const totalVolume = result.reduce((acc, t) => acc + t.volumeUsd, 0);
+      const totalVolume = result.reduce((acc, t) => acc + (t.volumeUsd || 0), 0);
 
       const mainTokens = result.filter((t) => t.main).map((token) => ({ ...token, percentage: (token.volumeUsd / totalVolume) * 100 }));
       const otherTokensVolume = result.filter((t) => !t.main).reduce((acc, t) => acc + t.volumeUsd, 0);

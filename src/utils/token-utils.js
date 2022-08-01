@@ -126,7 +126,7 @@ export const get24HVolumeDoubleSided = (volumes, token0NameKaddexStats, token1Na
 
 export const get24HVolumeSingleSided = (volumes, tokenNameKaddexStats) => {
   const last24hDailyVolume = volumes?.slice(-1)[0];
-  return last24hDailyVolume.volumes
+  return last24hDailyVolume?.volumes
     ?.filter(
       (v) =>
         v.chain === Number(CHAIN_ID) &&
