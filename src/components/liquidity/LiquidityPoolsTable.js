@@ -8,12 +8,13 @@ import { extractDecimal, humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
-import { AddIcon, GasIcon } from '../../assets';
+import { AddIcon, BoosterIcon, GasIcon } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS } from '../../router/routes';
 import Label from '../shared/Label';
 import tokenData from '../../constants/cryptoCurrencies';
 import { getAllPairValues } from '../../utils/token-utils';
-import { getPairMultiplier } from '../../api/liquidity-rewards';
+import { getPairsMultiplier } from '../../api/liquidity-rewards';
+import { commonColors } from '../../styles/theme';
 
 const LiquidityPoolsTable = () => {
   const history = useHistory();
@@ -26,11 +27,19 @@ const LiquidityPoolsTable = () => {
       const volumes = await getDailyVolume();
 
       const result = await getAllPairValues(pools, volumes);
+      const multipliers = await getPairsMultiplier(pools);
       for (let i = 0; i < result.length; i++) {
-        let pair = result[i].name.split(':');
-        let mult = await getPairMultiplier(pair[0], pair[1]);
-        if (!mult.errorMessage) {
-          result[i].multiplier = extractDecimal(mult);
+        try {
+          const multiplierObj = multipliers.find((x) => x.pair === result[i].name);
+
+          if (multiplierObj) {
+            result[i].multiplier = extractDecimal(multiplierObj.multiplier);
+          } else {
+            result[i].multiplier = 1;
+          }
+        } catch (error) {
+          console.log('fetchData -> error', error);
+          result[i].multiplier = 1;
         }
       }
       setPairList(result);
@@ -114,12 +123,34 @@ const renderColumns = () => {
     {
       name: 'KDX Multiplier',
       width: 160,
-      render: ({ item }) => (item.multiplier ? `${item.multiplier.toFixed(2)} x` : '-'),
+      render: ({ item }) =>
+        item.multiplier > 1 ? (
+          <FlexContainer className="align-ce svg-pink">
+            <BoosterIcon style={{ width: 16, height: 16 }} />
+            <Label labelStyle={{ fontWeight: 600, marginLeft: 6 }} fontSize={13} color={commonColors.pink}>
+              {item.multiplier.toFixed(2)} x
+            </Label>
+          </FlexContainer>
+        ) : (
+          '-'
+        ),
     },
     {
       name: 'APR',
       width: 160,
-      render: ({ item }) => `${item.apr?.value.toFixed(2)} %`,
+      render: ({ item }) =>
+        item.multiplier > 1 ? (
+          <div className="column flex">
+            <Label labelStyle={{ fontWeight: 600 }} fontSize={14} color={commonColors.pink}>
+              {(item.apr?.value * item.multiplier).toFixed(2)} %
+            </Label>
+            <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
+              {item.apr?.value.toFixed(2)} %
+            </Label>
+          </div>
+        ) : (
+          `${item.apr?.value.toFixed(2)} %`
+        ),
     },
   ];
 };

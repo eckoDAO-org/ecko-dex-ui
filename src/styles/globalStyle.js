@@ -257,6 +257,12 @@ export default createGlobalStyle`
         }
     }
 
+    .svg-pink {
+      path {
+          fill: ${({ theme: { colors } }) => colors.pink}!important;
+        }
+    }
+
     .main {
       padding-top: 32px;
       padding-bottom: 32px;

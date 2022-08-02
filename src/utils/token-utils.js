@@ -1,8 +1,7 @@
 import { getCoingeckoUsdPrice } from '../api/coingecko';
-import { CHAIN_ID, FEE, STAKING_REWARDS_PERCENT } from '../constants/contextConstants';
+import { CHAIN_ID, APR_FEE, STAKING_REWARDS_PERCENT } from '../constants/contextConstants';
 import tokenData from '../constants/cryptoCurrencies';
 import { bigNumberConverter } from './bignumber';
-import { getPairList } from '../api/pact';
 import { reduceBalance } from './reduceBalance';
 
 export const getTokenByModuleV2 = (token) => {
@@ -37,7 +36,7 @@ export const getInfoCoin = (item, coinPositionArray) => {
 };
 
 export const getApr = (volume, liquidity) => {
-  const percentageOnVolume = (volume / 100) * FEE;
+  const percentageOnVolume = volume * APR_FEE;
   const percentagePerYear = percentageOnVolume * 365;
   const apr = liquidity ? (percentagePerYear * 100) / liquidity : 0;
 
@@ -144,8 +143,7 @@ export const getTokenUsdPriceByLiquidity = (liquidity0, liquidity1, usdPrice) =>
 /**
  * @param {string} tokenName [example: "KDX"]
  */
-export const getTokenUsdPriceByName = async (tokenName) => {
-  const pools = await getPairList();
+export const getTokenUsdPriceByName = async (tokenName, pools) => {
   const token = Object.values(tokenData).find((t) => t.name === tokenName);
   return await getTokenUsdPrice(token, pools);
 };
