@@ -76,7 +76,7 @@
       "coin:lago.kwUSDC": {
         "name": "coin:lago.kwUSDC",
         "token0": "KDA",
-        "token1": "kwUSDC", 
+        "token1": "kwUSDC",
         "main": false,
         "isBoosted": false,
         "color": "#292A45"
@@ -84,7 +84,7 @@
       "coin:kdlaunch.token": {
         "name": "coin:kdlaunch.token",
         "token0": "KDA",
-        "token1": "KDL", 
+        "token1": "KDL",
         "main": false,
         "isBoosted": false,
         "color": "#4aa5b1"
@@ -92,23 +92,15 @@
       "coin:kdlaunch.kdswap-token": {
         "name": "coin:kdlaunch.kdswap-token",
         "token0": "KDA",
-        "token1": "KDS", 
+        "token1": "KDS",
         "main": false,
         "isBoosted": false,
         "color": "#6ebbf2"
       },
-      "coin:free.kishu-ken": {
-        "name": "coin:free.kishu-ken",
-        "token0": "KDA",
-        "token1": "KISHK", 
-        "main": false,
-        "isBoosted": false,
-        "color": "#EEAA7B"
-      },
       "coin:free.backalley": {
         "name": "coin:free.backalley",
         "token0": "KDA",
-        "token1": "BKA", 
+        "token1": "BKA",
         "main": false,
         "isBoosted": false,
         "color": "#822C8B"
