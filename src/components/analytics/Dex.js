@@ -2,13 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import axios from 'axios';
-import { getDailyVolume, getGroupedTVL } from '../../api/kaddex-stats';
+import { getGroupedTVL } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact';
 import { chartTimeRanges, CHART_OPTIONS, DAILY_VOLUME_RANGE, MONTHLY_VOLUME_RANGE, WEEKLY_VOLUME_RANGE } from '../../constants/chartOptionsConstants';
 import tokenData, { pairsData } from '../../constants/cryptoCurrencies';
 import { usePactContext } from '../../contexts';
-import { humanReadableNumber, extractDecimal } from '../../utils/reduceBalance';
-import { get24HVolumeSingleSided } from '../../utils/token-utils';
+import { humanReadableNumber, extractDecimal, reduceBalance } from '../../utils/reduceBalance';
 import TVLChart from '../charts/TVLChart';
 import VolumeChart from '../charts/VolumeChart';
 import AnalyticsSimpleWidget from '../shared/AnalyticsSimpleWidget';
@@ -28,7 +27,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
   const [volumeRange, setVolumeRange] = useState(DAILY_VOLUME_RANGE.value);
 
   const [loading, setLoading] = useState(true);
-  const [tokensVolumes, setTokensVolumes] = useState([]);
+  const [tvlDetails, setTVLDetails] = useState([]);
   const [pairsVolume, setPairsVolume] = useState([]);
   const [stakingDiff, setStakingDiff] = useState(null);
 
@@ -113,38 +112,32 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
 
   const { tokensUsdPrice } = usePactContext();
 
-  const getTokensVolume = async () => {
+  const getTVLDetails = async () => {
     const pairsList = await getPairList();
     if (pairsList?.length) {
-      const volumes = await getDailyVolume();
+      const main = pairsList.filter((t) => t.main);
+      const others = pairsList.filter((t) => !t.main);
+      const totalKDATVL = pairsList.reduce((partialSum, curr) => partialSum + reduceBalance(curr.reserves[0]) * 2, 0);
+      const totalKDAOtherTVL = others.reduce((partialSum, curr) => partialSum + reduceBalance(curr.reserves[0]) * 2, 0);
 
-      const tokens = Object.values(tokenData);
+      const kdaPrice = tokensUsdPrice?.KDA;
+      const mains = main.map((t) => {
+        const kdaTVL = reduceBalance(t.reserves[0]) * 2;
+        return {
+          color: t.color,
+          name: `${t.token0}/${t.token1}`,
+          volumeUsd: kdaPrice * reduceBalance(t.reserves[0]) * 2,
+          percentage: (kdaTVL * 100) / totalKDATVL,
+        };
+      });
 
-      const result = [];
-
-      // calculate sum of liquidity in usd and volumes in usd for each token in each pair
-      for (const token of tokens) {
-        const tokenPairs = pairsList.filter((p) => p.token0 === token.name || p.token1 === token.name);
-        const tokenUsdPrice = tokensUsdPrice?.[token.name];
-        let volumeUsd = 0;
-        let volume24H = 0;
-        for (let i = 0; i < tokenPairs.length; i++) {
-          volume24H += get24HVolumeSingleSided(volumes, token.tokenNameKaddexStats);
-          volumeUsd += volume24H * tokenUsdPrice;
-        }
-        result.push({ ...token, volumeUsd, volume24H, tokenUsdPrice });
-      }
-      const totalVolume = result.reduce((acc, t) => acc + (t.volumeUsd || 0), 0);
-
-      const mainTokens = result.filter((t) => t.main).map((token) => ({ ...token, percentage: (token.volumeUsd / totalVolume) * 100 }));
-      const otherTokensVolume = result.filter((t) => !t.main).reduce((acc, t) => acc + t.volumeUsd, 0);
       const otherTokens = {
         name: 'OTHER',
-        volumeUsd: otherTokensVolume,
-        percentage: (otherTokensVolume / totalVolume) * 100,
+        volumeUsd: kdaPrice * totalKDAOtherTVL,
+        percentage: (totalKDAOtherTVL * 100) / totalKDATVL,
       };
 
-      setTokensVolumes(otherTokensVolume.length > 0 ? [...mainTokens, otherTokens] : [...mainTokens]);
+      setTVLDetails([...mains, otherTokens]);
     }
     setLoading(false);
   };
@@ -250,7 +243,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
 
   useEffect(() => {
     if (tokensUsdPrice) {
-      getTokensVolume();
+      getTVLDetails();
       getPairsVolume();
     }
   }, [tokensUsdPrice, volumeRange]);
@@ -298,7 +291,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
         />
       </FlexContainer>
       <FlexContainer>
-        <StackedBarChart title="TVL Details" data={NETWORK_TYPE === 'mainnet' ? tokensVolumes : fakeTokensVolume} />
+        <StackedBarChart title="TVL Details" data={NETWORK_TYPE === 'mainnet' ? tvlDetails : fakeTokensVolume} />
       </FlexContainer>
       <FlexContainer>
         <StackedBarChart
