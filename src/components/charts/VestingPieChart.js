@@ -27,24 +27,33 @@ const IconContainer = styled.div`
   }
 `;
 
-const VestingPieChart = ({ kdxSupply, KDX_TOTAL_SUPPLY }) => {
+const VestingPieChart = ({ kdxSupplyPercentage, kdxBurntPercentage }) => {
   const [width] = useWindowSize();
 
   const vesting = getVestingScheduleData('2021-06-01', moment().format('YYYY-MM-DD')).slice(-1)[0];
-  const notCirculatingValue =
-    100 - (100 - vesting['Total Supply']) - vesting['Liquidity mining'] - vesting['Community Sales'] - vesting['Team'] - vesting['DAO treasury'];
 
   const chartData = {
-    Burned: { name: 'Burned', color: '#6699C9', value: 100 - vesting['Total Supply'], icon: <BurnedIcon /> },
+    Burned: { name: 'Burned', color: '#6699C9', value: kdxBurntPercentage, icon: <BurnedIcon /> },
     LiquidityMining: { name: 'Liquidity Mining', color: '#E77E76', value: vesting['Liquidity mining'], icon: <BoosterIcon /> },
     CommunitySales: { name: 'Community Sales', color: '#897DBC', value: vesting['Community Sales'], icon: <SalesIcon /> },
     Team: { name: 'Team', color: '#5AC2DD', value: vesting['Team'], icon: <TeamIcon /> },
     DAOTreasury: { name: 'DAO Treasury', color: '#E7638E', value: vesting['DAO treasury'], icon: <DaoIcon /> },
   };
 
-  const Circulating = { name: 'Circulating', color: '#9797A4', value: 100 - notCirculatingValue };
+  const Circulating = { name: 'Circulating', color: '#9797A4', value: kdxSupplyPercentage };
 
-  const NotCirculating = { name: 'Not Circulating', color: '#9797A4', value: notCirculatingValue };
+  const NotCirculating = {
+    name: 'Not Circulating',
+    color: '#9797A4',
+    value:
+      100 -
+      kdxBurntPercentage -
+      kdxSupplyPercentage -
+      vesting['Liquidity mining'] -
+      vesting['Community Sales'] -
+      vesting['Team'] -
+      vesting['DAO treasury'],
+  };
 
   const getPieSize = () => {
     if (width < 900) {
