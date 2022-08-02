@@ -37,12 +37,17 @@ export const getGroupedTVL = (startDate, endDate, type = 'daily') => {
   return kaddexStatsRequest(url);
 };
 
-export const getTotalVolume = async (startDate, endDate, token) => {
+export const getTotalVolume = async (startDate, endDate, token, stats) => {
   const [namespace, name] = token.split('.');
-  const stats = await getGroupedVolume(startDate, endDate, 'daily');
+  let verifiedStats = null;
+  if (!stats) {
+    verifiedStats = await getGroupedVolume(startDate, endDate, 'daily');
+  } else {
+    verifiedStats = stats;
+  }
   let totalVolume = 0;
-  if (stats?.data) {
-    for (const day of stats?.data) {
+  if (verifiedStats?.data) {
+    for (const day of verifiedStats?.data) {
       if (day?.volumes) {
         for (const vol of day?.volumes) {
           if ((vol?.tokenFromName === name && vol?.tokenFromNamespace === namespace) || (vol?.tokenFromName === 'coin' && token === 'coin')) {

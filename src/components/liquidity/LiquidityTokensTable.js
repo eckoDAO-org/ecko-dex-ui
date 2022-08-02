@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
-import { getDailyVolume, getTotalVolume } from '../../api/kaddex-stats';
+import { getDailyVolume, getGroupedVolume, getTotalVolume } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact';
 import CommonTable from '../shared/CommonTable';
 import tokenData from '../../constants/cryptoCurrencies';
@@ -29,7 +29,6 @@ const LiquidityTokensTable = () => {
     const pairsList = await getPairList();
     if (pairsList?.length) {
       const volumes = await getDailyVolume();
-
       const tokens = Object.values(tokenData);
 
       // get all aprs from pairs list
@@ -37,6 +36,7 @@ const LiquidityTokensTable = () => {
       const result = [];
 
       // calculate sum of liquidity in usd and volumes in usd for each token in each pair
+      const stats = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
       for (const token of tokens) {
         const tokenPairs = pairsList.filter((p) => p.token0 === token.name || p.token1 === token.name);
         const tokenUsdPrice = tokensUsdPrice?.[token.name] ? tokensUsdPrice?.[token.name] : 0;
@@ -46,10 +46,12 @@ const LiquidityTokensTable = () => {
         }
 
         const liquidityUSD = tokenUsdPrice ? liquidity * tokenUsdPrice : null;
+
         const volume24H = await getTotalVolume(
           moment().subtract(1, 'days').toDate(),
           moment().subtract(1, 'days').toDate(),
-          token.tokenNameKaddexStats
+          token.tokenNameKaddexStats,
+          stats
         );
 
         // filter all apr that contains the token in at least one side of the pair

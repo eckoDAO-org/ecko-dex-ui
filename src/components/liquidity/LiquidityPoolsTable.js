@@ -13,7 +13,7 @@ import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS } fro
 import Label from '../shared/Label';
 import tokenData from '../../constants/cryptoCurrencies';
 import { getAllPairValues } from '../../utils/token-utils';
-import { getPairMultiplier } from '../../api/liquidity-rewards';
+import { getPairsMultiplier } from '../../api/liquidity-rewards';
 
 const LiquidityPoolsTable = () => {
   const history = useHistory();
@@ -26,11 +26,19 @@ const LiquidityPoolsTable = () => {
       const volumes = await getDailyVolume();
 
       const result = await getAllPairValues(pools, volumes);
+      const multipliers = await getPairsMultiplier(pools);
       for (let i = 0; i < result.length; i++) {
-        let pair = result[i].name.split(':');
-        let mult = await getPairMultiplier(pair[0], pair[1]);
-        if (!mult.errorMessage) {
-          result[i].multiplier = extractDecimal(mult);
+        try {
+          const multiplierObj = multipliers.find((x) => x.pair === result[i].name);
+
+          if (multiplierObj) {
+            result[i].multiplier = extractDecimal(multiplierObj.multiplier);
+          } else {
+            result[i].multiplier = 1;
+          }
+        } catch (error) {
+          console.log('fetchData -> error', error);
+          result[i].multiplier = 1;
         }
       }
       setPairList(result);

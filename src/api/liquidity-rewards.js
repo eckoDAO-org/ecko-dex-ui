@@ -27,6 +27,39 @@ export const getPairMultiplier = async (tokenA, tokenB) => {
   }
 };
 
+export const getPairsMultiplier = async (pairList) => {
+  const tokenPairList = pairList.reduce((accum, pair) => {
+    accum += `[${pair.name.split(':').join(' ')}] `;
+    return accum;
+  }, '');
+  const pactCode = `
+  (namespace 'free)
+              (module kaddex-read G
+  
+                (defcap G ()
+                  true)
+  
+                (defun multipliers (pairList:list)
+                  (let* (
+                    (token0 (at 0 pairList))
+                    (token1 (at 1 pairList))
+                    (multiplier (${KADDEX_NAMESPACE}.wrapper.get-pair-multiplier token0 token1))
+                  )
+                  {'pair: (format "{}:{}" [token0 token1]), 'multiplier: multiplier}
+                ))
+              )
+              (map (${KADDEX_NAMESPACE}-read.multipliers) [${tokenPairList}])
+  `;
+  try {
+    let data = await pactFetchLocal(pactCode);
+    if (data) {
+      return data;
+    }
+  } catch (e) {
+    return handleError(e);
+  }
+};
+
 export const getKdxRewardsAvailable = async () => {
   try {
     let data = await pactFetchLocal(`(${KADDEX_NAMESPACE}.wrapper.total-kdx-rewards-available)`);
