@@ -8,14 +8,15 @@ import CommonTable from '../shared/CommonTable';
 import tokenData from '../../constants/cryptoCurrencies';
 import { humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
-import { AddIcon, GasIcon, TradeUpIcon } from '../../assets';
+import { AddIcon, BoosterIcon, GasIcon, TradeUpIcon } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_LIQUIDITY_TOKENS, ROUTE_TOKEN_INFO } from '../../router/routes';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
 import { getAllPairValues } from '../../utils/token-utils';
 import { useApplicationContext, usePactContext } from '../../contexts';
-import { theme } from '../../styles/theme';
+import { commonColors, theme } from '../../styles/theme';
 import styled from 'styled-components';
+import { getPairsMultiplier } from '../../api/liquidity-rewards';
 
 const LiquidityTokensTable = () => {
   const history = useHistory();
@@ -34,6 +35,9 @@ const LiquidityTokensTable = () => {
       // get all aprs from pairs list
       const aprs = (await getAllPairValues(pairsList, volumes)).map((pair) => pair.apr);
       const result = [];
+
+      // get all multipliers from pairs list
+      const multipliers = await getPairsMultiplier(pairsList);
 
       // calculate sum of liquidity in usd and volumes in usd for each token in each pair
       const stats = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
@@ -58,8 +62,21 @@ const LiquidityTokensTable = () => {
         const filteredApr = aprs.filter((a) => a.token0 === token.name || a.token1 === token.name);
         // get the highest apr for filtered apr
         const highestApr = Math.max(...filteredApr.map((apr) => apr.value));
+        // filter all multiplier that contains the token in at least one side of the pair
+        const filteredMult = multipliers.filter((a) => a.pair.split(':')[0] === token.code || a.pair.split(':')[1] === token.code);
+        // get the highest multiplier for filtered multiplier
+        const highestMult = Math.max(...filteredMult.map((m) => m.multiplier));
 
-        result.push({ ...token, volume24HUsd: volume24H * tokenUsdPrice, volume24H, apr: highestApr, liquidityUSD, liquidity, tokenUsdPrice });
+        result.push({
+          ...token,
+          volume24HUsd: volume24H * tokenUsdPrice,
+          volume24H,
+          apr: highestApr,
+          liquidityUSD,
+          liquidity,
+          tokenUsdPrice,
+          multiplier: highestMult,
+        });
       }
       setTokens(result);
     }
@@ -180,7 +197,17 @@ const renderColumns = (history) => {
     {
       name: 'APR',
       width: 120,
-      render: ({ item }) => `${item.apr.toFixed(2)} %`,
+      render: ({ item }) =>
+        item.multiplier > 1 ? (
+          <FlexContainer className="align-ce svg-pink">
+            <BoosterIcon style={{ width: 16, height: 16 }} />
+            <Label labelStyle={{ fontWeight: 600, marginLeft: 6 }} fontSize={14} color={commonColors.pink}>
+              {(item.apr * item.multiplier).toFixed(2)} %
+            </Label>
+          </FlexContainer>
+        ) : (
+          `${item.apr.toFixed(2)} %`
+        ),
     },
   ];
 };

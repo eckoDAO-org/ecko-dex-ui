@@ -93,8 +93,8 @@ const StakeContainer = () => {
   }, []);
 
   const getAccountStakingPercentage = () => {
-    if (estimateUnstakeData?.staked && poolState && poolState['staked-kdx']) {
-      return parseFloat((100 * estimateUnstakeData?.staked) / reduceBalance(poolState['staked-kdx']));
+    if (estimateUnstakeData?.['stake-record']?.['amount'] && poolState && poolState['staked-kdx']) {
+      return parseFloat((100 * extractDecimal(estimateUnstakeData?.['stake-record']?.amount)) / reduceBalance(poolState['staked-kdx']));
     }
     return false;
   };

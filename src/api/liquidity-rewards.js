@@ -34,7 +34,7 @@ export const getPairsMultiplier = async (pairList) => {
   }, '');
   const pactCode = `
   (namespace 'free)
-              (module kaddex-read G
+              (module ${KADDEX_NAMESPACE}-read G
   
                 (defcap G ()
                   true)
@@ -43,8 +43,8 @@ export const getPairsMultiplier = async (pairList) => {
                   (let* (
                     (token0 (at 0 pairList))
                     (token1 (at 1 pairList))
-                    (multiplier (${KADDEX_NAMESPACE}.wrapper.get-pair-multiplier token0 token1))
-                  )
+                    (multiplier (try 1.0 (${KADDEX_NAMESPACE}.wrapper.get-pair-multiplier token0 token1)))
+                    )
                   {'pair: (format "{}:{}" [token0 token1]), 'multiplier: multiplier}
                 ))
               )
