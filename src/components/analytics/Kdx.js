@@ -104,7 +104,11 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdxSupply, kdaPrice, kdxBurnt }) => {
         />
       </FlexContainer>
       <VestingScheduleChart height={300} />
-      <VestingPieChart kdxSupply={kdxSupply} KDX_TOTAL_SUPPLY={KDX_TOTAL_SUPPLY} />
+      <VestingPieChart
+        kdxSupplyPercentage={(100 * kdxSupply) / KDX_TOTAL_SUPPLY}
+        kdxBurntPercentage={(100 * kdxBurnt) / KDX_TOTAL_SUPPLY}
+        KDX_TOTAL_SUPPLY={KDX_TOTAL_SUPPLY}
+      />
     </FlexContainer>
   );
 };

@@ -9,7 +9,7 @@ const STYBannerContainer = styled(FlexContainer)`
   display: flex;
   align-items: center;
   width: 100%;
-  position: sticky;
+  position: ${({ position }) => position || 'sticky'};
   top: 0;
   width: auto;
   justify-content: center;
@@ -35,16 +35,17 @@ const STYBannerContainer = styled(FlexContainer)`
   }
 `;
 
-const Banner = () => {
+const Banner = ({ text, position }) => {
   return (
     <STYBannerContainer
       desktopStyle={{ margin: `16px ${theme.layout.desktopPadding}px 0px` }}
       tabletStyle={{ margin: `16px ${theme.layout.tabletPadding}px 0px` }}
       mobileStyle={{ margin: `16px ${theme.layout.mobilePadding}px 0px` }}
+      position={position}
     >
       <AlertIcon className="mobile-none" />
       <Label inverted fontSize={13} labelStyle={{ display: 'inline-block' }}>
-        Welcome to our devnet environment, first, make sure to have devnet network information added to x-wallet, and funds on chain 0.
+        {text || 'Welcome to our devnet environment, first, make sure to have devnet network information added to x-wallet, and funds on chain 0.'}
       </Label>
     </STYBannerContainer>
   );
