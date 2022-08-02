@@ -96,6 +96,22 @@
         "main": false,
         "isBoosted": false,
         "color": "#6ebbf2"
+      },
+      "coin:free.kishu-ken": {
+        "name": "coin:free.kishu-ken",
+        "token0": "KDA",
+        "token1": "KISHK", 
+        "main": false,
+        "isBoosted": false,
+        "color": "#EEAA7B"
+      },
+      "coin:free.backalley": {
+        "name": "coin:free.backalley",
+        "token0": "KDA",
+        "token1": "BKA", 
+        "main": false,
+        "isBoosted": false,
+        "color": "#822C8B"
       }
     }
   }
