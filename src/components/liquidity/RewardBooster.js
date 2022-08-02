@@ -78,14 +78,18 @@ const RewardBooster = ({ type, apr, handleState, previewObject, pair }) => {
               />
             )}
           </FlexContainer>
-          <div className="flex column">
-            <Label fontSize={24}> APR {apr?.toFixed(2)} %</Label>
-            {wantsKdxRewards && multiplier && (
+          {wantsKdxRewards && multiplier ? (
+            <div className="flex column">
+              <Label fontSize={24}>APR {(apr * extractDecimal(multiplier))?.toFixed(2)} %</Label>
               <Label className="justify-fe" fontSize={13} withShade labelStyle={{ marginTop: 4 }}>
                 {extractDecimal(multiplier)?.toFixed(2)} x
               </Label>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div className="flex column">
+              <Label fontSize={24}> APR {apr?.toFixed(2)} %</Label>
+            </div>
+          )}
         </div>
 
         {wantsKdxRewards && (
