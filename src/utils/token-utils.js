@@ -39,7 +39,7 @@ export const getInfoCoin = (item, coinPositionArray) => {
 export const getApr = (volume, liquidity) => {
   const percentageOnVolume = (volume / 100) * FEE;
   const percentagePerYear = percentageOnVolume * 365;
-  const apr = (percentagePerYear * 100) / liquidity;
+  const apr = liquidity ? (percentagePerYear * 100) / liquidity : 0;
 
   return apr;
 };
@@ -126,7 +126,7 @@ export const get24HVolumeDoubleSided = (volumes, token0NameKaddexStats, token1Na
 
 export const get24HVolumeSingleSided = (volumes, tokenNameKaddexStats) => {
   const last24hDailyVolume = volumes?.slice(-1)[0];
-  return last24hDailyVolume.volumes
+  return last24hDailyVolume?.volumes
     ?.filter(
       (v) =>
         v.chain === Number(CHAIN_ID) &&
@@ -138,7 +138,7 @@ export const get24HVolumeSingleSided = (volumes, tokenNameKaddexStats) => {
 
 export const getTokenUsdPriceByLiquidity = (liquidity0, liquidity1, usdPrice) => {
   const liquidityRatio = liquidity0 / liquidity1;
-  return bigNumberConverter(liquidityRatio * usdPrice);
+  return bigNumberConverter(liquidityRatio * usdPrice, 3);
 };
 
 /**

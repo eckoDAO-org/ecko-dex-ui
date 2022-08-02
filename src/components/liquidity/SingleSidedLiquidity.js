@@ -4,7 +4,7 @@ import { getTokenBalanceAccount } from '../../api/pact';
 import { ArrowDown } from '../../assets';
 import tokenData from '../../constants/cryptoCurrencies';
 import { useAccountContext, useLiquidityContext, useModalContext, usePactContext, useWalletContext } from '../../contexts';
-import { useInterval } from '../../hooks/useInterval';
+// import { useInterval } from '../../hooks/useInterval';
 import noExponents from '../../utils/noExponents';
 import { extractDecimal, getCorrectBalance, getDecimalPlaces, humanReadableNumber, limitDecimalPlaces } from '../../utils/reduceBalance';
 import reduceToken from '../../utils/reduceToken';
@@ -78,11 +78,11 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
   }, [fromValue?.coin, selectedPool]);
 
   /// POLLING ON UPDATE PACT RATIO
-  useInterval(async () => {
-    if (!isNaN(pact.ratio)) {
-      await pact.getReserves(tokenData?.[selectedPool?.token0]?.code, tokenData?.[selectedPool?.token1]?.code);
-    }
-  }, 10000);
+  // useInterval(async () => {
+  //   if (!isNaN(pact.ratio)) {
+  //     await pact.getReserves(tokenData?.[selectedPool?.token0]?.code, tokenData?.[selectedPool?.token1]?.code);
+  //   }
+  // }, 10000);
 
   const handleTokenValue = async (token) => {
     const crypto = tokenData[token];

@@ -60,7 +60,7 @@ const TVLChart = ({ kdaPrice, height }) => {
         }
 
         let token0USD = token0Balance * token0price;
-        let token1USD = token1Balance * token1price;
+        let token1USD = token1Balance * token1price || 0;
         totalTVL += token0USD += token1USD;
       }
       setCurrentTVL(totalTVL);

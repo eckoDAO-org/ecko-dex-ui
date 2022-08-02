@@ -29,7 +29,7 @@ import { useAccountContext, useKaddexWalletContext, useNotificationContext, useP
 import { ROUTE_STAKE, ROUTE_UNSTAKE } from '../router/routes';
 import { CHAIN_ID, NETWORK } from '../constants/contextConstants';
 import { theme } from '../styles/theme';
-import { useInterval } from '../hooks/useInterval';
+// import { useInterval } from '../hooks/useInterval';
 import { extractDecimal, getDecimalPlaces, reduceBalance } from '../utils/reduceBalance';
 import { STAKING_CONSTANTS } from '../constants/stakingConstants';
 import { getTimeByBlockchain } from '../utils/string-utils';
@@ -81,7 +81,7 @@ const StakeContainer = () => {
     updateAccountStakingData();
   }, [updateAccountStakingData]);
 
-  useInterval(updateAccountStakingData, 10000);
+  // useInterval(updateAccountStakingData, 10000);
 
   useEffect(() => {
     getPoolState().then((res) => {

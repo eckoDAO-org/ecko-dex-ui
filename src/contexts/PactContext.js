@@ -2,7 +2,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
 import pairTokens from '../constants/pairsConfig';
-import { useInterval } from '../hooks/useInterval';
+// import { useInterval } from '../hooks/useInterval';
 import axios from 'axios';
 import { getTokenUsdPriceByName } from '../utils/token-utils';
 import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, KADDEX_NAMESPACE, KADDEX_API_URL } from '../constants/contextConstants';
@@ -66,7 +66,7 @@ export const PactProvider = (props) => {
   useEffect(() => {
     getNetworkGasData();
   }, []);
-  useInterval(getNetworkGasData, 20000);
+  // useInterval(getNetworkGasData, 20000);
 
   const updateTokenUsdPrice = async () => {
     const result = {};
@@ -81,7 +81,7 @@ export const PactProvider = (props) => {
   useEffect(() => {
     updateTokenUsdPrice();
   }, []);
-  useInterval(updateTokenUsdPrice, 25000);
+  // useInterval(updateTokenUsdPrice, 25000);
 
   useEffect(() => {
     pairReserve ? setRatio(pairReserve['token0'] / pairReserve['token1']) : setRatio(NaN);

@@ -29,7 +29,7 @@ import GameEditionModeButton from '../components/layout/header/GameEditionModeBu
 import { HistoryIcon } from '../assets';
 import { ROUTE_MY_SWAP, ROUTE_SWAP } from '../router/routes';
 import { SwapSuccessView, SwapSuccessViewGE } from '../components/modals/swap-modals/SwapSuccesTxView';
-import { useInterval } from '../hooks/useInterval';
+// import { useInterval } from '../hooks/useInterval';
 import {
   useAccountContext,
   useApplicationContext,
@@ -297,11 +297,11 @@ const SwapContainer = () => {
   }, [fetchData]); //the getPair call is invoked when is selected a token
 
   // POLLING ON UPDATE PACT RATIO
-  useInterval(async () => {
-    if (!isNaN(pact.ratio)) {
-      await pact.getReserves(fromValues.address, toValues.address);
-    }
-  }, 10000);
+  // useInterval(async () => {
+  //   if (!isNaN(pact.ratio)) {
+  //     await pact.getReserves(fromValues.address, toValues.address);
+  //   }
+  // }, 10000);
 
   useEffect(() => {
     if (swap.walletSuccess) {
