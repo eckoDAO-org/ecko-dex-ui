@@ -7,6 +7,7 @@ import { reduceBalance } from '../utils/reduceBalance';
 import LogoLoader from '../components/shared/Loader';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import Label from '../components/shared/Label';
+import Banner from '../components/layout/header/Banner';
 import InfoPopup from '../components/shared/InfoPopup';
 import { getCoingeckoUsdPrice } from '../api/coingecko';
 import { getKDXSupply, getKDXTotalSupply, getKDXTotalBurnt } from '../api/kaddex.kdx';
@@ -75,6 +76,9 @@ const AnalyticsContainer = () => {
         tabletStyle={{ paddingRight: theme.layout.tabletPadding, paddingLeft: theme.layout.tabletPadding }}
         mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
       >
+        <Banner
+          text={`The information displayed on this page is currently under BETA testing, and is provided on an "as is" and "as available" basis`}
+        />
         <div className="flex align-ce justify-sb">
           <FlexContainer className="align-ce" gap={16} mobileStyle={{ marginBottom: 16 }}>
             <Label

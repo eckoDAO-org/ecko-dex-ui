@@ -35,7 +35,7 @@ const STYBannerContainer = styled(FlexContainer)`
   }
 `;
 
-const Banner = () => {
+const Banner = ({ text }) => {
   return (
     <STYBannerContainer
       desktopStyle={{ margin: `16px ${theme.layout.desktopPadding}px 0px` }}
@@ -44,7 +44,7 @@ const Banner = () => {
     >
       <AlertIcon className="mobile-none" />
       <Label inverted fontSize={13} labelStyle={{ display: 'inline-block' }}>
-        Welcome to our devnet environment, first, make sure to have devnet network information added to x-wallet, and funds on chain 0.
+        {text || 'Welcome to our devnet environment, first, make sure to have devnet network information added to x-wallet, and funds on chain 0.'}
       </Label>
     </STYBannerContainer>
   );
