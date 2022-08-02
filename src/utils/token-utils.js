@@ -36,7 +36,7 @@ export const getInfoCoin = (item, coinPositionArray) => {
 };
 
 export const getApr = (volume, liquidity) => {
-  const percentageOnVolume = (volume / 100) * APR_FEE;
+  const percentageOnVolume = volume * APR_FEE;
   const percentagePerYear = percentageOnVolume * 365;
   const apr = liquidity ? (percentagePerYear * 100) / liquidity : 0;
 
