@@ -7,7 +7,7 @@ import axios from 'axios';
 import { getTokenUsdPriceByName } from '../utils/token-utils';
 import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, KADDEX_NAMESPACE, KADDEX_API_URL } from '../constants/contextConstants';
 import { useAccountContext, useNotificationContext, useWalletContext } from '.';
-import { fetchPrecision } from '../api/pact';
+import { fetchPrecision, getPairList } from '../api/pact';
 import tokenData from '../constants/cryptoCurrencies';
 import { GAS_OPTIONS } from '../constants/gasConfiguration';
 
@@ -69,9 +69,10 @@ export const PactProvider = (props) => {
   // useInterval(getNetworkGasData, 20000);
 
   const updateTokenUsdPrice = async () => {
+    const pairList = await getPairList();
     const result = {};
     for (const token of Object.values(tokenData)) {
-      await getTokenUsdPriceByName(token.name).then((price) => {
+      await getTokenUsdPriceByName(token.name, pairList).then((price) => {
         result[token.name] = price;
       });
     }
@@ -86,10 +87,6 @@ export const PactProvider = (props) => {
   useEffect(() => {
     pairReserve ? setRatio(pairReserve['token0'] / pairReserve['token1']) : setRatio(NaN);
   }, [pairReserve]);
-
-  useEffect(() => {
-    fetchPrecision();
-  }, []);
 
   useEffect(() => {
     if (!wallet.wallet) {

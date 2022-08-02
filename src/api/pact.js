@@ -326,13 +326,17 @@ export const getPairAccount = async (token0, token1) => {
 };
 
 export const getTokenBalanceAccount = async (coinCode, account) => {
-  return await Pact.fetch.local(
-    {
-      pactCode: `(${coinCode}.details ${JSON.stringify(account)})`,
-      meta: Pact.lang.mkMeta('', CHAIN_ID, GAS_PRICE, 150000, creationTime(), 600),
-    },
-    NETWORK
-  );
+  if (account) {
+    return await Pact.fetch.local(
+      {
+        pactCode: `(${coinCode}.details ${JSON.stringify(account)})`,
+        meta: Pact.lang.mkMeta('', CHAIN_ID, GAS_PRICE, 150000, creationTime(), 600),
+      },
+      NETWORK
+    );
+  } else {
+    return { result: { status: 'failure' } };
+  }
 };
 
 export const fetchPrecision = async () => {

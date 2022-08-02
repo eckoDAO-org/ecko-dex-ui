@@ -52,9 +52,13 @@ const AddLiquidityContainer = (props) => {
   const [apr, setApr] = useState(null);
 
   const calculateApr = async () => {
-    const pool = data.pools.find(
-      (p) => (p.token0 === pair.token0 && p.token1 === pair.token1) || (p.token0 === pair.token1 && p.token1 === pair.token0)
-    );
+    let pool = null;
+    if (pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED) {
+      pool = data.pools.find((p) => p.token0 === pair.token0 || p.token1 === pair.token0);
+    } else {
+      pool = data.pools.find((p) => (p.token0 === pair.token0 && p.token1 === pair.token1) || (p.token0 === pair.token1 && p.token1 === pair.token0));
+    }
+
     if (pool) {
       const result = await getAllPairValues([pool], data.volumes);
       setApr(result[0]?.apr?.value);
@@ -73,8 +77,14 @@ const AddLiquidityContainer = (props) => {
   };
 
   useEffect(() => {
-    if (data?.pools?.length && data?.volumes?.length && isValidString(pair?.token0) && isValidString(pair.token1) && pair?.token0 !== pair.token1) {
-      calculateApr();
+    if (pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED) {
+      if (data?.pools?.length && data?.volumes?.length && isValidString(pair?.token0)) {
+        calculateApr();
+      }
+    } else {
+      if (data?.pools?.length && data?.volumes?.length && isValidString(pair?.token0) && isValidString(pair.token1) && pair?.token0 !== pair.token1) {
+        calculateApr();
+      }
     }
   }, [pair, data]);
 
