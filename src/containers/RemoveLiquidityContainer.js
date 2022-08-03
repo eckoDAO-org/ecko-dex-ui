@@ -16,9 +16,10 @@ import useQueryParams from '../hooks/useQueryParams';
 import AppLoader from '../components/shared/AppLoader';
 import { LIQUIDITY_VIEW } from '../constants/liquidityView';
 import { getAllPairValues } from '../utils/token-utils';
-import { getDailyVolume } from '../api/kaddex-stats';
+import { getGroupedVolume } from '../api/kaddex-stats';
 import theme from '../styles/theme';
 import tokenData from '../constants/cryptoCurrencies';
+import moment from 'moment';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -50,7 +51,7 @@ const RemoveLiquidityContainer = () => {
   const [previewAmount, setPreviewAmount] = useState(1);
 
   const calculateApr = async (resultPairList, currentPair) => {
-    const volumes = await getDailyVolume();
+    const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
     const pool = resultPairList.find(
       (p) =>
         (p.token0 === currentPair.token0 && p.token1 === currentPair.token1) || (p.token0 === currentPair.token1 && p.token1 === currentPair.token0)
@@ -131,6 +132,7 @@ const RemoveLiquidityContainer = () => {
           {pair.isBoosted && (
             <>
               <RewardBooster
+                isBoosted={pair.isBoosted}
                 apr={apr}
                 type={LIQUIDITY_VIEW.REMOVE_LIQUIDITY}
                 handleState={setWantsKdxRewards}

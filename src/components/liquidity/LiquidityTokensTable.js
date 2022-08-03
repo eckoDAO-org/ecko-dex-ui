@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
-import { getDailyVolume, getGroupedVolume, getTotalVolume } from '../../api/kaddex-stats';
+import { getGroupedVolume, getTotalKDAVolume } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact';
 import CommonTable from '../shared/CommonTable';
 import tokenData from '../../constants/cryptoCurrencies';
@@ -29,7 +29,7 @@ const LiquidityTokensTable = () => {
   const fetchData = async () => {
     const pairsList = await getPairList();
     if (pairsList?.length) {
-      const volumes = await getDailyVolume();
+      const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
       const tokens = Object.values(tokenData);
 
       // get all aprs from pairs list
@@ -40,7 +40,7 @@ const LiquidityTokensTable = () => {
       const multipliers = await getPairsMultiplier(pairsList);
 
       // calculate sum of liquidity in usd and volumes in usd for each token in each pair
-      const stats = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
+      //const stats = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
       for (const token of tokens) {
         const tokenPairs = pairsList.filter((p) => p.token0 === token.name || p.token1 === token.name);
         const tokenUsdPrice = tokensUsdPrice?.[token.name] ? tokensUsdPrice?.[token.name] : 0;
@@ -51,11 +51,11 @@ const LiquidityTokensTable = () => {
 
         const liquidityUSD = tokenUsdPrice ? liquidity * tokenUsdPrice : null;
 
-        const volume24H = await getTotalVolume(
+        const volume24H = await getTotalKDAVolume(
           moment().subtract(1, 'days').toDate(),
           moment().subtract(1, 'days').toDate(),
           token.tokenNameKaddexStats,
-          stats
+          volumes
         );
 
         // filter all apr that contains the token in at least one side of the pair
@@ -69,7 +69,7 @@ const LiquidityTokensTable = () => {
 
         result.push({
           ...token,
-          volume24HUsd: volume24H * tokenUsdPrice,
+          volume24HUsd: volume24H * tokensUsdPrice?.KDA,
           volume24H,
           apr: highestApr,
           liquidityUSD,
@@ -155,7 +155,7 @@ const renderColumns = (history) => {
       width: 160,
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer h-100" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
-          $ {humanReadableNumber(item.tokenUsdPrice)}
+          {humanReadableNumber(item.tokenUsdPrice, 3) !== '0.000' ? `$ ${humanReadableNumber(item.tokenUsdPrice, 3)}` : '<$ 0.001'}
         </ScalableCryptoContainer>
       ),
     },

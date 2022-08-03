@@ -12,7 +12,7 @@ import reduceToken from '../../../utils/reduceToken';
 import AccountModal from '../../modals/kdaModals/AccountModal';
 import theme, { commonTheme } from '../../../styles/theme';
 import { CoinKaddexIcon, ThreeDotsIcon } from '../../../assets';
-import { reduceBalance } from '../../../utils/reduceBalance';
+import { humanReadableNumber, reduceBalance } from '../../../utils/reduceBalance';
 import Label from '../../shared/Label';
 import {
   useRightModalContext,
@@ -74,7 +74,7 @@ const RightHeaderItems = () => {
         <div className="flex align-ce">
           <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 8 }} />
           <Label outGameEditionView fontSize={13} className="mainnet-chain-2">
-            $ {tokensUsdPrice?.KDX || '-'}
+            $ {tokensUsdPrice?.KDX ? humanReadableNumber(tokensUsdPrice?.KDX, 3) : '-'}
           </Label>
         </div>
       )}

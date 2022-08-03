@@ -1,4 +1,6 @@
+import moment from 'moment';
 import { getCoingeckoUsdPrice } from '../api/coingecko';
+import { getTotalKDAVolume } from '../api/kaddex-stats';
 import { CHAIN_ID, APR_FEE, STAKING_REWARDS_PERCENT } from '../constants/contextConstants';
 import tokenData from '../constants/cryptoCurrencies';
 import { bigNumberConverter } from './bignumber';
@@ -72,12 +74,17 @@ export const getAllPairValues = async (pools, volumes) => {
 
     // retrieve usd value for each token of the pair to calculate values in usd
     for (const token of [token0, token1]) {
-      const tokenUsdPrice = await getTokenUsdPrice(token, pools);
+      const tokenUsdPrice = await getTokenUsdPrice({ coingeckoId: 'kadena' }, pools);
 
       if (tokenUsdPrice) {
-        volume24H = get24HVolumeDoubleSided(volumes, token0.tokenNameKaddexStats, token1.tokenNameKaddexStats, token.tokenNameKaddexStats);
-        volume24HUsd = volume24H * tokenUsdPrice;
-        liquidityUsd += (token.name === token0.name ? liquidity0 : liquidity1) * tokenUsdPrice;
+        volume24H = await getTotalKDAVolume(
+          moment().subtract(1, 'days').toDate(),
+          moment().subtract(1, 'days').toDate(),
+          token.tokenNameKaddexStats,
+          volumes
+        );
+        volume24HUsd = volume24H * tokenUsdPrice * 2;
+        liquidityUsd += liquidity0 * tokenUsdPrice;
         apr = getApr(volume24HUsd, liquidityUsd);
       } else {
         apr = getApr(volume24H, liquidity);
@@ -135,9 +142,9 @@ export const get24HVolumeSingleSided = (volumes, tokenNameKaddexStats) => {
     .reduce((total, v) => total + getVolume(v, tokenNameKaddexStats), 0);
 };
 
-export const getTokenUsdPriceByLiquidity = (liquidity0, liquidity1, usdPrice) => {
+export const getTokenUsdPriceByLiquidity = (liquidity0, liquidity1, usdPrice, precision = 8) => {
   const liquidityRatio = liquidity0 / liquidity1;
-  return bigNumberConverter(liquidityRatio * usdPrice, 3);
+  return bigNumberConverter(liquidityRatio * usdPrice, precision);
 };
 
 /**
@@ -170,7 +177,7 @@ export const getTokenUsdPrice = async (token, pairsList) => {
           if (!token1Usd) {
             tokenUsd = null;
           } else {
-            return getTokenUsdPriceByLiquidity(liquidity1, liquidity0, token1Usd);
+            return getTokenUsdPriceByLiquidity(liquidity1, liquidity0, token1Usd, token.precision);
           }
         } else {
           const token0 = Object.values(tokenData).find((t) => t.name === pair.token0);
@@ -178,7 +185,7 @@ export const getTokenUsdPrice = async (token, pairsList) => {
           if (!token0Usd) {
             tokenUsd = null;
           }
-          return getTokenUsdPriceByLiquidity(liquidity0, liquidity1, token0Usd);
+          return getTokenUsdPriceByLiquidity(liquidity0, liquidity1, token0Usd, token.precision);
         }
 
         return tokenUsd;

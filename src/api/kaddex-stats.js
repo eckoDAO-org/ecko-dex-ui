@@ -37,6 +37,33 @@ export const getGroupedTVL = (startDate, endDate, type = 'daily') => {
   return kaddexStatsRequest(url);
 };
 
+export const getTotalKDAVolume = async (startDate, endDate, token, stats) => {
+  const [namespace, name] = token.split('.');
+  let verifiedStats = null;
+  if (!stats) {
+    verifiedStats = await getGroupedVolume(startDate, endDate, 'daily');
+  } else {
+    verifiedStats = stats;
+  }
+  let totalVolume = 0;
+  if (verifiedStats?.data) {
+    for (const day of verifiedStats?.data) {
+      if (day?.volumes) {
+        for (const vol of day?.volumes) {
+          if ((vol?.tokenFromName === name && vol?.tokenFromNamespace === namespace) || (vol?.tokenToName === 'coin' && token === 'coin')) {
+            totalVolume += vol?.tokenToVolume;
+          }
+          if ((vol?.tokenToName === name && vol?.tokenToNamespace === namespace) || (vol?.tokenFromName === 'coin' && token === 'coin')) {
+            totalVolume += vol?.tokenFromVolume;
+          }
+        }
+      }
+    }
+  }
+
+  return totalVolume;
+};
+
 export const getTotalVolume = async (startDate, endDate, token, stats) => {
   const [namespace, name] = token.split('.');
   let verifiedStats = null;
