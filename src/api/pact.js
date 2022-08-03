@@ -231,7 +231,7 @@ const dataWithoutBooster = async (account, tokenPairList) => {
         supply: data[3],
         reserves: [data[1], data[2]],
         pooledAmount: [data[5], data[6]],
-        poolShare: data[4] / data[3],
+        poolShare: extractDecimal(data[4]) / extractDecimal(data[3]),
       };
       return accum;
     }, {});
