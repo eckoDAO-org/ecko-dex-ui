@@ -14,8 +14,8 @@ import InfoPopup from '../shared/InfoPopup';
 import Label from '../shared/Label';
 import Toggle from './Toggle';
 
-const RewardBooster = ({ type, apr, handleState, previewObject, pair }) => {
-  const { wantsKdxRewards } = useLiquidityContext();
+const RewardBooster = ({ type, apr, handleState, previewObject, pair, isBoosted }) => {
+  const { wantsKdxRewards, setWantsKdxRewards } = useLiquidityContext();
   const { tokensUsdPrice } = usePactContext();
   const [, setLoading] = useState(false);
 
@@ -42,6 +42,14 @@ const RewardBooster = ({ type, apr, handleState, previewObject, pair }) => {
     fetchData();
   }, [pair]);
 
+  useEffect(() => {
+    if (isBoosted) {
+      setWantsKdxRewards(isBoosted);
+    } else {
+      setWantsKdxRewards(false);
+    }
+  }, [isBoosted]);
+
   return (
     <>
       <Label fontFamily="syncopate">
@@ -58,7 +66,7 @@ const RewardBooster = ({ type, apr, handleState, previewObject, pair }) => {
           <FlexContainer gap={16} className="align-ce">
             <CoinsIcon className="coins-icon" />
             <Toggle
-              initialState={true}
+              initialState={isBoosted || wantsKdxRewards}
               onClick={(active) => {
                 if (active) {
                   handleState(true);
@@ -66,6 +74,7 @@ const RewardBooster = ({ type, apr, handleState, previewObject, pair }) => {
                   handleState(false);
                 }
               }}
+              disabled={!isBoosted}
             />
             {wantsKdxRewards ? (
               <CoinKaddexIcon width={24} height={24} />

@@ -49,7 +49,7 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdxSupply, kdaPrice, kdxBurnt }) => {
           title={'Price'}
           mainText={
             <div className="flex align-ce">
-              {`$ ${kdxPrice || '-'}`}
+              {`$ ${kdxPrice ? humanReadableNumber(kdxPrice, 3) : '-'}`}
               <GraphicPercentage
                 prevValue={kdxPriceDiff?.initial}
                 currentValue={kdxPriceDiff?.final}
