@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useErrorState } from '../../hooks/useErrorState';
-import { getDailyVolume, getGroupedVolume } from '../../api/kaddex-stats';
+import { getGroupedVolume } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact';
 import { extractDecimal, humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';

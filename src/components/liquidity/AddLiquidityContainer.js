@@ -13,7 +13,7 @@ import useQueryParams from '../../hooks/useQueryParams';
 import DoubleSidedLiquidity from './DoubleSidedLiquidity';
 import SingleSidedLiquidity from './SingleSidedLiquidity';
 import { getPairList } from '../../api/pact';
-import { getDailyVolume } from '../../api/kaddex-stats';
+import { getGroupedVolume } from '../../api/kaddex-stats';
 import { getAllPairValues } from '../../utils/token-utils';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { isValidString } from '../../utils/string-utils';
@@ -21,6 +21,8 @@ import { AppLoader } from '../../components/shared/AppLoader';
 import { useErrorState } from '../../hooks/useErrorState';
 import theme from '../../styles/theme';
 import { useLiquidityContext } from '../../contexts';
+import { getPairsMultiplier } from '../../api/liquidity-rewards';
+import moment from 'moment';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -65,10 +67,30 @@ const AddLiquidityContainer = (props) => {
     }
   };
 
+  const getCurrentPool = () => {
+    let pool = null;
+    if (pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED) {
+      pool = data.pools.find((p) => p.token0 === pair.token0 || p.token1 === pair.token0);
+    } else {
+      pool = data.pools.find((p) => (p.token0 === pair.token0 && p.token1 === pair.token1) || (p.token0 === pair.token1 && p.token1 === pair.token0));
+    }
+
+    if (pool) {
+      return pool;
+    }
+  };
+
   const fetchData = async () => {
     const pools = await getPairList();
     if (pools.length) {
-      const volumes = await getDailyVolume();
+      const multipliers = await getPairsMultiplier(pools);
+      const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
+      for (const pool of pools) {
+        let multiplier = multipliers.find((mult) => mult.pair === pool.name);
+        if (multiplier) {
+          pool.multiplier = multiplier.multiplier;
+        }
+      }
 
       setData({ pools, volumes });
     }
@@ -78,11 +100,17 @@ const AddLiquidityContainer = (props) => {
 
   useEffect(() => {
     if (pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED) {
-      if (data?.pools?.length && data?.volumes?.length && isValidString(pair?.token0)) {
+      if (data?.pools?.length && data?.volumes?.data?.length && isValidString(pair?.token0)) {
         calculateApr();
       }
     } else {
-      if (data?.pools?.length && data?.volumes?.length && isValidString(pair?.token0) && isValidString(pair.token1) && pair?.token0 !== pair.token1) {
+      if (
+        data?.pools?.length &&
+        data?.volumes?.data?.length &&
+        isValidString(pair?.token0) &&
+        isValidString(pair.token1) &&
+        pair?.token0 !== pair.token1
+      ) {
         calculateApr();
       }
     }
@@ -119,7 +147,14 @@ const AddLiquidityContainer = (props) => {
         </FlexContainer>
         <SlippagePopupContent />
       </FlexContainer>
-      <RewardBooster apr={apr} type={LIQUIDITY_VIEW.ADD_LIQUIDITY} handleState={setWantsKdxRewards} />
+      {/* REWARDS BOOSTER COMPONENTS */}
+      <RewardBooster
+        pair={getCurrentPool()}
+        apr={apr}
+        type={LIQUIDITY_VIEW.ADD_LIQUIDITY}
+        handleState={setWantsKdxRewards}
+        isBoosted={getCurrentPool() && getCurrentPool().isBoosted}
+      />
 
       <FlexContainer gap={24}>
         <Label

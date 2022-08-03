@@ -142,9 +142,9 @@ export const get24HVolumeSingleSided = (volumes, tokenNameKaddexStats) => {
     .reduce((total, v) => total + getVolume(v, tokenNameKaddexStats), 0);
 };
 
-export const getTokenUsdPriceByLiquidity = (liquidity0, liquidity1, usdPrice) => {
+export const getTokenUsdPriceByLiquidity = (liquidity0, liquidity1, usdPrice, precision = 8) => {
   const liquidityRatio = liquidity0 / liquidity1;
-  return bigNumberConverter(liquidityRatio * usdPrice, 3);
+  return bigNumberConverter(liquidityRatio * usdPrice, precision);
 };
 
 /**
@@ -177,7 +177,7 @@ export const getTokenUsdPrice = async (token, pairsList) => {
           if (!token1Usd) {
             tokenUsd = null;
           } else {
-            return getTokenUsdPriceByLiquidity(liquidity1, liquidity0, token1Usd);
+            return getTokenUsdPriceByLiquidity(liquidity1, liquidity0, token1Usd, token.precision);
           }
         } else {
           const token0 = Object.values(tokenData).find((t) => t.name === pair.token0);
@@ -185,7 +185,7 @@ export const getTokenUsdPrice = async (token, pairsList) => {
           if (!token0Usd) {
             tokenUsd = null;
           }
-          return getTokenUsdPriceByLiquidity(liquidity0, liquidity1, token0Usd);
+          return getTokenUsdPriceByLiquidity(liquidity0, liquidity1, token0Usd, token.precision);
         }
 
         return tokenUsd;

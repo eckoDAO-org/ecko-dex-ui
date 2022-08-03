@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 
-const Toggle = ({ initialState, onClick }) => {
+const Toggle = ({ initialState, onClick, disabled }) => {
   const [active, setActive] = useState(initialState);
+
+  useEffect(() => {
+    setActive(initialState);
+  }, [initialState]);
 
   return (
     <Container
-      active={active}
+      active={!disabled && active}
       onClick={() => {
-        setActive((prev) => !prev);
-        if (onClick) {
-          onClick(!active);
+        if (!disabled) {
+          setActive((prev) => !prev);
+          if (onClick) {
+            onClick(!active);
+          }
         }
       }}
     >

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
-import { getDailyVolume, getGroupedVolume, getTotalVolume } from '../../api/kaddex-stats';
+import { getGroupedVolume, getTotalVolume } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact';
 import CommonTable from '../shared/CommonTable';
 import tokenData from '../../constants/cryptoCurrencies';
@@ -155,7 +155,7 @@ const renderColumns = (history) => {
       width: 160,
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer h-100" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
-          $ {humanReadableNumber(item.tokenUsdPrice)}
+          {humanReadableNumber(item.tokenUsdPrice, 3) !== '0.000' ? `$ ${humanReadableNumber(item.tokenUsdPrice, 3)}` : '<$ 0.001'}
         </ScalableCryptoContainer>
       ),
     },

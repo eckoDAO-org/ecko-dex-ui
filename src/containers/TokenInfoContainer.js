@@ -101,7 +101,13 @@ const TokenInfoContainer = () => {
           title={'Price'}
           mainText={
             <div className="flex align-ce" style={{ marginBottom: 10 }}>
-              {`$ ${pact?.tokensUsdPrice?.[token] || '-'}`}
+              {`$ ${
+                pact?.tokensUsdPrice?.[token]
+                  ? humanReadableNumber(pact?.tokensUsdPrice?.[token], 3) !== '0.000'
+                    ? humanReadableNumber(pact?.tokensUsdPrice?.[token], 3)
+                    : (pact?.tokensUsdPrice?.[token]).toFixed(tokenData[token].precision)
+                  : '-'
+              }`}
               <GraphicPercentage prevValue={price24h?.initial} currentValue={price24h?.final} componentStyle={{ marginLeft: 10, marginTop: 0 }} />
             </div>
           }
