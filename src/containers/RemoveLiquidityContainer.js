@@ -16,7 +16,7 @@ import useQueryParams from '../hooks/useQueryParams';
 import AppLoader from '../components/shared/AppLoader';
 import { LIQUIDITY_VIEW } from '../constants/liquidityView';
 import { getAllPairValues } from '../utils/token-utils';
-import { getDailyVolume, getGroupedVolume } from '../api/kaddex-stats';
+import { getGroupedVolume } from '../api/kaddex-stats';
 import theme from '../styles/theme';
 import tokenData from '../constants/cryptoCurrencies';
 import moment from 'moment';
