@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { getCoingeckoUsdPrice } from '../api/coingecko';
-import { getTotalVolume } from '../api/kaddex-stats';
+import { getTotalKDAVolume } from '../api/kaddex-stats';
 import { CHAIN_ID, APR_FEE, STAKING_REWARDS_PERCENT } from '../constants/contextConstants';
 import tokenData from '../constants/cryptoCurrencies';
 import { bigNumberConverter } from './bignumber';
@@ -74,17 +74,17 @@ export const getAllPairValues = async (pools, volumes) => {
 
     // retrieve usd value for each token of the pair to calculate values in usd
     for (const token of [token0, token1]) {
-      const tokenUsdPrice = await getTokenUsdPrice(token, pools);
+      const tokenUsdPrice = await getTokenUsdPrice({ coingeckoId: 'kadena' }, pools);
 
       if (tokenUsdPrice) {
-        volume24H = await getTotalVolume(
+        volume24H = await getTotalKDAVolume(
           moment().subtract(1, 'days').toDate(),
           moment().subtract(1, 'days').toDate(),
           token.tokenNameKaddexStats,
           volumes
         );
-        volume24HUsd = volume24H * tokenUsdPrice;
-        liquidityUsd += (token.name === token0.name ? liquidity0 : liquidity1) * tokenUsdPrice;
+        volume24HUsd = volume24H * tokenUsdPrice * 2;
+        liquidityUsd += liquidity0 * tokenUsdPrice;
         apr = getApr(volume24HUsd, liquidityUsd);
       } else {
         apr = getApr(volume24H, liquidity);

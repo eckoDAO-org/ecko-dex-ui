@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
-import { getGroupedVolume, getTotalVolume } from '../../api/kaddex-stats';
+import { getGroupedVolume, getTotalKDAVolume } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact';
 import CommonTable from '../shared/CommonTable';
 import tokenData from '../../constants/cryptoCurrencies';
@@ -51,7 +51,7 @@ const LiquidityTokensTable = () => {
 
         const liquidityUSD = tokenUsdPrice ? liquidity * tokenUsdPrice : null;
 
-        const volume24H = await getTotalVolume(
+        const volume24H = await getTotalKDAVolume(
           moment().subtract(1, 'days').toDate(),
           moment().subtract(1, 'days').toDate(),
           token.tokenNameKaddexStats,
@@ -69,7 +69,7 @@ const LiquidityTokensTable = () => {
 
         result.push({
           ...token,
-          volume24HUsd: volume24H * tokenUsdPrice,
+          volume24HUsd: volume24H * tokensUsdPrice?.KDA,
           volume24H,
           apr: highestApr,
           liquidityUSD,
