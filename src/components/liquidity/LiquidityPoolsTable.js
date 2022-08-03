@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useErrorState } from '../../hooks/useErrorState';
-import { getDailyVolume } from '../../api/kaddex-stats';
+import { getDailyVolume, getGroupedVolume } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact';
 import { extractDecimal, humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
@@ -15,6 +15,7 @@ import tokenData from '../../constants/cryptoCurrencies';
 import { getAllPairValues } from '../../utils/token-utils';
 import { getPairsMultiplier } from '../../api/liquidity-rewards';
 import { commonColors } from '../../styles/theme';
+import moment from 'moment';
 
 const LiquidityPoolsTable = () => {
   const history = useHistory();
@@ -24,7 +25,7 @@ const LiquidityPoolsTable = () => {
   const fetchData = async () => {
     const pools = await getPairList();
     if (pools.length) {
-      const volumes = await getDailyVolume();
+      const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
 
       const result = await getAllPairValues(pools, volumes);
       const multipliers = await getPairsMultiplier(pools);
