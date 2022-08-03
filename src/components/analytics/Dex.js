@@ -5,7 +5,7 @@ import axios from 'axios';
 import { getGroupedTVL } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact';
 import { chartTimeRanges, CHART_OPTIONS, DAILY_VOLUME_RANGE, MONTHLY_VOLUME_RANGE, WEEKLY_VOLUME_RANGE } from '../../constants/chartOptionsConstants';
-import tokenData, { pairsData } from '../../constants/cryptoCurrencies';
+import tokenData from '../../constants/cryptoCurrencies';
 import { usePactContext } from '../../contexts';
 import { humanReadableNumber, extractDecimal, reduceBalance } from '../../utils/reduceBalance';
 import TVLChart from '../charts/TVLChart';
@@ -16,7 +16,6 @@ import { FlexContainer } from '../shared/FlexContainer';
 import GraphicPercentage from '../shared/GraphicPercentage';
 import ProgressBar from '../shared/ProgressBar';
 import StackedBarChart from '../shared/StackedBarChart';
-import pairTokens from '../../constants/pairsConfig';
 import AppLoader from '../shared/AppLoader';
 import { NETWORK_TYPE } from '../../constants/contextConstants';
 
@@ -27,6 +26,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
   const [volumeRange, setVolumeRange] = useState(DAILY_VOLUME_RANGE.value);
 
   const [loading, setLoading] = useState(true);
+  const [localPairList, setLocalPairList] = useState([]);
   const [tvlDetails, setTVLDetails] = useState([]);
   const [pairsVolume, setPairsVolume] = useState([]);
   const [stakingDiff, setStakingDiff] = useState(null);
@@ -112,12 +112,17 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
 
   const { tokensUsdPrice } = usePactContext();
 
+  useEffect(() => {
+    getPairList().then((pL) => {
+      setLocalPairList(pL);
+    });
+  }, []);
+
   const getTVLDetails = async () => {
-    const pairsList = await getPairList();
-    if (pairsList?.length) {
-      const main = pairsList.filter((t) => t.main);
-      const others = pairsList.filter((t) => !t.main);
-      const totalKDATVL = pairsList.reduce((partialSum, curr) => partialSum + reduceBalance(curr.reserves[0]) * 2, 0);
+    if (localPairList?.length) {
+      const main = localPairList?.filter((t) => t.main);
+      const others = localPairList?.filter((t) => !t.main);
+      const totalKDATVL = localPairList.reduce((partialSum, curr) => partialSum + reduceBalance(curr.reserves[0]) * 2, 0);
       const totalKDAOtherTVL = others.reduce((partialSum, curr) => partialSum + reduceBalance(curr.reserves[0]) * 2, 0);
 
       const kdaPrice = tokensUsdPrice?.KDA;
@@ -145,72 +150,62 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
   const getPairsVolume = async () => {
     axios
       .get(
-        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/tvl/daily?dateStart=${chartTimeRanges[volumeRange].dateStartTvl}&dateEnd=${moment()
-          .subtract(1, 'day')
+        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/volume/daily?dateStart=${chartTimeRanges[volumeRange].dateStartTvl}&dateEnd=${moment()
+          .subtract(1, 'days')
           .format('YYYY-MM-DD')}`
       )
-      .then(async (res) => {
-        const lastTvl = res.data[0];
-        const allTVL = [];
-
-        const mainsTVL = lastTvl.tvl.filter((t) => {
-          const name0 = `${t.tokenTo}:${t.tokenFrom}`;
-          const name1 = `${t.tokenFrom}:${t.tokenTo}`;
-
-          return (pairTokens[name0] && pairTokens[name0].main) || (pairTokens[name1] && pairTokens[name1].main);
-        });
-        const otherTVL = lastTvl.tvl.filter((t) => {
-          const name0 = `${t.tokenTo}:${t.tokenFrom}`;
-          const name1 = `${t.tokenFrom}:${t.tokenTo}`;
-          return (pairTokens[name0] && !pairTokens[name0].main) || (pairTokens[name1] && !pairTokens[name1].main);
-        });
-
-        const otherTvlTotalSum = otherTVL.reduce((partialSum, currVol) => {
-          if (currVol.tokenFrom === 'coin') {
-            const tokenToPrice = (currVol.tokenFromTVL / currVol.tokenToTVL) * kdaPrice;
-            return partialSum + currVol.tokenFromTVL * kdaPrice + currVol.tokenToTVL * tokenToPrice;
-          } else {
-            const tokenFromPrice = (currVol.tokenToTVL / currVol.tokenFromTVL) * kdaPrice;
-            return partialSum + currVol.tokenFromTVL * tokenFromPrice + currVol.tokenToTVL * kdaPrice;
+      .then(async (volumeRes) => {
+        const kdaPrice = tokensUsdPrice?.KDA;
+        let mainVolumes = [];
+        const otherVolumes = {
+          name: 'OTHER',
+          volumeKDA: 0,
+        };
+        const main = localPairList.filter((t) => t.main);
+        const findMainPair = (vol) =>
+          main.find(
+            (m) => m.name === `coin:${vol.tokenFromNamespace}.${vol.tokenFromName}` || m.name === `coin:${vol.tokenToNamespace}.${vol.tokenToName}`
+          );
+        for (const volumes of volumeRes?.data) {
+          for (const volume of volumes?.volumes) {
+            const isMainPair = findMainPair(volume);
+            if (isMainPair) {
+              const alreadyAdded = mainVolumes.find((mV) => mV.name === `${isMainPair.token0}/${isMainPair.token1}`);
+              if (alreadyAdded) {
+                const volumeKDA = alreadyAdded.volumeKDA + (volume.tokenFromName === 'coin' ? volume.tokenFromVolume : volume.tokenToVolume);
+                mainVolumes = [
+                  ...mainVolumes.filter((mV) => mV.name !== `${isMainPair.token0}/${isMainPair.token1}`),
+                  {
+                    color: isMainPair.color,
+                    name: `${isMainPair.token0}/${isMainPair.token1}`,
+                    volumeKDA,
+                  },
+                ];
+              } else {
+                const volumeKDA = volume.tokenFromName === 'coin' ? volume.tokenFromVolume : volume.tokenToVolume;
+                mainVolumes.push({
+                  color: isMainPair.color,
+                  name: `${isMainPair.token0}/${isMainPair.token1}`,
+                  volumeKDA,
+                });
+              }
+            } else {
+              const volumeKDA = volume.tokenFromName === 'coin' ? volume.tokenFromVolume : volume.tokenToVolume;
+              otherVolumes.volumeKDA += volumeKDA;
+            }
           }
-        }, 0);
-
-        let totalTvl = otherTvlTotalSum;
-
-        for (const mainTVL of mainsTVL) {
-          let sum = 0;
-          const name0 = `${mainTVL.tokenTo}:${mainTVL.tokenFrom}`;
-          const name1 = `${mainTVL.tokenFrom}:${mainTVL.tokenTo}`;
-          const pair = Object.values(pairsData).find((p) => p.name === name0 || p.name === name1);
-          if (mainTVL.tokenFrom === 'coin') {
-            const tokenToPrice = (mainTVL.tokenFromTVL / mainTVL.tokenToTVL) * kdaPrice;
-            sum = mainTVL.tokenFromTVL * kdaPrice + mainTVL.tokenToTVL * tokenToPrice;
-          } else {
-            const tokenFromPrice = (mainTVL.tokenToTVL / mainTVL.tokenFromTVL) * kdaPrice;
-            sum = mainTVL.tokenFromTVL * tokenFromPrice + mainTVL.tokenToTVL * kdaPrice;
-          }
-          totalTvl += sum;
-          allTVL.push({
-            ...mainTVL,
-            volumeUsd: sum,
-            name: `${pair.token0}/${pair.token1}`,
-            color: pair.color,
-          });
         }
-        if (otherTvlTotalSum > 0)
-          allTVL.push({
-            name: 'OTHER',
-            volumeUsd: otherTvlTotalSum,
-          });
-
-        for (const tvl of allTVL) {
-          tvl.percentage = (tvl.volumeUsd / totalTvl) * 100;
-        }
-        setPairsVolume(allTVL);
+        const volumeBarData = [...mainVolumes, otherVolumes].map((volData) => ({
+          ...volData,
+          volumeUsd: volData.volumeKDA * kdaPrice,
+          percentage: 10,
+        }));
+        const totalVol = volumeBarData.reduce((partialSum, curr) => partialSum + curr.volumeUsd, 0);
+        setPairsVolume(volumeBarData.map((v) => ({ ...v, percentage: (100 * v.volumeUsd) / totalVol })));
         setLoading(false);
       })
       .catch((err) => {
-        console.error('get tvl error', err);
+        console.error('get volume error', err);
         setLoading(false);
       });
   };
@@ -246,7 +241,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
       getTVLDetails();
       getPairsVolume();
     }
-  }, [tokensUsdPrice, volumeRange]);
+  }, [tokensUsdPrice, volumeRange, localPairList]);
 
   useEffect(() => {
     if (stakeDataRange) {
