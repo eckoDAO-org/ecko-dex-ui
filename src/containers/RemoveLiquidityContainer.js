@@ -131,6 +131,7 @@ const RemoveLiquidityContainer = () => {
           {pair.isBoosted && (
             <>
               <RewardBooster
+                isBoosted={pair.isBoosted}
                 apr={apr}
                 type={LIQUIDITY_VIEW.REMOVE_LIQUIDITY}
                 handleState={setWantsKdxRewards}
