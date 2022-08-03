@@ -29,7 +29,7 @@ const LiquidityTokensTable = () => {
   const fetchData = async () => {
     const pairsList = await getPairList();
     if (pairsList?.length) {
-      const volumes = await getDailyVolume();
+      const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
       const tokens = Object.values(tokenData);
 
       // get all aprs from pairs list
@@ -40,7 +40,7 @@ const LiquidityTokensTable = () => {
       const multipliers = await getPairsMultiplier(pairsList);
 
       // calculate sum of liquidity in usd and volumes in usd for each token in each pair
-      const stats = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
+      //const stats = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
       for (const token of tokens) {
         const tokenPairs = pairsList.filter((p) => p.token0 === token.name || p.token1 === token.name);
         const tokenUsdPrice = tokensUsdPrice?.[token.name] ? tokensUsdPrice?.[token.name] : 0;
@@ -55,7 +55,7 @@ const LiquidityTokensTable = () => {
           moment().subtract(1, 'days').toDate(),
           moment().subtract(1, 'days').toDate(),
           token.tokenNameKaddexStats,
-          stats
+          volumes
         );
 
         // filter all apr that contains the token in at least one side of the pair
