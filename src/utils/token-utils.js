@@ -83,7 +83,7 @@ export const getAllPairValues = async (pools, volumes) => {
           token.tokenNameKaddexStats,
           volumes
         );
-        volume24HUsd = volume24H * tokenUsdPrice;
+        volume24HUsd = volume24H * tokenUsdPrice * 2;
         liquidityUsd += liquidity0 * tokenUsdPrice;
         apr = getApr(volume24HUsd, liquidityUsd);
       } else {
