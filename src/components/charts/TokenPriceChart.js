@@ -101,7 +101,12 @@ const TokenPriceChart = ({ tokenData, height }) => {
     <FlexContainer className="column align-ce w-100 h-100 background-fill" withGradient style={{ padding: 32 }}>
       <div className="flex justify-sb w-100">
         <div className="column w-100">
-          <Label fontSize={24}>$ {humanReadableNumber(currentData?.price)}</Label>
+          <Label fontSize={24}>
+            ${' '}
+            {humanReadableNumber(currentData?.price, 3) !== '0.000'
+              ? humanReadableNumber(currentData?.price, 3)
+              : humanReadableNumber(currentData?.price, tokenData?.precision)}
+          </Label>
           <Label fontSize={16}>{moment(currentData?.date).format('DD/MM/YYYY')}</Label>
         </div>
         <ThemeIconContainer className="flex">
