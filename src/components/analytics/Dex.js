@@ -5,7 +5,6 @@ import axios from 'axios';
 import { getGroupedTVL } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact';
 import { chartTimeRanges, CHART_OPTIONS, DAILY_VOLUME_RANGE, MONTHLY_VOLUME_RANGE, WEEKLY_VOLUME_RANGE } from '../../constants/chartOptionsConstants';
-import tokenData from '../../constants/cryptoCurrencies';
 import { usePactContext } from '../../contexts';
 import { humanReadableNumber, extractDecimal, reduceBalance } from '../../utils/reduceBalance';
 import TVLChart from '../charts/TVLChart';
@@ -17,11 +16,13 @@ import GraphicPercentage from '../shared/GraphicPercentage';
 import ProgressBar from '../shared/ProgressBar';
 import StackedBarChart from '../shared/StackedBarChart';
 import AppLoader from '../shared/AppLoader';
-import { NETWORK_TYPE } from '../../constants/contextConstants';
+import { isMainnet } from '../../constants/contextConstants';
+import { samplePairsVolume, sampleTokensVolume } from './devnetSampleVolumes';
 
 const KDX_TOTAL_SUPPLY = 1000000000;
 
 const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
+  const { tokensUsdPrice } = usePactContext();
   const [stakeDataRange, setStakeDataRange] = useState(DAILY_VOLUME_RANGE.value);
   const [volumeRange, setVolumeRange] = useState(DAILY_VOLUME_RANGE.value);
 
@@ -32,85 +33,6 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
   const [stakingDiff, setStakingDiff] = useState(null);
 
   const stakedKdx = extractDecimal((poolState && poolState['staked-kdx']) || 0);
-
-  const fakeTokensVolume = [
-    {
-      ...tokenData['KDA'],
-      percentage: 50,
-      precision: 12,
-      tokenNameKaddexStats: 'coin',
-      tokenUsdPrice: 2.05,
-      volume24H: 28192.62209297493,
-      volumeUsd: 86692.31293589789,
-    },
-    {
-      ...tokenData['KDX'],
-      percentage: 25,
-      precision: 12,
-      tokenNameKaddexStats: 'kdx',
-      tokenUsdPrice: 2.05,
-      volume24H: 28192.62209297493,
-      volumeUsd: 86692.31293589789,
-    },
-    {
-      ...tokenData['ABC'],
-      percentage: 25,
-      precision: 12,
-      tokenNameKaddexStats: 'abc',
-      tokenUsdPrice: 2.05,
-      volume24H: 28192.62209297493,
-      volumeUsd: 86692.31293589789,
-    },
-  ];
-
-  const fakePairsVolume = [
-    {
-      chain: 2,
-      color: '#5dcbe5',
-      day: '2022-06-05T00:00:00.066Z',
-      dayString: '2022-06-05',
-      name: 'KDA/KDX',
-      percentage: 60,
-      tokenFrom: 'coin',
-      tokenFromTVL: 51166.03235845142,
-      tokenTo: 'kaddex.kdx',
-      tokenToTVL: 128334.41023473465,
-      volumeUsd: 0,
-      __v: 0,
-      _id: '629d51b0a6e1e6629b5fe88a',
-    },
-    {
-      chain: 2,
-      color: '#ed1cb5',
-      day: '2022-06-05T00:00:00.066Z',
-      dayString: '2022-06-05',
-      name: 'KDA/ABC',
-      percentage: 20,
-      tokenFrom: 'coin',
-      tokenFromTVL: 51166.03235845142,
-      tokenTo: 'kaddex.abc',
-      tokenToTVL: 128334.41023473465,
-      volumeUsd: 0,
-      __v: 0,
-      _id: '629d51b0a6e1e6629b5fe88a',
-    },
-    {
-      chain: 2,
-      day: '2022-06-05T00:00:00.066Z',
-      dayString: '2022-06-05',
-      name: 'OTHER',
-      percentage: 20,
-      tokenFrom: 'coin',
-      tokenFromTVL: 51166.03235845142,
-      tokenTo: 'kaddex.xyz',
-      tokenToTVL: 128334.41023473465,
-      volumeUsd: 0,
-      __v: 0,
-      _id: '629d51b0a6e1e6629b5fe88a',
-    },
-  ];
-
-  const { tokensUsdPrice } = usePactContext();
 
   useEffect(() => {
     getPairList().then((pL) => {
@@ -126,15 +48,17 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
       const totalKDAOtherTVL = others.reduce((partialSum, curr) => partialSum + reduceBalance(curr.reserves[0]) * 2, 0);
 
       const kdaPrice = tokensUsdPrice?.KDA;
-      const mains = main.map((t) => {
-        const kdaTVL = reduceBalance(t.reserves[0]) * 2;
-        return {
-          color: t.color,
-          name: `${t.token0}/${t.token1}`,
-          volumeUsd: kdaPrice * reduceBalance(t.reserves[0]) * 2,
-          percentage: (kdaTVL * 100) / totalKDATVL,
-        };
-      });
+      const mains = main
+        .map((t) => {
+          const kdaTVL = reduceBalance(t.reserves[0]) * 2;
+          return {
+            color: t.color,
+            name: `${t.token0}/${t.token1}`,
+            volumeUsd: kdaPrice * reduceBalance(t.reserves[0]) * 2,
+            percentage: (kdaTVL * 100) / totalKDATVL,
+          };
+        })
+        .sort((x, y) => y.percentage - x.percentage);
 
       const otherTokens = {
         name: 'OTHER',
@@ -286,12 +210,12 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
         />
       </FlexContainer>
       <FlexContainer>
-        <StackedBarChart title="TVL Details" data={NETWORK_TYPE === 'mainnet' ? tvlDetails : fakeTokensVolume} />
+        <StackedBarChart title="TVL Details" data={isMainnet() ? tvlDetails : sampleTokensVolume} />
       </FlexContainer>
       <FlexContainer>
         <StackedBarChart
           title="Volume Details"
-          data={NETWORK_TYPE === 'mainnet' ? pairsVolume : fakePairsVolume}
+          data={isMainnet() ? pairsVolume : samplePairsVolume}
           withDoubleToken
           rightComponent={
             <CustomDropdown

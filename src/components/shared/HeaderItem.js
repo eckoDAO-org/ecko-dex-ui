@@ -73,7 +73,7 @@ const HeaderItem = ({
   return (
     <Item
       id={id}
-      to={item.route}
+      to={item.route || '/'}
       className={className}
       onClick={() => {
         if (item.route) {
