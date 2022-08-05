@@ -49,9 +49,9 @@ const StatsTable = () => {
 
           let price24Diff = null;
           if (asset === 'KDA') {
-            price24Diff = await getKDAPriceDiff(moment().subtract(2, 'days').toDate(), moment().subtract(1, 'days').toDate(), asset, currency);
+            price24Diff = await getKDAPriceDiff(moment().subtract(1, 'days').toDate(), new Date(), asset, currency);
           } else {
-            price24Diff = await getUSDPriceDiff(moment().subtract(2, 'days').toDate(), moment().subtract(1, 'days').toDate(), asset, currency);
+            price24Diff = await getUSDPriceDiff(moment().subtract(1, 'days').toDate(), new Date(), asset, currency);
           }
 
           data.push({
