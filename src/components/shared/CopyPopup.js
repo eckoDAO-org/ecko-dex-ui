@@ -5,15 +5,22 @@ import { theme } from '../../styles/theme';
 import CustomPopup from './CustomPopup';
 import Label from './Label';
 
-const CopyPopup = ({ textToCopy, title, containerStyle }) => {
+const CopyPopup = ({ textToCopy, title, containerStyle, popupStyle, position = 'left center' }) => {
   const { themeMode } = useApplicationContext();
   const { gameEditionView } = useGameEditionContext();
   return (
     <CustomPopup
-      containerStyle={gameEditionView ? { padding: 8, border: '2px dashed #ffffff', borderRadius: 0, backgroundColor: '#000000' } : { padding: 8 }}
+      containerStyle={
+        gameEditionView
+          ? { padding: 8, border: '2px dashed #ffffff', borderRadius: 0, backgroundColor: '#000000' }
+          : {
+              ...popupStyle,
+              padding: 8,
+            }
+      }
       hideGradient={gameEditionView}
       on="click"
-      position="left center"
+      position={position}
       trigger={
         <div
           style={{ marginRight: 8, cursor: 'pointer', display: 'flex', alignItems: 'center', ...containerStyle }}
