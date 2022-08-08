@@ -64,7 +64,7 @@ export const GAS_OPTIONS = {
       gasPrice: ECONOMY_GAS_PRICE,
     },
     REMOVE_LIQUIDITY: {
-      gasLimit: 16000,
+      gasLimit: 20000,
       gasPrice: ECONOMY_GAS_PRICE,
     },
     CLAIM_LIQUIDITY_REWARDS: {
@@ -98,7 +98,7 @@ export const GAS_OPTIONS = {
       gasPrice: NORMAL_GAS_PRICE,
     },
     REMOVE_LIQUIDITY: {
-      gasLimit: 16000,
+      gasLimit: 20000,
       gasPrice: NORMAL_GAS_PRICE,
     },
     CLAIM_LIQUIDITY_REWARDS: {
@@ -132,7 +132,7 @@ export const GAS_OPTIONS = {
       gasPrice: FAST_GAS_PRICE,
     },
     REMOVE_LIQUIDITY: {
-      gasLimit: 16000,
+      gasLimit: 20000,
       gasPrice: FAST_GAS_PRICE,
     },
     CLAIM_LIQUIDITY_REWARDS: {
@@ -166,7 +166,7 @@ export const GAS_OPTIONS = {
       gasPrice: GAS_STATION_PRICE,
     },
     REMOVE_LIQUIDITY: {
-      gasLimit: 16000,
+      gasLimit: 20000,
       gasPrice: GAS_STATION_PRICE,
     },
     CLAIM_LIQUIDITY_REWARDS: {
