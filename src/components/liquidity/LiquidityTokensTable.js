@@ -39,6 +39,13 @@ const LiquidityTokensTable = () => {
       // get all multipliers from pairs list
       const multipliers = await getPairsMultiplier(pairsList);
 
+      // get an util object that contains all token info with its apr and multiplier
+      const tokenAprAndMultiplier = pairsList.map((p) => {
+        let apr = aprs.find((a) => a.token0 === p.token0 && a.token1 === p.token1).value;
+        let mult = multipliers.find((m) => m.pair === p.name).multiplier;
+        return { code: p.name, token0: p.token0, token1: p.token1, apr, mult };
+      });
+
       // calculate sum of liquidity in usd and volumes in usd for each token in each pair
       //const stats = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
       for (const token of tokens) {
@@ -57,25 +64,28 @@ const LiquidityTokensTable = () => {
           token.tokenNameKaddexStats,
           volumes
         );
+        let apr = 0;
+        let multiplier = 0;
 
-        // filter all apr that contains the token in at least one side of the pair
-        const filteredApr = aprs.filter((a) => a.token0 === token.name || a.token1 === token.name);
-        // get the highest apr for filtered apr
-        const highestApr = Math.max(...filteredApr.map((apr) => apr.value));
-        // filter all multiplier that contains the token in at least one side of the pair
-        const filteredMult = multipliers.filter((a) => a.pair.split(':')[0] === token.code || a.pair.split(':')[1] === token.code);
-        // get the highest multiplier for filtered multiplier
-        const highestMult = Math.max(...filteredMult.map((m) => m.multiplier));
+        if (token.name === 'KDA') {
+          // if token KDA, get the largests apr and multiplier among all pairs
+          const majorAprMultiplierPair = tokenAprAndMultiplier.sort((x, y) => y.mult * y.apr - x.mult * x.apr)[0];
+          apr = majorAprMultiplierPair.apr;
+          multiplier = majorAprMultiplierPair.multiplier;
+        } else {
+          apr = tokenAprAndMultiplier.find((a) => a.token0 === token.name || a.token1 === token.name).apr;
+          multiplier = tokenAprAndMultiplier.find((a) => a.code.split(':')[0] === token.code || a.code.split(':')[1] === token.code).mult;
+        }
 
         result.push({
           ...token,
           volume24HUsd: volume24H * tokensUsdPrice?.KDA,
           volume24H,
-          apr: highestApr,
+          apr,
           liquidityUSD,
           liquidity,
           tokenUsdPrice,
-          multiplier: highestMult,
+          multiplier,
         });
       }
       setTokens(result);
