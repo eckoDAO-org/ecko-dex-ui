@@ -110,14 +110,9 @@ const Row = styled.div`
 `;
 
 const PumpIconContainer = styled.div`
-  display: flex;
-  align-items: center;
-
   svg {
-    width: ${({ size = 24 }) => size}px;
-    height: ${({ size = 24 }) => size}px;
     path {
-      fill: ${({ theme: { colors }, pact }) => (pact.enableGasStation ? colors.green : colors.white)};
+      fill: ${({ theme: { colors }, isGasOn }) => (isGasOn ? colors.green : colors.white)};
     }
   }
 `;
@@ -201,7 +196,7 @@ const GasStationSettings = ({ className, hasNotification }) => {
 
   return (
     <Wrapper ref={ref} resolutionConfiguration={resolutionConfiguration}>
-      <PumpIconContainer className="flex" onClick={() => setShowGasStationSettings((prev) => !prev)} pact={pact}>
+      <PumpIconContainer className="flex" onClick={() => setShowGasStationSettings((prev) => !prev)} isGasOn={pact.enableGasStation}>
         <PumpIcon style={{ cursor: 'pointer', width: 34, height: 34, marginLeft: -8, marginRight: -10 }} />
         {hasNotification && <WarningAnimated />}
       </PumpIconContainer>
