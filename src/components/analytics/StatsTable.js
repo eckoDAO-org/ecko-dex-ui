@@ -58,16 +58,22 @@ const StatsTable = () => {
             ...t,
             price,
             dailyPriceChange: [price24Diff?.initial, price24Diff?.final],
+            dailyPriceChangeValue: getPercentage(price24Diff?.initial, price24Diff?.final),
             dailyVolume: volume24 ? volume24 * kdaUsdPrice : 0,
             dailyVolumeChange: [volume24Graph?.initial * kdaUsdPrice, volume24Graph?.final * kdaUsdPrice],
+            dailyVolumeValue: getPercentage(volume24Graph?.initial * kdaUsdPrice, volume24Graph?.final * kdaUsdPrice),
           });
         }
-        setLoading(false);
         setStatsData(data);
+        setLoading(false);
       }
     };
     setInitData();
   }, [pact?.tokensUsdPrice]);
+
+  const getPercentage = (a, b) => {
+    return ((b - a) / a) * 100;
+  };
 
   return !loading ? (
     <CommonTable
@@ -126,6 +132,7 @@ const renderColumns = (history) => {
     {
       name: 'Price',
       width: 160,
+      sortBy: 'price',
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer h-100" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
           {humanReadableNumber(item.price, 3) !== '0.000' ? `$ ${humanReadableNumber(item.price, 3)}` : '<$ 0.001'}
@@ -136,6 +143,7 @@ const renderColumns = (history) => {
     {
       name: '24h Price Change',
       width: 160,
+      sortBy: 'dailyPriceChangeValue',
       render: ({ item }) => {
         return <GraphicPercentage componentStyle={{ margin: 0 }} prevValue={item.dailyPriceChange[0]} currentValue={item.dailyPriceChange[1]} />;
       },
@@ -144,6 +152,7 @@ const renderColumns = (history) => {
     {
       name: '24h Volume',
       width: 160,
+      sortBy: 'dailyVolume',
       render: ({ item }) => {
         return `$ ${humanReadableNumber(extractDecimal(item.dailyVolume))}`;
       },
@@ -151,6 +160,7 @@ const renderColumns = (history) => {
     {
       name: '24h Volume Change',
       width: 160,
+      sortBy: 'dailyVolumeValue',
       render: ({ item }) => {
         return <GraphicPercentage componentStyle={{ margin: 0 }} prevValue={item.dailyVolumeChange[0]} currentValue={item.dailyVolumeChange[1]} />;
       },

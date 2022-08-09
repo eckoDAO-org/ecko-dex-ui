@@ -27,23 +27,30 @@ const LiquidityPoolsTable = () => {
     if (pools.length) {
       const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
 
-      const result = await getAllPairValues(pools, volumes);
+      const allPairValues = await getAllPairValues(pools, volumes);
+      let allData = [];
       const multipliers = await getPairsMultiplier(pools);
-      for (let i = 0; i < result.length; i++) {
+      for (let i = 0; i < allPairValues.length; i++) {
         try {
-          const multiplierObj = multipliers.find((x) => x.pair === result[i].name);
+          const multiplierObj = multipliers.find((x) => x.pair === allPairValues[i].name);
 
           if (multiplierObj) {
-            result[i].multiplier = extractDecimal(multiplierObj.multiplier);
+            allPairValues[i].multiplier = extractDecimal(multiplierObj.multiplier);
           } else {
-            result[i].multiplier = 1;
+            allPairValues[i].multiplier = 1;
           }
         } catch (error) {
           console.log('fetchData -> error', error);
-          result[i].multiplier = 1;
+          allPairValues[i].multiplier = 1;
         }
+        let data = {
+          ...allPairValues[i],
+          apr: allPairValues[i].apr.value,
+        };
+        allData.push(data);
       }
-      setPairList(result);
+
+      setPairList(allData);
     }
     setLoading(false);
   };
@@ -90,7 +97,7 @@ const renderColumns = () => {
     {
       name: 'liquidity',
       width: 160,
-
+      sortBy: 'liquidityUsd',
       render: ({ item }) => {
         if (item.liquidityUsd) {
           return `$ ${humanReadableNumber(item.liquidityUsd)}`;
@@ -101,6 +108,7 @@ const renderColumns = () => {
     {
       name: '24h Volume',
       width: 160,
+      sortBy: 'volume24HUsd',
       render: ({ item }) => {
         if (item.volume24HUsd) {
           return `$ ${humanReadableNumber(item.volume24HUsd)}`;
@@ -124,6 +132,7 @@ const renderColumns = () => {
     {
       name: 'KDX Multiplier',
       width: 160,
+      sortBy: 'multiplier',
       render: ({ item }) =>
         item.multiplier > 1 ? (
           <FlexContainer className="align-ce svg-pink">
@@ -139,18 +148,20 @@ const renderColumns = () => {
     {
       name: 'APR',
       width: 160,
+      sortBy: 'apr',
+      multiplier: 'multiplier',
       render: ({ item }) =>
         item.multiplier > 1 ? (
           <div className="column flex">
             <Label labelStyle={{ fontWeight: 600 }} fontSize={14} color={commonColors.pink}>
-              {(item.apr?.value * item.multiplier).toFixed(2)} %
+              {(item.apr * item.multiplier).toFixed(2)} %
             </Label>
             <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
-              {item.apr?.value.toFixed(2)} %
+              {item.apr.toFixed(2)} %
             </Label>
           </div>
         ) : (
-          `${item.apr?.value.toFixed(2)} %`
+          `${item.apr.toFixed(2)} %`
         ),
     },
   ];

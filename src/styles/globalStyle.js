@@ -164,6 +164,10 @@ export default createGlobalStyle`
       align-items: center;
     }
 
+    .align-bl {
+      align-items: baseline;
+    }
+
     .justify-ce {
       justify-content: center;
     }
@@ -263,6 +267,10 @@ export default createGlobalStyle`
         }
     }
 
+    .rotate-180{
+      transform: rotate(180deg);
+    }
+
     .main {
       padding-top: 32px;
       padding-bottom: 32px;
@@ -271,5 +279,4 @@ export default createGlobalStyle`
         padding-bottom: 24px;
       }
     }
-
 `;
