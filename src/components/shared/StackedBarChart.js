@@ -62,9 +62,13 @@ const StackedBarChart = ({ title, rightComponent, data, withDoubleToken }) => {
   const CustomTooltip = () => {
     const tokenInfo = data.find((token) => token.name === barOnHover);
     let tokens = null;
-    if (withDoubleToken && tokenInfo) {
-      const s = tokenInfo?.name.split('/');
-      tokens = s[0] !== 'OTHER' ? s : null;
+    const s = tokenInfo?.name.split('/');
+    if (tokenInfo) {
+      if (withDoubleToken) {
+        tokens = s[0] !== 'OTHER' ? s : null;
+      } else {
+        tokens = s[0] !== 'OTHER' ? s[1] : null;
+      }
     }
     return tokenInfo ? (
       <TooltipContent gap={16} className="column">
@@ -77,11 +81,14 @@ const StackedBarChart = ({ title, rightComponent, data, withDoubleToken }) => {
               <CryptoContainer size={24} style={{ marginLeft: -12, zIndex: 1 }}>
                 {tokens && tokenData[tokens[1]].icon}{' '}
               </CryptoContainer>
+              <Label>{tokenInfo.name}</Label>
             </>
           ) : (
-            <CryptoContainer size={24}>{getTokenIconById(tokenInfo.name)}</CryptoContainer>
+            <>
+              <CryptoContainer size={24}>{getTokenIconById(tokens)}</CryptoContainer>
+              <Label>{s[0] !== 'OTHER' ? s[1] : 'OTHER'}</Label>
+            </>
           )}
-          <Label>{tokenInfo.name}</Label>
         </FlexContainer>
         <Label>{tokenInfo.percentage.toFixed(2)} %</Label>
         <Label>$ {humanReadableNumber(tokenInfo.volumeUsd)}</Label>
@@ -92,8 +99,8 @@ const StackedBarChart = ({ title, rightComponent, data, withDoubleToken }) => {
   };
 
   const BottomChartData = ({ item }) => {
+    const s = item?.name.split('/') || [];
     if (withDoubleToken) {
-      const s = item?.name.split('/') || [];
       let tokens = s[0] !== 'OTHER' ? s : null;
       return (
         <>
@@ -114,12 +121,13 @@ const StackedBarChart = ({ title, rightComponent, data, withDoubleToken }) => {
         </>
       );
     } else {
+      let token = s[0] !== 'OTHER' ? s[1] : null;
       return (
         <>
           <div style={{ width: 32, height: 16, borderRadius: 4, background: item.color || '#A9AAB4', marginRight: 8 }}></div>
-          {getTokenIconById(item.name) && <CryptoContainer size={16}>{getTokenIconById(item.name)}</CryptoContainer>}
+          {getTokenIconById(token) && <CryptoContainer size={16}>{getTokenIconById(token)}</CryptoContainer>}
           <Label>
-            {item.name} {item.percentage.toFixed(2)} %
+            {token} {item.percentage.toFixed(2)} %
           </Label>
         </>
       );

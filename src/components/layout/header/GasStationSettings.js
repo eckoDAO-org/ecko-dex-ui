@@ -109,6 +109,14 @@ const Row = styled.div`
   }
 `;
 
+const PumpIconContainer = styled.div`
+  svg {
+    path {
+      fill: ${({ theme: { colors }, isGasOn }) => (isGasOn ? colors.green : colors.white)};
+    }
+  }
+`;
+
 const WarningAnimated = styled(WarningIcon)`
   position: absolute;
   cursor: pointer;
@@ -188,10 +196,10 @@ const GasStationSettings = ({ className, hasNotification }) => {
 
   return (
     <Wrapper ref={ref} resolutionConfiguration={resolutionConfiguration}>
-      <div className="flex" onClick={() => setShowGasStationSettings((prev) => !prev)}>
+      <PumpIconContainer className="flex" onClick={() => setShowGasStationSettings((prev) => !prev)} isGasOn={pact.enableGasStation}>
         <PumpIcon style={{ cursor: 'pointer', width: 34, height: 34, marginLeft: -8, marginRight: -10 }} />
         {hasNotification && <WarningAnimated />}
-      </div>
+      </PumpIconContainer>
       {showGasStationSettings && (
         <PopupContainer outOfGameEdition withGradient className={`background-fill ${className}`} style={{ width: 'unset', zIndex: 1 }}>
           <Container>

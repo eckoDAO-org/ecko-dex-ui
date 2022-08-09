@@ -5,7 +5,7 @@ import moment from 'moment';
 import styled from 'styled-components';
 import { TradeUpIcon } from '../../assets';
 import tokenData from '../../constants/cryptoCurrencies';
-import { getTokenVolumeDiff, getUSDPriceDiff, getKDAPriceDiff } from '../../api/kaddex-stats';
+import { getTokenVolumeDiff, getUSDPriceDiff, getKDAPriceDiff, getGroupedVolume, getTotalKDAVolume } from '../../api/kaddex-stats';
 import { usePactContext } from '../../contexts';
 import { useApplicationContext } from '../../contexts';
 import { ROUTE_TOKEN_INFO } from '../../router/routes';
@@ -27,28 +27,39 @@ const StatsTable = () => {
     const setInitData = async () => {
       if (pact?.tokensUsdPrice) {
         const data = [];
+        const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
         for (const t of Object.values(tokenData)) {
           const asset = (t.statsID || t.code) === 'coin' ? 'KDA' : t.statsID || t.code;
           const currency = (t.statsID || t.code) === 'coin' ? 'USDT' : 'coin';
           const price = pact?.tokensUsdPrice && pact?.tokensUsdPrice[t?.name];
           const kdaUsdPrice = pact?.tokensUsdPrice?.KDA;
-          const volume24 = await getTokenVolumeDiff(
+
+          const volume24 = await getTotalKDAVolume(
+            moment().subtract(1, 'days').toDate(),
+            moment().subtract(1, 'days').toDate(),
+            t.tokenNameKaddexStats,
+            volumes
+          );
+
+          const volume24Graph = await getTokenVolumeDiff(
             moment().subtract(2, 'days').toDate(),
             moment().subtract(1, 'days').toDate(),
             t.statsID || t.code
           );
+
           let price24Diff = null;
           if (asset === 'KDA') {
             price24Diff = await getKDAPriceDiff(moment().subtract(1, 'days').toDate(), new Date(), asset, currency);
           } else {
             price24Diff = await getUSDPriceDiff(moment().subtract(1, 'days').toDate(), new Date(), asset, currency);
           }
+
           data.push({
             ...t,
             price,
             dailyPriceChange: [price24Diff?.initial, price24Diff?.final],
-            dailyVolume: price24Diff?.final && volume24?.final ? volume24?.final * price24Diff?.final : 0,
-            dailyVolumeChange: [volume24?.initial * kdaUsdPrice, volume24?.final * kdaUsdPrice],
+            dailyVolume: volume24 ? volume24 * kdaUsdPrice : 0,
+            dailyVolumeChange: [volume24Graph?.initial * kdaUsdPrice, volume24Graph?.final * kdaUsdPrice],
           });
         }
         setLoading(false);
@@ -117,7 +128,7 @@ const renderColumns = (history) => {
       width: 160,
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer h-100" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
-          $ {humanReadableNumber(extractDecimal(item.price))}
+          {humanReadableNumber(item.price, 3) !== '0.000' ? `$ ${humanReadableNumber(item.price, 3)}` : '<$ 0.001'}
         </ScalableCryptoContainer>
       ),
     },

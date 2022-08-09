@@ -4,7 +4,7 @@ import styled from 'styled-components/macro';
 import { BoosterIcon } from '../assets';
 import LiquidityMyLiquidityTable from '../components/liquidity/LiquidityMyLiquidityTable';
 import LiquidityPoolsTable from '../components/liquidity/LiquidityPoolsTable';
-import LiquidityRewards from '../components/liquidity/LiquidityRewards';
+import LiquidityRewardsTable from '../components/liquidity/LiquidityRewardsTable';
 import LiquidityTablesInfo from '../components/liquidity/LiquidityTablesInfo';
 import LiquidityTokensTable from '../components/liquidity/LiquidityTokensTable';
 import CustomButton from '../components/shared/CustomButton';
@@ -104,7 +104,7 @@ const LiquidityContainer = () => {
       {/* MY LIQUIDITY TABLE */}
       {pathname === ROUTE_LIQUIDITY_MY_LIQUIDITY && <LiquidityMyLiquidityTable />}
       {/* MY LIQUIDITY TABLE */}
-      {pathname === ROUTE_LIQUIDITY_REWARDS && <LiquidityRewards />}
+      {pathname === ROUTE_LIQUIDITY_REWARDS && <LiquidityRewardsTable />}
     </FlexContainer>
   );
 };

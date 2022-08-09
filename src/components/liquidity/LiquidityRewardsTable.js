@@ -21,6 +21,7 @@ import reduceToken from '../../utils/reduceToken';
 import { claimLiquidityRewardsCommandToSign, getAccountLiquidityRewards } from '../../api/liquidity-rewards';
 import { NETWORK } from '../../constants/contextConstants';
 import { timeRender } from '../../utils/time-utils';
+import CopyPopup from '../shared/CopyPopup';
 
 const ClaimButton = styled.div`
   display: flex;
@@ -43,7 +44,7 @@ const filterOptions = [
   { key: 2, text: `Pending`, value: 'pending' },
 ];
 
-const LiquidityRewards = () => {
+const LiquidityRewardsTable = () => {
   const modalContext = useModalContext();
   const { account } = useAccountContext();
   const pact = usePactContext();
@@ -170,7 +171,7 @@ const LiquidityRewards = () => {
                 <Label fontSize={16}>Amount</Label>
                 <Label>
                   It's an estimate of the amount of KDX you will receive at claiming time. The actual sum is calculated based on the average price of
-                  KDX during the 5-day waiting period after liquidity removal.
+                  KDX during the 8-day waiting period after liquidity removal.
                 </Label>
                 <Divider />
                 <Label fontSize={16}>KDX Multiplier</Label>
@@ -181,7 +182,7 @@ const LiquidityRewards = () => {
                 <Divider />
                 <Label fontSize={16}>Remaining Time</Label>
                 <Label>
-                  Withdrawing your rewards in the form of KDX implies a 5-day waiting period from the time you remove liquidity. Such waiting window
+                  Withdrawing your rewards in the form of KDX implies a 8-day waiting period from the time you remove liquidity. Such waiting window
                   is needed to calculate the average price of KDX to be used in determining the amount of your boosted rewards.
                 </Label>
               </FlexContainer>
@@ -232,7 +233,7 @@ const LiquidityRewards = () => {
   );
 };
 
-export default LiquidityRewards;
+export default LiquidityRewardsTable;
 
 const renderColumns = () => {
   return [
@@ -261,10 +262,10 @@ const renderColumns = () => {
     },
 
     {
-      name: 'Transaction ID',
+      name: 'Request ID',
       width: 160,
       render: ({ item }) => {
-        return reduceToken(item?.['request-id']);
+        return <CopyPopup title={reduceToken(item?.['request-id'])} textToCopy={item?.['request-id']} position="bottom center" />;
       },
     },
     {
