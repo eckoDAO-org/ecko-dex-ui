@@ -1,9 +1,12 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { FlexContainer } from './FlexContainer';
 import Label from './Label';
 import LogoLoader from './Loader';
 import InfoPopup from './InfoPopup';
+import { ArrowDown } from '../../assets';
+import { extractDecimal } from '../../utils/reduceBalance';
 
 const Wrapper = styled(FlexContainer)`
   background-color: ${({ theme: { backgroundContainer } }) => backgroundContainer};
@@ -78,7 +81,56 @@ const Wrapper = styled(FlexContainer)`
   }
 `;
 
+// STRUCTURE OF column prop:[]
+
+// [{
+//   name: 'APR',             -------- name column displayed
+//   width: 120,              -------- width of column
+//   sortBy: 'apr',           -------- (optional) attribute of items prop for which you want to sort
+//   multiplier: 'multiplier'  --------(optional, works with sortBy) useful if the sort is on a multiplied value
+//   render: ({ item }) =>    -------- value that you want to render
+//     `${item.apr.toFixed(2)} %`
+// },
+//  ...
+// ]
+
 const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onClick }) => {
+  const [sortedItems, setSortedItems] = useState([]);
+  const [sortNames, setSortNames] = useState({});
+
+  useEffect(() => {
+    let list = {};
+    for (let column of columns) {
+      if (column.sortBy) list[column.sortBy] = null;
+    }
+    setSortNames(list);
+
+    if (items) setSortedItems(items);
+  }, []);
+
+  const handleSort = (attribute, descending, multiplier) => {
+    const itemSort = items.sort((x, y) => {
+      const m = multiplier ? { y: extractDecimal(y[multiplier]), x: extractDecimal(x[multiplier]) } : { y: 1, x: 1 };
+      if (descending) {
+        return extractDecimal(y[attribute]) * m.y - extractDecimal(x[attribute]) * m.x;
+      } else {
+        return extractDecimal(x[attribute]) * m.x - extractDecimal(y[attribute]) * m.y;
+      }
+    });
+    setSortedItems(itemSort);
+  };
+
+  const handleSortName = (attribute) => {
+    const sortLabels = sortNames;
+    const prevState = sortLabels[attribute];
+    Object.keys(sortLabels).map((s) => (sortLabels[s] = null));
+    if (prevState !== null) {
+      setSortNames((prev) => ({ ...prev, [attribute]: !prevState }));
+    } else {
+      setSortNames((prev) => ({ ...prev, [attribute]: true }));
+    }
+  };
+
   return (
     <Wrapper withGradient className="w-100 relative hidden column background-fill" style={{ paddingTop: 0 }}>
       <FlexContainer className="w-100 x-auto scrollbar-y-none">
@@ -88,9 +140,25 @@ const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onCl
               {columns?.map((c, i) => (
                 <th key={i} className={i === 0 ? 'sticky' : ''} style={{ minWidth: c.width, zIndex: i === 0 ? 3 : 1 }}>
                   {typeof c.name === 'string' ? (
-                    <Label fontSize={13} className={`capitalize ${c?.align === 'right' ? 'justify-fe' : ''}`}>
-                      {c.name} {c.popup && <InfoPopup>{c.popup}</InfoPopup>}
-                    </Label>
+                    <div className="flex align-bl " style={{ minWidth: c.width }}>
+                      <Label
+                        fontSize={13}
+                        className={`capitalize ${c?.align === 'right' ? 'justify-fe' : ''}`}
+                        onClick={
+                          c.sortBy
+                            ? () => {
+                                handleSort(c.sortBy, !sortNames[c.sortBy], c.multiplier);
+                                handleSortName(c.sortBy);
+                              }
+                            : null
+                        }
+                      >
+                        {c.name} {c.popup && <InfoPopup>{c.popup}</InfoPopup>}
+                      </Label>
+                      {c.sortBy && sortNames[c.sortBy] !== null && (
+                        <ArrowDown className={`svg-app-color ${sortNames[c.sortBy] ? 'rotate-180' : ''}`} style={{ width: 10, marginLeft: 4 }} />
+                      )}
+                    </div>
                   ) : (
                     c.name
                   )}
@@ -100,7 +168,7 @@ const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onCl
             </tr>
           </thead>
           <tbody>
-            {items?.map((item, i) => (
+            {sortedItems?.map((item, i) => (
               <tr
                 key={i}
                 onClick={() => {
@@ -113,7 +181,7 @@ const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onCl
                 {columns?.map((c, j) => (
                   <td key={j} className={j === 0 ? 'sticky' : ''} style={{ minWidth: c.width, zIndex: j === 0 ? 2 : 1 }}>
                     <Label fontSize={13} className={c?.align === 'right' ? 'justify-fe' : ''}>
-                      {c.render({ item, column: c })}
+                      {c.render({ item })}
                     </Label>
                   </td>
                 ))}

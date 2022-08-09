@@ -12,12 +12,6 @@ import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
-import CustomDropdown from '../shared/CustomDropdown';
-
-const sortByOptions = [
-  { key: 0, text: `Ascending`, value: 'ascending' },
-  { key: 1, text: `Descending`, value: 'descending' },
-];
 
 const LiquidityMyLiquidityTable = () => {
   const history = useHistory();
@@ -25,14 +19,23 @@ const LiquidityMyLiquidityTable = () => {
   const { tokensUsdPrice } = usePactContext();
   const [pairList, setPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(true);
-  const [orderBy, setOrderBy] = useState('descending');
 
   const fetchData = async () => {
     setLoading(true);
     const result = await getPairListAccountBalance(account.account);
+
     if (!result.errorMessage) {
       const resultWithLiquidity = result?.filter((r) => extractDecimal(r.pooledAmount[0]) !== 0 && extractDecimal(r.pooledAmount[1]) !== 0);
-      orderPairs(resultWithLiquidity);
+      let allData = [];
+      for (const res of resultWithLiquidity) {
+        allData.push({
+          ...res,
+          pooledAmountToken0: extractDecimal(res.pooledAmount[0]),
+          pooledAmountToken1: extractDecimal(res.pooledAmount[1]),
+        });
+      }
+
+      setPairList(allData);
     }
 
     setLoading(false);
@@ -46,22 +49,6 @@ const LiquidityMyLiquidityTable = () => {
     }
   }, [account.account]);
 
-  useEffect(() => {
-    if (pairList.length > 0) {
-      orderPairs(pairList);
-    }
-  }, [orderBy]);
-
-  const orderPairs = (pairs) => {
-    let result = pairs.map((p) => ({ ...p, poolShare: p.poolShare || 0 }));
-    if (orderBy === 'ascending') {
-      result = result.sort((x, y) => x.poolShare - y.poolShare);
-    } else {
-      result = result.sort((x, y) => y.poolShare - x.poolShare);
-    }
-
-    setPairList(result);
-  };
   return !loading ? (
     !account.account ? (
       <Label className="justify-ce">Please connect your wallet to see your liquidity. </Label>
@@ -69,20 +56,10 @@ const LiquidityMyLiquidityTable = () => {
       <Label className="justify-ce">Your active Kaddex liquidity positions will appear here.</Label>
     ) : (
       <div className="column">
-        <div className="flex justify-sb" style={{ marginBottom: 16 }}>
+        <div className="flex justify-fs" style={{ marginBottom: 16 }}>
           <Label fontSize={16} fontFamily="syncopate">
             MY LIQUIDITY
           </Label>
-
-          <CustomDropdown
-            containerStyle={{ minWidth: 134 }}
-            title="sort by:"
-            options={sortByOptions}
-            onChange={(e, { value }) => {
-              setOrderBy(value);
-            }}
-            value={orderBy}
-          />
         </div>
         <CommonTable
           items={pairList}
@@ -126,22 +103,18 @@ const renderColumns = (tokensUsdPrice) => {
         </FlexContainer>
       ),
     },
-    // {
-    //   name: 'My Pool Tokens',
-    //   width: 160,
-    //   render: ({ item }) => pairUnit(extractDecimal(item.balance), 6),
-    // },
     {
       name: 'Token A',
+      sortBy: 'pooledAmountToken0',
       width: 160,
       render: ({ item }) => (
         <div className="column flex">
           <Label>
-            {getDecimalPlaces(extractDecimal(item.pooledAmount[0]))} {item.token0}
+            {getDecimalPlaces(item.pooledAmountToken0)} {item.token0}
           </Label>
           {tokensUsdPrice ? (
             <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
-              $ {humanReadableNumber(tokensUsdPrice?.[item.token0] * extractDecimal(item.pooledAmount[0]))}
+              $ {humanReadableNumber(tokensUsdPrice?.[item.token0] * item?.pooledAmountToken0)}
             </Label>
           ) : (
             ''
@@ -153,14 +126,15 @@ const renderColumns = (tokensUsdPrice) => {
     {
       name: 'Token B',
       width: 160,
+      sortBy: 'pooledAmountToken1',
       render: ({ item }) => (
         <div className="column flex">
           <Label>
-            {getDecimalPlaces(extractDecimal(item.pooledAmount[1]))} {item.token1}
+            {getDecimalPlaces(item?.pooledAmountToken1)} {item.token1}
           </Label>
           {tokensUsdPrice ? (
             <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
-              $ {humanReadableNumber(tokensUsdPrice?.[item.token1] * extractDecimal(item.pooledAmount[1]))}
+              $ {humanReadableNumber(tokensUsdPrice?.[item.token1] * item?.pooledAmountToken1)}
             </Label>
           ) : (
             ''
@@ -172,6 +146,7 @@ const renderColumns = (tokensUsdPrice) => {
     {
       name: 'My Pool Share',
       width: 160,
+      sortBy: 'poolShare',
       render: ({ item }) => {
         return item.poolShare >= 0
           ? `${(item?.poolShare * 100).toPrecision(4)} %`
