@@ -1,22 +1,19 @@
 import React from 'react';
 import { NccLogo, NccLogoLightMode } from '../../assets';
 import { useApplicationContext } from '../../contexts';
-import useWindowSize from '../../hooks/useWindowSize';
-import { commonTheme } from '../../styles/theme';
 import { FlexContainer } from '../shared/FlexContainer';
-import Label from '../shared/Label';
 
 const FooterPolicy = () => {
-  const [width] = useWindowSize();
+  //const [width] = useWindowSize();
   const { themeMode } = useApplicationContext();
   return (
     <FlexContainer
-      className="justify-sb"
+      className="justify-ce" //replace with justify-sb
       desktopStyle={{ margin: '0px 88px 24px' }}
       tabletStyle={{ margin: '0px 32px 24px' }}
       mobileStyle={{ margin: '0px 16px 24px' }}
     >
-      {width > commonTheme.mediaQueries.desktopPixel && <Label color="transparent" fontSize={12} labelStyle={{ minWidth: 259 }}></Label>}
+      {/* {width > commonTheme.mediaQueries.desktopPixel && <Label color="transparent" fontSize={12} labelStyle={{ minWidth: 259 }}></Label>} */}
       {themeMode === 'dark' ? (
         <NccLogo
           className="pointer"
@@ -32,7 +29,7 @@ const FooterPolicy = () => {
           }}
         />
       )}
-      <Label
+      {/* <Label
         fontSize={12}
         labelStyle={{
           display: width < commonTheme.mediaQueries.mobilePixel && 'flex',
@@ -59,7 +56,7 @@ const FooterPolicy = () => {
         >
           Privacy Policy
         </span>
-      </Label>
+      </Label> */}
     </FlexContainer>
   );
 };

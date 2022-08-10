@@ -18,8 +18,8 @@ const VotingPowerInfo = () => {
       <Divider />
       <Label fontSize={16}>Multiplier (M)</Label>
       <Label>
-        The Voting Power Multiplier is a time-dependent function of your KDX staking amount and meaningful contributions (Vibedust). In 60 days the
-        multiplier value goes up to 1 and can reach 2.5 over the course of 4 years.
+        The Voting Power Multiplier is a time-dependent function of your KDX staking amount. In 60 days the multiplier value goes up to 1 and can
+        reach 2.5 over the course of 4 years.
       </Label>
     </FlexContainer>
   );

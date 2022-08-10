@@ -252,12 +252,14 @@ const renderColumns = () => {
     {
       name: 'Amount',
       width: 160,
+      sortBy: 'estimated-kdx',
       render: ({ item }) => `${getDecimalPlaces(extractDecimal(item?.['estimated-kdx']))} KDX`,
     },
 
     {
       name: '~ KDX Multiplier',
       width: 160,
+      sortBy: 'multiplier',
       render: ({ item }) => `${getDecimalPlaces(extractDecimal(item?.['multiplier']))} x`,
     },
 

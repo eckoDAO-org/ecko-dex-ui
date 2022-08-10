@@ -71,7 +71,7 @@ const LiquidityTokensTable = () => {
           // if token KDA, get the largests apr and multiplier among all pairs
           const majorAprMultiplierPair = tokenAprAndMultiplier.sort((x, y) => y.mult * y.apr - x.mult * x.apr)[0];
           apr = majorAprMultiplierPair.apr;
-          multiplier = majorAprMultiplierPair.multiplier;
+          multiplier = majorAprMultiplierPair.mult;
         } else {
           apr = tokenAprAndMultiplier.find((a) => a.token0 === token.name || a.token1 === token.name).apr;
           multiplier = tokenAprAndMultiplier.find((a) => a.code.split(':')[0] === token.code || a.code.split(':')[1] === token.code).mult;
@@ -163,6 +163,7 @@ const renderColumns = (history) => {
     {
       name: 'price',
       width: 160,
+      sortBy: 'tokenUsdPrice',
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer h-100" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
           {humanReadableNumber(item.tokenUsdPrice, 3) !== '0.000' ? `$ ${humanReadableNumber(item.tokenUsdPrice, 3)}` : '<$ 0.001'}
@@ -172,7 +173,7 @@ const renderColumns = (history) => {
     {
       name: 'liquidity',
       width: 160,
-
+      sortBy: 'liquidityUSD',
       render: ({ item }) => {
         if (item.liquidityUSD) {
           return `$ ${humanReadableNumber(item.liquidityUSD)}`;
@@ -183,6 +184,7 @@ const renderColumns = (history) => {
     {
       name: '24h Volume',
       width: 160,
+      sortBy: 'volume24HUsd',
       render: ({ item }) => {
         if (item.volume24HUsd) {
           return `$ ${humanReadableNumber(item.volume24HUsd)}`;
@@ -207,6 +209,8 @@ const renderColumns = (history) => {
     {
       name: 'APR',
       width: 120,
+      sortBy: 'apr',
+      multiplier: 'multiplier',
       render: ({ item }) =>
         item.multiplier > 1 ? (
           <FlexContainer className="align-ce svg-pink">
