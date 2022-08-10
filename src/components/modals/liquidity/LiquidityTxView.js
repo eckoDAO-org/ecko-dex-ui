@@ -260,6 +260,7 @@ export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading
 export const SuccessRemoveView = ({ token0, token1, loading, onClick, pair }) => {
   const swap = useSwapContext();
   const { wantsKdxRewards } = useLiquidityContext();
+  const pact = usePactContext();
   return (
     <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle>
       <FlexContainer className="w-100 column" gap={12}>
@@ -271,40 +272,29 @@ export const SuccessRemoveView = ({ token0, token1, loading, onClick, pair }) =>
           <Label fontSize={16}>Amount</Label>
         </div>
 
-        <div className="flex align-ce justify-sb">
-          <div className="flex align-ce">
-            <CryptoContainer size={24}>{getTokenIconById(token0)}</CryptoContainer>
-            <Label>
-              {getDecimalPlaces(extractDecimal(pair.isBoosted ? swap?.localRes?.result?.data?.amountA : swap?.localRes?.result?.data?.amount0)) ||
-                '-'}
-            </Label>
-          </div>
-          <Label>{token0}</Label>
-        </div>
-        <div className="flex align-ce justify-sb">
-          <div className="flex align-ce">
-            <CryptoContainer size={24}>{getTokenIconById(token1)}</CryptoContainer>
-            <Label>
-              {getDecimalPlaces(extractDecimal(pair.isBoosted ? swap?.localRes?.result?.data?.amountB : swap?.localRes?.result?.data?.amount1)) ||
-                '-'}
-            </Label>
-          </div>
-
-          <Label>{token1}</Label>
-        </div>
-
+        <RowTokenInfoPrice
+          tokenIcon={getTokenIconById(token0)}
+          tokenName={token0}
+          amount={pair.isBoosted ? swap?.localRes?.result?.data?.amountA : swap?.localRes?.result?.data?.amount0}
+          tokenPrice={pact.tokensUsdPrice?.[token0] || null}
+        />
+        <RowTokenInfoPrice
+          tokenIcon={getTokenIconById(token1)}
+          tokenName={token1}
+          amount={pair.isBoosted ? swap?.localRes?.result?.data?.amountB : swap?.localRes?.result?.data?.amount1}
+          tokenPrice={pact.tokensUsdPrice?.[token1] || null}
+        />
         {wantsKdxRewards && pair.isBoosted && (
           <>
             <div className="flex" style={{ marginTop: 6 }}>
               <Label fontSize={16}>Rewards</Label>
             </div>
-            <div className="flex align-ce justify-sb">
-              <div className="flex align-ce">
-                <CryptoContainer size={24}>{getTokenIconById('KDX')}</CryptoContainer>
-                <Label>{getDecimalPlaces(extractDecimal(swap?.localRes?.resPreview?.['estimated-kdx-rewards'])) || '-'}</Label>
-              </div>
-              <Label>KDX</Label>
-            </div>
+            <RowTokenInfoPrice
+              tokenIcon={getTokenIconById('KDX')}
+              tokenName={'KDX'}
+              amount={swap?.localRes?.resPreview?.['estimated-kdx-rewards']}
+              tokenPrice={pact.tokensUsdPrice?.KDX || null}
+            />
           </>
         )}
       </FlexContainer>
