@@ -125,9 +125,9 @@ const TokenPriceChart = ({ tokenData, height }) => {
           <CustomDropdown
             options={[
               { key: 0, text: '7d', value: moment().subtract(7, 'day').format('YYYY-MM-DD') },
-              { key: 1, text: '1m', value: moment().subtract(1, 'months').format('YYYY-MM-DD') },
-              { key: 2, text: '3m', value: moment().subtract(3, 'months').format('YYYY-MM-DD') },
-              { key: 3, text: '6m', value: moment().subtract(6, 'months').format('YYYY-MM-DD') },
+              { key: 1, text: '1M', value: moment().subtract(1, 'months').format('YYYY-MM-DD') },
+              { key: 2, text: '3M', value: moment().subtract(3, 'months').format('YYYY-MM-DD') },
+              { key: 3, text: '6M', value: moment().subtract(6, 'months').format('YYYY-MM-DD') },
             ]}
             dropdownStyle={{ minWidth: '66px', padding: 10, height: 30 }}
             onChange={(e, { value }) => {

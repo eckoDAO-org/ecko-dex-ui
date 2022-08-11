@@ -16,9 +16,11 @@ import { getAllPairValues } from '../../utils/token-utils';
 import { getPairsMultiplier } from '../../api/liquidity-rewards';
 import { commonColors } from '../../styles/theme';
 import moment from 'moment';
+import { usePactContext } from '../../contexts';
 
 const LiquidityPoolsTable = () => {
   const history = useHistory();
+  const pact = usePactContext();
   const [pairList, setPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(false);
 
@@ -63,7 +65,7 @@ const LiquidityPoolsTable = () => {
   return !loading ? (
     <CommonTable
       items={pairList}
-      columns={renderColumns()}
+      columns={pact.enableGasStation ? renderColumns() : renderColumns().filter((x) => x.name !== 'Fees')}
       actions={[
         {
           icon: () => <AddIcon />,
@@ -116,7 +118,6 @@ const renderColumns = () => {
         return humanReadableNumber(item.volume24H);
       },
     },
-
     {
       name: 'Fees',
       width: 160,

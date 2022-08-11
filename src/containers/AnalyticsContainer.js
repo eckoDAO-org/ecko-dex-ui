@@ -78,7 +78,7 @@ const AnalyticsContainer = () => {
       >
         <Banner
           position="unset"
-          text={`The information displayed on this page is currently under BETA testing, and is provided on an "as is" and "as available" basis`}
+          text={`The information displayed on this page is currently under BETA testing, and is provided on an "as is" and "as available" basis.`}
         />
         <div className="flex align-ce justify-sb">
           <FlexContainer className="align-ce" gap={16} mobileStyle={{ marginBottom: 16 }}>

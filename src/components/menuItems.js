@@ -59,13 +59,13 @@ export const STAKE = {
 export const VAULT = {
   id: 3,
   label: 'vault',
-  target: '_self',
+  target: '_blank',
   link: process.env.REACT_APP_VAULTING_URL,
 };
 export const BUY_CRYPTO = {
   id: 5,
   label: 'buy',
-  target: '_self',
+  target: '_blank',
   link: process.env.REACT_APP_BUY_CRYPTO_URL,
 };
 

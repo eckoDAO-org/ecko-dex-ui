@@ -51,9 +51,9 @@ const VotingPower = ({ daoAccountData }) => {
           values={[
             { value: 0, label: 'Start' },
             { value: 0.5, label: '7d' },
-            { value: 1, label: '2m' },
-            { value: 1.5, label: '8.25m' },
-            { value: 2, label: '22m' },
+            { value: 1, label: '2M' },
+            { value: 1.5, label: '8.25M' },
+            { value: 2, label: '22M' },
             { value: 2.5, label: '4y' },
           ]}
         />

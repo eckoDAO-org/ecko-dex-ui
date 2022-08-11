@@ -157,7 +157,7 @@ const LiquidityRewardsTable = () => {
       <Label className="justify-ce">Please connect your wallet to see your rewards. </Label>
     ) : rewardsFiltered.length === 0 ? (
       <Label className="justify-ce align-ce" labelStyle={{ textAlign: 'center' }}>
-        Participate in the liquidity mining program to activate boosted rewards.
+        To participate in the liquidity mining program and activate the multiplier, users are required to first remove liquidity and claim rewards.
       </Label>
     ) : (
       <>
