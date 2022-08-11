@@ -17,7 +17,6 @@ import KdxDaoTreasuryDetails from './analytics-details/KdxDaoTreasuryDetails';
 import KdxCirculatingSupplyDetails from './analytics-details/KdxCirculatingSupplyDetails';
 
 const Kdx = ({ KDX_TOTAL_SUPPLY, kdaPrice, analyticsData }) => {
-  console.log('LOG --> analyticsData', analyticsData);
   const [width] = useWindowSize();
   const pact = usePactContext();
   const kdxPrice = pact?.tokensUsdPrice?.KDX;
@@ -108,7 +107,6 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdaPrice, analyticsData }) => {
           icon={<BurnedIcon />}
           iconColor={commonColors.redComponent}
         />
-        {/* TODO: add Dao tresury and Liquidity Mining */}
         <AnalyticsSimpleWidget
           title={'DAO Treasury'}
           mainText={`${analyticsData?.daoTreasury ? humanReadableNumber(analyticsData?.daoTreasury?.amount, 2) : '-'} KDX`}

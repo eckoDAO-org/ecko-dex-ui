@@ -4,7 +4,6 @@ import { FlexContainer } from '../../shared/FlexContainer';
 import Label from '../../shared/Label';
 
 const KdxCirculatingSupplyDetails = ({ supply, tokensUsdPrice }) => {
-  console.log('LOG --> supply', supply);
   return (
     <FlexContainer className="w-100 column" gap={8}>
       <FlexContainer className="column" gap={16}>

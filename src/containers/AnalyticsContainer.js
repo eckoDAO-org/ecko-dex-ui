@@ -3,14 +3,12 @@ import React, { useEffect, useState } from 'react';
 import useLazyImage from '../hooks/useLazyImage';
 import { usePactContext, useGameEditionContext } from '../contexts';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
-import { reduceBalance } from '../utils/reduceBalance';
 import LogoLoader from '../components/shared/Loader';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import Label from '../components/shared/Label';
 import Banner from '../components/layout/header/Banner';
 import InfoPopup from '../components/shared/InfoPopup';
 import { getCoingeckoUsdPrice } from '../api/coingecko';
-import { getKDXSupply, getKDXTotalSupply } from '../api/kaddex.kdx';
 import { getPoolState } from '../api/kaddex.staking';
 import theme from '../styles/theme';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -32,13 +30,7 @@ const AnalyticsContainer = () => {
   const pact = usePactContext();
   const [kdaPrice, setKdaPrice] = useState(null);
 
-  //TODO to delete
-  const [kdxSupply, setKdxSupply] = useState(null);
-  const [, /*kdxTreasury*/ setKdxTreasury] = useState(null);
-  const [, /* kdxRewards */ setKdxRewards] = useState(null);
-  ///
   const [analyticsData, setAnalyticsData] = useState({});
-
   const [poolState, setPoolState] = useState(null);
   const { gameEditionView } = useGameEditionContext();
 
@@ -51,15 +43,6 @@ const AnalyticsContainer = () => {
         .catch(async (err) => {
           console.log('fetch kda price err', err);
         });
-      getKDXTotalSupply().then((supply) => {
-        setKdxSupply(reduceBalance(supply, 2));
-      });
-      getKDXSupply('network-rewards').then((reward) => {
-        setKdxRewards(reduceBalance(reward, 2));
-      });
-      getKDXSupply('dao-treasury').then((treasury) => {
-        setKdxTreasury(reduceBalance(treasury, 2));
-      });
       getPoolState().then((res) => {
         setPoolState(res);
       });
@@ -124,7 +107,7 @@ const AnalyticsContainer = () => {
           </InfoPopup>
         </div>
         {/* DEX */}
-        {pathname === ROUTE_ANALYTICS && <Dex kdxSupply={kdxSupply} kdaPrice={kdaPrice} poolState={poolState} />}
+        {pathname === ROUTE_ANALYTICS && <Dex kdxSupply={analyticsData?.circulatingSupply?.totalSupply} kdaPrice={kdaPrice} poolState={poolState} />}
         {/* KDX */}
         {pathname === ROUTE_ANALYTICS_KDX && <Kdx analyticsData={analyticsData} KDX_TOTAL_SUPPLY={KDX_TOTAL_SUPPLY} kdaPrice={kdaPrice} />}
         {/* DEX */}

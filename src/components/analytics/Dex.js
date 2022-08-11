@@ -135,20 +135,21 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
   };
 
   const getStakingData = async () => {
-    let startDate = moment().subtract(1, 'days').format('YYYY-MM-DD');
+    let startDate = moment().subtract(2, 'days').format('YYYY-MM-DD');
     if (stakeDataRange === WEEKLY_VOLUME_RANGE.value) {
       startDate = moment().subtract(7, 'days').format('YYYY-MM-DD');
     }
     if (stakeDataRange === MONTHLY_VOLUME_RANGE.value) {
       startDate = moment().subtract(1, 'months').format('YYYY-MM-DD');
     }
-    getGroupedTVL(startDate, moment().format('YYYY-MM-DD'))
+    getGroupedTVL(startDate, moment().subtract(1, 'days').format('YYYY-MM-DD'))
       .then(async ({ data }) => {
         if (data?.length) {
           const lastStakingTVL = data[data.length - 1]?.tvl?.find((tvl) => tvl?.tokenFrom === 'kaddex.staking-pool-state');
           const firstTVL = data
             .find((allTvl) => allTvl?.tvl?.find((tvl) => tvl?.tokenFrom === 'kaddex.staking-pool-state'))
             ?.tvl?.find((tvl) => tvl?.tokenFrom === 'kaddex.staking-pool-state');
+
           if (lastStakingTVL?.tokenFromTVL && firstTVL?.tokenFromTVL) {
             setStakingDiff({
               initial: firstTVL?.tokenFromTVL,
@@ -186,7 +187,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
         <AnalyticsSimpleWidget
           title={'KDX Staked'}
           mainText={`${humanReadableNumber(stakedKdx, 2)} KDX` || '-'}
-          subtitle={`${((100 * stakedKdx) / kdxSupply).toFixed(2)} %`}
+          subtitle={`${((100 * stakedKdx) / KDX_TOTAL_SUPPLY).toFixed(2)} %`}
         />
         <AnalyticsSimpleWidget
           title={'Staking Data'}
