@@ -4,7 +4,7 @@ import moment from 'moment';
 import styled from 'styled-components/macro';
 import { useAccountContext, useGameEditionContext, useLiquidityContext, usePactContext, useSwapContext } from '../../../contexts';
 import { CHAIN_ID } from '../../../constants/contextConstants';
-import { extractDecimal, getDecimalPlaces, humanReadableNumber, reduceBalance } from '../../../utils/reduceBalance';
+import { extractDecimal, getDecimalPlaces, reduceBalance } from '../../../utils/reduceBalance';
 import { getTokenIconById, getTokenName } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import Label from '../../shared/Label';
