@@ -18,6 +18,7 @@ import StackedBarChart from '../shared/StackedBarChart';
 import AppLoader from '../shared/AppLoader';
 import { isMainnet } from '../../constants/contextConstants';
 import { samplePairsVolume, sampleTokensVolume } from './devnetSampleVolumes';
+import Label from '../shared/Label';
 
 const KDX_TOTAL_SUPPLY = 1000000000;
 
@@ -119,13 +120,21 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
             }
           }
         }
-        const volumeBarData = [...mainVolumes, otherVolumes].map((volData) => ({
+        const mainVolumeBarData = [...mainVolumes]
+          .map((volData) => ({
+            ...volData,
+            volumeUsd: volData.volumeKDA * kdaPrice,
+            percentage: 10,
+          }))
+          .sort((x, y) => y.volumeUsd - x.volumeUsd);
+        const otherVolumeBarData = [otherVolumes].map((volData) => ({
           ...volData,
           volumeUsd: volData.volumeKDA * kdaPrice,
           percentage: 10,
         }));
-        const totalVol = volumeBarData.reduce((partialSum, curr) => partialSum + curr.volumeUsd, 0);
-        setPairsVolume(volumeBarData.map((v) => ({ ...v, percentage: (100 * v.volumeUsd) / totalVol })));
+        const totVolumeBarData = [...mainVolumeBarData, ...otherVolumeBarData];
+        const totalVol = totVolumeBarData.reduce((partialSum, curr) => partialSum + curr.volumeUsd, 0);
+        setPairsVolume(totVolumeBarData.map((v) => ({ ...v, percentage: (100 * v.volumeUsd) / totalVol })));
         setLoading(false);
       })
       .catch((err) => {
@@ -176,7 +185,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
   return loading ? (
     <AppLoader containerStyle={{ height: '100%', alignItems: 'center', justifyContent: 'center' }} />
   ) : (
-    <FlexContainer className="w-100 column" mobileClassName="column" gap={24}>
+    <FlexContainer className="w-100 column" mobileClassName="column" gap={24} style={{ paddingBottom: 32 }}>
       <FlexContainer className="w-100" mobileClassName="column" tabletClassName="column" gap={24}>
         <TVLChart kdaPrice={kdaPrice} height={300} />
 
@@ -185,7 +194,16 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
       <FlexContainer mobileClassName="column" gap={24}>
         <AnalyticsSimpleWidget
           title={'KDX Staked'}
-          mainText={`${humanReadableNumber(stakedKdx, 2)} KDX` || '-'}
+          mainText={
+            (
+              <div>
+                {humanReadableNumber(stakedKdx, 2)} KDX
+                <Label fontSize={16} mobileFontSize={16} labelStyle={{ opacity: 0.7, marginBottom: 3 }}>
+                  $ {humanReadableNumber(tokensUsdPrice?.KDX * extractDecimal(stakedKdx))}
+                </Label>
+              </div>
+            ) || '-'
+          }
           subtitle={`${((100 * stakedKdx) / kdxSupply).toFixed(2)} %`}
         />
         <AnalyticsSimpleWidget

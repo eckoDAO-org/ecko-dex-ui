@@ -145,6 +145,12 @@ const STYFlexContainer = styled.div`
         `;
     }
   }}
+  
+  ::-webkit-scrollbar {
+    display: auto;
+    width: 7px !important;
+    height: 7px !important;
+  }
 
   &.column {
     flex-direction: column;

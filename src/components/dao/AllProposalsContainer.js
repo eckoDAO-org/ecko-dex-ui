@@ -144,7 +144,7 @@ const AllProposalsContainer = ({ accountData }) => {
           desktopStyle={{ maxHeight: `calc(${height}px - ${theme.header.height}px - 184px)` }}
           tabletStyle={{ maxHeight: `calc(${height}px - ${theme.header.height}px - 184px)` }}
         >
-          <PartialScrollableScrollSection id="proposals-list" className="scrollbar-none" style={{ width: '100%' }}>
+          <PartialScrollableScrollSection id="proposals-list" style={{ width: '100%' }}>
             {filteredProposals.length > 0 ? (
               filteredProposals.map((data, index) => (
                 <>

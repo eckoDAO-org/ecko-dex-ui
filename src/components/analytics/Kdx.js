@@ -44,7 +44,7 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdxSupply, kdaPrice, kdxBurnt }) => {
     } else return width <= theme.mediaQueries.desktopPixel ? 2 : 3;
   };
   return (
-    <FlexContainer className="column" gap={16}>
+    <FlexContainer className="column" gap={16} style={{ paddingBottom: 32 }}>
       <FlexContainer className="grid" columns={getColumns()} gridColumnGap={16}>
         <AnalyticsSimpleWidget
           title={'Price'}

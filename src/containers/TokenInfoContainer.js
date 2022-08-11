@@ -114,14 +114,14 @@ const TokenInfoContainer = () => {
           subtitle={token !== 'KDX' ? `1 KDX = ${getDecimalPlaces(pact?.tokensUsdPrice?.KDX / pact?.tokensUsdPrice?.[token])} ${token}` : null}
         />
         <AnalyticsSimpleWidget
-          title="1m Trading Volume"
+          title="1M Trading Volume"
           mainText={`$ ${humanReadableNumber(monthlyVolumeRange?.final * monthlyRange?.final)}`}
           subtitle={
             monthlyVolumeRange?.initial && <GraphicPercentage prevValue={monthlyVolumeRange?.initial} currentValue={monthlyVolumeRange?.final} />
           }
         />
         <AnalyticsSimpleWidget
-          title="1m Price Delta"
+          title="1M Price Delta"
           mainText={`$ ${humanReadableNumber(monthlyRange?.final - monthlyRange?.initial)}`}
           subtitle={<GraphicPercentage prevValue={monthlyRange?.initial} currentValue={monthlyRange?.final} />}
         />

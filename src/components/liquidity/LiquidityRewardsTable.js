@@ -263,13 +263,13 @@ const renderColumns = () => {
       render: ({ item }) => `${getDecimalPlaces(extractDecimal(item?.['multiplier']))} x`,
     },
 
-    {
+    /*   {
       name: 'Request ID',
       width: 160,
       render: ({ item }) => {
         return <CopyPopup title={reduceToken(item?.['request-id'])} textToCopy={item?.['request-id']} position="bottom center" />;
       },
-    },
+    }, */
     {
       name: 'Remaining Time',
       width: 160,
@@ -283,7 +283,7 @@ const renderColumns = () => {
     },
     {
       name: 'Status',
-      width: 160,
+      width: 100,
       render: ({ item }) => {
         let color = '';
         item?.['remaining-time'] > 0 ? (color = commonColors.info) : (color = commonColors.green);
