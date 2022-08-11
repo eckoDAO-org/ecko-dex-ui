@@ -160,10 +160,11 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, apr }) => {
     </SuccesViewContainer>
   );
 };
-export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading, onClick, apr }) => {
+export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading, onClick, apr, multiplier }) => {
   const { account } = useAccountContext();
   const pact = usePactContext();
   const swap = useSwapContext();
+  console.log('LOG --> swap', swap?.localRes);
   const pair = getPairByTokensName(token0, token1);
 
   const fromValues = extractDecimal(swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1']);
@@ -204,7 +205,7 @@ export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading
         {isNumber(apr) && (
           <FlexContainer className="align-ce justify-sb">
             <Label fontSize={13}>APR</Label>
-            <Label fontSize={13}>{`${apr} %`}</Label>
+            <Label fontSize={13}>{`${multiplier ? (apr * multiplier)?.toFixed(2) : apr?.toFixed(2)} %`}</Label>
           </FlexContainer>
         )}
         {/* POOL SHARE*/}
@@ -241,13 +242,7 @@ export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading
             <RowTokenInfoPrice
               tokenIcon={getTokenIconById(token1)}
               tokenName={token1}
-              amount={
-                fromValues
-                  ? token0 === pair.token0
-                    ? fromValues * reduceBalance(pact?.computeOut(fromValues) / fromValues, 12)
-                    : fromValues * reduceBalance(pact?.computeIn(fromValues) / fromValues, 12)
-                  : extractDecimal(swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0'])
-              }
+              amount={extractDecimal(swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0'])}
               tokenPrice={pact.tokensUsdPrice?.[token1] || null}
             />
           </FlexContainer>

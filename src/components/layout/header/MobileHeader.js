@@ -69,9 +69,6 @@ const MobileHeader = ({ className }) => {
         {/* <GameEditionModeButton /> */}
         <RightHeaderItems />
       </RowContainer>
-      {/* <Label outGameEditionView className="mainnet-chain-2 mobile-only">
-        Chain 2
-      </Label> */}
     </Container>
   );
 };

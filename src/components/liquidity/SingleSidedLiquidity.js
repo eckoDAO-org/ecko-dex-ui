@@ -217,6 +217,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
           >
             <SuccessAddSigleSideView
               apr={apr}
+              multiplier={selectedPool?.multiplier}
               initialAmount={fromValue.amount}
               token0={fromValue.coin}
               token1={selectedPool?.token0 === fromValue.coin ? selectedPool?.token1 : selectedPool?.token0}

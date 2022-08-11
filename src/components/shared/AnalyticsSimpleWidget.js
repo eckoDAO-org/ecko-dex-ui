@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import Label from './Label';
 import { FlexContainer } from './FlexContainer';
+import { useRightModalContext } from '../../contexts';
+import CustomButton from './CustomButton';
 
 const IconContainer = styled.div`
   position: absolute;
@@ -20,7 +22,8 @@ const IconContainer = styled.div`
   }
 `;
 
-const AnalyticsSimpleWidget = ({ title, mainText, subtitle, rightComponent, icon, iconColor }) => {
+const AnalyticsSimpleWidget = ({ title, mainText, subtitle, rightComponent, icon, iconColor, detailsContent }) => {
+  const rightModalContext = useRightModalContext();
   return (
     <FlexContainer withGradient className="relative w-100 column  background-fill" style={{ padding: 32, zIndex: 1 }}>
       <div className=" w-100 flex">
@@ -33,6 +36,22 @@ const AnalyticsSimpleWidget = ({ title, mainText, subtitle, rightComponent, icon
 
       <Label>{subtitle}</Label>
       {icon && <IconContainer iconColor={iconColor}>{icon}</IconContainer>}
+      {detailsContent && (
+        <CustomButton
+          buttonStyle={{ position: 'absolute', right: 24, top: 24, padding: '4px 8px', width: 'min-content', height: 'min-content' }}
+          fontSize={8}
+          onClick={() =>
+            rightModalContext.openModal({
+              className: 'info-popup',
+              title: `${title} details`,
+              content: detailsContent,
+              contentStyle: { padding: 16, paddingTop: 0 },
+            })
+          }
+        >
+          details
+        </CustomButton>
+      )}
     </FlexContainer>
   );
 };
