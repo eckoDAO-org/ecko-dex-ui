@@ -4,7 +4,7 @@ import styled from 'styled-components/macro';
 import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts';
 import useWindowSize from '../../hooks/useWindowSize';
 import { FlexContainer } from '../shared/FlexContainer';
-import { getVestingScheduleData } from './data/chartData';
+//import { getVestingScheduleData } from './data/chartData';
 import ProgressBar from '../shared/ProgressBar';
 
 import Label from '../shared/Label';
@@ -27,17 +27,25 @@ const IconContainer = styled.div`
   }
 `;
 
-const VestingPieChart = ({ kdxSupplyPercentage, kdxBurntPercentage }) => {
+const VestingPieChart = ({
+  kdxSupplyPercentage,
+  kdxBurntPercentage,
+  kdxLiquidityMiningPercentage,
+  kdxCommunitySalePercentage,
+  kdxTeamPercentage,
+  kdxDaoTreasuryPercentage,
+}) => {
   const [width] = useWindowSize();
 
-  const vesting = getVestingScheduleData('2021-06-01', moment().format('YYYY-MM-DD')).slice(-1)[0];
+  //const vesting = getVestingScheduleData('2021-06-01', moment().format('YYYY-MM-DD')).slice(-1)[0];
 
+  //TODO Community Sale will contains private sale
   const chartData = {
     Burned: { name: 'Burned', color: '#6699C9', value: kdxBurntPercentage, icon: <BurnedIcon /> },
-    LiquidityMining: { name: 'Liquidity Mining', color: '#E77E76', value: vesting['Liquidity mining'], icon: <BoosterIcon /> },
-    CommunitySales: { name: 'Community Sales', color: '#897DBC', value: vesting['Community Sales'], icon: <SalesIcon /> },
-    Team: { name: 'Team', color: '#5AC2DD', value: vesting['Team'], icon: <TeamIcon /> },
-    DAOTreasury: { name: 'DAO Treasury', color: '#E7638E', value: vesting['DAO treasury'], icon: <DaoIcon /> },
+    LiquidityMining: { name: 'Liquidity Mining', color: '#E77E76', value: kdxLiquidityMiningPercentage, icon: <BoosterIcon /> },
+    CommunitySales: { name: 'Community Sales', color: '#897DBC', value: kdxCommunitySalePercentage, icon: <SalesIcon /> },
+    Team: { name: 'Team', color: '#5AC2DD', value: kdxTeamPercentage, icon: <TeamIcon /> },
+    DAOTreasury: { name: 'DAO Treasury', color: '#E7638E', value: kdxDaoTreasuryPercentage, icon: <DaoIcon /> },
   };
 
   const Circulating = { name: 'Circulating', color: '#9797A4', value: kdxSupplyPercentage };
@@ -45,14 +53,7 @@ const VestingPieChart = ({ kdxSupplyPercentage, kdxBurntPercentage }) => {
   const NotCirculating = {
     name: 'Not Circulating',
     color: '#9797A4',
-    value:
-      100 -
-      kdxBurntPercentage -
-      kdxSupplyPercentage -
-      vesting['Liquidity mining'] -
-      vesting['Community Sales'] -
-      vesting['Team'] -
-      vesting['DAO treasury'],
+    value: 100 - kdxBurntPercentage - kdxSupplyPercentage,
   };
 
   const getPieSize = () => {

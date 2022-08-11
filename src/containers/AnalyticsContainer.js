@@ -10,7 +10,7 @@ import Label from '../components/shared/Label';
 import Banner from '../components/layout/header/Banner';
 import InfoPopup from '../components/shared/InfoPopup';
 import { getCoingeckoUsdPrice } from '../api/coingecko';
-import { getKDXSupply, getKDXTotalSupply, getKDXTotalBurnt } from '../api/kaddex.kdx';
+import { getKDXSupply, getKDXTotalSupply } from '../api/kaddex.kdx';
 import { getPoolState } from '../api/kaddex.staking';
 import theme from '../styles/theme';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -18,7 +18,9 @@ import { ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS } from '../
 import Dex from '../components/analytics/Dex';
 import Kdx from '../components/analytics/Kdx';
 import StatsTable from '../components/analytics/StatsTable';
-import { isMainnet, KDX_TOTAL_SUPPLY } from '../constants/contextConstants';
+import { KDX_TOTAL_SUPPLY } from '../constants/contextConstants';
+import { getAnalyticsData } from '../api/kaddex-analytics';
+import moment from 'moment';
 
 export const FIXED_SUPPLY = 200577508;
 export const FIXED_BURNT = 99422492;
@@ -29,10 +31,14 @@ const AnalyticsContainer = () => {
 
   const pact = usePactContext();
   const [kdaPrice, setKdaPrice] = useState(null);
+
+  //TODO to delete
   const [kdxSupply, setKdxSupply] = useState(null);
-  const [kdxBurnt, setKdxBurnt] = useState(null);
   const [, /*kdxTreasury*/ setKdxTreasury] = useState(null);
   const [, /* kdxRewards */ setKdxRewards] = useState(null);
+  ///
+  const [analyticsData, setAnalyticsData] = useState({});
+
   const [poolState, setPoolState] = useState(null);
   const { gameEditionView } = useGameEditionContext();
 
@@ -48,9 +54,6 @@ const AnalyticsContainer = () => {
       getKDXTotalSupply().then((supply) => {
         setKdxSupply(reduceBalance(supply, 2));
       });
-      getKDXTotalBurnt().then((burnt) => {
-        setKdxBurnt(reduceBalance(burnt, 2));
-      });
       getKDXSupply('network-rewards').then((reward) => {
         setKdxRewards(reduceBalance(reward, 2));
       });
@@ -59,6 +62,9 @@ const AnalyticsContainer = () => {
       });
       getPoolState().then((res) => {
         setPoolState(res);
+      });
+      getAnalyticsData(moment().subtract(1, 'day').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')).then((res) => {
+        setAnalyticsData(res[res.length - 1]);
       });
     };
     getInitialData();
@@ -120,14 +126,7 @@ const AnalyticsContainer = () => {
         {/* DEX */}
         {pathname === ROUTE_ANALYTICS && <Dex kdxSupply={kdxSupply} kdaPrice={kdaPrice} poolState={poolState} />}
         {/* KDX */}
-        {pathname === ROUTE_ANALYTICS_KDX && (
-          <Kdx
-            KDX_TOTAL_SUPPLY={KDX_TOTAL_SUPPLY}
-            kdxSupply={isMainnet() ? kdxSupply : FIXED_SUPPLY}
-            kdaPrice={kdaPrice}
-            kdxBurnt={isMainnet() ? kdxBurnt : FIXED_BURNT}
-          />
-        )}
+        {pathname === ROUTE_ANALYTICS_KDX && <Kdx analyticsData={analyticsData} KDX_TOTAL_SUPPLY={KDX_TOTAL_SUPPLY} kdaPrice={kdaPrice} />}
         {/* DEX */}
         {pathname === ROUTE_ANALYTICS_STATS && <StatsTable />}
       </FlexContainer>
