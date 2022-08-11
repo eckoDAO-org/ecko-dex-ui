@@ -210,7 +210,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
         />
       </FlexContainer>
       <FlexContainer>
-        <StackedBarChart title="TVL Details" data={isMainnet() ? tvlDetails : sampleTokensVolume} />
+        <StackedBarChart title="TVL Details" withDoubleToken data={isMainnet() ? tvlDetails : sampleTokensVolume} />
       </FlexContainer>
       <FlexContainer>
         <StackedBarChart
