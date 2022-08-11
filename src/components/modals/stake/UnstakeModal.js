@@ -82,14 +82,6 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
             Are you sure you want to close your staking plan? Partially or completely removing your staking position will have a negative effect on
             your Voting power.
           </Label>
-
-          {/* <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 12, marginBottom: 20 }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 16, height: 30, width: 30 }} />
-              <Label>{estimateUnstakeData['reward-accrued']} </Label>
-            </div>
-            <Label>KDX</Label>
-          </div> */}
         </>
       );
     }

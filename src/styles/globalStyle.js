@@ -43,7 +43,7 @@ export default createGlobalStyle`
           background-position: center;
           background-image: url(${themeMode === 'light' ? appLightBackground : appDarkBackground});
         `;
-      }}};
+      }};
     };
 
     #root {
