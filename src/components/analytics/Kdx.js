@@ -16,6 +16,9 @@ import ProgressBar from '../shared/ProgressBar';
 import KdxDaoTreasuryDetails from './analytics-details/KdxDaoTreasuryDetails';
 import KdxCirculatingSupplyDetails from './analytics-details/KdxCirculatingSupplyDetails';
 
+const KDX_MINING_REWARDS_CAP = 400000000;
+const KDX_DAO_TREASURY_CAP = 250000000;
+
 const Kdx = ({ KDX_TOTAL_SUPPLY, kdaPrice, analyticsData }) => {
   const [width] = useWindowSize();
   const pact = usePactContext();
@@ -132,10 +135,10 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdaPrice, analyticsData }) => {
       <VestingPieChart
         kdxSupplyPercentage={(analyticsData?.circulatingSupply?.totalSupply / KDX_TOTAL_SUPPLY) * 100}
         kdxBurntPercentage={((analyticsData?.burn?.stakingBurn + analyticsData?.burn?.tokenBurn) / KDX_TOTAL_SUPPLY) * 100}
-        kdxLiquidityMiningPercentage={(analyticsData?.liquidityMining / KDX_TOTAL_SUPPLY) * 100}
+        kdxLiquidityMiningPercentage={((KDX_MINING_REWARDS_CAP - analyticsData?.liquidityMining) / KDX_TOTAL_SUPPLY) * 100}
         kdxCommunitySalePercentage={(analyticsData?.communitySale / KDX_TOTAL_SUPPLY) * 100}
         kdxTeamPercentage={5}
-        kdxDaoTreasuryPercentage={(analyticsData?.daoTreasury?.amount / KDX_TOTAL_SUPPLY) * 100}
+        kdxDaoTreasuryPercentage={((KDX_DAO_TREASURY_CAP - analyticsData?.daoTreasury?.amount) / KDX_TOTAL_SUPPLY) * 100}
       />
     </FlexContainer>
   );
