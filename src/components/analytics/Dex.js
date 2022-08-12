@@ -43,23 +43,25 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
 
   const getTVLDetails = async () => {
     if (localPairList?.length) {
-      const main = localPairList?.filter((t) => t.main);
-      const others = localPairList?.filter((t) => !t.main);
-      const totalKDATVL = localPairList.reduce((partialSum, curr) => partialSum + reduceBalance(curr.reserves[0]) * 2, 0);
-      const totalKDAOtherTVL = others.reduce((partialSum, curr) => partialSum + reduceBalance(curr.reserves[0]) * 2, 0);
+      const totalKDATVL = localPairList.reduce((partialSum, curr) => partialSum + reduceBalance(curr.reserves[0]), 0);
 
       const kdaPrice = tokensUsdPrice?.KDA;
-      const mains = main
+      const pairData = localPairList
         .map((t) => {
-          const kdaTVL = reduceBalance(t.reserves[0]) * 2;
+          const kdaTVL = reduceBalance(t.reserves[0]);
           return {
             color: t.color,
             name: `${t.token0}/${t.token1}`,
+            kdaReserve: t.reserves[0],
             volumeUsd: kdaPrice * reduceBalance(t.reserves[0]) * 2,
             percentage: (kdaTVL * 100) / totalKDATVL,
           };
         })
         .sort((x, y) => y.percentage - x.percentage);
+
+      const mains = pairData.splice(0, 3);
+
+      const totalKDAOtherTVL = pairData.reduce((partialSum, curr) => partialSum + reduceBalance(curr.kdaReserve), 0);
 
       const otherTokens = {
         name: 'OTHER',
@@ -80,6 +82,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
           .format('YYYY-MM-DD')}`
       )
       .then(async (volumeRes) => {
+        console.log('LOG --> volumeRes', volumeRes);
         const kdaPrice = tokensUsdPrice?.KDA;
         let mainVolumes = [];
         const otherVolumes = {
@@ -91,6 +94,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
           main.find(
             (m) => m.name === `coin:${vol.tokenFromNamespace}.${vol.tokenFromName}` || m.name === `coin:${vol.tokenToNamespace}.${vol.tokenToName}`
           );
+
         for (const volumes of volumeRes?.data) {
           for (const volume of volumes?.volumes) {
             const isMainPair = findMainPair(volume);

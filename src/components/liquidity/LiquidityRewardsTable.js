@@ -17,11 +17,9 @@ import CustomDropdown from '../shared/CustomDropdown';
 import { Divider } from 'semantic-ui-react';
 
 import { getTokenByModuleV2 } from '../../utils/token-utils';
-import reduceToken from '../../utils/reduceToken';
 import { claimLiquidityRewardsCommandToSign, getAccountLiquidityRewards } from '../../api/liquidity-rewards';
 import { NETWORK } from '../../constants/contextConstants';
 import { timeRender } from '../../utils/time-utils';
-import CopyPopup from '../shared/CopyPopup';
 
 const ClaimButton = styled.div`
   display: flex;
