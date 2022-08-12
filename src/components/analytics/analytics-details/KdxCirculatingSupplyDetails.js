@@ -26,9 +26,9 @@ const KdxCirculatingSupplyDetails = ({ supply, tokensUsdPrice }) => {
             </Label>
           )}
         </FlexContainer>
-        <FlexContainer className="w-100 column" gap={8}>
+        <FlexContainer className="w-100 column justify-fe align-fe" gap={4}>
           <Label>Amount Vaulted</Label>
-          <Label fontSize={24}>{`${humanReadableNumber(supply.vaultedAmount)} KDX`}</Label>
+          <Label fontSize={16}>{`${humanReadableNumber(supply.vaultedAmount)} KDX`}</Label>
           {tokensUsdPrice && (
             <Label fontSize={12} mobileFontSize={12} labelStyle={{ opacity: 0.7 }}>
               $ {humanReadableNumber(tokensUsdPrice?.KDX * supply.vaultedAmount)}
