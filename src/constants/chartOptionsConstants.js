@@ -12,7 +12,7 @@ export const WEEKLY_VOLUME_RANGE = {
 };
 export const MONTHLY_VOLUME_RANGE = {
   key: 2,
-  text: '1m',
+  text: '1M',
   value: 'monthly',
 };
 
@@ -52,17 +52,17 @@ export const chartTimeRanges = {
 ///TVL
 export const TVL_3M_RANGE = {
   key: 0,
-  text: '3m',
+  text: '3M',
   value: '3m',
 };
 export const TVL_6M_RANGE = {
   key: 1,
-  text: '6m',
+  text: '6M',
   value: '6m',
 };
 export const TVL_12M_RANGE = {
   key: 2,
-  text: '1y',
+  text: '1Y',
   value: '1y',
 };
 
@@ -92,12 +92,12 @@ export const tvlRanges = {
 ///VESTING
 export const VESTING_4Y_RANGE = {
   key: 0,
-  text: '4y',
+  text: '4Y',
   value: '4y',
 };
 export const VESTING_10Y_RANGE = {
   key: 1,
-  text: '10y',
+  text: '10Y',
   value: '10y',
 };
 

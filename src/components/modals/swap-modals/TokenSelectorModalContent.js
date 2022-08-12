@@ -88,7 +88,6 @@ const TokenSelectorModalContent = ({ onSelectToken, onClose, token, tokensToKeep
       )}
       {!gameEditionView && <Divider />}
       <PartialScrollableScrollSection
-        className="scrollbar-none"
         style={{
           width: '100%',
           maxHeight: gameEditionView ? (width < theme().mediaQueries.desktopPixel ? '534px' : '400px') : '170px',

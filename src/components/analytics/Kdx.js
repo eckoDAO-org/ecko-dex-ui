@@ -48,21 +48,18 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdaPrice, analyticsData }) => {
     } else return width <= theme.mediaQueries.desktopPixel ? 2 : 3;
   };
   return (
-    <FlexContainer className="column" gap={16}>
+    <FlexContainer className="column" gap={16} style={{ paddingBottom: 32 }}>
       <FlexContainer className="grid" columns={getColumns()} gridColumnGap={16}>
         <AnalyticsSimpleWidget
           title={'Price'}
           mainText={
-            <div className="flex align-ce">
+            <FlexContainer className="flex align-fs column">
               {`$ ${kdxPrice ? humanReadableNumber(kdxPrice, 3) : '-'}`}
-              <GraphicPercentage
-                prevValue={kdxPriceDiff?.initial}
-                currentValue={kdxPriceDiff?.final}
-                componentStyle={{ marginLeft: 10, marginTop: 0 }}
-              />
-            </div>
+
+              <div style={{ fontSize: 13 }}>{kdxPrice && `${getDecimalPlaces(extractDecimal(kdxPrice / kdaPrice))} KDA`}</div>
+            </FlexContainer>
           }
-          subtitle={kdxPrice && `${getDecimalPlaces(extractDecimal(kdxPrice / kdaPrice))} KDA`}
+          subtitle={<GraphicPercentage prevValue={kdxPriceDiff?.initial} currentValue={kdxPriceDiff?.final} />}
         />
         <AnalyticsSimpleWidget
           title="Marketcap"

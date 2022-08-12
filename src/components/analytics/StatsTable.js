@@ -102,7 +102,7 @@ const StatsTable = () => {
       ]}
     />
   ) : (
-    <AppLoader containerStyle={{ height: '100%', alignItems: 'center', justifyContent: 'center' }} />
+    <AppLoader className="h-100 w-100 align-ce justify-ce" />
   );
 };
 

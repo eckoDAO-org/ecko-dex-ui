@@ -5,6 +5,8 @@ import { ArrowBack, CloseIcon } from '../../assets';
 import Label from './Label';
 import { FlexContainer } from './FlexContainer';
 import { useGameEditionContext } from '../../contexts';
+import theme from '../../styles/theme';
+import useWindowSize from '../../hooks/useWindowSize';
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -23,14 +25,16 @@ const HeaderContainer = styled.div`
 
 const ModalContainer = ({ title, description, containerStyle, titleStyle, descriptionStyle, children, onBack, onClose }) => {
   const { gameEditionView } = useGameEditionContext();
-
+  const [width] = useWindowSize();
   return (
     <FlexContainer
       withGradient
       className="relative column justify-sb w-100 background-fill"
       style={{ padding: 24, maxHeight: '90%', overflowY: 'auto', ...containerStyle }}
     >
-      <HeaderContainer style={{ justifyContent: !onBack && !onClose && 'center', alignItems: 'flex-start' }}>
+      <HeaderContainer
+        style={{ justifyContent: !onBack && !onClose && 'center', alignItems: width > theme.mediaQueries.mobilePixel && 'flex-start' }}
+      >
         {onBack && (
           <ArrowBack
             style={{
@@ -45,7 +49,7 @@ const ModalContainer = ({ title, description, containerStyle, titleStyle, descri
             fontFamily="syncopate"
             className="capitalize"
             fontSize={24}
-            labelStyle={{ marginRight: 25, ...titleStyle }}
+            labelStyle={{ maxWidth: width <= theme.mediaQueries.mobilePixel && 'min-content', marginRight: 25, ...titleStyle }}
             gameEditionView={gameEditionView}
           >
             {title}

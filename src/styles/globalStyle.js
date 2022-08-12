@@ -31,7 +31,7 @@ export default createGlobalStyle`
       font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
       color: ${({ theme: { colors } }) => colors.primary};
       background: ${({ theme: { backgroundBody } }) => backgroundBody};
-      
+
       opacity: 1;
       background-size: cover;
       background-repeat: no-repeat;
@@ -43,8 +43,8 @@ export default createGlobalStyle`
           background-position: center;
           background-image: url(${themeMode === 'light' ? appLightBackground : appDarkBackground});
         `;
-      }};
-    };
+      }}};
+      
 
     #root {
       height: 100%;

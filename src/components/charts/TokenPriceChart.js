@@ -99,8 +99,8 @@ const TokenPriceChart = ({ tokenData, height }) => {
     <AppLoader containerStyle={{ height: '100%', alignItems: 'center', justifyContent: 'center' }} />
   ) : (
     <FlexContainer className="column align-ce w-100 h-100 background-fill" withGradient style={{ padding: 32 }}>
-      <div className="flex justify-sb w-100">
-        <div className="column w-100">
+      <FlexContainer className="flex justify-sb w-100" mobileClassName="column">
+        <FlexContainer className="column w-100" mobileStyle={{ marginBottom: 10 }}>
           <Label fontSize={24}>
             ${' '}
             {humanReadableNumber(currentData?.price, 3) !== '0.000'
@@ -108,7 +108,7 @@ const TokenPriceChart = ({ tokenData, height }) => {
               : humanReadableNumber(currentData?.price, tokenData?.precision)}
           </Label>
           <Label fontSize={16}>{moment(currentData?.date).format('DD/MM/YYYY')}</Label>
-        </div>
+        </FlexContainer>
         <ThemeIconContainer className="flex">
           <CustomDropdown
             options={[
@@ -125,9 +125,9 @@ const TokenPriceChart = ({ tokenData, height }) => {
           <CustomDropdown
             options={[
               { key: 0, text: '7d', value: moment().subtract(7, 'day').format('YYYY-MM-DD') },
-              { key: 1, text: '1m', value: moment().subtract(1, 'months').format('YYYY-MM-DD') },
-              { key: 2, text: '3m', value: moment().subtract(3, 'months').format('YYYY-MM-DD') },
-              { key: 3, text: '6m', value: moment().subtract(6, 'months').format('YYYY-MM-DD') },
+              { key: 1, text: '1M', value: moment().subtract(1, 'months').format('YYYY-MM-DD') },
+              { key: 2, text: '3M', value: moment().subtract(3, 'months').format('YYYY-MM-DD') },
+              { key: 3, text: '6M', value: moment().subtract(6, 'months').format('YYYY-MM-DD') },
             ]}
             dropdownStyle={{ minWidth: '66px', padding: 10, height: 30 }}
             onChange={(e, { value }) => {
@@ -136,7 +136,7 @@ const TokenPriceChart = ({ tokenData, height }) => {
             value={dateStart}
           />
         </ThemeIconContainer>
-      </div>
+      </FlexContainer>
 
       {chartMode === 'line' ? (
         <div style={{ width: '100%', height }}>

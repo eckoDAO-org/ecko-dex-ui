@@ -27,18 +27,7 @@ const MaintenanceContainer = () => {
   return (
     <Container>
       <KaddexLogo style={{ marginBottom: 32 }} />
-      <span style={{ fontSize: '16px' }}>We are almost there, Kaddex v1 will launch at 14:00 UTC on August 1st.</span>
-      <span style={{ fontSize: '16px', marginTop: 12 }}>
-        In the meantime, you can always trade here:{' '}
-        <span
-          style={{ cursor: 'pointer' }}
-          onClick={(item) => {
-            window.open(`https://beta.kaddex.com`, '_blank', 'noopener,noreferrer');
-          }}
-        >
-          https://beta.kaddex.com
-        </span>
-      </span>
+      <span style={{ fontSize: '16px', textAlign: 'center' }}>The platform is temporarily on maintenance. Please check back soon.</span>
     </Container>
   );
 };

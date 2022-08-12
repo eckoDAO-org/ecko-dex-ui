@@ -58,61 +58,66 @@ const AnalyticsContainer = () => {
     <LogoLoader />
   ) : (
     !gameEditionView && (
-      <FlexContainer
-        className="column w-100 main"
-        gap={24}
-        desktopStyle={{ paddingRight: theme.layout.desktopPadding, paddingLeft: theme.layout.desktopPadding }}
-        tabletStyle={{ paddingRight: theme.layout.tabletPadding, paddingLeft: theme.layout.tabletPadding }}
-        mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
-      >
-        <Banner
-          position="unset"
-          text={`The information displayed on this page is currently under BETA testing, and is provided on an "as is" and "as available" basis`}
-        />
-        <div className="flex align-ce justify-sb">
-          <FlexContainer className="align-ce" gap={16} mobileStyle={{ marginBottom: 16 }}>
-            <Label
-              withShade={pathname !== ROUTE_ANALYTICS}
-              className="pointer"
-              fontSize={24}
-              fontFamily="syncopate"
-              onClick={() => history.push(ROUTE_ANALYTICS)}
-            >
-              DEX
-            </Label>
-            <Label
-              withShade={pathname !== ROUTE_ANALYTICS_KDX}
-              className="pointer"
-              fontSize={24}
-              fontFamily="syncopate"
-              onClick={() => history.push(ROUTE_ANALYTICS_KDX)}
-            >
-              KDX
-            </Label>
-            <Label
-              withShade={pathname !== ROUTE_ANALYTICS_STATS}
-              className="pointer"
-              fontSize={24}
-              fontFamily="syncopate"
-              onClick={() => history.push(ROUTE_ANALYTICS_STATS)}
-            >
-              STATS
-            </Label>
-          </FlexContainer>
+      <>
+        {pathname !== ROUTE_ANALYTICS_STATS && (
+          <Banner
+            position="unset"
+            text={`The information displayed on this page is currently under BETA testing, and is provided on an "as is" and "as available" basis.`}
+          />
+        )}
 
-          <InfoPopup type="modal" title="Analytics data info">
-            <Label>
-              The information displayed on this page is currently under BETA testing, and is provided on an "as is" and "as available" basis
-            </Label>
-          </InfoPopup>
-        </div>
-        {/* DEX */}
+        <FlexContainer
+          className="column w-100 h-100 main"
+          gap={24}
+          desktopStyle={{ paddingRight: theme.layout.desktopPadding, paddingLeft: theme.layout.desktopPadding }}
+          tabletStyle={{ paddingRight: theme.layout.tabletPadding, paddingLeft: theme.layout.tabletPadding }}
+          mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
+        >
+          <FlexContainer className="flex align-ce justify-sb" mobileStyle={{ alignItems: 'flex-start' }}>
+            <FlexContainer className="align-ce" gap={16} mobileStyle={{ marginBottom: 16 }}>
+              <Label
+                withShade={pathname !== ROUTE_ANALYTICS}
+                className="pointer"
+                fontSize={24}
+                fontFamily="syncopate"
+                onClick={() => history.push(ROUTE_ANALYTICS)}
+              >
+                DEX
+              </Label>
+              <Label
+                withShade={pathname !== ROUTE_ANALYTICS_KDX}
+                className="pointer"
+                fontSize={24}
+                fontFamily="syncopate"
+                onClick={() => history.push(ROUTE_ANALYTICS_KDX)}
+              >
+                KDX
+              </Label>
+              <Label
+                withShade={pathname !== ROUTE_ANALYTICS_STATS}
+                className="pointer"
+                fontSize={24}
+                fontFamily="syncopate"
+                onClick={() => history.push(ROUTE_ANALYTICS_STATS)}
+              >
+                STATS
+              </Label>
+            </FlexContainer>
+
+            <InfoPopup type="modal" title="Analytics data info">
+              <Label>
+                The information displayed on this page is currently under BETA testing, and is provided on an "as is" and "as available" basis.
+              </Label>
+            </InfoPopup>
+          </FlexContainer>
+          {/* DEX */}
         {pathname === ROUTE_ANALYTICS && <Dex kdxSupply={analyticsData?.circulatingSupply?.totalSupply} kdaPrice={kdaPrice} poolState={poolState} />}
         {/* KDX */}
         {pathname === ROUTE_ANALYTICS_KDX && <Kdx analyticsData={analyticsData} KDX_TOTAL_SUPPLY={KDX_TOTAL_SUPPLY} kdaPrice={kdaPrice} />}
         {/* DEX */}
         {pathname === ROUTE_ANALYTICS_STATS && <StatsTable />}
       </FlexContainer>
+      </>
     )
   );
 };
