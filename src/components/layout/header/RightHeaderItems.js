@@ -11,7 +11,7 @@ import PopupContentList from './PopupContentList';
 import reduceToken from '../../../utils/reduceToken';
 import AccountModal from '../../modals/kdaModals/AccountModal';
 import theme, { commonTheme } from '../../../styles/theme';
-import { CoinKaddexIcon, ThreeDotsIcon } from '../../../assets';
+import { ChainIcon, CoinKaddexIcon, ThreeDotsIcon } from '../../../assets';
 import { humanReadableNumber, reduceBalance } from '../../../utils/reduceBalance';
 import Label from '../../shared/Label';
 import {
@@ -74,11 +74,16 @@ const RightHeaderItems = () => {
         <div className="flex column align-fe">
           <div className="flex align-ce justify-fe">
             <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 8, width: 10, height: 10 }} />
-            <Label outGameEditionView fontSize={10}>
+            <Label outGameEditionView fontSize={10} labelStyle={{ whiteSpace: 'nowrap' }}>
               $ {tokensUsdPrice?.KDX ? humanReadableNumber(tokensUsdPrice?.KDX, 3) : '-'}
             </Label>
           </div>
-          <Label outGameEditionView fontSize={10} class1Name="">{`Chain ${CHAIN_ID}`}</Label>
+          <div style={{ display: 'flex' }}>
+            <ChainIcon className="svg-app-color" />
+            <Label outGameEditionView fontSize={13} class1Name="mainnet-chain-2 desktop-only" labelStyle={{ marginLeft: 6 }}>
+              {CHAIN_ID}
+            </Label>
+          </div>
         </div>
       )}
 
@@ -86,11 +91,16 @@ const RightHeaderItems = () => {
         <>
           <div className="flex align-ce">
             <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 8 }} />
-            <Label outGameEditionView fontSize={13} className="mainnet-chain-2">
+            <Label outGameEditionView fontSize={13} className="mainnet-chain-2" labelStyle={{ whiteSpace: 'nowrap' }}>
               $ {tokensUsdPrice?.KDX ? humanReadableNumber(tokensUsdPrice?.KDX, 3) : '-'}
             </Label>
           </div>
-          <Label outGameEditionView fontSize={13} class1Name="mainnet-chain-2 desktop-only">{`Chain ${CHAIN_ID}`}</Label>
+          <div style={{ display: 'flex' }}>
+            <ChainIcon className="svg-app-color" />
+            <Label outGameEditionView fontSize={13} class1Name="mainnet-chain-2 desktop-only" labelStyle={{ marginLeft: 6 }}>
+              {CHAIN_ID}
+            </Label>
+          </div>
         </>
       )}
 

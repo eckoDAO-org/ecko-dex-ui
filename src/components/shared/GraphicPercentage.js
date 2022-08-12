@@ -11,7 +11,7 @@ const GraphicPercentage = ({ prevValue, currentValue, componentStyle }) => {
 
   const percentage = getPercentage(prevValue, currentValue);
 
-  return prevValue !== 0 ? (
+  return prevValue && currentValue && prevValue !== 0 ? (
     <FlexContainer
       gap={8}
       className="align-ce"
@@ -31,7 +31,7 @@ const GraphicPercentage = ({ prevValue, currentValue, componentStyle }) => {
       }
     </FlexContainer>
   ) : (
-    '-'
+    ''
   );
 };
 
