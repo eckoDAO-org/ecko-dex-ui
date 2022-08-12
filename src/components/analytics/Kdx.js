@@ -135,7 +135,7 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdaPrice, analyticsData }) => {
         kdxSupplyPercentage={(analyticsData?.circulatingSupply?.totalSupply / KDX_TOTAL_SUPPLY) * 100}
         kdxBurntPercentage={((analyticsData?.burn?.stakingBurn + analyticsData?.burn?.tokenBurn) / KDX_TOTAL_SUPPLY) * 100}
         kdxLiquidityMiningPercentage={((KDX_MINING_REWARDS_CAP - analyticsData?.liquidityMining) / KDX_TOTAL_SUPPLY) * 100}
-        kdxCommunitySalePercentage={(analyticsData?.communitySale / KDX_TOTAL_SUPPLY) * 100}
+        kdxCommunitySalePercentage={20.2}
         kdxTeamPercentage={0}
         kdxDaoTreasuryPercentage={((KDX_DAO_TREASURY_CAP - analyticsData?.daoTreasury?.amount) / KDX_TOTAL_SUPPLY) * 100}
       />

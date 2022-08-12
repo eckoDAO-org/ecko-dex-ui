@@ -10,6 +10,7 @@ import ProgressBar from '../shared/ProgressBar';
 import Label from '../shared/Label';
 import { Divider } from 'semantic-ui-react';
 import { BoosterIcon, BurnedIcon, DaoIcon, SalesIcon, TeamIcon } from '../../assets';
+import { commonTheme } from '../../styles/theme';
 
 const IconContainer = styled.div`
   height: 32px;
@@ -93,17 +94,20 @@ const VestingPieChart = ({
 
         <FlexContainer className="flex column justify-sb" mobileClassName="column w-100" mobileStyle={{ marginTop: 24 }}>
           {Object.values({ ...chartData, Circulating }).map((d, i) => (
-            <FlexContainer key={i} className="flex align-ce justify-sb" mobileStyle={{ marginBottom: 16 }} tabletStyle={{ marginBottom: 16 }}>
-              <div className="flex align-ce">
-                <IconContainer color={d.color}>{d?.icon || <div style={{ width: 58 }} />}</IconContainer>
-                <Label fontSize={16} color={d.color} labelStyle={{ marginRight: 70 }}>
-                  {d.name}:
+            <>
+              <FlexContainer key={i} className="flex align-ce justify-sb" mobileStyle={{ marginBottom: 16 }} tabletStyle={{ marginBottom: 16 }}>
+                <div className="flex align-ce">
+                  <IconContainer color={d.color}>{d?.icon || <div style={{ width: 58 }} />}</IconContainer>
+                  <Label fontSize={16} color={d.color} labelStyle={{ marginRight: 70 }}>
+                    {d.name}:
+                  </Label>
+                </div>
+                <Label fontSize={16} color={d.color} labelStyle={{ whiteSpace: 'nowrap' }}>
+                  {d.value.toFixed(2)} %
                 </Label>
-              </div>
-              <Label fontSize={16} color={d.color} labelStyle={{ whiteSpace: 'nowrap' }}>
-                {d.value.toFixed(2)} %
-              </Label>
-            </FlexContainer>
+              </FlexContainer>
+              {d.name === 'Burned' && <Divider fitted style={{ marginBottom: width < commonTheme.mediaQueries.desktopPixel ? 16 : 0 }} />}
+            </>
           ))}
           <FlexContainer
             className="flex"
