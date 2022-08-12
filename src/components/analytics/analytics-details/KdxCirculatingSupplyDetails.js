@@ -1,9 +1,11 @@
 import React from 'react';
+import { Divider } from 'semantic-ui-react';
 import { humanReadableNumber } from '../../../utils/reduceBalance';
 import { FlexContainer } from '../../shared/FlexContainer';
 import Label from '../../shared/Label';
 
 const KdxCirculatingSupplyDetails = ({ supply, tokensUsdPrice }) => {
+  console.log('LOG --> supply', supply);
   return (
     <FlexContainer className="w-100 column" gap={8}>
       <FlexContainer className="column" gap={16}>
@@ -17,20 +19,30 @@ const KdxCirculatingSupplyDetails = ({ supply, tokensUsdPrice }) => {
           )}
         </FlexContainer>
         <FlexContainer className="w-100 column" gap={8}>
-          <Label>Amount Locked</Label>
-          <Label fontSize={24}>{`${humanReadableNumber(supply.lockedAmount)} KDX`}</Label>
-          {tokensUsdPrice && (
-            <Label fontSize={12} mobileFontSize={12} labelStyle={{ opacity: 0.7 }}>
-              $ {humanReadableNumber(tokensUsdPrice?.KDX * supply.lockedAmount)}
-            </Label>
-          )}
-        </FlexContainer>
-        <FlexContainer className="w-100 column" gap={8}>
           <Label>Amount Staked</Label>
           <Label fontSize={24}>{`${humanReadableNumber(supply.stakedAmount)} KDX`}</Label>
           {tokensUsdPrice && (
             <Label fontSize={12} mobileFontSize={12} labelStyle={{ opacity: 0.7 }}>
               $ {humanReadableNumber(tokensUsdPrice?.KDX * supply.stakedAmount)}
+            </Label>
+          )}
+        </FlexContainer>
+        <FlexContainer className="w-100 column" gap={8}>
+          <Label>Amount Vaulted</Label>
+          <Label fontSize={24}>{`${humanReadableNumber(supply.vaultedAmount)} KDX`}</Label>
+          {tokensUsdPrice && (
+            <Label fontSize={12} mobileFontSize={12} labelStyle={{ opacity: 0.7 }}>
+              $ {humanReadableNumber(tokensUsdPrice?.KDX * supply.vaultedAmount)}
+            </Label>
+          )}
+        </FlexContainer>
+        <Divider style={{ margin: '8px 0px' }} />
+        <FlexContainer className="w-100 column" gap={8}>
+          <Label>Available Supply</Label>
+          <Label fontSize={24}>{`${humanReadableNumber(supply.totalSupply - supply.vaultedAmount - supply.stakedAmount)} KDX`}</Label>
+          {tokensUsdPrice && (
+            <Label fontSize={12} mobileFontSize={12} labelStyle={{ opacity: 0.7 }}>
+              $ {humanReadableNumber(tokensUsdPrice?.KDX * (supply.totalSupply - supply.vaultedAmount - supply.stakedAmount))}
             </Label>
           )}
         </FlexContainer>
