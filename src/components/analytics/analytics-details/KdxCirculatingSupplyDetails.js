@@ -38,7 +38,7 @@ const KdxCirculatingSupplyDetails = ({ supply, tokensUsdPrice }) => {
         <Divider style={{ margin: '8px 0px' }} />
         <FlexContainer className="w-100 column" gap={8}>
           <Label>Available Supply</Label>
-          <Label fontSize={24}>{`${humanReadableNumber(supply.totalSupply - supply.vaultedAmount - supply.stakedAmount)} KDX`}</Label>
+          <Label fontSize={24}>{`${humanReadableNumber(supply.totalSupply - supply.stakedAmount)} KDX`}</Label>
           {tokensUsdPrice && (
             <Label fontSize={12} mobileFontSize={12} labelStyle={{ opacity: 0.7 }}>
               $ {humanReadableNumber(tokensUsdPrice?.KDX * (supply.totalSupply - supply.stakedAmount))}
