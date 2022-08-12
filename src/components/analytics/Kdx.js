@@ -8,7 +8,6 @@ import tokenData from '../../constants/cryptoCurrencies';
 import { extractDecimal, getDecimalPlaces, humanReadableNumber } from '../../utils/reduceBalance';
 import { getDailyCandles } from '../../api/kaddex-stats';
 import VestingPieChart from '../charts/VestingPieChart';
-import VestingScheduleChart from '../charts/VestingScheduleChart';
 import AnalyticsSimpleWidget from '../shared/AnalyticsSimpleWidget';
 import { FlexContainer } from '../shared/FlexContainer';
 import GraphicPercentage from '../shared/GraphicPercentage';
@@ -131,7 +130,7 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdaPrice, analyticsData }) => {
           iconColor={commonColors.pink}
         />
       </FlexContainer>
-      <VestingScheduleChart height={300} />
+      {/* <VestingScheduleChart height={300} /> */}
       <VestingPieChart
         kdxSupplyPercentage={(analyticsData?.circulatingSupply?.totalSupply / KDX_TOTAL_SUPPLY) * 100}
         kdxBurntPercentage={((analyticsData?.burn?.stakingBurn + analyticsData?.burn?.tokenBurn) / KDX_TOTAL_SUPPLY) * 100}

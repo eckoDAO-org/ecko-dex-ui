@@ -164,7 +164,6 @@ export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading
   const { account } = useAccountContext();
   const pact = usePactContext();
   const swap = useSwapContext();
-  console.log('LOG --> swap', swap?.localRes);
   const pair = getPairByTokensName(token0, token1);
 
   const fromValues = extractDecimal(swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1']);
