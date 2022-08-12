@@ -26,6 +26,7 @@ import CustomButton from '../../../components/shared/CustomButton';
 import NotificationList from '../../right-modal-notification/NotificationList';
 import { CHAIN_ID } from '../../../constants/contextConstants';
 import GasStationSettings from './GasStationSettings';
+import CustomPopup from '../../shared/CustomPopup';
 
 const RightContainerHeader = styled.div`
   display: flex;
@@ -70,37 +71,44 @@ const RightHeaderItems = () => {
 
   return (
     <RightContainerHeader>
-      {width < theme.mediaQueries.desktopPixel && (
+      {width < theme.mediaQueries.desktopPixel + 100 && (
         <div className="flex column align-fe">
           <div className="flex align-ce justify-fe">
-            <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 8, width: 10, height: 10 }} />
-            <Label outGameEditionView fontSize={10} labelStyle={{ whiteSpace: 'nowrap' }}>
+            <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 8, width: 14, height: 14 }} />
+            <Label outGameEditionView fontSize={12} labelStyle={{ whiteSpace: 'nowrap' }}>
               $ {tokensUsdPrice?.KDX ? humanReadableNumber(tokensUsdPrice?.KDX, 3) : '-'}
             </Label>
           </div>
           <div style={{ display: 'flex' }}>
-            <ChainIcon className="svg-app-color" />
-            <Label outGameEditionView fontSize={13} class1Name="mainnet-chain-2 desktop-only" labelStyle={{ marginLeft: 6 }}>
-              {CHAIN_ID}
+            <Label outGameEditionView fontSize={13} class1Name="mainnet-chain-2 desktop-only" labelStyle={{ marginLeft: 6, whiteSpace: 'nowrap' }}>
+              {`Chain ${CHAIN_ID}`}
             </Label>
           </div>
         </div>
       )}
 
-      {width >= theme.mediaQueries.desktopPixel && (
+      {width >= theme.mediaQueries.desktopPixel + 100 && (
         <>
           <div className="flex align-ce">
             <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 8 }} />
-            <Label outGameEditionView fontSize={13} className="mainnet-chain-2" labelStyle={{ whiteSpace: 'nowrap' }}>
+            <Label outGameEditionView fontSize={14} className="mainnet-chain-2" labelStyle={{ whiteSpace: 'nowrap' }}>
               $ {tokensUsdPrice?.KDX ? humanReadableNumber(tokensUsdPrice?.KDX, 3) : '-'}
             </Label>
           </div>
-          <div style={{ display: 'flex' }}>
-            <ChainIcon className="svg-app-color" />
-            <Label outGameEditionView fontSize={13} class1Name="mainnet-chain-2 desktop-only" labelStyle={{ marginLeft: 6 }}>
-              {CHAIN_ID}
-            </Label>
-          </div>
+          <CustomPopup
+            offset={[-50, 2]}
+            popupStyle={{ padding: 2 }}
+            trigger={
+              <div style={{ display: 'flex' }}>
+                <ChainIcon className="svg-app-color" />
+                <Label outGameEditionView fontSize={14} class1Name="mainnet-chain-2 desktop-only" labelStyle={{ marginLeft: 6 }}>
+                  {CHAIN_ID}
+                </Label>
+              </div>
+            }
+          >
+            <Label labelStyle={{ maxWidth: '200px' }}>Make sure to have Kadena assets on Chain 2.</Label>
+          </CustomPopup>
         </>
       )}
 

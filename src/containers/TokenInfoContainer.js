@@ -100,7 +100,7 @@ const TokenInfoContainer = () => {
         <AnalyticsSimpleWidget
           title={'Price'}
           mainText={
-            <FlexContainer className="flex align-fs column" style={{ marginBottom: 10 }}>
+            <FlexContainer className="flex align-fs column" style={{ marginBottom: 7 }}>
               {`$ ${
                 pact?.tokensUsdPrice?.[token]
                   ? humanReadableNumber(pact?.tokensUsdPrice?.[token], 3) !== '0.000'
@@ -108,7 +108,7 @@ const TokenInfoContainer = () => {
                     : (pact?.tokensUsdPrice?.[token]).toFixed(tokenData[token].precision)
                   : '-'
               }`}
-              <GraphicPercentage prevValue={price24h?.initial} currentValue={price24h?.final} componentStyle={{ marginTop: 8 }} />
+              <GraphicPercentage prevValue={price24h?.initial} currentValue={price24h?.final} />
             </FlexContainer>
           }
           subtitle={token !== 'KDX' ? `1 KDX = ${getDecimalPlaces(pact?.tokensUsdPrice?.KDX / pact?.tokensUsdPrice?.[token])} ${token}` : null}

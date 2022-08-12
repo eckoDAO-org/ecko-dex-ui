@@ -19,7 +19,7 @@ const GraphicPercentage = ({ prevValue, currentValue, componentStyle }) => {
         background: percentage >= 0 ? commonColors.green : commonColors.redComponent,
         padding: '2px 8px',
         borderRadius: 20,
-        marginTop: 10,
+        marginTop: 7,
         ...componentStyle,
       }}
     >

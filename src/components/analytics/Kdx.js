@@ -54,16 +54,13 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdaPrice, analyticsData }) => {
         <AnalyticsSimpleWidget
           title={'Price'}
           mainText={
-            <div className="flex align-ce">
+            <FlexContainer className="flex align-fs column">
               {`$ ${kdxPrice ? humanReadableNumber(kdxPrice, 3) : '-'}`}
-              <GraphicPercentage
-                prevValue={kdxPriceDiff?.initial}
-                currentValue={kdxPriceDiff?.final}
-                componentStyle={{ marginLeft: 10, marginTop: 0 }}
-              />
-            </div>
+
+              <div style={{ fontSize: 13 }}>{kdxPrice && `${getDecimalPlaces(extractDecimal(kdxPrice / kdaPrice))} KDA`}</div>
+            </FlexContainer>
           }
-          subtitle={kdxPrice && `${getDecimalPlaces(extractDecimal(kdxPrice / kdaPrice))} KDA`}
+          subtitle={<GraphicPercentage prevValue={kdxPriceDiff?.initial} currentValue={kdxPriceDiff?.final} />}
         />
         <AnalyticsSimpleWidget
           title="Marketcap"
