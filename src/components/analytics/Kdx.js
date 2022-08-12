@@ -8,7 +8,6 @@ import tokenData from '../../constants/cryptoCurrencies';
 import { extractDecimal, getDecimalPlaces, humanReadableNumber } from '../../utils/reduceBalance';
 import { getDailyCandles } from '../../api/kaddex-stats';
 import VestingPieChart from '../charts/VestingPieChart';
-import VestingScheduleChart from '../charts/VestingScheduleChart';
 import AnalyticsSimpleWidget from '../shared/AnalyticsSimpleWidget';
 import { FlexContainer } from '../shared/FlexContainer';
 import GraphicPercentage from '../shared/GraphicPercentage';
@@ -128,13 +127,13 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdaPrice, analyticsData }) => {
           iconColor={commonColors.pink}
         />
       </FlexContainer>
-      <VestingScheduleChart height={300} />
+      {/* <VestingScheduleChart height={300} /> */}
       <VestingPieChart
         kdxSupplyPercentage={(analyticsData?.circulatingSupply?.totalSupply / KDX_TOTAL_SUPPLY) * 100}
         kdxBurntPercentage={((analyticsData?.burn?.stakingBurn + analyticsData?.burn?.tokenBurn) / KDX_TOTAL_SUPPLY) * 100}
         kdxLiquidityMiningPercentage={((KDX_MINING_REWARDS_CAP - analyticsData?.liquidityMining) / KDX_TOTAL_SUPPLY) * 100}
         kdxCommunitySalePercentage={(analyticsData?.communitySale / KDX_TOTAL_SUPPLY) * 100}
-        kdxTeamPercentage={5}
+        kdxTeamPercentage={0}
         kdxDaoTreasuryPercentage={((KDX_DAO_TREASURY_CAP - analyticsData?.daoTreasury?.amount) / KDX_TOTAL_SUPPLY) * 100}
       />
     </FlexContainer>

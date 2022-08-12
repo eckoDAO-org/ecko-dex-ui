@@ -64,11 +64,11 @@ export const GAS_OPTIONS = {
       gasPrice: ECONOMY_GAS_PRICE,
     },
     REMOVE_LIQUIDITY: {
-      gasLimit: 20000,
+      gasLimit: 40000,
       gasPrice: ECONOMY_GAS_PRICE,
     },
     CLAIM_LIQUIDITY_REWARDS: {
-      gasLimit: 4000,
+      gasLimit: 40000,
       gasPrice: ECONOMY_GAS_PRICE,
     },
     DAO_VOTE: {
@@ -98,11 +98,11 @@ export const GAS_OPTIONS = {
       gasPrice: NORMAL_GAS_PRICE,
     },
     REMOVE_LIQUIDITY: {
-      gasLimit: 20000,
+      gasLimit: 40000,
       gasPrice: NORMAL_GAS_PRICE,
     },
     CLAIM_LIQUIDITY_REWARDS: {
-      gasLimit: 4000,
+      gasLimit: 40000,
       gasPrice: NORMAL_GAS_PRICE,
     },
     DAO_VOTE: {
@@ -132,11 +132,11 @@ export const GAS_OPTIONS = {
       gasPrice: FAST_GAS_PRICE,
     },
     REMOVE_LIQUIDITY: {
-      gasLimit: 20000,
+      gasLimit: 40000,
       gasPrice: FAST_GAS_PRICE,
     },
     CLAIM_LIQUIDITY_REWARDS: {
-      gasLimit: 4000,
+      gasLimit: 40000,
       gasPrice: FAST_GAS_PRICE,
     },
     DAO_VOTE: {
@@ -166,11 +166,11 @@ export const GAS_OPTIONS = {
       gasPrice: GAS_STATION_PRICE,
     },
     REMOVE_LIQUIDITY: {
-      gasLimit: 20000,
+      gasLimit: 40000,
       gasPrice: GAS_STATION_PRICE,
     },
     CLAIM_LIQUIDITY_REWARDS: {
-      gasLimit: 4000,
+      gasLimit: 40000,
       gasPrice: GAS_STATION_PRICE,
     },
     DAO_VOTE: {
