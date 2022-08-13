@@ -1,22 +1,10 @@
-import { pactFetchLocal } from './pact';
-import { handleError } from './utils';
+import { kaddexStatsRequest } from './kaddex-stats';
 
-export const getKDXAnalyticsData = async (purpose) => {
-  try {
-    const pactCode = `
-    (use kaddex.kdx)
-    (let*(
-             (a (total-supply))
-             (b (get-supply 'network-rewards))
-             (c (get-supply 'dao-treasury))
-             (tm (total-minted))
-             (d (- tm a))
-         ){'total-supply: a, 'supply-network-rewards: b, 'supply-dao-treasury: c, 'total-burnt:d}
-     )
-        `;
-    const data = await pactFetchLocal(pactCode);
-    return data;
-  } catch (e) {
-    return handleError(e);
-  }
+export const getAnalyticsData = async (dateStart, dateEnd) => {
+  const url = `analytics/get-data?dateStart=${dateStart}&dateEnd=${dateEnd}`;
+  return await kaddexStatsRequest(url)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => console.log('err', err));
 };

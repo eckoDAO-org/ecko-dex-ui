@@ -133,7 +133,7 @@ const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onCl
 
   return (
     <Wrapper withGradient className="w-100 relative hidden column background-fill" style={{ paddingTop: 0 }}>
-      <FlexContainer className="w-100 x-auto scrollbar-y-none">
+      <FlexContainer className="w-100 x-auto">
         <table cellSpacing={0} cellPadding={24}>
           <thead>
             <tr className="tr-sticky" style={{ zIndex: 3, top: 0 }}>

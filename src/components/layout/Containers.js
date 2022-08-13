@@ -3,13 +3,16 @@ import styled from 'styled-components/macro';
 export const PartialScrollableScrollSection = styled.div`
   flex: 1;
   overflow: auto;
+
   * {
-    -ms-overflow-style: none;
+    -ms-overflow-style: auto;
   }
   ::-webkit-scrollbar {
-    display: none;
+    display: auto;
+    width: 7px !important;
+    height: 7px !important;
   }
-  scrollbar-width: none;
+  scrollbar-width: auto;
 `;
 
 export const Container = styled.div`

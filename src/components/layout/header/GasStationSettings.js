@@ -167,7 +167,10 @@ const GasStationSettings = ({ className, hasNotification }) => {
       if (pact.enableGasStation) {
         pact.setGasConfiguration(GAS_OPTIONS.DEFAULT[section]);
       } else pact.setGasConfiguration(GAS_OPTIONS.NORMAL[section]);
-    } else pact.setGasConfiguration(GAS_OPTIONS.NORMAL.SWAP);
+    } else {
+      pact.setGasConfiguration(GAS_OPTIONS.NORMAL.SWAP);
+      setClickedButton('NORMAL');
+    }
   }, [pact.enableGasStation, pathname]);
 
   useEffect(() => {

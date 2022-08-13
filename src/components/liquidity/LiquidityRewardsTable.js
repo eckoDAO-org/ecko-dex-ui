@@ -17,11 +17,9 @@ import CustomDropdown from '../shared/CustomDropdown';
 import { Divider } from 'semantic-ui-react';
 
 import { getTokenByModuleV2 } from '../../utils/token-utils';
-import reduceToken from '../../utils/reduceToken';
 import { claimLiquidityRewardsCommandToSign, getAccountLiquidityRewards } from '../../api/liquidity-rewards';
 import { NETWORK } from '../../constants/contextConstants';
 import { timeRender } from '../../utils/time-utils';
-import CopyPopup from '../shared/CopyPopup';
 
 const ClaimButton = styled.div`
   display: flex;
@@ -157,7 +155,7 @@ const LiquidityRewardsTable = () => {
       <Label className="justify-ce">Please connect your wallet to see your rewards. </Label>
     ) : rewardsFiltered.length === 0 ? (
       <Label className="justify-ce align-ce" labelStyle={{ textAlign: 'center' }}>
-        Participate in the liquidity mining program to activate boosted rewards.
+        To participate in the liquidity mining program and activate the multiplier, users are required to first remove liquidity and claim rewards.
       </Label>
     ) : (
       <>
@@ -263,13 +261,13 @@ const renderColumns = () => {
       render: ({ item }) => `${getDecimalPlaces(extractDecimal(item?.['multiplier']))} x`,
     },
 
-    {
+    /*   {
       name: 'Request ID',
       width: 160,
       render: ({ item }) => {
         return <CopyPopup title={reduceToken(item?.['request-id'])} textToCopy={item?.['request-id']} position="bottom center" />;
       },
-    },
+    }, */
     {
       name: 'Remaining Time',
       width: 160,
@@ -283,7 +281,7 @@ const renderColumns = () => {
     },
     {
       name: 'Status',
-      width: 160,
+      width: 100,
       render: ({ item }) => {
         let color = '';
         item?.['remaining-time'] > 0 ? (color = commonColors.info) : (color = commonColors.green);

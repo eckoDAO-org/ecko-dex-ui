@@ -1,7 +1,7 @@
 import axios from 'axios';
 import moment from 'moment';
 
-const kaddexStatsRequest = async (url) => {
+export const kaddexStatsRequest = async (url) => {
   try {
     return await axios
       .get(`${process.env.REACT_APP_KADDEX_STATS_API_URL}/${url}`, {

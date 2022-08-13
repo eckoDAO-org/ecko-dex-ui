@@ -18,6 +18,7 @@ import StackedBarChart from '../shared/StackedBarChart';
 import AppLoader from '../shared/AppLoader';
 import { isMainnet } from '../../constants/contextConstants';
 import { samplePairsVolume, sampleTokensVolume } from './devnetSampleVolumes';
+import Label from '../shared/Label';
 
 const KDX_TOTAL_SUPPLY = 1000000000;
 
@@ -42,23 +43,25 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
 
   const getTVLDetails = async () => {
     if (localPairList?.length) {
-      const main = localPairList?.filter((t) => t.main);
-      const others = localPairList?.filter((t) => !t.main);
-      const totalKDATVL = localPairList.reduce((partialSum, curr) => partialSum + reduceBalance(curr.reserves[0]) * 2, 0);
-      const totalKDAOtherTVL = others.reduce((partialSum, curr) => partialSum + reduceBalance(curr.reserves[0]) * 2, 0);
+      const totalKDATVL = localPairList.reduce((partialSum, curr) => partialSum + reduceBalance(curr.reserves[0]), 0);
 
       const kdaPrice = tokensUsdPrice?.KDA;
-      const mains = main
+      const pairData = localPairList
         .map((t) => {
-          const kdaTVL = reduceBalance(t.reserves[0]) * 2;
+          const kdaTVL = reduceBalance(t.reserves[0]);
           return {
             color: t.color,
             name: `${t.token0}/${t.token1}`,
+            kdaReserve: t.reserves[0],
             volumeUsd: kdaPrice * reduceBalance(t.reserves[0]) * 2,
             percentage: (kdaTVL * 100) / totalKDATVL,
           };
         })
         .sort((x, y) => y.percentage - x.percentage);
+
+      const mains = pairData.splice(0, 3);
+
+      const totalKDAOtherTVL = pairData.reduce((partialSum, curr) => partialSum + reduceBalance(curr.kdaReserve), 0);
 
       const otherTokens = {
         name: 'OTHER',
@@ -79,6 +82,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
           .format('YYYY-MM-DD')}`
       )
       .then(async (volumeRes) => {
+        console.log('LOG --> volumeRes', volumeRes);
         const kdaPrice = tokensUsdPrice?.KDA;
         let mainVolumes = [];
         const otherVolumes = {
@@ -90,6 +94,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
           main.find(
             (m) => m.name === `coin:${vol.tokenFromNamespace}.${vol.tokenFromName}` || m.name === `coin:${vol.tokenToNamespace}.${vol.tokenToName}`
           );
+
         for (const volumes of volumeRes?.data) {
           for (const volume of volumes?.volumes) {
             const isMainPair = findMainPair(volume);
@@ -119,13 +124,21 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
             }
           }
         }
-        const volumeBarData = [...mainVolumes, otherVolumes].map((volData) => ({
+        const mainVolumeBarData = [...mainVolumes]
+          .map((volData) => ({
+            ...volData,
+            volumeUsd: volData.volumeKDA * kdaPrice,
+            percentage: 10,
+          }))
+          .sort((x, y) => y.volumeUsd - x.volumeUsd);
+        const otherVolumeBarData = [otherVolumes].map((volData) => ({
           ...volData,
           volumeUsd: volData.volumeKDA * kdaPrice,
           percentage: 10,
         }));
-        const totalVol = volumeBarData.reduce((partialSum, curr) => partialSum + curr.volumeUsd, 0);
-        setPairsVolume(volumeBarData.map((v) => ({ ...v, percentage: (100 * v.volumeUsd) / totalVol })));
+        const totVolumeBarData = [...mainVolumeBarData, ...otherVolumeBarData];
+        const totalVol = totVolumeBarData.reduce((partialSum, curr) => partialSum + curr.volumeUsd, 0);
+        setPairsVolume(totVolumeBarData.map((v) => ({ ...v, percentage: (100 * v.volumeUsd) / totalVol })));
         setLoading(false);
       })
       .catch((err) => {
@@ -135,20 +148,21 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
   };
 
   const getStakingData = async () => {
-    let startDate = moment().subtract(1, 'days').format('YYYY-MM-DD');
+    let startDate = moment().subtract(2, 'days').format('YYYY-MM-DD');
     if (stakeDataRange === WEEKLY_VOLUME_RANGE.value) {
       startDate = moment().subtract(7, 'days').format('YYYY-MM-DD');
     }
     if (stakeDataRange === MONTHLY_VOLUME_RANGE.value) {
       startDate = moment().subtract(1, 'months').format('YYYY-MM-DD');
     }
-    getGroupedTVL(startDate, moment().format('YYYY-MM-DD'))
+    getGroupedTVL(startDate, moment().subtract(1, 'days').format('YYYY-MM-DD'))
       .then(async ({ data }) => {
         if (data?.length) {
           const lastStakingTVL = data[data.length - 1]?.tvl?.find((tvl) => tvl?.tokenFrom === 'kaddex.staking-pool-state');
           const firstTVL = data
             .find((allTvl) => allTvl?.tvl?.find((tvl) => tvl?.tokenFrom === 'kaddex.staking-pool-state'))
             ?.tvl?.find((tvl) => tvl?.tokenFrom === 'kaddex.staking-pool-state');
+
           if (lastStakingTVL?.tokenFromTVL && firstTVL?.tokenFromTVL) {
             setStakingDiff({
               initial: firstTVL?.tokenFromTVL,
@@ -176,7 +190,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
   return loading ? (
     <AppLoader containerStyle={{ height: '100%', alignItems: 'center', justifyContent: 'center' }} />
   ) : (
-    <FlexContainer className="w-100 column" mobileClassName="column" gap={24}>
+    <FlexContainer className="w-100 column" mobileClassName="column" gap={24} style={{ paddingBottom: 32 }}>
       <FlexContainer className="w-100" mobileClassName="column" tabletClassName="column" gap={24}>
         <TVLChart kdaPrice={kdaPrice} height={300} />
 
@@ -185,7 +199,16 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
       <FlexContainer mobileClassName="column" gap={24}>
         <AnalyticsSimpleWidget
           title={'KDX Staked'}
-          mainText={`${humanReadableNumber(stakedKdx, 2)} KDX` || '-'}
+          mainText={
+            (
+              <div>
+                {humanReadableNumber(stakedKdx, 2)} KDX
+                <Label fontSize={16} mobileFontSize={16} labelStyle={{ opacity: 0.7, marginBottom: 3 }}>
+                  $ {humanReadableNumber(tokensUsdPrice?.KDX * extractDecimal(stakedKdx))}
+                </Label>
+              </div>
+            ) || '-'
+          }
           subtitle={`${((100 * stakedKdx) / kdxSupply).toFixed(2)} %`}
         />
         <AnalyticsSimpleWidget
@@ -210,7 +233,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
         />
       </FlexContainer>
       <FlexContainer>
-        <StackedBarChart title="TVL Details" data={isMainnet() ? tvlDetails : sampleTokensVolume} />
+        <StackedBarChart title="TVL Details" withDoubleToken data={isMainnet() ? tvlDetails : sampleTokensVolume} />
       </FlexContainer>
       <FlexContainer>
         <StackedBarChart

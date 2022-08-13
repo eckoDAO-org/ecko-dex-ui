@@ -24,7 +24,7 @@ const LiquidityTokensTable = () => {
   const [loading, setLoading] = useState(true);
   const [tokens, setTokens] = useState([]);
 
-  const { tokensUsdPrice } = usePactContext();
+  const { tokensUsdPrice, enableGasStation } = usePactContext();
 
   const fetchData = async () => {
     const pairsList = await getPairList();
@@ -102,7 +102,7 @@ const LiquidityTokensTable = () => {
   return !loading ? (
     <CommonTable
       items={tokens}
-      columns={renderColumns(history)}
+      columns={enableGasStation ? renderColumns(history) : renderColumns(history).filter((x) => x.name !== 'Fees')}
       actions={[
         {
           icon: () => <AddIcon />,

@@ -100,7 +100,7 @@ const TokenInfoContainer = () => {
         <AnalyticsSimpleWidget
           title={'Price'}
           mainText={
-            <div className="flex align-ce" style={{ marginBottom: 10 }}>
+            <FlexContainer className="flex align-fs column" style={{ marginBottom: 7 }}>
               {`$ ${
                 pact?.tokensUsdPrice?.[token]
                   ? humanReadableNumber(pact?.tokensUsdPrice?.[token], 3) !== '0.000'
@@ -108,20 +108,20 @@ const TokenInfoContainer = () => {
                     : (pact?.tokensUsdPrice?.[token]).toFixed(tokenData[token].precision)
                   : '-'
               }`}
-              <GraphicPercentage prevValue={price24h?.initial} currentValue={price24h?.final} componentStyle={{ marginLeft: 10, marginTop: 0 }} />
-            </div>
+              <GraphicPercentage prevValue={price24h?.initial} currentValue={price24h?.final} />
+            </FlexContainer>
           }
           subtitle={token !== 'KDX' ? `1 KDX = ${getDecimalPlaces(pact?.tokensUsdPrice?.KDX / pact?.tokensUsdPrice?.[token])} ${token}` : null}
         />
         <AnalyticsSimpleWidget
-          title="1m Trading Volume"
+          title="1M Trading Volume"
           mainText={`$ ${humanReadableNumber(monthlyVolumeRange?.final * monthlyRange?.final)}`}
           subtitle={
             monthlyVolumeRange?.initial && <GraphicPercentage prevValue={monthlyVolumeRange?.initial} currentValue={monthlyVolumeRange?.final} />
           }
         />
         <AnalyticsSimpleWidget
-          title="1m Price Delta"
+          title="1M Price Delta"
           mainText={`$ ${humanReadableNumber(monthlyRange?.final - monthlyRange?.initial)}`}
           subtitle={<GraphicPercentage prevValue={monthlyRange?.initial} currentValue={monthlyRange?.final} />}
         />
