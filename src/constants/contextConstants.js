@@ -10,6 +10,14 @@ export const ENABLE_GAS_STATION = process.env.REACT_APP_ENABLE_GAS_STATION || fa
 export const KADDEX_NAMESPACE = process.env.REACT_APP_KADDEX_NAMESPACE || 'kaddex'; //
 export const STAKING_REWARDS_PERCENT = process.env.REACT_APP_STAKING_REWARDS_PERCENT || 0.05;
 export const KADDEX_API_URL = process.env.REACT_APP_KADDEX_API_URL || 'https://kaddex-api.azurewebsites.net';
+export const WALLET_CONNECT_PROJECT_ID = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID || '';
+export const WALLET_CONNECT_RELAY_URL = process.env.REACT_APP_WALLET_CONNECT_RELAY_URL || '';
+export const WALLET_CONNECT_METADATA = {
+    name: 'X-Wallet',
+        description: 'X-Wallet for Kadena',
+    url: 'https://xwallet.kaddex.com/',
+    icons: ['https://avatars.githubusercontent.com/u/37784886'],
+};
 
 export const KDX_TOTAL_SUPPLY = 1000000000;
 

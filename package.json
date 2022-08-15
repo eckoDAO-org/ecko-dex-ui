@@ -7,6 +7,9 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@walletconnect/qrcode-modal": "^1.8.0",
+    "@walletconnect/sign-client": "^2.0.0-rc.1",
+    "@walletconnect/utils": "^1.8.0",
     "apexcharts": "^3.35.3",
     "axios": "^0.24.0",
     "base64-url": "^2.3.3",
@@ -49,18 +52,11 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+     ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
   "devDependencies": {
     "babel-plugin-macros": "^2.8.0",
     "eslint-config-airbnb": "^18.2.0",
