@@ -13,10 +13,10 @@ export const KADDEX_API_URL = process.env.REACT_APP_KADDEX_API_URL || 'https://k
 export const WALLET_CONNECT_PROJECT_ID = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID || '';
 export const WALLET_CONNECT_RELAY_URL = process.env.REACT_APP_WALLET_CONNECT_RELAY_URL || '';
 export const WALLET_CONNECT_METADATA = {
-    name: 'X-Wallet',
-        description: 'X-Wallet for Kadena',
-    url: 'https://xwallet.kaddex.com/',
-    icons: ['https://avatars.githubusercontent.com/u/37784886'],
+  name: 'Kaddex SWAP',
+  description: 'Swap for KDA and KDX',
+  url: 'https://swap.kaddex.com/',
+  icons: ['https://kaddex.com/Kaddex_icon.png'],
 };
 
 export const KDX_TOTAL_SUPPLY = 1000000000;
