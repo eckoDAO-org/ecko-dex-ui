@@ -108,7 +108,15 @@
       "coin:free.kishu-ken": {
         "name": "coin:free.kishu-ken",
         "token0": "KDA",
-        "token1": "KISHK", 
+        "token1": "KISHK",
+        "main": false,
+        "isBoosted": false,
+        "color": "#EEAA7B"
+      },
+      "coin:free.kapybara-token": {
+        "name": "coin:free.kapybara-token",
+        "token0": "KDA",
+        "token1": "KAPY",
         "main": false,
         "isBoosted": false,
         "color": "#EEAA7B"
