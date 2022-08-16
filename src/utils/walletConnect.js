@@ -159,7 +159,7 @@ const useWalletConnect = () => {
     }
   }, []);
 
-  const subscribeToEvents = useCallback(async (callbacks) => {
+  /* const subscribeToEvents = useCallback(async (callbacks) => {
     if (!client) {
       const initialized = await initialize();
       if (!initialized) {
@@ -168,7 +168,6 @@ const useWalletConnect = () => {
     }
 
     client.on('session_ping', (args) => {
-      console.log('Wallet Connect event', 'session_ping', args);
       if (callbacks?.onPing) {
         callbacks.onPing();
       }
@@ -176,7 +175,6 @@ const useWalletConnect = () => {
 
     client.on('session_event', (args) => {
       const { event } = args;
-      console.log('Wallet Connect event', 'session_event', args);
       switch (event?.name) {
         case KDA_EVENTS.ACCOUNT_CHANGED:
           if (callbacks?.onAccountChange) {
@@ -193,7 +191,7 @@ const useWalletConnect = () => {
       }
     });
 
-    /* client.on('session_update', ({ topic, params }) => {
+    client.on('session_update', ({ topic, params }) => {
         console.log('EVENT', 'session_update', { topic, params });
         const { namespaces } = params;
         const _session = _client.session.get(topic);
@@ -203,12 +201,12 @@ const useWalletConnect = () => {
       client.on('session_delete', () => {
         console.log('EVENT', 'session_delete');
         reset();
-      }); */
-  }, []);
+      });
+  }, []);  */
 
   return {
     connectWallet,
-    subscribeToEvents,
+    // subscribeToEvents,
   };
 };
 

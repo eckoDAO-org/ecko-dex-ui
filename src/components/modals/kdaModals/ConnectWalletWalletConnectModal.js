@@ -60,7 +60,7 @@ const ConnectWalletWalletConnectModal = ({ onConnectionSuccess }) => {
         }
       })
       .catch(onWalletDismiss);
-  }, [onWalletDismiss, openModal, setVerifiedAccount, modalContext, onConnectionSuccess, connectWallet]);
+  }, [gameEditionView, onWalletDismiss, openModal, setVerifiedAccount, modalContext, onConnectionSuccess, connectWallet]);
 
   return (
     <>

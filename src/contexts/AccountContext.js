@@ -6,14 +6,13 @@ import { CHAIN_ID, creationTime, GAS_PRICE, NETWORK } from '../constants/context
 import useLocalStorage from '../hooks/useLocalStorage';
 import { useGameEditionContext } from '.';
 import { getTokenBalanceAccount } from '../api/pact';
-import { useWalletConnect } from '../utils/walletConnect';
+// import { useWalletConnect } from '../utils/walletConnect';
 
 export const AccountContext = createContext();
 export const AccountProvider = (props) => {
   const [fetchAccountBalance, setFetchAccountBalance] = useState(false);
   const [localRes, setLocalRes] = useState(null);
   const { gameEditionView } = useGameEditionContext();
-  const { subscribeToEvents } = useWalletConnect();
 
   const [account, setAccount, removeAccount] = useLocalStorage('acct', { account: null, guard: null, balance: 0 });
   const [privKey, setPrivKey, removePrivKey] = useLocalStorage('pk', '');
@@ -39,13 +38,14 @@ export const AccountProvider = (props) => {
     if (account.account) setRegistered(true);
   }, [registered]);
 
-  useEffect(() => {
+  // const { subscribeToEvents } = useWalletConnect();
+  /* useEffect(() => {
     subscribeToEvents({
       onPing: () => {},
       onAccountChange: (data) => {},
       onChainIdChange: (data) => {},
     });
-  }, []);
+  }, []); */
 
   const setVerifiedAccount = async (accountName, onConnectionSuccess) => {
     try {

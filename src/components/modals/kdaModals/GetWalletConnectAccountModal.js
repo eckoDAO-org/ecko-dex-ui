@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import styled from 'styled-components/macro';
 import CustomButton from '../../../components/shared/CustomButton';
 import { Dropdown } from 'semantic-ui-react';
 import reduceToken from '../../../utils/reduceToken';
 import { commonTheme } from '../../../styles/theme';
-import { getAccounts, openZelcore } from '../../../utils/zelcore';
-import LogoLoader from '../../shared/Loader';
 import Label from '../../shared/Label';
 import { GeArrowIcon } from '../../../assets';
 import { useAccountContext, useGameEditionContext, useModalContext } from '../../../contexts';
@@ -108,7 +106,7 @@ const GetWalletConnectAccountModal = ({ accounts: accountsProps, onClose, onConn
     } else {
       modalContext.onBackModal();
     }
-  }, [modalContext.onBackModal, onWireSelect, closeModal, gameEditionView]);
+  }, [account, modalContext, onWireSelect, closeModal, gameEditionView]);
 
   return (
     <ModalContent>
