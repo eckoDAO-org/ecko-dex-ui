@@ -1,15 +1,14 @@
 import React, { useCallback } from 'react';
 import CustomButton from '../../../components/shared/CustomButton';
 import Label from '../../shared/Label';
-import { useWalletConnect } from '../../../utils/walletConnect';
-import { useAccountContext, useGameEditionContext, useModalContext } from '../../../contexts';
+import { useAccountContext, useGameEditionContext, useModalContext, useWalletConnectContext } from '../../../contexts';
 import GetWalletConnectAccountModal from './GetWalletConnectAccountModal';
 
 const ConnectWalletWalletConnectModal = ({ onConnectionSuccess }) => {
   const modalContext = useModalContext();
   const { gameEditionView, openModal, closeModal, onWireSelect } = useGameEditionContext();
   const { account, setVerifiedAccount } = useAccountContext();
-  const { connectWallet } = useWalletConnect();
+  const { connectWallet } = useWalletConnectContext();
 
   const onWalletDismiss = useCallback(() => {
     if (gameEditionView) {

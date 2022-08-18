@@ -91,9 +91,11 @@ const GetWalletConnectAccountModal = ({ accounts: accountsProps, onClose, onConn
 
   const handleConnect = useCallback(async () => {
     await setVerifiedAccount(selectedAccount, onConnectionSuccess);
-
     await handleModalClose();
-  }, [setVerifiedAccount, handleModalClose, onConnectionSuccess, selectedAccount]);
+    if (!gameEditionView) {
+      window.location.reload();
+    }
+  }, [gameEditionView, setVerifiedAccount, handleModalClose, onConnectionSuccess, selectedAccount]);
 
   const handleCancel = useCallback(() => {
     setSelectedAccount(null);
