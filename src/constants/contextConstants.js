@@ -10,10 +10,19 @@ export const ENABLE_GAS_STATION = process.env.REACT_APP_ENABLE_GAS_STATION || fa
 export const KADDEX_NAMESPACE = process.env.REACT_APP_KADDEX_NAMESPACE || 'kaddex'; //
 export const STAKING_REWARDS_PERCENT = process.env.REACT_APP_STAKING_REWARDS_PERCENT || 0.05;
 export const KADDEX_API_URL = process.env.REACT_APP_KADDEX_API_URL || 'https://kaddex-api.azurewebsites.net';
+export const NETWORK_VERSION = process.env.REACT_APP_KDA_NETWORK_VERSION || '0.0';
+export const WALLET_CONNECT_PROJECT_ID = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID || '';
+export const WALLET_CONNECT_RELAY_URL = process.env.REACT_APP_WALLET_CONNECT_RELAY_URL || '';
+export const WALLET_CONNECT_METADATA = {
+  name: 'Kaddex SWAP',
+  description: 'Swap for KDA and KDX',
+  url: 'https://swap.kaddex.com/',
+  icons: ['https://kaddex.com/Kaddex_icon.png'],
+};
 
 export const KDX_TOTAL_SUPPLY = 1000000000;
 
-export const NETWORK = `${process.env.REACT_APP_KDA_NETWORK}/chainweb/0.0/${NETWORKID}/chain/${CHAIN_ID}/pact`;
+export const NETWORK = `${process.env.REACT_APP_KDA_NETWORK}/chainweb/${NETWORK_VERSION}/${NETWORKID}/chain/${CHAIN_ID}/pact`;
 
 export const creationTime = () => Math.round(new Date().getTime() / 1000) - 10;
 

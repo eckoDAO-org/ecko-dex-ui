@@ -3,8 +3,15 @@ import Pact from 'pact-lang-api';
 import tokenData from '../constants/cryptoCurrencies';
 import { reduceBalance } from '../utils/reduceBalance';
 
-import { useKaddexWalletContext, useWalletContext, useAccountContext, usePactContext } from '.';
-import { CHAIN_ID, creationTime, NETWORK, NETWORKID, KADDEX_NAMESPACE } from '../constants/contextConstants';
+import { useKaddexWalletContext, useWalletContext, useAccountContext, usePactContext, useWalletConnectContext } from '.';
+import {
+  CHAIN_ID,
+  creationTime,
+  NETWORK,
+  NETWORKID,
+  KADDEX_NAMESPACE,
+  NETWORK_VERSION
+} from '../constants/contextConstants';
 import { getPair, getPairAccount, getTokenBalanceAccount } from '../api/pact';
 import { mkReq, parseRes } from '../api/utils';
 
@@ -14,6 +21,7 @@ export const SwapProvider = (props) => {
   const pact = usePactContext();
   const { account, localRes, setLocalRes } = useAccountContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
+  const { pairingTopic: isWalletConnectConnected, requestSignTransaction: walletConnectRequestSignTransaction } = useWalletConnectContext();
   const wallet = useWalletContext();
 
   const swap = async (token0, token1, isSwapIn) => {
@@ -127,6 +135,7 @@ export const SwapProvider = (props) => {
           },
           signingPubKey: accountDetails.result.data.guard.keys[0],
           networkId: NETWORKID,
+          networkVersion: NETWORK_VERSION,
         };
         //alert to sign tx
         /* walletLoading(); */
@@ -134,6 +143,9 @@ export const SwapProvider = (props) => {
         let command = null;
         if (isKaddexWalletConnected) {
           const res = await kaddexWalletRequestSign(signCmd);
+          command = res.signedCmd;
+        } else if (isWalletConnectConnected) {
+          const res = await walletConnectRequestSignTransaction(account.account, CHAIN_ID, signCmd);
           command = res.signedCmd;
         } else {
           command = await Pact.wallet.sign(signCmd);

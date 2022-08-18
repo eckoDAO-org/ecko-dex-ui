@@ -19,6 +19,7 @@ import { KaddexWhite } from '../../assets';
 import { WALLET } from '../../constants/wallet';
 import ConnectWalletZelcoreModal from '../modals/kdaModals/ConnectWalletZelcoreModal';
 import ConnectWalletChainweaverModal from '../modals/kdaModals/ConnectWalletChainweaverModal';
+import ConnectWalletWalletConnectModal from '../modals/kdaModals/ConnectWalletWalletConnectModal';
 import { FadeIn } from '../shared/animations';
 import GameEditionButtons from './components/GameEditionButtons';
 import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
@@ -199,6 +200,15 @@ const GameEditionContainer = ({ children }) => {
             onCloseModal();
           },
           content: <ConnectWalletChainweaverModal onConnectionSuccess={async () => await onConnectionSuccess(WALLET.CHAINWEAVER)} />,
+        });
+
+      case WALLET.WALLETCONNECT.name:
+        return openModal({
+          title: WALLET.WALLETCONNECT.name.toUpperCase(),
+          onClose: () => {
+            onCloseModal();
+          },
+          content: <ConnectWalletWalletConnectModal onConnectionSuccess={async () => await onConnectionSuccess(WALLET.WALLETCONNECT)} />,
         });
 
       case WALLET.KADDEX_WALLET.name:
