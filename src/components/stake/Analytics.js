@@ -99,7 +99,7 @@ const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt, kdxSupply }) 
           <div className="flex align-ce">
             <Label>Staked Share</Label>
           </div>
-          <Label fontSize={24}>{(stakedShare && extractDecimal(stakedShare).toFixed(2)) || '-'} % </Label>
+          <Label fontSize={24}>{(stakedShare && extractDecimal(stakedShare).toFixed(5)) || '-'} % </Label>
           <SubLabel labelStyle={{ fontSize: 12 }}>{staked !== 0 && stakedShare ? humanReadableNumber(extractDecimal(staked)) : '-'} KDX</SubLabel>
         </div>
         <div className="flex column align-fe">

@@ -14,6 +14,7 @@ import Label from '../components/shared/Label';
 import {
   ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED,
   ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED,
+  ROUTE_LIQUIDITY_CREATE_PAIR,
   ROUTE_LIQUIDITY_MY_LIQUIDITY,
   ROUTE_LIQUIDITY_POOLS,
   ROUTE_LIQUIDITY_REWARDS,
@@ -94,6 +95,15 @@ const LiquidityContainer = () => {
             }
           >
             ADD LIQUIDITY
+          </CustomButton>
+          <CustomButton
+            fontSize={13}
+            buttonStyle={{ height: 33 }}
+            type="gradient"
+            fontFamily="syncopate"
+            onClick={() => history.push(ROUTE_LIQUIDITY_CREATE_PAIR)}
+          >
+            CREATE PAIR
           </CustomButton>
         </FlexContainer>
       </FlexContainer>

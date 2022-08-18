@@ -33,6 +33,7 @@ import { theme } from '../styles/theme';
 import { extractDecimal, getDecimalPlaces, reduceBalance } from '../utils/reduceBalance';
 import { STAKING_CONSTANTS } from '../constants/stakingConstants';
 import { getTimeByBlockchain } from '../utils/string-utils';
+import useWindowSize from '../hooks/useWindowSize';
 
 const StakeContainer = () => {
   const history = useHistory();
@@ -49,6 +50,7 @@ const StakeContainer = () => {
   const [estimateUnstakeData, setEstimateUnstakeData] = useState(null);
   const [daoAccountData, setDaoAccountData] = useState(null);
   const [inputAmount, setInputAmount] = useState('');
+  const [width] = useWindowSize();
 
   const stakedTimeStart =
     (estimateUnstakeData && estimateUnstakeData['stake-record'] && getTimeByBlockchain(estimateUnstakeData['stake-record']['effective-start'])) ||
@@ -434,7 +436,15 @@ const StakeContainer = () => {
         </InfoPopup>
       </FlexContainer>
 
-      <FlexContainer gap={24} tabletClassName="column" mobileClassName="column">
+      <FlexContainer
+        gap={24}
+        style={{
+          flexDirection: width < theme().mediaQueries.desktopPixel + 110 && 'column',
+          rowGap: width < theme().mediaQueries.desktopPixel + 110 && 24,
+        }}
+        tabletClassName="column"
+        mobileClassName="column"
+      >
         <Position
           stakeData={estimateUnstakeData}
           amount={estimateUnstakeData?.['stake-record']?.['amount'] || 0.0}
