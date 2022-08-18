@@ -2,9 +2,8 @@ import Client from '@walletconnect/sign-client';
 import QRCodeModal from '@walletconnect/qrcode-modal';
 import { CHAIN_ID, WALLET_CONNECT_METADATA, WALLET_CONNECT_PROJECT_ID, WALLET_CONNECT_RELAY_URL } from '../constants/contextConstants';
 import React, { createContext, useCallback, useEffect, useState } from 'react';
-import { useAccountContext, useNotificationContext } from './index';
+import { useAccountContext } from './index';
 import useLocalStorage from '../hooks/useLocalStorage';
-import { WALLET } from '../constants/wallet';
 
 export const KDA_NAMESPACE = 'kda';
 
