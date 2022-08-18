@@ -6,7 +6,8 @@ import reduceToken from '../../../utils/reduceToken';
 import { commonTheme } from '../../../styles/theme';
 import Label from '../../shared/Label';
 import { GeArrowIcon } from '../../../assets';
-import { useAccountContext, useGameEditionContext, useModalContext } from '../../../contexts';
+import { useAccountContext, useGameEditionContext, useModalContext, useWalletContext } from '../../../contexts';
+import { WALLET } from '../../../constants/wallet';
 
 const ActionContainer = styled.div`
   display: flex;
@@ -74,6 +75,7 @@ const DropdownContainer = styled.div`
 const GetWalletConnectAccountModal = ({ accounts: accountsProps, onClose, onConnectionSuccess }) => {
   const modalContext = useModalContext();
   const { account, setVerifiedAccount } = useAccountContext();
+  const { signingWallet, setSelectedWallet } = useWalletContext();
   const { gameEditionView, closeModal, onWireSelect } = useGameEditionContext();
 
   const accounts = useMemo(() => (accountsProps || []).filter((item, pos, self) => self.indexOf(item) === pos), [accountsProps]);
@@ -91,11 +93,13 @@ const GetWalletConnectAccountModal = ({ accounts: accountsProps, onClose, onConn
 
   const handleConnect = useCallback(async () => {
     await setVerifiedAccount(selectedAccount, onConnectionSuccess);
-    await handleModalClose();
-    if (!gameEditionView) {
-      window.location.reload();
-    }
-  }, [gameEditionView, setVerifiedAccount, handleModalClose, onConnectionSuccess, selectedAccount]);
+    setTimeout(async () => {
+      await setVerifiedAccount(selectedAccount, onConnectionSuccess);
+      await signingWallet();
+      await setSelectedWallet(WALLET.WALLETCONNECT);
+      await handleModalClose();
+    }, 500);
+  }, [setVerifiedAccount, signingWallet, setSelectedWallet, handleModalClose, onConnectionSuccess, selectedAccount]);
 
   const handleCancel = useCallback(() => {
     setSelectedAccount(null);

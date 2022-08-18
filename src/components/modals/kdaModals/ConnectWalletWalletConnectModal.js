@@ -49,7 +49,11 @@ const ConnectWalletWalletConnectModal = ({ onConnectionSuccess }) => {
                 description: 'Select Account',
                 onBack: () => modalContext.onBackModal(),
                 content: (
-                  <GetWalletConnectAccountModal accounts={responseNullable.accounts} onClose={modalContext.closeModal} onBack={onWalletDismiss} />
+                  <GetWalletConnectAccountModal
+                    accounts={responseNullable.accounts}
+                    onClose={modalContext.closeModal}
+                    onConnectionSuccess={onConnectionSuccess}
+                  />
                 ),
               });
             }
