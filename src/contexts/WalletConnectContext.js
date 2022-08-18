@@ -97,7 +97,6 @@ export const WalletConnectProvider = (props) => {
   const [walletConnectState, setWalletConnectState] = useLocalStorage('walletConnectState', initialWalletConnectState);
 
   const { account, logout } = useAccountContext();
-  const { showNotification, STATUSES } = useNotificationContext();
 
   const initialize = useCallback(async () => {
     try {
@@ -158,15 +157,6 @@ export const WalletConnectProvider = (props) => {
 
         QRCodeModal.close();
 
-        showNotification({
-          title: `${WALLET.WALLETCONNECT.name} was connected`,
-          type: 'game-mode',
-          icon: WALLET.WALLETCONNECT.notificationLogo,
-          closeButton: false,
-          titleStyle: { fontSize: 13 },
-          autoClose: 2000,
-        });
-
         return {
           chainIds: KDA_CHAINS,
           accounts,
@@ -177,7 +167,7 @@ export const WalletConnectProvider = (props) => {
         return null;
       }
     },
-    [client, initialize, showNotification, setWalletConnectState, walletConnectState]
+    [client, initialize, setWalletConnectState, walletConnectState]
   );
 
   const requestSignTransaction = useCallback(
@@ -246,7 +236,7 @@ export const WalletConnectProvider = (props) => {
         client.removeListener('pairing_expire', onSessionDelete);
       };
     }
-  }, [client, walletConnectState, setWalletConnectState, STATUSES, logout]);
+  }, [client, walletConnectState, setWalletConnectState, logout]);
 
   useEffect(() => {
     if (walletConnectState?.pairingTopic && client && !account) {
