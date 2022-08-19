@@ -43,3 +43,14 @@ export const getPairModuleDetails = async (moduleName, account) => {
     return handleError(e);
   }
 };
+
+export const getPairs = async () => {
+  try {
+    let data = await pactFetchLocal(`(${KADDEX_NAMESPACE}.exchange.get-pairs)`);
+    if (data) {
+      return data;
+    }
+  } catch (e) {
+    return handleError(e);
+  }
+};

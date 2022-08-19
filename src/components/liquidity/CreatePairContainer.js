@@ -22,6 +22,8 @@ import CreatePairTokenSelectorModal from '../modals/liquidity/CreatePairTokenSel
 import { ArrowBack, ArrowDown } from '../../assets';
 import { ROUTE_LIQUIDITY_TOKENS } from '../../router/routes';
 import { useHistory } from 'react-router-dom';
+import CreatePairInfo from './CreatePairInfo';
+import InfoPopup from '../shared/InfoPopup';
 
 const CreatePairContainer = () => {
   const history = useHistory();
@@ -89,7 +91,7 @@ const CreatePairContainer = () => {
     let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(signedCommand));
     data = await parseRes(data);
     console.log('🚀 log --> data', data);
-    if (data.message?.status !== 'success') {
+    if (data.result?.status !== 'success') {
       showNotification({
         title: 'Staking error',
         message: 'Error while creating the pair',
@@ -147,7 +149,6 @@ const CreatePairContainer = () => {
       title: 'Add Token',
       description: '',
       onClose: () => {
-        setToken1('');
         closeModal();
       },
       content: (
@@ -168,28 +169,34 @@ const CreatePairContainer = () => {
   };
   return (
     <FlexContainer
-      className="column align-ce w-100 h-100 main"
+      className="column align-fs w-100 h-100 main"
+      style={{ maxWidth: 550, marginLeft: 'auto', marginRight: 'auto' }}
       desktopStyle={{ paddingRight: theme().layout.desktopPadding, paddingLeft: theme().layout.desktopPadding }}
       tabletStyle={{ paddingRight: theme().layout.tabletPadding, paddingLeft: theme().layout.tabletPadding }}
       mobileStyle={{ paddingRight: theme().layout.mobilePadding, paddingLeft: theme().layout.mobilePadding }}
     >
-      <FlexContainer>
-        <ArrowBack
-          className="arrow-back"
-          style={{
-            cursor: 'pointer',
-            marginRight: '15px',
-            justifyContent: 'center',
-          }}
-          onClick={() => {
-            history.push(ROUTE_LIQUIDITY_TOKENS);
-          }}
-        />
-        <Label fontSize={24} fontFamily="syncopate">
-          CREATE PAIR
-        </Label>
+      <FlexContainer className="justify-sb w-100">
+        <div className="flex">
+          <ArrowBack
+            className="arrow-back"
+            style={{
+              cursor: 'pointer',
+              marginRight: '15px',
+              justifyContent: 'center',
+            }}
+            onClick={() => {
+              history.push(ROUTE_LIQUIDITY_TOKENS);
+            }}
+          />
+          <Label fontSize={24} fontFamily="syncopate">
+            CREATE PAIR
+          </Label>
+        </div>
+        <InfoPopup type="modal" title="Create Pair" containerStyle={{ marginLeft: 0 }}>
+          <CreatePairInfo />
+        </InfoPopup>
       </FlexContainer>
-      <CommonWrapper containerStyle={{ maxWidth: 550 }}>
+      <CommonWrapper>
         <FlexContainer className="justify-ce column" gap={16} style={{ padding: '0px 36px 36px' }}>
           <Label>Select pair</Label>
           <FlexContainer className="justify-ce" gap={24}>

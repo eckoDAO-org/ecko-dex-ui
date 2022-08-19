@@ -66,23 +66,17 @@ const CreatePairTokenSelectorModal = ({ onSelectedToken, onClose }) => {
         }}
       />
       <Label>{tokenExists ? 'token address found' : 'token address not found'}</Label>
-      {tokenExists && (
-        <Input
-          fontSize={14}
-          placeholder="Please insert token name"
-          value={tokenNameSelected}
-          onChange={(e, { value }) => {
-            setTokenNameSelected(value.toUpperCase());
-          }}
-        />
-      )}
 
       {tokenExists && (
         <CustomButton
           type="gradient"
           onClick={async () => {
             if (tokenSelected) {
-              await onSelectedToken(tokenSelected, tokenNameSelected);
+              const moduleName = tokenSelected.split('.')[1];
+              await onSelectedToken(
+                tokenSelected,
+                tokenSelected.substr(tokenSelected.indexOf('.') + 1, moduleName.length >= 3 ? 3 : moduleName.length).toUpperCase()
+              );
             }
             if (onClose) {
               onClose();
