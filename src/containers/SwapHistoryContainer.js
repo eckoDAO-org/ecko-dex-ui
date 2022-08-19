@@ -19,6 +19,8 @@ import { NETWORK_TYPE } from '../constants/contextConstants';
 import AppLoader from '../components/shared/AppLoader';
 import theme from '../styles/theme';
 import { useGameEditionContext, usePactContext } from '../contexts';
+import { extractDecimal, getDecimalPlaces } from '../utils/reduceBalance';
+import { getTimeByBlockchain } from '../utils/string-utils';
 
 export const CardContainer = styled(FadeIn)`
   display: flex;
@@ -176,7 +178,7 @@ const renderColumns = () => {
     {
       name: 'date',
       width: 160,
-      render: ({ item }) => <FlexContainer>{moment(item?.blockTime).format('DD/MM/YYYY HH:mm:ss')}</FlexContainer>,
+      render: ({ item }) => <FlexContainer>{moment(getTimeByBlockchain(item?.blockTime)).format('DD/MM/YYYY HH:mm:ss')}</FlexContainer>,
     },
     {
       name: 'request key',
@@ -186,10 +188,9 @@ const renderColumns = () => {
     {
       name: 'amount',
       width: 160,
-      align: 'right',
       render: ({ item }) => (
         <FlexContainer>
-          {item?.params[2]} {getInfoCoin(item, 3)?.name}
+          {getDecimalPlaces(extractDecimal(item?.params[2]))} {getInfoCoin(item, 3)?.name}
         </FlexContainer>
       ),
     },
