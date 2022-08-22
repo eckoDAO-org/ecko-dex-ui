@@ -4,7 +4,7 @@ import { pactFetchLocal } from './pact';
 import { handleError } from './utils';
 
 export const createPairCommand = async (token0, token1, hint, gasStation, gasLimit, gasPrice, account) => {
-  const pactCode = `(${KADDEX_NAMESPACE}.exchange.create-pair ${token0} ${token1} "${hint}")`;
+  const pactCode = `(${KADDEX_NAMESPACE}.exchange.create-pair ${token0} ${token1} "")`;
   return {
     pactCode,
     caps: [

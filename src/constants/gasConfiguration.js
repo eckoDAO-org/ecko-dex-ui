@@ -7,6 +7,7 @@ import {
   ROUTE_LIQUIDITY_REWARDS,
   ROUTE_STAKE,
   ROUTE_UNSTAKE,
+  ROUTE_LIQUIDITY_CREATE_PAIR,
 } from '../router/routes';
 
 export const PATH_CONFIGURATION = {
@@ -21,6 +22,10 @@ export const PATH_CONFIGURATION = {
   ADD_LIQUIDITY_SINGLE_SIDE: {
     name: 'ADD_LIQUIDITY_SINGLE_SIDE',
     route: ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED,
+  },
+  CREATE_PAIR: {
+    name: 'CREATE_PAIR',
+    route: ROUTE_LIQUIDITY_CREATE_PAIR,
   },
   REMOVE_LIQUIDITY: {
     name: 'REMOVE_LIQUIDITY',
@@ -63,6 +68,10 @@ export const GAS_OPTIONS = {
       gasLimit: 16000,
       gasPrice: ECONOMY_GAS_PRICE,
     },
+    CREATE_PAIR: {
+      gasLimit: 2500,
+      gasPrice: ECONOMY_GAS_PRICE,
+    },
     REMOVE_LIQUIDITY: {
       gasLimit: 40000,
       gasPrice: ECONOMY_GAS_PRICE,
@@ -95,6 +104,10 @@ export const GAS_OPTIONS = {
     },
     ADD_LIQUIDITY_SINGLE_SIDE: {
       gasLimit: 16000,
+      gasPrice: NORMAL_GAS_PRICE,
+    },
+    CREATE_PAIR: {
+      gasLimit: 2500,
       gasPrice: NORMAL_GAS_PRICE,
     },
     REMOVE_LIQUIDITY: {
@@ -131,6 +144,10 @@ export const GAS_OPTIONS = {
       gasLimit: 16000,
       gasPrice: FAST_GAS_PRICE,
     },
+    CREATE_PAIR: {
+      gasLimit: 2500,
+      gasPrice: FAST_GAS_PRICE,
+    },
     REMOVE_LIQUIDITY: {
       gasLimit: 40000,
       gasPrice: FAST_GAS_PRICE,
@@ -163,6 +180,10 @@ export const GAS_OPTIONS = {
     },
     ADD_LIQUIDITY_SINGLE_SIDE: {
       gasLimit: 16000,
+      gasPrice: GAS_STATION_PRICE,
+    },
+    CREATE_PAIR: {
+      gasLimit: 2500,
       gasPrice: GAS_STATION_PRICE,
     },
     REMOVE_LIQUIDITY: {

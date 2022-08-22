@@ -178,7 +178,7 @@ const CreatePairContainer = () => {
       <FlexContainer className="justify-sb w-100">
         <div className="flex">
           <ArrowBack
-            className="arrow-back"
+            className="arrow-back svg-app-color"
             style={{
               cursor: 'pointer',
               marginRight: '15px',
@@ -216,7 +216,7 @@ const CreatePairContainer = () => {
               >
                 <Label fontSize={13}>{token0Name}</Label>
 
-                <ArrowDown style={{ marginRight: 0, marginLeft: 8 }} />
+                <ArrowDown className="svg-app-color" style={{ marginRight: 0, marginLeft: 8 }} />
               </CustomButton>
               <Label labelStyle={{ alignSelf: 'center' }}>{token0}</Label>
             </FlexContainer>
@@ -237,7 +237,7 @@ const CreatePairContainer = () => {
               >
                 <Label fontSize={13}>{token1Name !== '' ? token1Name : 'select'}</Label>
 
-                <ArrowDown style={{ marginRight: 0, marginLeft: 8 }} />
+                <ArrowDown className="svg-app-color" style={{ marginRight: 0, marginLeft: 8 }} />
               </CustomButton>
               <Label labelStyle={{ alignSelf: 'center' }}>{token1}</Label>
             </FlexContainer>
