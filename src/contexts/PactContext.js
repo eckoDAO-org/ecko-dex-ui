@@ -4,12 +4,13 @@ import Pact from 'pact-lang-api';
 import pairTokens from '../constants/pairsConfig';
 // import { useInterval } from '../hooks/useInterval';
 import axios from 'axios';
-import { getTokenUsdPriceByName } from '../utils/token-utils';
+import { getTokenName, getTokenUsdPriceByName } from '../utils/token-utils';
 import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, KADDEX_NAMESPACE, KADDEX_API_URL } from '../constants/contextConstants';
 import { useAccountContext, useNotificationContext, useWalletContext } from '.';
 import { fetchPrecision, getPairList } from '../api/pact';
-import tokenData from '../constants/cryptoCurrencies';
+import tokenData, { pairsData } from '../constants/cryptoCurrencies';
 import { GAS_OPTIONS } from '../constants/gasConfiguration';
+import { getPairs, getTokenNameFromAddress, getVerifiedPools } from '../api/pairs';
 
 export const PactContext = createContext();
 
@@ -48,6 +49,9 @@ export const PactProvider = (props) => {
   const [gasConfiguration, setGasConfiguration] = useState(GAS_OPTIONS.DEFAULT.SWAP);
   const [networkGasData, setNetworkGasData] = useState(initialNetworkGasData);
 
+  const [allPairs, setAllPairs] = useState(pairsData);
+  const [allTokens, setAllTokens] = useState(tokenData);
+
   const handleGasConfiguration = (key, value) => {
     setGasConfiguration((prev) => ({ ...prev, [key]: value }));
   };
@@ -67,6 +71,56 @@ export const PactProvider = (props) => {
     getNetworkGasData();
   }, []);
   // useInterval(getNetworkGasData, 20000);
+
+  const getPairsData = async () => {
+    const result = await getPairs();
+    if (result.errorMessage) {
+      console.log('ERROR');
+      return;
+    } else {
+      const communityPairs = result.filter((r) => !allPairs.hasOwnProperty(r));
+
+      communityPairs.map((communityPair) => {
+        communityPair = {
+          name: communityPair,
+          token0: 'KDA',
+          token1: getTokenNameFromAddress(communityPair),
+          main: false,
+          isBoosted: false,
+          color: '#92187B',
+          isVerified: false,
+        };
+
+        setAllPairs((prev) => ({ ...prev, [communityPair.name]: communityPair }));
+      });
+
+      result.map((res) => {
+        const index = res.indexOf(':');
+        const token0 = res.substr(0, index); // Gets the first part for future
+        const token1 = res.substr(index + 1); // Gets the second part
+        if (!allTokens.hasOwnProperty(getTokenName(token1))) {
+          let communityPair = {
+            name: getTokenNameFromAddress(token1),
+            coingeckoId: '',
+            tokenNameKaddexStats: token1,
+            code: token1,
+            main: true,
+            icon: '',
+            color: '',
+            precision: 12,
+            isVerified: false,
+          };
+
+          setAllTokens((prev) => ({ ...prev, [getTokenNameFromAddress(token1)]: communityPair }));
+        }
+      });
+    }
+    return;
+  };
+
+  useEffect(async () => {
+    await getPairsData();
+  }, []);
 
   const updateTokenUsdPrice = async () => {
     const pairList = await getPairList();
@@ -299,6 +353,8 @@ export const PactProvider = (props) => {
     pairList,
     setPairList,
     swapList,
+    allPairs,
+    allTokens,
     getMoreEventsSwapList,
     moreSwap,
     polling,

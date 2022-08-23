@@ -96,15 +96,17 @@ const LiquidityContainer = () => {
           >
             ADD LIQUIDITY
           </CustomButton>
-          <CustomButton
-            fontSize={13}
-            buttonStyle={{ height: 33 }}
-            type="gradient"
-            fontFamily="syncopate"
-            onClick={() => history.push(ROUTE_LIQUIDITY_CREATE_PAIR)}
-          >
-            CREATE PAIR
-          </CustomButton>
+          {pathname === ROUTE_LIQUIDITY_POOLS && (
+            <CustomButton
+              fontSize={13}
+              buttonStyle={{ height: 33 }}
+              type="gradient"
+              fontFamily="syncopate"
+              onClick={() => history.push(ROUTE_LIQUIDITY_CREATE_PAIR)}
+            >
+              CREATE PAIR
+            </CustomButton>
+          )}
         </FlexContainer>
       </FlexContainer>
       {/* SINGLE SIDE TABLE */}

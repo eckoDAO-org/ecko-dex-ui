@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
-import { createPairCommand, getPairModuleDetails } from '../../api/pairs';
+import { createPairCommand, getCommunityPairs, getPairModuleDetails, getVerifiedPairs } from '../../api/pairs';
 import { CHAIN_ID, NETWORK } from '../../constants/contextConstants';
 import {
   useAccountContext,
@@ -13,10 +13,9 @@ import {
 import { theme } from '../../styles/theme';
 import CustomButton from '../shared/CustomButton';
 import { FlexContainer } from '../shared/FlexContainer';
-import Input from '../shared/Input';
 import Label from '../shared/Label';
 import CommonWrapper from '../stake/CommonWrapper';
-import CreatePoolModal from '../modals/liquidity/CreatePairModal';
+import CreatePairModal from '../modals/liquidity/CreatePairModal';
 import { mkReq, parseRes } from '../../api/utils';
 import CreatePairTokenSelectorModal from '../modals/liquidity/CreatePairTokenSelectorModal';
 import { ArrowBack, ArrowDown } from '../../assets';
@@ -24,6 +23,7 @@ import { ROUTE_LIQUIDITY_TOKENS } from '../../router/routes';
 import { useHistory } from 'react-router-dom';
 import CreatePairInfo from './CreatePairInfo';
 import InfoPopup from '../shared/InfoPopup';
+import tokenData from '../../constants/cryptoCurrencies';
 
 const CreatePairContainer = () => {
   const history = useHistory();
@@ -108,7 +108,7 @@ const CreatePairContainer = () => {
           closeModal();
         },
         content: (
-          <CreatePoolModal
+          <CreatePairModal
             data={data}
             token0={token0}
             token1={token1}
@@ -214,6 +214,7 @@ const CreatePairContainer = () => {
                   height: '40px',
                 }}
               >
+                {tokenData['KDA']?.icon}
                 <Label fontSize={13}>{token0Name}</Label>
 
                 <ArrowDown className="svg-app-color" style={{ marginRight: 0, marginLeft: 8 }} />
@@ -235,6 +236,7 @@ const CreatePairContainer = () => {
                   height: '40px',
                 }}
               >
+                {/* {token1Name && tokenData[token1Name]?.icon} */}
                 <Label fontSize={13}>{token1Name !== '' ? token1Name : 'select'}</Label>
 
                 <ArrowDown className="svg-app-color" style={{ marginRight: 0, marginLeft: 8 }} />

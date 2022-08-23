@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CustomButton from '../../shared/CustomButton';
 import styled from 'styled-components';
 import Input from '../../shared/Input';
-import { checkTokenModule } from '../../../api/pairs';
+import { checkTokenModule, getTokenNameFromAddress } from '../../../api/pairs';
 import Label from '../../shared/Label';
 import { FlexContainer } from '../../shared/FlexContainer';
 
@@ -72,11 +72,7 @@ const CreatePairTokenSelectorModal = ({ onSelectedToken, onClose }) => {
           type="gradient"
           onClick={async () => {
             if (tokenSelected) {
-              const moduleName = tokenSelected.split('.')[1];
-              await onSelectedToken(
-                tokenSelected,
-                tokenSelected.substr(tokenSelected.indexOf('.') + 1, moduleName.length >= 3 ? 3 : moduleName.length).toUpperCase()
-              );
+              await onSelectedToken(tokenSelected, getTokenNameFromAddress(tokenSelected));
             }
             if (onClose) {
               onClose();
