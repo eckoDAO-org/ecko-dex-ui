@@ -5,40 +5,26 @@ import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { useAccountContext } from './index';
 import useLocalStorage from '../hooks/useLocalStorage';
 
-export const KDA_NAMESPACE = 'kda';
+export const KDA_NAMESPACE = 'kadena';
 
-export const KDA_CHAINS = [
-  'kda:0',
-  'kda:1',
-  'kda:2',
-  'kda:3',
-  'kda:4',
-  'kda:5',
-  'kda:6',
-  'kda:7',
-  'kda:8',
-  'kda:9',
-  'kda:10',
-  'kda:11',
-  'kda:12',
-  'kda:13',
-  'kda:14',
-  'kda:15',
-  'kda:16',
-  'kda:17',
-  'kda:18',
-  'kda:19',
-];
+export const KDA_CHAINS = ['kadena:mainnet01', 'kadena:testnet04'];
 
 const KDA_METHODS = {
-  KDA_SIGN: 'KDA_SIGN',
-  KDA_SEND_TRANSACTION: 'KDA_SEND_TRANSACTION',
-  KDA_SIGN_TRANSACTION: 'KDA_SIGN_TRANSACTION',
+  KDA_SIGN: 'kadena_sign',
+  KDA_QUICK_SIGN: 'kadena_quicksign',
 };
 
-const KDA_EVENTS = {
-  ACCOUNT_CHANGED: 'accountChanged',
-  CHAIN_ID_CHANGED: 'chainIdChanged',
+const KDX_METHODS = {
+  KDX_SIGN: 'kaddex_sign',
+  KDX_SEND_TRANSACTION: 'kaddex_send_transaction',
+  KDX_SIGN_TRANSACTION: 'kaddex_sign_transaction',
+};
+
+const KDA_EVENTS = {};
+
+const KDX_EVENTS = {
+  ACCOUNT_CHANGED: 'account_changed',
+  CHAIN_ID_CHANGED: 'chain_id_changed',
 };
 
 export const getNamespacesFromChains = (chains) => {
@@ -55,8 +41,10 @@ export const getNamespacesFromChains = (chains) => {
 
 export const getSupportedMethodsByNamespace = (namespace) => {
   switch (namespace) {
-    case 'kda':
+    case 'kadena':
       return Object.values(KDA_METHODS);
+    case 'kaddex':
+      return Object.values(KDX_METHODS);
     default:
       throw new Error(`No default methods for namespace: ${namespace}`);
   }
@@ -64,8 +52,10 @@ export const getSupportedMethodsByNamespace = (namespace) => {
 
 export const getSupportedEventsByNamespace = (namespace) => {
   switch (namespace) {
-    case 'kda':
+    case 'kadena':
       return Object.values(KDA_EVENTS);
+    case 'kaddex':
+      return Object.values(KDX_EVENTS);
     default:
       throw new Error(`No default events for namespace: ${namespace}`);
   }
@@ -80,6 +70,13 @@ export const getRequiredNamespaces = (chains) => {
         methods: getSupportedMethodsByNamespace(namespace),
         chains: chains.filter((chain) => chain.startsWith(namespace)),
         events: getSupportedEventsByNamespace(namespace),
+        extension: [
+          {
+            methods: getSupportedMethodsByNamespace('kaddex'),
+            chains: chains.filter((chain) => chain.startsWith(namespace)),
+            events: getSupportedEventsByNamespace('kaddex'),
+          },
+        ],
       },
     ])
   );
@@ -188,7 +185,7 @@ export const WalletConnectProvider = (props) => {
         topic: walletConnectState?.pairingTopic,
         chainId: `${KDA_NAMESPACE}:${chainId || CHAIN_ID}`,
         request: {
-          method: KDA_METHODS.KDA_SIGN_TRANSACTION,
+          method: KDX_METHODS.KDX_SIGN_TRANSACTION,
           params: payload,
         },
       });
@@ -239,7 +236,8 @@ export const WalletConnectProvider = (props) => {
 
   useEffect(() => {
     if (walletConnectState?.pairingTopic && client && !account) {
-      client.disconnect({
+      client
+        .disconnect({
           topic: walletConnectState?.pairingTopic,
           reason: {
             message: 'User disconnected.',
