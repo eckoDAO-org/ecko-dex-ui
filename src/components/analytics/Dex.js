@@ -82,7 +82,6 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
           .format('YYYY-MM-DD')}`
       )
       .then(async (volumeRes) => {
-        console.log('LOG --> volumeRes', volumeRes);
         const kdaPrice = tokensUsdPrice?.KDA;
         let mainVolumes = [];
         const otherVolumes = {

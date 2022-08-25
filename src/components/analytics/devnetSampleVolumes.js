@@ -1,5 +1,3 @@
-import tokenData from '../../constants/cryptoCurrencies';
-
 export const sampleTokensVolume = [
   {
     color: '#ed1cb5',
