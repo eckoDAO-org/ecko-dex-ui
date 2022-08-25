@@ -83,59 +83,60 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
       )
       .then(async (volumeRes) => {
         const kdaPrice = tokensUsdPrice?.KDA;
-        let mainVolumes = [];
-        const otherVolumes = {
-          name: 'OTHER',
-          volumeKDA: 0,
-        };
-        const main = localPairList.filter((t) => t.main);
-        const findMainPair = (vol) =>
-          main.find(
+        let allVolumes = [];
+        const allTokenPairs = localPairList;
+        const findTokenPair = (vol) =>
+          allTokenPairs.find(
             (m) => m.name === `coin:${vol.tokenFromNamespace}.${vol.tokenFromName}` || m.name === `coin:${vol.tokenToNamespace}.${vol.tokenToName}`
           );
 
         for (const volumes of volumeRes?.data) {
           for (const volume of volumes?.volumes) {
-            const isMainPair = findMainPair(volume);
-            if (isMainPair) {
-              const alreadyAdded = mainVolumes.find((mV) => mV.name === `${isMainPair.token0}/${isMainPair.token1}`);
+            const pair = findTokenPair(volume);
+            if (pair) {
+              const alreadyAdded = allVolumes.find((mV) => mV.name === `${pair.token0}/${pair.token1}`);
               if (alreadyAdded) {
                 const volumeKDA = alreadyAdded.volumeKDA + (volume.tokenFromName === 'coin' ? volume.tokenFromVolume : volume.tokenToVolume);
-                mainVolumes = [
-                  ...mainVolumes.filter((mV) => mV.name !== `${isMainPair.token0}/${isMainPair.token1}`),
+                allVolumes = [
+                  ...allVolumes.filter((mV) => mV.name !== `${pair.token0}/${pair.token1}`),
                   {
-                    color: isMainPair.color,
-                    name: `${isMainPair.token0}/${isMainPair.token1}`,
+                    color: pair.color,
+                    name: `${pair.token0}/${pair.token1}`,
                     volumeKDA,
                   },
                 ];
               } else {
                 const volumeKDA = volume.tokenFromName === 'coin' ? volume.tokenFromVolume : volume.tokenToVolume;
-                mainVolumes.push({
-                  color: isMainPair.color,
-                  name: `${isMainPair.token0}/${isMainPair.token1}`,
+                allVolumes.push({
+                  color: pair.color,
+                  name: `${pair.token0}/${pair.token1}`,
                   volumeKDA,
                 });
               }
-            } else {
-              const volumeKDA = volume.tokenFromName === 'coin' ? volume.tokenFromVolume : volume.tokenToVolume;
-              otherVolumes.volumeKDA += volumeKDA;
             }
           }
         }
-        const mainVolumeBarData = [...mainVolumes]
+        const allVolumeBarData = [...allVolumes]
           .map((volData) => ({
             ...volData,
             volumeUsd: volData.volumeKDA * kdaPrice,
             percentage: 10,
           }))
           .sort((x, y) => y.volumeUsd - x.volumeUsd);
-        const otherVolumeBarData = [otherVolumes].map((volData) => ({
-          ...volData,
-          volumeUsd: volData.volumeKDA * kdaPrice,
-          percentage: 10,
-        }));
-        const totVolumeBarData = [...mainVolumeBarData, ...otherVolumeBarData];
+
+        const topVolumesBarData = allVolumeBarData.splice(0, 3);
+        const otherVolumePercentage = allVolumeBarData.reduce((acc, curr) => acc + curr.percentage, 0);
+        const otherVolumeKda = allVolumeBarData.reduce((acc, curr) => acc + curr.volumeKDA, 0);
+        const otherVolumeUsd = allVolumeBarData.reduce((acc, curr) => acc + curr.volumeUsd, 0);
+
+        const otherVolumeBarData = {
+          name: 'OTHER',
+          volumeKDA: otherVolumeKda,
+          volumeUsd: otherVolumeUsd,
+          percentage: otherVolumePercentage,
+        };
+
+        const totVolumeBarData = [...topVolumesBarData, otherVolumeBarData];
         const totalVol = totVolumeBarData.reduce((partialSum, curr) => partialSum + curr.volumeUsd, 0);
         setPairsVolume(totVolumeBarData.map((v) => ({ ...v, percentage: (100 * v.volumeUsd) / totalVol })));
         setLoading(false);
