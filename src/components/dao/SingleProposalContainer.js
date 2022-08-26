@@ -4,7 +4,7 @@ import moment from 'moment';
 import Pact from 'pact-lang-api';
 import { useHistory } from 'react-router-dom';
 import { hasAccountVoted, readSingleProposal, voteCommandToSign, votePreview } from '../../api/dao';
-import { useAccountContext, useKaddexWalletContext, useNotificationContext, usePactContext } from '../../contexts';
+import { useAccountContext, useKaddexWalletContext, useNotificationContext, usePactContext, useWalletConnectContext } from '../../contexts';
 import { ROUTE_DAO } from '../../router/routes';
 import { PartialScrollableScrollSection } from '../layout/Containers';
 import { FlexContainer } from '../shared/FlexContainer';
@@ -19,7 +19,7 @@ import { getStatusProposal } from '../../utils/dao-utils';
 import Loader from '../shared/Loader';
 import HtmlFormatterContainer from './HtmlFormatterContainer';
 import useWindowSize from '../../hooks/useWindowSize';
-import { NETWORK, CHAIN_ID } from '../../constants/contextConstants';
+import { NETWORK, CHAIN_ID, NETWORKID } from '../../constants/contextConstants';
 
 const SingleProposalContainer = ({ proposal_id, accountData }) => {
   const { account } = useAccountContext();
@@ -27,6 +27,7 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
   const notificationContext = useNotificationContext();
   const { showNotification, STATUSES } = useNotificationContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
+  const { pairingTopic: isWalletConnectConnected, requestSignTransaction: walletConnectRequestSign } = useWalletConnectContext();
 
   const history = useHistory();
   const [daoSingleProposalLoading, setDaoSingleProposalLoading] = useState(false);
@@ -87,7 +88,6 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
           setDaoSingleProposalLoading(false);
         })
         .catch((error) => {
-          console.log(`~ Vote error`, error);
           pact.setPolling(false);
           notificationContext.showErrorNotification(null, 'Vote error', (error.toString && error.toString()) || 'Generic Vote error');
           setDaoFetchDataLoading(false);
@@ -102,6 +102,9 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
     try {
       if (isKaddexWalletConnected) {
         const res = await kaddexWalletRequestSign(commandToSign);
+        return res.signedCmd;
+      } else if (isWalletConnectConnected) {
+        const res = await walletConnectRequestSign(account.account, NETWORKID, commandToSign);
         return res.signedCmd;
       } else {
         const res = await Pact.wallet.sign(commandToSign);

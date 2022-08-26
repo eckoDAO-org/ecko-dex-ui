@@ -2,7 +2,7 @@ import React, { useState, createContext } from 'react';
 import pairTokens from '../constants/pairsConfig';
 import Pact from 'pact-lang-api';
 import { CHAIN_ID, NETWORK, NETWORKID, PRECISION, KADDEX_NAMESPACE } from '../constants/contextConstants';
-import { useKaddexWalletContext, usePactContext, useWalletContext, useAccountContext } from '.';
+import { useKaddexWalletContext, usePactContext, useWalletContext, useAccountContext, useWalletConnectContext } from '.';
 import { extractDecimal, reduceBalance } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
 import { handleError, mkReq, parseRes } from '../api/utils';
@@ -14,6 +14,7 @@ export const LiquidityProvider = (props) => {
   const pact = usePactContext();
   const { account, setLocalRes } = useAccountContext();
   const { isConnected: isXWalletConnected, requestSign: xWalletRequestSign } = useKaddexWalletContext();
+  const { pairingTopic: isWalletConnectConnected, requestSignTransaction: walletConnectRequestSign } = useWalletConnectContext();
   const wallet = useWalletContext();
   const [liquidityProviderFee, setLiquidityProviderFee] = useState(0.003);
   const [pairListAccount, setPairListAccount] = useState(pairTokens);
@@ -84,6 +85,9 @@ export const LiquidityProvider = (props) => {
       let command = null;
       if (isXWalletConnected) {
         const res = await xWalletRequestSign(signCmd);
+        command = res.signedCmd;
+      } else if (isWalletConnectConnected) {
+        const res = await walletConnectRequestSign(account.account, NETWORKID, signCmd);
         command = res.signedCmd;
       } else {
         command = await Pact.wallet.sign(signCmd);
@@ -168,6 +172,9 @@ export const LiquidityProvider = (props) => {
         let command = null;
         if (isXWalletConnected) {
           const res = await xWalletRequestSign(signCmd);
+          command = res.signedCmd;
+        } else if (isWalletConnectConnected) {
+          const res = await walletConnectRequestSign(account.account, NETWORKID, signCmd);
           command = res.signedCmd;
         } else {
           command = await Pact.wallet.sign(signCmd);
@@ -264,6 +271,9 @@ export const LiquidityProvider = (props) => {
       let cmd = null;
       if (isXWalletConnected) {
         const res = await xWalletRequestSign(signCmd);
+        cmd = res.signedCmd;
+      } else if (isWalletConnectConnected) {
+        const res = await walletConnectRequestSign(account.account, NETWORKID, signCmd);
         cmd = res.signedCmd;
       } else {
         cmd = await Pact.wallet.sign(signCmd);
