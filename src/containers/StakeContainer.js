@@ -25,9 +25,16 @@ import VotingPower from '../components/stake/VotingPower';
 import { AddStakeModal } from '../components/modals/stake/AddStakeModal';
 import { UnstakeModal } from '../components/modals/stake/UnstakeModal';
 import { ClaimModal } from '../components/modals/stake/ClaimModal';
-import { useAccountContext, useKaddexWalletContext, useNotificationContext, usePactContext, useModalContext } from '../contexts';
+import {
+  useAccountContext,
+  useKaddexWalletContext,
+  useNotificationContext,
+  usePactContext,
+  useModalContext,
+  useWalletConnectContext,
+} from '../contexts';
 import { ROUTE_STAKE, ROUTE_UNSTAKE } from '../router/routes';
-import { CHAIN_ID, NETWORK } from '../constants/contextConstants';
+import { CHAIN_ID, NETWORK, NETWORKID } from '../constants/contextConstants';
 import { theme } from '../styles/theme';
 // import { useInterval } from '../hooks/useInterval';
 import { extractDecimal, getDecimalPlaces, reduceBalance } from '../utils/reduceBalance';
@@ -40,6 +47,7 @@ const StakeContainer = () => {
   const { openModal, closeModal } = useModalContext();
   const { account } = useAccountContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
+  const { pairingTopic: isWalletConnectConnected, requestSignTransaction: walletConnectRequestSign } = useWalletConnectContext();
   const { showNotification, STATUSES, pollingNotif, showErrorNotification, transactionListen } = useNotificationContext();
   const pact = usePactContext();
 
@@ -118,6 +126,9 @@ const StakeContainer = () => {
   const signCommand = async (cmd) => {
     if (isKaddexWalletConnected) {
       const res = await kaddexWalletRequestSign(cmd);
+      return res.signedCmd;
+    } else if (isWalletConnectConnected) {
+      const res = await walletConnectRequestSign(account.account, NETWORKID, cmd);
       return res.signedCmd;
     } else {
       return await Pact.wallet.sign(cmd);

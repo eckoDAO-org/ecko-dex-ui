@@ -9,6 +9,7 @@ import {
   useGameEditionContext,
   useKaddexWalletContext,
   useNotificationContext,
+  useWalletConnectContext,
   useWalletContext,
 } from '../../contexts';
 import { STATUSES } from '../../contexts/NotificationContext';
@@ -151,6 +152,7 @@ const GameEditionContainer = ({ children }) => {
   const location = useLocation();
   const { showNotification } = useNotificationContext();
   const { initializeKaddexWallet, isConnected, isInstalled } = useKaddexWalletContext();
+  const { pairingTopic: isWalletConnectConnected } = useWalletConnectContext();
   const { wallet, signingWallet, setSelectedWallet } = useWalletContext();
   const { resolutionConfiguration, themeMode } = useApplicationContext();
   const { showWires, setShowWires, selectedWire, openModal, modalState, closeModal, onWireSelect, showTokens, setOutsideToken, setShowTokens } =
@@ -241,6 +243,22 @@ const GameEditionContainer = ({ children }) => {
       });
     }
   }, [account.account, isConnected]);
+
+  useEffect(() => {
+    if (account.account && isWalletConnectConnected) {
+      onWireSelect(WALLET.WALLETCONNECT);
+
+      showNotification({
+        title: `${WALLET.WALLETCONNECT.name} connected`,
+        type: 'game-mode',
+        icon: WALLET.KADDEX_WALLET.notificationLogo,
+        closeButton: false,
+        titleStyle: { fontSize: 13 },
+        autoClose: 3000,
+      });
+    }
+  }, [account.account, isWalletConnectConnected]);
+
   useEffect(() => {
     if ((selectedWire && !account.account) || (selectedWire && selectedWire?.id !== wallet?.id)) {
       getWalletModal(selectedWire.name);
