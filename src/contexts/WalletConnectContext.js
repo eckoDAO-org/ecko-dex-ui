@@ -1,6 +1,6 @@
 import Client from '@walletconnect/sign-client';
 import QRCodeModal from '@walletconnect/qrcode-modal';
-import { CHAIN_ID, NETWORKID, WALLET_CONNECT_METADATA, WALLET_CONNECT_PROJECT_ID, WALLET_CONNECT_RELAY_URL } from '../constants/contextConstants';
+import { NETWORKID, WALLET_CONNECT_METADATA, WALLET_CONNECT_PROJECT_ID, WALLET_CONNECT_RELAY_URL } from '../constants/contextConstants';
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { useAccountContext } from './index';
 import useLocalStorage from '../hooks/useLocalStorage';
