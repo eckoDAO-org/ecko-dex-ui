@@ -1,13 +1,13 @@
 import Client from '@walletconnect/sign-client';
 import QRCodeModal from '@walletconnect/qrcode-modal';
-import { CHAIN_ID, WALLET_CONNECT_METADATA, WALLET_CONNECT_PROJECT_ID, WALLET_CONNECT_RELAY_URL } from '../constants/contextConstants';
+import { CHAIN_ID, NETWORKID, WALLET_CONNECT_METADATA, WALLET_CONNECT_PROJECT_ID, WALLET_CONNECT_RELAY_URL } from '../constants/contextConstants';
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { useAccountContext } from './index';
 import useLocalStorage from '../hooks/useLocalStorage';
 
 export const KDA_NAMESPACE = 'kadena';
 
-export const KDA_CHAINS = ['kadena:mainnet01', 'kadena:testnet04'];
+export const KDA_CHAINS = ['kadena:mainnet01', 'kadena:testnet04', 'kadena:development'];
 
 const KDA_METHODS = {
   KDA_SIGN: 'kadena_sign',
@@ -167,7 +167,7 @@ export const WalletConnectProvider = (props) => {
   );
 
   const requestSignTransaction = useCallback(
-    async (account, chainId, payload) => {
+    async (account, networkId, payload) => {
       if (!client) {
         const initialized = await initialize();
         if (!initialized) {
@@ -183,9 +183,9 @@ export const WalletConnectProvider = (props) => {
 
       const response = await client?.request({
         topic: walletConnectState?.pairingTopic,
-        chainId: `${KDA_NAMESPACE}:${chainId || CHAIN_ID}`,
+        chainId: `${KDA_NAMESPACE}:${networkId || NETWORKID}`,
         request: {
-          method: KDX_METHODS.KDX_SIGN_TRANSACTION,
+          method: KDA_METHODS.KDA_SIGN,
           params: payload,
         },
       });

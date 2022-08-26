@@ -145,7 +145,7 @@ export const SwapProvider = (props) => {
           const res = await kaddexWalletRequestSign(signCmd);
           command = res.signedCmd;
         } else if (isWalletConnectConnected) {
-          const res = await walletConnectRequestSignTransaction(account.account, CHAIN_ID, signCmd);
+          const res = await walletConnectRequestSignTransaction(account.account, NETWORKID, signCmd);
           command = res.signedCmd;
         } else {
           command = await Pact.wallet.sign(signCmd);
