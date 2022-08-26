@@ -73,6 +73,28 @@ const DropdownContainer = styled.div`
   }
 `;
 
+const CustomDropdown = styled.div`
+  .ui.selection.dropdown {
+    padding-right: 1em !important;
+  }
+
+  .ui.selection.visible.dropdown .menu {
+    position: unset;
+    top: unset;
+    border: none;
+  }
+
+  .ui.selection.dropdown .menu > .item {
+    border: none;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+
+    &:first-child {
+      padding-top: 1.5rem !important;
+    }
+  }
+`;
+
 const GetZelcoreAccountModal = ({ onClose, onConnectionSuccess }) => {
   const modalContext = useModalContext();
   const { account, setVerifiedAccount } = useAccountContext();
@@ -190,22 +212,24 @@ const GetZelcoreAccountModal = ({ onClose, onConnectionSuccess }) => {
               />
             </DropdownContainer>
           ) : (
-            <Dropdown
-              placeholder="More"
-              fluid
-              selection
-              closeOnChange
-              options={
-                accounts &&
-                accounts.map((item, index) => ({
-                  key: index,
-                  text: reduceToken(item),
-                  value: item,
-                }))
-              }
-              onChange={handleDropdownChange}
-              value={selectedAccount}
-            />
+            <CustomDropdown>
+              <Dropdown
+                placeholder="More"
+                fluid
+                selection
+                closeOnChange
+                options={
+                  accounts &&
+                  accounts.map((item, index) => ({
+                    key: index,
+                    text: reduceToken(item),
+                    value: item,
+                  }))
+                }
+                onChange={handleDropdownChange}
+                value={selectedAccount}
+              />
+            </CustomDropdown>
           )}
           <ActionContainer gameEditionView={gameEditionView}>
             <CustomButton type="basic" geType="cancel" fluid onClick={() => handleCancel()}>
