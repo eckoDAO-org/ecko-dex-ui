@@ -1,6 +1,5 @@
 import React, { createContext } from 'react';
 import Pact from 'pact-lang-api';
-import tokenData from '../constants/cryptoCurrencies';
 import { reduceBalance } from '../utils/reduceBalance';
 
 import { useKaddexWalletContext, useWalletContext, useAccountContext, usePactContext } from '.';
@@ -47,18 +46,18 @@ export const SwapProvider = (props) => {
                 account.account,
                 pair,
                 isSwapIn
-                  ? reduceBalance(token0.amount, tokenData[token0.coin].precision)
-                  : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision),
+                  ? reduceBalance(token0.amount, pact.allTokens[token0.coin].precision)
+                  : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token0.coin].precision),
               ],
             },
           ],
         },
         envData: {
           'user-ks': account.guard,
-          token0Amount: reduceBalance(token0.amount, tokenData[token0.coin].precision),
-          token1Amount: reduceBalance(token1.amount, tokenData[token1.coin].precision),
-          token1AmountWithSlippage: reduceBalance(token1.amount * (1 - parseFloat(pact.slippage)), tokenData[token1.coin].precision),
-          token0AmountWithSlippage: reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision),
+          token0Amount: reduceBalance(token0.amount, pact.allTokens[token0.coin].precision),
+          token1Amount: reduceBalance(token1.amount, pact.allTokens[token1.coin].precision),
+          token1AmountWithSlippage: reduceBalance(token1.amount * (1 - parseFloat(pact.slippage)), pact.allTokens[token1.coin].precision),
+          token0AmountWithSlippage: reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token0.coin].precision),
         },
         // meta: Pact.lang.mkMeta('', '', 0, 0, 0, 0),
         networkId: NETWORKID,
@@ -109,8 +108,8 @@ export const SwapProvider = (props) => {
               account.account,
               pair.account,
               isSwapIn
-                ? reduceBalance(token0.amount, tokenData[token0.coin].precision)
-                : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision),
+                ? reduceBalance(token0.amount, pact.allTokens[token0.coin].precision)
+                : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token0.coin].precision),
             ]),
           ],
           sender: pact.enableGasStation ? 'kaddex-free-gas' : account.account,
@@ -120,10 +119,10 @@ export const SwapProvider = (props) => {
           ttl: 600,
           envData: {
             'user-ks': accountDetails.result.data.guard,
-            token0Amount: reduceBalance(token0.amount, tokenData[token0.coin].precision),
-            token1Amount: reduceBalance(token1.amount, tokenData[token1.coin].precision),
-            token0AmountWithSlippage: reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision),
-            token1AmountWithSlippage: reduceBalance(token1.amount * (1 - parseFloat(pact.slippage)), tokenData[token1.coin].precision),
+            token0Amount: reduceBalance(token0.amount, pact.allTokens[token0.coin].precision),
+            token1Amount: reduceBalance(token1.amount, pact.allTokens[token1.coin].precision),
+            token0AmountWithSlippage: reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token0.coin].precision),
+            token1AmountWithSlippage: reduceBalance(token1.amount * (1 - parseFloat(pact.slippage)), pact.allTokens[token1.coin].precision),
           },
           signingPubKey: accountDetails.result.data.guard.keys[0],
           networkId: NETWORKID,
@@ -181,7 +180,6 @@ export const SwapProvider = (props) => {
         swap,
         getPairAccount,
         swapWallet,
-        tokenData,
         localRes,
         mkReq,
         parseRes,

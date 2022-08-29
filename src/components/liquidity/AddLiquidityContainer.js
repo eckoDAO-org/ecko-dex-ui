@@ -20,7 +20,7 @@ import { isValidString } from '../../utils/string-utils';
 import { AppLoader } from '../../components/shared/AppLoader';
 import { useErrorState } from '../../hooks/useErrorState';
 import theme from '../../styles/theme';
-import { useLiquidityContext } from '../../contexts';
+import { useLiquidityContext, usePactContext } from '../../contexts';
 import { getPairsMultiplier } from '../../api/liquidity-rewards';
 import moment from 'moment';
 
@@ -43,6 +43,7 @@ const Container = styled(FadeIn)`
 const AddLiquidityContainer = (props) => {
   const history = useHistory();
   const { setWantsKdxRewards } = useLiquidityContext();
+  const pact = usePactContext();
   const { pathname } = useLocation();
 
   const query = useQueryParams();
@@ -62,7 +63,7 @@ const AddLiquidityContainer = (props) => {
     }
 
     if (pool) {
-      const result = await getAllPairValues([pool], data.volumes);
+      const result = await getAllPairValues([pool], data.volumes, pact.allTokens);
       setApr(result[0]?.apr?.value);
     }
   };
@@ -81,7 +82,7 @@ const AddLiquidityContainer = (props) => {
   };
 
   const fetchData = async () => {
-    const pools = await getPairList();
+    const pools = await getPairList(pact.allPairs);
     if (pools.length) {
       const multipliers = await getPairsMultiplier(pools);
       const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');

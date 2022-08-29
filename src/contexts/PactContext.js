@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
-import pairTokens from '../constants/pairsConfig';
 // import { useInterval } from '../hooks/useInterval';
 import axios from 'axios';
 import { getTokenName, getTokenUsdPriceByName } from '../utils/token-utils';
@@ -37,7 +36,6 @@ export const PactProvider = (props) => {
   const [pactCmd, setPactCmd] = useState(null);
 
   const [ratio, setRatio] = useState(NaN);
-  const [pairList, setPairList] = useState(pairTokens);
   const [swapList, setSwapList] = useState([]);
   const [offsetSwapList, setOffsetSwapList] = useState(0);
   const [moreSwap, setMoreSwap] = useState(true);
@@ -98,7 +96,7 @@ export const PactProvider = (props) => {
         const index = res.indexOf(':');
         const token0 = res.substr(0, index); // Gets the first part for future
         const token1 = res.substr(index + 1); // Gets the second part
-        if (!allTokens.hasOwnProperty(getTokenName(token1))) {
+        if (!allTokens.hasOwnProperty(getTokenName(token1, tokenData))) {
           let communityPair = {
             name: getTokenNameFromAddress(token1),
             coingeckoId: '',
@@ -123,10 +121,10 @@ export const PactProvider = (props) => {
   }, []);
 
   const updateTokenUsdPrice = async () => {
-    const pairList = await getPairList();
+    const pairList = await getPairList(allPairs);
     const result = {};
-    for (const token of Object.values(tokenData)) {
-      await getTokenUsdPriceByName(token.name, pairList).then((price) => {
+    for (const token of Object.values(allTokens)) {
+      await getTokenUsdPriceByName(token.name, pairList, allTokens).then((price) => {
         result[token.name] = price;
       });
     }
@@ -139,7 +137,9 @@ export const PactProvider = (props) => {
   // useInterval(updateTokenUsdPrice, 25000);
 
   useEffect(() => {
-    pairReserve ? setRatio(pairReserve['token0'] / pairReserve['token1']) : setRatio(NaN);
+    if (pairReserve) {
+      pairReserve['token0'] === 0 && pairReserve['token1'] === 0 ? setRatio(0) : setRatio(pairReserve['token0'] / pairReserve['token1']);
+    } else setRatio(NaN);
   }, [pairReserve]);
 
   useEffect(() => {
@@ -284,7 +284,8 @@ export const PactProvider = (props) => {
 
   const getRatio = (toToken, fromToken) => {
     if (toToken === fromToken) return 1;
-    return pairReserve['token1'] / pairReserve['token0'];
+    else if (pairReserve['token1'] === 0 && pairReserve['token0'] === 0) return 1;
+    else return pairReserve['token1'] / pairReserve['token0'];
   };
 
   const getRatio1 = (toToken, fromToken) => {
@@ -350,8 +351,6 @@ export const PactProvider = (props) => {
     precision,
     setPrecision,
     fetchPrecision,
-    pairList,
-    setPairList,
     swapList,
     allPairs,
     allTokens,

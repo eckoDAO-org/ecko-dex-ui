@@ -7,17 +7,17 @@ import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
 import { getTokenIconByCode } from '../../../utils/token-utils';
 
 export const ClaimModal = ({ onConfirm, estimateUnstakeData }) => {
-  const { tokensUsdPrice } = usePactContext();
+  const pact = usePactContext();
 
   return (
     <div>
       <Label fontSize={16}>Staking Rewards Collected</Label>
       <StakeModalRow style={{ marginBottom: 20 }}>
         <RowTokenInfoPrice
-          tokenIcon={getTokenIconByCode('kaddex.kdx')}
+          tokenIcon={getTokenIconByCode('kaddex.kdx', pact.allTokens)}
           tokenName="KDX"
           amount={estimateUnstakeData['reward-accrued']}
-          tokenPrice={tokensUsdPrice?.KDX}
+          tokenPrice={pact.tokensUsdPrice?.KDX}
         />
       </StakeModalRow>
 
@@ -31,10 +31,10 @@ export const ClaimModal = ({ onConfirm, estimateUnstakeData }) => {
           </Label>
           <StakeModalRow>
             <RowTokenInfoPrice
-              tokenIcon={getTokenIconByCode('kaddex.kdx')}
+              tokenIcon={getTokenIconByCode('kaddex.kdx', pact.allTokens)}
               tokenName="KDX"
               amount={estimateUnstakeData['reward-penalty']}
-              tokenPrice={tokensUsdPrice?.KDX}
+              tokenPrice={pact.tokensUsdPrice?.KDX}
             />
           </StakeModalRow>
         </>

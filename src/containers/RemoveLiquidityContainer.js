@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { useAccountContext, useLiquidityContext } from '../contexts';
+import { useAccountContext, useLiquidityContext, usePactContext } from '../contexts';
 import RemoveLiquidityContent from '../components/liquidity/RemoveLiquidityContent';
 import SlippagePopupContent from '../components/layout/header/SlippagePopupContent';
 import { FadeIn } from '../components/shared/animations';
@@ -18,7 +18,6 @@ import { LIQUIDITY_VIEW } from '../constants/liquidityView';
 import { getAllPairValues } from '../utils/token-utils';
 import { getGroupedVolume } from '../api/kaddex-stats';
 import theme from '../styles/theme';
-import tokenData from '../constants/cryptoCurrencies';
 import moment from 'moment';
 
 const Container = styled(FadeIn)`
@@ -39,8 +38,8 @@ const Container = styled(FadeIn)`
 const RemoveLiquidityContainer = () => {
   const history = useHistory();
   const query = useQueryParams();
-  const { setWantsKdxRewards } = useLiquidityContext();
   const liquidity = useLiquidityContext();
+  const pact = usePactContext();
   const { account } = useAccountContext();
 
   const [loading, setLoading] = useState(false);
@@ -56,14 +55,14 @@ const RemoveLiquidityContainer = () => {
       (p) =>
         (p.token0 === currentPair.token0 && p.token1 === currentPair.token1) || (p.token0 === currentPair.token1 && p.token1 === currentPair.token0)
     );
-    const result = await getAllPairValues([pool], volumes);
+    const result = await getAllPairValues([pool], volumes, pact.allTokens);
     setApr(result[0]?.apr?.value);
   };
 
   const fetchData = async () => {
     const token0 = query.get('token0');
     const token1 = query.get('token1');
-    const resultPairList = await getPairListAccountBalance(account.account);
+    const resultPairList = await getPairListAccountBalance(account.account, pact.allPairs);
     if (resultPairList.length) {
       const currentPair = resultPairList.find((p) => p.token0 === token0 && p.token1 === token1);
       setPair(currentPair);
@@ -82,7 +81,11 @@ const RemoveLiquidityContainer = () => {
   }, 60000); */
 
   const removePreview = async (currentPair) => {
-    const res = await liquidity.removeLiquidityPreview(tokenData[currentPair?.token0].code, tokenData[currentPair?.token1].code, previewAmount);
+    const res = await liquidity.removeLiquidityPreview(
+      pact.allTokens[currentPair?.token0].code,
+      pact.allTokens[currentPair?.token1].code,
+      previewAmount
+    );
     if (!res.errorMessage) {
       setPreviewObject(res);
     }
@@ -135,7 +138,7 @@ const RemoveLiquidityContainer = () => {
                 isBoosted={pair.isBoosted}
                 apr={apr}
                 type={LIQUIDITY_VIEW.REMOVE_LIQUIDITY}
-                handleState={setWantsKdxRewards}
+                handleState={liquidity.setWantsKdxRewards}
                 previewObject={previewObject}
                 pair={pair}
               />

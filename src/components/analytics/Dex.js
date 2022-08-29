@@ -23,7 +23,7 @@ import Label from '../shared/Label';
 const KDX_TOTAL_SUPPLY = 1000000000;
 
 const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
-  const { tokensUsdPrice } = usePactContext();
+  const { tokensUsdPrice, allPairs } = usePactContext();
   const [stakeDataRange, setStakeDataRange] = useState(DAILY_VOLUME_RANGE.value);
   const [volumeRange, setVolumeRange] = useState(DAILY_VOLUME_RANGE.value);
 
@@ -36,7 +36,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
   const stakedKdx = extractDecimal((poolState && poolState['staked-kdx']) || 0);
 
   useEffect(() => {
-    getPairList().then((pL) => {
+    getPairList(allPairs).then((pL) => {
       setLocalPairList(pL);
     });
   }, []);

@@ -5,7 +5,7 @@ import PixeledTokenSelectorWhiteIcon from '../../../assets/images/game-edition/p
 import { PixeledArrowDownIcon, TreeDotsHorizontalIcon } from '../../../assets';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import PressButtonToActionLabel from '../../game-edition-v2/components/PressButtonToActionLabel';
-import { useGameEditionContext, useSwapContext } from '../../../contexts';
+import { useGameEditionContext, usePactContext } from '../../../contexts';
 
 const Content = styled.div`
   display: flex;
@@ -100,14 +100,13 @@ const TokenItem = styled.div`
 const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, fromToken, toToken }) => {
   const [searchValue, setSearchValue] = useState('');
   const [translateX, setTranslateX] = useState(0);
-
-  const swap = useSwapContext();
+  const pact = usePactContext();
 
   const [selectedToken, setSelectedToken] = useState(null);
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(1);
   const { gameEditionView, setShowTokens, setButtons, setOutsideToken, showTokens } = useGameEditionContext();
 
-  const cryptoCurrencies = Object.values(swap.tokenData)
+  const cryptoCurrencies = Object.values(pact.allTokens)
     .filter((c) => {
       const code = c.code !== 'coin' ? c.code.split('.')[1] : c.code;
       return code.toLocaleLowerCase().includes(searchValue?.toLocaleLowerCase()) || c.name.toLowerCase().includes(searchValue?.toLowerCase());

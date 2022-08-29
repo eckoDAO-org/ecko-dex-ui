@@ -7,7 +7,6 @@ import WalletRequestView from '../modals/WalletRequestView';
 import CustomButton from '../shared/CustomButton';
 import FormContainer from '../shared/FormContainer';
 import Input from '../shared/Input';
-import tokenData from '../../constants/cryptoCurrencies';
 import Label from '../shared/Label';
 import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
 import { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
@@ -140,8 +139,8 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
   const onRemoveLiquidity = async () => {
     setLoading(true);
     const res = await liquidity.removeLiquidityWallet(
-      tokenData[pair?.token0].code,
-      tokenData[pair?.token1].code,
+      pact.allTokens[pair?.token0].code,
+      pact.allTokens[pair?.token1].code,
       reduceBalance(pooled, PRECISION),
       previewAmount
     );

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import Pact from 'pact-lang-api';
 import { BoosterIcon } from '../../assets';
-import tokenData from '../../constants/cryptoCurrencies';
 import { extractDecimal, getDecimalPlaces } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
@@ -198,7 +197,7 @@ const LiquidityRewardsTable = () => {
         </div>
         <CommonTable
           items={rewardsFiltered}
-          columns={renderColumns()}
+          columns={renderColumns(pact.allTokens)}
           actions={[
             {
               icon: (item) => (
@@ -233,16 +232,16 @@ const LiquidityRewardsTable = () => {
 
 export default LiquidityRewardsTable;
 
-const renderColumns = () => {
+const renderColumns = (allTokens) => {
   return [
     {
       name: '',
       width: 160,
       render: ({ item }) => (
         <FlexContainer className="align-ce">
-          <CryptoContainer style={{ zIndex: 2 }}>{tokenData[getTokenByModuleV2(item.tokenA)].icon} </CryptoContainer>
-          <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}> {tokenData[getTokenByModuleV2(item.tokenB)].icon}</CryptoContainer>
-          {getTokenByModuleV2(item.tokenA)}/{getTokenByModuleV2(item.tokenB)}
+          <CryptoContainer style={{ zIndex: 2 }}>{allTokens[getTokenByModuleV2(item.tokenA, allTokens)].icon} </CryptoContainer>
+          <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}> {allTokens[getTokenByModuleV2(item.tokenB, allTokens)].icon}</CryptoContainer>
+          {getTokenByModuleV2(item.tokenA, allTokens)}/{getTokenByModuleV2(item.tokenB, allTokens)}
         </FlexContainer>
       ),
     },

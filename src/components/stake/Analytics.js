@@ -36,12 +36,12 @@ const IconContainer = styled.div`
 const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt, kdxSupply }) => {
   const [totalVolumeUSD, setTotalVolumeUSD] = useState(null);
   const [stakingAPR, setStakingAPR] = useState(null);
-  const { tokensUsdPrice } = usePactContext();
+  const pact = usePactContext();
   useEffect(() => {
-    getPairList()
+    getPairList(pact.allPairs)
       .then(async (pools) => {
         const volumes = await getDailyVolume();
-        const allPairValues = await getAllPairValues(pools, volumes);
+        const allPairValues = await getAllPairValues(pools, volumes, pact.allTokens);
         let totalUsd = 0;
         if (allPairValues?.length) {
           for (const pair of allPairValues) {
@@ -56,10 +56,10 @@ const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt, kdxSupply }) 
   const dailyUSDIncome = totalVolumeUSD && (getDailyUSDRewards(totalVolumeUSD) * stakedShare) / 100;
 
   useEffect(() => {
-    if (totalVolumeUSD && tokensUsdPrice?.KDX && totalStaked) {
-      setStakingAPR(getStakingApr(totalVolumeUSD, tokensUsdPrice?.KDX * extractDecimal(totalStaked)));
+    if (totalVolumeUSD && pact.tokensUsdPrice?.KDX && totalStaked) {
+      setStakingAPR(getStakingApr(totalVolumeUSD, pact.tokensUsdPrice?.KDX * extractDecimal(totalStaked)));
     }
-  }, [totalVolumeUSD, totalStaked, tokensUsdPrice?.KDX]);
+  }, [totalVolumeUSD, totalStaked, pact.tokensUsdPrice?.KDX]);
 
   return (
     <CommonWrapper title="analytics" gap={24} popup={<AnalyticsInfo />} popupTitle="Analytics">
@@ -69,7 +69,7 @@ const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt, kdxSupply }) 
             <Label>Daily Income</Label>
           </div>
           <Label fontSize={24}>
-            {(dailyUSDIncome && tokensUsdPrice?.KDX && humanReadableNumber(dailyUSDIncome / tokensUsdPrice?.KDX)) || '-'} KDX
+            {(dailyUSDIncome && pact.tokensUsdPrice?.KDX && humanReadableNumber(dailyUSDIncome / pact.tokensUsdPrice?.KDX)) || '-'} KDX
           </Label>
           {dailyUSDIncome ? <SubLabel>$ {(dailyUSDIncome && humanReadableNumber(dailyUSDIncome)) || ''}</SubLabel> : ''}
         </div>

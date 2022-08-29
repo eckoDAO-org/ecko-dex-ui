@@ -5,7 +5,6 @@ import { useAccountContext, usePactContext } from '../../contexts';
 import { useErrorState } from '../../hooks/useErrorState';
 import { getPairListAccountBalance } from '../../api/pact';
 import { AddIcon, RemoveIcon } from '../../assets';
-import tokenData from '../../constants/cryptoCurrencies';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_MY_LIQUIDITY, ROUTE_LIQUIDITY_REMOVE_LIQUIDITY } from '../../router/routes';
 import { extractDecimal, getDecimalPlaces, humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
@@ -16,13 +15,13 @@ import Label from '../shared/Label';
 const LiquidityMyLiquidityTable = () => {
   const history = useHistory();
   const { account } = useAccountContext();
-  const { tokensUsdPrice } = usePactContext();
+  const { tokensUsdPrice, allTokens, allPairs } = usePactContext();
   const [pairList, setPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     setLoading(true);
-    const result = await getPairListAccountBalance(account.account);
+    const result = await getPairListAccountBalance(account.account, allPairs);
 
     if (!result.errorMessage) {
       const resultWithLiquidity = result?.filter((r) => extractDecimal(r.pooledAmount[0]) !== 0 && extractDecimal(r.pooledAmount[1]) !== 0);
@@ -63,7 +62,7 @@ const LiquidityMyLiquidityTable = () => {
         </div>
         <CommonTable
           items={pairList}
-          columns={renderColumns(tokensUsdPrice)}
+          columns={renderColumns(tokensUsdPrice, allTokens)}
           actions={[
             {
               icon: () => <AddIcon />,
@@ -90,15 +89,15 @@ const LiquidityMyLiquidityTable = () => {
 };
 
 export default LiquidityMyLiquidityTable;
-const renderColumns = (tokensUsdPrice) => {
+const renderColumns = (tokensUsdPrice, allTokens) => {
   return [
     {
       name: '',
       width: 160,
       render: ({ item }) => (
         <FlexContainer className="align-ce">
-          <CryptoContainer style={{ zIndex: 2 }}>{tokenData[item.token0].icon} </CryptoContainer>
-          <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}> {tokenData[item.token1].icon}</CryptoContainer>
+          <CryptoContainer style={{ zIndex: 2 }}>{allTokens[item.token0].icon} </CryptoContainer>
+          <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}> {allTokens[item.token1].icon}</CryptoContainer>
           {item.token0}/{item.token1}
         </FlexContainer>
       ),

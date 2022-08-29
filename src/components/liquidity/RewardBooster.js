@@ -4,7 +4,6 @@ import styled from 'styled-components/macro';
 import { getKdxRewardsAvailable, getPairMultiplier } from '../../api/liquidity-rewards';
 import { BoosterIcon, CoinKaddexIcon, CoinsIcon, KaddexOutlineIcon } from '../../assets';
 import { KDX_TOTAL_SUPPLY } from '../../constants/contextConstants';
-import tokenData from '../../constants/cryptoCurrencies';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { useLiquidityContext, usePactContext } from '../../contexts';
 import theme from '../../styles/theme';
@@ -16,7 +15,7 @@ import Toggle from './Toggle';
 
 const RewardBooster = ({ type, apr, handleState, previewObject, pair, isBoosted }) => {
   const { wantsKdxRewards, setWantsKdxRewards } = useLiquidityContext();
-  const { tokensUsdPrice } = usePactContext();
+  const { tokensUsdPrice, allTokens } = usePactContext();
   const [, setLoading] = useState(false);
 
   const [multiplier, setMultiplier] = useState(null);
@@ -28,7 +27,7 @@ const RewardBooster = ({ type, apr, handleState, previewObject, pair, isBoosted 
       setRewardsAvailable(extractDecimal(res));
     }
     if (pair) {
-      const result = await getPairMultiplier(tokenData[pair?.token0].code, tokenData[pair?.token1].code);
+      const result = await getPairMultiplier(allTokens[pair?.token0].code, allTokens[pair?.token1].code);
       if (!result.errorMessage) {
         setMultiplier(result);
       }

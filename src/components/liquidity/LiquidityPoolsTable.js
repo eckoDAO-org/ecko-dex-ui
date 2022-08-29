@@ -11,7 +11,6 @@ import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import { AddIcon, BoosterIcon, GasIcon } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS } from '../../router/routes';
 import Label from '../shared/Label';
-import tokenData from '../../constants/cryptoCurrencies';
 import { getAllPairValues } from '../../utils/token-utils';
 import { getPairsMultiplier } from '../../api/liquidity-rewards';
 import { commonColors } from '../../styles/theme';
@@ -25,11 +24,11 @@ const LiquidityPoolsTable = () => {
   const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
-    const pools = await getPairList();
+    const pools = await getPairList(pact.allPairs);
     if (pools.length) {
       const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
 
-      const allPairValues = await getAllPairValues(pools, volumes);
+      const allPairValues = await getAllPairValues(pools, volumes, pact.allTokens);
       let allData = [];
       const multipliers = await getPairsMultiplier(pools);
       for (let i = 0; i < allPairValues.length; i++) {
@@ -65,7 +64,7 @@ const LiquidityPoolsTable = () => {
   return !loading ? (
     <CommonTable
       items={pairList}
-      columns={pact.enableGasStation ? renderColumns() : renderColumns().filter((x) => x.name !== 'Fees')}
+      columns={pact.enableGasStation ? renderColumns(pact.allTokens) : renderColumns(pact.allTokens).filter((x) => x.name !== 'Fees')}
       actions={[
         {
           icon: () => <AddIcon />,
@@ -83,15 +82,15 @@ const LiquidityPoolsTable = () => {
 
 export default LiquidityPoolsTable;
 
-const renderColumns = () => {
+const renderColumns = (allTokens) => {
   return [
     {
       name: '',
       width: 160,
       render: ({ item }) => (
         <FlexContainer className="align-ce">
-          <CryptoContainer style={{ zIndex: 2 }}> {tokenData[item.token0].icon}</CryptoContainer>
-          <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{tokenData[item.token1].icon} </CryptoContainer>
+          <CryptoContainer style={{ zIndex: 2 }}> {allTokens[item.token0].icon}</CryptoContainer>
+          <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{allTokens[item.token1].icon} </CryptoContainer>
           {item.token0}/{item.token1}
         </FlexContainer>
       ),

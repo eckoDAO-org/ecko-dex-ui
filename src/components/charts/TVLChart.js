@@ -9,6 +9,7 @@ import { getPairList } from '../../api/pact';
 import { getGroupedTVL } from '../../api/kaddex-stats';
 import CustomDropdown from '../shared/CustomDropdown';
 import { tvlRanges, TVL_3M_RANGE, TVL_CHART_OPTIONS } from '../../constants/chartOptionsConstants';
+import { usePactContext } from '../../contexts';
 
 export const GraphCardHeader = styled.div`
   width: 100%;
@@ -32,6 +33,7 @@ const STYChartContainer = styled(ResponsiveContainer)`
 `;
 
 const TVLChart = ({ kdaPrice, height }) => {
+  const { allPairs } = usePactContext();
   const [viewedTVL, setViewedTVL] = useState(null);
   const [currentTVL, setCurrentTVL] = useState(null);
   const [currentDate, setCurrentDate] = useState(null);
@@ -41,7 +43,7 @@ const TVLChart = ({ kdaPrice, height }) => {
 
   const getTVL = useCallback(async () => {
     let totalTVL = 0;
-    const pairList = await getPairList();
+    const pairList = await getPairList(allPairs);
     if (Array.isArray(pairList)) {
       for (const pair of pairList) {
         const token0Balance = Number(pair.reserves[0]?.decimal) || pair.reserves[0] || 0;

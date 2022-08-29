@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
-import tokenData from '../../../constants/cryptoCurrencies';
+import { usePactContext } from '../../../contexts';
 import CustomDivider from '../../shared/CustomDivider';
 import { CryptoContainer, FlexContainer } from '../../shared/FlexContainer';
 import Label from '../../shared/Label';
@@ -8,6 +8,7 @@ import Search from '../../shared/Search';
 
 const SelectPoolModal = ({ pools, onSelect }) => {
   const [searchValue, setSearchValue] = useState('');
+  const { allTokens } = usePactContext();
 
   return (
     <Content>
@@ -23,10 +24,10 @@ const SelectPoolModal = ({ pools, onSelect }) => {
           .map((pool, i) => (
             <div key={i} className="pointer flex align-ce" onClick={() => onSelect(pool)}>
               <CryptoContainer size={22} style={{ zIndex: 2 }}>
-                {tokenData[pool.token0].icon}
+                {allTokens[pool.token0].icon}
               </CryptoContainer>
               <CryptoContainer size={22} style={{ marginLeft: -12, zIndex: 1 }}>
-                {tokenData[pool.token1].icon}{' '}
+                {allTokens[pool.token1].icon}{' '}
               </CryptoContainer>
               <Label fontSize={13}>
                 {pool.token0}/{pool.token1}

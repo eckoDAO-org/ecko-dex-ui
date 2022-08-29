@@ -6,7 +6,7 @@ import { PartialScrollableScrollSection } from '../../layout/Containers';
 import useWindowSize from '../../../hooks/useWindowSize';
 import { theme } from '../../../styles/theme';
 import { CloseIcon } from '../../../assets';
-import { useApplicationContext, useGameEditionContext, useSwapContext } from '../../../contexts';
+import { useApplicationContext, useGameEditionContext, usePactContext } from '../../../contexts';
 
 const Divider = styled.div`
   border-top: ${({ theme: { colors } }) => `1px solid ${colors.white}99 `};
@@ -57,12 +57,12 @@ const TokenItem = styled.div`
 `;
 const TokenSelectorModalContent = ({ onSelectToken, onClose, token, tokensToKeep }) => {
   const [searchValue, setSearchValue] = useState('');
-  const swap = useSwapContext();
+  const pact = usePactContext();
   const { gameEditionView, onCloseTokensList } = useGameEditionContext();
   const { themeMode } = useApplicationContext();
 
   const [width] = useWindowSize();
-  const cryptoCurrencies = Object.values(swap.tokenData).filter((c) => {
+  const cryptoCurrencies = Object.values(pact.allTokens).filter((c) => {
     const code = c.code !== 'coin' ? c.code.split('.')[1] : c.code;
     return code.toLocaleLowerCase().includes(searchValue?.toLocaleLowerCase()) || c.name.toLowerCase().includes(searchValue?.toLowerCase());
   });

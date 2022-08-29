@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import styled from 'styled-components';
-import tokenData from '../../constants/cryptoCurrencies';
+import { usePactContext } from '../../contexts';
 import { humanReadableNumber } from '../../utils/reduceBalance';
 import { getTokenIconById } from '../../utils/token-utils';
 import { CryptoContainer, FlexContainer } from './FlexContainer';
@@ -52,6 +52,7 @@ const TooltipContent = styled(FlexContainer)`
 `;
 
 const StackedBarChart = ({ title, rightComponent, data, withDoubleToken }) => {
+  const pact = usePactContext();
   const [barOnHover, setBarOnHover] = useState('');
 
   const obj = data.reduce((res, item) => {
@@ -76,16 +77,16 @@ const StackedBarChart = ({ title, rightComponent, data, withDoubleToken }) => {
           {withDoubleToken && tokens ? (
             <>
               <CryptoContainer size={24} style={{ zIndex: 2 }}>
-                {tokens && tokenData[tokens[0]].icon}
+                {tokens && pact.allTokens[tokens[0]]?.icon}
               </CryptoContainer>
               <CryptoContainer size={24} style={{ marginLeft: -12, zIndex: 1 }}>
-                {tokens && tokenData[tokens[1]].icon}{' '}
+                {tokens && pact.allTokens[tokens[1]]?.icon}{' '}
               </CryptoContainer>
               <Label>{tokenInfo.name}</Label>
             </>
           ) : (
             <>
-              <CryptoContainer size={24}>{getTokenIconById(tokens)}</CryptoContainer>
+              <CryptoContainer size={24}>{getTokenIconById(tokens, pact.allTokens)}</CryptoContainer>
               <Label>{s[0] !== 'OTHER' ? s[1] : 'OTHER'}</Label>
             </>
           )}
@@ -108,10 +109,10 @@ const StackedBarChart = ({ title, rightComponent, data, withDoubleToken }) => {
           {tokens && (
             <>
               <CryptoContainer size={16} style={{ zIndex: 2 }}>
-                {tokens && tokenData[tokens[0]].icon}
+                {tokens && pact.allTokens[tokens[0]]?.icon}
               </CryptoContainer>
               <CryptoContainer size={16} style={{ marginLeft: -12, zIndex: 1 }}>
-                {tokens && tokenData[tokens[1]].icon}
+                {tokens && pact.allTokens[tokens[1]]?.icon}
               </CryptoContainer>
             </>
           )}
@@ -125,7 +126,7 @@ const StackedBarChart = ({ title, rightComponent, data, withDoubleToken }) => {
       return (
         <>
           <div style={{ width: 32, height: 16, borderRadius: 4, background: item.color || '#A9AAB4', marginRight: 8 }}></div>
-          {getTokenIconById(token) && <CryptoContainer size={16}>{getTokenIconById(token)}</CryptoContainer>}
+          {getTokenIconById(token, pact.allTokens) && <CryptoContainer size={16}>{getTokenIconById(token, pact.allTokens)}</CryptoContainer>}
           <Label>
             {token} {item.percentage.toFixed(2)} %
           </Label>

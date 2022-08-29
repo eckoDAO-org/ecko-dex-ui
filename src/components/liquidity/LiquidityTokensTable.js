@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom';
 import { getGroupedVolume, getTotalKDAVolume } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact';
 import CommonTable from '../shared/CommonTable';
-import tokenData from '../../constants/cryptoCurrencies';
 import { humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import { AddIcon, BoosterIcon, GasIcon, TradeUpIcon } from '../../assets';
@@ -18,22 +17,31 @@ import { commonColors, theme } from '../../styles/theme';
 import styled from 'styled-components';
 import { getPairsMultiplier } from '../../api/liquidity-rewards';
 
+const ScalableCryptoContainer = styled(FlexContainer)`
+  transition: all 0.3s ease-in-out;
+
+  :hover {
+    transform: scale(1.18);
+  }
+`;
+
 const LiquidityTokensTable = () => {
   const history = useHistory();
   const { themeMode } = useApplicationContext();
+  const pact = usePactContext();
   const [loading, setLoading] = useState(true);
   const [tokens, setTokens] = useState([]);
 
   const { tokensUsdPrice, enableGasStation } = usePactContext();
 
   const fetchData = async () => {
-    const pairsList = await getPairList();
+    const pairsList = await getPairList(pact.allPairs);
     if (pairsList?.length) {
       const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
-      const tokens = Object.values(tokenData);
+      const tokens = Object.values(pact.allTokens);
 
       // get all aprs from pairs list
-      const aprs = (await getAllPairValues(pairsList, volumes)).map((pair) => pair.apr);
+      const aprs = (await getAllPairValues(pairsList, volumes, pact.allTokens)).map((pair) => pair.apr);
       const result = [];
 
       // get all multipliers from pairs list
@@ -73,7 +81,7 @@ const LiquidityTokensTable = () => {
           apr = majorAprMultiplierPair.apr;
           multiplier = majorAprMultiplierPair.mult;
         } else {
-          apr = tokenAprAndMultiplier.find((a) => a.token0 === token.name || a.token1 === token.name).apr;
+          apr = tokenAprAndMultiplier.find((a) => a.token0 === token.name || a.token1 === token.name).apr || 0;
           multiplier = tokenAprAndMultiplier.find((a) => a.code.split(':')[0] === token.code || a.code.split(':')[1] === token.code).mult;
         }
 
@@ -102,7 +110,7 @@ const LiquidityTokensTable = () => {
   return !loading ? (
     <CommonTable
       items={tokens}
-      columns={enableGasStation ? renderColumns(history) : renderColumns(history).filter((x) => x.name !== 'Fees')}
+      columns={enableGasStation ? renderColumns(history, pact.allTokens) : renderColumns(history).filter((x) => x.name !== 'Fees')}
       actions={[
         {
           icon: () => <AddIcon />,
@@ -140,22 +148,14 @@ const LiquidityTokensTable = () => {
 
 export default LiquidityTokensTable;
 
-const ScalableCryptoContainer = styled(FlexContainer)`
-  transition: all 0.3s ease-in-out;
-
-  :hover {
-    transform: scale(1.18);
-  }
-`;
-
-const renderColumns = (history) => {
+const renderColumns = (history, allTokens) => {
   return [
     {
       name: '',
       width: 160,
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
-          <CryptoContainer style={{ zIndex: 2 }}> {tokenData[item.name].icon}</CryptoContainer>
+          <CryptoContainer style={{ zIndex: 2 }}> {allTokens[item.name].icon}</CryptoContainer>
           {item.name}
         </ScalableCryptoContainer>
       ),

@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom';
 import moment from 'moment';
 import styled from 'styled-components';
 import { TradeUpIcon } from '../../assets';
-import tokenData from '../../constants/cryptoCurrencies';
 import { getTokenVolumeDiff, getUSDPriceDiff, getKDAPriceDiff, getGroupedVolume, getTotalKDAVolume } from '../../api/kaddex-stats';
 import { usePactContext } from '../../contexts';
 import { useApplicationContext } from '../../contexts';
@@ -28,7 +27,7 @@ const StatsTable = () => {
       if (pact?.tokensUsdPrice) {
         const data = [];
         const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
-        for (const t of Object.values(tokenData)) {
+        for (const t of Object.values(pact.allTokens)) {
           const asset = (t.statsID || t.code) === 'coin' ? 'KDA' : t.statsID || t.code;
           const currency = (t.statsID || t.code) === 'coin' ? 'USDT' : 'coin';
           const price = pact?.tokensUsdPrice && pact?.tokensUsdPrice[t?.name];
