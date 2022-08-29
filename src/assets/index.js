@@ -63,5 +63,7 @@ export { ReactComponent as NccLogoLightMode } from './images/shared/ncc-logo-lig
 export { ReactComponent as WarningIcon } from './images/header/warning-icon.svg';
 export { ReactComponent as PumpIcon } from './images/header/petrol-pump.svg';
 export { ReactComponent as ChainIcon } from './images/shared/chain.svg';
+export { ReactComponent as UnknownLogo } from './images/shared/unknown.svg';
+export { ReactComponent as VerifiedLogo } from './images/shared/verified.svg';
 
 export * from '../assets/images/game-edition';

@@ -10,6 +10,7 @@ import { fetchPrecision, getPairList } from '../api/pact';
 import tokenData, { pairsData } from '../constants/cryptoCurrencies';
 import { GAS_OPTIONS } from '../constants/gasConfiguration';
 import { getPairs, getTokenNameFromAddress, getVerifiedPools } from '../api/pairs';
+import { UnknownLogo } from '../assets';
 
 export const PactContext = createContext();
 
@@ -47,8 +48,8 @@ export const PactProvider = (props) => {
   const [gasConfiguration, setGasConfiguration] = useState(GAS_OPTIONS.DEFAULT.SWAP);
   const [networkGasData, setNetworkGasData] = useState(initialNetworkGasData);
 
-  const [allPairs, setAllPairs] = useState(pairsData);
-  const [allTokens, setAllTokens] = useState(tokenData);
+  const [allPairs, setAllPairs] = useState(null);
+  const [allTokens, setAllTokens] = useState(null);
 
   const handleGasConfiguration = (key, value) => {
     setGasConfiguration((prev) => ({ ...prev, [key]: value }));
@@ -72,11 +73,13 @@ export const PactProvider = (props) => {
 
   const getPairsData = async () => {
     const result = await getPairs();
+    let communityList = {};
+    let communityTokenList = {};
     if (result.errorMessage) {
       console.log('ERROR');
       return;
     } else {
-      const communityPairs = result.filter((r) => !allPairs.hasOwnProperty(r));
+      const communityPairs = result.filter((r) => !pairsData.hasOwnProperty(r));
 
       communityPairs.map((communityPair) => {
         communityPair = {
@@ -88,52 +91,60 @@ export const PactProvider = (props) => {
           color: '#92187B',
           isVerified: false,
         };
-
-        setAllPairs((prev) => ({ ...prev, [communityPair.name]: communityPair }));
+        return (communityList[communityPair.name] = communityPair);
       });
+      setAllPairs((prev) => ({ ...prev, ...pairsData, ...communityList }));
 
       result.map((res) => {
         const index = res.indexOf(':');
         const token0 = res.substr(0, index); // Gets the first part for future
         const token1 = res.substr(index + 1); // Gets the second part
-        if (!allTokens.hasOwnProperty(getTokenName(token1, tokenData))) {
-          let communityPair = {
+
+        if (!tokenData.hasOwnProperty(Object.values(tokenData).find((token) => token.code === token1)?.name)) {
+          let communityToken = {
             name: getTokenNameFromAddress(token1),
             coingeckoId: '',
-            tokenNameKaddexStats: token1,
+            statsID: token1,
+            tokenNameKaddexStats: 'xyz',
             code: token1,
-            main: true,
-            icon: '',
+            main: false,
+            icon: <UnknownLogo style={{ marginRight: 8 }} />,
             color: '',
             precision: 12,
             isVerified: false,
           };
-
-          setAllTokens((prev) => ({ ...prev, [getTokenNameFromAddress(token1)]: communityPair }));
+          return (communityTokenList[communityToken.name] = communityToken);
         }
       });
+      setAllTokens((prev) => ({ ...prev, ...tokenData, ...communityTokenList }));
     }
     return;
   };
 
-  useEffect(async () => {
-    await getPairsData();
+  useEffect(() => {
+    async function fetchData() {
+      await getPairsData();
+    }
+
+    fetchData();
   }, []);
 
   const updateTokenUsdPrice = async () => {
     const pairList = await getPairList(allPairs);
     const result = {};
-    for (const token of Object.values(allTokens)) {
-      await getTokenUsdPriceByName(token.name, pairList, allTokens).then((price) => {
-        result[token.name] = price;
-      });
+    if (allTokens) {
+      for (const token of Object.values(allTokens)) {
+        await getTokenUsdPriceByName(token.name, pairList, allTokens).then((price) => {
+          result[token.name] = price;
+        });
+      }
     }
     setTokensUsdPrice(result);
   };
 
   useEffect(() => {
-    updateTokenUsdPrice();
-  }, []);
+    if (allPairs && allTokens) updateTokenUsdPrice();
+  }, [allTokens, allPairs]);
   // useInterval(updateTokenUsdPrice, 25000);
 
   useEffect(() => {

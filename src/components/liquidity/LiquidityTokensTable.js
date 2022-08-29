@@ -7,7 +7,7 @@ import { getPairList } from '../../api/pact';
 import CommonTable from '../shared/CommonTable';
 import { humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
-import { AddIcon, BoosterIcon, GasIcon, TradeUpIcon } from '../../assets';
+import { AddIcon, BoosterIcon, GasIcon, TradeUpIcon, VerifiedLogo } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_LIQUIDITY_TOKENS, ROUTE_TOKEN_INFO } from '../../router/routes';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
@@ -16,14 +16,7 @@ import { useApplicationContext, usePactContext } from '../../contexts';
 import { commonColors, theme } from '../../styles/theme';
 import styled from 'styled-components';
 import { getPairsMultiplier } from '../../api/liquidity-rewards';
-
-const ScalableCryptoContainer = styled(FlexContainer)`
-  transition: all 0.3s ease-in-out;
-
-  :hover {
-    transform: scale(1.18);
-  }
-`;
+import useWindowSize from '../../hooks/useWindowSize';
 
 const LiquidityTokensTable = () => {
   const history = useHistory();
@@ -33,6 +26,8 @@ const LiquidityTokensTable = () => {
   const [tokens, setTokens] = useState([]);
 
   const { tokensUsdPrice, enableGasStation } = usePactContext();
+
+  const [width] = useWindowSize();
 
   const fetchData = async () => {
     const pairsList = await getPairList(pact.allPairs);
@@ -110,7 +105,11 @@ const LiquidityTokensTable = () => {
   return !loading ? (
     <CommonTable
       items={tokens}
-      columns={enableGasStation ? renderColumns(history, pact.allTokens) : renderColumns(history).filter((x) => x.name !== 'Fees')}
+      columns={
+        enableGasStation
+          ? renderColumns(history, pact.allTokens, width)
+          : renderColumns(history, pact.allTokens, width).filter((x) => x.name !== 'Fees')
+      }
       actions={[
         {
           icon: () => <AddIcon />,
@@ -148,13 +147,28 @@ const LiquidityTokensTable = () => {
 
 export default LiquidityTokensTable;
 
-const renderColumns = (history, allTokens) => {
+const ScalableCryptoContainer = styled(FlexContainer)`
+  transition: all 0.3s ease-in-out;
+
+  :hover {
+    transform: scale(1.18);
+  }
+`;
+
+const renderColumns = (history, allTokens, width) => {
   return [
     {
       name: '',
-      width: 160,
+      width: width <= theme().mediaQueries.mobilePixel ? 90 : 160,
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
+          {allTokens[item.name]?.isVerified ? (
+            <div style={{ marginRight: 16 }}>
+              <VerifiedLogo />
+            </div>
+          ) : (
+            <div style={{ width: 32 }} />
+          )}
           <CryptoContainer style={{ zIndex: 2 }}> {allTokens[item.name].icon}</CryptoContainer>
           {item.name}
         </ScalableCryptoContainer>
@@ -162,7 +176,7 @@ const renderColumns = (history, allTokens) => {
     },
     {
       name: 'price',
-      width: 160,
+      width: width <= theme().mediaQueries.mobilePixel ? 90 : 160,
       sortBy: 'tokenUsdPrice',
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer h-100" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
@@ -195,7 +209,7 @@ const renderColumns = (history, allTokens) => {
 
     {
       name: 'Fees',
-      width: 160,
+      width: width <= theme().mediaQueries.mobilePixel ? 90 : 160,
       render: () => (
         <FlexContainer className="align-ce">
           <GasIcon />

@@ -8,7 +8,7 @@ import { extractDecimal, humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
-import { AddIcon, BoosterIcon, GasIcon } from '../../assets';
+import { AddIcon, BoosterIcon, GasIcon, VerifiedLogo } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS } from '../../router/routes';
 import Label from '../shared/Label';
 import { getAllPairValues } from '../../utils/token-utils';
@@ -64,7 +64,11 @@ const LiquidityPoolsTable = () => {
   return !loading ? (
     <CommonTable
       items={pairList}
-      columns={pact.enableGasStation ? renderColumns(pact.allTokens) : renderColumns(pact.allTokens).filter((x) => x.name !== 'Fees')}
+      columns={
+        pact.enableGasStation
+          ? renderColumns(pact.allTokens, pact.allPairs)
+          : renderColumns(pact.allTokens, pact.allPairs).filter((x) => x.name !== 'Fees')
+      }
       actions={[
         {
           icon: () => <AddIcon />,
@@ -82,13 +86,20 @@ const LiquidityPoolsTable = () => {
 
 export default LiquidityPoolsTable;
 
-const renderColumns = (allTokens) => {
+const renderColumns = (allTokens, allPairs) => {
   return [
     {
       name: '',
       width: 160,
       render: ({ item }) => (
         <FlexContainer className="align-ce">
+          {allPairs[item.name]?.isVerified ? (
+            <div style={{ marginRight: 16 }}>
+              <VerifiedLogo />
+            </div>
+          ) : (
+            <div style={{ width: 32 }} />
+          )}
           <CryptoContainer style={{ zIndex: 2 }}> {allTokens[item.token0].icon}</CryptoContainer>
           <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{allTokens[item.token1].icon} </CryptoContainer>
           {item.token0}/{item.token1}

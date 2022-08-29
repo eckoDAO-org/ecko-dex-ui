@@ -43,7 +43,6 @@ const CreatePairTokenSelectorModal = ({ onSelectedToken, onClose }) => {
 
   const fetchData = async () => {
     const result = await checkTokenModule(tokenSelected);
-    console.log('🚀 log --> result', result);
     if (result.errorMessage) {
       setTokenExists(false);
     } else {

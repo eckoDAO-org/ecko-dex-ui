@@ -18,7 +18,7 @@ import CommonWrapper from '../stake/CommonWrapper';
 import CreatePairModal from '../modals/liquidity/CreatePairModal';
 import { mkReq, parseRes } from '../../api/utils';
 import CreatePairTokenSelectorModal from '../modals/liquidity/CreatePairTokenSelectorModal';
-import { ArrowBack, ArrowDown } from '../../assets';
+import { ArrowBack, ArrowDown, UnknownLogo } from '../../assets';
 import { ROUTE_LIQUIDITY_TOKENS } from '../../router/routes';
 import { useHistory } from 'react-router-dom';
 import CreatePairInfo from './CreatePairInfo';
@@ -56,7 +56,6 @@ const CreatePairContainer = () => {
 
   const fetchData = async () => {
     const result = await getPairModuleDetails(token1, account.account);
-    console.log('🚀 log --> result', result);
     if (!result.errorMessage) {
       setCreatePairAvailable(true);
     }
@@ -72,7 +71,6 @@ const CreatePairContainer = () => {
       pact.gasConfiguration.gasPrice,
       account
     );
-    console.log('🚀 log --> command', command);
     if (!command) {
       showNotification({
         title: 'Invalid Action',
@@ -84,13 +82,11 @@ const CreatePairContainer = () => {
       return;
     }
     const signedCommand = await signCommand(command);
-    console.log('🚀 log --> signedCommand', signedCommand);
     if (!signedCommand) {
       return;
     }
     let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(signedCommand));
     data = await parseRes(data);
-    console.log('🚀 log --> data', data);
     if (data.result?.status !== 'success') {
       showNotification({
         title: 'Staking error',
@@ -236,7 +232,7 @@ const CreatePairContainer = () => {
                   height: '40px',
                 }}
               >
-                {/* {token1Name && tokenData[token1Name]?.icon} */}
+                {token1Name && <UnknownLogo style={{ marginRight: 8 }} />}
                 <Label fontSize={13}>{token1Name !== '' ? token1Name : 'select'}</Label>
 
                 <ArrowDown className="svg-app-color" style={{ marginRight: 0, marginLeft: 8 }} />

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import moment from 'moment';
 import styled from 'styled-components';
-import { TradeUpIcon } from '../../assets';
+import { TradeUpIcon, VerifiedLogo } from '../../assets';
 import { getTokenVolumeDiff, getUSDPriceDiff, getKDAPriceDiff, getGroupedVolume, getTotalKDAVolume } from '../../api/kaddex-stats';
 import { usePactContext } from '../../contexts';
 import { useApplicationContext } from '../../contexts';
@@ -77,7 +77,7 @@ const StatsTable = () => {
   return !loading ? (
     <CommonTable
       items={statsData}
-      columns={renderColumns(history)}
+      columns={renderColumns(history, pact.allTokens)}
       actions={[
         {
           icon: () => (
@@ -115,13 +115,20 @@ const ScalableCryptoContainer = styled(FlexContainer)`
   }
 `;
 
-const renderColumns = (history) => {
+const renderColumns = (history, allTokens) => {
   return [
     {
       name: '',
       width: 160,
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
+          {allTokens[item.name]?.isVerified ? (
+            <div style={{ marginRight: 16 }}>
+              <VerifiedLogo />
+            </div>
+          ) : (
+            <div style={{ width: 32 }} />
+          )}
           <CryptoContainer style={{ zIndex: 2 }}>{item.icon} </CryptoContainer>
           {item.name}
         </ScalableCryptoContainer>

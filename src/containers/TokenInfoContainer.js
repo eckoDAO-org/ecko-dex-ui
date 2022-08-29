@@ -23,8 +23,10 @@ const TokenInfoContainer = () => {
   const pact = usePactContext();
 
   const asset =
-    (pact.allTokens[token].statsID || pact.allTokens[token].code) === 'coin' ? 'KDA' : pact.allTokens[token].statsID || pact.allTokens[token].code;
-  const currency = (pact.allTokens[token].statsID || pact.allTokens[token].code) === 'coin' ? 'USDT' : 'coin';
+    (pact.allTokens?.[token].statsID || pact.allTokens?.[token].code) === 'coin'
+      ? 'KDA'
+      : pact.allTokens?.[token].statsID || pact.allTokens?.[token].code;
+  const currency = (pact.allTokens?.[token].statsID || pact.allTokens?.[token].code) === 'coin' ? 'USDT' : 'coin';
 
   const [monthlyRange, setMonthlyRange] = useState(initialMonthlyRange);
   const [monthlyVolumeRange, setMonthlyVolumeRange] = useState(initialMonthlyRange);
@@ -91,7 +93,7 @@ const TokenInfoContainer = () => {
           }}
           onClick={() => history.goBack()}
         />
-        <CryptoContainer style={{ marginRight: 8 }}>{pact.allTokens[token].icon}</CryptoContainer>
+        <CryptoContainer style={{ marginRight: 8 }}>{pact.allTokens?.[token].icon}</CryptoContainer>
         <Label fontSize={24} fontFamily="syncopate">
           {token}
         </Label>
@@ -105,7 +107,7 @@ const TokenInfoContainer = () => {
                 pact?.tokensUsdPrice?.[token]
                   ? humanReadableNumber(pact?.tokensUsdPrice?.[token], 3) !== '0.000'
                     ? humanReadableNumber(pact?.tokensUsdPrice?.[token], 3)
-                    : (pact?.tokensUsdPrice?.[token]).toFixed(pact.allTokens[token].precision)
+                    : (pact?.tokensUsdPrice?.[token]).toFixed(pact.allTokens?.[token].precision)
                   : '-'
               }`}
               <GraphicPercentage prevValue={price24h?.initial} currentValue={price24h?.final} />
@@ -126,7 +128,7 @@ const TokenInfoContainer = () => {
           subtitle={<GraphicPercentage prevValue={monthlyRange?.initial} currentValue={monthlyRange?.final} />}
         />
       </FlexContainer>
-      <TokenPriceChart dataToken={pact.allTokens[token]} height={300} />
+      <TokenPriceChart dataToken={pact.allTokens?.[token]} height={300} />
     </FlexContainer>
     // <div>
     //   <CustomButton onClick={() => history.goBack()}>Token Info</CustomButton>
