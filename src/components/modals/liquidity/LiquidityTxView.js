@@ -82,6 +82,7 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, apr }) => {
   const pair = getPairByTokensName(token0, token1, pact.allPairs);
 
   const fromValues = extractDecimal(swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1']);
+  console.log('LOG --> swap?.localRes?.result?.data?', swap?.localRes?.result?.data);
 
   return (
     <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle>
@@ -145,16 +146,18 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, apr }) => {
           tokenIcon={getTokenIconById(token1, pact.allTokens)}
           tokenName={token1}
           amount={
-            fromValues
+            fromValues && pair?.isVerified
               ? fromValues * reduceBalance(pact?.computeOut(fromValues) / fromValues, 12)
               : swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0']
           }
           tokenPrice={pact.tokensUsdPrice?.[token1] || null}
         />
-        <FlexContainer className="row justify-sb">
-          <Label>Ratio</Label>
-          <Label fontSize={13}>{`1 ${token0} = ${getDecimalPlaces(pact?.computeOut(fromValues) / fromValues)} ${token1}`}</Label>
-        </FlexContainer>
+        {pact.pairReserve?.token0 !== 0 && pact.pairReserve?.token1 !== 0 && (
+          <FlexContainer className="row justify-sb">
+            <Label>Ratio</Label>
+            <Label fontSize={13}>{`1 ${token0} = ${getDecimalPlaces(pact?.computeOut(fromValues) / fromValues)} ${token1}`}</Label>
+          </FlexContainer>
+        )}
       </FlexContainer>
     </SuccesViewContainer>
   );

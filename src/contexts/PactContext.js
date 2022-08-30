@@ -373,6 +373,7 @@ export const PactProvider = (props) => {
     getRatio,
     getRatio1,
     share,
+    pairReserve,
     getReserves,
     txSend,
     computePriceImpact,
