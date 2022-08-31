@@ -19,6 +19,7 @@ import { SuccessAddView } from '../modals/liquidity/LiquidityTxView';
 import { useAccountContext, useGameEditionContext, useLiquidityContext, useModalContext, usePactContext, useWalletContext } from '../../contexts';
 import reduceToken from '../../utils/reduceToken';
 import ConnectWalletModal from '../modals/kdaModals/ConnectWalletModal';
+import { isNaN } from 'lodash';
 
 const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   const pact = usePactContext();
@@ -545,13 +546,17 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
                   <FlexContainer className="column w-100">
                     <Label fontSize={13}>{`${toValues.coin}/${fromValues.coin}`}</Label>
                     <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
-                      {reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}
+                      {pact.pairReserve.token0 === 0 && pact.pairReserve.token1 === 0
+                        ? pact.getRatioFirstAddLiquidity(toValues.coin, toValues.amount, fromValues.coin, fromValues.amount)
+                        : reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}
                     </Label>
                   </FlexContainer>
                   <FlexContainer className="column align-ce w-100">
                     <Label fontSize={13}>{`${fromValues.coin}/${toValues.coin}`}</Label>
                     <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
-                      {reduceBalance(pact.getRatio1(fromValues.coin, toValues.coin)) ?? '-'}
+                      {pact.pairReserve.token0 === 0 && pact.pairReserve.token1 === 0
+                        ? pact.getRatioFirstAddLiquidityInverse(toValues.coin, toValues.amount, fromValues.coin, fromValues.amount)
+                        : reduceBalance(pact.getRatio1(fromValues.coin, toValues.coin)) ?? '-'}
                     </Label>
                   </FlexContainer>
                   <FlexContainer className="column align-fe w-100">

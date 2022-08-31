@@ -3,7 +3,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
 // import { useInterval } from '../hooks/useInterval';
 import axios from 'axios';
-import { getTokenName, getTokenUsdPriceByName } from '../utils/token-utils';
+import { getTokenUsdPriceByName } from '../utils/token-utils';
 import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, KADDEX_NAMESPACE, KADDEX_API_URL } from '../constants/contextConstants';
 import { useAccountContext, useNotificationContext, useWalletContext } from '.';
 import { fetchPrecision, getPairList } from '../api/pact';
@@ -11,6 +11,7 @@ import tokenData, { pairsData } from '../constants/cryptoCurrencies';
 import { GAS_OPTIONS } from '../constants/gasConfiguration';
 import { getPairs, getTokenNameFromAddress, getVerifiedPools } from '../api/pairs';
 import { UnknownLogo } from '../assets';
+import { reduceBalance } from '../utils/reduceBalance';
 
 export const PactContext = createContext();
 
@@ -293,6 +294,18 @@ export const PactProvider = (props) => {
 
   // UTILS
 
+  const getRatioFirstAddLiquidity = (toToken, toTokenAmount, fromToken, fromTokenAmount) => {
+    if (toToken === fromToken) return 1;
+    else if (toTokenAmount / fromTokenAmount && toTokenAmount / fromTokenAmount !== Infinity) return reduceBalance(toTokenAmount / fromTokenAmount);
+    else return '-';
+  };
+
+  const getRatioFirstAddLiquidityInverse = (toToken, toTokenAmount, fromToken, fromTokenAmount) => {
+    if (toToken === fromToken) return 1;
+    else if (fromTokenAmount / toTokenAmount && fromTokenAmount / toTokenAmount !== Infinity) return reduceBalance(fromTokenAmount / toTokenAmount);
+    else return '-';
+  };
+
   const getRatio = (toToken, fromToken) => {
     if (toToken === fromToken) return 1;
     else if (pairReserve['token1'] === 0 && pairReserve['token0'] === 0) return 1;
@@ -370,6 +383,8 @@ export const PactProvider = (props) => {
     polling,
     setPolling,
     ratio,
+    getRatioFirstAddLiquidity,
+    getRatioFirstAddLiquidityInverse,
     getRatio,
     getRatio1,
     share,

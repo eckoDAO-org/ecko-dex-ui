@@ -152,12 +152,22 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, apr }) => {
           }
           tokenPrice={pact.tokensUsdPrice?.[token1] || null}
         />
-        {pact.pairReserve?.token0 !== 0 && pact.pairReserve?.token1 !== 0 && (
-          <FlexContainer className="row justify-sb">
-            <Label>Ratio</Label>
+
+        <FlexContainer className="row justify-sb">
+          <Label>Ratio</Label>
+          {pact.pairReserve?.token0 !== 0 && pact.pairReserve?.token1 !== 0 ? (
             <Label fontSize={13}>{`1 ${token0} = ${getDecimalPlaces(pact?.computeOut(fromValues) / fromValues)} ${token1}`}</Label>
-          </FlexContainer>
-        )}
+          ) : (
+            <Label fontSize={13}>{`1 ${token0} = ${getDecimalPlaces(
+              pact?.getRatioFirstAddLiquidityInverse(
+                token1,
+                swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0'],
+                token0,
+                fromValues
+              )
+            )} ${token1}`}</Label>
+          )}
+        </FlexContainer>
       </FlexContainer>
     </SuccesViewContainer>
   );
