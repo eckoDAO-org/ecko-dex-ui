@@ -134,7 +134,16 @@
         "token1": "KAPY",
         "main": false,
         "isBoosted": false,
-        "color": "#EEAA7B",
+        "color": "#fe9c4c",
+        "isVerified": true
+      },
+      "coin:free.jodie-token": {
+        "name": "coin:free.jodie-token",
+        "token0": "KDA",
+        "token1": "JDE",
+        "main": false,
+        "isBoosted": false,
+        "color": "#7c572e",
         "isVerified": true
       }
     }
