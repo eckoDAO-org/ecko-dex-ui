@@ -95,7 +95,7 @@ const renderColumns = (allTokens, allPairs) => {
         <FlexContainer className="align-ce">
           {allPairs[item.name]?.isVerified ? (
             <div style={{ marginRight: 16 }}>
-              <VerifiedLogo />
+              <VerifiedLogo className="svg-app-color" />
             </div>
           ) : (
             <div style={{ width: 32 }} />
