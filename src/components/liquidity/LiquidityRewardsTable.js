@@ -247,7 +247,7 @@ const renderColumns = (allTokens) => {
     },
 
     {
-      name: 'Amount',
+      name: 'Estimated Amount',
       width: 160,
       sortBy: 'estimated-kdx',
       render: ({ item }) => `${getDecimalPlaces(extractDecimal(item?.['estimated-kdx']))} KDX`,

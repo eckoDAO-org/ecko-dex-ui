@@ -67,5 +67,6 @@ export { ReactComponent as UnknownLogo } from './images/shared/unknown_new.svg';
 export { ReactComponent as VerifiedLogo } from './images/shared/verified.svg';
 export { ReactComponent as LiquidityDollarLogo } from './images/shared/liquidity_dollar.svg';
 export { ReactComponent as AddLiquidityLogo } from './images/shared/add_liquidity.svg';
+export { ReactComponent as VaultIcon } from './images/shared/vault.svg';
 
 export * from '../assets/images/game-edition';
