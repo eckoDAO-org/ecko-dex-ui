@@ -52,8 +52,7 @@ const LiquidityPoolsTable = () => {
         };
         allData.push(data);
       }
-
-      setPairList(allData);
+      setPairList(allData.sort((x, y) => y.liquidityUsd - x.liquidityUsd));
     }
     setLoading(false);
   };

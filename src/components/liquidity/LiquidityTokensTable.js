@@ -91,7 +91,7 @@ const LiquidityTokensTable = () => {
           multiplier,
         });
       }
-      setTokens(result);
+      setTokens(result.sort((x, y) => y.liquidityUSD - x.liquidityUSD));
     }
     setLoading(false);
   };

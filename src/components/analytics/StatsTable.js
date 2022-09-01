@@ -63,7 +63,7 @@ const StatsTable = () => {
             dailyVolumeValue: getPercentage(volume24Graph?.initial * kdaUsdPrice, volume24Graph?.final * kdaUsdPrice),
           });
         }
-        setStatsData(data);
+        setStatsData(data.sort((x, y) => y.dailyVolume - x.dailyVolume));
         setLoading(false);
       }
     };
