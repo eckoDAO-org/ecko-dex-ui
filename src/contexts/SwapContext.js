@@ -4,14 +4,7 @@ import tokenData from '../constants/cryptoCurrencies';
 import { reduceBalance } from '../utils/reduceBalance';
 
 import { useKaddexWalletContext, useWalletContext, useAccountContext, usePactContext, useWalletConnectContext } from '.';
-import {
-  CHAIN_ID,
-  creationTime,
-  NETWORK,
-  NETWORKID,
-  KADDEX_NAMESPACE,
-  NETWORK_VERSION
-} from '../constants/contextConstants';
+import { CHAIN_ID, creationTime, NETWORK, NETWORKID, KADDEX_NAMESPACE, NETWORK_VERSION } from '../constants/contextConstants';
 import { getPair, getPairAccount, getTokenBalanceAccount } from '../api/pact';
 import { mkReq, parseRes } from '../api/utils';
 
@@ -21,7 +14,11 @@ export const SwapProvider = (props) => {
   const pact = usePactContext();
   const { account, localRes, setLocalRes } = useAccountContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
-  const { pairingTopic: isWalletConnectConnected, requestSignTransaction: walletConnectRequestSignTransaction } = useWalletConnectContext();
+  const {
+    pairingTopic: isWalletConnectConnected,
+    requestSignTransaction: walletConnectRequestSignTransaction,
+    sendTransactionUpdateEvent: walletConnectSendTransactionUpdateEvent,
+  } = useWalletConnectContext();
   const wallet = useWalletContext();
 
   const swap = async (token0, token1, isSwapIn) => {
@@ -158,6 +155,7 @@ export const SwapProvider = (props) => {
         pact.setPactCmd(command);
         let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(command));
         data = await parseRes(data);
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, data);
         setLocalRes(data);
         return data;
       } catch (e) {

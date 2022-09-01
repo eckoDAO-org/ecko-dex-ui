@@ -55,7 +55,11 @@ const LiquidityRewardsTable = () => {
   const pact = usePactContext();
   const { pollingNotif, showErrorNotification, transactionListen } = useNotificationContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
-  const { pairingTopic: isWalletConnectConnected, requestSignTransaction: walletConnectRequestSign } = useWalletConnectContext();
+  const {
+    pairingTopic: isWalletConnectConnected,
+    requestSignTransaction: walletConnectRequestSign,
+    sendTransactionUpdateEvent: walletConnectSendTransactionUpdateEvent,
+  } = useWalletConnectContext();
   const [loading, setLoading] = useState(true);
   const [rewards, setRewards] = useState([]);
   const [rewardsFiltered, setRewardsFiltered] = useState([]);
@@ -116,7 +120,9 @@ const LiquidityRewardsTable = () => {
       .then(async (stakingResponse) => {
         pollingNotif(stakingResponse.requestKeys[0], 'Claim Rewards Transaction Pending');
 
-        await transactionListen(stakingResponse.requestKeys[0]);
+        const txRes = await transactionListen(stakingResponse.requestKeys[0]);
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, txRes);
+
         pact.setPolling(false);
       })
       .catch((error) => {
