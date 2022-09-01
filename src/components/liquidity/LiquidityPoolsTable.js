@@ -13,15 +13,17 @@ import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS } fro
 import Label from '../shared/Label';
 import { getAllPairValues } from '../../utils/token-utils';
 import { getPairsMultiplier } from '../../api/liquidity-rewards';
-import { commonColors } from '../../styles/theme';
+import { theme, commonColors } from '../../styles/theme';
 import moment from 'moment';
 import { usePactContext } from '../../contexts';
+import useWindowSize from '../../hooks/useWindowSize';
 
 const LiquidityPoolsTable = () => {
   const history = useHistory();
   const pact = usePactContext();
   const [pairList, setPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(false);
+  const [width] = useWindowSize();
 
   const fetchData = async () => {
     const pools = await getPairList(pact.allPairs);
@@ -66,8 +68,8 @@ const LiquidityPoolsTable = () => {
       items={pairList}
       columns={
         pact.enableGasStation
-          ? renderColumns(pact.allTokens, pact.allPairs)
-          : renderColumns(pact.allTokens, pact.allPairs).filter((x) => x.name !== 'Fees')
+          ? renderColumns(pact.allTokens, pact.allPairs, width)
+          : renderColumns(pact.allTokens, pact.allPairs, width).filter((x) => x.name !== 'Fees')
       }
       actions={[
         {
@@ -86,23 +88,32 @@ const LiquidityPoolsTable = () => {
 
 export default LiquidityPoolsTable;
 
-const renderColumns = (allTokens, allPairs) => {
+const renderColumns = (allTokens, allPairs, width) => {
   return [
     {
       name: '',
-      width: 160,
+      width: width <= theme().mediaQueries.mobilePixel ? 80 : 160,
       render: ({ item }) => (
-        <FlexContainer className="align-ce">
-          {allPairs[item.name]?.isVerified ? (
-            <div style={{ marginRight: 16 }}>
-              <VerifiedLogo className="svg-app-color" />
-            </div>
-          ) : (
-            <div style={{ width: 32 }} />
-          )}
-          <CryptoContainer style={{ zIndex: 2 }}> {allTokens[item.token0].icon}</CryptoContainer>
-          <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{allTokens[item.token1].icon} </CryptoContainer>
-          {item.token0}/{item.token1}
+        <FlexContainer className="align-ce" mobileClassName="column" mobilePixel={769}>
+          <div className="flex align-ce">
+            {allPairs[item.name]?.isVerified ? (
+              <div style={{ marginRight: 16 }}>
+                <VerifiedLogo className="svg-app-color" />
+              </div>
+            ) : (
+              <div style={{ width: 32 }} />
+            )}
+            <CryptoContainer style={{ zIndex: 2 }}> {allTokens[item.token0].icon}</CryptoContainer>
+            <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{allTokens[item.token1].icon} </CryptoContainer>
+          </div>
+          <div
+            style={{
+              marginLeft: width <= theme().mediaQueries.mobilePixel && 22,
+              marginTop: width <= theme().mediaQueries.mobilePixel && 4,
+            }}
+          >
+            {item.token0}/{item.token1}
+          </div>
         </FlexContainer>
       ),
     },
@@ -130,7 +141,7 @@ const renderColumns = (allTokens, allPairs) => {
     },
     {
       name: 'Fees',
-      width: 160,
+      width: 100,
       render: () => (
         <FlexContainer className="align-ce">
           <GasIcon />
@@ -142,7 +153,7 @@ const renderColumns = (allTokens, allPairs) => {
     },
     {
       name: 'KDX Multiplier',
-      width: 160,
+      width: 100,
       sortBy: 'multiplier',
       render: ({ item }) =>
         item.multiplier > 1 ? (
@@ -158,7 +169,7 @@ const renderColumns = (allTokens, allPairs) => {
     },
     {
       name: 'APR',
-      width: 160,
+      width: 100,
       sortBy: 'apr',
       multiplier: 'multiplier',
       render: ({ item }) =>

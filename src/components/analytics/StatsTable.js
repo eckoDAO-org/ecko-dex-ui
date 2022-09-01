@@ -119,7 +119,7 @@ const renderColumns = (history, allTokens) => {
   return [
     {
       name: '',
-      width: 160,
+      width: 100,
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
           {allTokens[item.name]?.isVerified ? (
@@ -137,7 +137,7 @@ const renderColumns = (history, allTokens) => {
 
     {
       name: 'Price',
-      width: 160,
+      width: 100,
       sortBy: 'price',
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer h-100" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
@@ -148,7 +148,7 @@ const renderColumns = (history, allTokens) => {
 
     {
       name: '24h Price Change',
-      width: 160,
+      width: 120,
       sortBy: 'dailyPriceChangeValue',
       render: ({ item }) => {
         return <GraphicPercentage componentStyle={{ margin: 0 }} prevValue={item.dailyPriceChange[0]} currentValue={item.dailyPriceChange[1]} />;
@@ -165,7 +165,7 @@ const renderColumns = (history, allTokens) => {
     },
     {
       name: '24h Volume Change',
-      width: 160,
+      width: 120,
       sortBy: 'dailyVolumeValue',
       render: ({ item }) => {
         return <GraphicPercentage componentStyle={{ margin: 0 }} prevValue={item.dailyVolumeChange[0]} currentValue={item.dailyVolumeChange[1]} />;

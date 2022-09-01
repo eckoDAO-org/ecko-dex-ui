@@ -10,6 +10,8 @@ import { UnknownLogo } from '../../../assets';
 import CustomDivider from '../../shared/CustomDivider';
 import Search from '../../shared/Search';
 import Loader from '../../shared/Loader';
+import useWindowSize from '../../../hooks/useWindowSize';
+import { theme } from '../../../styles/theme';
 
 export const StakeModalRow = styled.div`
   display: flex;
@@ -37,7 +39,7 @@ export const IconSubTitle = styled.div`
 const CreatePairTokenSelectorModal = ({ onSelectedToken, onClose }) => {
   const [tokenSelected, setTokenSelected] = useState('');
   const [tokenNameSelected, setTokenNameSelected] = useState('');
-
+  const [width] = useWindowSize();
   const [tokenExists, setTokenExists] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -65,7 +67,7 @@ const CreatePairTokenSelectorModal = ({ onSelectedToken, onClose }) => {
   return (
     <FlexContainer className="column" gap={16}>
       <Search
-        containerStyle={{ marginBottom: 0 }}
+        containerStyle={{ marginBottom: width >= theme().mediaQueries.desktopPixel && 0 }}
         fluid
         placeholder="Please insert token address"
         value={tokenSelected}

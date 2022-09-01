@@ -159,7 +159,7 @@ const renderColumns = (history, allTokens, width) => {
   return [
     {
       name: '',
-      width: width <= theme().mediaQueries.mobilePixel ? 90 : 160,
+      width: width <= theme().mediaQueries.mobilePixel ? 90 : 100,
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
           {allTokens[item.name]?.isVerified ? (
@@ -176,7 +176,7 @@ const renderColumns = (history, allTokens, width) => {
     },
     {
       name: 'price',
-      width: width <= theme().mediaQueries.mobilePixel ? 90 : 160,
+      width: width <= theme().mediaQueries.mobilePixel ? 90 : 100,
       sortBy: 'tokenUsdPrice',
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer h-100" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
@@ -209,7 +209,7 @@ const renderColumns = (history, allTokens, width) => {
 
     {
       name: 'Fees',
-      width: width <= theme().mediaQueries.mobilePixel ? 90 : 160,
+      width: width <= theme().mediaQueries.mobilePixel ? 90 : 100,
       render: () => (
         <FlexContainer className="align-ce">
           <GasIcon />
@@ -222,7 +222,7 @@ const renderColumns = (history, allTokens, width) => {
 
     {
       name: 'APR',
-      width: 120,
+      width: 100,
       sortBy: 'apr',
       multiplier: 'multiplier',
       render: ({ item }) =>
