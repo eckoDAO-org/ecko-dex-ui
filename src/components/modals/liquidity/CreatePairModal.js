@@ -7,6 +7,9 @@ import Label from '../../shared/Label';
 import { usePactContext } from '../../../contexts';
 import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
 import { getTokenIconByCode } from '../../../utils/token-utils';
+import { FlexContainer } from '../../shared/FlexContainer';
+import tokenData from '../../../constants/cryptoCurrencies';
+import { UnknownLogo } from '../../../assets';
 
 export const StakeModalRow = styled.div`
   display: flex;
@@ -31,9 +34,17 @@ export const IconSubTitle = styled.div`
   }
 `;
 
-const CreatePairModal = ({ data, token0, token1, onConfirm }) => {
+export const IconAndLabel = styled.div`
+  img {
+    width: 24px !important;
+    height: 24px !important;
+  }
+`;
+
+const CreatePairModal = ({ data, token0Name, token1Name, token0, token1, onConfirm }) => {
+  const { allTokens } = usePactContext();
   const getModalText = () => {
-    return `you are creating a pair`;
+    return `You are creating a pair`;
   };
 
   return (
@@ -42,9 +53,24 @@ const CreatePairModal = ({ data, token0, token1, onConfirm }) => {
         <Label>{getModalText()}</Label>
       </div>
       <CustomDivider style={{ margin: '15px 0' }} />
-      <Label fontSize={16}>token 0: {token0} </Label>
-      <Label fontSize={16}>token 1: {token1} </Label>
-
+      <FlexContainer className="column" gap={16}>
+        <Label fontSize={16}>Token A </Label>
+        <FlexContainer className="justify-sb">
+          <IconAndLabel className="flex">
+            {allTokens[token0Name]?.icon}
+            <Label>{token0Name}</Label>
+          </IconAndLabel>
+          <Label>{token0}</Label>
+        </FlexContainer>
+        <Label fontSize={16}>Token B </Label>
+        <FlexContainer className="justify-sb">
+          <div className="flex">
+            <UnknownLogo style={{ marginRight: 8 }} />
+            <Label>{token1Name}</Label>
+          </div>
+          <Label>{token1}</Label>
+        </FlexContainer>
+      </FlexContainer>
       <CustomButton type="gradient" buttonStyle={{ marginTop: 32 }} onClick={onConfirm}>
         CONFIRM
       </CustomButton>

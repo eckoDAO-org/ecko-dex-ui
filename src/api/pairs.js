@@ -55,9 +55,21 @@ export const getPairs = async () => {
   }
 };
 
+export const getModuleList = async () => {
+  try {
+    let data = await pactFetchLocal(`(list-modules)`);
+    if (data) {
+      return data;
+    }
+  } catch (e) {
+    return handleError(e);
+  }
+};
+
 export const getTokenNameFromAddress = (token) => {
   const moduleName = token.split('.')[1];
-  return token.substr(token.indexOf('.') + 1, moduleName.length >= 3 ? 3 : moduleName.length).toUpperCase();
+  if (moduleName) return token.substr(token.indexOf('.') + 1, moduleName.length >= 3 ? 3 : moduleName.length).toUpperCase();
+  else return token;
 };
 
 export const getVerifiedPairs = (pairs) => {

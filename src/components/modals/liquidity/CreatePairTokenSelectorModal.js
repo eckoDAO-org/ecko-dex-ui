@@ -2,9 +2,14 @@ import React, { useEffect, useState } from 'react';
 import CustomButton from '../../shared/CustomButton';
 import styled from 'styled-components';
 import Input from '../../shared/Input';
-import { checkTokenModule, getTokenNameFromAddress } from '../../../api/pairs';
+import { checkTokenModule, getModuleList, getTokenNameFromAddress } from '../../../api/pairs';
 import Label from '../../shared/Label';
 import { FlexContainer } from '../../shared/FlexContainer';
+import { PartialScrollableScrollSection } from '../../layout/Containers';
+import { UnknownLogo } from '../../../assets';
+import CustomDivider from '../../shared/CustomDivider';
+import Search from '../../shared/Search';
+import Loader from '../../shared/Loader';
 
 export const StakeModalRow = styled.div`
   display: flex;
@@ -34,14 +39,17 @@ const CreatePairTokenSelectorModal = ({ onSelectedToken, onClose }) => {
   const [tokenNameSelected, setTokenNameSelected] = useState('');
 
   const [tokenExists, setTokenExists] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  useEffect(async () => {
     if (tokenSelected.includes('.')) {
-      fetchData();
+      await fetchData();
+      setLoading(false);
     }
   }, [tokenSelected]);
 
   const fetchData = async () => {
+    setLoading(true);
     const result = await checkTokenModule(tokenSelected);
     if (result.errorMessage) {
       setTokenExists(false);
@@ -56,19 +64,23 @@ const CreatePairTokenSelectorModal = ({ onSelectedToken, onClose }) => {
 
   return (
     <FlexContainer className="column" gap={16}>
-      <Input
-        fontSize={14}
+      <Search
+        containerStyle={{ marginBottom: 0 }}
+        fluid
         placeholder="Please insert token address"
         value={tokenSelected}
-        onChange={(e, { value }) => {
-          setTokenSelected(value);
-        }}
+        onChange={(e, { value }) => setTokenSelected(value)}
       />
-      <Label>{tokenExists ? 'token address found' : 'token address not found'}</Label>
 
+      {/* <Label>Token Address</Label> */}
+      <CustomDivider />
+      {loading && <Loader />}
+      {!loading && !tokenExists && <Label>No matching token address found</Label>}
       {tokenExists && (
-        <CustomButton
-          type="gradient"
+        <FlexContainer
+          className="flex"
+          style={{ cursor: 'pointer' }}
+          gap={8}
           onClick={async () => {
             if (tokenSelected) {
               await onSelectedToken(tokenSelected, getTokenNameFromAddress(tokenSelected));
@@ -78,8 +90,9 @@ const CreatePairTokenSelectorModal = ({ onSelectedToken, onClose }) => {
             }
           }}
         >
-          CONFIRM
-        </CustomButton>
+          <UnknownLogo />
+          <Label>{tokenSelected}</Label>
+        </FlexContainer>
       )}
     </FlexContainer>
   );

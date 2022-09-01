@@ -82,10 +82,11 @@ export const PactProvider = (props) => {
       const communityPairs = result.filter((r) => !pairsData.hasOwnProperty(r));
 
       communityPairs.map((communityPair) => {
+        const tokens = communityPair.split(':');
         communityPair = {
           name: communityPair,
-          token0: 'KDA',
-          token1: getTokenNameFromAddress(communityPair),
+          token0: tokens[0] === 'coin' ? 'KDA' : getTokenNameFromAddress(tokens[0]),
+          token1: getTokenNameFromAddress(tokens[1]),
           main: false,
           isBoosted: false,
           color: '#92187B',

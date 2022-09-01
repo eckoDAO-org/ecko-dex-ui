@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
-import { createPairCommand, getCommunityPairs, getPairModuleDetails, getVerifiedPairs } from '../../api/pairs';
+import { createPairCommand, getCommunityPairs, getModuleList, getPairModuleDetails, getVerifiedPairs } from '../../api/pairs';
 import { CHAIN_ID, NETWORK } from '../../constants/contextConstants';
 import {
   useAccountContext,
@@ -106,6 +106,8 @@ const CreatePairContainer = () => {
         content: (
           <CreatePairModal
             data={data}
+            token0Name={token0Name}
+            token1Name={token1Name}
             token0={token0}
             token1={token1}
             onConfirm={() => {
@@ -158,10 +160,11 @@ const CreatePairContainer = () => {
     });
   };
 
-  const getButtonLabel = () => {
-    if (token0 === '' || token1 === '') return 'Insert pair';
-    else if (!createPairAvailable) return 'No balance';
-    return 'Create pair';
+  const getButtonStatus = () => {
+    if (token0 === '' || token1 === '') return { message: 'Insert pair', disabled: true };
+    else if (token0 === token1) return { message: 'Insert different tokens', disabled: true };
+    else if (!createPairAvailable) return { message: 'No balance', disabled: true };
+    return { message: 'Create Pair', disabled: false };
   };
   return (
     <FlexContainer
@@ -192,59 +195,67 @@ const CreatePairContainer = () => {
           <CreatePairInfo />
         </InfoPopup>
       </FlexContainer>
-      <CommonWrapper>
-        <FlexContainer className="justify-ce column" gap={16} style={{ padding: '0px 36px 36px' }}>
+      <CommonWrapper cardStyle={{ padding: 24 }} gap={16}>
+        <FlexContainer className="justify-ce column" gap={16}>
           <Label>Select pair</Label>
-          <FlexContainer className="justify-ce" gap={24}>
-            <FlexContainer className="column" gap={16}>
+          <FlexContainer className="justify-ce column" gap={16}>
+            <FlexContainer className="column">
               <CustomButton
-                type="basic"
+                type="primary"
                 geBasic
                 fontFamily="basier"
                 buttonStyle={{
                   justifyContent: 'space-between',
-                  background: `${theme(themeMode).colors.white}33`,
-                  borderRadius: '20px',
-                  padding: '10px 30px',
+                  border: `1px solid ${theme(themeMode).colors.white}99`,
+                  borderRadius: '10px',
+                  padding: '10px',
                   marginRight: 0,
                   height: '40px',
                 }}
               >
-                {tokenData['KDA']?.icon}
-                <Label fontSize={13}>{token0Name}</Label>
-
+                <div className="align-ce flex">
+                  {pact.allTokens[token0Name]?.icon}
+                  <Label fontSize={13}>{token0Name}</Label>
+                </div>
                 <ArrowDown className="svg-app-color" style={{ marginRight: 0, marginLeft: 8 }} />
               </CustomButton>
-              <Label labelStyle={{ alignSelf: 'center' }}>{token0}</Label>
             </FlexContainer>
-            <FlexContainer className="column" gap={16}>
+            <FlexContainer className="column">
               <CustomButton
-                type="basic"
+                type="primary"
                 geBasic
                 fontFamily="basier"
                 onClick={handleTokenSelector}
                 buttonStyle={{
                   justifyContent: 'space-between',
-                  background: `${theme(themeMode).colors.white}33`,
-                  borderRadius: '20px',
-                  padding: '10px 30px',
+                  border: `1px solid ${theme(themeMode).colors.white}99`,
+                  borderRadius: '10px',
+                  padding: '10px',
                   marginRight: 0,
                   height: '40px',
                 }}
               >
-                {token1Name && <UnknownLogo style={{ marginRight: 8 }} />}
-                <Label fontSize={13}>{token1Name !== '' ? token1Name : 'select'}</Label>
-
+                <div className="align-ce flex">
+                  {token1Name && <UnknownLogo style={{ marginRight: 8, width: 20, height: 20 }} />}
+                  <Label fontSize={13}>{token1Name !== '' ? token1Name : 'select'}</Label>
+                </div>
                 <ArrowDown className="svg-app-color" style={{ marginRight: 0, marginLeft: 8 }} />
               </CustomButton>
-              <Label labelStyle={{ alignSelf: 'center' }}>{token1}</Label>
             </FlexContainer>
           </FlexContainer>
+          <div className="flex justify-sb">
+            <Label>Token A</Label>
+            <Label>{token0}</Label>
+          </div>
+          <div className="flex justify-sb">
+            <Label>Token B</Label>
+            <Label>{token1 ? token1 : '-'}</Label>
+          </div>
         </FlexContainer>
 
         <div className="justify-ce align-ce flex">
           <CustomButton
-            disabled={token0 === '' || token1 === '' || !createPairAvailable}
+            disabled={getButtonStatus().disabled}
             buttonStyle={{ maxWidth: '444px' }}
             fluid
             type="gradient"
@@ -252,7 +263,7 @@ const CreatePairContainer = () => {
               await onCreatePair();
             }}
           >
-            {getButtonLabel()}
+            {getButtonStatus().message}
           </CustomButton>
         </div>
       </CommonWrapper>

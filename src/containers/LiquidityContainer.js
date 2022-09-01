@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { BoosterIcon } from '../assets';
+import { BoosterIcon, LiquidityDollarLogo } from '../assets';
 import LiquidityMyLiquidityTable from '../components/liquidity/LiquidityMyLiquidityTable';
 import LiquidityPoolsTable from '../components/liquidity/LiquidityPoolsTable';
 import LiquidityRewardsTable from '../components/liquidity/LiquidityRewardsTable';
@@ -11,9 +11,8 @@ import CustomButton from '../components/shared/CustomButton';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import InfoPopup from '../components/shared/InfoPopup';
 import Label from '../components/shared/Label';
+import useWindowSize from '../hooks/useWindowSize';
 import {
-  ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED,
-  ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED,
   ROUTE_LIQUIDITY_CREATE_PAIR,
   ROUTE_LIQUIDITY_MY_LIQUIDITY,
   ROUTE_LIQUIDITY_POOLS,
@@ -25,6 +24,8 @@ import theme, { commonColors } from '../styles/theme';
 const LiquidityContainer = () => {
   const { pathname } = useLocation();
   const history = useHistory();
+  const [width] = useWindowSize();
+
   return (
     <FlexContainer
       className="column w-100 h-100 main"
@@ -58,7 +59,7 @@ const LiquidityContainer = () => {
             </InfoPopup>
           )}
         </FlexContainer>
-        <FlexContainer gap={16} mobileClassName="column" mobilePixel={530}>
+        <FlexContainer gap={16} mobilePixel={530}>
           <CustomButton
             fontSize={13}
             buttonStyle={{ height: 33 }}
@@ -66,12 +67,12 @@ const LiquidityContainer = () => {
             color={commonColors.pink}
             onClick={() => history.push(ROUTE_LIQUIDITY_REWARDS)}
           >
-            <RewardsButtonContent color={pathname === ROUTE_LIQUIDITY_REWARDS ? '#fff' : commonColors.pink}>
+            <ButtonContent color={pathname === ROUTE_LIQUIDITY_REWARDS ? '#fff' : commonColors.pink}>
               <BoosterIcon />
               <Label fontFamily="syncopate" color={pathname === ROUTE_LIQUIDITY_REWARDS ? '#fff' : commonColors.pink} labelStyle={{ marginTop: 1 }}>
                 REWARDS
               </Label>
-            </RewardsButtonContent>
+            </ButtonContent>
           </CustomButton>
           <CustomButton
             fontSize={13}
@@ -80,9 +81,14 @@ const LiquidityContainer = () => {
             fontFamily="syncopate"
             onClick={() => history.push(ROUTE_LIQUIDITY_MY_LIQUIDITY)}
           >
-            MY LIQUIDITY
+            <ButtonContent color={commonColors.white}>
+              <LiquidityDollarLogo />
+              <Label fontFamily="syncopate" labelStyle={{ marginTop: 1 }}>
+                MY LIQUIDITY
+              </Label>
+            </ButtonContent>
           </CustomButton>
-          <CustomButton
+          {/*           <CustomButton
             fontSize={13}
             buttonStyle={{ height: 33 }}
             type="gradient"
@@ -94,8 +100,13 @@ const LiquidityContainer = () => {
               )
             }
           >
-            ADD LIQUIDITY
-          </CustomButton>
+            <ButtonContent color={commonColors.white}>
+              <LiquidityDollarLogo />
+              <Label fontFamily="syncopate" labelStyle={{ marginTop: 1 }}>
+                ADD LIQUIDITY
+              </Label>
+            </ButtonContent>
+          </CustomButton> */}
           {pathname === ROUTE_LIQUIDITY_POOLS && (
             <CustomButton
               fontSize={13}
@@ -123,7 +134,7 @@ const LiquidityContainer = () => {
 
 export default LiquidityContainer;
 
-const RewardsButtonContent = styled.div`
+const ButtonContent = styled.div`
   display: flex;
   align-items: center;
   svg {
