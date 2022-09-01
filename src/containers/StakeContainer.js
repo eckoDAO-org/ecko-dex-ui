@@ -209,7 +209,11 @@ const StakeContainer = () => {
 
         setInputAmount('');
         const txRes = await transactionListen(stakingResponse.requestKeys[0]);
-        await walletConnectSendTransactionUpdateEvent(NETWORKID, txRes);
+        const eventData = {
+          ...txRes,
+          type: 'ROLL-UP & STAKE',
+        };
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
         pact.setPolling(false);
       })
       .catch((error) => {
@@ -307,7 +311,11 @@ const StakeContainer = () => {
         pollingNotif(rollupAndUnstake.requestKeys[0], 'Unstake Transaction Pending');
 
         const txRes = await transactionListen(rollupAndUnstake.requestKeys[0]);
-        await walletConnectSendTransactionUpdateEvent(NETWORKID, txRes);
+        const eventData = {
+          ...txRes,
+          type: 'ROLL-UP & UNSTAKE',
+        };
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
         pact.setPolling(false);
         setInputAmount('');
       })
@@ -326,7 +334,11 @@ const StakeContainer = () => {
         pollingNotif(rollupAndUnstake.requestKeys[0], 'Claim and Unstake Transaction Pending');
 
         const txRes = await transactionListen(rollupAndUnstake.requestKeys[0]);
-        await walletConnectSendTransactionUpdateEvent(NETWORKID, txRes);
+        const eventData = {
+          ...txRes,
+          type: 'ROLL-UP & CLAIM & UNSTAKE',
+        };
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
         pact.setPolling(false);
         setInputAmount('');
       })
@@ -395,7 +407,11 @@ const StakeContainer = () => {
         pollingNotif(rollupAndClaim.requestKeys[0], 'Rollup and Unstake Transaction Pending');
 
         const txRes = await transactionListen(rollupAndClaim.requestKeys[0]);
-        await walletConnectSendTransactionUpdateEvent(NETWORKID, txRes);
+        const eventData = {
+          ...txRes,
+          type: 'ROLL-UP & CLAIM',
+        };
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
         pact.setPolling(false);
         setInputAmount('');
       })

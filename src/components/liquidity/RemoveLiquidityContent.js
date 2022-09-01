@@ -140,8 +140,8 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
   const onRemoveLiquidity = async () => {
     setLoading(true);
     const res = await liquidity.removeLiquidityWallet(
-      tokenData[pair?.token0].code,
-      tokenData[pair?.token1].code,
+      tokenData[pair?.token0],
+      tokenData[pair?.token1],
       reduceBalance(pooled, PRECISION),
       previewAmount
     );
