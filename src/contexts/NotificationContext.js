@@ -226,23 +226,24 @@ export const NotificationProvider = ({ children }) => {
 
   /* Generic listener of a transaction. The main input to work is the request key.
      If you want, pass successTitle and erroTitle in order to customize the message notification.
-     Default messages are 'Transaction Success!' and 'Transaction Error!' 
+     Default messages are 'Transaction Success!' and 'Transaction Error!'
   */
   const transactionListen = async (reqKey, successTitle, errorTitle) => {
     const pollRes = await listen(reqKey);
-    if (pollRes === 'success') {
+    if (pollRes?.result?.status === 'success') {
       setFetchAccountBalance(true);
       successTitle ? showSuccessNotification(reqKey, successTitle) : showSuccessNotification(reqKey);
     } else {
       setFetchAccountBalance(true);
       errorTitle ? showErrorNotification(reqKey, errorTitle) : showErrorNotification(reqKey);
     }
+    return pollRes;
   };
 
   useEffect(() => {
     if (!notificationNotCompletedChecked && account.account) {
       const pendingNotification = notificationList.filter((notif) => notif.type === 'info' && notif.isCompleted === false);
-      pendingNotification.map((pendingNotif) => transactionListen(pendingNotif.description));
+      pendingNotification.forEach((pendingNotif) => transactionListen(pendingNotif.description));
 
       setNotificationNotCompletedChecked(true);
     }

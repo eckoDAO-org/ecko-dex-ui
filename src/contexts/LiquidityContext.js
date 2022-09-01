@@ -14,7 +14,11 @@ export const LiquidityProvider = (props) => {
   const pact = usePactContext();
   const { account, setLocalRes } = useAccountContext();
   const { isConnected: isXWalletConnected, requestSign: xWalletRequestSign } = useKaddexWalletContext();
-  const { pairingTopic: isWalletConnectConnected, requestSignTransaction: walletConnectRequestSign } = useWalletConnectContext();
+  const {
+    pairingTopic: isWalletConnectConnected,
+    requestSignTransaction: walletConnectRequestSign,
+    sendTransactionUpdateEvent: walletConnectSendTransactionUpdateEvent,
+  } = useWalletConnectContext();
   const wallet = useWalletContext();
   const [liquidityProviderFee, setLiquidityProviderFee] = useState(0.003);
   const [pairListAccount, setPairListAccount] = useState(pairTokens);
@@ -99,6 +103,7 @@ export const LiquidityProvider = (props) => {
       pact.setPactCmd(command);
       let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(command));
       data = await parseRes(data);
+      await walletConnectSendTransactionUpdateEvent(NETWORKID, data);
       setLocalRes(data);
       return data;
     } catch (e) {
@@ -186,6 +191,7 @@ export const LiquidityProvider = (props) => {
         pact.setPactCmd(command);
         let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(command));
         data = await parseRes(data);
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, data);
         setLocalRes(data);
         return data;
       } catch (e) {
@@ -284,6 +290,7 @@ export const LiquidityProvider = (props) => {
       pact.setPactCmd(cmd);
       let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(cmd));
       data = await parseRes(data);
+      await walletConnectSendTransactionUpdateEvent(NETWORKID, data);
       let previewData = await removeLiquidityPreview(token0, token1, previewAmount);
       if (!previewData.errorMessage) {
         const result = { ...data, resPreview: { ...previewData } };

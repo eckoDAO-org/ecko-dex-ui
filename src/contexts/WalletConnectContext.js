@@ -20,7 +20,9 @@ const KDX_METHODS = {
   KDX_SIGN_TRANSACTION: 'kaddex_sign_transaction',
 };
 
-const KDA_EVENTS = {};
+const KDA_EVENTS = {
+  KDA_TRANSACTION_UPDATED: 'kadena_transaction_updated',
+};
 
 const KDX_EVENTS = {
   ACCOUNT_CHANGED: 'account_changed',
@@ -195,6 +197,35 @@ export const WalletConnectProvider = (props) => {
     [client, walletConnectState, connectWallet, initialize]
   );
 
+  const sendTransactionUpdateEvent = useCallback(
+    async (networkId, payload) => {
+      if (!client) {
+        const initialized = await initialize();
+        if (!initialized) {
+          throw new Error('WalletConnect is not initialized');
+        }
+      }
+      if (!walletConnectState?.pairingTopic) {
+        const connectedWallet = await connectWallet();
+        if (!connectedWallet) {
+          throw new Error('WalletConnect is not connected');
+        }
+      }
+
+      try {
+        await client?.emit({
+          topic: walletConnectState?.pairingTopic,
+          chainId: `${KDA_NAMESPACE}:${networkId || NETWORKID}`,
+          event: {
+            name: KDA_EVENTS.KDA_TRANSACTION_UPDATED,
+            params: payload,
+          },
+        });
+      } catch (e) {}
+    },
+    [client, walletConnectState, connectWallet, initialize]
+  );
+
   useEffect(() => {
     if (!client) {
       initialize().then((initialized) => {
@@ -254,6 +285,7 @@ export const WalletConnectProvider = (props) => {
     ...walletConnectState,
     connectWallet,
     requestSignTransaction,
+    sendTransactionUpdateEvent,
   };
   return <WalletConnectContext.Provider value={contextValues}>{props.children}</WalletConnectContext.Provider>;
 };

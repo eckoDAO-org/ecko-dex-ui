@@ -27,8 +27,11 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
   const notificationContext = useNotificationContext();
   const { showNotification, STATUSES } = useNotificationContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
-  const { pairingTopic: isWalletConnectConnected, requestSignTransaction: walletConnectRequestSign } = useWalletConnectContext();
-
+  const {
+    pairingTopic: isWalletConnectConnected,
+    requestSignTransaction: walletConnectRequestSign,
+    sendTransactionUpdateEvent: walletConnectSendTransactionUpdateEvent,
+  } = useWalletConnectContext();
   const history = useHistory();
   const [daoSingleProposalLoading, setDaoSingleProposalLoading] = useState(false);
   const [daoFetchDataLoading, setDaoFetchDataLoading] = useState(false);
@@ -82,7 +85,8 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
         .sendSigned(signedCommand, NETWORK)
         .then(async (voteProposal) => {
           notificationContext.pollingNotif(voteProposal.requestKeys[0], 'Vote Pending');
-          await notificationContext.transactionListen(voteProposal.requestKeys[0], 'Vote Success', 'Vote Failed');
+          const txRes = await notificationContext.transactionListen(voteProposal.requestKeys[0], 'Vote Success', 'Vote Failed');
+          await walletConnectSendTransactionUpdateEvent(NETWORKID, txRes);
           pact.setPolling(false);
           setDaoFetchDataLoading(false);
           setDaoSingleProposalLoading(false);
