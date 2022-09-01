@@ -86,7 +86,11 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
         .then(async (voteProposal) => {
           notificationContext.pollingNotif(voteProposal.requestKeys[0], 'Vote Pending');
           const txRes = await notificationContext.transactionListen(voteProposal.requestKeys[0], 'Vote Success', 'Vote Failed');
-          await walletConnectSendTransactionUpdateEvent(NETWORKID, txRes);
+          const eventData = {
+            ...txRes,
+            type: 'VOTE',
+          };
+          await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
           pact.setPolling(false);
           setDaoFetchDataLoading(false);
           setDaoSingleProposalLoading(false);

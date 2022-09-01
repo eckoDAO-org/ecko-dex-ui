@@ -121,7 +121,11 @@ const LiquidityRewardsTable = () => {
         pollingNotif(stakingResponse.requestKeys[0], 'Claim Rewards Transaction Pending');
 
         const txRes = await transactionListen(stakingResponse.requestKeys[0]);
-        await walletConnectSendTransactionUpdateEvent(NETWORKID, txRes);
+        const eventData = {
+          ...txRes,
+          type: 'CLAIM REWARDS',
+        };
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
 
         pact.setPolling(false);
       })

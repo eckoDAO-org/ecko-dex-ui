@@ -155,7 +155,21 @@ export const SwapProvider = (props) => {
         pact.setPactCmd(command);
         let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(command));
         data = await parseRes(data);
-        await walletConnectSendTransactionUpdateEvent(NETWORKID, data);
+        const eventData = {
+          ...data,
+          amountFrom: isSwapIn
+            ? reduceBalance(token0.amount, tokenData[token0.coin].precision)
+            : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), tokenData[token0.coin].precision),
+          amountTo: isSwapIn
+            ? reduceBalance(token1.amount * (1 - parseFloat(pact.slippage)), tokenData[token1.coin].precision)
+            : reduceBalance(token1.amount, tokenData[token1.coin].precision),
+          tokenAddressFrom: token0.address,
+          tokenAddressTo: token1.address,
+          coinFrom: token0.coin,
+          coinTo: token1.coin,
+          type: 'SWAP',
+        };
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
         setLocalRes(data);
         return data;
       } catch (e) {

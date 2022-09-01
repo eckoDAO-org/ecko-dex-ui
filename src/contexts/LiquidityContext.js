@@ -103,7 +103,23 @@ export const LiquidityProvider = (props) => {
       pact.setPactCmd(command);
       let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(command));
       data = await parseRes(data);
-      await walletConnectSendTransactionUpdateEvent(NETWORKID, data);
+      const eventData = {
+        ...data,
+        amountFrom: Math.max(
+          reduceBalance(newAmountDesired0 * (1 - parseFloat(pact.slippage)), tokenData[pairConfig.token0].precision),
+          reduceBalance(newAmountDesired0, tokenData[pairConfig.token0].precision)
+        ),
+        amountTo: Math.max(
+          reduceBalance(newAmountDesired1 * (1 - parseFloat(pact.slippage)), tokenData[pairConfig.token1].precision),
+          reduceBalance(newAmountDesired1, tokenData[pairConfig.token1].precision)
+        ),
+        tokenAddressFrom: tokenData[pairConfig.token0].code,
+        tokenAddressTo: tokenData[pairConfig.token1].code,
+        coinFrom: tokenData[pairConfig.token0].name,
+        coinTo: tokenData[pairConfig.token1].name,
+        type: 'LIQUIDITY DOUBLE SIDE',
+      };
+      await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
       setLocalRes(data);
       return data;
     } catch (e) {
@@ -191,7 +207,20 @@ export const LiquidityProvider = (props) => {
         pact.setPactCmd(command);
         let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(command));
         data = await parseRes(data);
-        await walletConnectSendTransactionUpdateEvent(NETWORKID, data);
+        const eventData = {
+          ...data,
+          amountFrom: Math.max(
+            reduceBalance(amountDesired0, tokenData[token0.name].precision),
+            reduceBalance(args['amountA-min'], tokenData[token0.name].precision)
+          ),
+          amountTo: reduceBalance(args['amountB-min'], tokenData[token1.name].precision),
+          tokenAddressFrom: tokenData[token0.name].code,
+          tokenAddressTo: tokenData[token1.name].code,
+          coinFrom: tokenData[token0.name].name,
+          coinTo: tokenData[token1.name].name,
+          type: 'LIQUIDITY SINGLE SIDE',
+        };
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
         setLocalRes(data);
         return data;
       } catch (e) {
@@ -222,13 +251,13 @@ export const LiquidityProvider = (props) => {
 
   const removeLiquidityWallet = async (token0, token1, liquidity, previewAmount) => {
     try {
-      let pair = await getPairAccount(token0, token1);
+      let pair = await getPairAccount(token0.code, token1.code);
 
-      const pairConfig = pairTokens[`${token0}:${token1}`] || pairTokens[`${token1}:${token0}`];
+      const pairConfig = pairTokens[`${token0.code}:${token1.code}`] || pairTokens[`${token1.code}:${token0.code}`];
       const pactCode = pairConfig.isBoosted
         ? `(${KADDEX_NAMESPACE}.wrapper.remove-liquidity
-        ${token0}
-        ${token1}
+        ${token0.code}
+        ${token1.code}
         (read-decimal 'liquidity)
         0.0
         0.0
@@ -238,8 +267,8 @@ export const LiquidityProvider = (props) => {
         ${wantsKdxRewards}
       )`
         : `(${KADDEX_NAMESPACE}.exchange.remove-liquidity
-        ${token0}
-        ${token1}
+        ${token0.code}
+        ${token1.code}
         (read-decimal 'liquidity)
         0.0
         0.0
@@ -290,7 +319,16 @@ export const LiquidityProvider = (props) => {
       pact.setPactCmd(cmd);
       let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(cmd));
       data = await parseRes(data);
-      await walletConnectSendTransactionUpdateEvent(NETWORKID, data);
+      const eventData = {
+        ...data,
+        amountFrom: reduceBalance(liquidity, PRECISION),
+        tokenAddressFrom: token0.code,
+        tokenAddressTo: token1.code,
+        coinFrom: token0.name,
+        coinTo: token1.name,
+        type: 'LIQUIDITY REMOVE',
+      };
+      await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
       let previewData = await removeLiquidityPreview(token0, token1, previewAmount);
       if (!previewData.errorMessage) {
         const result = { ...data, resPreview: { ...previewData } };
