@@ -88,13 +88,23 @@ const CreatePairContainer = () => {
     let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(signedCommand));
     data = await parseRes(data);
     if (data.result?.status !== 'success') {
-      showNotification({
-        title: 'Staking error',
-        message: 'Error while creating the pair',
-        type: STATUSES.ERROR,
-        autoClose: 5000,
-        hideProgressBar: false,
-      });
+      if (data.result?.error?.message.includes('row found for key')) {
+        showNotification({
+          title: 'Create Pair Error',
+          message: 'This pair already exists',
+          type: STATUSES.ERROR,
+          autoClose: 5000,
+          hideProgressBar: false,
+        });
+      } else {
+        showNotification({
+          title: 'Create Pair Error',
+          message: data.result?.error?.message,
+          type: STATUSES.ERROR,
+          autoClose: 5000,
+          hideProgressBar: false,
+        });
+      }
       return;
     } else {
       openModal({

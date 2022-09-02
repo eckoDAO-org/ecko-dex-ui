@@ -50,7 +50,6 @@ const LiquidityRewardsTable = () => {
   const [loading, setLoading] = useState(true);
   const [rewards, setRewards] = useState([]);
   const [rewardsFiltered, setRewardsFiltered] = useState([]);
-
   const [statusFilter, setStatusFilter] = useState('all');
 
   const fetchData = async () => {
@@ -152,7 +151,7 @@ const LiquidityRewardsTable = () => {
   return !loading ? (
     !account.account ? (
       <Label className="justify-ce">Please connect your wallet to see your rewards. </Label>
-    ) : rewardsFiltered.length === 0 ? (
+    ) : rewards.length === 0 ? (
       <Label className="justify-ce align-ce" labelStyle={{ textAlign: 'center' }}>
         To participate in the liquidity mining program and activate the multiplier, users are required to first remove liquidity and claim rewards.
       </Label>
@@ -195,34 +194,40 @@ const LiquidityRewardsTable = () => {
             value={statusFilter}
           />
         </div>
-        <CommonTable
-          items={rewardsFiltered}
-          columns={renderColumns(pact.allTokens)}
-          actions={[
-            {
-              icon: (item) => (
-                <ClaimButton disabled={item?.['remaining-time'] > 0} color={item?.['remaining-time'] > 0 ? commonColors.info : null}>
-                  <BoosterIcon />{' '}
-                  <Label
-                    labelStyle={{ lineHeight: 1 }}
-                    withShade={item?.['remaining-time'] > 0}
-                    color={item?.['remaining-time'] > 0 ? commonColors.info : null}
-                    fontFamily="syncopate"
-                  >
-                    CLAIM
-                  </Label>
-                </ClaimButton>
-              ),
-              disabled: (item) => item?.['remaining-time'] > 0,
-              onClick: (item) => {
-                const disabled = item?.['remaining-time'] > 0;
-                if (!disabled) {
-                  onClaimRewards(item);
-                }
+        {rewardsFiltered.length > 0 ? (
+          <CommonTable
+            items={rewardsFiltered.length > 0 && rewardsFiltered}
+            columns={renderColumns(pact.allTokens)}
+            actions={[
+              {
+                icon: (item) => (
+                  <ClaimButton disabled={item?.['remaining-time'] > 0} color={item?.['remaining-time'] > 0 ? commonColors.info : null}>
+                    <BoosterIcon />{' '}
+                    <Label
+                      labelStyle={{ lineHeight: 1 }}
+                      withShade={item?.['remaining-time'] > 0}
+                      color={item?.['remaining-time'] > 0 ? commonColors.info : null}
+                      fontFamily="syncopate"
+                    >
+                      CLAIM
+                    </Label>
+                  </ClaimButton>
+                ),
+                disabled: (item) => item?.['remaining-time'] > 0,
+                onClick: (item) => {
+                  const disabled = item?.['remaining-time'] > 0;
+                  if (!disabled) {
+                    onClaimRewards(item);
+                  }
+                },
               },
-            },
-          ]}
-        />
+            ]}
+          />
+        ) : (
+          <div className="flex justify-ce">
+            <Label>No {statusFilter} rewards</Label>
+          </div>
+        )}
       </>
     )
   ) : (
@@ -280,7 +285,7 @@ const renderColumns = (allTokens) => {
     },
     {
       name: 'Status',
-      width: 100,
+      width: 80,
       render: ({ item }) => {
         let color = '';
         item?.['remaining-time'] > 0 ? (color = commonColors.info) : (color = commonColors.green);

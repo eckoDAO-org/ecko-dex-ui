@@ -74,7 +74,9 @@ const CreatePairTokenSelectorModal = ({ onSelectedToken, onClose }) => {
         onChange={(e, { value }) => setTokenSelected(value)}
       />
 
-      {/* <Label>Token Address</Label> */}
+      <Label fontSize={13} fontFamily="syncopate">
+        Token Address
+      </Label>
       <CustomDivider />
       {loading && <Loader />}
       {!loading && !tokenExists && <Label>No matching token address found</Label>}
