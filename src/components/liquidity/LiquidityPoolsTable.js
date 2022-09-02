@@ -30,6 +30,7 @@ const LiquidityPoolsTable = () => {
       const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
 
       const allPairValues = await getAllPairValues(pools, volumes);
+      console.log('LOG --> allPairValues', allPairValues);
       let allData = [];
       const multipliers = await getPairsMultiplier(pools);
       for (let i = 0; i < allPairValues.length; i++) {

@@ -17,6 +17,7 @@ import { useApplicationContext, usePactContext } from '../../contexts';
 import { commonColors, theme } from '../../styles/theme';
 import styled from 'styled-components';
 import { getPairsMultiplier } from '../../api/liquidity-rewards';
+import { getAnalyticsTokenStatsData } from '../../api/kaddex-analytics';
 
 const LiquidityTokensTable = () => {
   const history = useHistory();
@@ -30,6 +31,7 @@ const LiquidityTokensTable = () => {
     const pairsList = await getPairList();
     if (pairsList?.length) {
       const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
+      const tokensStatsData = await getAnalyticsTokenStatsData();
       const tokens = Object.values(tokenData);
 
       // get all aprs from pairs list
@@ -58,12 +60,7 @@ const LiquidityTokensTable = () => {
 
         const liquidityUSD = tokenUsdPrice ? liquidity * tokenUsdPrice : null;
 
-        const volume24H = await getTotalKDAVolume(
-          moment().subtract(1, 'days').toDate(),
-          moment().subtract(1, 'days').toDate(),
-          token.tokenNameKaddexStats,
-          volumes
-        );
+        const volume24H = tokensStatsData?.[token.code].volume24h;
         let apr = 0;
         let multiplier = 0;
 
@@ -79,7 +76,7 @@ const LiquidityTokensTable = () => {
 
         result.push({
           ...token,
-          volume24HUsd: volume24H * tokensUsdPrice?.KDA,
+          volume24HUsd: volume24H * tokensUsdPrice?.[token.name],
           volume24H,
           apr,
           liquidityUSD,

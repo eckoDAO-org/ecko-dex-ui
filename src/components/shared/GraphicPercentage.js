@@ -4,14 +4,16 @@ import { commonColors } from '../../styles/theme';
 import { FlexContainer } from './FlexContainer';
 import Label from './Label';
 
-const GraphicPercentage = ({ prevValue, currentValue, componentStyle }) => {
+const GraphicPercentage = ({ prevValue, currentValue, percentageValue, componentStyle }) => {
   const getPercentage = (a, b) => {
     return ((b - a) / a) * 100;
   };
 
-  const percentage = getPercentage(prevValue, currentValue);
+  // if there are prevValue and currentValue, the component returns getPercentage of these value.
+  // if percentageValue is passed at the commponent, this return directly this value
+  const percentage = percentageValue || getPercentage(prevValue, currentValue);
 
-  return prevValue && currentValue && prevValue !== 0 ? (
+  return percentageValue || (prevValue && currentValue && prevValue !== 0) ? (
     <FlexContainer
       gap={8}
       className="align-ce"

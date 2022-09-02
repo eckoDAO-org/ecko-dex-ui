@@ -1,11 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import moment from 'moment';
 import styled from 'styled-components';
 import { TradeUpIcon } from '../../assets';
 import tokenData from '../../constants/cryptoCurrencies';
-import { getTokenVolumeDiff, getUSDPriceDiff, getKDAPriceDiff, getGroupedVolume, getTotalKDAVolume } from '../../api/kaddex-stats';
 import { usePactContext } from '../../contexts';
 import { useApplicationContext } from '../../contexts';
 import { ROUTE_TOKEN_INFO } from '../../router/routes';
@@ -15,6 +13,7 @@ import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import GraphicPercentage from '../shared/GraphicPercentage';
+import { getAnalyticsTokenStatsData } from '../../api/kaddex-analytics';
 
 const StatsTable = () => {
   const { themeMode } = useApplicationContext();
@@ -27,41 +26,16 @@ const StatsTable = () => {
     const setInitData = async () => {
       if (pact?.tokensUsdPrice) {
         const data = [];
-        const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
+        const tokensStatsData = await getAnalyticsTokenStatsData();
         for (const t of Object.values(tokenData)) {
-          const asset = (t.statsID || t.code) === 'coin' ? 'KDA' : t.statsID || t.code;
-          const currency = (t.statsID || t.code) === 'coin' ? 'USDT' : 'coin';
           const price = pact?.tokensUsdPrice && pact?.tokensUsdPrice[t?.name];
-          const kdaUsdPrice = pact?.tokensUsdPrice?.KDA;
-
-          const volume24 = await getTotalKDAVolume(
-            moment().subtract(1, 'days').toDate(),
-            moment().subtract(1, 'days').toDate(),
-            t.tokenNameKaddexStats,
-            volumes
-          );
-
-          const volume24Graph = await getTokenVolumeDiff(
-            moment().subtract(2, 'days').toDate(),
-            moment().subtract(1, 'days').toDate(),
-            t.statsID || t.code
-          );
-
-          let price24Diff = null;
-          if (asset === 'KDA') {
-            price24Diff = await getKDAPriceDiff(moment().subtract(1, 'days').toDate(), new Date(), asset, currency);
-          } else {
-            price24Diff = await getUSDPriceDiff(moment().subtract(1, 'days').toDate(), new Date(), asset, currency);
-          }
-
+          const tokenStats = tokensStatsData[t.code];
           data.push({
             ...t,
             price,
-            dailyPriceChange: [price24Diff?.initial, price24Diff?.final],
-            dailyPriceChangeValue: getPercentage(price24Diff?.initial, price24Diff?.final),
-            dailyVolume: volume24 ? volume24 * kdaUsdPrice : 0,
-            dailyVolumeChange: [volume24Graph?.initial * kdaUsdPrice, volume24Graph?.final * kdaUsdPrice],
-            dailyVolumeValue: getPercentage(volume24Graph?.initial * kdaUsdPrice, volume24Graph?.final * kdaUsdPrice),
+            dailyPriceChangeValue: tokenStats && tokenStats.priceChange24h,
+            dailyVolume: tokenStats && tokenStats.volume24h * price,
+            dailyVolumeChange: tokenStats && tokenStats.volumeChange24h,
           });
         }
         setStatsData(data);
@@ -70,10 +44,6 @@ const StatsTable = () => {
     };
     setInitData();
   }, [pact?.tokensUsdPrice]);
-
-  const getPercentage = (a, b) => {
-    return ((b - a) / a) * 100;
-  };
 
   return !loading ? (
     <CommonTable
@@ -145,7 +115,7 @@ const renderColumns = (history) => {
       width: 160,
       sortBy: 'dailyPriceChangeValue',
       render: ({ item }) => {
-        return <GraphicPercentage componentStyle={{ margin: 0 }} prevValue={item.dailyPriceChange[0]} currentValue={item.dailyPriceChange[1]} />;
+        return <GraphicPercentage componentStyle={{ margin: 0 }} percentageValue={item.dailyPriceChangeValue} />;
       },
     },
 
@@ -160,9 +130,9 @@ const renderColumns = (history) => {
     {
       name: '24h Volume Change',
       width: 160,
-      sortBy: 'dailyVolumeValue',
+      sortBy: 'dailyVolumeChange',
       render: ({ item }) => {
-        return <GraphicPercentage componentStyle={{ margin: 0 }} prevValue={item.dailyVolumeChange[0]} currentValue={item.dailyVolumeChange[1]} />;
+        return <GraphicPercentage componentStyle={{ margin: 0 }} percentageValue={item.dailyVolumeChange} />;
       },
     },
   ];
