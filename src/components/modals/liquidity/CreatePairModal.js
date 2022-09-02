@@ -2,13 +2,9 @@ import React from 'react';
 import CustomButton from '../../shared/CustomButton';
 import CustomDivider from '../../shared/CustomDivider';
 import styled from 'styled-components';
-import { STAKING_REWARDS_PERCENT } from '../../../constants/contextConstants';
 import Label from '../../shared/Label';
 import { usePactContext } from '../../../contexts';
-import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
-import { getTokenIconByCode } from '../../../utils/token-utils';
 import { FlexContainer } from '../../shared/FlexContainer';
-import tokenData from '../../../constants/cryptoCurrencies';
 import { UnknownLogo } from '../../../assets';
 
 export const StakeModalRow = styled.div`

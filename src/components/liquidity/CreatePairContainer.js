@@ -23,7 +23,6 @@ import { ROUTE_LIQUIDITY_TOKENS } from '../../router/routes';
 import { useHistory } from 'react-router-dom';
 import CreatePairInfo from './CreatePairInfo';
 import InfoPopup from '../shared/InfoPopup';
-import tokenData from '../../constants/cryptoCurrencies';
 
 const CreatePairContainer = () => {
   const history = useHistory();

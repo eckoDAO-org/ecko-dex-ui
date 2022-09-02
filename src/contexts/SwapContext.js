@@ -2,8 +2,8 @@ import React, { createContext } from 'react';
 import Pact from 'pact-lang-api';
 import { reduceBalance } from '../utils/reduceBalance';
 
-import { useKaddexWalletContext, useWalletContext, useAccountContext, usePactContext } from '.';
-import { CHAIN_ID, creationTime, NETWORK, NETWORKID, KADDEX_NAMESPACE } from '../constants/contextConstants';
+import { useKaddexWalletContext, useWalletContext, useAccountContext, usePactContext, useWalletConnectContext } from '.';
+import { CHAIN_ID, creationTime, NETWORK, NETWORKID, KADDEX_NAMESPACE, NETWORK_VERSION } from '../constants/contextConstants';
 import { getPair, getPairAccount, getTokenBalanceAccount } from '../api/pact';
 import { mkReq, parseRes } from '../api/utils';
 
@@ -13,6 +13,11 @@ export const SwapProvider = (props) => {
   const pact = usePactContext();
   const { account, localRes, setLocalRes } = useAccountContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
+  const {
+    pairingTopic: isWalletConnectConnected,
+    requestSignTransaction: walletConnectRequestSignTransaction,
+    sendTransactionUpdateEvent: walletConnectSendTransactionUpdateEvent,
+  } = useWalletConnectContext();
   const wallet = useWalletContext();
 
   const swap = async (token0, token1, isSwapIn) => {
@@ -126,6 +131,7 @@ export const SwapProvider = (props) => {
           },
           signingPubKey: accountDetails.result.data.guard.keys[0],
           networkId: NETWORKID,
+          networkVersion: NETWORK_VERSION,
         };
         //alert to sign tx
         /* walletLoading(); */
@@ -133,6 +139,9 @@ export const SwapProvider = (props) => {
         let command = null;
         if (isKaddexWalletConnected) {
           const res = await kaddexWalletRequestSign(signCmd);
+          command = res.signedCmd;
+        } else if (isWalletConnectConnected) {
+          const res = await walletConnectRequestSignTransaction(account.account, NETWORKID, signCmd);
           command = res.signedCmd;
         } else {
           command = await Pact.wallet.sign(signCmd);
@@ -145,6 +154,21 @@ export const SwapProvider = (props) => {
         pact.setPactCmd(command);
         let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(command));
         data = await parseRes(data);
+        const eventData = {
+          ...data,
+          amountFrom: isSwapIn
+            ? reduceBalance(token0.amount, pact.allTokens[token0.coin].precision)
+            : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token0.coin].precision),
+          amountTo: isSwapIn
+            ? reduceBalance(token1.amount * (1 - parseFloat(pact.slippage)), pact.allTokens[token1.coin].precision)
+            : reduceBalance(token1.amount, pact.allTokens[token1.coin].precision),
+          tokenAddressFrom: token0.address,
+          tokenAddressTo: token1.address,
+          coinFrom: token0.coin,
+          coinTo: token1.coin,
+          type: 'SWAP',
+        };
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
         setLocalRes(data);
         return data;
       } catch (e) {

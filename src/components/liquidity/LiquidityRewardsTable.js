@@ -10,14 +10,21 @@ import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
 import { commonColors } from '../../styles/theme';
 import InfoPopup from '../shared/InfoPopup';
-import { useAccountContext, useKaddexWalletContext, useModalContext, useNotificationContext, usePactContext } from '../../contexts';
+import {
+  useAccountContext,
+  useKaddexWalletContext,
+  useModalContext,
+  useNotificationContext,
+  usePactContext,
+  useWalletConnectContext,
+} from '../../contexts';
 import ClaimYourKDXRewards from '../modals/liquidity/ClaimYourKDXRewards';
 import CustomDropdown from '../shared/CustomDropdown';
 import { Divider } from 'semantic-ui-react';
 
 import { getTokenByModuleV2 } from '../../utils/token-utils';
 import { claimLiquidityRewardsCommandToSign, getAccountLiquidityRewards } from '../../api/liquidity-rewards';
-import { NETWORK } from '../../constants/contextConstants';
+import { NETWORK, NETWORKID } from '../../constants/contextConstants';
 import { timeRender } from '../../utils/time-utils';
 
 const ClaimButton = styled.div`
@@ -47,6 +54,11 @@ const LiquidityRewardsTable = () => {
   const pact = usePactContext();
   const { pollingNotif, showErrorNotification, transactionListen } = useNotificationContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
+  const {
+    pairingTopic: isWalletConnectConnected,
+    requestSignTransaction: walletConnectRequestSign,
+    sendTransactionUpdateEvent: walletConnectSendTransactionUpdateEvent,
+  } = useWalletConnectContext();
   const [loading, setLoading] = useState(true);
   const [rewards, setRewards] = useState([]);
   const [rewardsFiltered, setRewardsFiltered] = useState([]);
@@ -91,6 +103,9 @@ const LiquidityRewardsTable = () => {
     if (isKaddexWalletConnected) {
       const res = await kaddexWalletRequestSign(cmd);
       return res.signedCmd;
+    } else if (isWalletConnectConnected) {
+      const res = await walletConnectRequestSign(account.account, NETWORKID, cmd);
+      return res.signedCmd;
     } else {
       return await Pact.wallet.sign(cmd);
     }
@@ -103,7 +118,13 @@ const LiquidityRewardsTable = () => {
       .then(async (stakingResponse) => {
         pollingNotif(stakingResponse.requestKeys[0], 'Claim Rewards Transaction Pending');
 
-        await transactionListen(stakingResponse.requestKeys[0]);
+        const txRes = await transactionListen(stakingResponse.requestKeys[0]);
+        const eventData = {
+          ...txRes,
+          type: 'CLAIM REWARDS',
+        };
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+
         pact.setPolling(false);
       })
       .catch((error) => {

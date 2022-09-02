@@ -19,6 +19,8 @@ import { NETWORK_TYPE } from '../constants/contextConstants';
 import AppLoader from '../components/shared/AppLoader';
 import theme from '../styles/theme';
 import { useGameEditionContext, usePactContext } from '../contexts';
+import { extractDecimal, getDecimalPlaces } from '../utils/reduceBalance';
+import { getTimeByBlockchain } from '../utils/string-utils';
 
 export const CardContainer = styled(FadeIn)`
   display: flex;
@@ -99,24 +101,20 @@ const SwapHistoryContainer = () => {
     }
   }, [gameEditionView, pact.swapList]);
 
-  const getInfoTokenWrap = (item, coinPositionArray) => {
-    getInfoCoin(item, coinPositionArray, pact.allTokens);
-  };
-
-  const renderColumns = () => {
+  const renderColumns = (allTokens) => {
     return [
       {
         name: 'name',
         width: 160,
         render: ({ item }) => (
           <FlexContainer className="align-ce">
-            <CryptoContainer style={{ zIndex: 2 }}>{getInfoTokenWrap(item, 3)?.icon} </CryptoContainer>
-            <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{getInfoTokenWrap(item, 5)?.icon} </CryptoContainer>
-            {getInfoTokenWrap(item, 3)?.name}/{getInfoTokenWrap(item, 5)?.name}
+            <CryptoContainer style={{ zIndex: 2 }}>{getInfoCoin(item, 3, allTokens)?.icon} </CryptoContainer>
+            <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{getInfoCoin(item, 5, allTokens)?.icon} </CryptoContainer>
+            {getInfoCoin(item, 3, allTokens)?.name}/{getInfoCoin(item, 5, allTokens)?.name}
           </FlexContainer>
         ),
         geName: 'Swap pair',
-        geRender: ({ item }) => `${getInfoTokenWrap(item, 3)?.name}/${getInfoTokenWrap(item, 5)?.name}`,
+        geRender: ({ item }) => `${getInfoCoin(item, 3, allTokens)?.name}/${getInfoCoin(item, 5, allTokens)?.name}`,
       },
       {
         name: 'date',
@@ -131,10 +129,10 @@ const SwapHistoryContainer = () => {
       {
         name: 'amount',
         width: 160,
-        align: 'right',
+        align: 'left',
         render: ({ item }) => (
           <FlexContainer>
-            {item?.params[2]} {getInfoTokenWrap(item, 3)?.name}
+            {item?.params[2]} {getInfoCoin(item, 3, allTokens)?.name}
           </FlexContainer>
         ),
       },
@@ -166,7 +164,7 @@ const SwapHistoryContainer = () => {
             <CommonTableGameEdition
               id="swap-history-list"
               items={pact.swapList}
-              columns={renderColumns()}
+              columns={renderColumns(pact.allTokens)}
               loading={pact.loadingSwap}
               onClick={(item) => {
                 window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${item?.requestKey}`, '_blank', 'noopener,noreferrer');
@@ -175,7 +173,7 @@ const SwapHistoryContainer = () => {
           ) : (
             <CommonTable
               items={pact.swapList}
-              columns={renderColumns()}
+              columns={renderColumns(pact.allTokens)}
               hasMore={pact.moreSwap}
               loading={pact.loadingSwap}
               loadMore={async () => {

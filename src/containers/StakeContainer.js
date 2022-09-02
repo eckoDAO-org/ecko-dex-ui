@@ -25,9 +25,16 @@ import VotingPower from '../components/stake/VotingPower';
 import { AddStakeModal } from '../components/modals/stake/AddStakeModal';
 import { UnstakeModal } from '../components/modals/stake/UnstakeModal';
 import { ClaimModal } from '../components/modals/stake/ClaimModal';
-import { useAccountContext, useKaddexWalletContext, useNotificationContext, usePactContext, useModalContext } from '../contexts';
+import {
+  useAccountContext,
+  useKaddexWalletContext,
+  useNotificationContext,
+  usePactContext,
+  useModalContext,
+  useWalletConnectContext,
+} from '../contexts';
 import { ROUTE_STAKE, ROUTE_UNSTAKE } from '../router/routes';
-import { CHAIN_ID, NETWORK } from '../constants/contextConstants';
+import { CHAIN_ID, NETWORK, NETWORKID } from '../constants/contextConstants';
 import { theme } from '../styles/theme';
 // import { useInterval } from '../hooks/useInterval';
 import { extractDecimal, getDecimalPlaces, reduceBalance } from '../utils/reduceBalance';
@@ -41,6 +48,11 @@ const StakeContainer = () => {
   const { openModal, closeModal } = useModalContext();
   const { account } = useAccountContext();
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
+  const {
+    pairingTopic: isWalletConnectConnected,
+    requestSignTransaction: walletConnectRequestSign,
+    sendTransactionUpdateEvent: walletConnectSendTransactionUpdateEvent,
+  } = useWalletConnectContext();
   const { showNotification, STATUSES, pollingNotif, showErrorNotification, transactionListen } = useNotificationContext();
   const pact = usePactContext();
 
@@ -121,6 +133,9 @@ const StakeContainer = () => {
     if (isKaddexWalletConnected) {
       const res = await kaddexWalletRequestSign(cmd);
       return res.signedCmd;
+    } else if (isWalletConnectConnected) {
+      const res = await walletConnectRequestSign(account.account, NETWORKID, cmd);
+      return res.signedCmd;
     } else {
       return await Pact.wallet.sign(cmd);
     }
@@ -195,7 +210,12 @@ const StakeContainer = () => {
         pollingNotif(stakingResponse.requestKeys[0], 'Staking Transaction Pending');
 
         setInputAmount('');
-        await transactionListen(stakingResponse.requestKeys[0]);
+        const txRes = await transactionListen(stakingResponse.requestKeys[0]);
+        const eventData = {
+          ...txRes,
+          type: 'ROLL-UP & STAKE',
+        };
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
         pact.setPolling(false);
       })
       .catch((error) => {
@@ -292,7 +312,12 @@ const StakeContainer = () => {
       .then(async (rollupAndUnstake) => {
         pollingNotif(rollupAndUnstake.requestKeys[0], 'Unstake Transaction Pending');
 
-        await transactionListen(rollupAndUnstake.requestKeys[0]);
+        const txRes = await transactionListen(rollupAndUnstake.requestKeys[0]);
+        const eventData = {
+          ...txRes,
+          type: 'ROLL-UP & UNSTAKE',
+        };
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
         pact.setPolling(false);
         setInputAmount('');
       })
@@ -310,7 +335,12 @@ const StakeContainer = () => {
       .then(async (rollupAndUnstake) => {
         pollingNotif(rollupAndUnstake.requestKeys[0], 'Claim and Unstake Transaction Pending');
 
-        await transactionListen(rollupAndUnstake.requestKeys[0]);
+        const txRes = await transactionListen(rollupAndUnstake.requestKeys[0]);
+        const eventData = {
+          ...txRes,
+          type: 'ROLL-UP & CLAIM & UNSTAKE',
+        };
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
         pact.setPolling(false);
         setInputAmount('');
       })
@@ -378,7 +408,12 @@ const StakeContainer = () => {
       .then(async (rollupAndClaim) => {
         pollingNotif(rollupAndClaim.requestKeys[0], 'Rollup and Unstake Transaction Pending');
 
-        await transactionListen(rollupAndClaim.requestKeys[0]);
+        const txRes = await transactionListen(rollupAndClaim.requestKeys[0]);
+        const eventData = {
+          ...txRes,
+          type: 'ROLL-UP & CLAIM',
+        };
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
         pact.setPolling(false);
         setInputAmount('');
       })

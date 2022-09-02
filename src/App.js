@@ -12,6 +12,7 @@ import { SwapProvider } from './contexts/SwapContext';
 import { LiquidityProvider } from './contexts/LiquidityContext';
 import { GameEditionProvider } from './contexts/GameEditionContext';
 import { KaddexWalletProvider } from './contexts/KaddexWalletContext';
+import { WalletConnectProvider } from './contexts/WalletConnectContext';
 import RightModalRender from './components/modals/RightModalRender';
 import gameEditionBackground from './assets/images/game-edition/game-edition-background.png';
 import useLazyImage from './hooks/useLazyImage';
@@ -37,15 +38,17 @@ function App() {
                 <WalletProvider>
                   <PactProvider>
                     <KaddexWalletProvider>
-                      <SwapProvider>
-                        <LiquidityProvider>
-                          <RightModalRender>
-                            <ModalRender>
-                              <Router />
-                            </ModalRender>
-                          </RightModalRender>
-                        </LiquidityProvider>
-                      </SwapProvider>
+                      <WalletConnectProvider>
+                        <SwapProvider>
+                          <LiquidityProvider>
+                            <RightModalRender>
+                              <ModalRender>
+                                <Router />
+                              </ModalRender>
+                            </RightModalRender>
+                          </LiquidityProvider>
+                        </SwapProvider>
+                      </WalletConnectProvider>
                     </KaddexWalletProvider>
                   </PactProvider>
                 </WalletProvider>

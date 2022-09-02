@@ -11,7 +11,7 @@ import { ArrowBack } from '../assets';
 import Label from '../components/shared/Label';
 import RewardBooster from '../components/liquidity/RewardBooster';
 import { ROUTE_LIQUIDITY_MY_LIQUIDITY } from '../router/routes';
-import { getPairListAccountBalance } from '../api/pact';
+import { getPairList, getPairListAccountBalance } from '../api/pact';
 import useQueryParams from '../hooks/useQueryParams';
 import AppLoader from '../components/shared/AppLoader';
 import { LIQUIDITY_VIEW } from '../constants/liquidityView';
@@ -62,7 +62,11 @@ const RemoveLiquidityContainer = () => {
   const fetchData = async () => {
     const token0 = query.get('token0');
     const token1 = query.get('token1');
-    const resultPairList = await getPairListAccountBalance(account.account, pact.allPairs);
+    const pairs = await getPairList(pact.allPairs);
+    const resultPairList = await getPairListAccountBalance(
+      account.account,
+      pairs.filter((x) => x.reserves[0] !== 0)
+    );
     if (resultPairList.length) {
       const currentPair = resultPairList.find((p) => p.token0 === token0 && p.token1 === token1);
       setPair(currentPair);
@@ -132,18 +136,14 @@ const RemoveLiquidityContainer = () => {
             </FlexContainer>
             <SlippagePopupContent />
           </FlexContainer>
-          {pair.isBoosted && (
-            <>
-              <RewardBooster
-                isBoosted={pair.isBoosted}
-                apr={apr}
-                type={LIQUIDITY_VIEW.REMOVE_LIQUIDITY}
-                handleState={liquidity.setWantsKdxRewards}
-                previewObject={previewObject}
-                pair={pair}
-              />
-            </>
-          )}
+          <RewardBooster
+            isBoosted={pair.isBoosted}
+            apr={apr}
+            type={LIQUIDITY_VIEW.REMOVE_LIQUIDITY}
+            handleState={liquidity.setWantsKdxRewards}
+            previewObject={previewObject}
+            pair={pair}
+          />
           <RemoveLiquidityContent pair={pair} previewObject={previewObject} previewAmount={previewAmount} setPreviewAmount={setPreviewAmount} />
         </>
       )}

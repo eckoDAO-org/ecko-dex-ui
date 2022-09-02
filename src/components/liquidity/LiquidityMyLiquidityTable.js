@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useAccountContext, usePactContext } from '../../contexts';
 import { useErrorState } from '../../hooks/useErrorState';
-import { getPairListAccountBalance } from '../../api/pact';
+import { getPairList, getPairListAccountBalance } from '../../api/pact';
 import { AddIcon, RemoveIcon } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_MY_LIQUIDITY, ROUTE_LIQUIDITY_REMOVE_LIQUIDITY } from '../../router/routes';
 import { extractDecimal, getDecimalPlaces, humanReadableNumber } from '../../utils/reduceBalance';
@@ -21,7 +21,12 @@ const LiquidityMyLiquidityTable = () => {
 
   const fetchData = async () => {
     setLoading(true);
-    const result = await getPairListAccountBalance(account.account, allPairs);
+
+    const pairs = await getPairList(allPairs);
+    const result = await getPairListAccountBalance(
+      account.account,
+      pairs.filter((x) => x.reserves[0] !== 0)
+    );
 
     if (!result.errorMessage) {
       const resultWithLiquidity = result?.filter((r) => extractDecimal(r.pooledAmount[0]) !== 0 && extractDecimal(r.pooledAmount[1]) !== 0);

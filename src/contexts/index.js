@@ -10,6 +10,7 @@ import { ApplicationContext } from './ApplicationContext';
 import { GameEditionContext } from './GameEditionContext';
 import { LiquidityContext } from './LiquidityContext';
 import { RightModalContext } from './RightModalContext';
+import { WalletConnectContext } from './WalletConnectContext';
 
 export function useKaddexWalletContext() {
   return useContext(KaddexWalletContext);
@@ -43,4 +44,7 @@ export function useLiquidityContext() {
 }
 export function useRightModalContext() {
   return useContext(RightModalContext);
+}
+export function useWalletConnectContext() {
+  return useContext(WalletConnectContext);
 }
