@@ -215,7 +215,9 @@ const StakeContainer = () => {
           ...txRes,
           type: 'ROLL-UP & STAKE',
         };
-        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+        if (isWalletConnectConnected) {
+          await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+        }
         pact.setPolling(false);
       })
       .catch((error) => {
@@ -317,7 +319,9 @@ const StakeContainer = () => {
           ...txRes,
           type: 'ROLL-UP & UNSTAKE',
         };
-        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+        if (isWalletConnectConnected) {
+          await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+        }
         pact.setPolling(false);
         setInputAmount('');
       })
@@ -340,7 +344,9 @@ const StakeContainer = () => {
           ...txRes,
           type: 'ROLL-UP & CLAIM & UNSTAKE',
         };
-        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+        if (isWalletConnectConnected) {
+          await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+        }
         pact.setPolling(false);
         setInputAmount('');
       })
@@ -413,7 +419,9 @@ const StakeContainer = () => {
           ...txRes,
           type: 'ROLL-UP & CLAIM',
         };
-        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+        if (isWalletConnectConnected) {
+          await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+        }
         pact.setPolling(false);
         setInputAmount('');
       })

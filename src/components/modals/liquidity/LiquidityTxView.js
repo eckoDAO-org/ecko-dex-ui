@@ -82,7 +82,6 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, apr }) => {
   const pair = getPairByTokensName(token0, token1, pact.allPairs);
 
   const fromValues = extractDecimal(swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1']);
-  console.log('LOG --> swap?.localRes?.result?.data?', swap?.localRes?.result?.data);
 
   return (
     <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle>
