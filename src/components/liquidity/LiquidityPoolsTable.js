@@ -93,7 +93,7 @@ const renderColumns = (allTokens, allPairs, width) => {
       name: '',
       width: width <= theme().mediaQueries.mobilePixel ? 80 : 160,
       render: ({ item }) => (
-        <FlexContainer className="align-ce" mobileClassName="column" mobilePixel={769}>
+        <FlexContainer desktopClassName="align-ce" tabletClassName="align-ce" mobileClassName="column align-fs" mobilePixel={769}>
           <div className="flex align-ce">
             {allPairs[item.name]?.isVerified ? (
               <div style={{ marginRight: 16 }}>
@@ -106,8 +106,9 @@ const renderColumns = (allTokens, allPairs, width) => {
             <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{allTokens[item.token1].icon} </CryptoContainer>
           </div>
           <div
+            className="align-fs flex"
             style={{
-              marginLeft: width <= theme().mediaQueries.mobilePixel && 22,
+              marginLeft: width <= theme().mediaQueries.mobilePixel && 32,
               marginTop: width <= theme().mediaQueries.mobilePixel && 4,
             }}
           >
