@@ -113,6 +113,8 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
     })
     ?.map((c) => c);
 
+  const topThreeCrypto = cryptoCurrencies.filter((crypto, i) => i < 3);
+
   useEffect(() => {
     if (gameEditionView) {
       setButtons({
@@ -127,8 +129,8 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
           }
         },
       });
-      if (selectedTokenIndex < cryptoCurrencies.length) {
-        setSelectedToken(cryptoCurrencies[selectedTokenIndex]);
+      if (selectedTokenIndex < topThreeCrypto.length) {
+        setSelectedToken(topThreeCrypto[selectedTokenIndex]);
       } else {
         setSelectedToken(null);
       }
@@ -137,7 +139,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
   }, [selectedTokenIndex, selectedToken, gameEditionView]);
 
   const onSelectToken = (direction) => {
-    if (direction === 'right' && selectedTokenIndex + 1 <= cryptoCurrencies.length) {
+    if (direction === 'right' && selectedTokenIndex + 1 <= topThreeCrypto.length) {
       setSelectedTokenIndex((prev) => prev + 1);
       setTranslateX((prev) => prev - 160);
     }
@@ -165,7 +167,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
         <PixeledArrowDownIcon />
       </IconContainer>
       <TokensContainer translateX={translateX}>
-        {cryptoCurrencies.map((crypto, i) => {
+        {topThreeCrypto.map((crypto, i) => {
           return (
             <TokenItem
               isVisible={selectedTokenIndex - 1 <= i && selectedTokenIndex + 1 >= i}
@@ -181,7 +183,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
           );
         })}
         <TokenItem
-          isVisible={selectedTokenIndex - 1 <= cryptoCurrencies.length && selectedTokenIndex + 1 >= cryptoCurrencies.length}
+          isVisible={selectedTokenIndex - 1 <= topThreeCrypto.length && selectedTokenIndex + 1 >= topThreeCrypto.length}
           key="MORE"
           selected={!selectedToken}
           style={{ cursor: showTokens ? 'default' : 'pointer' }}
