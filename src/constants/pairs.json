@@ -145,6 +145,15 @@
         "isBoosted": false,
         "color": "#7c572e",
         "isVerified": true
+      },
+      "coin:lago.kwBTC": {
+        "name": "coin:lago.kwBTC",
+        "token0": "KDA",
+        "token1": "kwBTC",
+        "main": false,
+        "isBoosted": false,
+        "color": "#ed9b21",
+        "isVerified": true
       }
     }
   }

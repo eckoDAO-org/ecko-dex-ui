@@ -41,6 +41,7 @@ import { extractDecimal, getDecimalPlaces, reduceBalance } from '../utils/reduce
 import { STAKING_CONSTANTS } from '../constants/stakingConstants';
 import { getTimeByBlockchain } from '../utils/string-utils';
 import useWindowSize from '../hooks/useWindowSize';
+import { getAnalyticsData } from '../api/kaddex-analytics';
 
 const StakeContainer = () => {
   const history = useHistory();
@@ -101,8 +102,8 @@ const StakeContainer = () => {
     getPoolState().then((res) => {
       setPoolState(res);
     });
-    getKDXTotalSupply().then((supply) => {
-      setKdxSupply(reduceBalance(supply, 2));
+    getAnalyticsData(moment().subtract(1, 'day').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')).then((res) => {
+      setKdxSupply(res[res.length - 1].circulatingSupply.totalSupply);
     });
   }, []);
 
