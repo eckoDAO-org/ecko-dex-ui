@@ -136,6 +136,14 @@
         "main": false,
         "isBoosted": false,
         "color": "#ed9b21"
+      },
+      "coin:lago.USD2": {
+        "name": "coin:lago.USD2",
+        "token0": "KDA",
+        "token1": "USD2",
+        "main": false,
+        "isBoosted": false,
+        "color": "#ed9b21"
       }
     }
   }
