@@ -67,11 +67,26 @@ const ConnectWalletWalletConnectModal = ({ onConnectionSuccess }) => {
 
   return (
     <>
-      <Label fontSize={13} geFontSize={20} geColor="yellow" geLabelStyle={{ textAlign: 'center' }}>
-        Please make sure the KDA account provided is controlled by your wallet which has support for WalletConnect
-      </Label>
+      <div>
+        <Label className="flex column" fontSize={13} geFontSize={20} geColor="yellow" geLabelStyle={{ textAlign: 'center' }}>
+          <span>
+            Please carefully read the information on our{' '}
+            <a
+              href={`https://app.gitbook.com/o/MeY3nwK9GNcc8LX9miWr/s/jw12NPj6B3hl29hn8hwH/~/changes/ACuLm11PucPSrsErQVEJ/getting-started/x-wallet/walletconnect#all-device`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              documentation
+            </a>{' '}
+            when connecting your iOS or Android mobile device to the Kaddex DEX, either using a Connection Code, or a QR Code.
+          </span>
+        </Label>
+      </div>
       <Label fontSize={13} geFontSize={16} geColor="blue" geLabelStyle={{ textAlign: 'center', marginBottom: 30 }}>
-        When submitting a transaction, WalletConnect will show you a preview within the wallet before signing
+        Important:
+        <br />
+        Please make the KDA account provided is controlled by your X-Wallet mobile App which has support for WalletConnect. When submitting a
+        transaction, WalletConnect will show you a preview within your X-Wallet mobile App before signing.
       </Label>
       <CustomButton geType="pink" geLabel="CONNECT" onClick={onConnectWallet}>
         Connect
