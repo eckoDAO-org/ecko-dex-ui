@@ -169,7 +169,9 @@ export const SwapProvider = (props) => {
           coinTo: token1.coin,
           type: 'SWAP',
         };
-        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+        if (isWalletConnectConnected) {
+          await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+        }
         setLocalRes(data);
         return data;
       } catch (e) {
