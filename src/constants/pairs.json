@@ -144,6 +144,14 @@
         "main": false,
         "isBoosted": false,
         "color": "#ed9b21"
+      },
+      "arkade.token:coin": {
+        "name": "arkade.token:coin",
+        "token0": "ARKD",
+        "token1": "KDA",
+        "main": false,
+        "isBoosted": false,
+        "color": "#ed9b21"
       }
     }
   }
