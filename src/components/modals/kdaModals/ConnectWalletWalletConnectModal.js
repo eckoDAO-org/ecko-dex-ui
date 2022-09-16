@@ -71,11 +71,7 @@ const ConnectWalletWalletConnectModal = ({ onConnectionSuccess }) => {
         <Label className="flex column" fontSize={13} geFontSize={20} geColor="yellow" geLabelStyle={{ textAlign: 'center' }}>
           <span>
             Please carefully read the information on our{' '}
-            <a
-              href={`https://app.gitbook.com/o/MeY3nwK9GNcc8LX9miWr/s/jw12NPj6B3hl29hn8hwH/~/changes/ACuLm11PucPSrsErQVEJ/getting-started/x-wallet/walletconnect#all-device`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={`https://docs.kaddex.com/kaddex-features/getting-started/x-wallet/walletconnect`} target="_blank" rel="noopener noreferrer">
               documentation
             </a>{' '}
             when connecting your iOS or Android mobile device to the Kaddex DEX, either using a Connection Code, or a QR Code.
