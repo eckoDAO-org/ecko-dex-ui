@@ -8,6 +8,8 @@ import {
   LogoZelcoreIcon,
   LogoChainweaverIcon,
   XWalletLogo,
+  WalletConnectLogo,
+  WireWalletConnectIcon, LogoWalletConnectIcon,
 } from '../assets';
 
 export const WALLET = {
@@ -35,5 +37,13 @@ export const WALLET = {
     getAccountsUrl: 'http://127.0.0.1:9467/v1/accounts',
     wireIcon: <WireChainweaverIcon />,
     notificationLogo: <LogoChainweaverIcon />,
+  },
+  WALLETCONNECT: {
+    id: 'WALLETCONNECT',
+    name: 'WalletConnect',
+    logo: <WalletConnectLogo width={18} height={18} />,
+    signMethod: 'wallet',
+    wireIcon: <WireWalletConnectIcon />,
+    notificationLogo: <LogoWalletConnectIcon />,
   },
 };

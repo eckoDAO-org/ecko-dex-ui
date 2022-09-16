@@ -2,7 +2,7 @@ import React, { useState, createContext } from 'react';
 import pairTokens from '../constants/pairsConfig';
 import Pact from 'pact-lang-api';
 import { CHAIN_ID, NETWORK, NETWORKID, PRECISION, KADDEX_NAMESPACE } from '../constants/contextConstants';
-import { useKaddexWalletContext, usePactContext, useWalletContext, useAccountContext } from '.';
+import { useKaddexWalletContext, usePactContext, useWalletContext, useAccountContext, useWalletConnectContext } from '.';
 import { extractDecimal, reduceBalance } from '../utils/reduceBalance';
 import tokenData from '../constants/cryptoCurrencies';
 import { handleError, mkReq, parseRes } from '../api/utils';
@@ -14,10 +14,15 @@ export const LiquidityProvider = (props) => {
   const pact = usePactContext();
   const { account, setLocalRes } = useAccountContext();
   const { isConnected: isXWalletConnected, requestSign: xWalletRequestSign } = useKaddexWalletContext();
+  const {
+    pairingTopic: isWalletConnectConnected,
+    requestSignTransaction: walletConnectRequestSign,
+    sendTransactionUpdateEvent: walletConnectSendTransactionUpdateEvent,
+  } = useWalletConnectContext();
   const wallet = useWalletContext();
   const [liquidityProviderFee, setLiquidityProviderFee] = useState(0.003);
   const [pairListAccount, setPairListAccount] = useState(pairTokens);
-  const [wantsKdxRewards, setWantsKdxRewards] = useState(true);
+  const [wantsKdxRewards, setWantsKdxRewards] = useState(false);
 
   const addLiquidityWallet = async (token0, token1, amountDesired0, amountDesired1) => {
     try {
@@ -85,6 +90,9 @@ export const LiquidityProvider = (props) => {
       if (isXWalletConnected) {
         const res = await xWalletRequestSign(signCmd);
         command = res.signedCmd;
+      } else if (isWalletConnectConnected) {
+        const res = await walletConnectRequestSign(account.account, NETWORKID, signCmd);
+        command = res.signedCmd;
       } else {
         command = await Pact.wallet.sign(signCmd);
       }
@@ -95,6 +103,25 @@ export const LiquidityProvider = (props) => {
       pact.setPactCmd(command);
       let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(command));
       data = await parseRes(data);
+      const eventData = {
+        ...data,
+        amountFrom: Math.max(
+          reduceBalance(newAmountDesired0 * (1 - parseFloat(pact.slippage)), tokenData[pairConfig.token0].precision),
+          reduceBalance(newAmountDesired0, tokenData[pairConfig.token0].precision)
+        ),
+        amountTo: Math.max(
+          reduceBalance(newAmountDesired1 * (1 - parseFloat(pact.slippage)), tokenData[pairConfig.token1].precision),
+          reduceBalance(newAmountDesired1, tokenData[pairConfig.token1].precision)
+        ),
+        tokenAddressFrom: tokenData[pairConfig.token0].code,
+        tokenAddressTo: tokenData[pairConfig.token1].code,
+        coinFrom: tokenData[pairConfig.token0].name,
+        coinTo: tokenData[pairConfig.token1].name,
+        type: 'LIQUIDITY DOUBLE SIDE',
+      };
+      if (isWalletConnectConnected) {
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+      }
       setLocalRes(data);
       return data;
     } catch (e) {
@@ -169,6 +196,9 @@ export const LiquidityProvider = (props) => {
         if (isXWalletConnected) {
           const res = await xWalletRequestSign(signCmd);
           command = res.signedCmd;
+        } else if (isWalletConnectConnected) {
+          const res = await walletConnectRequestSign(account.account, NETWORKID, signCmd);
+          command = res.signedCmd;
         } else {
           command = await Pact.wallet.sign(signCmd);
         }
@@ -179,6 +209,22 @@ export const LiquidityProvider = (props) => {
         pact.setPactCmd(command);
         let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(command));
         data = await parseRes(data);
+        const eventData = {
+          ...data,
+          amountFrom: Math.max(
+            reduceBalance(amountDesired0, tokenData[token0.name].precision),
+            reduceBalance(args['amountA-min'], tokenData[token0.name].precision)
+          ),
+          amountTo: reduceBalance(args['amountB-min'], tokenData[token1.name].precision),
+          tokenAddressFrom: tokenData[token0.name].code,
+          tokenAddressTo: tokenData[token1.name].code,
+          coinFrom: tokenData[token0.name].name,
+          coinTo: tokenData[token1.name].name,
+          type: 'LIQUIDITY SINGLE SIDE',
+        };
+        if (isWalletConnectConnected) {
+          await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+        }
         setLocalRes(data);
         return data;
       } catch (e) {
@@ -209,13 +255,13 @@ export const LiquidityProvider = (props) => {
 
   const removeLiquidityWallet = async (token0, token1, liquidity, previewAmount) => {
     try {
-      let pair = await getPairAccount(token0, token1);
+      let pair = await getPairAccount(token0.code, token1.code);
 
-      const pairConfig = pairTokens[`${token0}:${token1}`] || pairTokens[`${token1}:${token0}`];
+      const pairConfig = pairTokens[`${token0.code}:${token1.code}`] || pairTokens[`${token1.code}:${token0.code}`];
       const pactCode = pairConfig.isBoosted
         ? `(${KADDEX_NAMESPACE}.wrapper.remove-liquidity
-        ${token0}
-        ${token1}
+        ${token0.code}
+        ${token1.code}
         (read-decimal 'liquidity)
         0.0
         0.0
@@ -225,8 +271,8 @@ export const LiquidityProvider = (props) => {
         ${wantsKdxRewards}
       )`
         : `(${KADDEX_NAMESPACE}.exchange.remove-liquidity
-        ${token0}
-        ${token1}
+        ${token0.code}
+        ${token1.code}
         (read-decimal 'liquidity)
         0.0
         0.0
@@ -265,6 +311,9 @@ export const LiquidityProvider = (props) => {
       if (isXWalletConnected) {
         const res = await xWalletRequestSign(signCmd);
         cmd = res.signedCmd;
+      } else if (isWalletConnectConnected) {
+        const res = await walletConnectRequestSign(account.account, NETWORKID, signCmd);
+        cmd = res.signedCmd;
       } else {
         cmd = await Pact.wallet.sign(signCmd);
       }
@@ -274,6 +323,18 @@ export const LiquidityProvider = (props) => {
       pact.setPactCmd(cmd);
       let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(cmd));
       data = await parseRes(data);
+      const eventData = {
+        ...data,
+        amountFrom: reduceBalance(liquidity, PRECISION),
+        tokenAddressFrom: token0.code,
+        tokenAddressTo: token1.code,
+        coinFrom: token0.name,
+        coinTo: token1.name,
+        type: 'LIQUIDITY REMOVE',
+      };
+      if (isWalletConnectConnected) {
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+      }
       let previewData = await removeLiquidityPreview(token0, token1, previewAmount);
       if (!previewData.errorMessage) {
         const result = { ...data, resPreview: { ...previewData } };
