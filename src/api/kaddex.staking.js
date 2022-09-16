@@ -5,6 +5,7 @@ import { getFloatPrecision } from '../utils/string-utils';
 import { CHAIN_ID, GAS_PRICE, GAS_LIMIT, NETWORKID, ENABLE_GAS_STATION, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { handleError } from './utils';
 import { reduceBalance } from '../utils/reduceBalance';
+import tokenData from '../constants/cryptoCurrencies';
 
 export const getPoolState = async () => {
   try {
@@ -37,7 +38,10 @@ export const getAddStakeCommand = async (verifiedAccount, amountToStake, gasStat
     }
   }
   const parsedAmount = parseFloat(amountToStake?.toString());
-  const decimalPlaces = getFloatPrecision(parsedAmount);
+  let decimalPlaces = getFloatPrecision(parsedAmount);
+  if (decimalPlaces > tokenData['KDX'].precision) {
+    decimalPlaces = tokenData['KDX'].precision;
+  }
   const pactCode = `(${KADDEX_NAMESPACE}.staking.stake "${account.account}" ${parsedAmount.toFixed(decimalPlaces || 2)})`;
   return {
     pactCode,
@@ -139,7 +143,10 @@ export const getRollupAndUnstakeCommand = async (verifiedAccount, amountToUnstak
     }
   }
   const parsedAmount = parseFloat(amountToUnstake?.toString());
-  const decimalPlaces = getFloatPrecision(parsedAmount);
+  let decimalPlaces = getFloatPrecision(parsedAmount);
+  if (decimalPlaces > tokenData['KDX'].precision) {
+    decimalPlaces = tokenData['KDX'].precision;
+  }
   const pactCode = `
   (${KADDEX_NAMESPACE}.staking.rollup "${account.account}")
   (${KADDEX_NAMESPACE}.staking.unstake "${account.account}" ${parsedAmount.toFixed(decimalPlaces || 2)})
@@ -228,7 +235,10 @@ export const getRollupClaimAndUnstakeCommand = async (verifiedAccount, amountToU
     }
   }
   const parsedAmount = parseFloat(amountToUnstake?.toString());
-  const decimalPlaces = getFloatPrecision(parsedAmount);
+  let decimalPlaces = getFloatPrecision(parsedAmount);
+  if (decimalPlaces > tokenData['KDX'].precision) {
+    decimalPlaces = tokenData['KDX'].precision;
+  }
   const pactCode = `
   (${KADDEX_NAMESPACE}.staking.rollup "${account.account}")
   (${KADDEX_NAMESPACE}.staking.claim "${account.account}")

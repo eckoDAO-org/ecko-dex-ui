@@ -129,18 +129,14 @@ const RemoveLiquidityContainer = () => {
             </FlexContainer>
             <SlippagePopupContent />
           </FlexContainer>
-          {pair.isBoosted && (
-            <>
-              <RewardBooster
-                isBoosted={pair.isBoosted}
-                apr={apr}
-                type={LIQUIDITY_VIEW.REMOVE_LIQUIDITY}
-                handleState={setWantsKdxRewards}
-                previewObject={previewObject}
-                pair={pair}
-              />
-            </>
-          )}
+          <RewardBooster
+            isBoosted={pair.isBoosted}
+            apr={apr}
+            type={LIQUIDITY_VIEW.REMOVE_LIQUIDITY}
+            handleState={setWantsKdxRewards}
+            previewObject={previewObject}
+            pair={pair}
+          />
           <RemoveLiquidityContent pair={pair} previewObject={previewObject} previewAmount={previewAmount} setPreviewAmount={setPreviewAmount} />
         </>
       )}

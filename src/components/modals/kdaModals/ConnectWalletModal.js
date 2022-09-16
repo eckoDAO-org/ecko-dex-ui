@@ -7,6 +7,7 @@ import ConnectWalletChainweaverModal from './ConnectWalletChainweaverModal';
 import styled from 'styled-components';
 import { FlexContainer } from '../../shared/FlexContainer';
 import Label from '../../shared/Label';
+import ConnectWalletWalletConnectModal from './ConnectWalletWalletConnectModal';
 
 const ConnectWalletModal = () => {
   const modalContext = useModalContext();
@@ -17,8 +18,6 @@ const ConnectWalletModal = () => {
 
   const openWalletModal = (walletName) => {
     switch (walletName) {
-      default:
-        return <div />;
       case WALLET.ZELCORE.name:
         if (gameEditionView) {
           return openModal({
@@ -52,6 +51,24 @@ const ConnectWalletModal = () => {
             content: <ConnectWalletChainweaverModal onClose={() => modalContext.closeModal()} />,
           });
         }
+
+      case WALLET.WALLETCONNECT.name:
+        if (gameEditionView) {
+          return openModal({
+            title: 'connect wallet',
+            description: 'WalletConnect',
+            content: <ConnectWalletWalletConnectModal onClose={closeModal} />,
+          });
+        } else {
+          return modalContext.openModal({
+            id: 'CHIANWEAVER',
+            title: 'connect wallet',
+            description: 'WalletConnect',
+            onBack: () => modalContext.onBackModal(),
+            content: <ConnectWalletWalletConnectModal onClose={() => modalContext.closeModal()} />,
+          });
+        }
+
       case WALLET.KADDEX_WALLET.name:
         if (!isInstalled) {
           showNotification({
@@ -64,6 +81,9 @@ const ConnectWalletModal = () => {
           modalContext.closeModal();
         }
         break;
+
+      default:
+        return <div />;
     }
   };
 
@@ -76,6 +96,15 @@ const ConnectWalletModal = () => {
         }}
       >
         {WALLET.KADDEX_WALLET.name}
+      </CustomButton>
+      <CustomButton
+        type="primary"
+        onClick={() => {
+          openWalletModal(WALLET.WALLETCONNECT.name);
+        }}
+      >
+        {!gameEditionView && WALLET.WALLETCONNECT.logo}
+        <Label outGameEditionView> {WALLET.WALLETCONNECT.name}</Label>
       </CustomButton>
       <CustomButton
         type="primary"
