@@ -17,3 +17,12 @@ export const getAnalyticsTokenStatsData = async () => {
     })
     .catch((err) => console.log('err', err));
 };
+
+export const getAnalyticsPoolsStatsData = async () => {
+  const url = `analytics/get-pools-stats`;
+  return await kaddexStatsRequest(url)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => console.log('err', err));
+};

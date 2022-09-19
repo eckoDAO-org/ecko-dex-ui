@@ -2,9 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useErrorState } from '../../hooks/useErrorState';
-import { getGroupedVolume } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact';
-import { extractDecimal, humanReadableNumber } from '../../utils/reduceBalance';
+import { humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
@@ -12,43 +11,61 @@ import { AddIcon, BoosterIcon, GasIcon } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS } from '../../router/routes';
 import Label from '../shared/Label';
 import tokenData from '../../constants/cryptoCurrencies';
-import { getAllPairValues } from '../../utils/token-utils';
+import { getApr, getTokenName } from '../../utils/token-utils';
 import { getPairsMultiplier } from '../../api/liquidity-rewards';
 import { commonColors } from '../../styles/theme';
-import moment from 'moment';
 import { usePactContext } from '../../contexts';
+import { getAnalyticsPoolsStatsData } from '../../api/kaddex-analytics';
 
 const LiquidityPoolsTable = () => {
   const history = useHistory();
-  const pact = usePactContext();
+  const { enableGasStation, tokensUsdPrice } = usePactContext();
+
   const [pairList, setPairList] = useErrorState([], true);
+  console.log('LOG --> pairList', pairList);
   const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
     const pools = await getPairList();
-    if (pools.length) {
-      const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
 
-      const allPairValues = await getAllPairValues(pools, volumes);
-      console.log('LOG --> allPairValues', allPairValues);
+    if (pools.length) {
+      const volumes = await getAnalyticsPoolsStatsData();
       let allData = [];
       const multipliers = await getPairsMultiplier(pools);
-      for (let i = 0; i < allPairValues.length; i++) {
-        try {
-          const multiplierObj = multipliers.find((x) => x.pair === allPairValues[i].name);
+      for (const pool of pools) {
+        let volume24HUsd = 0;
+        let apr = 0;
+        let liquidityUsd = 0;
+        const token0 = Object.values(tokenData).find((t) => t.name === pool.token0);
+        const token1 = Object.values(tokenData).find((t) => t.name === pool.token1);
 
-          if (multiplierObj) {
-            allPairValues[i].multiplier = extractDecimal(multiplierObj.multiplier);
-          } else {
-            allPairValues[i].multiplier = 1;
-          }
-        } catch (error) {
-          console.log('fetchData -> error', error);
-          allPairValues[i].multiplier = 1;
+        let multiplier = multipliers.find((m) => m.pair === pool.name).multiplier;
+
+        if (tokensUsdPrice) {
+          const liquidity0 = tokensUsdPrice[token0.name] ? reduceBalance(pool.reserves[0]) * tokensUsdPrice[token0.name] : 0;
+          const liquidity1 = tokensUsdPrice[token1.name] ? reduceBalance(pool.reserves[1]) * tokensUsdPrice[token1.name] : 0;
+
+          let token0UsdPrice = tokensUsdPrice[getTokenName(volumes[pool.name].baseTokenCode)];
+          let token1UsdPrice = tokensUsdPrice[getTokenName(volumes[pool.name].targetTokenCode)];
+
+          volume24HUsd =
+            token0UsdPrice && token1UsdPrice ? volumes[pool.name].baseVolume * token0UsdPrice + volumes[pool.name].targetVolume * token1UsdPrice : 0;
+
+          liquidityUsd = liquidity0 + liquidity1;
+
+          apr = getApr(volume24HUsd, liquidityUsd);
+        } else {
+          apr = null;
+          liquidityUsd = null;
+          volume24HUsd = null;
         }
+
         let data = {
-          ...allPairValues[i],
-          apr: allPairValues[i].apr.value,
+          ...pool,
+          liquidityUsd,
+          volume24HUsd,
+          apr,
+          multiplier,
         };
         allData.push(data);
       }
@@ -60,13 +77,13 @@ const LiquidityPoolsTable = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetchData();
-  }, []);
+    if (tokensUsdPrice) fetchData();
+  }, [tokensUsdPrice]);
 
   return !loading ? (
     <CommonTable
       items={pairList}
-      columns={pact.enableGasStation ? renderColumns() : renderColumns().filter((x) => x.name !== 'Fees')}
+      columns={enableGasStation ? renderColumns() : renderColumns().filter((x) => x.name !== 'Fees')}
       actions={[
         {
           icon: () => <AddIcon />,
@@ -105,7 +122,7 @@ const renderColumns = () => {
         if (item.liquidityUsd) {
           return `$ ${humanReadableNumber(item.liquidityUsd)}`;
         }
-        return humanReadableNumber(item.liquidity);
+        return `$ 0.00`;
       },
     },
     {
@@ -116,7 +133,7 @@ const renderColumns = () => {
         if (item.volume24HUsd) {
           return `$ ${humanReadableNumber(item.volume24HUsd)}`;
         }
-        return humanReadableNumber(item.volume24H);
+        return `$ 0.00`;
       },
     },
     {
