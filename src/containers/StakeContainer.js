@@ -148,7 +148,7 @@ const StakeContainer = () => {
       errorMessage = 'Amount must be positive';
     }
     if (inputAmount > kdxAccountBalance) {
-      errorMessage = "You dont't have enough KDX";
+      errorMessage = "You don't have enough KDX";
     }
     if (errorMessage) {
       showNotification({
@@ -193,14 +193,14 @@ const StakeContainer = () => {
           alreadyStakedAmount={estimateUnstakeData?.staked}
           onConfirm={() => {
             closeModal();
-            sendStakeCommand(signedCommand);
+            sendStakeCommand(signedCommand, inputAmount);
           }}
         />
       ),
     });
   };
 
-  const sendStakeCommand = async (signedCommand) => {
+  const sendStakeCommand = async (signedCommand, amountFrom = 0) => {
     pact.setPolling(true);
     Pact.wallet
       .sendSigned(signedCommand, NETWORK)
@@ -211,6 +211,7 @@ const StakeContainer = () => {
         const txRes = await transactionListen(stakingResponse.requestKeys[0]);
         const eventData = {
           ...txRes,
+          amountFrom,
           type: 'ROLL-UP & STAKE',
         };
         await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
@@ -244,7 +245,7 @@ const StakeContainer = () => {
       }
       const claimAndUnstakeSignedCommand = await signCommand(claimAndUnstakeCommand);
       if (claimAndUnstakeSignedCommand) {
-        sendRollupClaimAndUnstakeCommand(claimAndUnstakeSignedCommand);
+        sendRollupClaimAndUnstakeCommand(claimAndUnstakeSignedCommand, inputAmount);
       }
     } else {
       const command = await getRollupAndUnstakeCommand(
@@ -266,7 +267,7 @@ const StakeContainer = () => {
       }
       const signedCommand = await signCommand(command);
       if (signedCommand) {
-        sendRollupAndUnstakeCommand(signedCommand);
+        sendRollupAndUnstakeCommand(signedCommand, inputAmount);
       }
     }
     closeModal();
@@ -303,7 +304,7 @@ const StakeContainer = () => {
     });
   };
 
-  const sendRollupAndUnstakeCommand = async (signedCommand) => {
+  const sendRollupAndUnstakeCommand = async (signedCommand, amountFrom = 0) => {
     pact.setPolling(true);
     Pact.wallet
       .sendSigned(signedCommand, NETWORK)
@@ -313,6 +314,7 @@ const StakeContainer = () => {
         const txRes = await transactionListen(rollupAndUnstake.requestKeys[0]);
         const eventData = {
           ...txRes,
+          amountFrom,
           type: 'ROLL-UP & UNSTAKE',
         };
         await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
@@ -326,7 +328,7 @@ const StakeContainer = () => {
       });
   };
 
-  const sendRollupClaimAndUnstakeCommand = async (signedCommand) => {
+  const sendRollupClaimAndUnstakeCommand = async (signedCommand, amountFrom = 0) => {
     pact.setPolling(true);
     Pact.wallet
       .sendSigned(signedCommand, NETWORK)
@@ -336,6 +338,7 @@ const StakeContainer = () => {
         const txRes = await transactionListen(rollupAndUnstake.requestKeys[0]);
         const eventData = {
           ...txRes,
+          amountFrom,
           type: 'ROLL-UP & CLAIM & UNSTAKE',
         };
         await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
