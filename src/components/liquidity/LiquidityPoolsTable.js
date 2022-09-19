@@ -88,13 +88,17 @@ const renderColumns = () => {
     {
       name: '',
       width: 160,
-      render: ({ item }) => (
-        <FlexContainer className="align-ce">
-          <CryptoContainer style={{ zIndex: 2 }}> {tokenData[item.token0].icon}</CryptoContainer>
-          <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{tokenData[item.token1].icon} </CryptoContainer>
-          {item.token0}/{item.token1}
-        </FlexContainer>
-      ),
+      render: ({ item }) => {
+        let t0 = item.token0 === 'KDA' ? item.token0 : item.token1;
+        let t1 = item.token1 !== 'KDA' ? item.token1 : item.token0;
+        return (
+          <FlexContainer className="align-ce">
+            <CryptoContainer style={{ zIndex: 2 }}> {tokenData[t0].icon}</CryptoContainer>
+            <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{tokenData[t1].icon} </CryptoContainer>
+            {t0}/{t1}
+          </FlexContainer>
+        );
+      },
     },
     {
       name: 'liquidity',
