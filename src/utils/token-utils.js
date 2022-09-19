@@ -64,8 +64,8 @@ export const getAllPairValues = async (pools, volumes) => {
     const token0 = Object.values(tokenData).find((t) => t.name === pool.token0);
     const token1 = Object.values(tokenData).find((t) => t.name === pool.token1);
 
-    const liquidity0 = reduceBalance(pool.reserves[0]);
-    const liquidity1 = reduceBalance(pool.reserves[1]);
+    const liquidity0 = token0.code === 'coin' ? reduceBalance(pool.reserves[0]) : reduceBalance(pool.reserves[1]);
+    const liquidity1 = token1.code === 'coin' ? reduceBalance(pool.reserves[0]) : reduceBalance(pool.reserves[1]);
     let liquidityUsd = 0;
     let volume24H = 0;
     let volume24HUsd = 0;
