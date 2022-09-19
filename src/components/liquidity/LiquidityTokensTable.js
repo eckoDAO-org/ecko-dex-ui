@@ -35,6 +35,7 @@ const LiquidityTokensTable = () => {
       const tokens = Object.values(tokenData);
 
       // get all aprs from pairs list
+      // TODO: apr by kaddex-api
       const aprs = (await getAllPairValues(pairsList, volumes)).map((pair) => pair.apr);
       const result = [];
 
@@ -49,7 +50,6 @@ const LiquidityTokensTable = () => {
       });
 
       // calculate sum of liquidity in usd and volumes in usd for each token in each pair
-      //const stats = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
       for (const token of tokens) {
         const tokenPairs = pairsList.filter((p) => p.token0 === token.name || p.token1 === token.name);
         const tokenUsdPrice = tokensUsdPrice?.[token.name] ? tokensUsdPrice?.[token.name] : 0;
