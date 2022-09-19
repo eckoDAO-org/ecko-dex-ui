@@ -119,7 +119,47 @@
         "token1": "KAPY",
         "main": false,
         "isBoosted": false,
-        "color": "#EEAA7B"
+        "color": "#fe9c4c"
+      },
+      "coin:free.jodie-token": {
+        "name": "coin:free.jodie-token",
+        "token0": "KDA",
+        "token1": "JDE",
+        "main": false,
+        "isBoosted": false,
+        "color": "#7c572e"
+      },
+      "coin:lago.kwBTC": {
+        "name": "coin:lago.kwBTC",
+        "token0": "KDA",
+        "token1": "kwBTC",
+        "main": false,
+        "isBoosted": false,
+        "color": "#ed9b21"
+      },
+      "coin:lago.USD2": {
+        "name": "coin:lago.USD2",
+        "token0": "KDA",
+        "token1": "USD2",
+        "main": false,
+        "isBoosted": false,
+        "color": "#ed9b21"
+      },
+      "arkade.token:coin": {
+        "name": "arkade.token:coin",
+        "token0": "ARKD",
+        "token1": "KDA",
+        "main": false,
+        "isBoosted": false,
+        "color": "#ed9b21"
+      },
+      "coin:free.KAYC": {
+        "name": "coin:free.KAYC",
+        "token0": "KDA",
+        "token1": "KAYC",
+        "main": false,
+        "isBoosted": false,
+        "color": "#ed9b21"
       }
     }
   }
