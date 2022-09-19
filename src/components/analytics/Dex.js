@@ -54,7 +54,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
           return {
             color: t.color,
             name: `${t.token0}/${t.token1}`,
-            kdaReserve: t.reserves[0],
+            kdaReserve: t.token0 === 'KDA' ? t.reserves[0] : t.reserves[1],
             volumeUsd: kdaPrice * reduceBalance(t.token0 === 'KDA' ? t.reserves[0] : t.reserves[1]) * 2,
             percentage: (kdaTVL * 100) / totalKDATVL,
           };
