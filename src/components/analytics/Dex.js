@@ -43,17 +43,19 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
 
   const getTVLDetails = async () => {
     if (localPairList?.length) {
-      const totalKDATVL = localPairList.reduce((partialSum, curr) => partialSum + reduceBalance(curr.reserves[0]), 0);
+      const totalKDATVL = localPairList.reduce((partialSum, curr) => {
+        return partialSum + reduceBalance(curr.token0 === 'KDA' ? curr.reserves[0] : curr.reserves[1]);
+      }, 0);
 
       const kdaPrice = tokensUsdPrice?.KDA;
       const pairData = localPairList
         .map((t) => {
-          const kdaTVL = reduceBalance(t.reserves[0]);
+          const kdaTVL = reduceBalance(t.token0 === 'KDA' ? t.reserves[0] : t.reserves[1]);
           return {
             color: t.color,
             name: `${t.token0}/${t.token1}`,
             kdaReserve: t.reserves[0],
-            volumeUsd: kdaPrice * reduceBalance(t.reserves[0]) * 2,
+            volumeUsd: kdaPrice * reduceBalance(t.token0 === 'KDA' ? t.reserves[0] : t.reserves[1]) * 2,
             percentage: (kdaTVL * 100) / totalKDATVL,
           };
         })
