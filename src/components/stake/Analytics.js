@@ -2,16 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
-import { getPairList } from '../../api/pact';
-import { getGroupedVolume } from '../../api/kaddex-stats';
-import { getAllPairValues, getStakingApr, getDailyUSDRewards } from '../../utils/token-utils';
+import { getStakingApr, getDailyUSDRewards, getAllPairsData } from '../../utils/token-utils';
 import { extractDecimal, getDecimalPlaces, humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
 import { usePactContext } from '../../contexts';
 import AnalyticsInfo from './AnalyticsInfo';
 import styled from 'styled-components';
 import { BurnedIcon } from '../../assets';
 import { commonColors } from '../../styles/theme';
-import moment from 'moment';
 
 const SubLabel = styled(Label)`
   font-size: 16px;
@@ -38,21 +35,18 @@ const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt, kdxSupply }) 
   const [totalVolumeUSD, setTotalVolumeUSD] = useState(null);
   const [stakingAPR, setStakingAPR] = useState(null);
   const { tokensUsdPrice } = usePactContext();
-  useEffect(() => {
-    getPairList()
-      .then(async (pools) => {
-        const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
-        const allPairValues = await getAllPairValues(pools, volumes);
-        let totalUsd = 0;
-        if (allPairValues?.length) {
-          for (const pair of allPairValues) {
-            totalUsd += pair.volume24HUsd;
-          }
-          setTotalVolumeUSD(totalUsd);
+  useEffect(async () => {
+    if (tokensUsdPrice) {
+      const allPairValues = await getAllPairsData(tokensUsdPrice);
+      let totalUsd = 0;
+      if (allPairValues?.length) {
+        for (const pair of allPairValues) {
+          totalUsd += pair.volume24HUsd;
         }
-      })
-      .catch((err) => console.log('error fetching pair list', err));
-  }, []);
+        setTotalVolumeUSD(totalUsd);
+      }
+    }
+  }, [tokensUsdPrice]);
 
   const dailyUSDIncome = totalVolumeUSD && (getDailyUSDRewards(totalVolumeUSD) * stakedShare) / 100;
 

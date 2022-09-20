@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import moment from 'moment';
 import { useHistory } from 'react-router-dom';
-import { getGroupedVolume } from '../../api/kaddex-stats';
 import { getPairList } from '../../api/pact';
 import CommonTable from '../shared/CommonTable';
 import tokenData from '../../constants/cryptoCurrencies';
@@ -12,11 +10,10 @@ import { AddIcon, BoosterIcon, GasIcon, TradeUpIcon } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_LIQUIDITY_TOKENS, ROUTE_TOKEN_INFO } from '../../router/routes';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
-import { getAllPairValues } from '../../utils/token-utils';
+import { getAllPairsData } from '../../utils/token-utils';
 import { useApplicationContext, usePactContext } from '../../contexts';
 import { commonColors, theme } from '../../styles/theme';
 import styled from 'styled-components';
-import { getPairsMultiplier } from '../../api/liquidity-rewards';
 import { getAnalyticsTokenStatsData } from '../../api/kaddex-analytics';
 
 const LiquidityTokensTable = () => {
@@ -30,25 +27,10 @@ const LiquidityTokensTable = () => {
   const fetchData = async () => {
     const pairsList = await getPairList();
     if (pairsList?.length) {
-      const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
+      const pairsData = await getAllPairsData(tokensUsdPrice);
       const tokensStatsData = await getAnalyticsTokenStatsData();
       const tokens = Object.values(tokenData);
-
-      // get all aprs from pairs list
-      // TODO: apr by kaddex-api
-      const aprs = (await getAllPairValues(pairsList, volumes)).map((pair) => pair.apr);
       const result = [];
-
-      // get all multipliers from pairs list
-      const multipliers = await getPairsMultiplier(pairsList);
-
-      // get an util object that contains all token info with its apr and multiplier
-      const tokenAprAndMultiplier = pairsList.map((p) => {
-        let apr = aprs.find((a) => a.token0 === p.token0 && a.token1 === p.token1).value;
-        let mult = multipliers.find((m) => m.pair === p.name).multiplier;
-        return { code: p.name, token0: p.token0, token1: p.token1, apr, mult };
-      });
-
       // calculate sum of liquidity in usd and volumes in usd for each token in each pair
       for (const token of tokens) {
         const tokenPairs = pairsList.filter((p) => p.token0 === token.name || p.token1 === token.name);
@@ -57,22 +39,13 @@ const LiquidityTokensTable = () => {
         for (const tokenPair of tokenPairs) {
           liquidity += token.name === tokenPair.token0 ? reduceBalance(tokenPair.reserves[0]) : reduceBalance(tokenPair.reserves[1]);
         }
-
         const liquidityUSD = tokenUsdPrice ? liquidity * tokenUsdPrice : null;
-
         const volume24H = tokensStatsData?.[token.code].volume24h;
-        let apr = 0;
-        let multiplier = 0;
-
-        if (token.name === 'KDA') {
-          // if token KDA, get the largests apr and multiplier among all pairs
-          const majorAprMultiplierPair = tokenAprAndMultiplier.sort((x, y) => y.mult * y.apr - x.mult * x.apr)[0];
-          apr = majorAprMultiplierPair.apr;
-          multiplier = majorAprMultiplierPair.mult;
-        } else {
-          apr = tokenAprAndMultiplier.find((a) => a.token0 === token.name || a.token1 === token.name).apr;
-          multiplier = tokenAprAndMultiplier.find((a) => a.code.split(':')[0] === token.code || a.code.split(':')[1] === token.code).mult;
-        }
+        let tokenInfo = pairsData
+          .filter((d) => d.token0 === token.name || d.token1 === token.name)
+          .sort((x, y) => y.apr * y.multiplier - x.apr * x.multiplier);
+        let apr = tokenInfo?.[0]?.apr;
+        let multiplier = tokenInfo?.[0]?.multiplier;
 
         result.push({
           ...token,

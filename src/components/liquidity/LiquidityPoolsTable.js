@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useErrorState } from '../../hooks/useErrorState';
-import { getPairList } from '../../api/pact';
-import { humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
+import { humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
@@ -11,11 +10,9 @@ import { AddIcon, BoosterIcon, GasIcon } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS } from '../../router/routes';
 import Label from '../shared/Label';
 import tokenData from '../../constants/cryptoCurrencies';
-import { getApr, getTokenName } from '../../utils/token-utils';
-import { getPairsMultiplier } from '../../api/liquidity-rewards';
+import { getAllPairsData } from '../../utils/token-utils';
 import { commonColors } from '../../styles/theme';
 import { usePactContext } from '../../contexts';
-import { getAnalyticsPoolsStatsData } from '../../api/kaddex-analytics';
 
 const LiquidityPoolsTable = () => {
   const history = useHistory();
@@ -25,52 +22,8 @@ const LiquidityPoolsTable = () => {
   const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
-    const pools = await getPairList();
-
-    if (pools.length) {
-      const volumes = await getAnalyticsPoolsStatsData();
-      let allData = [];
-      const multipliers = await getPairsMultiplier(pools);
-      for (const pool of pools) {
-        let volume24HUsd = 0;
-        let apr = 0;
-        let liquidityUsd = 0;
-        const token0 = Object.values(tokenData).find((t) => t.name === pool.token0);
-        const token1 = Object.values(tokenData).find((t) => t.name === pool.token1);
-
-        let multiplier = multipliers.find((m) => m.pair === pool.name).multiplier;
-
-        if (tokensUsdPrice) {
-          const liquidity0 = tokensUsdPrice[token0.name] ? reduceBalance(pool.reserves[0]) * tokensUsdPrice[token0.name] : 0;
-          const liquidity1 = tokensUsdPrice[token1.name] ? reduceBalance(pool.reserves[1]) * tokensUsdPrice[token1.name] : 0;
-
-          let token0UsdPrice = tokensUsdPrice[getTokenName(volumes[pool.name].baseTokenCode)];
-          let token1UsdPrice = tokensUsdPrice[getTokenName(volumes[pool.name].targetTokenCode)];
-
-          volume24HUsd =
-            token0UsdPrice && token1UsdPrice ? volumes[pool.name].baseVolume * token0UsdPrice + volumes[pool.name].targetVolume * token1UsdPrice : 0;
-
-          liquidityUsd = liquidity0 + liquidity1;
-
-          apr = getApr(volume24HUsd, liquidityUsd);
-        } else {
-          apr = null;
-          liquidityUsd = null;
-          volume24HUsd = null;
-        }
-
-        let data = {
-          ...pool,
-          liquidityUsd,
-          volume24HUsd,
-          apr,
-          multiplier,
-        };
-        allData.push(data);
-      }
-
-      setPairList(allData);
-    }
+    const pairsData = await getAllPairsData(tokensUsdPrice);
+    setPairList(pairsData);
     setLoading(false);
   };
 

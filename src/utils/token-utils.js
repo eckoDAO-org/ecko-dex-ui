@@ -1,6 +1,9 @@
 import moment from 'moment';
 import { getCoingeckoUsdPrice } from '../api/coingecko';
+import { getAnalyticsPoolsStatsData } from '../api/kaddex-analytics';
 import { getTotalKDAVolume } from '../api/kaddex-stats';
+import { getPairsMultiplier } from '../api/liquidity-rewards';
+import { getPairList } from '../api/pact';
 import { CHAIN_ID, APR_FEE, STAKING_REWARDS_PERCENT } from '../constants/contextConstants';
 import tokenData from '../constants/cryptoCurrencies';
 import { bigNumberConverter } from './bignumber';
@@ -57,6 +60,7 @@ export const getStakingApr = (totalDailyVolumeUSD, totalUsdStakedKDX) => {
 };
 
 // calculate liquidity, volumes and apr for each pool
+// TODO: NOT USED
 export const getAllPairValues = async (pools, volumes) => {
   const result = [];
 
@@ -99,6 +103,54 @@ export const getAllPairValues = async (pools, volumes) => {
   }
 
   return result;
+};
+
+export const getAllPairsData = async (tokensUsdPrice) => {
+  const pools = await getPairList();
+
+  if (pools.length) {
+    const volumes = await getAnalyticsPoolsStatsData();
+    const multipliers = await getPairsMultiplier(pools);
+    let allData = [];
+    for (const pool of pools) {
+      let volume24HUsd = 0;
+      let liquidityUsd = 0;
+      let apr = 0;
+      const token0 = Object.values(tokenData).find((t) => t.name === pool.token0);
+      const token1 = Object.values(tokenData).find((t) => t.name === pool.token1);
+
+      if (tokensUsdPrice) {
+        const liquidity0 = tokensUsdPrice[token0.name] ? reduceBalance(pool.reserves[0]) * tokensUsdPrice[token0.name] : 0;
+        const liquidity1 = tokensUsdPrice[token1.name] ? reduceBalance(pool.reserves[1]) * tokensUsdPrice[token1.name] : 0;
+
+        let token0UsdPrice = tokensUsdPrice[getTokenName(volumes[pool.name].baseTokenCode)];
+        let token1UsdPrice = tokensUsdPrice[getTokenName(volumes[pool.name].targetTokenCode)];
+
+        volume24HUsd =
+          token0UsdPrice && token1UsdPrice ? volumes[pool.name].baseVolume * token0UsdPrice + volumes[pool.name].targetVolume * token1UsdPrice : 0;
+
+        liquidityUsd = liquidity0 + liquidity1;
+        apr = volume24HUsd && liquidityUsd ? getApr(volume24HUsd, liquidityUsd) : 0;
+      } else {
+        apr = null;
+        liquidityUsd = null;
+        volume24HUsd = null;
+      }
+
+      const multiplier = multipliers.find((m) => m.pair === pool.name).multiplier;
+
+      let data = {
+        ...pool,
+        apr,
+        multiplier,
+        liquidityUsd,
+        volume24HUsd,
+      };
+      allData.push(data);
+    }
+
+    return allData;
+  }
 };
 
 // convert liquidity in usd
