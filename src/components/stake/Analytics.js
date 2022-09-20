@@ -3,14 +3,15 @@ import React, { useEffect, useState } from 'react';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
 import { getPairList } from '../../api/pact';
-import { getDailyVolume } from '../../api/kaddex-stats';
+import { getGroupedVolume } from '../../api/kaddex-stats';
 import { getAllPairValues, getStakingApr, getDailyUSDRewards } from '../../utils/token-utils';
-import { extractDecimal, humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
+import { extractDecimal, getDecimalPlaces, humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
 import { usePactContext } from '../../contexts';
 import AnalyticsInfo from './AnalyticsInfo';
 import styled from 'styled-components';
 import { BurnedIcon } from '../../assets';
 import { commonColors } from '../../styles/theme';
+import moment from 'moment';
 
 const SubLabel = styled(Label)`
   font-size: 16px;
@@ -40,7 +41,7 @@ const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt, kdxSupply }) 
   useEffect(() => {
     getPairList()
       .then(async (pools) => {
-        const volumes = await getDailyVolume();
+        const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
         const allPairValues = await getAllPairValues(pools, volumes);
         let totalUsd = 0;
         if (allPairValues?.length) {
@@ -71,7 +72,13 @@ const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt, kdxSupply }) 
           <Label fontSize={24}>
             {(dailyUSDIncome && tokensUsdPrice?.KDX && humanReadableNumber(dailyUSDIncome / tokensUsdPrice?.KDX)) || '-'} KDX
           </Label>
-          {dailyUSDIncome ? <SubLabel>$ {(dailyUSDIncome && humanReadableNumber(dailyUSDIncome)) || ''}</SubLabel> : ''}
+          {dailyUSDIncome ? (
+            <SubLabel>
+              {(dailyUSDIncome && humanReadableNumber(dailyUSDIncome) === '0.00' ? '<$ 0.001' : `$ ${humanReadableNumber(dailyUSDIncome)}`) || ''}
+            </SubLabel>
+          ) : (
+            ''
+          )}
         </div>
         <div>
           <div className="flex column align-fe">
@@ -99,7 +106,7 @@ const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt, kdxSupply }) 
           <div className="flex align-ce">
             <Label>Staked Share</Label>
           </div>
-          <Label fontSize={24}>{(stakedShare && extractDecimal(stakedShare).toFixed(2)) || '-'} % </Label>
+          <Label fontSize={24}>{(stakedShare && getDecimalPlaces(extractDecimal(stakedShare))) || '-'} % </Label>
           <SubLabel labelStyle={{ fontSize: 12 }}>{staked !== 0 && stakedShare ? humanReadableNumber(extractDecimal(staked)) : '-'} KDX</SubLabel>
         </div>
         <div className="flex column align-fe">
