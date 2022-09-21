@@ -41,7 +41,6 @@ const VolumeChart = ({ kdaPrice, width, height }) => {
       }&dateEnd=${moment().subtract(1, 'days').format('YYYY-MM-DD')}`
     );
     Promise.all([volumes, candles]).then(async (res) => {
-      console.log('res', res);
       const allVolume = [];
       for (const timeRange of res[0]?.data) {
         let kdaVerifiedPrice = null;
