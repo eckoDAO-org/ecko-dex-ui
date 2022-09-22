@@ -2,9 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useErrorState } from '../../hooks/useErrorState';
-import { getGroupedVolume } from '../../api/kaddex-stats';
-import { getPairList } from '../../api/pact';
-import { extractDecimal, humanReadableNumber } from '../../utils/reduceBalance';
+import { humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
@@ -12,60 +10,32 @@ import { AddIcon, BoosterIcon, GasIcon } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS } from '../../router/routes';
 import Label from '../shared/Label';
 import tokenData from '../../constants/cryptoCurrencies';
-import { getAllPairValues } from '../../utils/token-utils';
-import { getPairsMultiplier } from '../../api/liquidity-rewards';
+import { getAllPairsData } from '../../utils/token-utils';
 import { commonColors } from '../../styles/theme';
-import moment from 'moment';
 import { usePactContext } from '../../contexts';
 
 const LiquidityPoolsTable = () => {
   const history = useHistory();
-  const pact = usePactContext();
+  const { enableGasStation, tokensUsdPrice } = usePactContext();
+
   const [pairList, setPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
-    const pools = await getPairList();
-    if (pools.length) {
-      const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
-
-      const allPairValues = await getAllPairValues(pools, volumes);
-      let allData = [];
-      const multipliers = await getPairsMultiplier(pools);
-      for (let i = 0; i < allPairValues.length; i++) {
-        try {
-          const multiplierObj = multipliers.find((x) => x.pair === allPairValues[i].name);
-
-          if (multiplierObj) {
-            allPairValues[i].multiplier = extractDecimal(multiplierObj.multiplier);
-          } else {
-            allPairValues[i].multiplier = 1;
-          }
-        } catch (error) {
-          console.log('fetchData -> error', error);
-          allPairValues[i].multiplier = 1;
-        }
-        let data = {
-          ...allPairValues[i],
-          apr: allPairValues[i].apr.value,
-        };
-        allData.push(data);
-      }
-
-      setPairList(allData);
-    }
+    const pairsData = await getAllPairsData(tokensUsdPrice);
+    setPairList(pairsData);
     setLoading(false);
   };
 
   useEffect(() => {
     setLoading(true);
-    fetchData();
-  }, []);
+    if (tokensUsdPrice) fetchData();
+  }, [tokensUsdPrice]);
 
   return !loading ? (
     <CommonTable
       items={pairList}
-      columns={pact.enableGasStation ? renderColumns() : renderColumns().filter((x) => x.name !== 'Fees')}
+      columns={enableGasStation ? renderColumns() : renderColumns().filter((x) => x.name !== 'Fees')}
       actions={[
         {
           icon: () => <AddIcon />,
@@ -88,13 +58,17 @@ const renderColumns = () => {
     {
       name: '',
       width: 160,
-      render: ({ item }) => (
-        <FlexContainer className="align-ce">
-          <CryptoContainer style={{ zIndex: 2 }}> {tokenData[item.token0].icon}</CryptoContainer>
-          <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{tokenData[item.token1].icon} </CryptoContainer>
-          {item.token0}/{item.token1}
-        </FlexContainer>
-      ),
+      render: ({ item }) => {
+        let t0 = item.token0 === 'KDA' ? item.token0 : item.token1;
+        let t1 = item.token1 !== 'KDA' ? item.token1 : item.token0;
+        return (
+          <FlexContainer className="align-ce">
+            <CryptoContainer style={{ zIndex: 2 }}> {tokenData[t0].icon}</CryptoContainer>
+            <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{tokenData[t1].icon} </CryptoContainer>
+            {t0}/{t1}
+          </FlexContainer>
+        );
+      },
     },
     {
       name: 'liquidity',
@@ -104,7 +78,7 @@ const renderColumns = () => {
         if (item.liquidityUsd) {
           return `$ ${humanReadableNumber(item.liquidityUsd)}`;
         }
-        return humanReadableNumber(item.liquidity);
+        return `$ 0.00`;
       },
     },
     {
@@ -115,7 +89,7 @@ const renderColumns = () => {
         if (item.volume24HUsd) {
           return `$ ${humanReadableNumber(item.volume24HUsd)}`;
         }
-        return humanReadableNumber(item.volume24H);
+        return `$ 0.00`;
       },
     },
     {
