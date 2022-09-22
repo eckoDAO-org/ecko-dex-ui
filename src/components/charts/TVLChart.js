@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
+import axios from 'axios';
 import { Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import Label from '../shared/Label';
 import { humanReadableNumber } from '../../utils/reduceBalance';
@@ -39,63 +40,50 @@ const TVLChart = ({ kdaPrice, height }) => {
 
   const [tvlData, setTVLData] = useState([]);
 
-  const getTVL = useCallback(async () => {
-    let totalTVL = 0;
-    const pairList = await getPairList();
-    if (Array.isArray(pairList)) {
-      for (const pair of pairList) {
-        const token0Balance = Number(pair.reserves[0]?.decimal) || pair.reserves[0] || 0;
-        const token1Balance = Number(pair.reserves[1]?.decimal) || pair.reserves[1] || 0;
-        let token0price = 0;
-
-        if (pair.token0 === 'KDA') {
-          token0price = kdaPrice;
-        } else if (pair.token1 === 'KDA') {
-          token0price = (token1Balance / token0Balance) * kdaPrice;
-        }
-        let token1price = 0;
-        if (pair.token1 === 'KDA') {
-          token1price = kdaPrice;
-        } else if (pair.token0 === 'KDA') {
-          token1price = (token0Balance / token1Balance) * kdaPrice;
-        }
-        let token0USD = token0Balance * token0price;
-        let token1USD = token1Balance * token1price || 0;
-        totalTVL += token0USD += token1USD;
-      }
-      setCurrentTVL(totalTVL);
-      setViewedTVL(totalTVL);
-    }
-  }, [kdaPrice]);
-
   useEffect(() => {
-    getTVL();
-  }, [getTVL]);
-
-  useEffect(() => {
-    getGroupedTVL(tvlRanges[tvlRange]?.dateStart ?? moment().subtract(90, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'))
+    const groupedTvl = getGroupedTVL(
+      tvlRanges[tvlRange]?.dateStart ?? moment().subtract(90, 'days').format('YYYY-MM-DD'),
+      moment().format('YYYY-MM-DD')
+    );
+    const candles = axios.get(
+      `${process.env.REACT_APP_KADDEX_STATS_API_URL}/candles?currency=USDT&asset=KDA&dateStart=${
+        tvlRanges[tvlRange]?.dateStart ?? moment().subtract(60, 'days').format('YYYY-MM-DD')
+      }&dateEnd=${moment().subtract(1, 'days').format('YYYY-MM-DD')}`
+    );
+    Promise.all([groupedTvl, candles])
       .then(async (res) => {
         const allTVL = [];
-        for (const day of res.data) {
+        for (const day of res[0].data) {
+          let kdaVerifiedPrice = getDailyKdaPrice(day, res[1]?.data) || kdaPrice;
+
           allTVL.push({
             name: moment(day._id).format('DD/MM/YYYY'),
             tvl: +day.tvl
               .reduce((partialSum, currVol) => {
                 if (currVol.tokenFrom === 'coin') {
-                  const tokenToPrice = (currVol.tokenFromTVL / currVol.tokenToTVL) * kdaPrice;
-                  return partialSum + currVol.tokenFromTVL * kdaPrice + currVol.tokenToTVL * tokenToPrice;
+                  const tokenToPrice = (currVol.tokenFromTVL / currVol.tokenToTVL) * kdaVerifiedPrice;
+                  return partialSum + currVol.tokenFromTVL * kdaVerifiedPrice + currVol.tokenToTVL * tokenToPrice;
                 } else {
-                  const tokenFromPrice = (currVol.tokenToTVL / currVol.tokenFromTVL) * kdaPrice;
-                  return partialSum + currVol.tokenFromTVL * tokenFromPrice + currVol.tokenToTVL * kdaPrice;
+                  const tokenFromPrice = (currVol.tokenToTVL / currVol.tokenFromTVL) * kdaVerifiedPrice;
+                  return partialSum + currVol.tokenFromTVL * tokenFromPrice + currVol.tokenToTVL * kdaVerifiedPrice;
                 }
               }, 0)
               .toFixed(2),
+            kdaVerifiedPrice,
           });
         }
         setTVLData(allTVL);
+        setCurrentTVL(allTVL[allTVL.length - 1].tvl);
+        setViewedTVL(allTVL[allTVL.length - 1].tvl);
       })
       .catch((err) => console.log('get tvl error', err));
   }, [kdaPrice, tvlRange]);
+
+  const getDailyKdaPrice = (day, candles) => {
+    const id = day?._id;
+    const candle = candles.find((x) => x?.dayString === id);
+    return candle?.price?.close;
+  };
 
   return (
     <FlexContainer className="column align-ce w-100 h-100 background-fill" withGradient style={{ padding: 32 }}>

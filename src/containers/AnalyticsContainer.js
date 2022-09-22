@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import useLazyImage from '../hooks/useLazyImage';
-import { usePactContext, useGameEditionContext } from '../contexts';
+import { useGameEditionContext } from '../contexts';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
 import LogoLoader from '../components/shared/Loader';
 import { FlexContainer } from '../components/shared/FlexContainer';
@@ -26,8 +26,6 @@ export const FIXED_BURNT = 99422492;
 const AnalyticsContainer = () => {
   const { pathname } = useLocation();
   const history = useHistory();
-
-  const pact = usePactContext();
   const [kdaPrice, setKdaPrice] = useState(null);
 
   const [analyticsData, setAnalyticsData] = useState({});
@@ -51,7 +49,7 @@ const AnalyticsContainer = () => {
       });
     };
     getInitialData();
-  }, [pact]);
+  }, [kdaPrice]);
 
   const [loaded] = useLazyImage([modalBackground]);
   return !loaded && gameEditionView ? (
