@@ -125,8 +125,9 @@ const LiquidityRewardsTable = () => {
           ...txRes,
           type: 'CLAIM REWARDS',
         };
-        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
-
+        if (isWalletConnectConnected) {
+          await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+        }
         pact.setPolling(false);
       })
       .catch((error) => {

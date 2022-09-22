@@ -119,7 +119,9 @@ export const LiquidityProvider = (props) => {
         coinTo: tokenData[pairConfig.token1].name,
         type: 'LIQUIDITY DOUBLE SIDE',
       };
-      await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+      if (isWalletConnectConnected) {
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+      }
       setLocalRes(data);
       return data;
     } catch (e) {
@@ -220,7 +222,9 @@ export const LiquidityProvider = (props) => {
           coinTo: tokenData[token1.name].name,
           type: 'LIQUIDITY SINGLE SIDE',
         };
-        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+        if (isWalletConnectConnected) {
+          await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+        }
         setLocalRes(data);
         return data;
       } catch (e) {
@@ -328,7 +332,9 @@ export const LiquidityProvider = (props) => {
         coinTo: token1.name,
         type: 'LIQUIDITY REMOVE',
       };
-      await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+      if (isWalletConnectConnected) {
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+      }
       let previewData = await removeLiquidityPreview(token0, token1, previewAmount);
       if (!previewData.errorMessage) {
         const result = { ...data, resPreview: { ...previewData } };

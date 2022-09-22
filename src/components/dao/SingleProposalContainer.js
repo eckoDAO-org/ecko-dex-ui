@@ -90,7 +90,9 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
             ...txRes,
             type: 'VOTE',
           };
-          await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+          if (isWalletConnectConnected) {
+            await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+          }
           pact.setPolling(false);
           setDaoFetchDataLoading(false);
           setDaoSingleProposalLoading(false);
