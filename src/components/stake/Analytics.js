@@ -2,10 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
-import { getPairList } from '../../api/pact';
-import { getDailyVolume } from '../../api/kaddex-stats';
-import { getAllPairValues, getStakingApr, getDailyUSDRewards } from '../../utils/token-utils';
-import { extractDecimal, humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
+import { getStakingApr, getDailyUSDRewards, getAllPairsData } from '../../utils/token-utils';
+import { extractDecimal, getDecimalPlaces, humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
 import { usePactContext } from '../../contexts';
 import AnalyticsInfo from './AnalyticsInfo';
 import styled from 'styled-components';
@@ -37,21 +35,18 @@ const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt, kdxSupply }) 
   const [totalVolumeUSD, setTotalVolumeUSD] = useState(null);
   const [stakingAPR, setStakingAPR] = useState(null);
   const { tokensUsdPrice } = usePactContext();
-  useEffect(() => {
-    getPairList()
-      .then(async (pools) => {
-        const volumes = await getDailyVolume();
-        const allPairValues = await getAllPairValues(pools, volumes);
-        let totalUsd = 0;
-        if (allPairValues?.length) {
-          for (const pair of allPairValues) {
-            totalUsd += pair.volume24HUsd;
-          }
-          setTotalVolumeUSD(totalUsd);
+  useEffect(async () => {
+    if (tokensUsdPrice) {
+      const allPairValues = await getAllPairsData(tokensUsdPrice);
+      let totalUsd = 0;
+      if (allPairValues?.length) {
+        for (const pair of allPairValues) {
+          totalUsd += pair.volume24HUsd;
         }
-      })
-      .catch((err) => console.log('error fetching pair list', err));
-  }, []);
+        setTotalVolumeUSD(totalUsd);
+      }
+    }
+  }, [tokensUsdPrice]);
 
   const dailyUSDIncome = totalVolumeUSD && (getDailyUSDRewards(totalVolumeUSD) * stakedShare) / 100;
 
@@ -71,7 +66,13 @@ const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt, kdxSupply }) 
           <Label fontSize={24}>
             {(dailyUSDIncome && tokensUsdPrice?.KDX && humanReadableNumber(dailyUSDIncome / tokensUsdPrice?.KDX)) || '-'} KDX
           </Label>
-          {dailyUSDIncome ? <SubLabel>$ {(dailyUSDIncome && humanReadableNumber(dailyUSDIncome)) || ''}</SubLabel> : ''}
+          {dailyUSDIncome ? (
+            <SubLabel>
+              {(dailyUSDIncome && humanReadableNumber(dailyUSDIncome) === '0.00' ? '<$ 0.001' : `$ ${humanReadableNumber(dailyUSDIncome)}`) || ''}
+            </SubLabel>
+          ) : (
+            ''
+          )}
         </div>
         <div>
           <div className="flex column align-fe">
@@ -99,7 +100,7 @@ const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt, kdxSupply }) 
           <div className="flex align-ce">
             <Label>Staked Share</Label>
           </div>
-          <Label fontSize={24}>{(stakedShare && extractDecimal(stakedShare).toFixed(2)) || '-'} % </Label>
+          <Label fontSize={24}>{(stakedShare && getDecimalPlaces(extractDecimal(stakedShare))) || '-'} % </Label>
           <SubLabel labelStyle={{ fontSize: 12 }}>{staked !== 0 && stakedShare ? humanReadableNumber(extractDecimal(staked)) : '-'} KDX</SubLabel>
         </div>
         <div className="flex column align-fe">

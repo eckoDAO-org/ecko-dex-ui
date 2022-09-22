@@ -111,12 +111,14 @@ const AnalyticsContainer = () => {
             </InfoPopup>
           </FlexContainer>
           {/* DEX */}
-        {pathname === ROUTE_ANALYTICS && <Dex kdxSupply={analyticsData?.circulatingSupply?.totalSupply} kdaPrice={kdaPrice} poolState={poolState} />}
-        {/* KDX */}
-        {pathname === ROUTE_ANALYTICS_KDX && <Kdx analyticsData={analyticsData} KDX_TOTAL_SUPPLY={KDX_TOTAL_SUPPLY} kdaPrice={kdaPrice} />}
-        {/* DEX */}
-        {pathname === ROUTE_ANALYTICS_STATS && <StatsTable />}
-      </FlexContainer>
+          {pathname === ROUTE_ANALYTICS && (
+            <Dex kdxSupply={analyticsData?.circulatingSupply?.totalSupply} kdaPrice={kdaPrice} poolState={poolState} />
+          )}
+          {/* KDX */}
+          {pathname === ROUTE_ANALYTICS_KDX && <Kdx analyticsData={analyticsData} KDX_TOTAL_SUPPLY={KDX_TOTAL_SUPPLY} kdaPrice={kdaPrice} />}
+          {/* DEX */}
+          {pathname === ROUTE_ANALYTICS_STATS && <StatsTable />}
+        </FlexContainer>
       </>
     )
   );
