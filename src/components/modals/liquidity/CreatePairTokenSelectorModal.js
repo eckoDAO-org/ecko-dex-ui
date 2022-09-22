@@ -1,11 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import CustomButton from '../../shared/CustomButton';
 import styled from 'styled-components';
-import Input from '../../shared/Input';
-import { checkTokenModule, getModuleList, getTokenNameFromAddress } from '../../../api/pairs';
+import { checkTokenModule, getTokenNameFromAddress } from '../../../api/pairs';
 import Label from '../../shared/Label';
 import { FlexContainer } from '../../shared/FlexContainer';
-import { PartialScrollableScrollSection } from '../../layout/Containers';
 import { UnknownLogo } from '../../../assets';
 import CustomDivider from '../../shared/CustomDivider';
 import Search from '../../shared/Search';
@@ -38,7 +36,6 @@ export const IconSubTitle = styled.div`
 
 const CreatePairTokenSelectorModal = ({ onSelectedToken, onClose }) => {
   const [tokenSelected, setTokenSelected] = useState('');
-  const [tokenNameSelected, setTokenNameSelected] = useState('');
   const [width] = useWindowSize();
   const [tokenExists, setTokenExists] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -60,9 +57,9 @@ const CreatePairTokenSelectorModal = ({ onSelectedToken, onClose }) => {
     }
   };
 
-  const getModalText = () => {
-    return `Please insert token address`;
-  };
+  // const getModalText = () => {
+  //   return `Please insert token address`;
+  // };
 
   return (
     <FlexContainer className="column" gap={16}>

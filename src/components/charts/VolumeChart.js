@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
@@ -6,7 +8,7 @@ import { humanReadableNumber } from '../../utils/reduceBalance';
 import { BarChart, Bar, Tooltip, ResponsiveContainer } from 'recharts';
 import styled from 'styled-components';
 import { FlexContainer } from '../shared/FlexContainer';
-import { chartTimeRanges, CHART_OPTIONS, DAILY_VOLUME_RANGE } from '../../constants/chartOptionsConstants';
+import { chartTimeRanges, CHART_OPTIONS, DAILY_VOLUME_RANGE, MONTHLY_VOLUME_RANGE, WEEKLY_VOLUME_RANGE } from '../../constants/chartOptionsConstants';
 import CustomDropdown from '../shared/CustomDropdown';
 
 export const TimeRangeBar = styled.div`
@@ -30,30 +32,113 @@ const VolumeChart = ({ kdaPrice, width, height }) => {
   const [volumeRange, setVolumeRange] = useState(DAILY_VOLUME_RANGE.value);
 
   useEffect(() => {
-    axios
-      .get(
-        `${process.env.REACT_APP_KADDEX_STATS_API_URL}/volume/${volumeRange}?dateStart=${
-          chartTimeRanges[volumeRange]?.dateStart ?? moment().subtract(60, 'days').format('YYYY-MM-DD')
-        }&dateEnd=${moment().subtract(1, 'days').format('YYYY-MM-DD')}`
-      )
-      .then(async (res) => {
-        const allVolume = [];
-        for (const timeRange of res.data) {
-          allVolume.push({
-            name: timeRange._id,
-            title: chartTimeRanges[volumeRange]?.title(timeRange),
-            Volume: Number(
-              timeRange.volumes.reduce((partialSum, currVol) => {
-                return partialSum + (currVol.tokenFromName === 'coin' ? currVol.tokenFromVolume : currVol.tokenToVolume);
-              }, 0) * (2).toFixed(2)
-            ),
-          });
+    const volumes = axios.get(
+      `${process.env.REACT_APP_KADDEX_STATS_API_URL}/volume/${volumeRange}?dateStart=${
+        chartTimeRanges[volumeRange]?.dateStart ?? moment().subtract(60, 'days').format('YYYY-MM-DD')
+      }&dateEnd=${moment().subtract(1, 'days').format('YYYY-MM-DD')}`
+    );
+    const candles = axios.get(
+      `${process.env.REACT_APP_KADDEX_STATS_API_URL}/candles?currency=USDT&asset=KDA&dateStart=${
+        chartTimeRanges[volumeRange]?.dateStart ?? moment().subtract(60, 'days').format('YYYY-MM-DD')
+      }&dateEnd=${moment().subtract(1, 'days').format('YYYY-MM-DD')}`
+    );
+    Promise.all([volumes, candles]).then(async (res) => {
+      const allVolume = [];
+      for (const timeRange of res[0]?.data) {
+        let kdaVerifiedPrice = null;
+        switch (volumeRange) {
+          case DAILY_VOLUME_RANGE.value:
+            const dailyPrice = getDailyKdaPrice(timeRange, res[1]?.data);
+            kdaVerifiedPrice = dailyPrice;
+            break;
+          case WEEKLY_VOLUME_RANGE.value:
+            const weeklyPrice = getWeeklyKdaPrice(timeRange, res[1]?.data);
+            kdaVerifiedPrice = weeklyPrice;
+            break;
+          case MONTHLY_VOLUME_RANGE.value:
+            const monthlyPrice = getMonthlyKdaPrice(timeRange, res[1]?.data);
+            kdaVerifiedPrice = monthlyPrice;
+            break;
+          default:
+            const d = getDailyKdaPrice(timeRange, res[1]?.data);
+            kdaVerifiedPrice = d;
+            break;
         }
-        setVolume(allVolume);
-        setDailyVolume(allVolume[allVolume.length - 1].Volume * kdaPrice);
-      })
-      .catch((err) => console.log('get volume error', err));
-  }, [volumeRange, kdaPrice]);
+
+        allVolume.push({
+          name: timeRange._id,
+          title: chartTimeRanges[volumeRange]?.title(timeRange),
+          Volume: Number(
+            timeRange.volumes.reduce((partialSum, currVol) => {
+              return partialSum + (currVol.tokenFromName === 'coin' ? currVol.tokenFromVolume : currVol.tokenToVolume);
+            }, 0) * (2).toFixed(2)
+          ),
+          kdaPrice: kdaVerifiedPrice,
+        });
+      }
+      setVolume(allVolume);
+      setDailyVolume(
+        allVolume[allVolume.length - 1].Volume * (allVolume[allVolume.length - 1].kdaPrice ? allVolume[allVolume.length - 1].kdaPrice : kdaPrice)
+      );
+    });
+  }, [volumeRange]);
+
+  const getDailyKdaPrice = (timeRange, candles) => {
+    const id = timeRange?._id;
+    const candle = candles.find((x) => x?.dayString === id);
+    return candle?.price?.close;
+  };
+  const getWeeklyKdaPrice = (timeRange, candles) => {
+    const timeRangeSplitted = timeRange?._id.split('-');
+    const days = getWeekDaysByWeekNumber(timeRangeSplitted[1]?.replace('W', ''));
+    return getKdaAveragePrice(days, candles);
+  };
+
+  const getMonthlyKdaPrice = (timeRange, candles) => {
+    const timeRangeSplitted = timeRange?._id.split('-');
+    const days = getWeekDaysByMonthNumber(timeRangeSplitted[1]);
+    return getKdaAveragePrice(days, candles);
+  };
+
+  const getWeekDaysByWeekNumber = (weeknumber) => {
+    let date = moment()
+        .isoWeek(weeknumber || 1)
+        .startOf('week'),
+      weeklength = 7,
+      result = [];
+    while (weeklength--) {
+      result.push(date?.format('YYYY-MM-DD'));
+      date.add(1, 'day');
+    }
+    return result;
+  };
+
+  const getWeekDaysByMonthNumber = (month) => {
+    let count = moment().month(month).daysInMonth();
+    let days = [];
+    for (var i = 1; i < count + 1; i++) {
+      days.push(
+        moment()
+          .month(month - 1)
+          .date(i)
+          .format('YYYY-MM-DD')
+      );
+    }
+    return days;
+  };
+
+  const getKdaAveragePrice = (days, candles) => {
+    const filteredCandels = [];
+    days.map((day) => {
+      const dailyCandle = candles?.find((x) => x?.dayString === day);
+      if (dailyCandle) filteredCandels.push(dailyCandle);
+    });
+
+    const sumKdaCandles = filteredCandels?.reduce((a, b) => {
+      return a + b?.price?.close;
+    }, 0);
+    return sumKdaCandles / filteredCandels?.length;
+  };
 
   return (
     <FlexContainer withGradient className="column align-ce w-100 h-100 background-fill" style={{ padding: 32 }}>
@@ -80,12 +165,18 @@ const VolumeChart = ({ kdaPrice, width, height }) => {
             data={volume}
             onMouseMove={({ activePayload }) => {
               if (activePayload) {
-                setDailyVolume((activePayload && activePayload[0]?.payload?.Volume * kdaPrice) || '');
+                setDailyVolume(
+                  (activePayload &&
+                    activePayload[0]?.payload?.Volume * (activePayload[0]?.payload?.kdaPrice ? activePayload[0]?.payload?.kdaPrice : kdaPrice)) ||
+                    ''
+                );
                 setCurrentDate((activePayload && activePayload[0]?.payload?.title) || null);
               }
             }}
             onMouseLeave={() => {
-              setDailyVolume(volume[volume.length - 1]?.Volume * kdaPrice);
+              setDailyVolume(
+                volume[volume.length - 1]?.Volume * (volume[volume.length - 1]?.kdaPrice ? volume[volume.length - 1]?.kdaPrice : kdaPrice)
+              );
               setCurrentDate(null);
             }}
             margin={{

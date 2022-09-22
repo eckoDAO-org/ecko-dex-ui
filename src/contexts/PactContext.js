@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
@@ -9,7 +10,7 @@ import { useAccountContext, useNotificationContext, useWalletContext } from '.';
 import { fetchPrecision, getPairList } from '../api/pact';
 import tokenData, { pairsData } from '../constants/cryptoCurrencies';
 import { GAS_OPTIONS } from '../constants/gasConfiguration';
-import { getPairs, getTokenNameFromAddress, getVerifiedPools } from '../api/pairs';
+import { getPairs, getTokenNameFromAddress } from '../api/pairs';
 import { UnknownLogo } from '../assets';
 import { reduceBalance } from '../utils/reduceBalance';
 
@@ -99,7 +100,7 @@ export const PactProvider = (props) => {
 
       result.map((res) => {
         const index = res.indexOf(':');
-        const token0 = res.substr(0, index); // Gets the first part for future
+        //const token0 = res.substr(0, index); // Gets the first part for future
         const token1 = res.substr(index + 1); // Gets the second part
 
         if (!tokenData.hasOwnProperty(Object.values(tokenData).find((token) => token.code === token1)?.name)) {

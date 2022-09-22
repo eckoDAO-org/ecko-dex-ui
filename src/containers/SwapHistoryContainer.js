@@ -19,8 +19,6 @@ import { NETWORK_TYPE } from '../constants/contextConstants';
 import AppLoader from '../components/shared/AppLoader';
 import theme from '../styles/theme';
 import { useGameEditionContext, usePactContext } from '../contexts';
-import { extractDecimal, getDecimalPlaces } from '../utils/reduceBalance';
-import { getTimeByBlockchain } from '../utils/string-utils';
 
 export const CardContainer = styled(FadeIn)`
   display: flex;

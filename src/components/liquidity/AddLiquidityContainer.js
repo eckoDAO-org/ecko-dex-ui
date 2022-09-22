@@ -14,7 +14,7 @@ import DoubleSidedLiquidity from './DoubleSidedLiquidity';
 import SingleSidedLiquidity from './SingleSidedLiquidity';
 import { getPairList } from '../../api/pact';
 import { getGroupedVolume } from '../../api/kaddex-stats';
-import { getAllPairValues } from '../../utils/token-utils';
+import { getAllPairsData } from '../../utils/token-utils';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { isValidString } from '../../utils/string-utils';
 import { AppLoader } from '../../components/shared/AppLoader';
@@ -45,6 +45,7 @@ const AddLiquidityContainer = (props) => {
   const { setWantsKdxRewards } = useLiquidityContext();
   const pact = usePactContext();
   const { pathname } = useLocation();
+  const { tokensUsdPrice } = usePactContext();
 
   const query = useQueryParams();
 
@@ -55,16 +56,17 @@ const AddLiquidityContainer = (props) => {
   const [apr, setApr] = useState(null);
 
   const calculateApr = async () => {
+    const allPairsData = await getAllPairsData(tokensUsdPrice, pact.allTokens, pact.allPairs);
+
     let pool = null;
     if (pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED) {
       pool = data.pools.find((p) => p.token0 === pair.token0 || p.token1 === pair.token0);
     } else {
       pool = data.pools.find((p) => (p.token0 === pair.token0 && p.token1 === pair.token1) || (p.token0 === pair.token1 && p.token1 === pair.token0));
     }
-
     if (pool) {
-      const result = await getAllPairValues([pool], data.volumes, pact.allTokens);
-      setApr(result[0]?.apr?.value);
+      let apr = allPairsData.find((p) => p.name === pool.name)?.apr || 0;
+      setApr(apr);
     }
   };
 

@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
-import { createPairCommand, getCommunityPairs, getModuleList, getPairModuleDetails, getVerifiedPairs } from '../../api/pairs';
+import { createPairCommand, getPairModuleDetails } from '../../api/pairs';
 import { CHAIN_ID, NETWORK } from '../../constants/contextConstants';
 import {
   useAccountContext,

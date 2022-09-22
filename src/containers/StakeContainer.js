@@ -12,7 +12,7 @@ import {
   getRollupClaimAndUnstakeCommand,
 } from '../api/kaddex.staking';
 import { getAccountData } from '../api/dao';
-import { getKDXAccountBalance, getKDXTotalSupply } from '../api/kaddex.kdx';
+import { getKDXAccountBalance } from '../api/kaddex.kdx';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import InfoPopup from '../components/shared/InfoPopup';
 import Label from '../components/shared/Label';

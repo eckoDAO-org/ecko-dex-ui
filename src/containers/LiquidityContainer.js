@@ -97,7 +97,7 @@ const LiquidityContainer = () => {
             {pathname === ROUTE_LIQUIDITY_POOLS && (
               <CustomButton
                 fontSize={13}
-                buttonStyle={{ height: 33, padding: 0, width: 'min-content', padding: '0px 16px' }}
+                buttonStyle={{ height: 33, width: 'min-content', padding: '0px 16px' }}
                 type="gradient"
                 fontFamily="syncopate"
                 onClick={() => history.push(ROUTE_LIQUIDITY_CREATE_PAIR)}

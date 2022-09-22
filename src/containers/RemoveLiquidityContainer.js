@@ -15,10 +15,8 @@ import { getPairList, getPairListAccountBalance } from '../api/pact';
 import useQueryParams from '../hooks/useQueryParams';
 import AppLoader from '../components/shared/AppLoader';
 import { LIQUIDITY_VIEW } from '../constants/liquidityView';
-import { getAllPairValues } from '../utils/token-utils';
-import { getGroupedVolume } from '../api/kaddex-stats';
+import { getAllPairsData } from '../utils/token-utils';
 import theme from '../styles/theme';
-import moment from 'moment';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -41,6 +39,7 @@ const RemoveLiquidityContainer = () => {
   const liquidity = useLiquidityContext();
   const pact = usePactContext();
   const { account } = useAccountContext();
+  const { tokensUsdPrice, allTokens, allPairs } = usePactContext();
 
   const [loading, setLoading] = useState(false);
   const [pair, setPair] = useState(null);
@@ -50,13 +49,15 @@ const RemoveLiquidityContainer = () => {
   const [previewAmount, setPreviewAmount] = useState(1);
 
   const calculateApr = async (resultPairList, currentPair) => {
-    const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
+    const allPairsData = await getAllPairsData(tokensUsdPrice, allTokens, allPairs);
     const pool = resultPairList.find(
       (p) =>
         (p.token0 === currentPair.token0 && p.token1 === currentPair.token1) || (p.token0 === currentPair.token1 && p.token1 === currentPair.token0)
     );
-    const result = await getAllPairValues([pool], volumes, pact.allTokens);
-    setApr(result[0]?.apr?.value);
+    if (pool) {
+      let apr = allPairsData.find((p) => p.name === pool.name)?.apr || 0;
+      setApr(apr);
+    }
   };
 
   const fetchData = async () => {

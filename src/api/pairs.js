@@ -1,5 +1,5 @@
 import Pact from 'pact-lang-api';
-import { CHAIN_ID, GAS_PRICE, GAS_LIMIT, NETWORKID, ENABLE_GAS_STATION, KADDEX_NAMESPACE } from '../constants/contextConstants';
+import { CHAIN_ID, NETWORKID, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { pactFetchLocal } from './pact';
 import { handleError } from './utils';
 

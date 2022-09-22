@@ -2,73 +2,43 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useErrorState } from '../../hooks/useErrorState';
-import { getGroupedVolume } from '../../api/kaddex-stats';
-import { getPairList } from '../../api/pact';
-import { extractDecimal, humanReadableNumber } from '../../utils/reduceBalance';
+import { humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import { AddIcon, BoosterIcon, GasIcon, VerifiedLogo } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS } from '../../router/routes';
 import Label from '../shared/Label';
-import { getAllPairValues } from '../../utils/token-utils';
-import { getPairsMultiplier } from '../../api/liquidity-rewards';
+import { getAllPairsData } from '../../utils/token-utils';
 import { theme, commonColors } from '../../styles/theme';
-import moment from 'moment';
 import { usePactContext } from '../../contexts';
 import useWindowSize from '../../hooks/useWindowSize';
 
 const LiquidityPoolsTable = () => {
   const history = useHistory();
-  const pact = usePactContext();
+  const { enableGasStation, tokensUsdPrice, allTokens, allPairs } = usePactContext();
+
   const [pairList, setPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(false);
   const [width] = useWindowSize();
 
   const fetchData = async () => {
-    const pools = await getPairList(pact.allPairs);
-    if (pools.length) {
-      const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
-
-      const allPairValues = await getAllPairValues(pools, volumes, pact.allTokens);
-      let allData = [];
-      const multipliers = await getPairsMultiplier(pools);
-      for (let i = 0; i < allPairValues.length; i++) {
-        try {
-          const multiplierObj = multipliers.find((x) => x.pair === allPairValues[i].name);
-
-          if (multiplierObj) {
-            allPairValues[i].multiplier = extractDecimal(multiplierObj.multiplier);
-          } else {
-            allPairValues[i].multiplier = 1;
-          }
-        } catch (error) {
-          console.log('fetchData -> error', error);
-          allPairValues[i].multiplier = 1;
-        }
-        let data = {
-          ...allPairValues[i],
-          apr: allPairValues[i].apr.value,
-        };
-        allData.push(data);
-      }
-      setPairList(allData.sort((x, y) => y.liquidityUsd - x.liquidityUsd));
-    }
+    // TODO: add pact.allPairs dependency
+    const pairsData = await getAllPairsData(tokensUsdPrice, allTokens, allPairs);
+    setPairList(pairsData);
     setLoading(false);
   };
 
   useEffect(() => {
     setLoading(true);
-    fetchData();
-  }, []);
+    if (tokensUsdPrice) fetchData();
+  }, [tokensUsdPrice]);
 
   return !loading ? (
     <CommonTable
       items={pairList}
       columns={
-        pact.enableGasStation
-          ? renderColumns(pact.allTokens, pact.allPairs, width)
-          : renderColumns(pact.allTokens, pact.allPairs, width).filter((x) => x.name !== 'Fees')
+        enableGasStation ? renderColumns(allTokens, allPairs, width) : renderColumns(allTokens, allPairs, width).filter((x) => x.name !== 'Fees')
       }
       actions={[
         {
@@ -129,7 +99,7 @@ const renderColumns = (allTokens, allPairs, width) => {
         if (item.liquidityUsd) {
           return `$ ${humanReadableNumber(item.liquidityUsd)}`;
         }
-        return humanReadableNumber(item.liquidity);
+        return `$ 0.00`;
       },
     },
     {
@@ -140,7 +110,7 @@ const renderColumns = (allTokens, allPairs, width) => {
         if (item.volume24HUsd) {
           return `$ ${humanReadableNumber(item.volume24HUsd)}`;
         }
-        return humanReadableNumber(item.volume24H);
+        return `$ 0.00`;
       },
     },
     {
