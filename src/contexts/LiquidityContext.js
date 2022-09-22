@@ -333,7 +333,7 @@ export const LiquidityProvider = (props) => {
       if (isWalletConnectConnected) {
         await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
       }
-      let previewData = await removeLiquidityPreview(token0, token1, previewAmount);
+      let previewData = await removeLiquidityPreview(token0.code, token1.code, previewAmount);
       if (!previewData.errorMessage) {
         const result = { ...data, resPreview: { ...previewData } };
         setLocalRes(result);

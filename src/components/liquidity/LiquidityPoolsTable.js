@@ -23,7 +23,6 @@ const LiquidityPoolsTable = () => {
   const [width] = useWindowSize();
 
   const fetchData = async () => {
-    // TODO: add pact.allPairs dependency
     const pairsData = await getAllPairsData(tokensUsdPrice, allTokens, allPairs);
     setPairList(pairsData);
     setLoading(false);

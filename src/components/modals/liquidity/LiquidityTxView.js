@@ -266,7 +266,6 @@ export const SuccessRemoveView = ({ token0, token1, loading, onClick, pair }) =>
   const swap = useSwapContext();
   const { wantsKdxRewards } = useLiquidityContext();
   const pact = usePactContext();
-  // TODO NaN value for rewards
   return (
     <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle>
       <FlexContainer className="w-100 column" gap={12}>

@@ -29,7 +29,6 @@ const LiquidityTokensTable = () => {
   const fetchData = async () => {
     const pairsList = await getPairList(allPairs);
     if (pairsList?.length) {
-      // TODO: add pact.allPairs dependency
       const pairsData = await getAllPairsData(tokensUsdPrice, allTokens, allPairs);
       const tokensStatsData = await getAnalyticsTokenStatsData();
       const tokens = Object.values(allTokens);
