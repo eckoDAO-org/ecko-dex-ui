@@ -4,13 +4,15 @@ import { useHistory } from 'react-router-dom';
 import { useAccountContext, usePactContext } from '../../contexts';
 import { useErrorState } from '../../hooks/useErrorState';
 import { getPairList, getPairListAccountBalance } from '../../api/pact';
-import { AddIcon, RemoveIcon } from '../../assets';
+import { AddIcon, RemoveIcon, VerifiedLogo } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_MY_LIQUIDITY, ROUTE_LIQUIDITY_REMOVE_LIQUIDITY } from '../../router/routes';
 import { extractDecimal, getDecimalPlaces, humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
+import useWindowSize from '../../hooks/useWindowSize';
+import { theme } from '../../styles/theme';
 
 const LiquidityMyLiquidityTable = () => {
   const history = useHistory();
@@ -18,6 +20,7 @@ const LiquidityMyLiquidityTable = () => {
   const { tokensUsdPrice, allTokens, allPairs } = usePactContext();
   const [pairList, setPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(true);
+  const [width] = useWindowSize();
 
   const fetchData = async () => {
     setLoading(true);
@@ -67,7 +70,7 @@ const LiquidityMyLiquidityTable = () => {
         </div>
         <CommonTable
           items={pairList}
-          columns={renderColumns(tokensUsdPrice, allTokens)}
+          columns={renderColumns(tokensUsdPrice, allTokens, width)}
           actions={[
             {
               icon: () => <AddIcon />,
@@ -94,16 +97,33 @@ const LiquidityMyLiquidityTable = () => {
 };
 
 export default LiquidityMyLiquidityTable;
-const renderColumns = (tokensUsdPrice, allTokens) => {
+const renderColumns = (tokensUsdPrice, allTokens, width) => {
   return [
     {
       name: '',
-      width: 160,
+      width: width <= theme().mediaQueries.mobilePixel ? 80 : 160,
       render: ({ item }) => (
-        <FlexContainer className="align-ce">
-          <CryptoContainer style={{ zIndex: 2 }}>{allTokens[item.token0].icon} </CryptoContainer>
-          <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}> {allTokens[item.token1].icon}</CryptoContainer>
-          {item.token0}/{item.token1}
+        <FlexContainer desktopClassName="align-ce" tabletClassName="align-ce" mobileClassName="column align-fs" mobilePixel={769}>
+          <div className="flex align-ce">
+            {allTokens[item.token0]?.isVerified ? (
+              <div style={{ marginRight: 16 }}>
+                <VerifiedLogo className="svg-app-color" />
+              </div>
+            ) : (
+              <div style={{ width: 32 }} />
+            )}
+            <CryptoContainer style={{ zIndex: 2 }}>{allTokens[item.token0].icon} </CryptoContainer>
+            <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}> {allTokens[item.token1].icon}</CryptoContainer>
+          </div>
+          <div
+            className="align-fs flex"
+            style={{
+              marginLeft: width <= theme().mediaQueries.mobilePixel && 32,
+              marginTop: width <= theme().mediaQueries.mobilePixel && 4,
+            }}
+          >
+            {item.token0}/{item.token1}
+          </div>
         </FlexContainer>
       ),
     },
