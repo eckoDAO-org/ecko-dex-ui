@@ -27,10 +27,9 @@ import InfoPopup from '../shared/InfoPopup';
 
 const CreatePairContainer = () => {
   const history = useHistory();
-  const [token0, setToken0] = useState('coin');
-  const [token1, setToken1] = useState('');
-  const [token0Name, setToken0Name] = useState('KDA');
-  const [token1Name, setToken1Name] = useState('');
+  const [token0 /*setToken0*/] = useState({ name: 'KDA', code: 'coin' });
+  const [token1, setToken1] = useState({ name: '', code: '' });
+
   const [createPairAvailable, setCreatePairAvailable] = useState(false);
   const { account } = useAccountContext();
   const { openModal, closeModal } = useModalContext();
@@ -49,13 +48,13 @@ const CreatePairContainer = () => {
   };
 
   useEffect(() => {
-    if (token1 !== '') {
+    if (token1.code !== '') {
       fetchData();
     }
-  }, [token1]);
+  }, [token1.code]);
 
   const fetchData = async () => {
-    const result = await getPairModuleDetails(token1, account.account);
+    const result = await getPairModuleDetails(token1.code, account.account);
     if (!result.errorMessage) {
       setCreatePairAvailable(true);
     }
@@ -63,8 +62,8 @@ const CreatePairContainer = () => {
 
   const onCreatePair = async () => {
     const command = await createPairCommand(
-      token0,
-      token1,
+      token0.code,
+      token1.code,
       '',
       pact.enableGasStation,
       pact.gasConfiguration.gasLimit,
@@ -116,10 +115,10 @@ const CreatePairContainer = () => {
         content: (
           <CreatePairModal
             data={data}
-            token0Name={token0Name}
-            token1Name={token1Name}
-            token0={token0}
-            token1={token1}
+            token0Name={token0.name}
+            token1Name={token1.name}
+            token0={token0.code}
+            token1={token1.code}
             onConfirm={() => {
               closeModal();
               sendCreatePairCommand(signedCommand);
@@ -147,9 +146,8 @@ const CreatePairContainer = () => {
       });
   };
 
-  const onSelectedToken = async (token, tokenName) => {
-    await setToken1(token);
-    await setToken1Name(tokenName);
+  const onSelectedToken = (tokenCode, tokenName) => {
+    setToken1({ code: tokenCode, name: tokenName });
   };
 
   const handleTokenSelector = () => {
@@ -171,8 +169,8 @@ const CreatePairContainer = () => {
   };
 
   const getButtonStatus = () => {
-    if (token0 === '' || token1 === '') return { message: 'Insert pair', disabled: true };
-    else if (token0 === token1) return { message: 'Insert different tokens', disabled: true };
+    if (token0.code === '' || token1.code === '') return { message: 'Insert pair', disabled: true };
+    else if (token0.code === token1.code) return { message: 'Insert different tokens', disabled: true };
     else if (!createPairAvailable) return { message: 'No balance', disabled: true };
     return { message: 'Create Pair', disabled: false };
   };
@@ -224,8 +222,8 @@ const CreatePairContainer = () => {
                 }}
               >
                 <div className="align-ce flex">
-                  {pact.allTokens[token0Name]?.icon}
-                  <Label fontSize={13}>{token0Name}</Label>
+                  {pact.allTokens[token0.name]?.icon}
+                  <Label fontSize={13}>{token0.name}</Label>
                 </div>
                 <ArrowDown className="svg-app-color" style={{ marginRight: 0, marginLeft: 8 }} />
               </CustomButton>
@@ -246,8 +244,8 @@ const CreatePairContainer = () => {
                 }}
               >
                 <div className="align-ce flex">
-                  {token1Name && <UnknownLogo style={{ marginRight: 8, width: 20, height: 20 }} />}
-                  <Label fontSize={13}>{token1Name !== '' ? token1Name : 'select'}</Label>
+                  {token1.name && <UnknownLogo style={{ marginRight: 8, width: 20, height: 20 }} />}
+                  <Label fontSize={13}>{token1.name !== '' ? token1.name : 'select'}</Label>
                 </div>
                 <ArrowDown className="svg-app-color" style={{ marginRight: 0, marginLeft: 8 }} />
               </CustomButton>
@@ -255,11 +253,11 @@ const CreatePairContainer = () => {
           </FlexContainer>
           <div className="flex justify-sb">
             <Label>Token A</Label>
-            <Label>{token0}</Label>
+            <Label>{token0.code}</Label>
           </div>
           <div className="flex justify-sb">
             <Label>Token B</Label>
-            <Label>{token1 ? token1 : '-'}</Label>
+            <Label>{token1.code ? token1.code : '-'}</Label>
           </div>
         </FlexContainer>
 
