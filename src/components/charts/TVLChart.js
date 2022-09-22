@@ -49,10 +49,11 @@ const TVLChart = ({ kdaPrice, height }) => {
         const token0Balance = Number(pair.reserves[0]?.decimal) || pair.reserves[0] || 0;
         const token1Balance = Number(pair.reserves[1]?.decimal) || pair.reserves[1] || 0;
         let token0price = 0;
+
         if (pair.token0 === 'KDA') {
           token0price = kdaPrice;
         } else if (pair.token1 === 'KDA') {
-          token0price = (token0Balance / token1Balance) * kdaPrice;
+          token0price = (token1Balance / token0Balance) * kdaPrice;
         }
         let token1price = 0;
         if (pair.token1 === 'KDA') {
@@ -60,7 +61,6 @@ const TVLChart = ({ kdaPrice, height }) => {
         } else if (pair.token0 === 'KDA') {
           token1price = (token0Balance / token1Balance) * kdaPrice;
         }
-
         let token0USD = token0Balance * token0price;
         let token1USD = token1Balance * token1price || 0;
         totalTVL += token0USD += token1USD;

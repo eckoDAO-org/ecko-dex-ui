@@ -92,30 +92,34 @@ const renderColumns = (allTokens, allPairs, width) => {
     {
       name: '',
       width: width <= theme().mediaQueries.mobilePixel ? 80 : 160,
-      render: ({ item }) => (
-        <FlexContainer desktopClassName="align-ce" tabletClassName="align-ce" mobileClassName="column align-fs" mobilePixel={769}>
-          <div className="flex align-ce">
-            {allPairs[item.name]?.isVerified ? (
-              <div style={{ marginRight: 16 }}>
-                <VerifiedLogo className="svg-app-color" />
-              </div>
-            ) : (
-              <div style={{ width: 32 }} />
-            )}
-            <CryptoContainer style={{ zIndex: 2 }}> {allTokens[item.token0].icon}</CryptoContainer>
-            <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{allTokens[item.token1].icon} </CryptoContainer>
-          </div>
-          <div
-            className="align-fs flex"
-            style={{
-              marginLeft: width <= theme().mediaQueries.mobilePixel && 32,
-              marginTop: width <= theme().mediaQueries.mobilePixel && 4,
-            }}
-          >
-            {item.token0}/{item.token1}
-          </div>
-        </FlexContainer>
-      ),
+      render: ({ item }) => {
+        let t0 = item.token0 === 'KDA' ? item.token0 : item.token1;
+        let t1 = item.token1 !== 'KDA' ? item.token1 : item.token0;
+        return (
+          <FlexContainer desktopClassName="align-ce" tabletClassName="align-ce" mobileClassName="column align-fs" mobilePixel={769}>
+            <div className="flex align-ce">
+              {allPairs[item.name]?.isVerified ? (
+                <div style={{ marginRight: 16 }}>
+                  <VerifiedLogo className="svg-app-color" />
+                </div>
+              ) : (
+                <div style={{ width: 32 }} />
+              )}
+              <CryptoContainer style={{ zIndex: 2 }}> {allTokens[t0].icon}</CryptoContainer>
+              <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{allTokens[t1].icon} </CryptoContainer>
+            </div>
+            <div
+              className="align-fs flex"
+              style={{
+                marginLeft: width <= theme().mediaQueries.mobilePixel && 32,
+                marginTop: width <= theme().mediaQueries.mobilePixel && 4,
+              }}
+            >
+              {t0}/{t1}
+            </div>
+          </FlexContainer>
+        );
+      },
     },
     {
       name: 'liquidity',

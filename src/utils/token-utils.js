@@ -70,16 +70,19 @@ export const getAllPairValues = async (pools, volumes, allTokens) => {
     const token0 = Object.values(allTokens).find((t) => t.name === pool.token0);
     const token1 = Object.values(allTokens).find((t) => t.name === pool.token1);
 
-    const liquidity0 = reduceBalance(pool.reserves[0]);
-    const liquidity1 = reduceBalance(pool.reserves[1]);
+    const liquidity0 = token0.code === 'coin' ? reduceBalance(pool.reserves[0]) : reduceBalance(pool.reserves[1]);
+    const liquidity1 = token1.code === 'coin' ? reduceBalance(pool.reserves[0]) : reduceBalance(pool.reserves[1]);
     let liquidityUsd = 0;
     let volume24H = 0;
     let volume24HUsd = 0;
     let apr = 0;
     const liquidity = liquidity0 + liquidity1;
 
+    //ToDo: workaround for pool name with coin as second argument. Be careful when add create-pair function
+    const tokenArraySorted = token0.code === 'coin' ? [token0, token1] : [token1, token0];
+
     // retrieve usd value for each token of the pair to calculate values in usd
-    for (const token of [token0, token1]) {
+    for (const token of tokenArraySorted) {
       const tokenUsdPrice = await getTokenUsdPrice({ coingeckoId: 'kadena' }, pools);
 
       if (tokenUsdPrice) {
@@ -89,6 +92,7 @@ export const getAllPairValues = async (pools, volumes, allTokens) => {
           token.tokenNameKaddexStats,
           volumes
         );
+
         volume24HUsd = volume24H * tokenUsdPrice * 2;
         liquidityUsd += liquidity0 * tokenUsdPrice;
         apr = getApr(volume24HUsd, liquidityUsd);

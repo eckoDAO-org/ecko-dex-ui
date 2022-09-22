@@ -1,0 +1,22 @@
+diff --git a/node_modules/@walletconnect/qrcode-modal/dist/cjs/index.js b/node_modules/@walletconnect/qrcode-modal/dist/cjs/index.js
+index f5ceca8..2bf5fbe 100644
+--- a/node_modules/@walletconnect/qrcode-modal/dist/cjs/index.js
++++ b/node_modules/@walletconnect/qrcode-modal/dist/cjs/index.js
+@@ -137,7 +137,7 @@ var GRID_MIN_COUNT = 5;
+ var LINKS_PER_PAGE = 12;
+ 
+ function LinkDisplay(props) {
+-  var android = browserUtils.isAndroid();
++  var android = false; // browserUtils.isAndroid();
+   var ref = React.useState("");
+   var input = ref[0];
+   var setInput = ref[1];
+@@ -303,7 +303,7 @@ function QRCodeDisplay(props) {
+ }
+ 
+ function Modal(props) {
+-  var android = browserUtils.isAndroid();
++  var android = false; //  browserUtils.isAndroid();
+   var mobile = browserUtils.isMobile();
+   var whitelist = mobile ? props.qrcodeModalOptions && props.qrcodeModalOptions.mobileLinks ? props.qrcodeModalOptions.mobileLinks : undefined : props.qrcodeModalOptions && props.qrcodeModalOptions.desktopLinks ? props.qrcodeModalOptions.desktopLinks : undefined;
+   var ref = React.useState(false);

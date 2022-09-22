@@ -154,6 +154,35 @@
         "isBoosted": false,
         "color": "#ed9b21",
         "isVerified": true
+      },
+      "coin:lago.USD2": {
+        "name": "coin:lago.USD2",
+        "token0": "KDA",
+        "token1": "USD2",
+        "main": false,
+        "isBoosted": false,
+        "color": "#ed9b21",
+        "isVerified": true
+
+      },
+      "arkade.token:coin": {
+        "name": "arkade.token:coin",
+        "token0": "ARKD",
+        "token1": "KDA",
+        "main": false,
+        "isBoosted": false,
+        "color": "#ed9b21",
+        "isVerified": true
+
+      },
+      "coin:free.KAYC": {
+        "name": "coin:free.KAYC",
+        "token0": "KDA",
+        "token1": "KAYC",
+        "main": false,
+        "isBoosted": false,
+        "color": "#ed9b21",
+        "isVerified": true
       }
     }
   }

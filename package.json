@@ -47,13 +47,14 @@
     "start": "react-scripts start",
     "build": "react-scripts build && node post-build.js",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postinstall": "patch-package"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
   "browserslist": [
-     ">0.2%",
+    ">0.2%",
     "not dead",
     "not op_mini all"
   ],
@@ -66,6 +67,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "patch-package": "^6.4.7",
     "prettier": "^2.1.2"
   }
 }
