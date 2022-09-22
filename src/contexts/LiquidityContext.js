@@ -255,7 +255,7 @@ export const LiquidityProvider = (props) => {
     try {
       let pair = await getPairAccount(token0.code, token1.code);
 
-      const pairConfig = pact.allPairs[`${token0}:${token1}`] || pact.allPairs[`${token1}:${token0}`];
+      const pairConfig = pact.allPairs[`${token0.code}:${token1.code}`] || pact.allPairs[`${token1.code}:${token0.code}`];
       const pactCode = pairConfig.isBoosted
         ? `(${KADDEX_NAMESPACE}.wrapper.remove-liquidity
         ${token0.code}
