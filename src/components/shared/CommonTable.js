@@ -39,7 +39,7 @@ const Wrapper = styled(FlexContainer)`
   .sticky {
     position: -webkit-sticky;
     position: sticky;
-    left: 0px;
+    left: -2px;
   }
   .tr-sticky:after {
     content: '';
