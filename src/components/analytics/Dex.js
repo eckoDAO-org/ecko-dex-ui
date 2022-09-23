@@ -11,7 +11,7 @@ import TVLChart from '../charts/TVLChart';
 import VolumeChart from '../charts/VolumeChart';
 import AnalyticsSimpleWidget from '../shared/AnalyticsSimpleWidget';
 import CustomDropdown from '../shared/CustomDropdown';
-import { FlexContainer } from '../shared/FlexContainer';
+import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import GraphicPercentage from '../shared/GraphicPercentage';
 import ProgressBar from '../shared/ProgressBar';
 import StackedBarChart from '../shared/StackedBarChart';
@@ -23,7 +23,7 @@ import Label from '../shared/Label';
 const KDX_TOTAL_SUPPLY = 1000000000;
 
 const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
-  const { tokensUsdPrice, allPairs } = usePactContext();
+  const { tokensUsdPrice, allPairs, allTokens } = usePactContext();
   const [stakeDataRange, setStakeDataRange] = useState(DAILY_VOLUME_RANGE.value);
   const [volumeRange, setVolumeRange] = useState(DAILY_VOLUME_RANGE.value);
 
@@ -211,15 +211,46 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
               </div>
             ) || '-'
           }
-          subtitle={`${((100 * stakedKdx) / kdxSupply).toFixed(2)} %`}
+          subtitle={
+            <div className="w-100 flex column" style={{ paddingTop: 10 }}>
+              <ProgressBar maxValue={kdxSupply} currentValue={stakedKdx} containerStyle={{ paddingTop: 2, width: '100%' }} />
+              <div className="w-100 flex justify-sb" style={{ paddingTop: 4 }}>
+                <span>0%</span>
+                <span>25%</span>
+                <span>50%</span>
+                <span>75%</span>
+                <span>100%</span>
+              </div>
+              <div className="flex" style={{ paddingTop: 16 }}>
+                <div
+                  style={{
+                    width: 32,
+                    height: 16,
+                    borderRadius: 4,
+                    background: 'linear-gradient(to right, #5dcbe5, #e37480, #f6cc7d)',
+                    marginRight: 8,
+                  }}
+                ></div>
+
+                <>
+                  <CryptoContainer size={16} style={{ zIndex: 2 }}>
+                    {allTokens['KDX']?.icon}
+                  </CryptoContainer>
+                </>
+
+                <Label>sKDX {((100 * stakedKdx) / kdxSupply).toFixed(3)} %</Label>
+              </div>
+              {/* <span style={{ marginLeft: 20, whiteSpace: 'nowrap' }}>{((100 * stakedKdx) / kdxSupply).toFixed(3)} %</span> */}
+            </div>
+          }
         />
-        <AnalyticsSimpleWidget
+        {/* <AnalyticsSimpleWidget
           title={'Staking Data'}
           mainText={<GraphicPercentage prevValue={stakingDiff?.initial} currentValue={stakingDiff?.final} />}
           subtitle={
             <div className="w-100 flex" style={{ paddingTop: 10 }}>
-              <ProgressBar maxValue={KDX_TOTAL_SUPPLY} currentValue={stakedKdx} containerStyle={{ paddingTop: 2, width: '100%' }} />
-              <span style={{ marginLeft: 20, whiteSpace: 'nowrap' }}>{((100 * stakedKdx) / KDX_TOTAL_SUPPLY).toFixed(3)} %</span>
+              <ProgressBar maxValue={kdxSupply} currentValue={stakedKdx} containerStyle={{ paddingTop: 2, width: '100%' }} />
+              <span style={{ marginLeft: 20, whiteSpace: 'nowrap' }}>{((100 * stakedKdx) / kdxSupply).toFixed(3)} %</span>
             </div>
           }
           rightComponent={
@@ -232,7 +263,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
               value={stakeDataRange}
             />
           }
-        />
+        /> */}
       </FlexContainer>
       <FlexContainer>
         <StackedBarChart title="TVL Details" withDoubleToken data={isMainnet() ? tvlDetails : sampleTokensVolume} />
