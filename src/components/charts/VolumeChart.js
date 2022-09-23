@@ -1,4 +1,3 @@
-/* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -48,20 +47,16 @@ const VolumeChart = ({ kdaPrice, width, height }) => {
         let kdaVerifiedPrice = null;
         switch (volumeRange) {
           case DAILY_VOLUME_RANGE.value:
-            const dailyPrice = getDailyKdaPrice(timeRange, res[1]?.data);
-            kdaVerifiedPrice = dailyPrice;
+            kdaVerifiedPrice = getDailyKdaPrice(timeRange, res[1]?.data);
             break;
           case WEEKLY_VOLUME_RANGE.value:
-            const weeklyPrice = getWeeklyKdaPrice(timeRange, res[1]?.data);
-            kdaVerifiedPrice = weeklyPrice;
+            kdaVerifiedPrice = getWeeklyKdaPrice(timeRange, res[1]?.data);
             break;
           case MONTHLY_VOLUME_RANGE.value:
-            const monthlyPrice = getMonthlyKdaPrice(timeRange, res[1]?.data);
-            kdaVerifiedPrice = monthlyPrice;
+            kdaVerifiedPrice = getMonthlyKdaPrice(timeRange, res[1]?.data);
             break;
           default:
-            const d = getDailyKdaPrice(timeRange, res[1]?.data);
-            kdaVerifiedPrice = d;
+            kdaVerifiedPrice = getDailyKdaPrice(timeRange, res[1]?.data);
             break;
         }
 
@@ -129,7 +124,7 @@ const VolumeChart = ({ kdaPrice, width, height }) => {
 
   const getKdaAveragePrice = (days, candles) => {
     const filteredCandels = [];
-    days.map((day) => {
+    days.forEach((day) => {
       const dailyCandle = candles?.find((x) => x?.dayString === day);
       if (dailyCandle) filteredCandels.push(dailyCandle);
     });
