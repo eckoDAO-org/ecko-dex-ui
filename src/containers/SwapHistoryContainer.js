@@ -19,8 +19,6 @@ import { NETWORK_TYPE } from '../constants/contextConstants';
 import AppLoader from '../components/shared/AppLoader';
 import theme from '../styles/theme';
 import { useGameEditionContext, usePactContext } from '../contexts';
-import { extractDecimal, getDecimalPlaces } from '../utils/reduceBalance';
-import { getTimeByBlockchain } from '../utils/string-utils';
 
 export const CardContainer = styled(FadeIn)`
   display: flex;
@@ -101,6 +99,44 @@ const SwapHistoryContainer = () => {
     }
   }, [gameEditionView, pact.swapList]);
 
+  const renderColumns = (allTokens) => {
+    return [
+      {
+        name: 'name',
+        width: 160,
+        render: ({ item }) => (
+          <FlexContainer className="align-ce">
+            <CryptoContainer style={{ zIndex: 2 }}>{getInfoCoin(item, 3, allTokens)?.icon} </CryptoContainer>
+            <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{getInfoCoin(item, 5, allTokens)?.icon} </CryptoContainer>
+            {getInfoCoin(item, 3, allTokens)?.name}/{getInfoCoin(item, 5, allTokens)?.name}
+          </FlexContainer>
+        ),
+        geName: 'Swap pair',
+        geRender: ({ item }) => `${getInfoCoin(item, 3, allTokens)?.name}/${getInfoCoin(item, 5, allTokens)?.name}`,
+      },
+      {
+        name: 'date',
+        width: 160,
+        render: ({ item }) => <FlexContainer>{moment(item?.blockTime).format('DD/MM/YYYY HH:mm:ss')}</FlexContainer>,
+      },
+      {
+        name: 'request key',
+        width: 160,
+        render: ({ item }) => <FlexContainer>{reduceToken(item?.requestKey)}</FlexContainer>,
+      },
+      {
+        name: 'amount',
+        width: 160,
+        align: 'left',
+        render: ({ item }) => (
+          <FlexContainer>
+            {item?.params[2]} {getInfoCoin(item, 3, allTokens)?.name}
+          </FlexContainer>
+        ),
+      },
+    ];
+  };
+
   return (
     <CardContainer
       gameEditionView={gameEditionView}
@@ -126,7 +162,7 @@ const SwapHistoryContainer = () => {
             <CommonTableGameEdition
               id="swap-history-list"
               items={pact.swapList}
-              columns={renderColumns()}
+              columns={renderColumns(pact.allTokens)}
               loading={pact.loadingSwap}
               onClick={(item) => {
                 window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${item?.requestKey}`, '_blank', 'noopener,noreferrer');
@@ -135,7 +171,7 @@ const SwapHistoryContainer = () => {
           ) : (
             <CommonTable
               items={pact.swapList}
-              columns={renderColumns()}
+              columns={renderColumns(pact.allTokens)}
               hasMore={pact.moreSwap}
               loading={pact.loadingSwap}
               loadMore={async () => {
@@ -159,40 +195,3 @@ const SwapHistoryContainer = () => {
 };
 
 export default SwapHistoryContainer;
-
-const renderColumns = () => {
-  return [
-    {
-      name: 'name',
-      width: 160,
-      render: ({ item }) => (
-        <FlexContainer className="align-ce">
-          <CryptoContainer style={{ zIndex: 2 }}>{getInfoCoin(item, 3)?.icon} </CryptoContainer>
-          <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{getInfoCoin(item, 5)?.icon} </CryptoContainer>
-          {getInfoCoin(item, 3)?.name}/{getInfoCoin(item, 5)?.name}
-        </FlexContainer>
-      ),
-      geName: 'Swap pair',
-      geRender: ({ item }) => `${getInfoCoin(item, 3)?.name}/${getInfoCoin(item, 5)?.name}`,
-    },
-    {
-      name: 'date',
-      width: 160,
-      render: ({ item }) => <FlexContainer>{moment(getTimeByBlockchain(item?.blockTime)).format('DD/MM/YYYY HH:mm:ss')}</FlexContainer>,
-    },
-    {
-      name: 'request key',
-      width: 160,
-      render: ({ item }) => <FlexContainer>{reduceToken(item?.requestKey)}</FlexContainer>,
-    },
-    {
-      name: 'amount',
-      width: 160,
-      render: ({ item }) => (
-        <FlexContainer>
-          {getDecimalPlaces(extractDecimal(item?.params[2]))} {getInfoCoin(item, 3)?.name}
-        </FlexContainer>
-      ),
-    },
-  ];
-};

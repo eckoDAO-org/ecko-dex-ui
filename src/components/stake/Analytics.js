@@ -34,10 +34,10 @@ const IconContainer = styled.div`
 const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt, kdxSupply }) => {
   const [totalVolumeUSD, setTotalVolumeUSD] = useState(null);
   const [stakingAPR, setStakingAPR] = useState(null);
-  const { tokensUsdPrice } = usePactContext();
+  const { tokensUsdPrice, allTokens, allPairs } = usePactContext();
   useEffect(async () => {
     if (tokensUsdPrice) {
-      const allPairValues = await getAllPairsData(tokensUsdPrice);
+      const allPairValues = await getAllPairsData(tokensUsdPrice, allTokens, allPairs);
       let totalUsd = 0;
       if (allPairValues?.length) {
         for (const pair of allPairValues) {

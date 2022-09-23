@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 32 32">
+  <defs>
+    <radialGradient id="radial-gradient" cx="0.5" cy="0.5" r="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset="1" stop-color="#dadada"/>
+    </radialGradient>
+  </defs>
+  <g id="Group_75551" data-name="Group 75551" transform="translate(-229 -591)">
+    <g id="Flux_logo_blue_black" transform="translate(228.771 591.498)">
+      <circle id="Ellipse_64" data-name="Ellipse 64" cx="16" cy="16" r="16" transform="translate(0.229 -0.498)" fill="#dadada"/>
+      <circle id="Ellipse_3180" data-name="Ellipse 3180" cx="10" cy="10" r="10" transform="translate(6.229 5.502)" stroke="rgba(0,0,0,0)" stroke-miterlimit="10" stroke-width="1" fill="url(#radial-gradient)"/>
+    </g>
+    <path id="Path_71098" data-name="Path 71098" d="M4.144-3.552h1.28v-.256c0-.848.32-1.136,1.024-1.68l.672-.528A2.952,2.952,0,0,0,8.336-8.464c0-1.744-1.344-2.9-3.344-2.9A3.125,3.125,0,0,0,1.568-8.128H2.944A1.848,1.848,0,0,1,4.992-10.16,1.7,1.7,0,0,1,6.928-8.432,1.96,1.96,0,0,1,6.1-6.784l-.512.4a2.825,2.825,0,0,0-1.44,2.576ZM3.92,0H5.648V-1.76H3.92Z" transform="translate(240.048 612.68)" fill="#8b8b8b"/>
+    <g id="Ellipse_3181" data-name="Ellipse 3181" transform="translate(233 595)" fill="none" stroke="#8b8b8b" stroke-width="1">
+      <circle cx="12" cy="12" r="12" stroke="none"/>
+      <circle cx="12" cy="12" r="11.5" fill="none"/>
+    </g>
+  </g>
+</svg>

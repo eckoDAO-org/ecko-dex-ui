@@ -107,7 +107,7 @@ const RightHeaderItems = () => {
               </div>
             }
           >
-            <Label labelStyle={{ maxWidth: '200px' }}>Make sure to have Kadena assets on Chain 2.</Label>
+            <Label labelStyle={{ maxWidth: '200px' }}>Make sure to have Kadena assets on Chain {CHAIN_ID}.</Label>
           </CustomPopup>
         </>
       )}

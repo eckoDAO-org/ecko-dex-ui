@@ -11,7 +11,6 @@ import SwapButtonsForm from '../components/swap/SwapButtonsForm';
 import SwapForm from '../components/swap/SwapForm';
 import SwapResults from '../components/swap/SwapResults';
 import SwapResultsGEv2 from '../components/swap/SwapResultsGEv2';
-import tokenData from '../constants/cryptoCurrencies';
 import { getCorrectBalance, reduceBalance } from '../utils/reduceBalance';
 import TokenSelectorModalContent from '../components/modals/swap-modals/TokenSelectorModalContent';
 import TokenSelectorModalContentGE from '../components/modals/swap-modals/TokenSelectorModalContentGE';
@@ -254,8 +253,12 @@ const SwapContainer = () => {
     setBalanceLoading(true);
     const getBalance = async () => {
       if (account.account && account.fetchAccountBalance) {
-        let acctOfFromValues = await account.getTokenAccount(tokenData[fromValues.coin]?.code, account.account.account, tokenSelectorType === 'from');
-        let acctOfToValues = await account.getTokenAccount(tokenData[toValues.coin]?.code, account.account.account, tokenSelectorType === 'to');
+        let acctOfFromValues = await account.getTokenAccount(
+          pact.allTokens[fromValues.coin]?.code,
+          account.account.account,
+          tokenSelectorType === 'from'
+        );
+        let acctOfToValues = await account.getTokenAccount(pact.allTokens[toValues.coin]?.code, account.account.account, tokenSelectorType === 'to');
         if (acctOfFromValues) {
           let balanceFrom = getCorrectBalance(acctOfFromValues.balance);
           setFromValues((prev) => ({

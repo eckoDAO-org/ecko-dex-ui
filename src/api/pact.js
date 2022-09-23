@@ -1,9 +1,7 @@
 import Pact from 'pact-lang-api';
 import { handleError } from './utils';
-import pairTokens from '../constants/pairsConfig';
 import { CHAIN_ID, creationTime, GAS_PRICE, KADDEX_NAMESPACE, NETWORKID } from '../constants/contextConstants';
 import { NETWORK } from '../constants/contextConstants';
-import tokenData from '../constants/cryptoCurrencies';
 import { extractDecimal } from '../utils/reduceBalance';
 
 export const pactFetchLocal = async (pactCode, options) => {
@@ -63,9 +61,9 @@ export const getPair = async (token0, token1) => {
   }
 };
 
-export const getPairList = async () => {
+export const getPairList = async (allPairs) => {
   try {
-    const tokenPairList = Object.keys(pairTokens).reduce((accum, pair) => {
+    const tokenPairList = Object.keys(allPairs).reduce((accum, pair) => {
       accum += `[${pair.split(':').join(' ')}] `;
       return accum;
     }, '');
@@ -109,7 +107,7 @@ export const getPairList = async () => {
         };
         return accum;
       }, {});
-      const pairList = Object.values(pairTokens).map((pair) => {
+      const pairList = Object.values(allPairs).map((pair) => {
         return {
           ...pair,
           ...dataList[pair.name],
@@ -122,24 +120,24 @@ export const getPairList = async () => {
   }
 };
 
-export const getPairListAccountBalance = async (account) => {
+export const getPairListAccountBalance = async (account, allPairs) => {
   try {
-    const tokenPairListWithBooster = Object.values(pairTokens)
+    const tokenPairListWithBooster = Object.values(allPairs)
       .filter((token) => token.isBoosted)
       .reduce((accum, pair) => {
         accum += `[${pair.name.split(':').join(' ')}] `;
         return accum;
       }, '');
-    const tokenPairListWithoutBooster = Object.values(pairTokens)
+    const tokenPairListWithoutBooster = Object.values(allPairs)
       .filter((token) => !token.isBoosted)
       .reduce((accum, pair) => {
         accum += `[${pair.name.split(':').join(' ')}] `;
         return accum;
       }, '');
 
-    const boosterResult = await dataWithBooster(account, tokenPairListWithBooster);
+    const boosterResult = await dataWithBooster(account, tokenPairListWithBooster, allPairs);
 
-    const noBoosterResult = await dataWithoutBooster(account, tokenPairListWithoutBooster);
+    const noBoosterResult = await dataWithoutBooster(account, tokenPairListWithoutBooster, allPairs);
 
     const totalResult = boosterResult.concat(noBoosterResult);
 
@@ -186,7 +184,7 @@ export const getOneSideLiquidityPairInfo = async (amountA, slippage, token0, tok
   }
 };
 
-const dataWithoutBooster = async (account, tokenPairList) => {
+const dataWithoutBooster = async (account, tokenPairList, allPairs) => {
   let data = await pactFetchLocal(
     `
           (namespace 'free)
@@ -236,7 +234,7 @@ const dataWithoutBooster = async (account, tokenPairList) => {
       return accum;
     }, {});
 
-    const pairList = Object.values(pairTokens)
+    const pairList = Object.values(allPairs)
       .filter((token) => !token.isBoosted)
       .map((pair) => {
         return {
@@ -248,7 +246,7 @@ const dataWithoutBooster = async (account, tokenPairList) => {
   }
 };
 
-const dataWithBooster = async (account, tokenPairList) => {
+const dataWithBooster = async (account, tokenPairList, allPairs) => {
   let data = await pactFetchLocal(
     `(namespace 'free)
 
@@ -304,7 +302,7 @@ const dataWithBooster = async (account, tokenPairList) => {
       return dataObj;
     });
 
-    const pairList = Object.values(pairTokens)
+    const pairList = Object.values(allPairs)
       .filter((token) => token.isBoosted)
       .map((pair, index) => {
         return {
@@ -339,9 +337,9 @@ export const getTokenBalanceAccount = async (coinCode, account) => {
   }
 };
 
-export const fetchPrecision = async () => {
+export const fetchPrecision = async (allTokens) => {
   let endBracket = '';
-  let tokenNames = Object.values(tokenData).reduce((accum, cumul) => {
+  let tokenNames = Object.values(allTokens).reduce((accum, cumul) => {
     endBracket += ')';
     let code = `
     (let
@@ -351,7 +349,7 @@ export const fetchPrecision = async () => {
     accum += code;
     return accum;
   }, '');
-  let objFormat = `{${Object.keys(tokenData)
+  let objFormat = `{${Object.keys(allTokens)
     .map((token) => `"${token}": ${token}`)
     .join(',')}}`;
   tokenNames = tokenNames + objFormat + endBracket;
@@ -364,8 +362,8 @@ export const fetchPrecision = async () => {
       NETWORK
     );
     if (data.result.status === 'success') {
-      Object.keys(tokenData).forEach((token) => {
-        tokenData[token].precision = extractDecimal(data.result.data[token]);
+      Object.keys(allTokens).forEach((token) => {
+        allTokens[token].precision = extractDecimal(data.result.data[token]);
       });
     }
   } catch (e) {

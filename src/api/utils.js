@@ -30,7 +30,10 @@ export const wait = async (timeout) => {
 };
 
 export const handleError = (error) => {
-  console.log(`ERROR: ${JSON.stringify(error)}`);
+  error?.result?.error?.message
+    ? console.log(` ERROR: ${JSON.stringify(error?.result?.error?.message)}`)
+    : console.log(` ERROR: ${JSON.stringify(error)}`);
+
   return { errorMessage: 'Unhandled Exception' };
 };
 
