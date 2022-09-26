@@ -9,6 +9,7 @@ import { getAccountData } from '../api/dao';
 import theme from '../styles/theme';
 // import { useInterval } from '../hooks/useInterval';
 import useWindowSize from '../hooks/useWindowSize';
+import { Helmet } from 'react-helmet';
 
 const DaoContainer = () => {
   const { proposal_id } = useParams();
@@ -40,6 +41,10 @@ const DaoContainer = () => {
       tabletStyle={{ paddingRight: theme.layout.tabletPadding, paddingLeft: theme.layout.tabletPadding }}
       mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
     >
+      <Helmet>
+        {/* <meta name="description" content="Use the Kaddex Staking tool to obtain a Passive Income Source" /> */}
+        <title>Kaddex - DAO</title>
+      </Helmet>
       {proposal_id ? (
         <SingleProposalContainer proposal_id={proposal_id} accountData={accountData} />
       ) : (

@@ -40,6 +40,7 @@ import { theme } from '../styles/theme';
 import { extractDecimal, getDecimalPlaces, reduceBalance } from '../utils/reduceBalance';
 import { STAKING_CONSTANTS } from '../constants/stakingConstants';
 import { getTimeByBlockchain } from '../utils/string-utils';
+import { Helmet } from 'react-helmet';
 
 const StakeContainer = () => {
   const history = useHistory();
@@ -448,6 +449,10 @@ const StakeContainer = () => {
       tabletStyle={{ paddingRight: theme().layout.tabletPadding, paddingLeft: theme().layout.tabletPadding }}
       mobileStyle={{ paddingRight: theme().layout.mobilePadding, paddingLeft: theme().layout.mobilePadding }}
     >
+      <Helmet>
+        <meta name="description" content="Use the Kaddex Staking tool to obtain a Passive Income Source" />
+        <title>Kaddex - Staking</title>
+      </Helmet>
       <FlexContainer className="w-100 justify-sb" style={{ marginBottom: 24 }}>
         <FlexContainer gap={16} mobileStyle={{ marginBottom: 16 }}>
           <Label
