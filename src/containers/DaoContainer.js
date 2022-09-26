@@ -42,8 +42,8 @@ const DaoContainer = () => {
       mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
     >
       <Helmet>
-        {/* <meta name="description" content="Use the Kaddex Staking tool to obtain a Passive Income Source" /> */}
-        <title>Kaddex - DAO</title>
+        <meta name="description" content="Use the Kaddex Staking tool to obtain a Passive Income Source" />
+        <title>Kaddex | DAO</title>
       </Helmet>
       {proposal_id ? (
         <SingleProposalContainer proposal_id={proposal_id} accountData={accountData} />

@@ -451,7 +451,7 @@ const StakeContainer = () => {
     >
       <Helmet>
         <meta name="description" content="Use the Kaddex Staking tool to obtain a Passive Income Source" />
-        <title>Kaddex - Staking</title>
+        <title>Kaddex | Staking</title>
       </Helmet>
       <FlexContainer className="w-100 justify-sb" style={{ marginBottom: 24 }}>
         <FlexContainer gap={16} mobileStyle={{ marginBottom: 16 }}>

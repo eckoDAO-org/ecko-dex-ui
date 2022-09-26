@@ -584,7 +584,7 @@ const SwapContainer = () => {
     >
       <Helmet>
         <meta name="description" content="A multi-protocol decentralized exchange (DEX) by Kaddex." />
-        <title>Kaddex - Swap</title>
+        <title>Kaddex | Swap</title>
       </Helmet>
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
 
