@@ -453,7 +453,7 @@ const StakeContainer = () => {
       mobileStyle={{ paddingRight: theme().layout.mobilePadding, paddingLeft: theme().layout.mobilePadding }}
     >
       <Helmet>
-        <meta name="description" content="Use the Kaddex Staking tool to obtain a Passive Income Source" />
+        <meta name="description" content="Accrue voting power for the Kaddex DAO while generating passive income." />
         <title>Kaddex | Staking</title>
       </Helmet>
       <FlexContainer className="w-100 justify-sb" style={{ marginBottom: 24 }}>
