@@ -42,7 +42,7 @@ const DaoContainer = () => {
       mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
     >
       <Helmet>
-        <meta name="description" content="Use the Kaddex Staking tool to obtain a Passive Income Source" />
+        <meta name="description" content="The community led DeFi ecosystem on Kadena" />
         <title>Kaddex | DAO</title>
       </Helmet>
       {proposal_id ? (

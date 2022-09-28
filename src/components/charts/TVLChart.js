@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 import axios from 'axios';
@@ -6,7 +6,6 @@ import { Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import Label from '../shared/Label';
 import { humanReadableNumber } from '../../utils/reduceBalance';
 import { FlexContainer } from '../shared/FlexContainer';
-import { getPairList } from '../../api/pact';
 import { getGroupedTVL } from '../../api/kaddex-stats';
 import CustomDropdown from '../shared/CustomDropdown';
 import { tvlRanges, TVL_3M_RANGE, TVL_CHART_OPTIONS } from '../../constants/chartOptionsConstants';
