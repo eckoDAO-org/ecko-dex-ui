@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import Pact from 'pact-lang-api';
 import { BoosterIcon } from '../../assets';
-import tokenData from '../../constants/cryptoCurrencies';
 import { extractDecimal, getDecimalPlaces } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
@@ -63,7 +62,6 @@ const LiquidityRewardsTable = () => {
   const [loading, setLoading] = useState(true);
   const [rewards, setRewards] = useState([]);
   const [rewardsFiltered, setRewardsFiltered] = useState([]);
-
   const [statusFilter, setStatusFilter] = useState('all');
 
   const fetchData = async () => {
@@ -175,7 +173,7 @@ const LiquidityRewardsTable = () => {
   return !loading ? (
     !account.account ? (
       <Label className="justify-ce">Please connect your wallet to see your rewards. </Label>
-    ) : rewardsFiltered.length === 0 ? (
+    ) : rewards.length === 0 ? (
       <Label className="justify-ce align-ce" labelStyle={{ textAlign: 'center' }}>
         To participate in the liquidity mining program and activate the multiplier, users are required to first remove liquidity and claim rewards.
       </Label>
@@ -218,34 +216,40 @@ const LiquidityRewardsTable = () => {
             value={statusFilter}
           />
         </div>
-        <CommonTable
-          items={rewardsFiltered}
-          columns={renderColumns()}
-          actions={[
-            {
-              icon: (item) => (
-                <ClaimButton disabled={item?.['remaining-time'] > 0} color={item?.['remaining-time'] > 0 ? commonColors.info : null}>
-                  <BoosterIcon />{' '}
-                  <Label
-                    labelStyle={{ lineHeight: 1 }}
-                    withShade={item?.['remaining-time'] > 0}
-                    color={item?.['remaining-time'] > 0 ? commonColors.info : null}
-                    fontFamily="syncopate"
-                  >
-                    CLAIM
-                  </Label>
-                </ClaimButton>
-              ),
-              disabled: (item) => item?.['remaining-time'] > 0,
-              onClick: (item) => {
-                const disabled = item?.['remaining-time'] > 0;
-                if (!disabled) {
-                  onClaimRewards(item);
-                }
+        {rewardsFiltered.length > 0 ? (
+          <CommonTable
+            items={rewardsFiltered.length > 0 && rewardsFiltered}
+            columns={renderColumns(pact.allTokens)}
+            actions={[
+              {
+                icon: (item) => (
+                  <ClaimButton disabled={item?.['remaining-time'] > 0} color={item?.['remaining-time'] > 0 ? commonColors.info : null}>
+                    <BoosterIcon />{' '}
+                    <Label
+                      labelStyle={{ lineHeight: 1 }}
+                      withShade={item?.['remaining-time'] > 0}
+                      color={item?.['remaining-time'] > 0 ? commonColors.info : null}
+                      fontFamily="syncopate"
+                    >
+                      CLAIM
+                    </Label>
+                  </ClaimButton>
+                ),
+                disabled: (item) => item?.['remaining-time'] > 0,
+                onClick: (item) => {
+                  const disabled = item?.['remaining-time'] > 0;
+                  if (!disabled) {
+                    onClaimRewards(item);
+                  }
+                },
               },
-            },
-          ]}
-        />
+            ]}
+          />
+        ) : (
+          <div className="flex justify-ce">
+            <Label>No {statusFilter} rewards</Label>
+          </div>
+        )}
       </>
     )
   ) : (
@@ -255,22 +259,22 @@ const LiquidityRewardsTable = () => {
 
 export default LiquidityRewardsTable;
 
-const renderColumns = () => {
+const renderColumns = (allTokens) => {
   return [
     {
       name: '',
       width: 160,
       render: ({ item }) => (
         <FlexContainer className="align-ce">
-          <CryptoContainer style={{ zIndex: 2 }}>{tokenData[getTokenByModuleV2(item.tokenA)].icon} </CryptoContainer>
-          <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}> {tokenData[getTokenByModuleV2(item.tokenB)].icon}</CryptoContainer>
-          {getTokenByModuleV2(item.tokenA)}/{getTokenByModuleV2(item.tokenB)}
+          <CryptoContainer style={{ zIndex: 2 }}>{allTokens[getTokenByModuleV2(item.tokenA, allTokens)].icon} </CryptoContainer>
+          <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}> {allTokens[getTokenByModuleV2(item.tokenB, allTokens)].icon}</CryptoContainer>
+          {getTokenByModuleV2(item.tokenA, allTokens)}/{getTokenByModuleV2(item.tokenB, allTokens)}
         </FlexContainer>
       ),
     },
 
     {
-      name: 'Amount',
+      name: 'Estimated Amount',
       width: 160,
       sortBy: 'estimated-kdx',
       render: ({ item }) => `${getDecimalPlaces(extractDecimal(item?.['estimated-kdx']))} KDX`,
@@ -303,7 +307,7 @@ const renderColumns = () => {
     },
     {
       name: 'Status',
-      width: 100,
+      width: 80,
       render: ({ item }) => {
         let color = '';
         item?.['remaining-time'] > 0 ? (color = commonColors.info) : (color = commonColors.green);

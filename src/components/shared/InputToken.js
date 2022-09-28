@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components/macro';
 import { ArrowDown, PixeledArrowDownIcon } from '../../assets';
 import CustomButton from './CustomButton';
-import tokenData from '../../constants/cryptoCurrencies';
 import Label from './Label';
-import { useApplicationContext, useGameEditionContext } from '../../contexts';
+import { useApplicationContext, useGameEditionContext, usePactContext } from '../../contexts';
 import { theme } from '../../styles/theme';
 
 const Container = styled.div`
@@ -64,6 +63,7 @@ const ElementsContainer = styled.div`
 const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor, withoutMAX }) => {
   const { gameEditionView } = useGameEditionContext();
   const { themeMode } = useApplicationContext();
+  const { allTokens } = usePactContext();
 
   return (
     <Container $gameEditionView={gameEditionView} geColor={geColor} coin={values?.coin}>
@@ -94,9 +94,9 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
               padding: !gameEditionView && '4px 8px',
             }}
           >
-            {tokenData[values.coin]?.icon}
+            {allTokens[values.coin]?.icon}
             <Label geFontSize={24} geColor={geColor} style={{ opacity: 1 }}>
-              {tokenData[values.coin]?.name}
+              {allTokens[values.coin]?.name}
             </Label>
             {gameEditionView ? <PixeledArrowDownIcon /> : <ArrowDown style={{ opacity: 1 }} />}
           </ElementsContainer>

@@ -18,6 +18,7 @@ const GraphicPercentage = ({ prevValue, currentValue, percentageValue, component
       gap={8}
       className="align-ce"
       style={{
+        minWidth: 105,
         background: percentage >= 0 ? commonColors.green : commonColors.redComponent,
         padding: '2px 8px',
         borderRadius: 20,
@@ -33,7 +34,21 @@ const GraphicPercentage = ({ prevValue, currentValue, percentageValue, component
       }
     </FlexContainer>
   ) : (
-    ''
+    <FlexContainer
+      gap={8}
+      className="align-ce justify-ce"
+      style={{
+        minWidth: 105,
+        background: percentage >= 0 ? commonColors.green : commonColors.redComponent,
+        padding: '2px 8px',
+        borderRadius: 20,
+        marginTop: 7,
+        ...componentStyle,
+      }}
+    >
+      {percentage >= 0 ? <TradeUpIcon /> : <TradeDownIcon />}
+      {<Label color="white">{percentage >= 0 ? '+' : '-'} 0 %</Label>}
+    </FlexContainer>
   );
 };
 

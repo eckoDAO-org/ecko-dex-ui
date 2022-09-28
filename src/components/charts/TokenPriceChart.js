@@ -56,7 +56,7 @@ const initialCurrentData = {
 
 const CHART_MODES = ['line', 'candle'];
 
-const TokenPriceChart = ({ tokenData, height }) => {
+const TokenPriceChart = ({ dataToken, height }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [chartMode, setChartMode] = useState(CHART_MODES[0]);
   const [candles, setCandles] = useState([]);
@@ -70,8 +70,8 @@ const TokenPriceChart = ({ tokenData, height }) => {
   }, [dateStart]);
 
   const fetchCandles = async () => {
-    const asset = (tokenData?.statsID || tokenData?.code) === 'coin' ? 'KDA' : tokenData?.statsID || tokenData?.code;
-    const currency = (tokenData?.statsID || tokenData?.code) === 'coin' ? 'USDT' : 'coin';
+    const asset = (dataToken?.statsID || dataToken?.code) === 'coin' ? 'KDA' : dataToken?.statsID || dataToken?.code;
+    const currency = (dataToken?.statsID || dataToken?.code) === 'coin' ? 'USDT' : 'coin';
     const candles = await getDailyCandles(asset, currency, moment(dateStart).toDate());
     setCandles(candles?.data || []);
     if (candles?.data?.length) {
@@ -105,7 +105,7 @@ const TokenPriceChart = ({ tokenData, height }) => {
             ${' '}
             {humanReadableNumber(currentData?.price, 3) !== '0.000'
               ? humanReadableNumber(currentData?.price, 3)
-              : humanReadableNumber(currentData?.price, tokenData?.precision)}
+              : humanReadableNumber(currentData?.price, dataToken?.precision)}
           </Label>
           <Label fontSize={16}>{moment(currentData?.date).format('DD/MM/YYYY')}</Label>
         </FlexContainer>

@@ -1,15 +1,18 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
-import pairTokens from '../constants/pairsConfig';
 // import { useInterval } from '../hooks/useInterval';
 import axios from 'axios';
 import { getTokenUsdPriceByName } from '../utils/token-utils';
 import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, KADDEX_NAMESPACE, KADDEX_API_URL } from '../constants/contextConstants';
 import { useAccountContext, useNotificationContext, useWalletContext } from '.';
 import { fetchPrecision, getPairList } from '../api/pact';
-import tokenData from '../constants/cryptoCurrencies';
+import tokenData, { pairsData } from '../constants/cryptoCurrencies';
 import { GAS_OPTIONS } from '../constants/gasConfiguration';
+import { getPairs, getTokenNameFromAddress } from '../api/pairs';
+import { UnknownLogo } from '../assets';
+import { reduceBalance } from '../utils/reduceBalance';
 
 export const PactContext = createContext();
 
@@ -36,7 +39,6 @@ export const PactProvider = (props) => {
   const [pactCmd, setPactCmd] = useState(null);
 
   const [ratio, setRatio] = useState(NaN);
-  const [pairList, setPairList] = useState(pairTokens);
   const [swapList, setSwapList] = useState([]);
   const [offsetSwapList, setOffsetSwapList] = useState(0);
   const [moreSwap, setMoreSwap] = useState(true);
@@ -47,6 +49,9 @@ export const PactProvider = (props) => {
   const [enableGasStation, setEnableGasStation] = useState(true);
   const [gasConfiguration, setGasConfiguration] = useState(GAS_OPTIONS.DEFAULT.SWAP);
   const [networkGasData, setNetworkGasData] = useState(initialNetworkGasData);
+
+  const [allPairs, setAllPairs] = useState(null);
+  const [allTokens, setAllTokens] = useState(null);
 
   const handleGasConfiguration = (key, value) => {
     setGasConfiguration((prev) => ({ ...prev, [key]: value }));
@@ -68,24 +73,87 @@ export const PactProvider = (props) => {
   }, []);
   // useInterval(getNetworkGasData, 20000);
 
-  const updateTokenUsdPrice = async () => {
-    const pairList = await getPairList();
-    const result = {};
-    for (const token of Object.values(tokenData)) {
-      await getTokenUsdPriceByName(token.name, pairList).then((price) => {
-        result[token.name] = price;
+  const getPairsData = async () => {
+    const result = await getPairs();
+    let communityList = {};
+    let communityTokenList = {};
+    if (result.errorMessage) {
+      console.log('ERROR');
+      return;
+    } else {
+      const communityPairs = result.filter((r) => !pairsData.hasOwnProperty(r));
+
+      communityPairs.map((communityPair) => {
+        const tokens = communityPair.split(':');
+        communityPair = {
+          name: communityPair,
+          token0: tokens[0] === 'coin' ? 'KDA' : getTokenNameFromAddress(tokens[0]),
+          token1: getTokenNameFromAddress(tokens[1]),
+          main: false,
+          isBoosted: false,
+          color: '#92187B',
+          isVerified: false,
+        };
+        return (communityList[communityPair.name] = communityPair);
       });
+      setAllPairs((prev) => ({ ...prev, ...pairsData, ...communityList }));
+
+      result.map((res) => {
+        const index = res.indexOf(':');
+        //const token0 = res.substr(0, index); // Gets the first part for future
+        const token1 = res.substr(index + 1); // Gets the second part
+
+        if (!tokenData.hasOwnProperty(Object.values(tokenData).find((token) => token.code === token1)?.name)) {
+          let communityToken = {
+            name: getTokenNameFromAddress(token1),
+            coingeckoId: '',
+            statsID: token1,
+            tokenNameKaddexStats: 'xyz',
+            code: token1,
+            main: false,
+            icon: <UnknownLogo style={{ marginRight: 8 }} />,
+            color: '',
+            precision: 12,
+            isVerified: false,
+          };
+          return (communityTokenList[communityToken.name] = communityToken);
+        }
+      });
+      setAllTokens((prev) => ({ ...prev, ...tokenData, ...communityTokenList }));
+    }
+    return;
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      await getPairsData();
+    }
+
+    fetchData();
+  }, []);
+
+  const updateTokenUsdPrice = async () => {
+    const pairList = await getPairList(allPairs);
+    const result = {};
+    if (allTokens) {
+      for (const token of Object.values(allTokens)) {
+        await getTokenUsdPriceByName(token.name, pairList, allTokens).then((price) => {
+          result[token.name] = price;
+        });
+      }
     }
     setTokensUsdPrice(result);
   };
 
   useEffect(() => {
-    updateTokenUsdPrice();
-  }, []);
+    if (allPairs && allTokens) updateTokenUsdPrice();
+  }, [allTokens, allPairs]);
   // useInterval(updateTokenUsdPrice, 25000);
 
   useEffect(() => {
-    pairReserve ? setRatio(pairReserve['token0'] / pairReserve['token1']) : setRatio(NaN);
+    if (pairReserve) {
+      pairReserve['token0'] === 0 && pairReserve['token1'] === 0 ? setRatio(0) : setRatio(pairReserve['token0'] / pairReserve['token1']);
+    } else setRatio(NaN);
   }, [pairReserve]);
 
   useEffect(() => {
@@ -228,9 +296,22 @@ export const PactProvider = (props) => {
 
   // UTILS
 
+  const getRatioFirstAddLiquidity = (toToken, toTokenAmount, fromToken, fromTokenAmount) => {
+    if (toToken === fromToken) return 1;
+    else if (toTokenAmount / fromTokenAmount && toTokenAmount / fromTokenAmount !== Infinity) return reduceBalance(toTokenAmount / fromTokenAmount);
+    else return '-';
+  };
+
+  const getRatioFirstAddLiquidityInverse = (toToken, toTokenAmount, fromToken, fromTokenAmount) => {
+    if (toToken === fromToken) return 1;
+    else if (fromTokenAmount / toTokenAmount && fromTokenAmount / toTokenAmount !== Infinity) return reduceBalance(fromTokenAmount / toTokenAmount);
+    else return '-';
+  };
+
   const getRatio = (toToken, fromToken) => {
     if (toToken === fromToken) return 1;
-    return pairReserve['token1'] / pairReserve['token0'];
+    else if (pairReserve['token1'] === 0 && pairReserve['token0'] === 0) return 1;
+    else return pairReserve['token1'] / pairReserve['token0'];
   };
 
   const getRatio1 = (toToken, fromToken) => {
@@ -296,17 +377,20 @@ export const PactProvider = (props) => {
     precision,
     setPrecision,
     fetchPrecision,
-    pairList,
-    setPairList,
     swapList,
+    allPairs,
+    allTokens,
     getMoreEventsSwapList,
     moreSwap,
     polling,
     setPolling,
     ratio,
+    getRatioFirstAddLiquidity,
+    getRatioFirstAddLiquidityInverse,
     getRatio,
     getRatio1,
     share,
+    pairReserve,
     getReserves,
     txSend,
     computePriceImpact,

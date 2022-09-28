@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-import tokenData from '../../../constants/cryptoCurrencies';
 import { usePactContext } from '../../../contexts';
 import { extractDecimal, getDecimalPlaces, humanReadableNumber } from '../../../utils/reduceBalance';
 import { getTokenByModuleV2, getTokenIconById } from '../../../utils/token-utils';
@@ -22,7 +21,7 @@ export const IconSubTitle = styled.div`
 `;
 
 const ClaimYourKDXRewards = ({ multiplier, amount, onClick, hasObservedPrice, tokenA, tokenB, tokenAObservedPrice, tokenBObservedPrice }) => {
-  const { tokensUsdPrice } = usePactContext();
+  const { tokensUsdPrice, allTokens } = usePactContext();
 
   return (
     <FlexContainer className="column" gap={16}>
@@ -38,14 +37,14 @@ const ClaimYourKDXRewards = ({ multiplier, amount, onClick, hasObservedPrice, to
           </Label>
           <div className="flex justify-sb" style={{ marginBottom: 8 }}>
             <Label fontSize={16}>
-              {tokenData[getTokenByModuleV2(tokenA)].icon}{' '}
+              {allTokens[getTokenByModuleV2(tokenA, allTokens)].icon}{' '}
               {humanReadableNumber(extractDecimal(tokenAObservedPrice) * extractDecimal(tokensUsdPrice?.KDX))}
             </Label>
             <Label fontSize={16}>$</Label>
           </div>
           <div className="flex justify-sb">
             <Label fontSize={16}>
-              {tokenData[getTokenByModuleV2(tokenB)].icon}{' '}
+              {allTokens[getTokenByModuleV2(tokenB, allTokens)].icon}{' '}
               {humanReadableNumber(extractDecimal(tokenBObservedPrice) * extractDecimal(tokensUsdPrice?.KDX))}
             </Label>
             <Label fontSize={16}>$</Label>
@@ -58,7 +57,7 @@ const ClaimYourKDXRewards = ({ multiplier, amount, onClick, hasObservedPrice, to
       <Label fontSize={16}>Amount</Label>
 
       <div className="flex align-ce">
-        <CryptoContainer size={30}>{getTokenIconById('KDX')}</CryptoContainer>
+        <CryptoContainer size={30}>{getTokenIconById('KDX', allTokens)}</CryptoContainer>
         <div className="column w-100">
           <div className="flex justify-sb">
             <Label fontSize={16}>{getDecimalPlaces(extractDecimal(amount))}</Label>
