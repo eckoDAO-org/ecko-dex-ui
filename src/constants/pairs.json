@@ -143,7 +143,7 @@
         "token1": "USD2",
         "main": false,
         "isBoosted": false,
-        "color": "#ed9b21"
+        "color": "#adad85"
       },
       "arkade.token:coin": {
         "name": "arkade.token:coin",
@@ -151,7 +151,7 @@
         "token1": "KDA",
         "main": false,
         "isBoosted": false,
-        "color": "#ed9b21"
+        "color": "#cc66ff"
       },
       "coin:free.KAYC": {
         "name": "coin:free.KAYC",
@@ -159,7 +159,15 @@
         "token1": "KAYC",
         "main": false,
         "isBoosted": false,
-        "color": "#ed9b21"
+        "color": "#d9ff66"
+      },
+      "coin:free.corona-token": {
+        "name": "coin:free.corona-token",
+        "token0": "KDA",
+        "token1": "CRNA",
+        "main": false,
+        "isBoosted": false,
+        "color": "#33cc33"
       }
     }
   }
