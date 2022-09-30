@@ -19,6 +19,7 @@ import { NETWORK_TYPE } from '../constants/contextConstants';
 import AppLoader from '../components/shared/AppLoader';
 import theme from '../styles/theme';
 import { useGameEditionContext, usePactContext } from '../contexts';
+import { humanReadableNumber } from '../utils/reduceBalance';
 
 export const CardContainer = styled(FadeIn)`
   display: flex;
@@ -127,10 +128,11 @@ const SwapHistoryContainer = () => {
       {
         name: 'amount',
         width: 160,
+        sortBy: 'amountA',
         align: 'left',
         render: ({ item }) => (
           <FlexContainer>
-            {item?.params[2]} {getInfoCoin(item, 3, allTokens)?.name}
+            {humanReadableNumber(item?.amountA)} {getInfoCoin(item, 3, allTokens)?.name}
           </FlexContainer>
         ),
       },
@@ -172,6 +174,7 @@ const SwapHistoryContainer = () => {
             <CommonTable
               items={pact.swapList}
               columns={renderColumns(pact.allTokens)}
+              wantPagination
               hasMore={pact.moreSwap}
               loading={pact.loadingSwap}
               loadMore={async () => {
