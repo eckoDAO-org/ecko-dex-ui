@@ -10,16 +10,17 @@ import CommonTable from '../components/shared/CommonTable';
 import reduceToken from '../utils/reduceToken';
 import { getInfoCoin } from '../utils/token-utils';
 import { ROUTE_INDEX } from '../router/routes';
-import { HistoryIcon } from '../assets';
+import { HistoryIcon, VerifiedLogo } from '../assets';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
 import PressButtonToActionLabel from '../components/game-edition-v2/components/PressButtonToActionLabel';
 import { FadeIn } from '../components/shared/animations';
 import CommonTableGameEdition from '../components/shared/CommonTableGameEdition';
 import { NETWORK_TYPE } from '../constants/contextConstants';
 import AppLoader from '../components/shared/AppLoader';
-import theme from '../styles/theme';
 import { useGameEditionContext, usePactContext } from '../contexts';
 import { humanReadableNumber } from '../utils/reduceBalance';
+import useWindowSize from '../hooks/useWindowSize';
+import { commonTheme } from '../styles/theme';
 
 export const CardContainer = styled(FadeIn)`
   display: flex;
@@ -81,6 +82,7 @@ const SwapHistoryContainer = () => {
   const history = useHistory();
   const pact = usePactContext();
   const { gameEditionView, setButtons } = useGameEditionContext();
+  const [width] = useWindowSize();
 
   useEffect(() => {
     pact.getEventsSwapList();
@@ -100,18 +102,40 @@ const SwapHistoryContainer = () => {
     }
   }, [gameEditionView, pact.swapList]);
 
-  const renderColumns = (allTokens) => {
+  const renderColumns = (allTokens, allPairs, width) => {
     return [
       {
         name: 'name',
         width: 160,
-        render: ({ item }) => (
-          <FlexContainer className="align-ce">
-            <CryptoContainer style={{ zIndex: 2 }}>{getInfoCoin(item, 3, allTokens)?.icon} </CryptoContainer>
-            <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{getInfoCoin(item, 5, allTokens)?.icon} </CryptoContainer>
-            {getInfoCoin(item, 3, allTokens)?.name}/{getInfoCoin(item, 5, allTokens)?.name}
-          </FlexContainer>
-        ),
+        render: ({ item }) => {
+          let t0 = getInfoCoin(item, 3, allTokens)?.name === 'KDA' ? getInfoCoin(item, 3, allTokens) : getInfoCoin(item, 5, allTokens);
+          let t1 = getInfoCoin(item, 5, allTokens)?.name !== 'KDA' ? getInfoCoin(item, 5, allTokens) : getInfoCoin(item, 3, allTokens);
+          let pair = `${t0?.code}:${t1?.code}`;
+          return (
+            <FlexContainer desktopClassName="align-ce" tabletClassName="align-ce" mobileClassName="column align-fs" mobilePixel={769}>
+              <div className="flex align-ce">
+                {allPairs[pair]?.isVerified ? (
+                  <div style={{ marginRight: 16 }}>
+                    <VerifiedLogo className="svg-app-color" />
+                  </div>
+                ) : (
+                  <div style={{ width: 32 }} />
+                )}
+                <CryptoContainer style={{ zIndex: 2 }}> {getInfoCoin(item, 3, allTokens)?.icon}</CryptoContainer>
+                <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{getInfoCoin(item, 5, allTokens)?.icon} </CryptoContainer>
+              </div>
+              <div
+                className="align-fs flex"
+                style={{
+                  marginLeft: width <= commonTheme.mediaQueries.mobilePixel && 32,
+                  marginTop: width <= commonTheme.mediaQueries.mobilePixel && 4,
+                }}
+              >
+                {getInfoCoin(item, 3, allTokens)?.name}/{getInfoCoin(item, 5, allTokens)?.name}
+              </div>
+            </FlexContainer>
+          );
+        },
         geName: 'Swap pair',
         geRender: ({ item }) => `${getInfoCoin(item, 3, allTokens)?.name}/${getInfoCoin(item, 5, allTokens)?.name}`,
       },
@@ -142,7 +166,7 @@ const SwapHistoryContainer = () => {
   return (
     <CardContainer
       gameEditionView={gameEditionView}
-      desktopStyle={{ padding: `32px ${theme.layout.desktopPadding}px` }}
+      desktopStyle={{ padding: `32px ${commonTheme.layout.desktopPadding}px` }}
       tabletStyle={{ padding: 32 }}
       mobileStyle={{ padding: '24px 16px 40px' }}
     >
@@ -164,7 +188,7 @@ const SwapHistoryContainer = () => {
             <CommonTableGameEdition
               id="swap-history-list"
               items={pact.swapList}
-              columns={renderColumns(pact.allTokens)}
+              columns={renderColumns(pact.allTokens, pact.allPairs, width)}
               loading={pact.loadingSwap}
               onClick={(item) => {
                 window.open(`https://explorer.chainweb.com/${NETWORK_TYPE}/tx/${item?.requestKey}`, '_blank', 'noopener,noreferrer');
@@ -173,7 +197,7 @@ const SwapHistoryContainer = () => {
           ) : (
             <CommonTable
               items={pact.swapList}
-              columns={renderColumns(pact.allTokens)}
+              columns={renderColumns(pact.allTokens, pact.allPairs, width)}
               wantPagination
               hasMore={pact.moreSwap}
               loading={pact.loadingSwap}
