@@ -225,7 +225,6 @@ const CreatePairContainer = () => {
                   {pact.allTokens[token0.name]?.icon}
                   <Label fontSize={13}>{token0.name}</Label>
                 </div>
-                <ArrowDown className="svg-app-color" style={{ marginRight: 0, marginLeft: 8 }} />
               </CustomButton>
             </FlexContainer>
             <FlexContainer className="column">
