@@ -525,7 +525,7 @@ const StakeContainer = () => {
         />
         <Analytics
           kdxSupply={kdxSupply}
-          staked={estimateUnstakeData?.staked}
+          staked={estimateUnstakeData?.['stake-record']?.amount}
           stakedShare={getAccountStakingPercentage()}
           totalStaked={poolState && poolState['staked-kdx']}
           totalBurnt={poolState && poolState['burnt-kdx']}
