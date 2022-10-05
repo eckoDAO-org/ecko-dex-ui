@@ -164,7 +164,7 @@ export const PactProvider = (props) => {
 
   const getEventsSwapList = async () => {
     setSwapList([]);
-    const limit = 20;
+    const limit = 50;
     try {
       if (account.account.account) {
         setLoadingSwap(true);
@@ -179,7 +179,13 @@ export const PactProvider = (props) => {
 
         if (Object.values(response?.data).length < limit) setMoreSwap(false);
         if (Object.values(response?.data).length !== 0) {
-          let swap = Object.values(response?.data);
+          let swap = Object.values(response?.data).map((s) => ({
+            ...s,
+            tokenA: s.params[3],
+            amountA: s.params[2],
+            tokenB: s.params[5],
+            amountB: s.params[4],
+          }));
           if (swap.length !== 0) {
             setSwapList(swap);
           } else setSwapList({ error: 'No swaps found' });
@@ -200,7 +206,7 @@ export const PactProvider = (props) => {
   };
 
   const getMoreEventsSwapList = async () => {
-    const limit = 20;
+    const limit = 50;
     let offset = offsetSwapList + limit;
 
     try {
@@ -214,7 +220,13 @@ export const PactProvider = (props) => {
             limit: limit,
           },
         });
-        let swap = Object.values(response?.data);
+        let swap = Object.values(response?.data).map((s) => ({
+          ...s,
+          tokenA: s.params[3],
+          amountA: s.params[2],
+          tokenB: s.params[5],
+          amountB: s.params[4],
+        }));
         if (swap.length !== 0) {
           const newResults = [...swapList, ...swap];
           if (swap.length < limit) {
