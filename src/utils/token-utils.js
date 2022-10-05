@@ -1,6 +1,6 @@
 import moment from 'moment';
-import { getCoingeckoUsdPrice } from '../api/coingecko';
 import { getAnalyticsPoolsStatsData } from '../api/kaddex-analytics';
+import { getCoingeckoUsdPrice } from '../api/coingecko';
 import { getTotalKDAVolume } from '../api/kaddex-stats';
 import { getPairsMultiplier } from '../api/liquidity-rewards';
 import { getPairList } from '../api/pact';
@@ -206,19 +206,19 @@ export const getTokenUsdPriceByLiquidity = (liquidity0, liquidity1, usdPrice, pr
 /**
  * @param {string} tokenName [example: "KDX"]
  */
-export const getTokenUsdPriceByName = async (tokenName, pools) => {
+export const getTokenUsdPriceByName = async (tokenName, pools, kdaPrice) => {
   const token = Object.values(tokenData).find((t) => t.name === tokenName);
-  return await getTokenUsdPrice(token, pools);
+  return await getTokenUsdPrice(token, pools, kdaPrice);
 };
 
 // retrieve token usd price based on the first pair that contains the token with a known price
-export const getTokenUsdPrice = async (token, pairsList) => {
+export const getTokenUsdPrice = async (token, pairsList, kdaPrice) => {
   if (!Array.isArray(pairsList)) {
     return null;
   }
   const filteredPairs = pairsList.filter((p) => p.token0 === token.name || p.token1 === token.name);
 
-  let tokenUsd = await getCoingeckoUsdPrice(token.coingeckoId);
+  let tokenUsd = token.name === 'KDA' && !kdaPrice ? await getCoingeckoUsdPrice(token.coingeckoId) : token.name === 'KDA' ? kdaPrice : null;
   if (tokenUsd) {
     return tokenUsd;
   } else {
@@ -229,7 +229,7 @@ export const getTokenUsdPrice = async (token, pairsList) => {
 
         if (pair.token0 === token.name) {
           const token1 = Object.values(tokenData).find((t) => t.name === pair.token1);
-          const token1Usd = await getCoingeckoUsdPrice(token1.coingeckoId);
+          const token1Usd = token1.name === 'KDA' && !kdaPrice ? await getCoingeckoUsdPrice(token1.coingeckoId) : kdaPrice;
           if (!token1Usd) {
             tokenUsd = null;
           } else {
@@ -237,7 +237,7 @@ export const getTokenUsdPrice = async (token, pairsList) => {
           }
         } else {
           const token0 = Object.values(tokenData).find((t) => t.name === pair.token0);
-          const token0Usd = await getCoingeckoUsdPrice(token0.coingeckoId);
+          const token0Usd = token0.name === 'KDA' && !kdaPrice ? await getCoingeckoUsdPrice(token0.coingeckoId) : kdaPrice;
           if (!token0Usd) {
             tokenUsd = null;
           }
