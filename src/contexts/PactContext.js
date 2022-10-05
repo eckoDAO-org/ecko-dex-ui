@@ -10,6 +10,7 @@ import { useAccountContext, useNotificationContext, useWalletContext } from '.';
 import { fetchPrecision, getPairList } from '../api/pact';
 import tokenData from '../constants/cryptoCurrencies';
 import { GAS_OPTIONS } from '../constants/gasConfiguration';
+import { getCoingeckoUsdPrice } from '../api/coingecko';
 
 export const PactContext = createContext();
 
@@ -48,6 +49,8 @@ export const PactProvider = (props) => {
   const [gasConfiguration, setGasConfiguration] = useState(GAS_OPTIONS.DEFAULT.SWAP);
   const [networkGasData, setNetworkGasData] = useState(initialNetworkGasData);
 
+  const [kdaUsdPrice, setKdaUsdPrice] = useState(null);
+
   const handleGasConfiguration = (key, value) => {
     setGasConfiguration((prev) => ({ ...prev, [key]: value }));
   };
@@ -68,11 +71,11 @@ export const PactProvider = (props) => {
   }, []);
   // useInterval(getNetworkGasData, 20000);
 
-  const updateTokenUsdPrice = async () => {
+  const updateTokenUsdPrice = async (kdaPrice) => {
     const pairList = await getPairList();
     const result = {};
     for (const token of Object.values(tokenData)) {
-      await getTokenUsdPriceByName(token.name, pairList).then((price) => {
+      await getTokenUsdPriceByName(token.name, pairList, kdaPrice).then((price) => {
         result[token.name] = price;
       });
     }
@@ -80,7 +83,17 @@ export const PactProvider = (props) => {
   };
 
   useEffect(() => {
-    updateTokenUsdPrice();
+    const getInitialData = async () => {
+      getCoingeckoUsdPrice('kadena')
+        .then((kdaPrice) => {
+          setKdaUsdPrice(kdaPrice);
+          updateTokenUsdPrice(kdaPrice);
+        })
+        .catch((err) => {
+          console.log('fetch kda price err', err);
+        });
+    };
+    getInitialData();
   }, []);
   // useInterval(updateTokenUsdPrice, 25000);
 
@@ -316,6 +329,7 @@ export const PactProvider = (props) => {
     setMoreSwap,
     loadingSwap,
     getEventsSwapList,
+    kdaUsdPrice,
   };
   return <PactContext.Provider value={contextValues}>{props.children}</PactContext.Provider>;
 };
