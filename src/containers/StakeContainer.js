@@ -42,6 +42,7 @@ import { STAKING_CONSTANTS } from '../constants/stakingConstants';
 import { getTimeByBlockchain } from '../utils/string-utils';
 import useWindowSize from '../hooks/useWindowSize';
 import { getAnalyticsData } from '../api/kaddex-analytics';
+import { Helmet } from 'react-helmet';
 
 const StakeContainer = () => {
   const history = useHistory();
@@ -451,6 +452,10 @@ const StakeContainer = () => {
       tabletStyle={{ paddingRight: theme().layout.tabletPadding, paddingLeft: theme().layout.tabletPadding }}
       mobileStyle={{ paddingRight: theme().layout.mobilePadding, paddingLeft: theme().layout.mobilePadding }}
     >
+      <Helmet>
+        <meta name="description" content="Accrue voting power for the Kaddex DAO while generating passive income." />
+        <title>Kaddex | Staking</title>
+      </Helmet>
       <FlexContainer className="w-100 justify-sb" style={{ marginBottom: 24 }}>
         <FlexContainer gap={16} mobileStyle={{ marginBottom: 16 }}>
           <Label

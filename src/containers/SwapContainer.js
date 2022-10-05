@@ -39,6 +39,7 @@ import {
   useWalletContext,
 } from '../contexts';
 import theme, { commonColors } from '../styles/theme';
+import { Helmet } from 'react-helmet';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -584,6 +585,10 @@ const SwapContainer = () => {
       className="scrollbar-none"
       mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
     >
+      <Helmet>
+        <meta name="description" content="A multi-protocol decentralized exchange (DEX) by Kaddex." />
+        <title>Kaddex | Swap</title>
+      </Helmet>
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
 
       <FlexContainer

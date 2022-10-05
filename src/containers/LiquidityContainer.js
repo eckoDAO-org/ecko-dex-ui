@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { AddLiquidityLogo, BoosterIcon, LiquidityDollarLogo } from '../assets';
@@ -37,6 +38,14 @@ const LiquidityContainer = () => {
       tabletStyle={{ paddingRight: theme().layout.tabletPadding, paddingLeft: theme().layout.tabletPadding }}
       mobileStyle={{ paddingRight: theme().layout.mobilePadding, paddingLeft: theme().layout.mobilePadding }}
     >
+      <Helmet>
+        <meta
+          name="description"
+          content="Liquidity providers earn a 0.25% fee back and 0.05% goes to stakers on all trades proportional to their share of the pool.
+Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity."
+        />
+        <title>Kaddex | Liquidity</title>
+      </Helmet>
       <FlexContainer className="w-100 justify-sb" mobileClassName="column" tabletClassName="column" style={{ marginBottom: 24 }}>
         <FlexContainer className="align-ce" gap={16} mobileStyle={{ marginBottom: 16 }} tabletStyle={{ marginBottom: 16 }}>
           <Label
