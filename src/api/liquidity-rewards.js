@@ -1,5 +1,6 @@
 import Pact from 'pact-lang-api';
 import { CHAIN_ID, KADDEX_NAMESPACE, NETWORK, NETWORKID } from '../constants/contextConstants';
+import { extractDecimal } from '../utils/reduceBalance';
 import { pactFetchLocal } from './pact';
 import { handleError, listen } from './utils';
 
@@ -20,7 +21,7 @@ export const getPairMultiplier = async (tokenA, tokenB) => {
   try {
     let data = await pactFetchLocal(`(${KADDEX_NAMESPACE}.wrapper.get-pair-multiplier ${tokenA} ${tokenB})`);
     if (data) {
-      return data;
+      return extractDecimal(data);
     }
   } catch (e) {
     return handleError(e);
@@ -53,7 +54,7 @@ export const getPairsMultiplier = async (pairList) => {
   try {
     let data = await pactFetchLocal(pactCode);
     if (data) {
-      return data;
+      return data.map((x) => ({ ...x, multiplier: extractDecimal(x.multiplier) }));
     }
   } catch (e) {
     return handleError(e);
