@@ -24,7 +24,7 @@ const LiquidityPoolsTable = () => {
 
   const fetchData = async () => {
     const pairsData = await getAllPairsData(tokensUsdPrice, allTokens, allPairs);
-    setPairList(pairsData);
+    setPairList(pairsData.sort((x, y) => y.liquidityUsd - x.liquidityUsd));
     setLoading(false);
   };
 

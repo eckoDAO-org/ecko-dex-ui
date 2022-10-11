@@ -121,7 +121,7 @@ const RewardBooster = ({ type, apr, handleState, previewObject, pair, isBoosted 
             <Label fontSize={13}>{((rewardsAvailable * 100) / (KDX_TOTAL_SUPPLY * 0.4)).toFixed(2)} %</Label>
           </div>
         )}
-        {type === LIQUIDITY_VIEW.REMOVE_LIQUIDITY && (
+        {type === LIQUIDITY_VIEW.REMOVE_LIQUIDITY && isBoosted && (
           <div className="flex justify-sb align-fs">
             <Label fontSize={16}>Fees Collected</Label>
             {wantsKdxRewards ? (
