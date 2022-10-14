@@ -13,6 +13,7 @@ import { GAS_OPTIONS } from '../constants/gasConfiguration';
 import { getPairs, getTokenNameFromAddress } from '../api/pairs';
 import { UnknownLogo } from '../assets';
 import { reduceBalance } from '../utils/reduceBalance';
+import { getCoingeckoUsdPrice } from '../api/coingecko';
 
 export const PactContext = createContext();
 
@@ -52,6 +53,8 @@ export const PactProvider = (props) => {
 
   const [allPairs, setAllPairs] = useState(null);
   const [allTokens, setAllTokens] = useState(null);
+
+  const [kdaUsdPrice, setKdaUsdPrice] = useState(null);
 
   const handleGasConfiguration = (key, value) => {
     setGasConfiguration((prev) => ({ ...prev, [key]: value }));
@@ -132,12 +135,12 @@ export const PactProvider = (props) => {
     fetchData();
   }, []);
 
-  const updateTokenUsdPrice = async () => {
+  const updateTokenUsdPrice = async (kdaPrice) => {
     const pairList = await getPairList(allPairs);
     const result = {};
     if (allTokens) {
       for (const token of Object.values(allTokens)) {
-        await getTokenUsdPriceByName(token.name, pairList, allTokens).then((price) => {
+        await getTokenUsdPriceByName(token.name, pairList, allTokens, kdaPrice).then((price) => {
           result[token.name] = price;
         });
       }
@@ -146,7 +149,19 @@ export const PactProvider = (props) => {
   };
 
   useEffect(() => {
-    if (allPairs && allTokens) updateTokenUsdPrice();
+    if (allPairs && allTokens) {
+      const getInitialData = async () => {
+        getCoingeckoUsdPrice('kadena')
+          .then((kdaPrice) => {
+            setKdaUsdPrice(kdaPrice);
+            updateTokenUsdPrice(kdaPrice);
+          })
+          .catch((err) => {
+            console.log('fetch kda price err', err);
+          });
+      };
+      getInitialData();
+    }
   }, [allTokens, allPairs]);
   // useInterval(updateTokenUsdPrice, 25000);
 
@@ -412,6 +427,7 @@ export const PactProvider = (props) => {
     setMoreSwap,
     loadingSwap,
     getEventsSwapList,
+    kdaUsdPrice,
   };
   return <PactContext.Provider value={contextValues}>{props.children}</PactContext.Provider>;
 };

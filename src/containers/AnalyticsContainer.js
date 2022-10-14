@@ -1,14 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import useLazyImage from '../hooks/useLazyImage';
-import { useGameEditionContext } from '../contexts';
+import { useGameEditionContext, usePactContext } from '../contexts';
 import modalBackground from '../assets/images/game-edition/modal-background.png';
 import LogoLoader from '../components/shared/Loader';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import Label from '../components/shared/Label';
 import Banner from '../components/layout/header/Banner';
 import InfoPopup from '../components/shared/InfoPopup';
-import { getCoingeckoUsdPrice } from '../api/coingecko';
 import { getPoolState } from '../api/kaddex.staking';
 import theme from '../styles/theme';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -27,30 +26,24 @@ export const FIXED_BURNT = 99422492;
 const AnalyticsContainer = () => {
   const { pathname } = useLocation();
   const history = useHistory();
-  const [kdaPrice, setKdaPrice] = useState(null);
-
   const [analyticsData, setAnalyticsData] = useState({});
   const [poolState, setPoolState] = useState(null);
   const { gameEditionView } = useGameEditionContext();
+  const { kdaUsdPrice } = usePactContext();
 
   useEffect(() => {
     const getInitialData = async () => {
-      getCoingeckoUsdPrice('kadena')
-        .then((kdaPrice) => {
-          setKdaPrice(kdaPrice);
-        })
-        .catch(async (err) => {
-          console.log('fetch kda price err', err);
+      if (kdaUsdPrice) {
+        getPoolState().then((res) => {
+          setPoolState(res);
         });
-      getPoolState().then((res) => {
-        setPoolState(res);
-      });
-      getAnalyticsData(moment().subtract(1, 'day').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')).then((res) => {
-        setAnalyticsData(res[res.length - 1]);
-      });
+        getAnalyticsData(moment().subtract(1, 'day').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')).then((res) => {
+          setAnalyticsData(res[res.length - 1]);
+        });
+      }
     };
     getInitialData();
-  }, [kdaPrice]);
+  }, [kdaUsdPrice]);
 
   const [loaded] = useLazyImage([modalBackground]);
   return !loaded && gameEditionView ? (
@@ -114,10 +107,10 @@ const AnalyticsContainer = () => {
           </FlexContainer>
           {/* DEX */}
           {pathname === ROUTE_ANALYTICS && (
-            <Dex kdxSupply={analyticsData?.circulatingSupply?.totalSupply} kdaPrice={kdaPrice} poolState={poolState} />
+            <Dex kdxSupply={analyticsData?.circulatingSupply?.totalSupply} kdaPrice={kdaUsdPrice} poolState={poolState} />
           )}
           {/* KDX */}
-          {pathname === ROUTE_ANALYTICS_KDX && <Kdx analyticsData={analyticsData} KDX_TOTAL_SUPPLY={KDX_TOTAL_SUPPLY} kdaPrice={kdaPrice} />}
+          {pathname === ROUTE_ANALYTICS_KDX && <Kdx analyticsData={analyticsData} KDX_TOTAL_SUPPLY={KDX_TOTAL_SUPPLY} kdaPrice={kdaUsdPrice} />}
           {/* DEX */}
           {pathname === ROUTE_ANALYTICS_STATS && <StatsTable />}
         </FlexContainer>

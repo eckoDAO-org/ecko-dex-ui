@@ -82,7 +82,7 @@ Fees are added to the pool, accrue in real time and can be claimed by withdrawin
                 color={commonColors.pink}
                 onClick={() => history.push(ROUTE_LIQUIDITY_REWARDS)}
               >
-                <BoosterIcon className={pathname === ROUTE_LIQUIDITY_REWARDS && 'svg-app-color'} />
+                <BoosterIcon className={pathname === ROUTE_LIQUIDITY_REWARDS ? 'svg-app-color' : ''} />
               </MobileButton>
               <MobileButton
                 background={pathname === ROUTE_LIQUIDITY_MY_LIQUIDITY ? theme(themeMode).colors.white : 'transparent'}
