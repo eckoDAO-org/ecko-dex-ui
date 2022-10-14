@@ -6,24 +6,25 @@ import { humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
-import { AddIcon, BoosterIcon, GasIcon } from '../../assets';
+import { AddIcon, BoosterIcon, GasIcon, VerifiedLogo } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS } from '../../router/routes';
 import Label from '../shared/Label';
-import tokenData from '../../constants/cryptoCurrencies';
 import { getAllPairsData } from '../../utils/token-utils';
-import { commonColors } from '../../styles/theme';
+import { theme, commonColors } from '../../styles/theme';
 import { usePactContext } from '../../contexts';
+import useWindowSize from '../../hooks/useWindowSize';
 
 const LiquidityPoolsTable = () => {
   const history = useHistory();
-  const { enableGasStation, tokensUsdPrice } = usePactContext();
+  const { enableGasStation, tokensUsdPrice, allTokens, allPairs } = usePactContext();
 
   const [pairList, setPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(false);
+  const [width] = useWindowSize();
 
   const fetchData = async () => {
-    const pairsData = await getAllPairsData(tokensUsdPrice);
-    setPairList(pairsData);
+    const pairsData = await getAllPairsData(tokensUsdPrice, allTokens, allPairs);
+    setPairList(pairsData.sort((x, y) => y.liquidityUsd - x.liquidityUsd));
     setLoading(false);
   };
 
@@ -35,7 +36,9 @@ const LiquidityPoolsTable = () => {
   return !loading ? (
     <CommonTable
       items={pairList}
-      columns={enableGasStation ? renderColumns() : renderColumns().filter((x) => x.name !== 'Fees')}
+      columns={
+        enableGasStation ? renderColumns(allTokens, allPairs, width) : renderColumns(allTokens, allPairs, width).filter((x) => x.name !== 'Fees')
+      }
       actions={[
         {
           icon: () => <AddIcon />,
@@ -53,19 +56,36 @@ const LiquidityPoolsTable = () => {
 
 export default LiquidityPoolsTable;
 
-const renderColumns = () => {
+const renderColumns = (allTokens, allPairs, width) => {
   return [
     {
       name: '',
-      width: 160,
+      width: width <= theme().mediaQueries.mobilePixel ? 80 : 160,
       render: ({ item }) => {
         let t0 = item.token0 === 'KDA' ? item.token0 : item.token1;
         let t1 = item.token1 !== 'KDA' ? item.token1 : item.token0;
         return (
-          <FlexContainer className="align-ce">
-            <CryptoContainer style={{ zIndex: 2 }}> {tokenData[t0].icon}</CryptoContainer>
-            <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{tokenData[t1].icon} </CryptoContainer>
-            {t0}/{t1}
+          <FlexContainer desktopClassName="align-ce" tabletClassName="align-ce" mobileClassName="column align-fs" mobilePixel={769}>
+            <div className="flex align-ce">
+              {allPairs[item.name]?.isVerified ? (
+                <div style={{ marginRight: 16 }}>
+                  <VerifiedLogo className="svg-app-color" />
+                </div>
+              ) : (
+                <div style={{ width: 32 }} />
+              )}
+              <CryptoContainer style={{ zIndex: 2 }}> {allTokens[t0].icon}</CryptoContainer>
+              <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{allTokens[t1].icon} </CryptoContainer>
+            </div>
+            <div
+              className="align-fs flex"
+              style={{
+                marginLeft: width <= theme().mediaQueries.mobilePixel && 32,
+                marginTop: width <= theme().mediaQueries.mobilePixel && 4,
+              }}
+            >
+              {t0}/{t1}
+            </div>
           </FlexContainer>
         );
       },
@@ -94,7 +114,7 @@ const renderColumns = () => {
     },
     {
       name: 'Fees',
-      width: 160,
+      width: 100,
       render: () => (
         <FlexContainer className="align-ce">
           <GasIcon />
@@ -106,7 +126,7 @@ const renderColumns = () => {
     },
     {
       name: 'KDX Multiplier',
-      width: 160,
+      width: 100,
       sortBy: 'multiplier',
       render: ({ item }) =>
         item.multiplier > 1 ? (
@@ -122,7 +142,7 @@ const renderColumns = () => {
     },
     {
       name: 'APR',
-      width: 160,
+      width: 100,
       sortBy: 'apr',
       multiplier: 'multiplier',
       render: ({ item }) =>
