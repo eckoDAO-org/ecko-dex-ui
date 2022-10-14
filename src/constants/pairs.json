@@ -183,6 +183,15 @@
         "isBoosted": false,
         "color": "#ed9b21",
         "isVerified": true
+      },
+      "coin:free.corona-token": {
+        "name": "coin:free.corona-token",
+        "token0": "KDA",
+        "token1": "CRNA",
+        "main": false,
+        "isBoosted": false,
+        "color": "#33cc33",
+        "isVerified": true
       }
     }
   }
