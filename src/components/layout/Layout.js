@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { useHistory, useLocation } from 'react-router';
 import useWindowSize from '../../hooks/useWindowSize';
-import { useAccountContext, useApplicationContext, useGameEditionContext } from '../../contexts';
+import { useAccountContext, useApplicationContext, useGameEditionContext, usePactContext } from '../../contexts';
 import DesktopHeader from './header/DesktopHeader';
 import MobileHeader from './header/MobileHeader';
 import { ReactComponent as Stripes } from '../../assets/images/shared/stripes.svg';
@@ -17,6 +17,7 @@ import theme from '../../styles/theme';
 import Banner from './header/Banner';
 import FooterPolicy from './FooterPolicy';
 import { isMainnet } from '../../constants/contextConstants';
+import AppLoader from '../shared/AppLoader';
 
 const WrapperContainer = styled.div`
   flex-direction: column;
@@ -67,6 +68,7 @@ const Layout = ({ children }) => {
   const { account } = useAccountContext();
   const { gameEditionView, setGameEditionView } = useGameEditionContext();
   const { resolutionConfiguration } = useApplicationContext();
+  const pact = usePactContext();
 
   useEffect(() => {
     if (gameEditionView) {
@@ -94,8 +96,10 @@ const Layout = ({ children }) => {
             <CenterBackground src={gameEditionBackground} alt="" />
             <GameEditionContainer>{children}</GameEditionContainer>
           </>
-        ) : (
+        ) : pact.allTokens ? (
           <div className="h-100 y-auto hide-scrollbar">{children}</div>
+        ) : (
+          <AppLoader containerStyle={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} />
         )}
       </WrapperContainer>
       <StripesContainer>

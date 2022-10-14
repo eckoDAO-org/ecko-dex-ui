@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { getTokenBalanceAccount } from '../../api/pact';
 import { ArrowDown } from '../../assets';
-import tokenData from '../../constants/cryptoCurrencies';
 import { useAccountContext, useLiquidityContext, useModalContext, usePactContext, useWalletContext } from '../../contexts';
 // import { useInterval } from '../../hooks/useInterval';
 import noExponents from '../../utils/noExponents';
@@ -69,9 +68,9 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
     if (selectedPool) {
       setFetchingPair(true);
       if (selectedPool?.token0 === fromValue.coin) {
-        await pact.getReserves(tokenData?.[selectedPool?.token0]?.code, tokenData?.[selectedPool?.token1]?.code);
+        await pact.getReserves(pact.allTokens?.[selectedPool?.token0]?.code, pact.allTokens?.[selectedPool?.token1]?.code);
       } else {
-        await pact.getReserves(tokenData?.[selectedPool?.token1]?.code, tokenData?.[selectedPool?.token0]?.code);
+        await pact.getReserves(pact.allTokens?.[selectedPool?.token1]?.code, pact.allTokens?.[selectedPool?.token0]?.code);
       }
       setFetchingPair(false);
     }
@@ -80,12 +79,12 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
   /// POLLING ON UPDATE PACT RATIO
   // useInterval(async () => {
   //   if (!isNaN(pact.ratio)) {
-  //     await pact.getReserves(tokenData?.[selectedPool?.token0]?.code, tokenData?.[selectedPool?.token1]?.code);
+  //     await pact.getReserves(pact.allTokens?.[selectedPool?.token0]?.code, pact.allTokens?.[selectedPool?.token1]?.code);
   //   }
   // }, 10000);
 
   const handleTokenValue = async (token) => {
-    const crypto = tokenData[token];
+    const crypto = pact.allTokens[token];
 
     let balance;
     if (crypto?.code === 'coin') {
@@ -135,7 +134,11 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
 
   const supply = async () => {
     const token1 = selectedPool?.token0 === fromValue.coin ? selectedPool?.token1 : selectedPool?.token0;
-    const res = await addOneSideLiquidityWallet(tokenData[fromValue.coin], tokenData[token1], Number(fromValue?.amount).toFixed(fromValue.precision));
+    const res = await addOneSideLiquidityWallet(
+      pact.allTokens[fromValue.coin],
+      pact.allTokens[token1],
+      Number(fromValue?.amount).toFixed(fromValue.precision)
+    );
     if (!res) {
       wallet.setIsWaitingForWalletAuth(true);
       /* pact.setWalletError(true); */
@@ -269,10 +272,10 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
             <div className="flex align-ce w-100">
               <div className="flex align-ce">
                 <CryptoContainer size={22} style={{ zIndex: 2 }}>
-                  {tokenData?.[selectedPool?.token0]?.icon}
+                  {pact.allTokens?.[selectedPool?.token0]?.icon}
                 </CryptoContainer>
                 <CryptoContainer size={22} style={{ marginLeft: -12, zIndex: 1 }}>
-                  {tokenData?.[selectedPool?.token1]?.icon}{' '}
+                  {pact.allTokens?.[selectedPool?.token1]?.icon}{' '}
                 </CryptoContainer>
               </div>
               <Label fontSize={13}>

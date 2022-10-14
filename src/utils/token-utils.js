@@ -5,38 +5,38 @@ import { getTotalKDAVolume } from '../api/kaddex-stats';
 import { getPairsMultiplier } from '../api/liquidity-rewards';
 import { getPairList } from '../api/pact';
 import { CHAIN_ID, APR_FEE, STAKING_REWARDS_PERCENT } from '../constants/contextConstants';
-import tokenData from '../constants/cryptoCurrencies';
 import { bigNumberConverter } from './bignumber';
 import { reduceBalance } from './reduceBalance';
 
-export const getTokenByModuleV2 = (token) => {
+export const getTokenByModuleV2 = (token, allTokens) => {
   const tokenCode = token.refName.namespace ? `${token.refName.namespace}.${token.refName.name}` : `${token.refName.name}`;
-  const token0 = Object.values(tokenData).find((t) => t.code === tokenCode);
+  const token0 = Object.values(allTokens).find((t) => t.code === tokenCode);
   if (token0?.name) {
     return token0?.name?.toUpperCase();
   }
   return token0?.toUpperCase();
 };
-export const getTokenName = (code) => {
-  const token0 = Object.values(tokenData).find((t) => t.code === code);
+
+export const getTokenName = (code, allTokens) => {
+  const token0 = Object.values(allTokens).find((t) => t.code === code);
   if (token0?.name) {
     return token0?.name;
   }
   return code?.toUpperCase();
 };
 
-export const getTokenIconById = (token) => {
-  return tokenData[token]?.icon;
+export const getTokenIconById = (token, allTokens) => {
+  return allTokens[token]?.icon;
 };
-export const getTokenIconByCode = (tokenCode) => {
-  return tokenData[getTokenName(tokenCode)]?.icon;
+export const getTokenIconByCode = (tokenCode, allTokens) => {
+  return allTokens[getTokenName(tokenCode, allTokens)]?.icon;
 };
 
-export const getInfoCoin = (item, coinPositionArray) => {
+export const getInfoCoin = (item, coinPositionArray, allTokens) => {
   let cryptoCode = item?.params[coinPositionArray]?.refName?.namespace
     ? `${item?.params[coinPositionArray]?.refName?.namespace}.${item?.params[coinPositionArray]?.refName?.name}`
     : item?.params[coinPositionArray]?.refName?.name;
-  const crypto = Object.values(tokenData).find(({ code }) => code === cryptoCode);
+  const crypto = Object.values(allTokens).find(({ code }) => code === cryptoCode);
   return crypto;
 };
 
@@ -59,14 +59,20 @@ export const getStakingApr = (totalDailyVolumeUSD, totalUsdStakedKDX) => {
   return (100 * yearlyRewards) / totalUsdStakedKDX;
 };
 
+export const getPairByTokensName = (token0Name, token1Name, allPairs) => {
+  return Object.values(allPairs).find(
+    (pair) => (pair.token0 === token0Name && pair.token1 === token1Name) || (pair.token0 === token1Name && pair.token1 === token0Name)
+  );
+};
+
 // calculate liquidity, volumes and apr for each pool
 // TODO: NOT USED
-export const getAllPairValues = async (pools, volumes) => {
+export const getAllPairValues = async (pools, volumes, allTokens) => {
   const result = [];
 
   for (const pool of pools) {
-    const token0 = Object.values(tokenData).find((t) => t.name === pool.token0);
-    const token1 = Object.values(tokenData).find((t) => t.name === pool.token1);
+    const token0 = Object.values(allTokens).find((t) => t.name === pool.token0);
+    const token1 = Object.values(allTokens).find((t) => t.name === pool.token1);
 
     const liquidity0 = token0.code === 'coin' ? reduceBalance(pool.reserves[0]) : reduceBalance(pool.reserves[1]);
     const liquidity1 = token1.code === 'coin' ? reduceBalance(pool.reserves[0]) : reduceBalance(pool.reserves[1]);
@@ -105,8 +111,8 @@ export const getAllPairValues = async (pools, volumes) => {
   return result;
 };
 
-export const getAllPairsData = async (tokensUsdPrice) => {
-  const pools = await getPairList();
+export const getAllPairsData = async (tokensUsdPrice, allTokens, allPairs) => {
+  const pools = await getPairList(allPairs);
 
   if (pools.length) {
     const volumes = await getAnalyticsPoolsStatsData();
@@ -116,15 +122,15 @@ export const getAllPairsData = async (tokensUsdPrice) => {
       let volume24HUsd = 0;
       let liquidityUsd = 0;
       let apr = 0;
-      const token0 = Object.values(tokenData).find((t) => t.name === pool.token0);
-      const token1 = Object.values(tokenData).find((t) => t.name === pool.token1);
+      const token0 = Object.values(allTokens).find((t) => t.name === pool.token0);
+      const token1 = Object.values(allTokens).find((t) => t.name === pool.token1);
 
       if (tokensUsdPrice) {
         const liquidity0 = tokensUsdPrice[token0.name] ? reduceBalance(pool.reserves[0]) * tokensUsdPrice[token0.name] : 0;
         const liquidity1 = tokensUsdPrice[token1.name] ? reduceBalance(pool.reserves[1]) * tokensUsdPrice[token1.name] : 0;
 
-        let token0UsdPrice = tokensUsdPrice[getTokenName(volumes[pool.name].baseTokenCode)];
-        let token1UsdPrice = tokensUsdPrice[getTokenName(volumes[pool.name].targetTokenCode)];
+        let token0UsdPrice = tokensUsdPrice[getTokenName(volumes[pool.name]?.baseTokenCode, allTokens)];
+        let token1UsdPrice = tokensUsdPrice[getTokenName(volumes[pool.name]?.targetTokenCode, allTokens)];
 
         volume24HUsd =
           token0UsdPrice && token1UsdPrice ? volumes[pool.name].baseVolume * token0UsdPrice + volumes[pool.name].targetVolume * token1UsdPrice : 0;
@@ -206,13 +212,13 @@ export const getTokenUsdPriceByLiquidity = (liquidity0, liquidity1, usdPrice, pr
 /**
  * @param {string} tokenName [example: "KDX"]
  */
-export const getTokenUsdPriceByName = async (tokenName, pools, kdaPrice) => {
-  const token = Object.values(tokenData).find((t) => t.name === tokenName);
-  return await getTokenUsdPrice(token, pools, kdaPrice);
+export const getTokenUsdPriceByName = async (tokenName, pools, allTokens, kdaPrice) => {
+  const token = Object.values(allTokens).find((t) => t.name === tokenName);
+  return await getTokenUsdPrice(token, pools, allTokens, kdaPrice);
 };
 
 // retrieve token usd price based on the first pair that contains the token with a known price
-export const getTokenUsdPrice = async (token, pairsList, kdaPrice) => {
+export const getTokenUsdPrice = async (token, pairsList, allTokens, kdaPrice) => {
   if (!Array.isArray(pairsList)) {
     return null;
   }
@@ -228,7 +234,7 @@ export const getTokenUsdPrice = async (token, pairsList, kdaPrice) => {
         const liquidity1 = reduceBalance(pair.reserves[1]);
 
         if (pair.token0 === token.name) {
-          const token1 = Object.values(tokenData).find((t) => t.name === pair.token1);
+          const token1 = Object.values(allTokens).find((t) => t.name === pair.token1);
           const token1Usd = token1.name === 'KDA' && !kdaPrice ? await getCoingeckoUsdPrice(token1.coingeckoId) : kdaPrice;
           if (!token1Usd) {
             tokenUsd = null;
@@ -236,7 +242,7 @@ export const getTokenUsdPrice = async (token, pairsList, kdaPrice) => {
             return getTokenUsdPriceByLiquidity(liquidity1, liquidity0, token1Usd, token.precision);
           }
         } else {
-          const token0 = Object.values(tokenData).find((t) => t.name === pair.token0);
+          const token0 = Object.values(allTokens).find((t) => t.name === pair.token0);
           const token0Usd = token0.name === 'KDA' && !kdaPrice ? await getCoingeckoUsdPrice(token0.coingeckoId) : kdaPrice;
           if (!token0Usd) {
             tokenUsd = null;

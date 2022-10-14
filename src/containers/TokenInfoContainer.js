@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { useHistory, useParams } from 'react-router-dom';
@@ -9,7 +10,6 @@ import AnalyticsSimpleWidget from '../components/shared/AnalyticsSimpleWidget';
 import { CryptoContainer, FlexContainer } from '../components/shared/FlexContainer';
 import GraphicPercentage from '../components/shared/GraphicPercentage';
 import Label from '../components/shared/Label';
-import tokenData from '../constants/cryptoCurrencies';
 import { getDecimalPlaces, humanReadableNumber } from '../utils/reduceBalance';
 import theme from '../styles/theme';
 
@@ -23,8 +23,11 @@ const TokenInfoContainer = () => {
   const { token } = useParams();
   const pact = usePactContext();
 
-  const asset = (tokenData[token].statsID || tokenData[token].code) === 'coin' ? 'KDA' : tokenData[token].statsID || tokenData[token].code;
-  const currency = (tokenData[token].statsID || tokenData[token].code) === 'coin' ? 'USDT' : 'coin';
+  const asset =
+    (pact.allTokens?.[token].statsID || pact.allTokens?.[token].code) === 'coin'
+      ? 'KDA'
+      : pact.allTokens?.[token].statsID || pact.allTokens?.[token].code;
+  const currency = (pact.allTokens?.[token].statsID || pact.allTokens?.[token].code) === 'coin' ? 'USDT' : 'coin';
 
   const [monthlyRange, setMonthlyRange] = useState(initialMonthlyRange);
   const [monthlyVolumeRange, setMonthlyVolumeRange] = useState(initialMonthlyRange);
@@ -47,13 +50,13 @@ const TokenInfoContainer = () => {
       const lastMonthVolume = await getTotalVolume(
         moment().subtract(1, 'months').toDate(),
         new Date(),
-        tokenData[token].statsID || tokenData[token].code
+        pact.allTokens[token].statsID || pact.allTokens[token].code
       );
       if (lastMonthVolume) {
         const pastLastMonthVolume = await getTotalVolume(
           moment().subtract(2, 'months').toDate(),
           moment().subtract(1, 'months').toDate(),
-          tokenData[token].statsID || tokenData[token].code
+          pact.allTokens[token].statsID || pact.allTokens[token].code
         );
         if (pastLastMonthVolume) {
           setMonthlyVolumeRange({
@@ -91,7 +94,7 @@ const TokenInfoContainer = () => {
           }}
           onClick={() => history.goBack()}
         />
-        <CryptoContainer style={{ marginRight: 8 }}>{tokenData[token].icon}</CryptoContainer>
+        <CryptoContainer style={{ marginRight: 8 }}>{pact.allTokens?.[token].icon}</CryptoContainer>
         <Label fontSize={24} fontFamily="syncopate">
           {token}
         </Label>
@@ -105,7 +108,7 @@ const TokenInfoContainer = () => {
                 pact?.tokensUsdPrice?.[token]
                   ? humanReadableNumber(pact?.tokensUsdPrice?.[token], 3) !== '0.000'
                     ? humanReadableNumber(pact?.tokensUsdPrice?.[token], 3)
-                    : (pact?.tokensUsdPrice?.[token]).toFixed(tokenData[token].precision)
+                    : (pact?.tokensUsdPrice?.[token]).toFixed(pact.allTokens?.[token].precision)
                   : '-'
               }`}
               <GraphicPercentage prevValue={price24h?.initial} currentValue={price24h?.final} />
@@ -126,7 +129,7 @@ const TokenInfoContainer = () => {
           subtitle={<GraphicPercentage prevValue={monthlyRange?.initial} currentValue={monthlyRange?.final} />}
         />
       </FlexContainer>
-      <TokenPriceChart tokenData={tokenData[token]} height={300} />
+      <TokenPriceChart dataToken={pact.allTokens?.[token]} height={300} />
     </FlexContainer>
     // <div>
     //   <CustomButton onClick={() => history.goBack()}>Token Info</CustomButton>

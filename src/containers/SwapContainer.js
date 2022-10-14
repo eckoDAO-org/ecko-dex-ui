@@ -11,7 +11,6 @@ import SwapButtonsForm from '../components/swap/SwapButtonsForm';
 import SwapForm from '../components/swap/SwapForm';
 import SwapResults from '../components/swap/SwapResults';
 import SwapResultsGEv2 from '../components/swap/SwapResultsGEv2';
-import tokenData from '../constants/cryptoCurrencies';
 import { getCorrectBalance, reduceBalance } from '../utils/reduceBalance';
 import TokenSelectorModalContent from '../components/modals/swap-modals/TokenSelectorModalContent';
 import TokenSelectorModalContentGE from '../components/modals/swap-modals/TokenSelectorModalContentGE';
@@ -40,6 +39,7 @@ import {
   useWalletContext,
 } from '../contexts';
 import theme, { commonColors } from '../styles/theme';
+import { Helmet } from 'react-helmet';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -254,8 +254,12 @@ const SwapContainer = () => {
     setBalanceLoading(true);
     const getBalance = async () => {
       if (account.account && account.fetchAccountBalance) {
-        let acctOfFromValues = await account.getTokenAccount(tokenData[fromValues.coin]?.code, account.account.account, tokenSelectorType === 'from');
-        let acctOfToValues = await account.getTokenAccount(tokenData[toValues.coin]?.code, account.account.account, tokenSelectorType === 'to');
+        let acctOfFromValues = await account.getTokenAccount(
+          pact.allTokens[fromValues.coin]?.code,
+          account.account.account,
+          tokenSelectorType === 'from'
+        );
+        let acctOfToValues = await account.getTokenAccount(pact.allTokens[toValues.coin]?.code, account.account.account, tokenSelectorType === 'to');
         if (acctOfFromValues) {
           let balanceFrom = getCorrectBalance(acctOfFromValues.balance);
           setFromValues((prev) => ({
@@ -581,6 +585,10 @@ const SwapContainer = () => {
       className="scrollbar-none"
       mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
     >
+      <Helmet>
+        <meta name="description" content="A multi-protocol decentralized exchange (DEX) by Kaddex." />
+        <title>Kaddex | Swap</title>
+      </Helmet>
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
 
       <FlexContainer

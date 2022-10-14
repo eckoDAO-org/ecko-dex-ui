@@ -12,7 +12,7 @@ import {
   getRollupClaimAndUnstakeCommand,
 } from '../api/kaddex.staking';
 import { getAccountData } from '../api/dao';
-import { getKDXAccountBalance, getKDXTotalSupply } from '../api/kaddex.kdx';
+import { getKDXAccountBalance } from '../api/kaddex.kdx';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import InfoPopup from '../components/shared/InfoPopup';
 import Label from '../components/shared/Label';
@@ -40,6 +40,9 @@ import { theme } from '../styles/theme';
 import { extractDecimal, getDecimalPlaces, reduceBalance } from '../utils/reduceBalance';
 import { STAKING_CONSTANTS } from '../constants/stakingConstants';
 import { getTimeByBlockchain } from '../utils/string-utils';
+import useWindowSize from '../hooks/useWindowSize';
+import { getAnalyticsData } from '../api/kaddex-analytics';
+import { Helmet } from 'react-helmet';
 
 const StakeContainer = () => {
   const history = useHistory();
@@ -61,6 +64,7 @@ const StakeContainer = () => {
   const [estimateUnstakeData, setEstimateUnstakeData] = useState(null);
   const [daoAccountData, setDaoAccountData] = useState(null);
   const [inputAmount, setInputAmount] = useState('');
+  const [width] = useWindowSize();
 
   const stakedTimeStart =
     (estimateUnstakeData && estimateUnstakeData['stake-record'] && getTimeByBlockchain(estimateUnstakeData['stake-record']['effective-start'])) ||
@@ -99,8 +103,8 @@ const StakeContainer = () => {
     getPoolState().then((res) => {
       setPoolState(res);
     });
-    getKDXTotalSupply().then((supply) => {
-      setKdxSupply(reduceBalance(supply, 2));
+    getAnalyticsData(moment().subtract(1, 'day').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')).then((res) => {
+      setKdxSupply(res[res.length - 1].circulatingSupply.totalSupply);
     });
   }, []);
 
@@ -448,6 +452,10 @@ const StakeContainer = () => {
       tabletStyle={{ paddingRight: theme().layout.tabletPadding, paddingLeft: theme().layout.tabletPadding }}
       mobileStyle={{ paddingRight: theme().layout.mobilePadding, paddingLeft: theme().layout.mobilePadding }}
     >
+      <Helmet>
+        <meta name="description" content="Accrue voting power for the Kaddex DAO while generating passive income." />
+        <title>Kaddex | Staking</title>
+      </Helmet>
       <FlexContainer className="w-100 justify-sb" style={{ marginBottom: 24 }}>
         <FlexContainer gap={16} mobileStyle={{ marginBottom: 16 }}>
           <Label
@@ -480,7 +488,15 @@ const StakeContainer = () => {
         </InfoPopup>
       </FlexContainer>
 
-      <FlexContainer gap={24} tabletClassName="column" mobileClassName="column">
+      <FlexContainer
+        gap={24}
+        style={{
+          flexDirection: width < theme().mediaQueries.desktopPixel + 110 && 'column',
+          rowGap: width < theme().mediaQueries.desktopPixel + 110 && 24,
+        }}
+        tabletClassName="column"
+        mobileClassName="column"
+      >
         <Position
           stakeData={estimateUnstakeData}
           amount={estimateUnstakeData?.['stake-record']?.['amount'] || 0.0}
@@ -509,7 +525,7 @@ const StakeContainer = () => {
         />
         <Analytics
           kdxSupply={kdxSupply}
-          staked={estimateUnstakeData?.staked}
+          staked={estimateUnstakeData?.['stake-record']?.amount}
           stakedShare={getAccountStakingPercentage()}
           totalStaked={poolState && poolState['staked-kdx']}
           totalBurnt={poolState && poolState['burnt-kdx']}

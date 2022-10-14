@@ -18,6 +18,7 @@ import StatsTable from '../components/analytics/StatsTable';
 import { KDX_TOTAL_SUPPLY } from '../constants/contextConstants';
 import { getAnalyticsData } from '../api/kaddex-analytics';
 import moment from 'moment';
+import { Helmet } from 'react-helmet';
 
 export const FIXED_SUPPLY = 200577508;
 export const FIXED_BURNT = 99422492;
@@ -56,7 +57,10 @@ const AnalyticsContainer = () => {
             text={`The information displayed on this page is currently under BETA testing, and is provided on an "as is" and "as available" basis.`}
           />
         )}
-
+        <Helmet>
+          <meta name="description" content="Discovering, interpreting, and communicating significant data patterns based on our platform." />
+          <title>Kaddex | Analytics</title>
+        </Helmet>
         <FlexContainer
           className="column w-100 h-100 main"
           gap={24}

@@ -14,6 +14,7 @@ import {
   ROUTE_UNSTAKE,
   ROUTE_DAO,
   ROUTE_LIQUIDITY_REWARDS,
+  ROUTE_LIQUIDITY_CREATE_PAIR,
   ROUTE_ANALYTICS_KDX,
   ROUTE_ANALYTICS_STATS,
 } from '../router/routes';
@@ -35,6 +36,7 @@ export const LIQUIDITY = {
     ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED,
     ROUTE_LIQUIDITY_REMOVE_LIQUIDITY,
     ROUTE_LIQUIDITY_REWARDS,
+    ROUTE_LIQUIDITY_CREATE_PAIR,
   ],
 };
 export const DAO = {
@@ -69,7 +71,7 @@ export const BUY_CRYPTO = {
   link: process.env.REACT_APP_BUY_CRYPTO_URL,
 };
 
-export default NETWORK_TYPE === 'development' ? [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS, VAULT] : [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS, VAULT];
+export default NETWORK_TYPE === 'development' ? [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS] : [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS];
 
 export const gameEditionRoutes = [
   {

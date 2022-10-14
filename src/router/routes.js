@@ -16,6 +16,7 @@ export const ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED = '/liquidity/add-liquid
 export const ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED = '/liquidity/add-liquidity-double-sided';
 export const ROUTE_LIQUIDITY_REMOVE_LIQUIDITY = '/liquidity/remove-liquidity';
 export const ROUTE_LIQUIDITY_REWARDS = '/liquidity/rewards';
+export const ROUTE_LIQUIDITY_CREATE_PAIR = '/liquidity/create-pair';
 
 // STAKE
 export const ROUTE_STAKE = '/stake';
