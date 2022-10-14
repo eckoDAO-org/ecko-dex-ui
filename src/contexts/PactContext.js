@@ -10,7 +10,7 @@ import { useAccountContext, useNotificationContext, useWalletContext } from '.';
 import { fetchPrecision, getPairList } from '../api/pact';
 import tokenData from '../constants/cryptoCurrencies';
 import { GAS_OPTIONS } from '../constants/gasConfiguration';
-import { getCoingeckoUsdPrice } from '../api/coingecko';
+import { getAnalyticsKdaUsdPrice, getCoingeckoUsdPrice } from '../api/coingecko';
 
 export const PactContext = createContext();
 
@@ -84,14 +84,12 @@ export const PactProvider = (props) => {
 
   useEffect(() => {
     const getInitialData = async () => {
-      getCoingeckoUsdPrice('kadena')
-        .then((kdaPrice) => {
-          setKdaUsdPrice(kdaPrice);
-          updateTokenUsdPrice(kdaPrice);
-        })
-        .catch((err) => {
-          console.log('fetch kda price err', err);
-        });
+      let kdaUsdPrice = await getCoingeckoUsdPrice('kadena');
+      if (!kdaUsdPrice) {
+        kdaUsdPrice = await getAnalyticsKdaUsdPrice();
+      }
+      setKdaUsdPrice(kdaUsdPrice);
+      updateTokenUsdPrice(kdaUsdPrice);
     };
     getInitialData();
   }, []);
