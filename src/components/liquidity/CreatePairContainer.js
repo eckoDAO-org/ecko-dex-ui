@@ -134,7 +134,7 @@ const CreatePairContainer = () => {
     Pact.wallet
       .sendSigned(signedCommand, NETWORK)
       .then(async (createPairResponse) => {
-        pollingNotif(createPairResponse.requestKeys[0], 'Staking Transaction Pending');
+        pollingNotif(createPairResponse.requestKeys[0], 'Create Pair Transaction Pending');
 
         await transactionListen(createPairResponse.requestKeys[0]);
         pact.setPolling(false);
@@ -142,7 +142,7 @@ const CreatePairContainer = () => {
       .catch((error) => {
         console.log(`~ error`, error);
         pact.setPolling(false);
-        showErrorNotification(null, 'Staking error', 'Generic add stake error');
+        showErrorNotification(null, 'Create pair error', 'Generic create pair error');
       });
   };
 
@@ -171,7 +171,7 @@ const CreatePairContainer = () => {
   const getButtonStatus = () => {
     if (token0.code === '' || token1.code === '') return { message: 'Insert pair', disabled: true };
     else if (token0.code === token1.code) return { message: 'Insert different tokens', disabled: true };
-    else if (!createPairAvailable) return { message: 'No balance', disabled: true };
+    else if (!createPairAvailable) return { message: 'Insufficient Balance', disabled: true };
     return { message: 'Create Pair', disabled: false };
   };
   return (
