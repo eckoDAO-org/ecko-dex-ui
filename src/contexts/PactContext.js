@@ -85,13 +85,16 @@ export const PactProvider = (props) => {
       return;
     } else {
       const communityPairs = result.filter((r) => !pairsData.hasOwnProperty(r));
+      console.log('🚀 log --> communityPairs', communityPairs);
+      const communityPairsWithKda = communityPairs.filter((res) => res.split(':')[0] === 'coin' || res.split(':')[1] === 'coin');
+      console.log('🚀 log --> communityPairsWithKda', communityPairsWithKda);
 
-      communityPairs.map((communityPair) => {
+      communityPairsWithKda.map((communityPair) => {
         const tokens = communityPair.split(':');
         communityPair = {
           name: communityPair,
           token0: tokens[0] === 'coin' ? 'KDA' : getTokenNameFromAddress(tokens[0]),
-          token1: getTokenNameFromAddress(tokens[1]),
+          token1: tokens[1] === 'coin' ? 'KDA' : getTokenNameFromAddress(tokens[1]),
           main: false,
           isBoosted: false,
           color: '#92187B',

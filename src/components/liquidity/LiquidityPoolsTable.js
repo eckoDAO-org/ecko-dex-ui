@@ -62,8 +62,16 @@ const renderColumns = (allTokens, allPairs, width) => {
       name: '',
       width: width <= theme().mediaQueries.mobilePixel ? 80 : 160,
       render: ({ item }) => {
-        let t0 = item.token0 === 'KDA' ? item.token0 : item.token1;
-        let t1 = item.token1 !== 'KDA' ? item.token1 : item.token0;
+        let t0 = null;
+        let t1 = null;
+        if (item.token0 !== 'KDA' && item.token1 !== 'KDA') {
+          t0 = item.token0;
+          t1 = item.token1;
+        } else {
+          t0 = item.token0 === 'KDA' ? item.token0 : item.token1;
+          t1 = item.token1 === 'KDA' ? item.token0 : item.token1;
+        }
+
         return (
           <FlexContainer desktopClassName="align-ce" tabletClassName="align-ce" mobileClassName="column align-fs" mobilePixel={769}>
             <div className="flex align-ce">
