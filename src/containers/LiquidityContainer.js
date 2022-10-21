@@ -144,30 +144,32 @@ Fees are added to the pool, accrue in real time and can be claimed by withdrawin
           /* DESKTOP & TABLET */
 
           <FlexContainer gap={16} mobilePixel={530}>
-            <CustomButton
-              fontSize={13}
-              buttonStyle={{ height: 33 }}
-              type={verifiedActive ? 'secondary' : 'primary'}
-              fontFamily="syncopate"
-              onClick={() => {
-                if (verifiedActive) {
-                  setVerifiedActive(false);
-                } else {
-                  setVerifiedActive(true);
-                }
-              }}
-            >
-              <ButtonContent color={commonColors.white}>
-                <VerifiedBoldLogo className={verifiedActive ? 'svg-app-inverted-color' : 'svg-app-color'} />
-                <Label
-                  fontFamily="syncopate"
-                  color={verifiedActive ? theme(themeMode).colors.primary : theme(themeMode).colors.white}
-                  labelStyle={{ marginTop: 1 }}
-                >
-                  VERIFIED
-                </Label>
-              </ButtonContent>
-            </CustomButton>
+            {(pathname === ROUTE_LIQUIDITY_TOKENS || pathname === ROUTE_LIQUIDITY_POOLS) && (
+              <CustomButton
+                fontSize={13}
+                buttonStyle={{ height: 33 }}
+                type={verifiedActive ? 'secondary' : 'primary'}
+                fontFamily="syncopate"
+                onClick={() => {
+                  if (verifiedActive) {
+                    setVerifiedActive(false);
+                  } else {
+                    setVerifiedActive(true);
+                  }
+                }}
+              >
+                <ButtonContent color={commonColors.white}>
+                  <VerifiedBoldLogo className={verifiedActive ? 'svg-app-inverted-color' : 'svg-app-color'} />
+                  <Label
+                    fontFamily="syncopate"
+                    color={verifiedActive ? theme(themeMode).colors.primary : theme(themeMode).colors.white}
+                    labelStyle={{ marginTop: 1 }}
+                  >
+                    VERIFIED
+                  </Label>
+                </ButtonContent>
+              </CustomButton>
+            )}
             <CustomButton
               fontSize={13}
               buttonStyle={{ height: 33 }}
