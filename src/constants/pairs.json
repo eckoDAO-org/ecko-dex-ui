@@ -163,7 +163,6 @@
         "isBoosted": false,
         "color": "#ed9b21",
         "isVerified": true
-
       },
       "arkade.token:coin": {
         "name": "arkade.token:coin",
@@ -173,7 +172,6 @@
         "isBoosted": false,
         "color": "#ed9b21",
         "isVerified": true
-
       },
       "coin:free.KAYC": {
         "name": "coin:free.KAYC",

@@ -2,6 +2,7 @@ import Pact from 'pact-lang-api';
 import { CHAIN_ID, NETWORKID, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { pactFetchLocal } from './pact';
 import { handleError } from './utils';
+import tokenData from '../constants/cryptoCurrencies';
 
 export const createPairCommand = async (token0, token1, hint, gasStation, gasLimit, gasPrice, account) => {
   const pactCode = `(${KADDEX_NAMESPACE}.exchange.create-pair ${token0} ${token1} "")`;
@@ -67,9 +68,23 @@ export const getModuleList = async () => {
 };
 
 export const getTokenNameFromAddress = (token) => {
+  let tokenVerified = null;
+  Object.keys(tokenData).forEach((item) => {
+    if (tokenData[item].code === token) {
+      tokenVerified = tokenData[item].name;
+    }
+  });
+  if (tokenVerified) return tokenVerified;
   const moduleName = token.split('.')[1];
-  if (moduleName) return token.substr(token.indexOf('.') + 1, moduleName.length >= 3 ? 3 : moduleName.length).toUpperCase();
-  else return token;
+  if (moduleName) {
+    const computedTokenName = token.substr(token.indexOf('.') + 1, moduleName.length >= 3 ? 3 : moduleName.length).toUpperCase();
+    const alreadyExists = tokenData[computedTokenName];
+    if (alreadyExists) {
+      return `nv${computedTokenName}`;
+    } else {
+      return computedTokenName;
+    }
+  } else return token;
 };
 
 export const getVerifiedPairs = (pairs) => {

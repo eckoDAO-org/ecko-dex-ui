@@ -16,11 +16,12 @@ import styled from 'styled-components';
 import { getAnalyticsTokenStatsData } from '../../api/kaddex-analytics';
 import useWindowSize from '../../hooks/useWindowSize';
 
-const LiquidityTokensTable = () => {
+const LiquidityTokensTable = ({ verifiedActive }) => {
   const history = useHistory();
   const { themeMode } = useApplicationContext();
   const [loading, setLoading] = useState(true);
-  const [tokens, setTokens] = useState([]);
+  const [allTokensList, setAllTokensList] = useState([]);
+  const [verifiedTokensList, setVerifiedTokensList] = useState([]);
 
   const { tokensUsdPrice, enableGasStation, allTokens, allPairs } = usePactContext();
 
@@ -60,7 +61,9 @@ const LiquidityTokensTable = () => {
           multiplier,
         });
       }
-      setTokens(result.sort((x, y) => y.liquidityUSD - x.liquidityUSD));
+      const verifiedTokensData = result.filter((r) => r.isVerified);
+      setAllTokensList(result.sort((x, y) => y.liquidityUSD - x.liquidityUSD));
+      setVerifiedTokensList(verifiedTokensData.sort((x, y) => y.liquidityUSD - x.liquidityUSD));
     }
     setLoading(false);
   };
@@ -73,7 +76,7 @@ const LiquidityTokensTable = () => {
 
   return !loading ? (
     <CommonTable
-      items={tokens}
+      items={verifiedActive ? verifiedTokensList : allTokensList}
       columns={
         enableGasStation ? renderColumns(history, allTokens, width) : renderColumns(history, allTokens, width).filter((x) => x.name !== 'Fees')
       }
