@@ -8,7 +8,6 @@ import LiquidityPoolsTable from '../components/liquidity/LiquidityPoolsTable';
 import LiquidityRewardsTable from '../components/liquidity/LiquidityRewardsTable';
 import LiquidityTablesInfo from '../components/liquidity/LiquidityTablesInfo';
 import LiquidityTokensTable from '../components/liquidity/LiquidityTokensTable';
-import Toggle from '../components/liquidity/Toggle';
 import CustomButton from '../components/shared/CustomButton';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import InfoPopup from '../components/shared/InfoPopup';
