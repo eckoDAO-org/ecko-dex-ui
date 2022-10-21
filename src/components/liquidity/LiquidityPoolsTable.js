@@ -14,17 +14,21 @@ import { theme, commonColors } from '../../styles/theme';
 import { usePactContext } from '../../contexts';
 import useWindowSize from '../../hooks/useWindowSize';
 
-const LiquidityPoolsTable = () => {
+const LiquidityPoolsTable = ({ verifiedActive }) => {
   const history = useHistory();
   const { enableGasStation, tokensUsdPrice, allTokens, allPairs } = usePactContext();
 
-  const [pairList, setPairList] = useErrorState([], true);
+  const [verifiedPairList, setVerifiedPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(false);
+  const [allPairList, setAllPairList] = useState([]);
+
   const [width] = useWindowSize();
 
   const fetchData = async () => {
-    const pairsData = await getAllPairsData(tokensUsdPrice, allTokens, allPairs);
-    setPairList(pairsData.sort((x, y) => y.liquidityUsd - x.liquidityUsd));
+    const pairsDataInfo = await getAllPairsData(tokensUsdPrice, allTokens, allPairs);
+    const verifiedPairsData = pairsDataInfo.filter((res) => res.isVerified);
+    setAllPairList(pairsDataInfo.sort((x, y) => y.liquidityUsd - x.liquidityUsd));
+    setVerifiedPairList(verifiedPairsData.sort((x, y) => y.liquidityUsd - x.liquidityUsd));
     setLoading(false);
   };
 
@@ -35,7 +39,7 @@ const LiquidityPoolsTable = () => {
 
   return !loading ? (
     <CommonTable
-      items={pairList}
+      items={verifiedActive ? verifiedPairList : allPairList}
       columns={
         enableGasStation ? renderColumns(allTokens, allPairs, width) : renderColumns(allTokens, allPairs, width).filter((x) => x.name !== 'Fees')
       }

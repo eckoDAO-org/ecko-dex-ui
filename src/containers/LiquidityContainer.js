@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { AddLiquidityLogo, BoosterIcon, LiquidityDollarLogo } from '../assets';
+import { AddLiquidityLogo, BoosterIcon, LiquidityDollarLogo, VerifiedBoldLogo } from '../assets';
 import LiquidityMyLiquidityTable from '../components/liquidity/LiquidityMyLiquidityTable';
 import LiquidityPoolsTable from '../components/liquidity/LiquidityPoolsTable';
 import LiquidityRewardsTable from '../components/liquidity/LiquidityRewardsTable';
 import LiquidityTablesInfo from '../components/liquidity/LiquidityTablesInfo';
 import LiquidityTokensTable from '../components/liquidity/LiquidityTokensTable';
+import Toggle from '../components/liquidity/Toggle';
 import CustomButton from '../components/shared/CustomButton';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import InfoPopup from '../components/shared/InfoPopup';
@@ -30,6 +31,7 @@ const LiquidityContainer = () => {
   const history = useHistory();
   const { themeMode } = useApplicationContext();
   const [width] = useWindowSize();
+  const [verifiedActive, setVerifiedActive] = useState(true);
 
   return (
     <FlexContainer
@@ -46,8 +48,19 @@ Fees are added to the pool, accrue in real time and can be claimed by withdrawin
         />
         <title>Kaddex | Liquidity</title>
       </Helmet>
-      <FlexContainer className="w-100 justify-sb" mobileClassName="column" tabletClassName="column" style={{ marginBottom: 24 }}>
-        <FlexContainer className="align-ce" gap={16} mobileStyle={{ marginBottom: 16 }} tabletStyle={{ marginBottom: 16 }}>
+      <FlexContainer
+        className="w-100 justify-sb"
+        mobileClassName="column"
+        tabletClassName="column"
+        style={{ marginBottom: 24, flexDirection: width < 1124 && 'column' }}
+      >
+        <FlexContainer
+          className="align-ce"
+          gap={16}
+          mobileStyle={{ marginBottom: 16 }}
+          tabletStyle={{ marginBottom: 16 }}
+          style={{ marginBottom: width < 1124 && '16px' }}
+        >
           <Label
             withShade={pathname !== ROUTE_LIQUIDITY_TOKENS}
             className="pointer"
@@ -77,6 +90,19 @@ Fees are added to the pool, accrue in real time and can be claimed by withdrawin
 
           <FlexContainer className="justify-sb" gap={16} mobilePixel={530}>
             <FlexContainer gap={16}>
+              <MobileButton
+                background={verifiedActive ? theme(themeMode).colors.white : 'transparent'}
+                color={theme(themeMode).colors.white}
+                onClick={() => {
+                  if (verifiedActive) {
+                    setVerifiedActive(false);
+                  } else {
+                    setVerifiedActive(true);
+                  }
+                }}
+              >
+                <VerifiedBoldLogo className={verifiedActive ? 'svg-app-inverted-color' : 'svg-app-color'} />
+              </MobileButton>
               <MobileButton
                 background={pathname === ROUTE_LIQUIDITY_REWARDS ? commonColors.pink : 'transparent'}
                 color={commonColors.pink}
@@ -119,6 +145,30 @@ Fees are added to the pool, accrue in real time and can be claimed by withdrawin
           /* DESKTOP & TABLET */
 
           <FlexContainer gap={16} mobilePixel={530}>
+            <CustomButton
+              fontSize={13}
+              buttonStyle={{ height: 33 }}
+              type={verifiedActive ? 'secondary' : 'primary'}
+              fontFamily="syncopate"
+              onClick={() => {
+                if (verifiedActive) {
+                  setVerifiedActive(false);
+                } else {
+                  setVerifiedActive(true);
+                }
+              }}
+            >
+              <ButtonContent color={commonColors.white}>
+                <VerifiedBoldLogo className={verifiedActive ? 'svg-app-inverted-color' : 'svg-app-color'} />
+                <Label
+                  fontFamily="syncopate"
+                  color={verifiedActive ? theme(themeMode).colors.primary : theme(themeMode).colors.white}
+                  labelStyle={{ marginTop: 1 }}
+                >
+                  VERIFIED
+                </Label>
+              </ButtonContent>
+            </CustomButton>
             <CustomButton
               fontSize={13}
               buttonStyle={{ height: 33 }}
@@ -182,9 +232,9 @@ Fees are added to the pool, accrue in real time and can be claimed by withdrawin
         )}
       </FlexContainer>
       {/* SINGLE SIDE TABLE */}
-      {pathname === ROUTE_LIQUIDITY_TOKENS && <LiquidityTokensTable />}
+      {pathname === ROUTE_LIQUIDITY_TOKENS && <LiquidityTokensTable verifiedActive={verifiedActive} />}
       {/* DOUBLE SIDE TABLE */}
-      {pathname === ROUTE_LIQUIDITY_POOLS && <LiquidityPoolsTable />}
+      {pathname === ROUTE_LIQUIDITY_POOLS && <LiquidityPoolsTable verifiedActive={verifiedActive} />}
       {/* MY LIQUIDITY TABLE */}
       {pathname === ROUTE_LIQUIDITY_MY_LIQUIDITY && <LiquidityMyLiquidityTable />}
       {/* MY LIQUIDITY TABLE */}
