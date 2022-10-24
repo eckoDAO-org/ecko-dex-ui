@@ -41,7 +41,7 @@ const CreatePairTokenSelectorModal = ({ onSelectedToken, onClose }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(async () => {
-    if (tokenSelected.includes('.')) {
+    if (tokenSelected.includes('.') && tokenSelected[tokenSelected.length - 1] !== '.') {
       await fetchData();
       setLoading(false);
     }
