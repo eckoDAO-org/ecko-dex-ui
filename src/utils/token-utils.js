@@ -123,8 +123,8 @@ export const getAllPairsData = async (tokensUsdPrice) => {
         const liquidity0 = tokensUsdPrice[token0.name] ? reduceBalance(pool.reserves[0]) * tokensUsdPrice[token0.name] : 0;
         const liquidity1 = tokensUsdPrice[token1.name] ? reduceBalance(pool.reserves[1]) * tokensUsdPrice[token1.name] : 0;
 
-        let token0UsdPrice = tokensUsdPrice[getTokenName(volumes[pool.name].baseTokenCode)];
-        let token1UsdPrice = tokensUsdPrice[getTokenName(volumes[pool.name].targetTokenCode)];
+        let token0UsdPrice = volumes[pool.name] ? tokensUsdPrice[getTokenName(volumes[pool.name].baseTokenCode)] : 0;
+        let token1UsdPrice = volumes[pool.name] ? tokensUsdPrice[getTokenName(volumes[pool.name].targetTokenCode)] : 0;
 
         volume24HUsd =
           token0UsdPrice && token1UsdPrice ? volumes[pool.name].baseVolume * token0UsdPrice + volumes[pool.name].targetVolume * token1UsdPrice : 0;
