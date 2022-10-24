@@ -1,6 +1,6 @@
 import React from 'react';
-import { tokens } from './tokens';
-import { pairs } from './pairs';
+import { tokens } from './tokens.json';
+import { pairs } from './pairs.json';
 
 const environment = process.env.REACT_APP_KDA_NETWORK_TYPE || 'testnet';
 const tokenData = tokens[environment];
