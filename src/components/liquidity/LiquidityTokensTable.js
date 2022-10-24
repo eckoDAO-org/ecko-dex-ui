@@ -40,7 +40,7 @@ const LiquidityTokensTable = () => {
           liquidity += token.name === tokenPair.token0 ? reduceBalance(tokenPair.reserves[0]) : reduceBalance(tokenPair.reserves[1]);
         }
         const liquidityUSD = tokenUsdPrice ? liquidity * tokenUsdPrice : null;
-        const volume24H = tokensStatsData?.[token.code].volume24h;
+        const volume24H = tokensStatsData[token.code] ? tokensStatsData[token.code].volume24h : 0;
         let tokenInfo = pairsData
           .filter((d) => d.token0 === token.name || d.token1 === token.name)
           .sort((x, y) => y.apr * y.multiplier - x.apr * x.multiplier);
