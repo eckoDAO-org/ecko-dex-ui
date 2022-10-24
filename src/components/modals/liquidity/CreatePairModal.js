@@ -40,7 +40,7 @@ export const IconAndLabel = styled.div`
 const CreatePairModal = ({ data, token0Name, token1Name, token0, token1, onConfirm }) => {
   const { allTokens } = usePactContext();
   const getModalText = () => {
-    return `By selecting confirm you are adding the pair bellow to your community pool list. After the pool is created, remember to add liquidity to allow trading.`;
+    return `By selecting confirm you are adding the pair bellow to the community pool list. After the pool is created, remember to add liquidity to allow trading. Refresh to view updated list.`;
   };
 
   return (
