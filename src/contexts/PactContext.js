@@ -13,7 +13,7 @@ import { GAS_OPTIONS } from '../constants/gasConfiguration';
 import { getPairs, getTokenNameFromAddress } from '../api/pairs';
 import { UnknownLogo } from '../assets';
 import { reduceBalance } from '../utils/reduceBalance';
-import { getCoingeckoUsdPrice } from '../api/coingecko';
+import { getAnalyticsKdaUsdPrice, getCoingeckoUsdPrice } from '../api/coingecko';
 
 export const PactContext = createContext();
 
@@ -153,17 +153,15 @@ export const PactProvider = (props) => {
 
   useEffect(() => {
     if (allPairs && allTokens) {
-      const getInitialData = async () => {
-        getCoingeckoUsdPrice('kadena')
-          .then((kdaPrice) => {
-            setKdaUsdPrice(kdaPrice);
-            updateTokenUsdPrice(kdaPrice);
-          })
-          .catch((err) => {
-            console.log('fetch kda price err', err);
-          });
-      };
-      getInitialData();
+    const getInitialData = async () => {
+      let kdaUsdPrice = await getCoingeckoUsdPrice('kadena');
+      if (!kdaUsdPrice) {
+        kdaUsdPrice = await getAnalyticsKdaUsdPrice();
+      }
+      setKdaUsdPrice(kdaUsdPrice);
+      updateTokenUsdPrice(kdaUsdPrice);
+    };
+    getInitialData();
     }
   }, [allTokens, allPairs]);
   // useInterval(updateTokenUsdPrice, 25000);
