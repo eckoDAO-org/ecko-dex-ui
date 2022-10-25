@@ -85,9 +85,7 @@ export const PactProvider = (props) => {
       return;
     } else {
       const communityPairs = result.filter((r) => !pairsData.hasOwnProperty(r));
-      console.log('🚀 log --> communityPairs', communityPairs);
       const communityPairsWithKda = communityPairs.filter((res) => res.split(':')[0] === 'coin' || res.split(':')[1] === 'coin');
-      console.log('🚀 log --> communityPairsWithKda', communityPairsWithKda);
 
       communityPairsWithKda.map((communityPair) => {
         const tokens = communityPair.split(':');
@@ -153,15 +151,15 @@ export const PactProvider = (props) => {
 
   useEffect(() => {
     if (allPairs && allTokens) {
-    const getInitialData = async () => {
-      let kdaUsdPrice = await getCoingeckoUsdPrice('kadena');
-      if (!kdaUsdPrice) {
-        kdaUsdPrice = await getAnalyticsKdaUsdPrice();
-      }
-      setKdaUsdPrice(kdaUsdPrice);
-      updateTokenUsdPrice(kdaUsdPrice);
-    };
-    getInitialData();
+      const getInitialData = async () => {
+        let kdaUsdPrice = await getCoingeckoUsdPrice('kadena');
+        if (!kdaUsdPrice) {
+          kdaUsdPrice = await getAnalyticsKdaUsdPrice();
+        }
+        setKdaUsdPrice(kdaUsdPrice);
+        updateTokenUsdPrice(kdaUsdPrice);
+      };
+      getInitialData();
     }
   }, [allTokens, allPairs]);
   // useInterval(updateTokenUsdPrice, 25000);
