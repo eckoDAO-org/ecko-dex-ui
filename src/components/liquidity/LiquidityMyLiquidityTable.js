@@ -70,7 +70,7 @@ const LiquidityMyLiquidityTable = () => {
         </div>
         <CommonTable
           items={pairList}
-          columns={renderColumns(tokensUsdPrice, allTokens, width)}
+          columns={renderColumns(tokensUsdPrice, allTokens, allPairs, width)}
           actions={[
             {
               icon: () => <AddIcon />,
@@ -97,7 +97,7 @@ const LiquidityMyLiquidityTable = () => {
 };
 
 export default LiquidityMyLiquidityTable;
-const renderColumns = (tokensUsdPrice, allTokens, width) => {
+const renderColumns = (tokensUsdPrice, allTokens, allPairs, width) => {
   return [
     {
       name: '',
@@ -105,7 +105,7 @@ const renderColumns = (tokensUsdPrice, allTokens, width) => {
       render: ({ item }) => (
         <FlexContainer desktopClassName="align-ce" tabletClassName="align-ce" mobileClassName="column align-fs" mobilePixel={769}>
           <div className="flex align-ce">
-            {allTokens[item.token0]?.isVerified ? (
+            {allPairs[item.name]?.isVerified ? (
               <div style={{ marginRight: 16 }}>
                 <VerifiedLogo className="svg-app-color" />
               </div>

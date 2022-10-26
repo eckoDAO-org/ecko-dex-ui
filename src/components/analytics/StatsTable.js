@@ -14,12 +14,13 @@ import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import GraphicPercentage from '../shared/GraphicPercentage';
 import { getAnalyticsTokenStatsData } from '../../api/kaddex-analytics';
 
-const StatsTable = () => {
+const StatsTable = ({ verifiedActive }) => {
   const { themeMode } = useApplicationContext();
   const pact = usePactContext();
   const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [statsData, setStatsData] = useState([]);
+  const [verifiedStatsData, setVerifiedStatsData] = useState([]);
 
   useEffect(() => {
     const setInitData = async () => {
@@ -37,7 +38,10 @@ const StatsTable = () => {
             dailyVolumeChange: tokenStats && tokenStats.volumeChange24h,
           });
         }
+        const dataVerified = data.filter((r) => r.isVerified);
+
         setStatsData(data.sort((x, y) => y.dailyVolume - x.dailyVolume));
+        setVerifiedStatsData(dataVerified.sort((x, y) => y.dailyVolume - x.dailyVolume));
         setLoading(false);
       }
     };
@@ -46,7 +50,7 @@ const StatsTable = () => {
 
   return !loading ? (
     <CommonTable
-      items={statsData}
+      items={verifiedActive ? verifiedStatsData : statsData}
       columns={renderColumns(history, pact.allTokens)}
       actions={[
         {
