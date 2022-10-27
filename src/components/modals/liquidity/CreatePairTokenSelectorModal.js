@@ -10,6 +10,7 @@ import Search from '../../shared/Search';
 import Loader from '../../shared/Loader';
 import useWindowSize from '../../../hooks/useWindowSize';
 import { theme } from '../../../styles/theme';
+import { usePactContext } from '../../../contexts';
 
 export const StakeModalRow = styled.div`
   display: flex;
@@ -36,6 +37,7 @@ export const IconSubTitle = styled.div`
 
 const CreatePairTokenSelectorModal = ({ onSelectedToken, onClose }) => {
   const [tokenSelected, setTokenSelected] = useState('');
+  const { allTokens } = usePactContext();
   const [width] = useWindowSize();
   const [tokenExists, setTokenExists] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -84,7 +86,7 @@ const CreatePairTokenSelectorModal = ({ onSelectedToken, onClose }) => {
           gap={8}
           onClick={async () => {
             if (tokenSelected) {
-              await onSelectedToken(tokenSelected, getTokenNameFromAddress(tokenSelected));
+              await onSelectedToken(tokenSelected, getTokenNameFromAddress(tokenSelected, allTokens));
             }
             if (onClose) {
               onClose();

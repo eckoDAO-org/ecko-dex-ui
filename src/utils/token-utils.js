@@ -126,8 +126,8 @@ export const getAllPairsData = async (tokensUsdPrice, allTokens, allPairs) => {
       const token1 = Object.values(allTokens).find((t) => t.name === pool.token1);
 
       if (tokensUsdPrice) {
-        const liquidity0 = tokensUsdPrice[token0.name] ? reduceBalance(pool.reserves[0]) * tokensUsdPrice[token0.name] : 0;
-        const liquidity1 = tokensUsdPrice[token1.name] ? reduceBalance(pool.reserves[1]) * tokensUsdPrice[token1.name] : 0;
+        const liquidity0 = tokensUsdPrice[token0?.name] ? reduceBalance(pool.reserves[0]) * tokensUsdPrice[token0.name] : 0;
+        const liquidity1 = tokensUsdPrice[token1?.name] ? reduceBalance(pool.reserves[1]) * tokensUsdPrice[token1.name] : 0;
 
         let token0UsdPrice = tokensUsdPrice[getTokenName(volumes[pool.name]?.baseTokenCode, allTokens)];
         let token1UsdPrice = tokensUsdPrice[getTokenName(volumes[pool.name]?.targetTokenCode, allTokens)];
