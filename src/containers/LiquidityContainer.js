@@ -9,6 +9,7 @@ import LiquidityRewardsTable from '../components/liquidity/LiquidityRewardsTable
 import LiquidityTablesInfo from '../components/liquidity/LiquidityTablesInfo';
 import LiquidityTokensTable from '../components/liquidity/LiquidityTokensTable';
 import CustomButton from '../components/shared/CustomButton';
+import CustomPopup from '../components/shared/CustomPopup';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import InfoPopup from '../components/shared/InfoPopup';
 import Label from '../components/shared/Label';
@@ -51,14 +52,14 @@ Fees are added to the pool, accrue in real time and can be claimed by withdrawin
         className="w-100 justify-sb"
         mobileClassName="column"
         tabletClassName="column"
-        style={{ marginBottom: 24, flexDirection: width < 1124 && 'column' }}
+        style={{ marginBottom: 24, flexDirection: width < 1230 && 'column' }}
       >
         <FlexContainer
           className="align-ce"
           gap={16}
           mobileStyle={{ marginBottom: 16 }}
           tabletStyle={{ marginBottom: 16 }}
-          style={{ marginBottom: width < 1124 && '16px' }}
+          style={{ marginBottom: width < 1230 && '16px' }}
         >
           <Label
             withShade={pathname !== ROUTE_LIQUIDITY_TOKENS}
@@ -147,30 +148,31 @@ Fees are added to the pool, accrue in real time and can be claimed by withdrawin
 
           <FlexContainer gap={16} mobilePixel={530}>
             {(pathname === ROUTE_LIQUIDITY_TOKENS || pathname === ROUTE_LIQUIDITY_POOLS) && (
-              <CustomButton
-                fontSize={13}
-                buttonStyle={{ height: 33 }}
-                type={verifiedActive ? 'secondary' : 'primary'}
-                fontFamily="syncopate"
-                onClick={() => {
-                  if (verifiedActive) {
-                    setVerifiedActive(false);
-                  } else {
-                    setVerifiedActive(true);
-                  }
-                }}
+              <CustomPopup
+                offset={[-50, -130]}
+                popupStyle={{ padding: 2 }}
+                trigger={
+                  <div style={{ display: 'flex' }}>
+                    <MobileButton
+                      background={verifiedActive ? theme(themeMode).colors.white : 'transparent'}
+                      color={theme(themeMode).colors.white}
+                      onClick={() => {
+                        if (verifiedActive) {
+                          setVerifiedActive(false);
+                        } else {
+                          setVerifiedActive(true);
+                        }
+                      }}
+                    >
+                      <VerifiedBoldLogo className={verifiedActive ? 'svg-app-inverted-color' : 'svg-app-color'} />
+                    </MobileButton>
+                  </div>
+                }
               >
-                <ButtonContent color={commonColors.white}>
-                  <VerifiedBoldLogo className={verifiedActive ? 'svg-app-inverted-color' : 'svg-app-color'} />
-                  <Label
-                    fontFamily="syncopate"
-                    color={verifiedActive ? theme(themeMode).colors.primary : theme(themeMode).colors.white}
-                    labelStyle={{ marginTop: 1 }}
-                  >
-                    VERIFIED
-                  </Label>
-                </ButtonContent>
-              </CustomButton>
+                <Label labelStyle={{ maxWidth: verifiedActive ? '140px' : '180px' }}>
+                  {verifiedActive ? 'Click to display unverified pools.' : 'Click to display only verified pools.'}
+                </Label>
+              </CustomPopup>
             )}
             <CustomButton
               fontSize={13}
@@ -205,7 +207,7 @@ Fees are added to the pool, accrue in real time and can be claimed by withdrawin
               </ButtonContent>
             </CustomButton>
 
-            {/* <CustomButton
+            <CustomButton
               fontSize={13}
               buttonStyle={{ height: 33 }}
               type="gradient"
@@ -218,7 +220,7 @@ Fees are added to the pool, accrue in real time and can be claimed by withdrawin
               }
             >
               ADD LIQUIDITY
-            </CustomButton> */}
+            </CustomButton>
 
             {pathname === ROUTE_LIQUIDITY_POOLS && (
               <CustomButton

@@ -6,7 +6,13 @@ import CommonTable from '../shared/CommonTable';
 import { humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import { AddIcon, BoosterIcon, GasIcon, TradeUpIcon, VerifiedLogo } from '../../assets';
-import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_LIQUIDITY_TOKENS, ROUTE_TOKEN_INFO } from '../../router/routes';
+import {
+  ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED,
+  ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED,
+  ROUTE_LIQUIDITY_POOLS,
+  ROUTE_LIQUIDITY_TOKENS,
+  ROUTE_TOKEN_INFO,
+} from '../../router/routes';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
 import { getAllPairsData } from '../../utils/token-utils';
@@ -74,6 +80,18 @@ const LiquidityTokensTable = ({ verifiedActive }) => {
     }
   }, [tokensUsdPrice]);
 
+  const checkIfTokenIsInBoostedPool = (item) => {
+    const itemCode = item.code;
+    let pairIsBoosted = null;
+    Object.keys(allPairs).forEach((pair) => {
+      const tokens = pair.split(':');
+      if (tokens[0] === itemCode || tokens[1] === itemCode) {
+        pairIsBoosted = allPairs[pair].isBoosted;
+      }
+    });
+    return pairIsBoosted;
+  };
+
   return !loading ? (
     <CommonTable
       items={verifiedActive ? verifiedTokensList : allTokensList}
@@ -84,9 +102,16 @@ const LiquidityTokensTable = ({ verifiedActive }) => {
         {
           icon: () => <AddIcon />,
           onClick: (item) => {
-            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${item.name}`), {
-              from: ROUTE_LIQUIDITY_TOKENS,
-            });
+            const itemIsInBoostedPair = checkIfTokenIsInBoostedPool(item);
+            if (itemIsInBoostedPair) {
+              history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${item.name}`), {
+                from: ROUTE_LIQUIDITY_TOKENS,
+              });
+            } else {
+              history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=KDA&token1=${item.name}`), {
+                from: ROUTE_LIQUIDITY_POOLS,
+              });
+            }
           },
         },
         {
@@ -200,7 +225,7 @@ const renderColumns = (history, allTokens, width) => {
           <FlexContainer className="align-ce svg-pink">
             <BoosterIcon style={{ width: 16, height: 16 }} />
             <Label labelStyle={{ fontWeight: 600, marginLeft: 6 }} fontSize={14} color={commonColors.pink}>
-              {(item.apr * item.multiplier).toFixed(2)} %
+              {(item?.apr * item?.multiplier)?.toFixed(2)} %
             </Label>
           </FlexContainer>
         ) : (
