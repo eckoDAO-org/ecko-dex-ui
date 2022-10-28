@@ -12,11 +12,12 @@ import { CryptoContainer, FlexContainer } from '../../shared/FlexContainer';
 import reduceToken from '../../../utils/reduceToken';
 import CopyPopup from '../../shared/CopyPopup';
 import CustomDivider from '../../shared/CustomDivider';
-import { ArrowIcon, KaddexOutlineIcon } from '../../../assets';
+import { ArrowIcon, KaddexOutlineIcon, NotificationWarningIcon } from '../../../assets';
 import { Checkbox } from 'semantic-ui-react';
 import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
 import { isNumber } from 'lodash';
 import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
+import { commonColors } from '../../../styles/theme';
 
 export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }) => {
   const { setButtons } = useGameEditionContext();
@@ -83,9 +84,37 @@ export const SuccessAddView = ({ token0, token1, loading, onClick, apr }) => {
 
   const fromValues = extractDecimal(swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1']);
 
+  const SvgContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    width: 32px;
+    margin-right: 8px;
+    svg {
+      height: 20px;
+      width: 20px;
+      path {
+        fill: ${({ commonColors }) => commonColors.gold}!important;
+      }
+    }
+  `;
+
   return (
     <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle>
       <FlexContainer className="w-100 column" gap={12}>
+        {/* DISCLAIMER */}
+        {(!pact.allTokens[token0].isVerified || !pact.allTokens[token1].isVerified) && (
+          <FlexContainer className="align-ce justify-sb">
+            <SvgContainer commonColors={commonColors}>
+              <NotificationWarningIcon />
+            </SvgContainer>
+
+            <Label fontSize={12} fontFamily="basier" color={commonColors.gold}>
+              This transaction contains unverified tokens. Review the preview information throughly before confirming the transaction.
+            </Label>
+          </FlexContainer>
+        )}
         {/* ACCOUNT */}
         <FlexContainer className="align-ce justify-sb">
           <Label fontSize={13}>Account</Label>
@@ -266,9 +295,37 @@ export const SuccessRemoveView = ({ token0, token1, loading, onClick, pair }) =>
   const swap = useSwapContext();
   const { wantsKdxRewards } = useLiquidityContext();
   const pact = usePactContext();
+
+  const SvgContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    width: 32px;
+    margin-right: 8px;
+    svg {
+      height: 20px;
+      width: 20px;
+      path {
+        fill: ${({ commonColors }) => commonColors.gold}!important;
+      }
+    }
+  `;
   return (
     <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle>
       <FlexContainer className="w-100 column" gap={12}>
+        {/* DISCLAIMER */}
+        {(!pact.allTokens[token0].isVerified || !pact.allTokens[token1].isVerified) && (
+          <FlexContainer className="align-ce justify-sb">
+            <SvgContainer commonColors={commonColors}>
+              <NotificationWarningIcon />
+            </SvgContainer>
+
+            <Label fontSize={12} fontFamily="basier" color={commonColors.gold}>
+              This transaction contains unverified tokens. Review the preview information throughly before confirming the transaction.
+            </Label>
+          </FlexContainer>
+        )}
         <Label>Are you sure you want to remove your liquidity?</Label>
 
         <CustomDivider style={{ margin: '16px 0' }} />

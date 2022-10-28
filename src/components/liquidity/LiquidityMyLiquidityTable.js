@@ -23,8 +23,6 @@ const LiquidityMyLiquidityTable = () => {
   const [width] = useWindowSize();
 
   const fetchData = async () => {
-    setLoading(true);
-
     const pairs = await getPairList(allPairs);
     const result = await getPairListAccountBalance(
       account.account,
@@ -49,12 +47,13 @@ const LiquidityMyLiquidityTable = () => {
   };
 
   useEffect(() => {
-    if (account.account) {
+    if (account.account && allPairs) {
+      setLoading(true);
       fetchData();
     } else {
       setLoading(false);
     }
-  }, [account.account]);
+  }, [account.account, allPairs]);
 
   return !loading ? (
     !account.account ? (

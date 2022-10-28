@@ -37,7 +37,6 @@ const RemoveLiquidityContainer = () => {
   const history = useHistory();
   const query = useQueryParams();
   const liquidity = useLiquidityContext();
-  const pact = usePactContext();
   const { account } = useAccountContext();
   const { tokensUsdPrice, allTokens, allPairs } = usePactContext();
 
@@ -45,11 +44,10 @@ const RemoveLiquidityContainer = () => {
   const [pair, setPair] = useState(null);
   const [apr, setApr] = useState(null);
   const [previewObject, setPreviewObject] = useState(null);
-
   const [previewAmount, setPreviewAmount] = useState(1);
 
-  const calculateApr = async (resultPairList, currentPair) => {
-    const allPairsData = await getAllPairsData(tokensUsdPrice, allTokens, allPairs);
+  const calculateApr = async (resultPairList, currentPair, pairs) => {
+    const allPairsData = await getAllPairsData(tokensUsdPrice, allTokens, allPairs, pairs);
     const pool = resultPairList.find(
       (p) =>
         (p.token0 === currentPair.token0 && p.token1 === currentPair.token1) || (p.token0 === currentPair.token1 && p.token1 === currentPair.token0)
@@ -61,19 +59,22 @@ const RemoveLiquidityContainer = () => {
   };
 
   const fetchData = async () => {
-    const token0 = query.get('token0');
-    const token1 = query.get('token1');
-    const pairs = await getPairList(pact.allPairs);
-    const resultPairList = await getPairListAccountBalance(
-      account.account,
-      pairs.filter((x) => x.reserves[0] !== 0)
-    );
-    if (resultPairList.length) {
-      const currentPair = resultPairList.find((p) => p.token0 === token0 && p.token1 === token1);
-      setPair(currentPair);
-      if (currentPair) {
-        await calculateApr(resultPairList, currentPair);
-        await removePreview(currentPair);
+    if (allPairs) {
+      const token0 = query.get('token0');
+      const token1 = query.get('token1');
+      const pairs = await getPairList(allPairs);
+
+      const resultPairList = await getPairListAccountBalance(
+        account.account,
+        pairs.filter((x) => x.reserves[0] !== 0)
+      );
+      if (resultPairList.length) {
+        const currentPair = resultPairList.find((p) => p.token0 === token0 && p.token1 === token1);
+        setPair(currentPair);
+        if (currentPair) {
+          await calculateApr(resultPairList, currentPair, pairs);
+          await removePreview(currentPair);
+        }
       }
     }
     setLoading(false);
@@ -86,11 +87,7 @@ const RemoveLiquidityContainer = () => {
   }, 60000); */
 
   const removePreview = async (currentPair) => {
-    const res = await liquidity.removeLiquidityPreview(
-      pact.allTokens[currentPair?.token0].code,
-      pact.allTokens[currentPair?.token1].code,
-      previewAmount
-    );
+    const res = await liquidity.removeLiquidityPreview(allTokens[currentPair?.token0].code, allTokens[currentPair?.token1].code, previewAmount);
     if (!res.errorMessage) {
       setPreviewObject(res);
     }
@@ -103,7 +100,7 @@ const RemoveLiquidityContainer = () => {
     } else {
       setLoading(false);
     }
-  }, [account]);
+  }, [account, allPairs]);
 
   return loading ? (
     <AppLoader className="h-100 w-100 justify-ce align-ce" />

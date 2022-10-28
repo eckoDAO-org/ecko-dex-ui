@@ -56,7 +56,7 @@ const AddLiquidityContainer = (props) => {
   const [apr, setApr] = useState(null);
 
   const calculateApr = async () => {
-    const allPairsData = await getAllPairsData(tokensUsdPrice, pact.allTokens, pact.allPairs);
+    const allPairsData = await getAllPairsData(tokensUsdPrice, pact.allTokens, pact.allPairs, data.pools);
 
     let pool = null;
     if (pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED) {
@@ -120,8 +120,13 @@ const AddLiquidityContainer = (props) => {
   }, [pair, data]);
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (pact.allPairs) {
+      setLoading(true);
+      fetchData();
+    } else {
+      setLoading(false);
+    }
+  }, [pact.allPairs]);
 
   return loading ? (
     <AppLoader className="h-100 w-100 align-ce justify-ce" />
