@@ -15,7 +15,7 @@ import {
 } from '../../router/routes';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
-import { getAllPairsData } from '../../utils/token-utils';
+import { checkIfTokenIsInBoostedPool, getAllPairsData } from '../../utils/token-utils';
 import { useApplicationContext, usePactContext } from '../../contexts';
 import { commonColors, theme } from '../../styles/theme';
 import styled from 'styled-components';
@@ -36,7 +36,7 @@ const LiquidityTokensTable = ({ verifiedActive }) => {
   const fetchData = async () => {
     const pairsList = await getPairList(allPairs);
     if (pairsList?.length) {
-      const pairsData = await getAllPairsData(tokensUsdPrice, allTokens, allPairs);
+      const pairsData = await getAllPairsData(tokensUsdPrice, allTokens, allPairs, pairsList);
       const tokensStatsData = await getAnalyticsTokenStatsData();
       const tokens = Object.values(allTokens);
       const result = [];
@@ -80,18 +80,6 @@ const LiquidityTokensTable = ({ verifiedActive }) => {
     }
   }, [tokensUsdPrice]);
 
-  const checkIfTokenIsInBoostedPool = (item) => {
-    const itemCode = item.code;
-    let pairIsBoosted = null;
-    Object.keys(allPairs).forEach((pair) => {
-      const tokens = pair.split(':');
-      if (tokens[0] === itemCode || tokens[1] === itemCode) {
-        pairIsBoosted = allPairs[pair].isBoosted;
-      }
-    });
-    return pairIsBoosted;
-  };
-
   return !loading ? (
     <CommonTable
       items={verifiedActive ? verifiedTokensList : allTokensList}
@@ -102,7 +90,7 @@ const LiquidityTokensTable = ({ verifiedActive }) => {
         {
           icon: () => <AddIcon />,
           onClick: (item) => {
-            const itemIsInBoostedPair = checkIfTokenIsInBoostedPool(item);
+            const itemIsInBoostedPair = checkIfTokenIsInBoostedPool(item, allPairs);
             if (itemIsInBoostedPair) {
               history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${item.name}`), {
                 from: ROUTE_LIQUIDITY_TOKENS,

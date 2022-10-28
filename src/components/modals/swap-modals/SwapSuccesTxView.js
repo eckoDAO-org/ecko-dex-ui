@@ -5,7 +5,7 @@ import { extractDecimal, getDecimalPlaces, reduceBalance } from '../../../utils/
 import reduceToken from '../../../utils/reduceToken';
 import { getTokenIconByCode, getTokenName } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
-import { AlertIcon, ArrowIcon, ChainIcon } from '../../../assets';
+import { AlertIcon, ArrowIcon, ChainIcon, NotificationWarningIcon } from '../../../assets';
 import { CHAIN_ID } from '../../../constants/contextConstants';
 import Label from '../../shared/Label';
 import { FlexContainer } from '../../shared/FlexContainer';
@@ -13,7 +13,8 @@ import CopyPopup from '../../shared/CopyPopup';
 import CustomDivider from '../../shared/CustomDivider';
 import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
 import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
-import { theme } from '../../../styles/theme';
+import { commonColors, theme } from '../../../styles/theme';
+import styled from 'styled-components';
 
 export const SwapSuccessViewGE = () => {
   const { account } = useAccountContext();
@@ -96,6 +97,22 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
   const swap = useSwapContext();
   const { themeMode } = useApplicationContext();
 
+  const SvgContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    width: 32px;
+    margin-right: 8px;
+    svg {
+      height: 20px;
+      width: 20px;
+      path {
+        fill: ${({ commonColors }) => commonColors.gold}!important;
+      }
+    }
+  `;
+
   const amountBWithSlippage =
     extractDecimal(swap?.localRes?.result?.data[1]?.amount) - extractDecimal(swap?.localRes?.result?.data[1]?.amount) * pact.slippage;
 
@@ -124,6 +141,19 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
       }}
     >
       <FlexContainer className="w-100 column" gap={12}>
+        {/* DISCLAIMER */}
+        {(!pact.allTokens[getTokenName(swap?.localRes?.result?.data[0]?.token, pact.allTokens)].isVerified ||
+          !pact.allTokens[getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)].isVerified) && (
+          <FlexContainer className="align-ce justify-sb">
+            <SvgContainer commonColors={commonColors}>
+              <NotificationWarningIcon />
+            </SvgContainer>
+
+            <Label fontSize={12} fontFamily="basier" color={commonColors.gold}>
+              This transaction contains unverified tokens. Review the preview information throughly before confirming the transaction.
+            </Label>
+          </FlexContainer>
+        )}
         {/* ACCOUNT */}
         <FlexContainer className="align-ce justify-sb">
           <Label fontSize={13}>Account</Label>

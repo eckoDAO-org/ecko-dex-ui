@@ -111,8 +111,8 @@ export const getAllPairValues = async (pools, volumes, allTokens) => {
   return result;
 };
 
-export const getAllPairsData = async (tokensUsdPrice, allTokens, allPairs) => {
-  const pools = await getPairList(allPairs);
+export const getAllPairsData = async (tokensUsdPrice, allTokens, allPairs, _pools) => {
+  const pools = _pools ? _pools : await getPairList(allPairs);
 
   if (pools.length) {
     const volumes = await getAnalyticsPoolsStatsData();
@@ -255,4 +255,16 @@ export const getTokenUsdPrice = async (token, pairsList, allTokens, kdaPrice) =>
     }
     return 0;
   }
+};
+
+export const checkIfTokenIsInBoostedPool = (item, allPairs) => {
+  const itemCode = item.code;
+  let pairIsBoosted = null;
+  Object.keys(allPairs).forEach((pair) => {
+    const tokens = pair.split(':');
+    if (tokens[0] === itemCode || tokens[1] === itemCode) {
+      pairIsBoosted = allPairs[pair].isBoosted;
+    }
+  });
+  return pairIsBoosted;
 };
