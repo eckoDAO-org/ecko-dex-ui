@@ -1,5 +1,5 @@
 import { createGlobalStyle, css } from 'styled-components/macro';
-import appDarkBackground from '../assets/images/shared/app-dark-background.png';
+import appDarkBackground from '../assets/images/shared/app-dark-background-orange.png';
 import appLightBackground from '../assets/images/shared/app-light-background.png';
 
 export default createGlobalStyle`
