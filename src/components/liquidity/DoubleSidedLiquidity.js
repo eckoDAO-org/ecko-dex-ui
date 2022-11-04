@@ -548,6 +548,8 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
                     <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
                       {pact.pairReserve.token0 === 0 && pact.pairReserve.token1 === 0
                         ? pact.getRatioFirstAddLiquidity(toValues.coin, toValues.amount, fromValues.coin, fromValues.amount)
+                        : reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) < 0.000001
+                        ? '< 0.000001'
                         : reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}
                     </Label>
                   </FlexContainer>
@@ -556,6 +558,8 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
                     <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
                       {pact.pairReserve.token0 === 0 && pact.pairReserve.token1 === 0
                         ? pact.getRatioFirstAddLiquidityInverse(toValues.coin, toValues.amount, fromValues.coin, fromValues.amount)
+                        : reduceBalance(pact.getRatio1(fromValues.coin, toValues.coin)) < 0.000001
+                        ? '< 0.000001'
                         : reduceBalance(pact.getRatio1(fromValues.coin, toValues.coin)) ?? '-'}
                     </Label>
                   </FlexContainer>

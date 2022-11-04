@@ -307,7 +307,11 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
               <Label fontSize={13}>
                 {pair?.token0}/{pair?.token1} Rate
               </Label>
-              <Label fontSize={13}>{getDecimalPlaces(extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1]))}</Label>
+              <Label fontSize={13}>
+                {getDecimalPlaces(extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1])) < 0.000001
+                  ? '< 0.000001'
+                  : getDecimalPlaces(extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1]))}
+              </Label>
             </FlexContainer>
           </FlexContainer>
         )}

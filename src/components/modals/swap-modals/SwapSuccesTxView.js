@@ -172,9 +172,11 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
         </FlexContainer>
         <FlexContainer className="row justify-sb">
           <Label>Ratio</Label>
-          <Label fontSize={13}>{`1 ${getTokenName(swap?.localRes?.result?.data[0]?.token, pact.allTokens)} = ${getDecimalPlaces(
-            pact?.computeOut(fromValues.amount) / fromValues.amount
-          )} ${getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)}`}</Label>
+          <Label fontSize={13}>{`1 ${getTokenName(swap?.localRes?.result?.data[0]?.token, pact.allTokens)} = ${
+            getDecimalPlaces(pact?.computeOut(fromValues.amount) / fromValues.amount) < 0.000001
+              ? '< 0.000001'
+              : getDecimalPlaces(pact?.computeOut(fromValues.amount) / fromValues.amount)
+          } ${getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)}`}</Label>
         </FlexContainer>
       </FlexContainer>
     </SuccesViewContainer>
