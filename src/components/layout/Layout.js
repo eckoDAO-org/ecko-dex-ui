@@ -10,7 +10,7 @@ import { ReactComponent as Stripes } from '../../assets/images/shared/stripes.sv
 import GameEditionContainer from '../game-edition-v2/GameEditionContainer';
 import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION, ROUTE_INDEX, ROUTE_STATS } from '../../router/routes';
 import browserDetection from '../../utils/browserDetection';
-import gameEditionBackground from '../../assets/images/game-edition/game-edition-background.png';
+import gameEditionBackground from '../../assets/images/game-edition/game-edition-background.webp';
 import TabletHeader from './header/TabletHeader';
 import { FlexContainer } from '../shared/FlexContainer';
 import theme from '../../styles/theme';

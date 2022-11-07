@@ -7,7 +7,7 @@ import { PROGRESS_BAR_MAX_VALUE } from '../../contexts/GameEditionContext';
 import { ROUTE_GAME_EDITION_MENU } from '../../router/routes';
 import { KaddexLoadingIcon } from '../../assets';
 import GameEditionProgressBar from '../shared/GameEditionProgressBar';
-import loadingBackground from '../../assets/images/game-edition/loading-background.png';
+import loadingBackground from '../../assets/images/game-edition/loading-background.webp';
 import GameEditionLabel from './components/GameEditionLabel';
 import { WALLET } from '../../constants/wallet';
 

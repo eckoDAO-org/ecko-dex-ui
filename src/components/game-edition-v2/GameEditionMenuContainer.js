@@ -8,7 +8,7 @@ import headerLinks from '../headerLinks';
 import { gameEditionRoutes } from '../menuItems';
 import { FadeIn } from '../shared/animations';
 import GameEditionLabel from './components/GameEditionLabel';
-import menuBackground from '../../assets/images/game-edition/menu-background.png';
+import menuBackground from '../../assets/images/game-edition/menu-background.webp';
 import { useGameEditionContext } from '../../contexts';
 import { useHistory } from 'react-router-dom';
 import PressButtonToActionLabel from './components/PressButtonToActionLabel';

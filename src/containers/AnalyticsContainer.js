@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import useLazyImage from '../hooks/useLazyImage';
 import { useApplicationContext, useGameEditionContext, usePactContext } from '../contexts';
-import modalBackground from '../assets/images/game-edition/modal-background.png';
+import modalBackground from '../assets/images/game-edition/modal-background.webp';
 import LogoLoader from '../components/shared/Loader';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import Label from '../components/shared/Label';

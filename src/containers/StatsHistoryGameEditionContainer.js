@@ -7,7 +7,7 @@ import { FadeIn } from '../components/shared/animations';
 import CommonTableGameEdition from '../components/shared/CommonTableGameEdition';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import Label from '../components/shared/Label';
-import modalBackground from '../assets/images/game-edition/modal-background.png';
+import modalBackground from '../assets/images/game-edition/modal-background.webp';
 import { extractDecimal, reduceBalance } from '../utils/reduceBalance';
 import { NETWORK_TYPE } from '../constants/contextConstants';
 import { GameEditionLoader } from '../components/shared/Loader';

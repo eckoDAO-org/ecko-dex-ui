@@ -14,7 +14,7 @@ import { GameEditionProvider } from './contexts/GameEditionContext';
 import { KaddexWalletProvider } from './contexts/KaddexWalletContext';
 import { WalletConnectProvider } from './contexts/WalletConnectContext';
 import RightModalRender from './components/modals/RightModalRender';
-import gameEditionBackground from './assets/images/game-edition/game-edition-background.png';
+import gameEditionBackground from './assets/images/game-edition/game-edition-background.webp';
 import useLazyImage from './hooks/useLazyImage';
 import AppLoader from './components/shared/AppLoader';
 import { useApplicationContext } from './contexts';

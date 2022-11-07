@@ -11,7 +11,7 @@ import reduceToken from '../utils/reduceToken';
 import { getInfoCoin } from '../utils/token-utils';
 import { ROUTE_INDEX } from '../router/routes';
 import { HistoryIcon, VerifiedLogo } from '../assets';
-import modalBackground from '../assets/images/game-edition/modal-background.png';
+import modalBackground from '../assets/images/game-edition/modal-background.webp';
 import PressButtonToActionLabel from '../components/game-edition-v2/components/PressButtonToActionLabel';
 import { FadeIn } from '../components/shared/animations';
 import CommonTableGameEdition from '../components/shared/CommonTableGameEdition';

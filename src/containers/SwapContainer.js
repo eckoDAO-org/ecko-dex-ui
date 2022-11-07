@@ -16,7 +16,7 @@ import TokenSelectorModalContent from '../components/modals/swap-modals/TokenSel
 import TokenSelectorModalContentGE from '../components/modals/swap-modals/TokenSelectorModalContentGE';
 import SlippagePopupContent from '../components/layout/header/SlippagePopupContent';
 import FormContainer from '../components/shared/FormContainer';
-import ArcadeBackground from '../assets/images/game-edition/arcade-background.png';
+import ArcadeBackground from '../assets/images/game-edition/arcade-background.webp';
 import yellowInputBox from '../assets/images/game-edition/pixeled-box-yellow.svg';
 import purpleInputBox from '../assets/images/game-edition/pixeled-box-purple.svg';
 import Label from '../components/shared/Label';
