@@ -197,7 +197,8 @@
         "token1": "DOC",
         "main": false,
         "isBoosted": false,
-        "color": "#e03a3f"
+        "color": "#e03a3f",
+        "isVerified": true
       }
     }
   }
