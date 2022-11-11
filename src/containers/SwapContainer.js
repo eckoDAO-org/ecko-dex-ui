@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
 import { throttle, debounce } from 'throttle-debounce';
+import { Helmet } from 'react-helmet';
 import useWindowSize from '../hooks/useWindowSize';
 import { useHistory } from 'react-router-dom';
 import { FadeIn } from '../components/shared/animations';
@@ -39,7 +40,6 @@ import {
   useWalletContext,
 } from '../contexts';
 import theme, { commonColors } from '../styles/theme';
-import { Helmet } from 'react-helmet';
 
 const Container = styled(FadeIn)`
   width: 100%;

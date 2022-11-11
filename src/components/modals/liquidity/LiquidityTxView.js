@@ -15,7 +15,7 @@ import CustomDivider from '../../shared/CustomDivider';
 import { ArrowIcon, KaddexOutlineIcon } from '../../../assets';
 import { Checkbox } from 'semantic-ui-react';
 import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
-import { isNumber } from 'lodash';
+import isNumber from 'lodash/isNumber';
 import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
 import DisclaimerUnverifiedTokens from '../../shared/DisclaimerUnverifiedTokens';
 

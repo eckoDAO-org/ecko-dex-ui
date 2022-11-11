@@ -19,7 +19,7 @@ import { SuccessAddView } from '../modals/liquidity/LiquidityTxView';
 import { useAccountContext, useGameEditionContext, useLiquidityContext, useModalContext, usePactContext, useWalletContext } from '../../contexts';
 import reduceToken from '../../utils/reduceToken';
 import ConnectWalletModal from '../modals/kdaModals/ConnectWalletModal';
-import { isNaN } from 'lodash';
+import isNaN from 'lodash/isNaN';
 
 const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   const pact = usePactContext();

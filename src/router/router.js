@@ -25,32 +25,38 @@ import {
   ROUTE_TOKEN_INFO,
 } from './routes';
 
-const Layout = React.lazy(() => import('../components/layout/Layout'));
+import Layout from '../components/layout/Layout';
 
 // GAME EDITION CONTAINERS
-const GameEditionMenuContainer = React.lazy(() => import('../components/game-edition-v2/GameEditionMenuContainer'));
-const GameEditionStartAnimation = React.lazy(() => import('../components/game-edition-v2/GameEditionStartAnimation'));
-const StatsHistoryGameEditionContainer = React.lazy(() => import('../containers/StatsHistoryGameEditionContainer'));
+const GameEditionMenuContainer = React.lazy(() =>
+  import('../components/game-edition-v2/GameEditionMenuContainer' /* webpackChunkName: "gameeditionContainer" */)
+);
+const GameEditionStartAnimation = React.lazy(() =>
+  import('../components/game-edition-v2/GameEditionStartAnimation' /* webpackChunkName: "gameeditionAnimation" */)
+);
+const StatsHistoryGameEditionContainer = React.lazy(() =>
+  import('../containers/StatsHistoryGameEditionContainer' /* webpackChunkName: "gameeditionStatsHistory" */)
+);
 
 //APP CONTAINERS
-const AddLiquidityContainer = React.lazy(() => import('../components/liquidity/AddLiquidityContainer'));
-const CreatePairContainer = React.lazy(() => import('../components/liquidity/CreatePairContainer'));
-const SwapContainer = React.lazy(() => import('../containers/SwapContainer'));
-const SwapHistoryContainer = React.lazy(() => import('../containers/SwapHistoryContainer'));
-const DaoContainer = React.lazy(() => import('../containers/DaoContainer'));
-const AnalyticsContainer = React.lazy(() => import('../containers/AnalyticsContainer'));
-const LiquidityContainer = React.lazy(() => import('../containers/LiquidityContainer'));
-const RemoveLiquidityContainer = React.lazy(() => import('../containers/RemoveLiquidityContainer'));
-const StakeContainer = React.lazy(() => import('../containers/StakeContainer'));
-const TokenInfoContainer = React.lazy(() => import('../containers/TokenInfoContainer'));
+const AddLiquidityContainer = React.lazy(() => import('../components/liquidity/AddLiquidityContainer' /* webpackChunkName: "add-liquidity" */));
+const CreatePairContainer = React.lazy(() => import('../components/liquidity/CreatePairContainer' /* webpackChunkName: "create-pair" */));
+const SwapContainer = React.lazy(() => import('../containers/SwapContainer' /* webpackChunkName: "swap" */));
+const SwapHistoryContainer = React.lazy(() => import('../containers/SwapHistoryContainer' /* webpackChunkName: "swap-history" */));
+const DaoContainer = React.lazy(() => import('../containers/DaoContainer' /* webpackChunkName: "dao" */));
+const AnalyticsContainer = React.lazy(() => import('../containers/AnalyticsContainer' /* webpackChunkName: "analytics" */));
+const LiquidityContainer = React.lazy(() => import('../containers/LiquidityContainer' /* webpackChunkName: "liquidity" */));
+const RemoveLiquidityContainer = React.lazy(() => import('../containers/RemoveLiquidityContainer' /* webpackChunkName: "remove-liquidity" */));
+const StakeContainer = React.lazy(() => import('../containers/StakeContainer' /* webpackChunkName: "stake" */));
+const TokenInfoContainer = React.lazy(() => import('../containers/TokenInfoContainer' /* webpackChunkName: "token-info" */));
 
 export default () => {
   const { gameEditionView } = useGameEditionContext();
   return (
     <Router>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Layout>
-          {gameEditionView ? (
+      <Layout>
+        {gameEditionView ? (
+          <Suspense fallback={<div>Loading...</div>}>
             <Switch>
               <Route exact path={ROUTE_GAME_START_ANIMATION} component={GameEditionStartAnimation} />
               <Route exact path={ROUTE_GAME_EDITION_MENU} component={GameEditionMenuContainer} />
@@ -58,7 +64,9 @@ export default () => {
               <Route exact path={ROUTE_MY_SWAP} component={SwapHistoryContainer} />
               <Route exact path={ROUTE_STATS} component={StatsHistoryGameEditionContainer} />
             </Switch>
-          ) : (
+          </Suspense>
+        ) : (
+          <Suspense fallback={<div>Loading...</div>}>
             <Switch>
               <Route exact path={ROUTE_INDEX} component={SwapContainer} />
               <Route exact path={ROUTE_MY_SWAP} component={SwapHistoryContainer} />
@@ -82,9 +90,9 @@ export default () => {
              Remember to delete
             <Route exact path={ROUTE_BUY_CRYPTO} component={BuyCryptoContainer} /> */}
             </Switch>
-          )}
-        </Layout>
-      </Suspense>
+          </Suspense>
+        )}
+      </Layout>
     </Router>
   );
 };
