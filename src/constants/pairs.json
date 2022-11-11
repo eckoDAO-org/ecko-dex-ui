@@ -190,6 +190,14 @@
         "isBoosted": false,
         "color": "#33cc33",
         "isVerified": true
+      },
+      "coin:free.docu": {
+        "name": "coin:free.docu",
+        "token0": "KDA",
+        "token1": "DOC",
+        "main": false,
+        "isBoosted": false,
+        "color": "#e03a3f"
       }
     }
   }
