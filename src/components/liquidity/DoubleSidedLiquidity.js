@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { throttle, debounce } from 'throttle-debounce';
 import React, { useEffect, useState } from 'react';
-import tokenData from '../../constants/cryptoCurrencies';
 import { getCorrectBalance, reduceBalance } from '../../utils/reduceBalance';
 import PixeledBlueContainer, { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
 import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
@@ -20,6 +19,7 @@ import { SuccessAddView } from '../modals/liquidity/LiquidityTxView';
 import { useAccountContext, useGameEditionContext, useLiquidityContext, useModalContext, usePactContext, useWalletContext } from '../../contexts';
 import reduceToken from '../../utils/reduceToken';
 import ConnectWalletModal from '../modals/kdaModals/ConnectWalletModal';
+import { isNaN } from 'lodash';
 
 const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   const pact = usePactContext();
@@ -54,8 +54,12 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
     setBalanceLoading(true);
     const getBalance = async () => {
       if (account.account) {
-        let acctOfFromValues = await account.getTokenAccount(tokenData[fromValues.coin]?.code, account.account.account, tokenSelectorType === 'from');
-        let acctOfToValues = await account.getTokenAccount(tokenData[toValues.coin]?.code, account.account.account, tokenSelectorType === 'to');
+        let acctOfFromValues = await account.getTokenAccount(
+          pact.allTokens[fromValues.coin]?.code,
+          account.account.account,
+          tokenSelectorType === 'from'
+        );
+        let acctOfToValues = await account.getTokenAccount(pact.allTokens[toValues.coin]?.code, account.account.account, tokenSelectorType === 'to');
         if (acctOfFromValues) {
           let balanceFrom = getCorrectBalance(acctOfFromValues.balance);
           setFromValues((prev) => ({
@@ -95,7 +99,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
     if (fetchData) {
       setFetchingPair(true);
       if (toValues.coin !== '' && fromValues.coin !== '') {
-        await pact.getReserves(tokenData?.[fromValues?.coin]?.code, tokenData?.[toValues?.coin]?.code);
+        await pact.getReserves(pact.allTokens?.[fromValues?.coin]?.code, pact.allTokens?.[toValues?.coin]?.code);
       }
       setFetchingPair(false);
       setFetchData(false);
@@ -105,7 +109,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   /// POLLING ON UPDATE PACT RATIO
   // useInterval(async () => {
   //   if (!isNaN(pact.ratio)) {
-  //     await pact.getReserves(tokenData?.[fromValues?.coin]?.code, tokenData?.[toValues?.coin]?.code);
+  //     await pact.getReserves(pact.allTokens?.[fromValues?.coin]?.code, pact.allTokens?.[toValues?.coin]?.code);
   //   }
   // }, 10000);
 
@@ -163,22 +167,24 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
     if (inputSide === 'from' && fromValues.amount !== '') {
       setInputSide(null);
       if (fromValues.coin !== '' && toValues.coin !== '' && !isNaN(pact.ratio)) {
-        if (fromValues.amount.length < 5) {
-          throttle(
-            500,
-            setToValues({
-              ...toValues,
-              amount: reduceBalance(fromValues.amount / pact.ratio, toValues.precision),
-            })
-          );
-        } else {
-          debounce(
-            500,
-            setToValues({
-              ...toValues,
-              amount: reduceBalance(fromValues.amount / pact.ratio, toValues.precision)?.toFixed(toValues.precision),
-            })
-          );
+        if (pact.ratio) {
+          if (fromValues.amount.length < 5) {
+            throttle(
+              500,
+              setToValues({
+                ...toValues,
+                amount: reduceBalance(fromValues.amount / pact.ratio, toValues.precision),
+              })
+            );
+          } else {
+            debounce(
+              500,
+              setToValues({
+                ...toValues,
+                amount: reduceBalance(fromValues.amount / pact.ratio, toValues.precision)?.toFixed(toValues.precision),
+              })
+            );
+          }
         }
       }
     }
@@ -191,22 +197,24 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
     if (inputSide === 'to' && toValues.amount !== '') {
       setInputSide(null);
       if (fromValues.coin !== '' && toValues.coin !== '' && !isNaN(pact.ratio)) {
-        if (toValues.amount.length < 5) {
-          throttle(
-            500,
-            setFromValues({
-              ...fromValues,
-              amount: reduceBalance(toValues.amount * pact.ratio, fromValues.precision),
-            })
-          );
-        } else {
-          debounce(
-            500,
-            setFromValues({
-              ...fromValues,
-              amount: reduceBalance(toValues.amount * pact.ratio, fromValues.precision)?.toFixed(fromValues?.precision),
-            })
-          );
+        if (pact.ratio) {
+          if (toValues.amount.length < 5) {
+            throttle(
+              500,
+              setFromValues({
+                ...fromValues,
+                amount: reduceBalance(toValues.amount * pact.ratio, fromValues.precision),
+              })
+            );
+          } else {
+            debounce(
+              500,
+              setFromValues({
+                ...fromValues,
+                amount: reduceBalance(toValues.amount * pact.ratio, fromValues.precision)?.toFixed(fromValues?.precision),
+              })
+            );
+          }
         }
       }
     }
@@ -217,23 +225,25 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
 
   useEffect(() => {
     if (!isNaN(pact.ratio)) {
-      if (fromValues.amount !== '' && toValues.amount === '') {
-        setToValues({
-          ...toValues,
-          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision),
-        });
-      }
-      if (fromValues.amount === '' && toValues.amount !== '') {
-        setFromValues({
-          ...fromValues,
-          amount: reduceBalance(pact.computeIn(toValues.amount), fromValues.precision),
-        });
-      }
-      if (fromValues.amount !== '' && toValues.amount !== '') {
-        setToValues({
-          ...toValues,
-          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision),
-        });
+      if (pact.ratio !== 0) {
+        if (fromValues.amount !== '' && toValues.amount === '') {
+          setToValues({
+            ...toValues,
+            amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision),
+          });
+        }
+        if (fromValues.amount === '' && toValues.amount !== '') {
+          setFromValues({
+            ...fromValues,
+            amount: reduceBalance(pact.computeIn(toValues.amount), fromValues.precision),
+          });
+        }
+        if (fromValues.amount !== '' && toValues.amount !== '') {
+          setToValues({
+            ...toValues,
+            amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision),
+          });
+        }
       }
     }
   }, [pact.ratio]);
@@ -268,7 +278,12 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   };
 
   const supply = async () => {
-    const res = await liquidity.addLiquidityWallet(tokenData[fromValues.coin], tokenData[toValues.coin], fromValues.amount, toValues.amount);
+    const res = await liquidity.addLiquidityWallet(
+      pact.allTokens[fromValues.coin],
+      pact.allTokens[toValues.coin],
+      fromValues.amount,
+      toValues.amount
+    );
     if (!res) {
       wallet.setIsWaitingForWalletAuth(true);
     } else {
@@ -531,13 +546,21 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
                   <FlexContainer className="column w-100">
                     <Label fontSize={13}>{`${toValues.coin}/${fromValues.coin}`}</Label>
                     <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
-                      {reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}
+                      {pact.pairReserve.token0 === 0 && pact.pairReserve.token1 === 0
+                        ? pact.getRatioFirstAddLiquidity(toValues.coin, toValues.amount, fromValues.coin, fromValues.amount)
+                        : reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) < 0.000001
+                        ? '< 0.000001'
+                        : reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}
                     </Label>
                   </FlexContainer>
                   <FlexContainer className="column align-ce w-100">
                     <Label fontSize={13}>{`${fromValues.coin}/${toValues.coin}`}</Label>
                     <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
-                      {reduceBalance(pact.getRatio1(fromValues.coin, toValues.coin)) ?? '-'}
+                      {pact.pairReserve.token0 === 0 && pact.pairReserve.token1 === 0
+                        ? pact.getRatioFirstAddLiquidityInverse(toValues.coin, toValues.amount, fromValues.coin, fromValues.amount)
+                        : reduceBalance(pact.getRatio1(fromValues.coin, toValues.coin)) < 0.000001
+                        ? '< 0.000001'
+                        : reduceBalance(pact.getRatio1(fromValues.coin, toValues.coin)) ?? '-'}
                     </Label>
                   </FlexContainer>
                   <FlexContainer className="column align-fe w-100">

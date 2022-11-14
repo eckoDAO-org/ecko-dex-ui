@@ -11,13 +11,12 @@ import { ArrowBack } from '../assets';
 import Label from '../components/shared/Label';
 import RewardBooster from '../components/liquidity/RewardBooster';
 import { ROUTE_LIQUIDITY_MY_LIQUIDITY } from '../router/routes';
-import { getPairListAccountBalance } from '../api/pact';
+import { getPairList, getPairListAccountBalance } from '../api/pact';
 import useQueryParams from '../hooks/useQueryParams';
 import AppLoader from '../components/shared/AppLoader';
 import { LIQUIDITY_VIEW } from '../constants/liquidityView';
 import { getAllPairsData } from '../utils/token-utils';
 import theme from '../styles/theme';
-import tokenData from '../constants/cryptoCurrencies';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -37,20 +36,18 @@ const Container = styled(FadeIn)`
 const RemoveLiquidityContainer = () => {
   const history = useHistory();
   const query = useQueryParams();
-  const { setWantsKdxRewards } = useLiquidityContext();
   const liquidity = useLiquidityContext();
   const { account } = useAccountContext();
-  const { tokensUsdPrice } = usePactContext();
+  const { tokensUsdPrice, allTokens, allPairs } = usePactContext();
 
   const [loading, setLoading] = useState(false);
   const [pair, setPair] = useState(null);
   const [apr, setApr] = useState(null);
   const [previewObject, setPreviewObject] = useState(null);
-
   const [previewAmount, setPreviewAmount] = useState(1);
 
-  const calculateApr = async (resultPairList, currentPair) => {
-    const allPairsData = await getAllPairsData(tokensUsdPrice);
+  const calculateApr = async (resultPairList, currentPair, pairs) => {
+    const allPairsData = await getAllPairsData(tokensUsdPrice, allTokens, allPairs, pairs);
     const pool = resultPairList.find(
       (p) =>
         (p.token0 === currentPair.token0 && p.token1 === currentPair.token1) || (p.token0 === currentPair.token1 && p.token1 === currentPair.token0)
@@ -62,15 +59,22 @@ const RemoveLiquidityContainer = () => {
   };
 
   const fetchData = async () => {
-    const token0 = query.get('token0');
-    const token1 = query.get('token1');
-    const resultPairList = await getPairListAccountBalance(account.account);
-    if (resultPairList.length) {
-      const currentPair = resultPairList.find((p) => p.token0 === token0 && p.token1 === token1);
-      setPair(currentPair);
-      if (currentPair) {
-        await calculateApr(resultPairList, currentPair);
-        await removePreview(currentPair);
+    if (allPairs) {
+      const token0 = query.get('token0');
+      const token1 = query.get('token1');
+      const pairs = await getPairList(allPairs);
+
+      const resultPairList = await getPairListAccountBalance(
+        account.account,
+        pairs.filter((x) => x.reserves[0] !== 0)
+      );
+      if (resultPairList.length) {
+        const currentPair = resultPairList.find((p) => p.token0 === token0 && p.token1 === token1);
+        setPair(currentPair);
+        if (currentPair) {
+          await calculateApr(resultPairList, currentPair, pairs);
+          await removePreview(currentPair);
+        }
       }
     }
     setLoading(false);
@@ -83,7 +87,7 @@ const RemoveLiquidityContainer = () => {
   }, 60000); */
 
   const removePreview = async (currentPair) => {
-    const res = await liquidity.removeLiquidityPreview(tokenData[currentPair?.token0].code, tokenData[currentPair?.token1].code, previewAmount);
+    const res = await liquidity.removeLiquidityPreview(allTokens[currentPair?.token0].code, allTokens[currentPair?.token1].code, previewAmount);
     if (!res.errorMessage) {
       setPreviewObject(res);
     }
@@ -96,7 +100,7 @@ const RemoveLiquidityContainer = () => {
     } else {
       setLoading(false);
     }
-  }, [account]);
+  }, [account, allPairs]);
 
   return loading ? (
     <AppLoader className="h-100 w-100 justify-ce align-ce" />
@@ -134,7 +138,7 @@ const RemoveLiquidityContainer = () => {
             isBoosted={pair.isBoosted}
             apr={apr}
             type={LIQUIDITY_VIEW.REMOVE_LIQUIDITY}
-            handleState={setWantsKdxRewards}
+            handleState={liquidity.setWantsKdxRewards}
             previewObject={previewObject}
             pair={pair}
           />

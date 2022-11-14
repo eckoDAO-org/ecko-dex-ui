@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import { TradeUpIcon } from '../../assets';
-import tokenData from '../../constants/cryptoCurrencies';
+import { TradeUpIcon, VerifiedLogo } from '../../assets';
 import { usePactContext } from '../../contexts';
 import { useApplicationContext } from '../../contexts';
 import { ROUTE_TOKEN_INFO } from '../../router/routes';
@@ -15,19 +14,20 @@ import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import GraphicPercentage from '../shared/GraphicPercentage';
 import { getAnalyticsTokenStatsData } from '../../api/kaddex-analytics';
 
-const StatsTable = () => {
+const StatsTable = ({ verifiedActive }) => {
   const { themeMode } = useApplicationContext();
   const pact = usePactContext();
   const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [statsData, setStatsData] = useState([]);
+  const [verifiedStatsData, setVerifiedStatsData] = useState([]);
 
   useEffect(() => {
     const setInitData = async () => {
       if (pact?.tokensUsdPrice) {
         const data = [];
         const tokensStatsData = await getAnalyticsTokenStatsData();
-        for (const t of Object.values(tokenData)) {
+        for (const t of Object.values(pact.allTokens)) {
           const price = pact?.tokensUsdPrice && pact?.tokensUsdPrice[t?.name];
           const tokenStats = tokensStatsData[t.code];
           data.push({
@@ -38,7 +38,10 @@ const StatsTable = () => {
             dailyVolumeChange: tokenStats && tokenStats.volumeChange24h,
           });
         }
-        setStatsData(data);
+        const dataVerified = data.filter((r) => r.isVerified);
+
+        setStatsData(data.sort((x, y) => y.dailyVolume - x.dailyVolume));
+        setVerifiedStatsData(dataVerified.sort((x, y) => y.dailyVolume - x.dailyVolume));
         setLoading(false);
       }
     };
@@ -47,8 +50,8 @@ const StatsTable = () => {
 
   return !loading ? (
     <CommonTable
-      items={statsData}
-      columns={renderColumns(history)}
+      items={verifiedActive ? verifiedStatsData : statsData}
+      columns={renderColumns(history, pact.allTokens)}
       actions={[
         {
           icon: () => (
@@ -86,13 +89,20 @@ const ScalableCryptoContainer = styled(FlexContainer)`
   }
 `;
 
-const renderColumns = (history) => {
+const renderColumns = (history, allTokens) => {
   return [
     {
       name: '',
-      width: 160,
+      width: 100,
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
+          {allTokens[item.name]?.isVerified ? (
+            <div style={{ marginRight: 16 }}>
+              <VerifiedLogo className="svg-app-color" />
+            </div>
+          ) : (
+            <div style={{ width: 32 }} />
+          )}
           <CryptoContainer style={{ zIndex: 2 }}>{item.icon} </CryptoContainer>
           {item.name}
         </ScalableCryptoContainer>
@@ -101,7 +111,7 @@ const renderColumns = (history) => {
 
     {
       name: 'Price',
-      width: 160,
+      width: 100,
       sortBy: 'price',
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer h-100" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
@@ -112,7 +122,7 @@ const renderColumns = (history) => {
 
     {
       name: '24h Price Change',
-      width: 160,
+      width: 120,
       sortBy: 'dailyPriceChangeValue',
       render: ({ item }) => {
         return <GraphicPercentage componentStyle={{ margin: 0 }} percentageValue={item.dailyPriceChangeValue} />;
@@ -129,8 +139,8 @@ const renderColumns = (history) => {
     },
     {
       name: '24h Volume Change',
-      width: 160,
-      sortBy: 'dailyVolumeChange',
+      width: 120,
+      sortBy: 'dailyVolumeValue',
       render: ({ item }) => {
         return <GraphicPercentage componentStyle={{ margin: 0 }} percentageValue={item.dailyVolumeChange} />;
       },

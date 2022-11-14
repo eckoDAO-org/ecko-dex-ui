@@ -3,33 +3,42 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { getPairList } from '../../api/pact';
 import CommonTable from '../shared/CommonTable';
-import tokenData from '../../constants/cryptoCurrencies';
 import { humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
-import { AddIcon, BoosterIcon, GasIcon, TradeUpIcon } from '../../assets';
-import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_LIQUIDITY_TOKENS, ROUTE_TOKEN_INFO } from '../../router/routes';
+import { AddIcon, BoosterIcon, GasIcon, TradeUpIcon, VerifiedLogo } from '../../assets';
+import {
+  ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED,
+  ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED,
+  ROUTE_LIQUIDITY_POOLS,
+  ROUTE_LIQUIDITY_TOKENS,
+  ROUTE_TOKEN_INFO,
+} from '../../router/routes';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
-import { getAllPairsData } from '../../utils/token-utils';
+import { checkIfTokenIsInBoostedPool, getAllPairsData } from '../../utils/token-utils';
 import { useApplicationContext, usePactContext } from '../../contexts';
 import { commonColors, theme } from '../../styles/theme';
 import styled from 'styled-components';
 import { getAnalyticsTokenStatsData } from '../../api/kaddex-analytics';
+import useWindowSize from '../../hooks/useWindowSize';
 
-const LiquidityTokensTable = () => {
+const LiquidityTokensTable = ({ verifiedActive }) => {
   const history = useHistory();
   const { themeMode } = useApplicationContext();
   const [loading, setLoading] = useState(true);
-  const [tokens, setTokens] = useState([]);
+  const [allTokensList, setAllTokensList] = useState([]);
+  const [verifiedTokensList, setVerifiedTokensList] = useState([]);
 
-  const { tokensUsdPrice, enableGasStation } = usePactContext();
+  const { tokensUsdPrice, enableGasStation, allTokens, allPairs } = usePactContext();
+
+  const [width] = useWindowSize();
 
   const fetchData = async () => {
-    const pairsList = await getPairList();
+    const pairsList = await getPairList(allPairs);
     if (pairsList?.length) {
-      const pairsData = await getAllPairsData(tokensUsdPrice);
+      const pairsData = await getAllPairsData(tokensUsdPrice, allTokens, allPairs, pairsList);
       const tokensStatsData = await getAnalyticsTokenStatsData();
-      const tokens = Object.values(tokenData);
+      const tokens = Object.values(allTokens);
       const result = [];
       // calculate sum of liquidity in usd and volumes in usd for each token in each pair
       for (const token of tokens) {
@@ -40,7 +49,7 @@ const LiquidityTokensTable = () => {
           liquidity += token.name === tokenPair.token0 ? reduceBalance(tokenPair.reserves[0]) : reduceBalance(tokenPair.reserves[1]);
         }
         const liquidityUSD = tokenUsdPrice ? liquidity * tokenUsdPrice : null;
-        const volume24H = tokensStatsData?.[token.code].volume24h;
+        const volume24H = tokensStatsData?.[token.code]?.volume24h;
         let tokenInfo = pairsData
           .filter((d) => d.token0 === token.name || d.token1 === token.name)
           .sort((x, y) => y.apr * y.multiplier - x.apr * x.multiplier);
@@ -58,7 +67,9 @@ const LiquidityTokensTable = () => {
           multiplier,
         });
       }
-      setTokens(result);
+      const verifiedTokensData = result.filter((r) => r.isVerified);
+      setAllTokensList(result.sort((x, y) => y.liquidityUSD - x.liquidityUSD));
+      setVerifiedTokensList(verifiedTokensData.sort((x, y) => y.liquidityUSD - x.liquidityUSD));
     }
     setLoading(false);
   };
@@ -71,15 +82,24 @@ const LiquidityTokensTable = () => {
 
   return !loading ? (
     <CommonTable
-      items={tokens}
-      columns={enableGasStation ? renderColumns(history) : renderColumns(history).filter((x) => x.name !== 'Fees')}
+      items={verifiedActive ? verifiedTokensList : allTokensList}
+      columns={
+        enableGasStation ? renderColumns(history, allTokens, width) : renderColumns(history, allTokens, width).filter((x) => x.name !== 'Fees')
+      }
       actions={[
         {
           icon: () => <AddIcon />,
           onClick: (item) => {
-            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${item.name}`), {
-              from: ROUTE_LIQUIDITY_TOKENS,
-            });
+            const itemIsInBoostedPair = checkIfTokenIsInBoostedPool(item, allPairs);
+            if (itemIsInBoostedPair) {
+              history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${item.name}`), {
+                from: ROUTE_LIQUIDITY_TOKENS,
+              });
+            } else {
+              history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=KDA&token1=${item.name}`), {
+                from: ROUTE_LIQUIDITY_POOLS,
+              });
+            }
           },
         },
         {
@@ -118,21 +138,28 @@ const ScalableCryptoContainer = styled(FlexContainer)`
   }
 `;
 
-const renderColumns = (history) => {
+const renderColumns = (history, allTokens, width) => {
   return [
     {
       name: '',
-      width: 160,
+      width: width <= theme().mediaQueries.mobilePixel ? 90 : 100,
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
-          <CryptoContainer style={{ zIndex: 2 }}> {tokenData[item.name].icon}</CryptoContainer>
+          {allTokens[item.name]?.isVerified ? (
+            <div style={{ marginRight: 16 }}>
+              <VerifiedLogo className="svg-app-color" />
+            </div>
+          ) : (
+            <div style={{ width: 32 }} />
+          )}
+          <CryptoContainer style={{ zIndex: 2 }}> {allTokens[item.name].icon}</CryptoContainer>
           {item.name}
         </ScalableCryptoContainer>
       ),
     },
     {
       name: 'price',
-      width: 160,
+      width: width <= theme().mediaQueries.mobilePixel ? 90 : 100,
       sortBy: 'tokenUsdPrice',
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer h-100" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
@@ -165,7 +192,7 @@ const renderColumns = (history) => {
 
     {
       name: 'Fees',
-      width: 160,
+      width: width <= theme().mediaQueries.mobilePixel ? 90 : 100,
       render: () => (
         <FlexContainer className="align-ce">
           <GasIcon />
@@ -178,7 +205,7 @@ const renderColumns = (history) => {
 
     {
       name: 'APR',
-      width: 120,
+      width: 100,
       sortBy: 'apr',
       multiplier: 'multiplier',
       render: ({ item }) =>
@@ -186,7 +213,7 @@ const renderColumns = (history) => {
           <FlexContainer className="align-ce svg-pink">
             <BoosterIcon style={{ width: 16, height: 16 }} />
             <Label labelStyle={{ fontWeight: 600, marginLeft: 6 }} fontSize={14} color={commonColors.pink}>
-              {(item.apr * item.multiplier).toFixed(2)} %
+              {(item?.apr * item?.multiplier)?.toFixed(2)} %
             </Label>
           </FlexContainer>
         ) : (

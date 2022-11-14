@@ -5,8 +5,8 @@ import Label from '../../shared/Label';
 import { PartialScrollableScrollSection } from '../../layout/Containers';
 import useWindowSize from '../../../hooks/useWindowSize';
 import { theme } from '../../../styles/theme';
-import { CloseIcon } from '../../../assets';
-import { useApplicationContext, useGameEditionContext, useSwapContext } from '../../../contexts';
+import { CloseIcon, VerifiedLogo } from '../../../assets';
+import { useApplicationContext, useGameEditionContext, usePactContext } from '../../../contexts';
 
 const Divider = styled.div`
   border-top: ${({ theme: { colors } }) => `1px solid ${colors.white}99 `};
@@ -51,18 +51,27 @@ const TokenItem = styled.div`
     width: 24px;
     height: 24px;
   }
+  img {
+    margin-right: 8px;
+    width: 24px !important;
+    height: 24px !important;
+  }
+  .svg-small {
+    width: 16px;
+    height: 16px;
+  }
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel + 1}px`}) {
     font-size: ${({ gameEditionView }) => gameEditionView && '13px'};
   }
 `;
 const TokenSelectorModalContent = ({ onSelectToken, onClose, token, tokensToKeep }) => {
   const [searchValue, setSearchValue] = useState('');
-  const swap = useSwapContext();
+  const pact = usePactContext();
   const { gameEditionView, onCloseTokensList } = useGameEditionContext();
   const { themeMode } = useApplicationContext();
 
   const [width] = useWindowSize();
-  const cryptoCurrencies = Object.values(swap.tokenData).filter((c) => {
+  const cryptoCurrencies = Object.values(pact.allTokens).filter((c) => {
     const code = c.code !== 'coin' ? c.code.split('.')[1] : c.code;
     return code.toLocaleLowerCase().includes(searchValue?.toLocaleLowerCase()) || c.name.toLowerCase().includes(searchValue?.toLowerCase());
   });
@@ -118,6 +127,7 @@ const TokenSelectorModalContent = ({ onSelectToken, onClose, token, tokensToKeep
                         }
                       }}
                     >
+                      {crypto.isVerified ? <VerifiedLogo className="svg-small svg-app-color" /> : <div style={{ width: '24px' }} />}
                       {crypto.icon}
                       {crypto.name}
 

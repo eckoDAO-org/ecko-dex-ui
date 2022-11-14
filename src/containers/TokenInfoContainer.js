@@ -1,17 +1,19 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { useHistory, useParams } from 'react-router-dom';
-import { usePactContext } from '../contexts';
-import { ArrowBack } from '../assets';
+import { useApplicationContext, usePactContext } from '../contexts';
+import { ArrowBack, VerifiedBoldLogo } from '../assets';
 import { getDailyCandles, getTotalVolume, getUSDPriceDiff, getKDAPriceDiff } from '../api/kaddex-stats';
 import TokenPriceChart from '../components/charts/TokenPriceChart';
 import AnalyticsSimpleWidget from '../components/shared/AnalyticsSimpleWidget';
 import { CryptoContainer, FlexContainer } from '../components/shared/FlexContainer';
 import GraphicPercentage from '../components/shared/GraphicPercentage';
 import Label from '../components/shared/Label';
-import tokenData from '../constants/cryptoCurrencies';
 import { getDecimalPlaces, humanReadableNumber } from '../utils/reduceBalance';
-import theme from '../styles/theme';
+import { theme, commonColors, commonTheme } from '../styles/theme';
+import styled from 'styled-components';
+import CustomButton from '../components/shared/CustomButton';
 
 const initialMonthlyRange = {
   initial: 0,
@@ -22,9 +24,13 @@ const TokenInfoContainer = () => {
   const history = useHistory();
   const { token } = useParams();
   const pact = usePactContext();
+  const { themeMode } = useApplicationContext();
 
-  const asset = (tokenData[token].statsID || tokenData[token].code) === 'coin' ? 'KDA' : tokenData[token].statsID || tokenData[token].code;
-  const currency = (tokenData[token].statsID || tokenData[token].code) === 'coin' ? 'USDT' : 'coin';
+  const asset =
+    (pact.allTokens?.[token].statsID || pact.allTokens?.[token].code) === 'coin'
+      ? 'KDA'
+      : pact.allTokens?.[token].statsID || pact.allTokens?.[token].code;
+  const currency = (pact.allTokens?.[token].statsID || pact.allTokens?.[token].code) === 'coin' ? 'USDT' : 'coin';
 
   const [monthlyRange, setMonthlyRange] = useState(initialMonthlyRange);
   const [monthlyVolumeRange, setMonthlyVolumeRange] = useState(initialMonthlyRange);
@@ -47,13 +53,13 @@ const TokenInfoContainer = () => {
       const lastMonthVolume = await getTotalVolume(
         moment().subtract(1, 'months').toDate(),
         new Date(),
-        tokenData[token].statsID || tokenData[token].code
+        pact.allTokens[token].statsID || pact.allTokens[token].code
       );
       if (lastMonthVolume) {
         const pastLastMonthVolume = await getTotalVolume(
           moment().subtract(2, 'months').toDate(),
           moment().subtract(1, 'months').toDate(),
-          tokenData[token].statsID || tokenData[token].code
+          pact.allTokens[token].statsID || pact.allTokens[token].code
         );
         if (pastLastMonthVolume) {
           setMonthlyVolumeRange({
@@ -77,24 +83,48 @@ const TokenInfoContainer = () => {
     <FlexContainer
       className="column w-100 main"
       gap={24}
-      desktopStyle={{ paddingRight: theme.layout.desktopPadding, paddingLeft: theme.layout.desktopPadding }}
-      tabletStyle={{ paddingRight: theme.layout.tabletPadding, paddingLeft: theme.layout.tabletPadding }}
-      mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
+      desktopStyle={{ paddingRight: commonTheme.layout.desktopPadding, paddingLeft: commonTheme.layout.desktopPadding }}
+      tabletStyle={{ paddingRight: commonTheme.layout.tabletPadding, paddingLeft: commonTheme.layout.tabletPadding }}
+      mobileStyle={{ paddingRight: commonTheme.layout.mobilePadding, paddingLeft: commonTheme.layout.mobilePadding }}
     >
-      <FlexContainer className="w-100 align-ce">
-        <ArrowBack
-          className="arrow-back svg-app-color"
-          style={{
-            cursor: 'pointer',
-            marginRight: '16px',
-            justifyContent: 'center',
-          }}
-          onClick={() => history.goBack()}
-        />
-        <CryptoContainer style={{ marginRight: 8 }}>{tokenData[token].icon}</CryptoContainer>
-        <Label fontSize={24} fontFamily="syncopate">
-          {token}
-        </Label>
+      <FlexContainer className="w-100 align-ce justify-sb">
+        <div className="flex w-100 align-ce">
+          <ArrowBack
+            className="arrow-back svg-app-color"
+            style={{
+              cursor: 'pointer',
+              marginRight: '16px',
+              justifyContent: 'center',
+            }}
+            onClick={() => history.goBack()}
+          />
+          <CryptoContainer style={{ marginRight: 8 }}>{pact.allTokens?.[token].icon}</CryptoContainer>
+          <Label fontSize={24} fontFamily="syncopate">
+            {token}
+          </Label>
+        </div>
+        {!pact.allTokens?.[token].isVerified && (
+          <CustomButton
+            fontSize={13}
+            buttonStyle={{ height: 33, width: 'min-content' }}
+            type={'secondary'}
+            fontFamily="syncopate"
+            onClick={() =>
+              window.open(
+                `https://docs.google.com/forms/d/e/1FAIpQLSfb_1LIY594I87WotLwD8SzmOte9gc9KT4_2y5z6ot5Wv46nw/viewform`,
+                '_blank',
+                'noopener,noreferrer'
+              )
+            }
+          >
+            <ButtonContent color={commonColors.white}>
+              <VerifiedBoldLogo className={'svg-app-inverted-color'} />
+              <Label fontFamily="syncopate" color={theme(themeMode).colors.primary} labelStyle={{ marginTop: 1 }}>
+                VERIFY
+              </Label>
+            </ButtonContent>
+          </CustomButton>
+        )}
       </FlexContainer>
       <FlexContainer gap={16} className="w-100 justify-sb" tabletClassName="column" mobileClassName="column">
         <AnalyticsSimpleWidget
@@ -105,7 +135,7 @@ const TokenInfoContainer = () => {
                 pact?.tokensUsdPrice?.[token]
                   ? humanReadableNumber(pact?.tokensUsdPrice?.[token], 3) !== '0.000'
                     ? humanReadableNumber(pact?.tokensUsdPrice?.[token], 3)
-                    : (pact?.tokensUsdPrice?.[token]).toFixed(tokenData[token].precision)
+                    : (pact?.tokensUsdPrice?.[token]).toFixed(pact.allTokens?.[token].precision)
                   : '-'
               }`}
               <GraphicPercentage prevValue={price24h?.initial} currentValue={price24h?.final} />
@@ -126,7 +156,7 @@ const TokenInfoContainer = () => {
           subtitle={<GraphicPercentage prevValue={monthlyRange?.initial} currentValue={monthlyRange?.final} />}
         />
       </FlexContainer>
-      <TokenPriceChart tokenData={tokenData[token]} height={300} />
+      <TokenPriceChart dataToken={pact.allTokens?.[token]} height={300} />
     </FlexContainer>
     // <div>
     //   <CustomButton onClick={() => history.goBack()}>Token Info</CustomButton>
@@ -135,3 +165,14 @@ const TokenInfoContainer = () => {
 };
 
 export default TokenInfoContainer;
+
+const ButtonContent = styled.div`
+  display: flex;
+  align-items: center;
+  svg {
+    margin-right: 8px;
+    path {
+      fill: ${({ color }) => color};
+    }
+  }
+`;

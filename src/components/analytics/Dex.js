@@ -22,7 +22,7 @@ import { SKDXIcon } from '../../assets';
 /* const KDX_TOTAL_SUPPLY = 1000000000; */
 
 const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
-  const { tokensUsdPrice } = usePactContext();
+  const { tokensUsdPrice, allPairs } = usePactContext();
   const [volumeRange, setVolumeRange] = useState(DAILY_VOLUME_RANGE.value);
 
   const [loading, setLoading] = useState(true);
@@ -33,7 +33,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
   const stakedKdx = extractDecimal((poolState && poolState['staked-kdx']) || 0);
 
   useEffect(() => {
-    getPairList().then((pL) => {
+    getPairList(allPairs).then((pL) => {
       setLocalPairList(pL);
     });
   }, []);

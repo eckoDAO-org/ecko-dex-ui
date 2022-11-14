@@ -209,6 +209,13 @@ export const CryptoContainer = styled.div`
     width: ${({ size = 32 }) => `${size}px`}!important;
     height: ${({ size = 32 }) => `${size}px`}!important;
   }
+  svg {
+    width: ${({ size = 32 }) => `${size}px`}!important;
+    height: ${({ size = 32 }) => `${size}px`}!important;
+    path {
+      fill: #212750 !important;
+    }
+  }
 `;
 
 export const EquationContainer = styled(FlexContainer)`

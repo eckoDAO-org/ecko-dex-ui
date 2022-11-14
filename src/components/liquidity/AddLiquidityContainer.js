@@ -43,6 +43,7 @@ const Container = styled(FadeIn)`
 const AddLiquidityContainer = (props) => {
   const history = useHistory();
   const { setWantsKdxRewards } = useLiquidityContext();
+  const pact = usePactContext();
   const { pathname } = useLocation();
   const { tokensUsdPrice } = usePactContext();
 
@@ -55,7 +56,7 @@ const AddLiquidityContainer = (props) => {
   const [apr, setApr] = useState(null);
 
   const calculateApr = async () => {
-    const allPairsData = await getAllPairsData(tokensUsdPrice);
+    const allPairsData = await getAllPairsData(tokensUsdPrice, pact.allTokens, pact.allPairs, data.pools);
 
     let pool = null;
     if (pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED) {
@@ -83,7 +84,7 @@ const AddLiquidityContainer = (props) => {
   };
 
   const fetchData = async () => {
-    const pools = await getPairList();
+    const pools = await getPairList(pact.allPairs);
     if (pools.length) {
       const multipliers = await getPairsMultiplier(pools);
       const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
@@ -119,8 +120,13 @@ const AddLiquidityContainer = (props) => {
   }, [pair, data]);
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (pact.allPairs) {
+      setLoading(true);
+      fetchData();
+    } else {
+      setLoading(false);
+    }
+  }, [pact.allPairs]);
 
   return loading ? (
     <AppLoader className="h-100 w-100 align-ce justify-ce" />

@@ -15,7 +15,7 @@ import { commonColors } from '../../../styles/theme';
 export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeData, toUnstakeAmount, stakedTimeStart }) => {
   const [checked, setChecked] = useState(false);
 
-  const { tokensUsdPrice } = usePactContext();
+  const pact = usePactContext();
   const isThreePercentPenaltyActive = () => stakedTimeStart && moment().diff(stakedTimeStart, 'hours') < STAKING_CONSTANTS.percentagePenaltyHours;
   const isDynamicPenaltyActive = () => stakedTimeStart && moment().diff(stakedTimeStart, 'hours') < STAKING_CONSTANTS.rewardsPenaltyHoursToWait;
 
@@ -37,7 +37,7 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
               <div style={{ textAlign: 'right' }}>
                 <Label>{getDecimalPlaces(toUnstakeAmount * 0.03)} KDX</Label>
                 <Label className="justify-fe" labelStyle={{ opacity: 0.7, fontSize: 13, marginTop: 4 }}>
-                  $ {(toUnstakeAmount * 0.03 * tokensUsdPrice?.KDX).toFixed(2)}
+                  $ {(toUnstakeAmount * 0.03 * pact.tokensUsdPrice?.KDX).toFixed(2)}
                 </Label>
               </div>
             </div>
@@ -67,7 +67,7 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
               <div style={{ textAlign: 'right' }}>
                 <Label>{estimateUnstakeData['reward-penalty'].toFixed(2)} KDX</Label>
                 <Label className="justify-fe" style={{ color: 'grey', fontSize: 13, marginTop: 4 }}>
-                  $ {(estimateUnstakeData['reward-penalty'] * tokensUsdPrice?.KDX).toFixed(2)}
+                  $ {(estimateUnstakeData['reward-penalty'] * pact.tokensUsdPrice?.KDX).toFixed(2)}
                 </Label>
               </div>
             </div>
@@ -92,7 +92,12 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
       {getUnstakeModalContent()}
       <Label fontSize={16}>Unstaked Amount</Label>
       <StakeModalRow>
-        <RowTokenInfoPrice tokenIcon={getTokenIconByCode('kaddex.kdx')} tokenName="KDX" amount={toUnstakeAmount} tokenPrice={tokensUsdPrice?.KDX} />
+        <RowTokenInfoPrice
+          tokenIcon={getTokenIconByCode('kaddex.kdx', pact.allTokens)}
+          tokenName="KDX"
+          amount={toUnstakeAmount}
+          tokenPrice={pact.okensUsdPrice?.KDX}
+        />
       </StakeModalRow>
       {isThreePercentPenaltyActive() ? (
         <StakeModalRow>
@@ -115,10 +120,10 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
           <Label fontSize={16}>Rewards Amount</Label>
           <StakeModalRow>
             <RowTokenInfoPrice
-              tokenIcon={getTokenIconByCode('kaddex.kdx')}
+              tokenIcon={getTokenIconByCode('kaddex.kdx', pact.allTokens)}
               tokenName="KDX"
               amount={(estimateUnstakeData && estimateUnstakeData?.['reward-accrued']) || 0}
-              tokenPrice={tokensUsdPrice?.KDX}
+              tokenPrice={pact.tokensUsdPrice?.KDX}
             />
           </StakeModalRow>
           {estimateUnstakeData && estimateUnstakeData?.['reward-penalty'] ? (

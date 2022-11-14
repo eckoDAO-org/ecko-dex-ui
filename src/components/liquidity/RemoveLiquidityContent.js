@@ -7,7 +7,6 @@ import WalletRequestView from '../modals/WalletRequestView';
 import CustomButton from '../shared/CustomButton';
 import FormContainer from '../shared/FormContainer';
 import Input from '../shared/Input';
-import tokenData from '../../constants/cryptoCurrencies';
 import Label from '../shared/Label';
 import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
 import { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
@@ -140,8 +139,8 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
   const onRemoveLiquidity = async () => {
     setLoading(true);
     const res = await liquidity.removeLiquidityWallet(
-      tokenData[pair?.token0],
-      tokenData[pair?.token1],
+      pact.allTokens[pair?.token0],
+      pact.allTokens[pair?.token1],
       reduceBalance(pooled, PRECISION),
       previewAmount
     );
@@ -308,7 +307,11 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
               <Label fontSize={13}>
                 {pair?.token0}/{pair?.token1} Rate
               </Label>
-              <Label fontSize={13}>{getDecimalPlaces(extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1]))}</Label>
+              <Label fontSize={13}>
+                {getDecimalPlaces(extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1])) < 0.000001
+                  ? '< 0.000001'
+                  : getDecimalPlaces(extractDecimal(pair.reserves[0]) / extractDecimal(pair.reserves[1]))}
+              </Label>
             </FlexContainer>
           </FlexContainer>
         )}

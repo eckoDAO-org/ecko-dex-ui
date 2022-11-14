@@ -14,6 +14,7 @@ import CustomDivider from '../../shared/CustomDivider';
 import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
 import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
 import { theme } from '../../../styles/theme';
+import DisclaimerUnverifiedTokens from '../../shared/DisclaimerUnverifiedTokens';
 
 export const SwapSuccessViewGE = () => {
   const { account } = useAccountContext();
@@ -27,7 +28,7 @@ export const SwapSuccessViewGE = () => {
       leftItem={
         <>
           <div className="flex justify-fs align-ce">
-            {getTokenIconByCode(swap?.localRes?.result?.data[0]?.token)}
+            {getTokenIconByCode(swap?.localRes?.result?.data[0]?.token, pact.allTokens)}
             <GameEditionLabel fontSize={32} color="black" fontFamily="syncopate">
               {getDecimalPlaces(extractDecimal(swap?.localRes?.result?.data[0]?.amount))}
             </GameEditionLabel>
@@ -48,7 +49,7 @@ export const SwapSuccessViewGE = () => {
       rightItem={
         <>
           <div className="flex justify-fs align-ce">
-            {getTokenIconByCode(swap?.localRes?.result?.data[1]?.token)}
+            {getTokenIconByCode(swap?.localRes?.result?.data[1]?.token, pact.allTokens)}
             <GameEditionLabel fontSize={32} color="black" fontFamily="syncopate">
               {getDecimalPlaces(extractDecimal(swap?.localRes?.result?.data[1]?.amount))}
             </GameEditionLabel>
@@ -67,7 +68,10 @@ export const SwapSuccessViewGE = () => {
       }
       infoItems={[
         {
-          label: `${getTokenName(swap?.localRes?.result?.data[0]?.token)}/${getTokenName(swap?.localRes?.result?.data[1]?.token)}`,
+          label: `${getTokenName(swap?.localRes?.result?.data[0]?.token, pact.allTokens)}/${getTokenName(
+            swap?.localRes?.result?.data[1]?.token,
+            pact.allTokens
+          )}`,
           value: `1 = ${reduceBalance(pact?.computeOut(1), 6)}`,
         },
         {
@@ -110,7 +114,9 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
             style={{ background: theme(themeMode).colors.white, borderRadius: 10, padding: 10, marginBottom: 24 }}
           >
             <AlertIcon className="mobile-none svg-app-inverted-color" />
-            <Label inverted>The current price of {getTokenName(swap?.localRes?.result?.data[1]?.token)} is below the slippage value</Label>
+            <Label inverted>
+              The current price of {getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)} is below the slippage value
+            </Label>
           </FlexContainer>
         )
       }
@@ -119,6 +125,9 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
       }}
     >
       <FlexContainer className="w-100 column" gap={12}>
+        {/* DISCLAIMER */}
+        {(!pact.allTokens[getTokenName(swap?.localRes?.result?.data[0]?.token, pact.allTokens)].isVerified ||
+          !pact.allTokens[getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)].isVerified) && <DisclaimerUnverifiedTokens />}
         {/* ACCOUNT */}
         <FlexContainer className="align-ce justify-sb">
           <Label fontSize={13}>Account</Label>
@@ -140,10 +149,10 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
         {/* FROM VALUES */}
         <FlexContainer className="align-ce justify-sb">
           <RowTokenInfoPrice
-            tokenIcon={getTokenIconByCode(swap?.localRes?.result?.data[0]?.token)}
-            tokenName={getTokenName(swap?.localRes?.result?.data[0]?.token)}
+            tokenIcon={getTokenIconByCode(swap?.localRes?.result?.data[0]?.token, pact.allTokens)}
+            tokenName={getTokenName(swap?.localRes?.result?.data[0]?.token, pact.allTokens)}
             amount={fromValues ? fromValues.amount : swap?.localRes?.result?.data[0]?.amount}
-            tokenPrice={pact.tokensUsdPrice?.[getTokenName(swap?.localRes?.result?.data[0]?.token)] || null}
+            tokenPrice={pact.tokensUsdPrice?.[getTokenName(swap?.localRes?.result?.data[0]?.token, pact.allTokens)] || null}
           />
         </FlexContainer>
         <ArrowIcon style={{ marginLeft: 6 }} />
@@ -151,21 +160,23 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
         <FlexContainer className="align-ce justify-sb">
           <RowTokenInfoPrice
             isEstimated
-            tokenIcon={getTokenIconByCode(swap?.localRes?.result?.data[1]?.token)}
-            tokenName={getTokenName(swap?.localRes?.result?.data[1]?.token)}
+            tokenIcon={getTokenIconByCode(swap?.localRes?.result?.data[1]?.token, pact.allTokens)}
+            tokenName={getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)}
             amount={
               fromValues
                 ? fromValues.amount * reduceBalance(pact?.computeOut(fromValues.amount) / fromValues.amount, 12)
                 : swap?.localRes?.result?.data[1]?.amount
             }
-            tokenPrice={pact.tokensUsdPrice?.[getTokenName(swap?.localRes?.result?.data[1]?.token)] || null}
+            tokenPrice={pact.tokensUsdPrice?.[getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)] || null}
           />
         </FlexContainer>
         <FlexContainer className="row justify-sb">
           <Label>Ratio</Label>
-          <Label fontSize={13}>{`1 ${getTokenName(swap?.localRes?.result?.data[0]?.token)} = ${getDecimalPlaces(
-            pact?.computeOut(fromValues.amount) / fromValues.amount
-          )} ${getTokenName(swap?.localRes?.result?.data[1]?.token)}`}</Label>
+          <Label fontSize={13}>{`1 ${getTokenName(swap?.localRes?.result?.data[0]?.token, pact.allTokens)} = ${
+            getDecimalPlaces(pact?.computeOut(fromValues.amount) / fromValues.amount) < 0.000001
+              ? '< 0.000001'
+              : getDecimalPlaces(pact?.computeOut(fromValues.amount) / fromValues.amount)
+          } ${getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)}`}</Label>
         </FlexContainer>
       </FlexContainer>
     </SuccesViewContainer>
