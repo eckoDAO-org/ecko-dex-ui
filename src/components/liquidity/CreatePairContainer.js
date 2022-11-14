@@ -20,7 +20,7 @@ import CreatePairModal from '../modals/liquidity/CreatePairModal';
 import { mkReq, parseRes } from '../../api/utils';
 import CreatePairTokenSelectorModal from '../modals/liquidity/CreatePairTokenSelectorModal';
 import { ArrowBack, ArrowDown, UnknownLogo } from '../../assets';
-import { ROUTE_LIQUIDITY_TOKENS } from '../../router/routes';
+import { ROUTE_LIQUIDITY_TOKENS, ROUTE_TOKEN_INFO } from '../../router/routes';
 import { useHistory } from 'react-router-dom';
 import CreatePairInfo from './CreatePairInfo';
 import InfoPopup from '../shared/InfoPopup';
@@ -136,7 +136,9 @@ const CreatePairContainer = () => {
       .then(async (createPairResponse) => {
         pollingNotif(createPairResponse.requestKeys[0], 'Create Pair Transaction Pending');
 
-        await transactionListen(createPairResponse.requestKeys[0]);
+        await transactionListen(createPairResponse.requestKeys[0], 'Pair created Successfull', 'Create Pair Transaction Error', () =>
+          history.push(ROUTE_TOKEN_INFO.replace(':token', token1.name))
+        );
         pact.setPolling(false);
       })
       .catch((error) => {

@@ -227,12 +227,19 @@ export const NotificationProvider = ({ children }) => {
   /* Generic listener of a transaction. The main input to work is the request key.
      If you want, pass successTitle and erroTitle in order to customize the message notification.
      Default messages are 'Transaction Success!' and 'Transaction Error!'
+
+     It's possible to add an action when the response is success (for example redirect to another page)
+     the action is a FUNCTION
   */
-  const transactionListen = async (reqKey, successTitle, errorTitle) => {
+  const transactionListen = async (reqKey, successTitle, errorTitle, successAction) => {
     const pollRes = await listen(reqKey);
     if (pollRes?.result?.status === 'success') {
       setFetchAccountBalance(true);
       successTitle ? showSuccessNotification(reqKey, successTitle) : showSuccessNotification(reqKey);
+      if (successAction) {
+        console.log('im in success action');
+        successAction();
+      }
     } else {
       setFetchAccountBalance(true);
       errorTitle ? showErrorNotification(reqKey, errorTitle) : showErrorNotification(reqKey);

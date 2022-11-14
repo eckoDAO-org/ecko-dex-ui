@@ -26,3 +26,12 @@ export const getAnalyticsPoolsStatsData = async () => {
     })
     .catch((err) => console.log('err', err));
 };
+
+export const getAnalyticsTokenData = async (tokenId) => {
+  const url = `token-data/token-data?tokenId=${tokenId}`;
+  return await kaddexStatsRequest(url)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => console.log('err', err));
+};

@@ -12,6 +12,7 @@ import GraphicPercentage from '../components/shared/GraphicPercentage';
 import Label from '../components/shared/Label';
 import { getDecimalPlaces, humanReadableNumber } from '../utils/reduceBalance';
 import theme from '../styles/theme';
+import { getAnalyticsTokenData } from '../api/kaddex-analytics';
 
 const initialMonthlyRange = {
   initial: 0,
@@ -27,6 +28,9 @@ const TokenInfoContainer = () => {
     (pact.allTokens?.[token].statsID || pact.allTokens?.[token].code) === 'coin'
       ? 'KDA'
       : pact.allTokens?.[token].statsID || pact.allTokens?.[token].code;
+
+  console.log('LOG --> asset', asset);
+
   const currency = (pact.allTokens?.[token].statsID || pact.allTokens?.[token].code) === 'coin' ? 'USDT' : 'coin';
 
   const [monthlyRange, setMonthlyRange] = useState(initialMonthlyRange);
@@ -35,9 +39,27 @@ const TokenInfoContainer = () => {
     initial: null,
     final: null,
   });
+  const [tokenData, setTokenData] = useState(null);
+  console.log('LOG --> tokenData', tokenData);
 
   useEffect(() => {
     const initData = async () => {
+      if (token === 'KDA' || token === 'KDX') {
+        //temporally mocked data
+        const analyticsTokenData = {
+          circulatingSupply: 9729644.329006802,
+          tokenId: asset,
+          totalSupply: 9997296.988999998,
+          updatedAt: '2022-11-11T00:10:12.775Z',
+          __v: 0,
+          _id: '636ba945864835ddd1fe767b',
+        };
+        setTokenData(analyticsTokenData);
+      } else {
+        const analyticsTokenData = await getAnalyticsTokenData(asset);
+        setTokenData(analyticsTokenData[0]);
+      }
+
       const { data } = await getDailyCandles(asset, currency, moment().subtract(30, 'days').toDate());
       if (data) {
         const initial = data[0]?.usdPrice?.close || data[0]?.price?.close || 0;
@@ -98,6 +120,23 @@ const TokenInfoContainer = () => {
         <Label fontSize={24} fontFamily="syncopate">
           {token}
         </Label>
+      </FlexContainer>
+      <FlexContainer gap={16} className="w-100 justify-sb" tabletClassName="column" mobileClassName="column">
+        <AnalyticsSimpleWidget
+          title={'Circulating Supply'}
+          mainText={`$ ${
+            pact?.tokensUsdPrice?.[token] && tokenData ? humanReadableNumber(pact?.tokensUsdPrice?.[token] * tokenData.circulatingSupply, 3) : '-'
+          }`}
+          subtitle={`${tokenData ? humanReadableNumber(tokenData.circulatingSupply, 3) : '-'} ${token}`}
+        />
+        <AnalyticsSimpleWidget
+          title="Total Supply"
+          mainText={`$ ${
+            pact?.tokensUsdPrice?.[token] && tokenData ? humanReadableNumber(pact?.tokensUsdPrice?.[token] * tokenData.totalSupply, 3) : '-'
+          }`}
+          subtitle={`${tokenData ? humanReadableNumber(tokenData.totalSupply, 3) : '-'} ${token}`}
+        />
+        <AnalyticsSimpleWidget title="TO ADD" mainText={`TO ADD`} subtitle="TO ADD" />
       </FlexContainer>
       <FlexContainer gap={16} className="w-100 justify-sb" tabletClassName="column" mobileClassName="column">
         <AnalyticsSimpleWidget
