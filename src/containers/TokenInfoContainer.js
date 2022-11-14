@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { useHistory, useParams } from 'react-router-dom';
-import { usePactContext } from '../contexts';
-import { ArrowBack } from '../assets';
+import { useApplicationContext, usePactContext } from '../contexts';
+import { ArrowBack, VerifiedBoldLogo } from '../assets';
 import { getDailyCandles, getTotalVolume, getUSDPriceDiff, getKDAPriceDiff } from '../api/kaddex-stats';
 import TokenPriceChart from '../components/charts/TokenPriceChart';
 import AnalyticsSimpleWidget from '../components/shared/AnalyticsSimpleWidget';
@@ -11,7 +11,9 @@ import { CryptoContainer, FlexContainer } from '../components/shared/FlexContain
 import GraphicPercentage from '../components/shared/GraphicPercentage';
 import Label from '../components/shared/Label';
 import { getDecimalPlaces, humanReadableNumber } from '../utils/reduceBalance';
-import theme from '../styles/theme';
+import { theme, commonColors, commonTheme } from '../styles/theme';
+import styled from 'styled-components';
+import CustomButton from '../components/shared/CustomButton';
 
 const initialMonthlyRange = {
   initial: 0,
@@ -22,6 +24,7 @@ const TokenInfoContainer = () => {
   const history = useHistory();
   const { token } = useParams();
   const pact = usePactContext();
+  const { themeMode } = useApplicationContext();
 
   const asset =
     (pact.allTokens?.[token].statsID || pact.allTokens?.[token].code) === 'coin'
@@ -80,24 +83,48 @@ const TokenInfoContainer = () => {
     <FlexContainer
       className="column w-100 main"
       gap={24}
-      desktopStyle={{ paddingRight: theme.layout.desktopPadding, paddingLeft: theme.layout.desktopPadding }}
-      tabletStyle={{ paddingRight: theme.layout.tabletPadding, paddingLeft: theme.layout.tabletPadding }}
-      mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
+      desktopStyle={{ paddingRight: commonTheme.layout.desktopPadding, paddingLeft: commonTheme.layout.desktopPadding }}
+      tabletStyle={{ paddingRight: commonTheme.layout.tabletPadding, paddingLeft: commonTheme.layout.tabletPadding }}
+      mobileStyle={{ paddingRight: commonTheme.layout.mobilePadding, paddingLeft: commonTheme.layout.mobilePadding }}
     >
-      <FlexContainer className="w-100 align-ce">
-        <ArrowBack
-          className="arrow-back svg-app-color"
-          style={{
-            cursor: 'pointer',
-            marginRight: '16px',
-            justifyContent: 'center',
-          }}
-          onClick={() => history.goBack()}
-        />
-        <CryptoContainer style={{ marginRight: 8 }}>{pact.allTokens?.[token].icon}</CryptoContainer>
-        <Label fontSize={24} fontFamily="syncopate">
-          {token}
-        </Label>
+      <FlexContainer className="w-100 align-ce justify-sb">
+        <div className="flex w-100 align-ce">
+          <ArrowBack
+            className="arrow-back svg-app-color"
+            style={{
+              cursor: 'pointer',
+              marginRight: '16px',
+              justifyContent: 'center',
+            }}
+            onClick={() => history.goBack()}
+          />
+          <CryptoContainer style={{ marginRight: 8 }}>{pact.allTokens?.[token].icon}</CryptoContainer>
+          <Label fontSize={24} fontFamily="syncopate">
+            {token}
+          </Label>
+        </div>
+        {!pact.allTokens?.[token].isVerified && (
+          <CustomButton
+            fontSize={13}
+            buttonStyle={{ height: 33, width: 'min-content' }}
+            type={'secondary'}
+            fontFamily="syncopate"
+            onClick={() =>
+              window.open(
+                `https://docs.google.com/forms/d/e/1FAIpQLSfb_1LIY594I87WotLwD8SzmOte9gc9KT4_2y5z6ot5Wv46nw/viewform`,
+                '_blank',
+                'noopener,noreferrer'
+              )
+            }
+          >
+            <ButtonContent color={commonColors.white}>
+              <VerifiedBoldLogo className={'svg-app-inverted-color'} />
+              <Label fontFamily="syncopate" color={theme(themeMode).colors.primary} labelStyle={{ marginTop: 1 }}>
+                VERIFY
+              </Label>
+            </ButtonContent>
+          </CustomButton>
+        )}
       </FlexContainer>
       <FlexContainer gap={16} className="w-100 justify-sb" tabletClassName="column" mobileClassName="column">
         <AnalyticsSimpleWidget
@@ -138,3 +165,14 @@ const TokenInfoContainer = () => {
 };
 
 export default TokenInfoContainer;
+
+const ButtonContent = styled.div`
+  display: flex;
+  align-items: center;
+  svg {
+    margin-right: 8px;
+    path {
+      fill: ${({ color }) => color};
+    }
+  }
+`;
