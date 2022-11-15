@@ -111,7 +111,7 @@ const TokenInfoContainer = () => {
             fontFamily="syncopate"
             onClick={() =>
               window.open(
-                `https://docs.google.com/forms/d/1lFt3quiQ37y5QDFt3XKwCeuRr_QJwmJrnXCRLWaWNC8`,
+                `https://docs.google.com/forms/d/e/1FAIpQLSfb_1LIY594I87WotLwD8SzmOte9gc9KT4_2y5z6ot5Wv46nw/viewform`,
                 '_blank',
                 'noopener,noreferrer'
               )
