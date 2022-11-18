@@ -127,7 +127,7 @@ const RewardBooster = ({ type, apr, handleState, previewObject, pair, isBoosted 
             {wantsKdxRewards ? (
               <div className="column">
                 <Label className="justify-fe" fontSize={16}>
-                  {previewObject ? getDecimalPlaces(extractDecimal(previewObject?.['estimated-kdx-rewards'])) : '-'} KDX
+                  ~ {previewObject ? getDecimalPlaces(extractDecimal(previewObject?.['estimated-kdx-rewards'])) : '-'} KDX
                 </Label>
                 <Label fontSize={13} className="justify-fe" withShade labelStyle={{ marginTop: 4 }}>
                   {tokensUsdPrice && previewObject

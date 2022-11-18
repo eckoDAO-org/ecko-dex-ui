@@ -95,9 +95,7 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
           PRECISION
         )
       );
-      setPreviewFees(
-        reduceBalance((extractDecimal(wantsKdxRewards && pair.isBoosted && previewObject?.['estimated-kdx-rewards']) * amount) / 100, PRECISION)
-      );
+      setPreviewFees(reduceBalance(extractDecimal(wantsKdxRewards && pair.isBoosted && previewObject?.['estimated-kdx-rewards']), PRECISION));
       setPreviewAmount(amount / 100);
     }
   }, [amount, pair, wantsKdxRewards]);
@@ -292,7 +290,7 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
               <div>
                 <FlexContainer className="justify-sb w-100">
                   <Label fontSize={13}>Fees Collected KDX</Label>
-                  <Label fontSize={13}>{getDecimalPlaces(extractDecimal(previewFees))}</Label>
+                  <Label fontSize={13}>~ {getDecimalPlaces(extractDecimal(previewFees))}</Label>
                 </FlexContainer>
                 {tokensUsdPrice ? (
                   <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7, justifyContent: 'flex-end' }}>
