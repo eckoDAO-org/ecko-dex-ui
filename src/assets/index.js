@@ -72,4 +72,12 @@ export { ReactComponent as AddLiquidityLogo } from './images/shared/add_liquidit
 export { ReactComponent as VaultIcon } from './images/shared/vault.svg';
 export { ReactComponent as SKDXIcon } from './images/shared/skdx-logo.svg';
 
+export { ReactComponent as DiscordIconCircle } from './images/social-media/discord.svg';
+export { ReactComponent as GithubIconCircle } from './images/social-media/github.svg';
+export { ReactComponent as LinkedinIconCircle } from './images/social-media/linkedin.svg';
+export { ReactComponent as MediumIconCircle } from './images/social-media/medium.svg';
+export { ReactComponent as TelegramIconCircle } from './images/social-media/telegram.svg';
+export { ReactComponent as TwitterIconCircle } from './images/social-media/twitter.svg';
+export { ReactComponent as YoutubeIconCircle } from './images/social-media/youtube.svg';
+
 export * from '../assets/images/game-edition';

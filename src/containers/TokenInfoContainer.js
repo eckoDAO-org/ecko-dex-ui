@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { useHistory, useParams } from 'react-router-dom';
 import { usePactContext } from '../contexts';
-import { ArrowBack } from '../assets';
+import { ArrowBack, DiscordIconCircle, GithubIconCircle, MediumIconCircle, TwitterIconCircle } from '../assets';
 import { getDailyCandles, getTotalVolume, getUSDPriceDiff, getKDAPriceDiff } from '../api/kaddex-stats';
 import TokenPriceChart from '../components/charts/TokenPriceChart';
 import AnalyticsSimpleWidget from '../components/shared/AnalyticsSimpleWidget';
@@ -13,6 +13,7 @@ import Label from '../components/shared/Label';
 import { getDecimalPlaces, humanReadableNumber } from '../utils/reduceBalance';
 import theme from '../styles/theme';
 import { getAnalyticsTokenData } from '../api/kaddex-analytics';
+import CopyPopup from '../components/shared/CopyPopup';
 
 const initialMonthlyRange = {
   initial: 0,
@@ -117,9 +118,19 @@ const TokenInfoContainer = () => {
           onClick={() => history.goBack()}
         />
         <CryptoContainer style={{ marginRight: 8 }}>{pact.allTokens?.[token].icon}</CryptoContainer>
-        <Label fontSize={24} fontFamily="syncopate">
+        <Label fontSize={24} fontFamily="syncopate" labelStyle={{ marginRight: 16 }}>
           {token}
         </Label>
+        <Label fontSize={16} labelStyle={{ marginRight: 8 }}>
+          {pact.allTokens?.[token].code}
+        </Label>
+        <CopyPopup containerStyle={{ marginBottom: 4, marginRight: 12 }} textToCopy={pact.allTokens?.[token].code} />
+        <FlexContainer gap={12} style={{ marginBottom: 4 }}>
+          <GithubIconCircle width={18} height={18} />
+          <TwitterIconCircle width={18} height={18} />
+          <DiscordIconCircle width={18} height={18} />
+          <MediumIconCircle width={18} height={18} />
+        </FlexContainer>
       </FlexContainer>
       <FlexContainer gap={16} className="w-100 justify-sb" tabletClassName="column" mobileClassName="column">
         <AnalyticsSimpleWidget
@@ -136,7 +147,7 @@ const TokenInfoContainer = () => {
           }`}
           subtitle={`${tokenData ? humanReadableNumber(tokenData.totalSupply, 3) : '-'} ${token}`}
         />
-        <AnalyticsSimpleWidget title="TO ADD" mainText={`TO ADD`} subtitle="TO ADD" />
+        <AnalyticsSimpleWidget title="Max Supply TO ADD" mainText={`TO ADD`} subtitle="TO ADD" />
       </FlexContainer>
       <FlexContainer gap={16} className="w-100 justify-sb" tabletClassName="column" mobileClassName="column">
         <AnalyticsSimpleWidget
@@ -169,6 +180,11 @@ const TokenInfoContainer = () => {
         />
       </FlexContainer>
       <TokenPriceChart dataToken={pact.allTokens?.[token]} height={300} />
+      <FlexContainer gap={16} className="w-100 justify-sb" tabletClassName="column" mobileClassName="column">
+        <AnalyticsSimpleWidget title="Liquidity" mainText={`$ 0.00 TODO`} subtitle={`$ 0.00 TODO ${token}`} />
+        <AnalyticsSimpleWidget title="24h Volume" mainText={`$ 0.00 TODO`} subtitle={`$ 0.00 TODO ${token}`} />
+        <AnalyticsSimpleWidget title="Marketcap - Fully Diluted Marketcap" mainText={`$ 0.00 TODO`} subtitle={`$ 0.00 TODO ${token}`} />
+      </FlexContainer>
     </FlexContainer>
     // <div>
     //   <CustomButton onClick={() => history.goBack()}>Token Info</CustomButton>
