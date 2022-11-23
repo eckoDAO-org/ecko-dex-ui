@@ -82,20 +82,14 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
 
   useEffect(() => {
     if (!isNaN(amount) && pair) {
-      setPooled(reduceBalance((extractDecimal(pair?.balance) * amount) / 100, PRECISION));
+      setPooled((extractDecimal(pair?.balance) * amount) / 100);
       setPooledToken0(
-        reduceBalance(
-          (extractDecimal(wantsKdxRewards && pair.isBoosted ? previewObject?.['tokenA-amount-received'] : pair?.pooledAmount[0]) * amount) / 100,
-          PRECISION
-        )
+        (extractDecimal(wantsKdxRewards && pair.isBoosted ? previewObject?.['tokenA-amount-received'] : pair?.pooledAmount[0]) * amount) / 100
       );
       setPooledToken1(
-        reduceBalance(
-          (extractDecimal(wantsKdxRewards && pair.isBoosted ? previewObject?.['tokenB-amount-received'] : pair?.pooledAmount[1]) * amount) / 100,
-          PRECISION
-        )
+        (extractDecimal(wantsKdxRewards && pair.isBoosted ? previewObject?.['tokenB-amount-received'] : pair?.pooledAmount[1]) * amount) / 100
       );
-      setPreviewFees(reduceBalance(extractDecimal(wantsKdxRewards && pair.isBoosted && previewObject?.['estimated-kdx-rewards']), PRECISION));
+      setPreviewFees(extractDecimal(wantsKdxRewards && pair.isBoosted && previewObject?.['estimated-kdx-rewards']));
       setPreviewAmount(amount / 100);
     }
   }, [amount, pair, wantsKdxRewards]);
@@ -139,7 +133,7 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
     const res = await liquidity.removeLiquidityWallet(
       pact.allTokens[pair?.token0],
       pact.allTokens[pair?.token1],
-      reduceBalance(pooled, PRECISION),
+      extractDecimal(pooled),
       previewAmount
     );
     if (!res) {
