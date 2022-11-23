@@ -124,7 +124,7 @@ const TokenInfoContainer = () => {
         <Label fontSize={16} labelStyle={{ marginRight: 8 }}>
           {pact.allTokens?.[token].code}
         </Label>
-        <CopyPopup containerStyle={{ marginBottom: 4, marginRight: 12 }} textToCopy={pact.allTokens?.[token].code} />
+        <CopyPopup containerStyle={{ marginBottom: 4, marginRight: 12 }} position="bottom" textToCopy={pact.allTokens?.[token].code} />
         <FlexContainer gap={12} style={{ marginBottom: 4 }}>
           <GithubIconCircle width={18} height={18} />
           <TwitterIconCircle width={18} height={18} />
