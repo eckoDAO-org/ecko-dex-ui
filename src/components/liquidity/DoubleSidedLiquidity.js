@@ -281,8 +281,8 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
     const res = await liquidity.addLiquidityWallet(
       pact.allTokens[fromValues.coin],
       pact.allTokens[toValues.coin],
-      fromValues.amount,
-      toValues.amount
+      reduceBalance(fromValues.amount, pact.allTokens[fromValues.coin].precision),
+      reduceBalance(toValues.amount, pact.allTokens[toValues.coin].precision)
     );
     if (!res) {
       wallet.setIsWaitingForWalletAuth(true);
