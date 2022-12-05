@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import ApexCharts from 'react-apexcharts';
 import { commonColors } from '../../styles/theme';
-import { getDailyCandles } from '../../api/kaddex-stats';
+import { getDailyCandles, getDailyCandlesFromCoinGecko } from '../../api/kaddex-stats';
 import { humanReadableNumber } from '../../utils/reduceBalance';
 import { useApplicationContext } from '../../contexts';
 import { FlexContainer } from '../shared/FlexContainer';
@@ -72,15 +72,40 @@ const TokenPriceChart = ({ dataToken, height }) => {
   const fetchCandles = async () => {
     const asset = (dataToken?.statsID || dataToken?.code) === 'coin' ? 'KDA' : dataToken?.statsID || dataToken?.code;
     const currency = (dataToken?.statsID || dataToken?.code) === 'coin' ? 'USDT' : 'coin';
-    const candles = await getDailyCandles(asset, currency, moment(dateStart).toDate());
-    setCandles(candles?.data || []);
-    if (candles?.data?.length) {
-      const last = candles?.data[candles.data.length - 1];
-      setCurrentData({
-        ...currentData,
-        price: last?.usdPrice?.close || last?.price?.close || '-',
+
+    if (dataToken.coingeckoId !== '') {
+      const candlesCoinGecko = await getDailyCandlesFromCoinGecko('kadena', 'usd', moment(dateStart).toDate());
+
+      candlesCoinGecko.splice(candlesCoinGecko.length - 2, 1);
+
+      const candlesData = candlesCoinGecko.map((item) => {
+        return {
+          day: moment(item[0]).format('YYYY-MM-DD'),
+          price: { close: item[1] },
+          timestamp: item[0],
+        };
       });
+
+      setCandles(candlesData || []);
+      if (candlesData.length) {
+        const last = candlesData[candlesData.length - 1];
+        setCurrentData({
+          ...currentData,
+          price: last?.price?.close || '-',
+        });
+      }
+    } else {
+      const candles = await getDailyCandles(asset, currency, moment(dateStart).toDate());
+      setCandles(candles?.data || []);
+      if (candles?.data?.length) {
+        const last = candles?.data[candles.data.length - 1];
+        setCurrentData({
+          ...currentData,
+          price: last?.usdPrice?.close || last?.price?.close || '-',
+        });
+      }
     }
+
     setIsLoading(false);
     return candles;
   };

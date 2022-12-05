@@ -141,7 +141,11 @@ const TokenInfoContainer = () => {
               <GraphicPercentage prevValue={price24h?.initial} currentValue={price24h?.final} />
             </FlexContainer>
           }
-          subtitle={token !== 'KDX' ? `1 KDX = ${getDecimalPlaces(pact?.tokensUsdPrice?.KDX / pact?.tokensUsdPrice?.[token])} ${token}` : null}
+          subtitle={
+            token !== 'KDX' && pact?.tokensUsdPrice?.[token]
+              ? `1 KDX = ${getDecimalPlaces(pact?.tokensUsdPrice?.KDX / pact?.tokensUsdPrice?.[token])} ${token}`
+              : null
+          }
         />
         <AnalyticsSimpleWidget
           title="1M Trading Volume"

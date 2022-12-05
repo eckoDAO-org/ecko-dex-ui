@@ -126,3 +126,20 @@ export const getDailyCandles = (asset, currency, dateStart, dateEnd = new Date()
   &currency=${currency}&asset=${asset}`;
   return kaddexStatsRequest(url);
 };
+
+export const getDailyCandlesFromCoinGecko = async (asset, currency, dateStart, dateEnd = new Date()) => {
+  const diff = moment(dateEnd).diff(moment(dateStart), 'days');
+
+  const urlDays = `https://api.coingecko.com/api/v3/coins/${asset}/market_chart?vs_currency=${currency}&days=${diff}&interval=daily`;
+
+  return await axios
+    .get(urlDays)
+    .then(async (res) => {
+      console.log('data', moment(res.data.prices[0][0]).format('YYYY-MM-DD'));
+      return res.data.prices;
+    })
+    .catch((err) => {
+      console.log('error', err);
+      return null;
+    });
+};
