@@ -10,7 +10,6 @@ import Input from '../shared/Input';
 import Label from '../shared/Label';
 import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
 import { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
-import { PRECISION } from '../../constants/contextConstants';
 import { extractDecimal, getDecimalPlaces, humanReadableNumber, limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
 import PixeledBlueContainer from '../game-edition-v2/components/PixeledInfoContainerBlue';
 import LogoLoader from '../shared/Loader';

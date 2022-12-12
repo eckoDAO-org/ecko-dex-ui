@@ -39,14 +39,14 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   const [fromValues, setFromValues] = useState({
     amount: '',
     balance: '',
-    coin: pair?.token0 || 'KDX',
-    precision: 12,
+    coin: pact.allTokens?.[pair?.token0] ? pair?.token0 : 'KDX',
+    precision: pact.allTokens?.[pair?.token0] ? pact.allTokens?.[pair?.token0]?.precision : 12,
   });
   const [toValues, setToValues] = useState({
     amount: '',
     balance: account.account.balance || '',
-    coin: pair?.token1 || (pair?.token0 === 'KDA' ? 'KDX' : 'KDA'),
-    precision: 12,
+    coin: pact.allTokens?.[pair?.token1] ? pair?.token1 : pair?.token0 === 'KDA' ? 'KDX' : 'KDA',
+    precision: pact.allTokens?.[pair?.token1] ? pact.allTokens?.[pair?.token1]?.precision : 12,
   });
 
   // update the balance after a transaction send or change account
