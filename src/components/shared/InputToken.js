@@ -109,7 +109,7 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
               padding: !gameEditionView && '4px 8px',
             }}
           >
-            {allTokens[values.coin]?.isVerified ? (
+            {allTokens[values.coin]?.isVerified || allTokens[values.coin]?.icon ? (
               allTokens[values.coin]?.icon
             ) : (
               <CryptoContainer className="flex align-ce" style={{ zIndex: 2 }} commonColors={commonColors}>

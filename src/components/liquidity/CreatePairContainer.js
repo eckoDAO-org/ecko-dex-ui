@@ -55,7 +55,7 @@ const CreatePairContainer = () => {
 
   const fetchData = async () => {
     const result = await getPairModuleDetails(token1.code, account.account);
-    if (!result.errorMessage) {
+    if (!result?.errorMessage && result?.balance > 0) {
       setCreatePairAvailable(true);
     }
   };
