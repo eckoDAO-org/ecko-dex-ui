@@ -1,23 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import { isNumber } from 'lodash';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { Checkbox } from 'semantic-ui-react';
 import styled from 'styled-components/macro';
-import { useAccountContext, useGameEditionContext, useLiquidityContext, usePactContext, useSwapContext } from '../../../contexts';
+import { ArrowIcon, KaddexOutlineIcon } from '../../../assets';
 import { CHAIN_ID } from '../../../constants/contextConstants';
+import { useAccountContext, useGameEditionContext, useLiquidityContext, usePactContext, useSwapContext } from '../../../contexts';
 import { extractDecimal, getDecimalPlaces, reduceBalance } from '../../../utils/reduceBalance';
+import reduceToken from '../../../utils/reduceToken';
 import { getPairByTokensName, getTokenIconById, getTokenName } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
-import Label from '../../shared/Label';
-import { CryptoContainer, FlexContainer } from '../../shared/FlexContainer';
-import reduceToken from '../../../utils/reduceToken';
 import CopyPopup from '../../shared/CopyPopup';
 import CustomDivider from '../../shared/CustomDivider';
-import { ArrowIcon, KaddexOutlineIcon } from '../../../assets';
-import { Checkbox } from 'semantic-ui-react';
-import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
-import { isNumber } from 'lodash';
-import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
 import DisclaimerUnverifiedTokens from '../../shared/DisclaimerUnverifiedTokens';
+import { CryptoContainer, FlexContainer } from '../../shared/FlexContainer';
+import Label from '../../shared/Label';
+import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
+import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
 
 export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }) => {
   const { setButtons } = useGameEditionContext();
@@ -312,7 +312,7 @@ export const SuccessRemoveView = ({ token0, token1, loading, onClick, pair }) =>
         {wantsKdxRewards && pair.isBoosted && (
           <>
             <div className="flex" style={{ marginTop: 6 }}>
-              <Label fontSize={16}>Rewards</Label>
+              <Label fontSize={16}>Estimated Rewards</Label>
             </div>
             <RowTokenInfoPrice
               tokenIcon={getTokenIconById('KDX', pact.allTokens)}
