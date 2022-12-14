@@ -10,7 +10,6 @@ import Input from '../shared/Input';
 import Label from '../shared/Label';
 import PressButtonToActionLabel from '../game-edition-v2/components/PressButtonToActionLabel';
 import { InfoContainer } from '../game-edition-v2/components/PixeledInfoContainerBlue';
-import { PRECISION } from '../../constants/contextConstants';
 import { extractDecimal, getDecimalPlaces, humanReadableNumber, limitDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
 import PixeledBlueContainer from '../game-edition-v2/components/PixeledInfoContainerBlue';
 import LogoLoader from '../shared/Loader';
@@ -82,22 +81,14 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
 
   useEffect(() => {
     if (!isNaN(amount) && pair) {
-      setPooled(reduceBalance((extractDecimal(pair?.balance) * amount) / 100, PRECISION));
+      setPooled((extractDecimal(pair?.balance) * amount) / 100);
       setPooledToken0(
-        reduceBalance(
-          (extractDecimal(wantsKdxRewards && pair.isBoosted ? previewObject?.['tokenA-amount-received'] : pair?.pooledAmount[0]) * amount) / 100,
-          PRECISION
-        )
+        (extractDecimal(wantsKdxRewards && pair.isBoosted ? previewObject?.['tokenA-amount-received'] : pair?.pooledAmount[0]) * amount) / 100
       );
       setPooledToken1(
-        reduceBalance(
-          (extractDecimal(wantsKdxRewards && pair.isBoosted ? previewObject?.['tokenB-amount-received'] : pair?.pooledAmount[1]) * amount) / 100,
-          PRECISION
-        )
+        (extractDecimal(wantsKdxRewards && pair.isBoosted ? previewObject?.['tokenB-amount-received'] : pair?.pooledAmount[1]) * amount) / 100
       );
-      setPreviewFees(
-        reduceBalance((extractDecimal(wantsKdxRewards && pair.isBoosted && previewObject?.['estimated-kdx-rewards']) * amount) / 100, PRECISION)
-      );
+      setPreviewFees(extractDecimal(wantsKdxRewards && pair.isBoosted && previewObject?.['estimated-kdx-rewards']));
       setPreviewAmount(amount / 100);
     }
   }, [amount, pair, wantsKdxRewards]);
@@ -141,7 +132,7 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
     const res = await liquidity.removeLiquidityWallet(
       pact.allTokens[pair?.token0],
       pact.allTokens[pair?.token1],
-      reduceBalance(pooled, PRECISION),
+      extractDecimal(pooled),
       previewAmount
     );
     if (!res) {
@@ -292,7 +283,7 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
               <div>
                 <FlexContainer className="justify-sb w-100">
                   <Label fontSize={13}>Fees Collected KDX</Label>
-                  <Label fontSize={13}>{getDecimalPlaces(extractDecimal(previewFees))}</Label>
+                  <Label fontSize={13}>~ {getDecimalPlaces(extractDecimal(previewFees))}</Label>
                 </FlexContainer>
                 {tokensUsdPrice ? (
                   <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7, justifyContent: 'flex-end' }}>

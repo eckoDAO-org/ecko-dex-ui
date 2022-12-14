@@ -40,6 +40,7 @@ import {
 } from '../contexts';
 import theme, { commonColors } from '../styles/theme';
 import { Helmet } from 'react-helmet';
+import useQueryParams from '../hooks/useQueryParams';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -103,6 +104,8 @@ const SwapContainer = () => {
   const modalContext = useModalContext();
   const { resolutionConfiguration } = useApplicationContext();
 
+  const query = useQueryParams();
+
   const { gameEditionView, openModal, closeModal, outsideToken } = useGameEditionContext();
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
 
@@ -110,17 +113,17 @@ const SwapContainer = () => {
   const [fromValues, setFromValues] = useState({
     amount: '',
     balance: '',
-    coin: 'KDA',
-    address: 'coin',
-    precision: 12,
+    coin: pact.allTokens?.[query.get('token0')] ? query.get('token0') : 'KDA',
+    address: pact.allTokens?.[query.get('token0')] ? pact.allTokens?.[query.get('token0')]?.code : 'coin',
+    precision: pact.allTokens?.[query.get('token0')] ? pact.allTokens?.[query.get('token0')]?.precision : 12,
   });
 
   const [toValues, setToValues] = useState({
     amount: '',
     balance: account.account.balance || '',
-    coin: 'KDX',
-    address: 'kaddex.kdx',
-    precision: 12,
+    coin: pact.allTokens?.[query.get('token1')] ? query.get('token1') : 'KDX',
+    address: pact.allTokens?.[query.get('token1')] ? pact.allTokens?.[query.get('token1')]?.code : 'kaddex.kdx',
+    precision: pact.allTokens?.[query.get('token1')] ? pact.allTokens?.[query.get('token1')]?.precision : 12,
   });
 
   const [inputSide, setInputSide] = useState('');
