@@ -83,15 +83,6 @@
         "color": "#92187B",
         "isVerified": true
       },
-      "coin:lago.kwUSDC": {
-        "name": "coin:lago.kwUSDC",
-        "token0": "KDA",
-        "token1": "kwUSDC",
-        "main": false,
-        "isBoosted": false,
-        "color": "#292A45",
-        "isVerified": true
-      },
       "coin:kdlaunch.token": {
         "name": "coin:kdlaunch.token",
         "token0": "KDA",
@@ -144,24 +135,6 @@
         "main": false,
         "isBoosted": false,
         "color": "#7c572e",
-        "isVerified": true
-      },
-      "coin:lago.kwBTC": {
-        "name": "coin:lago.kwBTC",
-        "token0": "KDA",
-        "token1": "kwBTC",
-        "main": false,
-        "isBoosted": false,
-        "color": "#ed9b21",
-        "isVerified": true
-      },
-      "coin:lago.USD2": {
-        "name": "coin:lago.USD2",
-        "token0": "KDA",
-        "token1": "USD2",
-        "main": false,
-        "isBoosted": false,
-        "color": "#ed9b21",
         "isVerified": true
       },
       "arkade.token:coin": {
