@@ -8,7 +8,7 @@ import { getTokenUsdPriceByName } from '../utils/token-utils';
 import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, KADDEX_NAMESPACE, KADDEX_API_URL } from '../constants/contextConstants';
 import { useAccountContext, useNotificationContext, useWalletContext } from '.';
 import { fetchPrecision, getPairList } from '../api/pact';
-import tokenData, { pairsData } from '../constants/cryptoCurrencies';
+import tokenData, { pairsData, blacklistedTokenData } from '../constants/cryptoCurrencies';
 import { GAS_OPTIONS } from '../constants/gasConfiguration';
 import { getPairs, getTokenNameFromAddress } from '../api/pairs';
 import { UnknownLogo } from '../assets';
@@ -92,6 +92,11 @@ export const PactProvider = (props) => {
         const tokens = item.split(':');
         const token0 = tokens[0]; // Gets the first contract
         const token1 = tokens[1]; // Gets the second contract
+
+        if (blacklistedTokenData.includes(token0) || blacklistedTokenData.includes(token1)) {
+          return;
+        }
+
         const tokenToCheck = token0 === 'coin' ? token1 : token0;
         const communityToken = {
           name: getTokenNameFromAddress(tokenToCheck, communityTokenList),
