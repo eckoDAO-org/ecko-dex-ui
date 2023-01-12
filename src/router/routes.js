@@ -27,6 +27,3 @@ export const ROUTE_ANALYTICS = '/analytics';
 export const ROUTE_ANALYTICS_KDX = '/analytics/kdx';
 export const ROUTE_ANALYTICS_STATS = '/analytics/stats';
 export const ROUTE_TOKEN_INFO = '/token-info/:token';
-
-// BUY CRYPTO - SIMPLEX
-export const ROUTE_BUY_CRYPTO = '/buy-crypto';

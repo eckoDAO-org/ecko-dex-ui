@@ -64,12 +64,6 @@ export const VAULT = {
   target: '_blank',
   link: process.env.REACT_APP_VAULTING_URL,
 };
-export const BUY_CRYPTO = {
-  id: 5,
-  label: 'buy',
-  target: '_blank',
-  link: process.env.REACT_APP_BUY_CRYPTO_URL,
-};
 
 export default NETWORK_TYPE === 'development' ? [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS] : [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS];
 
