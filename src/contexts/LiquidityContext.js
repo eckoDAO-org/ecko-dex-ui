@@ -288,7 +288,7 @@ export const LiquidityProvider = (props) => {
             pairConfig.name,
             account.account,
             pair,
-            Number(liquidity),
+            reduceBalance(liquidity, PRECISION),
           ]),
         ],
         sender: pact.enableGasStation ? 'kaddex-free-gas' : account.account,
