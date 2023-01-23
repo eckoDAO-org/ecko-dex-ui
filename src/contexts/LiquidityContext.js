@@ -361,6 +361,10 @@ export const LiquidityProvider = (props) => {
     }
   };
 
+  const singleSideRemoveLiquidityWallet = (token0, token1, tokenOut, liquidity) => {
+    console.log('LOG --> token0', token0);
+  };
+
   const removeLiquidityPreview = async (token0, token1, amount) => {
     try {
       const pactCode = `(${KADDEX_NAMESPACE}.wrapper.preview-remove-liquidity
@@ -383,6 +387,7 @@ export const LiquidityProvider = (props) => {
     addLiquidityWallet,
     addOneSideLiquidityWallet,
     removeLiquidityWallet,
+    singleSideRemoveLiquidityWallet,
     removeLiquidityPreview,
     wantsKdxRewards,
     setWantsKdxRewards,

@@ -59,7 +59,7 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, previewAmount }) => {
+const RemoveDoubleSideLiquidity = ({ pair, previewObject, setPreviewAmount, previewAmount }) => {
   const pact = usePactContext();
   const wallet = useWalletContext();
   const liquidity = useLiquidityContext();
@@ -311,4 +311,4 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
   );
 };
 
-export default RemoveLiquidityContent;
+export default RemoveDoubleSideLiquidity;
