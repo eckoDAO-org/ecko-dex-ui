@@ -16,7 +16,7 @@ import LogoLoader from '../shared/Loader';
 import { FadeIn } from '../shared/animations';
 import { FlexContainer } from '../shared/FlexContainer';
 import InputRange from '../shared/InputRange';
-import { SuccessRemoveView } from '../modals/liquidity/LiquidityTxView';
+import { SuccessDoubleSideRemoveView } from '../modals/liquidity/LiquidityTxView';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -165,7 +165,7 @@ const RemoveDoubleSideLiquidity = ({ pair, previewObject, setPreviewAmount, prev
             loading={loading}
           >
             {/* SuccessRemoveWithBoosterView to remove liquidy with booster */}
-            <SuccessRemoveView
+            <SuccessDoubleSideRemoveView
               token0={pair.token0}
               token1={pair.token1}
               label="Remove Liquidity"
