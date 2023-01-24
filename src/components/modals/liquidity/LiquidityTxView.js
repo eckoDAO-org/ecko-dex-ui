@@ -9,7 +9,7 @@ import { CHAIN_ID } from '../../../constants/contextConstants';
 import { useAccountContext, useGameEditionContext, useLiquidityContext, usePactContext, useSwapContext } from '../../../contexts';
 import { extractDecimal, getDecimalPlaces, reduceBalance } from '../../../utils/reduceBalance';
 import reduceToken from '../../../utils/reduceToken';
-import { getPairByTokensName, getTokenIconById, getTokenName } from '../../../utils/token-utils';
+import { getPairByTokensName, getTokenIconByCode, getTokenIconById, getTokenName } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import CopyPopup from '../../shared/CopyPopup';
 import CustomDivider from '../../shared/CustomDivider';
@@ -280,7 +280,7 @@ export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading
   );
 };
 
-export const SuccessRemoveView = ({ token0, token1, loading, onClick, pair }) => {
+export const SuccessDoubleSideRemoveView = ({ token0, token1, loading, onClick, pair }) => {
   const swap = useSwapContext();
   const { wantsKdxRewards } = useLiquidityContext();
   const pact = usePactContext();
@@ -309,6 +309,84 @@ export const SuccessRemoveView = ({ token0, token1, loading, onClick, pair }) =>
           amount={pair.isBoosted ? swap?.localRes?.result?.data?.amountB : swap?.localRes?.result?.data?.amount1}
           tokenPrice={pact.tokensUsdPrice?.[token1] || null}
         />
+        {wantsKdxRewards && pair.isBoosted && (
+          <>
+            <div className="flex" style={{ marginTop: 6 }}>
+              <Label fontSize={16}>Estimated Rewards</Label>
+            </div>
+            <RowTokenInfoPrice
+              tokenIcon={getTokenIconById('KDX', pact.allTokens)}
+              tokenName={'KDX'}
+              amount={swap?.localRes?.resPreview?.['estimated-kdx-rewards']}
+              tokenPrice={pact.tokensUsdPrice?.KDX || null}
+            />
+          </>
+        )}
+      </FlexContainer>
+    </SuccesViewContainer>
+  );
+};
+export const SuccessSingleSideRemoveView = ({ token0, token1, loading, onClick, pair }) => {
+  const swap = useSwapContext();
+  const { wantsKdxRewards } = useLiquidityContext();
+  const pact = usePactContext();
+  return (
+    <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle>
+      <FlexContainer className="w-100 column" gap={12}>
+        {/* DISCLAIMER */}
+        {(!pact.allTokens[token0].isVerified || !pact.allTokens[token1].isVerified) && <DisclaimerUnverifiedTokens />}
+        <Label>Are you sure you want to remove your liquidity?</Label>
+
+        <CustomDivider style={{ margin: '16px 0' }} />
+
+        <div className="flex justify-sb mobile-none">
+          <Label fontSize={16}>Amount</Label>
+          <Label fontSize={16}>Receive</Label>
+        </div>
+
+        <FlexContainer mobileClassName="column" gap={16}>
+          {/* LEFT */}
+          <Label className="mobile-only" fontSize={16}>
+            Amount
+          </Label>
+
+          <FlexContainer className="justify-ce column w-100" gap={14}>
+            <RowTokenInfoPrice
+              tokenIcon={getTokenIconById(token0, pact.allTokens)}
+              tokenName={token0}
+              amount={
+                pair.isBoosted ? swap?.localRes?.result?.data?.['remove-result']?.amountA : swap?.localRes?.result?.data?.['remove-result']?.amount0
+              }
+              tokenPrice={pact.tokensUsdPrice?.[token0] || null}
+            />
+            <RowTokenInfoPrice
+              tokenIcon={getTokenIconById(token1, pact.allTokens)}
+              tokenName={token1}
+              amount={
+                pair.isBoosted ? swap?.localRes?.result?.data?.['remove-result']?.amountB : swap?.localRes?.result?.data?.['remove-result']?.amount1
+              }
+              tokenPrice={pact.tokensUsdPrice?.[token1] || null}
+            />
+          </FlexContainer>
+
+          <FlexContainer className="align-ce justify-ce" mobileClassName="w-100">
+            <ArrowIcon className="mobile-none" style={{ transform: 'rotate(-90deg)' }} />
+            <ArrowIcon className="mobile-only" />
+          </FlexContainer>
+          {/* RIGHT */}
+          <Label className="mobile-only" fontSize={16}>
+            Receive
+          </Label>
+
+          <FlexContainer className="w-100 justify-ce align-ce">
+            <RowTokenInfoPrice
+              tokenIcon={getTokenIconByCode(swap?.localRes?.result?.data?.['swap-result']?.[1].token, pact.allTokens)}
+              tokenName={getTokenName(swap?.localRes?.result?.data?.['swap-result']?.[1].token, pact.allTokens)}
+              amount={swap?.localRes?.result?.data?.['total-amount']}
+              tokenPrice={pact.tokensUsdPrice?.[getTokenName(swap?.localRes?.result?.data?.['swap-result']?.[1].token, pact.allTokens)] || null}
+            />
+          </FlexContainer>
+        </FlexContainer>
         {wantsKdxRewards && pair.isBoosted && (
           <>
             <div className="flex" style={{ marginTop: 6 }}>
