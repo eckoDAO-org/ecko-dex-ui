@@ -26,7 +26,7 @@ const RewardBooster = ({ type, apr, handleState, previewObject, pair, isBoosted 
     if (!res.errorMessage) {
       setRewardsAvailable(extractDecimal(res));
     }
-    if (pair) {
+    if (pair && pair?.isBoosted) {
       const result = await getPairMultiplier(allTokens[pair?.token0].code, allTokens[pair?.token1].code);
       if (!result.errorMessage) {
         setMultiplier(result);

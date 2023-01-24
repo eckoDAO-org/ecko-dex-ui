@@ -79,7 +79,9 @@ const RemoveLiquidityContainer = (props) => {
         setPair(currentPair);
         if (currentPair) {
           await calculateApr(resultPairList, currentPair, pairs);
-          await removePreview(currentPair);
+          if (currentPair?.isBoosted) {
+            await removePreview(currentPair);
+          }
         }
       }
     }
