@@ -24,6 +24,7 @@ import {
   ROUTE_DAO,
   ROUTE_DAO_PROPOSAL,
   ROUTE_LIQUIDITY_REWARDS,
+  ROUTE_LIQUIDITY_CREATE_PAIR,
   ROUTE_ANALYTICS_KDX,
   ROUTE_ANALYTICS_STATS,
   ROUTE_TOKEN_INFO,
@@ -36,6 +37,7 @@ import AddLiquidityContainer from '../components/liquidity/AddLiquidityContainer
 import RemoveLiquidityContainer from '../containers/RemoveLiquidityContainer';
 import StakeContainer from '../containers/StakeContainer';
 import TokenInfoContainer from '../containers/TokenInfoContainer';
+import CreatePairContainer from '../components/liquidity/CreatePairContainer';
 
 export default () => {
   const { gameEditionView } = useGameEditionContext();
@@ -64,6 +66,7 @@ export default () => {
               path={[ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED]}
               component={AddLiquidityContainer}
             />
+            <Route exact path={[ROUTE_LIQUIDITY_CREATE_PAIR]} component={CreatePairContainer} />
             <Route exact path={ROUTE_LIQUIDITY_REMOVE_LIQUIDITY} component={RemoveLiquidityContainer} />
             <Route exact path={[ROUTE_DAO, ROUTE_DAO_PROPOSAL]} component={DaoContainer} />
             <Route exact path={[ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS]} component={AnalyticsContainer} />

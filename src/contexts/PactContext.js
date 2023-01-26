@@ -1,15 +1,19 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useEffect, useState } from 'react';
 import Pact from 'pact-lang-api';
-import pairTokens from '../constants/pairsConfig';
 // import { useInterval } from '../hooks/useInterval';
 import axios from 'axios';
 import { getTokenUsdPriceByName } from '../utils/token-utils';
 import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, KADDEX_NAMESPACE, KADDEX_API_URL } from '../constants/contextConstants';
 import { useAccountContext, useNotificationContext, useWalletContext } from '.';
 import { fetchPrecision, getPairList } from '../api/pact';
-import tokenData from '../constants/cryptoCurrencies';
+import tokenData, { pairsData, blacklistedTokenData } from '../constants/cryptoCurrencies';
 import { GAS_OPTIONS } from '../constants/gasConfiguration';
+import { getPairs, getTokenNameFromAddress } from '../api/pairs';
+import { UnknownLogo } from '../assets';
+import { reduceBalance } from '../utils/reduceBalance';
+import { getAnalyticsKdaUsdPrice, getCoingeckoUsdPrice } from '../api/coingecko';
 
 export const PactContext = createContext();
 
@@ -36,7 +40,6 @@ export const PactProvider = (props) => {
   const [pactCmd, setPactCmd] = useState(null);
 
   const [ratio, setRatio] = useState(NaN);
-  const [pairList, setPairList] = useState(pairTokens);
   const [swapList, setSwapList] = useState([]);
   const [offsetSwapList, setOffsetSwapList] = useState(0);
   const [moreSwap, setMoreSwap] = useState(true);
@@ -47,6 +50,11 @@ export const PactProvider = (props) => {
   const [enableGasStation, setEnableGasStation] = useState(true);
   const [gasConfiguration, setGasConfiguration] = useState(GAS_OPTIONS.DEFAULT.SWAP);
   const [networkGasData, setNetworkGasData] = useState(initialNetworkGasData);
+
+  const [allPairs, setAllPairs] = useState(null);
+  const [allTokens, setAllTokens] = useState(null);
+
+  const [kdaUsdPrice, setKdaUsdPrice] = useState(null);
 
   const handleGasConfiguration = (key, value) => {
     setGasConfiguration((prev) => ({ ...prev, [key]: value }));
@@ -68,24 +76,112 @@ export const PactProvider = (props) => {
   }, []);
   // useInterval(getNetworkGasData, 20000);
 
-  const updateTokenUsdPrice = async () => {
-    const pairList = await getPairList();
-    const result = {};
-    for (const token of Object.values(tokenData)) {
-      await getTokenUsdPriceByName(token.name, pairList).then((price) => {
-        result[token.name] = price;
+  const getPairsData = async () => {
+    const result = await getPairs();
+    let communityList = {};
+    let communityTokenList = {};
+    if (result.errorMessage) {
+      console.log('ERROR');
+      return;
+    } else {
+      const communityPairs = result.filter((r) => !pairsData.hasOwnProperty(r));
+      const communityPairsWithKda = communityPairs.filter((res) => res.split(':')[0] === 'coin' || res.split(':')[1] === 'coin');
+
+      communityPairsWithKda.map((item) => {
+        // TOKENS
+        const tokens = item.split(':');
+        const token0 = tokens[0]; // Gets the first contract
+        const token1 = tokens[1]; // Gets the second contract
+
+        if (blacklistedTokenData.includes(token0) || blacklistedTokenData.includes(token1)) {
+          return;
+        }
+
+        const tokenToCheck = token0 === 'coin' ? token1 : token0;
+        const communityToken = {
+          name: getTokenNameFromAddress(tokenToCheck, communityTokenList),
+          coingeckoId: '',
+          statsID: tokenToCheck,
+          tokenNameKaddexStats: tokenToCheck,
+          code: tokenToCheck,
+          main: false,
+          icon: <UnknownLogo style={{ marginRight: 8 }} />,
+          color: '',
+          precision: 12,
+          isVerified: false,
+        };
+        communityTokenList[communityToken.name] = communityToken;
+
+        let cpToken0Name = '';
+        let cpToken1Name = '';
+
+        Object.keys(communityTokenList).forEach((item) => {
+          if (communityTokenList[item].code === token0) {
+            cpToken0Name = communityTokenList[item].name;
+          }
+          if (communityTokenList[item].code === token1) {
+            cpToken1Name = communityTokenList[item].name;
+          }
+        });
+
+        // PAIRS
+        const communityPair = {
+          name: item,
+          token0: tokens[0] === 'coin' ? 'KDA' : cpToken0Name,
+          token1: tokens[1] === 'coin' ? 'KDA' : cpToken1Name,
+          main: false,
+          isBoosted: false,
+          color: '#92187B',
+          isVerified: false,
+        };
+        communityList[communityPair.name] = communityPair;
       });
+      setAllTokens((prev) => ({ ...prev, ...tokenData, ...communityTokenList }));
+      setAllPairs((prev) => ({ ...prev, ...pairsData, ...communityList }));
+    }
+    return;
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      await getPairsData();
+    }
+
+    fetchData();
+  }, []);
+
+  const updateTokenUsdPrice = async (kdaPrice) => {
+    const pairList = await getPairList(allPairs);
+    const result = {};
+    if (allTokens) {
+      for (const token of Object.values(allTokens)) {
+        await getTokenUsdPriceByName(token.name, pairList, allTokens, kdaPrice).then((price) => {
+          result[token.name] = price;
+        });
+      }
     }
     setTokensUsdPrice(result);
   };
 
   useEffect(() => {
-    updateTokenUsdPrice();
-  }, []);
+    if (allPairs && allTokens) {
+      const getInitialData = async () => {
+        let kdaUsdPrice = await getCoingeckoUsdPrice('kadena');
+        if (!kdaUsdPrice) {
+          kdaUsdPrice = await getAnalyticsKdaUsdPrice();
+        }
+        setKdaUsdPrice(kdaUsdPrice);
+        updateTokenUsdPrice(kdaUsdPrice);
+      };
+      getInitialData();
+    }
+  }, [allTokens, allPairs]);
   // useInterval(updateTokenUsdPrice, 25000);
 
   useEffect(() => {
-    pairReserve ? setRatio(pairReserve['token0'] / pairReserve['token1']) : setRatio(NaN);
+    if (pairReserve) {
+      pairReserve['token0'] === 0 && pairReserve['token1'] === 0 ? setRatio(0) : setRatio(pairReserve['token0'] / pairReserve['token1']);
+    } else setRatio(NaN);
   }, [pairReserve]);
 
   useEffect(() => {
@@ -96,7 +192,7 @@ export const PactProvider = (props) => {
 
   const getEventsSwapList = async () => {
     setSwapList([]);
-    const limit = 20;
+    const limit = 50;
     try {
       if (account.account.account) {
         setLoadingSwap(true);
@@ -111,7 +207,13 @@ export const PactProvider = (props) => {
 
         if (Object.values(response?.data).length < limit) setMoreSwap(false);
         if (Object.values(response?.data).length !== 0) {
-          let swap = Object.values(response?.data);
+          let swap = Object.values(response?.data).map((s) => ({
+            ...s,
+            tokenA: s.params[3],
+            amountA: s.params[2],
+            tokenB: s.params[5],
+            amountB: s.params[4],
+          }));
           if (swap.length !== 0) {
             setSwapList(swap);
           } else setSwapList({ error: 'No swaps found' });
@@ -132,7 +234,7 @@ export const PactProvider = (props) => {
   };
 
   const getMoreEventsSwapList = async () => {
-    const limit = 20;
+    const limit = 50;
     let offset = offsetSwapList + limit;
 
     try {
@@ -146,7 +248,13 @@ export const PactProvider = (props) => {
             limit: limit,
           },
         });
-        let swap = Object.values(response?.data);
+        let swap = Object.values(response?.data).map((s) => ({
+          ...s,
+          tokenA: s.params[3],
+          amountA: s.params[2],
+          tokenB: s.params[5],
+          amountB: s.params[4],
+        }));
         if (swap.length !== 0) {
           const newResults = [...swapList, ...swap];
           if (swap.length < limit) {
@@ -228,9 +336,22 @@ export const PactProvider = (props) => {
 
   // UTILS
 
+  const getRatioFirstAddLiquidity = (toToken, toTokenAmount, fromToken, fromTokenAmount) => {
+    if (toToken === fromToken) return 1;
+    else if (toTokenAmount / fromTokenAmount && toTokenAmount / fromTokenAmount !== Infinity) return reduceBalance(toTokenAmount / fromTokenAmount);
+    else return '-';
+  };
+
+  const getRatioFirstAddLiquidityInverse = (toToken, toTokenAmount, fromToken, fromTokenAmount) => {
+    if (toToken === fromToken) return 1;
+    else if (fromTokenAmount / toTokenAmount && fromTokenAmount / toTokenAmount !== Infinity) return reduceBalance(fromTokenAmount / toTokenAmount);
+    else return '-';
+  };
+
   const getRatio = (toToken, fromToken) => {
     if (toToken === fromToken) return 1;
-    return pairReserve['token1'] / pairReserve['token0'];
+    else if (pairReserve['token1'] === 0 && pairReserve['token0'] === 0) return 1;
+    else return pairReserve['token1'] / pairReserve['token0'];
   };
 
   const getRatio1 = (toToken, fromToken) => {
@@ -296,17 +417,20 @@ export const PactProvider = (props) => {
     precision,
     setPrecision,
     fetchPrecision,
-    pairList,
-    setPairList,
     swapList,
+    allPairs,
+    allTokens,
     getMoreEventsSwapList,
     moreSwap,
     polling,
     setPolling,
     ratio,
+    getRatioFirstAddLiquidity,
+    getRatioFirstAddLiquidityInverse,
     getRatio,
     getRatio1,
     share,
+    pairReserve,
     getReserves,
     txSend,
     computePriceImpact,
@@ -316,6 +440,7 @@ export const PactProvider = (props) => {
     setMoreSwap,
     loadingSwap,
     getEventsSwapList,
+    kdaUsdPrice,
   };
   return <PactContext.Provider value={contextValues}>{props.children}</PactContext.Provider>;
 };

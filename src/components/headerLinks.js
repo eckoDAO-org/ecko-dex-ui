@@ -1,5 +1,5 @@
 import React from 'react';
-import { AboutIcon, BetaIcon, CodeIcon, DiscordIcon, XWalletLogo } from '../assets';
+import { AboutIcon, BetaIcon, CodeIcon, DiscordIcon, VaultIcon, XWalletLogo } from '../assets';
 
 export default [
   {
@@ -13,6 +13,13 @@ export default [
     label: 'BETA',
     icon: <BetaIcon className="menu-icon" />,
     link: 'https://beta.kaddex.com',
+    hideOnGameEdition: true,
+  },
+  {
+    id: 5,
+    label: 'Vault',
+    icon: <VaultIcon className="menu-icon" />,
+    link: process.env.REACT_APP_VAULTING_URL,
     hideOnGameEdition: true,
   },
   {

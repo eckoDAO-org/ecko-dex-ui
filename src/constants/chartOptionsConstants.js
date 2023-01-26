@@ -1,4 +1,7 @@
 import moment from 'moment';
+
+const LAUNCH_DATE = moment('2022-08-01');
+
 ////VOLUME
 export const DAILY_VOLUME_RANGE = {
   key: 0,
@@ -21,7 +24,9 @@ export const CHART_OPTIONS = [DAILY_VOLUME_RANGE, WEEKLY_VOLUME_RANGE, MONTHLY_V
 export const chartTimeRanges = {
   [DAILY_VOLUME_RANGE.value]: {
     name: (_id) => moment(_id).format('DD/MM/YYYY'),
-    dateStart: moment().subtract(60, 'days').format('YYYY-MM-DD'),
+    dateStart: moment().subtract(60, 'days').isBefore(LAUNCH_DATE)
+      ? moment(LAUNCH_DATE).format('YYYY-MM-DD')
+      : moment().subtract(60, 'days').format('YYYY-MM-DD'),
     dateStartTvl: moment().subtract(1, 'days').format('YYYY-MM-DD'),
     title: (payload) => moment(payload._id).format('DD/MM/YYYY'),
     timeLabel: '24h',
@@ -31,7 +36,11 @@ export const chartTimeRanges = {
     name: (_id) => _id,
     dateStart: moment()
       .subtract(7 * 40, 'days')
-      .format('YYYY-MM-DD'),
+      .isBefore(LAUNCH_DATE)
+      ? moment(LAUNCH_DATE).format('YYYY-MM-DD')
+      : moment()
+          .subtract(7 * 40, 'days')
+          .format('YYYY-MM-DD'),
     dateStartTvl: moment().subtract(1, 'weeks').format('YYYY-MM-DD'),
     title: (payload) => moment(payload.volumes[0]?.startDay).format('DD/MM/YYYY'),
     timeLabel: 'weekly',
@@ -42,7 +51,12 @@ export const chartTimeRanges = {
     dateStart: moment()
       .subtract(30 * 6, 'days')
       .days(0)
-      .format('YYYY-MM-DD'),
+      .isBefore(LAUNCH_DATE)
+      ? moment(LAUNCH_DATE).format('YYYY-MM-DD')
+      : moment()
+          .subtract(30 * 6, 'days')
+          .days(0)
+          .format('YYYY-MM-DD'),
     dateStartTvl: moment().subtract(1, 'months').format('YYYY-MM-DD'),
     title: (payload) => moment(payload.volumes[0]?.startDay).format('MMM YY'),
     timeLabel: 'monthly',
@@ -71,19 +85,25 @@ export const TVL_CHART_OPTIONS = [TVL_3M_RANGE, TVL_6M_RANGE, TVL_12M_RANGE];
 export const tvlRanges = {
   [TVL_3M_RANGE.value]: {
     name: (_id) => moment(_id).format('DD/MM/YYYY'),
-    dateStart: moment().subtract(90, 'days').format('YYYY-MM-DD'),
+    dateStart: moment().subtract(90, 'days').isBefore(LAUNCH_DATE)
+      ? moment(LAUNCH_DATE).format('YYYY-MM-DD')
+      : moment().subtract(90, 'days').format('YYYY-MM-DD'),
     title: (payload) => moment(payload._id).format('DD/MM/YYYY'),
     timeLabel: '3m',
   },
   [TVL_6M_RANGE.value]: {
     name: (_id) => _id,
-    dateStart: moment().subtract(6, 'months').format('YYYY-MM-DD'),
+    dateStart: moment().subtract(6, 'months').isBefore(LAUNCH_DATE)
+      ? moment(LAUNCH_DATE).format('YYYY-MM-DD')
+      : moment().subtract(6, 'months').format('YYYY-MM-DD'),
     title: (payload) => moment(payload.volumes[0]?.startDay).format('DD/MM/YYYY'),
     timeLabel: '6m',
   },
   [TVL_12M_RANGE.value]: {
     name: (_id) => _id,
-    dateStart: moment().subtract(1, 'years').days(0).format('YYYY-MM-DD'),
+    dateStart: moment().subtract(1, 'years').days(0).isBefore(LAUNCH_DATE)
+      ? moment(LAUNCH_DATE).format('YYYY-MM-DD')
+      : moment().subtract(1, 'years').days(0).format('YYYY-MM-DD'),
     title: (payload) => moment(payload.volumes[0]?.startDay).format('MMM YY'),
     timeLabel: '1y',
   },

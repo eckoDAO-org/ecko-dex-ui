@@ -14,13 +14,13 @@ import DoubleSidedLiquidity from './DoubleSidedLiquidity';
 import SingleSidedLiquidity from './SingleSidedLiquidity';
 import { getPairList } from '../../api/pact';
 import { getGroupedVolume } from '../../api/kaddex-stats';
-import { getAllPairValues } from '../../utils/token-utils';
+import { getAllPairsData } from '../../utils/token-utils';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { isValidString } from '../../utils/string-utils';
 import { AppLoader } from '../../components/shared/AppLoader';
 import { useErrorState } from '../../hooks/useErrorState';
 import theme from '../../styles/theme';
-import { useLiquidityContext } from '../../contexts';
+import { useLiquidityContext, usePactContext } from '../../contexts';
 import { getPairsMultiplier } from '../../api/liquidity-rewards';
 import moment from 'moment';
 
@@ -43,7 +43,9 @@ const Container = styled(FadeIn)`
 const AddLiquidityContainer = (props) => {
   const history = useHistory();
   const { setWantsKdxRewards } = useLiquidityContext();
+  const pact = usePactContext();
   const { pathname } = useLocation();
+  const { tokensUsdPrice } = usePactContext();
 
   const query = useQueryParams();
 
@@ -54,16 +56,17 @@ const AddLiquidityContainer = (props) => {
   const [apr, setApr] = useState(null);
 
   const calculateApr = async () => {
+    const allPairsData = await getAllPairsData(tokensUsdPrice, pact.allTokens, pact.allPairs, data.pools);
+
     let pool = null;
     if (pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED) {
       pool = data.pools.find((p) => p.token0 === pair.token0 || p.token1 === pair.token0);
     } else {
       pool = data.pools.find((p) => (p.token0 === pair.token0 && p.token1 === pair.token1) || (p.token0 === pair.token1 && p.token1 === pair.token0));
     }
-
     if (pool) {
-      const result = await getAllPairValues([pool], data.volumes);
-      setApr(result[0]?.apr?.value);
+      let apr = allPairsData.find((p) => p.name === pool.name)?.apr || 0;
+      setApr(apr);
     }
   };
 
@@ -81,7 +84,7 @@ const AddLiquidityContainer = (props) => {
   };
 
   const fetchData = async () => {
-    const pools = await getPairList();
+    const pools = await getPairList(pact.allPairs);
     if (pools.length) {
       const multipliers = await getPairsMultiplier(pools);
       const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
@@ -117,8 +120,13 @@ const AddLiquidityContainer = (props) => {
   }, [pair, data]);
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (pact.allPairs) {
+      setLoading(true);
+      fetchData();
+    } else {
+      setLoading(false);
+    }
+  }, [pact.allPairs]);
 
   return loading ? (
     <AppLoader className="h-100 w-100 align-ce justify-ce" />

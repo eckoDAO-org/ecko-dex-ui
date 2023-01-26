@@ -1,10 +1,8 @@
 import React, { useState, createContext } from 'react';
-import pairTokens from '../constants/pairsConfig';
 import Pact from 'pact-lang-api';
 import { CHAIN_ID, NETWORK, NETWORKID, PRECISION, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { useKaddexWalletContext, usePactContext, useWalletContext, useAccountContext, useWalletConnectContext } from '.';
 import { extractDecimal, reduceBalance } from '../utils/reduceBalance';
-import tokenData from '../constants/cryptoCurrencies';
 import { handleError, mkReq, parseRes } from '../api/utils';
 import { getOneSideLiquidityPairInfo, getPairAccount, getTokenBalanceAccount, pactFetchLocal } from '../api/pact';
 
@@ -21,7 +19,7 @@ export const LiquidityProvider = (props) => {
   } = useWalletConnectContext();
   const wallet = useWalletContext();
   const [liquidityProviderFee, setLiquidityProviderFee] = useState(0.003);
-  const [pairListAccount, setPairListAccount] = useState(pairTokens);
+  const [pairListAccount, setPairListAccount] = useState(pact.allPairs);
   const [wantsKdxRewards, setWantsKdxRewards] = useState(true);
 
   const addLiquidityWallet = async (token0, token1, amountDesired0, amountDesired1) => {
@@ -30,13 +28,13 @@ export const LiquidityProvider = (props) => {
 
       let newAmountDesired0 = amountDesired0;
       let newAmountDesired1 = amountDesired1;
-      const pairExists = pairTokens[`${token0.code}:${token1.code}`];
+      const pairExists = pact.allPairs[`${token0.code}:${token1.code}`];
       let pairConfig = null;
 
       if (!pairExists) {
         newAmountDesired0 = amountDesired1;
         newAmountDesired1 = amountDesired0;
-        pairConfig = pairTokens[`${token1.code}:${token0.code}`];
+        pairConfig = pact.allPairs[`${token1.code}:${token0.code}`];
       } else {
         pairConfig = pairExists;
       }
@@ -44,8 +42,8 @@ export const LiquidityProvider = (props) => {
       const contractName = pairConfig.isBoosted ? 'wrapper' : 'exchange';
       const signCmd = {
         pactCode: `(${KADDEX_NAMESPACE}.${contractName}.add-liquidity
-            ${tokenData[pairConfig.token0].code}
-            ${tokenData[pairConfig.token1].code}
+            ${pact.allTokens[pairConfig.token0].code}
+            ${pact.allTokens[pairConfig.token1].code}
             (read-decimal 'amountDesired0)
             (read-decimal 'amountDesired1)
             (read-decimal 'amountMinimum0)
@@ -58,12 +56,12 @@ export const LiquidityProvider = (props) => {
           ...(pact.enableGasStation
             ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
             : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
-          Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${tokenData[pairConfig.token0].code}.TRANSFER`, [
+          Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${pact.allTokens[pairConfig.token0].code}.TRANSFER`, [
             account.account,
             pair,
             Number(newAmountDesired0),
           ]),
-          Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${tokenData[pairConfig.token1].code}.TRANSFER`, [
+          Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${pact.allTokens[pairConfig.token1].code}.TRANSFER`, [
             account.account,
             pair,
             Number(newAmountDesired1),
@@ -76,10 +74,10 @@ export const LiquidityProvider = (props) => {
         ttl: 600,
         envData: {
           'user-ks': account.guard,
-          amountDesired0: reduceBalance(newAmountDesired0, tokenData[pairConfig.token0].precision),
-          amountDesired1: reduceBalance(newAmountDesired1, tokenData[pairConfig.token1].precision),
-          amountMinimum0: reduceBalance(newAmountDesired0 * (1 - parseFloat(pact.slippage)), tokenData[pairConfig.token0].precision),
-          amountMinimum1: reduceBalance(newAmountDesired1 * (1 - parseFloat(pact.slippage)), tokenData[pairConfig.token1].precision),
+          amountDesired0: reduceBalance(newAmountDesired0, pact.allTokens[pairConfig.token0].precision),
+          amountDesired1: reduceBalance(newAmountDesired1, pact.allTokens[pairConfig.token1].precision),
+          amountMinimum0: reduceBalance(newAmountDesired0 * (1 - parseFloat(pact.slippage)), pact.allTokens[pairConfig.token0].precision),
+          amountMinimum1: reduceBalance(newAmountDesired1 * (1 - parseFloat(pact.slippage)), pact.allTokens[pairConfig.token1].precision),
         },
         signingPubKey: account.guard.keys[0],
         networkId: NETWORKID,
@@ -106,17 +104,17 @@ export const LiquidityProvider = (props) => {
       const eventData = {
         ...data,
         amountFrom: Math.max(
-          reduceBalance(newAmountDesired0 * (1 - parseFloat(pact.slippage)), tokenData[pairConfig.token0].precision),
-          reduceBalance(newAmountDesired0, tokenData[pairConfig.token0].precision)
+          reduceBalance(newAmountDesired0 * (1 - parseFloat(pact.slippage)), pact.allTokens[pairConfig.token0].precision),
+          reduceBalance(newAmountDesired0, pact.allTokens[pairConfig.token0].precision)
         ),
         amountTo: Math.max(
-          reduceBalance(newAmountDesired1 * (1 - parseFloat(pact.slippage)), tokenData[pairConfig.token1].precision),
-          reduceBalance(newAmountDesired1, tokenData[pairConfig.token1].precision)
+          reduceBalance(newAmountDesired1 * (1 - parseFloat(pact.slippage)), pact.allTokens[pairConfig.token1].precision),
+          reduceBalance(newAmountDesired1, pact.allTokens[pairConfig.token1].precision)
         ),
-        tokenAddressFrom: tokenData[pairConfig.token0].code,
-        tokenAddressTo: tokenData[pairConfig.token1].code,
-        coinFrom: tokenData[pairConfig.token0].name,
-        coinTo: tokenData[pairConfig.token1].name,
+        tokenAddressFrom: pact.allTokens[pairConfig.token0].code,
+        tokenAddressTo: pact.allTokens[pairConfig.token1].code,
+        coinFrom: pact.allTokens[pairConfig.token0].name,
+        coinTo: pact.allTokens[pairConfig.token1].name,
         type: 'LIQUIDITY DOUBLE SIDE',
       };
       if (isWalletConnectConnected) {
@@ -183,9 +181,9 @@ export const LiquidityProvider = (props) => {
           ttl: 600,
           envData: {
             'user-ks': accountDetails.result.data.guard,
-            amountDesired0: reduceBalance(amountDesired0, tokenData[token0.name].precision),
-            amountMinimum0: reduceBalance(args['amountA-min'], tokenData[token0.name].precision),
-            amountMinimum1: reduceBalance(args['amountB-min'], tokenData[token1.name].precision),
+            amountDesired0: reduceBalance(amountDesired0, pact.allTokens[token0.name].precision),
+            amountMinimum0: reduceBalance(args['amountA-min'], pact.allTokens[token0.name].precision),
+            amountMinimum1: reduceBalance(args['amountB-min'], pact.allTokens[token1.name].precision),
           },
           signingPubKey: accountDetails.result.data.guard.keys[0],
           networkId: NETWORKID,
@@ -212,14 +210,14 @@ export const LiquidityProvider = (props) => {
         const eventData = {
           ...data,
           amountFrom: Math.max(
-            reduceBalance(amountDesired0, tokenData[token0.name].precision),
-            reduceBalance(args['amountA-min'], tokenData[token0.name].precision)
+            reduceBalance(amountDesired0, pact.allTokens[token0.name].precision),
+            reduceBalance(args['amountA-min'], pact.allTokens[token0.name].precision)
           ),
-          amountTo: reduceBalance(args['amountB-min'], tokenData[token1.name].precision),
-          tokenAddressFrom: tokenData[token0.name].code,
-          tokenAddressTo: tokenData[token1.name].code,
-          coinFrom: tokenData[token0.name].name,
-          coinTo: tokenData[token1.name].name,
+          amountTo: reduceBalance(args['amountB-min'], pact.allTokens[token1.name].precision),
+          tokenAddressFrom: pact.allTokens[token0.name].code,
+          tokenAddressTo: pact.allTokens[token1.name].code,
+          coinFrom: pact.allTokens[token0.name].name,
+          coinTo: pact.allTokens[token1.name].name,
           type: 'LIQUIDITY SINGLE SIDE',
         };
         if (isWalletConnectConnected) {
@@ -257,7 +255,7 @@ export const LiquidityProvider = (props) => {
     try {
       let pair = await getPairAccount(token0.code, token1.code);
 
-      const pairConfig = pairTokens[`${token0.code}:${token1.code}`] || pairTokens[`${token1.code}:${token0.code}`];
+      const pairConfig = pact.allPairs[`${token0.code}:${token1.code}`] || pact.allPairs[`${token1.code}:${token0.code}`];
       const pactCode = pairConfig.isBoosted
         ? `(${KADDEX_NAMESPACE}.wrapper.remove-liquidity
         ${token0.code}
@@ -290,7 +288,7 @@ export const LiquidityProvider = (props) => {
             pairConfig.name,
             account.account,
             pair,
-            Number(liquidity),
+            reduceBalance(liquidity, PRECISION),
           ]),
         ],
         sender: pact.enableGasStation ? 'kaddex-free-gas' : account.account,
@@ -335,7 +333,7 @@ export const LiquidityProvider = (props) => {
       if (isWalletConnectConnected) {
         await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
       }
-      let previewData = await removeLiquidityPreview(token0, token1, previewAmount);
+      let previewData = await removeLiquidityPreview(token0.code, token1.code, previewAmount);
       if (!previewData.errorMessage) {
         const result = { ...data, resPreview: { ...previewData } };
         setLocalRes(result);
@@ -369,7 +367,7 @@ export const LiquidityProvider = (props) => {
         ${token0}
         ${token1}
         ${JSON.stringify(account.account)}
-        (* (at 'liquidity-tokens (kaddex.wrapper.get-liquidity-position ${token0} ${token1} ${JSON.stringify(account.account)})) ${amount})
+        (at 'liquidity-tokens (kaddex.wrapper.get-liquidity-position ${token0} ${token1} ${JSON.stringify(account.account)}))
       )`;
       return await pactFetchLocal(pactCode);
     } catch (e) {

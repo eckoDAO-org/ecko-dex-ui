@@ -4,7 +4,6 @@ import styled from 'styled-components/macro';
 import { getKdxRewardsAvailable, getPairMultiplier } from '../../api/liquidity-rewards';
 import { BoosterIcon, CoinKaddexIcon, CoinsIcon, KaddexOutlineIcon } from '../../assets';
 import { KDX_TOTAL_SUPPLY } from '../../constants/contextConstants';
-import tokenData from '../../constants/cryptoCurrencies';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { useLiquidityContext, usePactContext } from '../../contexts';
 import theme from '../../styles/theme';
@@ -16,7 +15,7 @@ import Toggle from './Toggle';
 
 const RewardBooster = ({ type, apr, handleState, previewObject, pair, isBoosted }) => {
   const { wantsKdxRewards, setWantsKdxRewards } = useLiquidityContext();
-  const { tokensUsdPrice } = usePactContext();
+  const { tokensUsdPrice, allTokens } = usePactContext();
   const [, setLoading] = useState(false);
 
   const [multiplier, setMultiplier] = useState(null);
@@ -28,7 +27,7 @@ const RewardBooster = ({ type, apr, handleState, previewObject, pair, isBoosted 
       setRewardsAvailable(extractDecimal(res));
     }
     if (pair) {
-      const result = await getPairMultiplier(tokenData[pair?.token0].code, tokenData[pair?.token1].code);
+      const result = await getPairMultiplier(allTokens[pair?.token0].code, allTokens[pair?.token1].code);
       if (!result.errorMessage) {
         setMultiplier(result);
       }
@@ -38,7 +37,7 @@ const RewardBooster = ({ type, apr, handleState, previewObject, pair, isBoosted 
 
   useEffect(() => {
     setLoading(true);
-    handleState(true);
+    handleState(isBoosted);
     fetchData();
   }, [pair]);
 
@@ -66,7 +65,7 @@ const RewardBooster = ({ type, apr, handleState, previewObject, pair, isBoosted 
           <FlexContainer gap={16} className="align-ce">
             <CoinsIcon className="coins-icon" />
             <Toggle
-              initialState={isBoosted || wantsKdxRewards}
+              initialState={isBoosted}
               onClick={(active) => {
                 if (active) {
                   handleState(true);
@@ -122,33 +121,35 @@ const RewardBooster = ({ type, apr, handleState, previewObject, pair, isBoosted 
             <Label fontSize={13}>{((rewardsAvailable * 100) / (KDX_TOTAL_SUPPLY * 0.4)).toFixed(2)} %</Label>
           </div>
         )}
-        {type === LIQUIDITY_VIEW.REMOVE_LIQUIDITY && (
+        {type === LIQUIDITY_VIEW.REMOVE_LIQUIDITY && isBoosted && (
           <div className="flex justify-sb align-fs">
             <Label fontSize={16}>Fees Collected</Label>
             {wantsKdxRewards ? (
               <div className="column">
                 <Label className="justify-fe" fontSize={16}>
-                  {getDecimalPlaces(extractDecimal(previewObject['estimated-kdx-rewards']))} KDX
+                  ~ {previewObject ? getDecimalPlaces(extractDecimal(previewObject?.['estimated-kdx-rewards'])) : '-'} KDX
                 </Label>
                 <Label fontSize={13} className="justify-fe" withShade labelStyle={{ marginTop: 4 }}>
-                  {tokensUsdPrice ? `$ ${humanReadableNumber(tokensUsdPrice?.KDX * extractDecimal(previewObject['estimated-kdx-rewards']))}` : ''}
+                  {tokensUsdPrice && previewObject
+                    ? `$ ${humanReadableNumber(tokensUsdPrice?.KDX * extractDecimal(previewObject['estimated-kdx-rewards']))}`
+                    : ''}
                 </Label>
               </div>
             ) : (
               <div className="column">
                 <Label className="justify-fe" fontSize={16}>
-                  {getDecimalPlaces(extractDecimal(previewObject['tokenA-fees-received']))} {pair?.token0}
+                  {previewObject ? getDecimalPlaces(extractDecimal(previewObject['tokenA-fees-received'])) : '-'} {pair?.token0}
                 </Label>
                 <Label fontSize={13} className="justify-fe" withShade labelStyle={{ marginTop: 4 }}>
-                  {tokensUsdPrice
+                  {tokensUsdPrice && previewObject
                     ? `$ ${humanReadableNumber(tokensUsdPrice[pair?.token0] * extractDecimal(previewObject['tokenA-fees-received']))}`
                     : ''}
                 </Label>
                 <Label className="justify-fe" fontSize={16} labelStyle={{ marginTop: 10 }}>
-                  {getDecimalPlaces(extractDecimal(previewObject['tokenB-fees-received']))} {pair?.token1}
+                  {previewObject ? getDecimalPlaces(extractDecimal(previewObject['tokenB-fees-received'])) : '-'} {pair?.token1}
                 </Label>
                 <Label fontSize={13} className="justify-fe" withShade labelStyle={{ marginTop: 4 }}>
-                  {tokensUsdPrice
+                  {tokensUsdPrice && previewObject
                     ? `$ ${humanReadableNumber(tokensUsdPrice[pair?.token1] * extractDecimal(previewObject['tokenB-fees-received']))}`
                     : ''}
                 </Label>

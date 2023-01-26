@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components/macro';
-import { ArrowDown, PixeledArrowDownIcon } from '../../assets';
+import { ArrowDown, PixeledArrowDownIcon, UnknownLogo } from '../../assets';
 import CustomButton from './CustomButton';
-import tokenData from '../../constants/cryptoCurrencies';
 import Label from './Label';
-import { useApplicationContext, useGameEditionContext } from '../../contexts';
-import { theme } from '../../styles/theme';
+import { useApplicationContext, useGameEditionContext, usePactContext } from '../../contexts';
+import { theme, commonColors } from '../../styles/theme';
 
 const Container = styled.div`
   ${({ $gameEditionView, coin }) => {
@@ -61,9 +60,25 @@ const ElementsContainer = styled.div`
   }
 `;
 
+const CryptoContainer = styled.div`
+  img {
+    width: ${({ size = 20 }) => `${size}px`}!important;
+    height: ${({ size = 20 }) => `${size}px`}!important;
+  }
+  svg {
+    width: ${({ size = 20 }) => `${size}px`}!important;
+    height: ${({ size = 20 }) => `${size}px`}!important;
+    margin: 0px 8px 0px 0px;
+    path {
+      fill: ${({ commonColors }) => commonColors.appColor}!important;
+    }
+  }
+`;
+
 const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor, withoutMAX }) => {
   const { gameEditionView } = useGameEditionContext();
   const { themeMode } = useApplicationContext();
+  const { allTokens } = usePactContext();
 
   return (
     <Container $gameEditionView={gameEditionView} geColor={geColor} coin={values?.coin}>
@@ -94,9 +109,15 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
               padding: !gameEditionView && '4px 8px',
             }}
           >
-            {tokenData[values.coin]?.icon}
+            {allTokens[values.coin]?.isVerified || allTokens[values.coin]?.icon ? (
+              allTokens[values.coin]?.icon
+            ) : (
+              <CryptoContainer className="flex align-ce" style={{ zIndex: 2 }} commonColors={commonColors}>
+                <UnknownLogo />
+              </CryptoContainer>
+            )}
             <Label geFontSize={24} geColor={geColor} style={{ opacity: 1 }}>
-              {tokenData[values.coin]?.name}
+              {allTokens[values.coin]?.name}
             </Label>
             {gameEditionView ? <PixeledArrowDownIcon /> : <ArrowDown style={{ opacity: 1 }} />}
           </ElementsContainer>
@@ -118,7 +139,9 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
               height: !gameEditionView && '28px',
             }}
           >
-            <Label fontSize={13}>Select</Label>
+            <Label geColor={geColor} fontSize={13}>
+              Select
+            </Label>
             {gameEditionView ? (
               <PixeledArrowDownIcon style={{ marginLeft: 8, marginRight: 0 }} />
             ) : (

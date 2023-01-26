@@ -7,6 +7,7 @@ import LogoLoader from './Loader';
 import InfoPopup from './InfoPopup';
 import { ArrowDown } from '../../assets';
 import { extractDecimal } from '../../utils/reduceBalance';
+import { Pagination } from 'semantic-ui-react';
 
 const Wrapper = styled(FlexContainer)`
   background-color: ${({ theme: { backgroundContainer } }) => backgroundContainer};
@@ -39,7 +40,7 @@ const Wrapper = styled(FlexContainer)`
   .sticky {
     position: -webkit-sticky;
     position: sticky;
-    left: 0px;
+    left: -2px;
   }
   .tr-sticky:after {
     content: '';
@@ -81,6 +82,39 @@ const Wrapper = styled(FlexContainer)`
   }
 `;
 
+const Paginator = styled(Pagination)`
+  &.ui.menu .item {
+    color: ${({ theme: { colors } }) => colors.white};
+    border-radius: 10px;
+  }
+  &.ui.menu {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    font-family: ${({ theme: { fontFamily } }) => fontFamily.basier};
+    min-height: 0px;
+    border-radius: 10px;
+  }
+  &.ui.pagination.menu .active.item {
+    color: ${({ theme: { colors } }) => colors.primary};
+    background: ${({ theme: { colors } }) => colors.white};
+    border-radius: 10px;
+  }
+  &.ui.menu a.item:hover {
+    color: ${({ theme: { colors } }) => colors.primary};
+    background: ${({ theme: { colors } }) => colors.white};
+    border-radius: 10px;
+  }
+  &.ui.pagination.menu .item {
+    min-width: 0px;
+    padding: 8px;
+    border-radius: 10px;
+  }
+  &.ui.menu > .item:first-child {
+    border-radius: 10px;
+  }
+`;
+
 // STRUCTURE OF column prop:[]
 
 // [{
@@ -94,9 +128,10 @@ const Wrapper = styled(FlexContainer)`
 //  ...
 // ]
 
-const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onClick }) => {
+const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onClick, wantPagination, offset = 10 }) => {
   const [sortedItems, setSortedItems] = useState([]);
   const [sortNames, setSortNames] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     let list = {};
@@ -107,6 +142,18 @@ const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onCl
 
     if (items) setSortedItems(items);
   }, []);
+
+  useEffect(() => {
+    if (items?.length > 0 && wantPagination) {
+      if (currentPage === 1) {
+        setSortedItems(items?.slice(currentPage - 1, currentPage - 1 + offset));
+      } else {
+        setSortedItems(items?.slice((currentPage - 1) * offset, (currentPage - 1) * offset + offset));
+      }
+    } else {
+      setSortedItems(items);
+    }
+  }, [items, currentPage]);
 
   const handleSort = (attribute, descending, multiplier) => {
     const itemSort = items.sort((x, y) => {
@@ -223,6 +270,28 @@ const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onCl
           </Label>
         </FlexContainer>
       )}
+      {/* PAGINATIONS SECTION */}
+      {wantPagination ? (
+        items?.length > 0 ? (
+          <FlexContainer className="row w-100 justify-sb" style={{ marginTop: 16 }}>
+            <Label>{`Page ${currentPage} of ${Math.ceil(items?.length / offset)}`}</Label>
+            <Paginator
+              boundaryRange={0}
+              defaultActivePage={1}
+              ellipsisItem={null}
+              firstItem={null}
+              lastItem={null}
+              siblingRange={2}
+              totalPages={Math.ceil(items?.length / offset)}
+              onPageChange={(_, data) => setCurrentPage(data.activePage)}
+            />
+          </FlexContainer>
+        ) : (
+          <FlexContainer className="w-100 justify-fs" style={{ padding: '8px 16px' }}>
+            <Label fontFamily="syncopate">No Vaulting found</Label>
+          </FlexContainer>
+        )
+      ) : null}
       {loading && <LogoLoader containerStyle={{ marginTop: 16 }} />}
     </Wrapper>
   );

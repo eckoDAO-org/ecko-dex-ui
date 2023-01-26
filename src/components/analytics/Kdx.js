@@ -4,7 +4,6 @@ import { BoosterIcon, BurnedIcon, DaoIcon } from '../../assets';
 import { usePactContext } from '../../contexts';
 import useWindowSize from '../../hooks/useWindowSize';
 import theme, { commonColors } from '../../styles/theme';
-import tokenData from '../../constants/cryptoCurrencies';
 import { extractDecimal, getDecimalPlaces, humanReadableNumber } from '../../utils/reduceBalance';
 import { getDailyCandles } from '../../api/kaddex-stats';
 import VestingPieChart from '../charts/VestingPieChart';
@@ -24,7 +23,7 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdaPrice, analyticsData }) => {
   const kdxPrice = pact?.tokensUsdPrice?.KDX;
   const [kdxPriceDiff, setKdxPriceDiff] = useState(null);
 
-  const kdxToken = tokenData.KDX ?? null;
+  const kdxToken = pact.allTokens.KDX ?? null;
   const asset = (kdxToken.statsID || kdxToken.code) === 'coin' ? 'KDA' : kdxToken.statsID || kdxToken.code;
   const currency = (kdxToken.statsID || kdxToken.code) === 'coin' ? 'USDT' : 'coin';
 

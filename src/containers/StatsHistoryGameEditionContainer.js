@@ -11,6 +11,7 @@ import modalBackground from '../assets/images/game-edition/modal-background.png'
 import { extractDecimal, reduceBalance } from '../utils/reduceBalance';
 import { NETWORK_TYPE } from '../constants/contextConstants';
 import { GameEditionLoader } from '../components/shared/Loader';
+import { usePactContext } from '../contexts';
 
 export const CardContainer = styled(FadeIn)`
   display: flex;
@@ -28,11 +29,12 @@ export const CardContainer = styled(FadeIn)`
 `;
 
 const StatsHistoryGameEditionContainer = () => {
+  const { allPairs } = usePactContext();
   const [pairList, setPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
-    const resultPairList = await getPairList();
+    const resultPairList = await getPairList(allPairs);
     setPairList(resultPairList);
     setLoading(false);
   };

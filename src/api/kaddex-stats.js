@@ -16,6 +16,7 @@ export const kaddexStatsRequest = async (url) => {
   }
 };
 
+//TODO: NOT USED
 export const getDailyVolume = async () => {
   const url = `volume/daily?dateStart=${moment().subtract(4, 'day').format('YYYY-MM-DD')}&dateEnd=${moment()
     .subtract(1, 'day')
