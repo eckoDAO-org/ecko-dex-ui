@@ -59,7 +59,6 @@ const ButtonContainer = styled.div`
 `;
 
 const RemoveSingleSideLiquidity = ({ pair, previewObject, setPreviewAmount, previewAmount }) => {
-  console.log('LOG --> pair', pair);
   const pact = usePactContext();
   const wallet = useWalletContext();
   const liquidity = useLiquidityContext();
@@ -134,7 +133,7 @@ const RemoveSingleSideLiquidity = ({ pair, previewObject, setPreviewAmount, prev
 
   const onRemoveSingleSideLiquidity = async () => {
     setLoading(true);
-    const res = await liquidity.singleSideRemoveLiquidityWallet(
+    const res = await liquidity.removeSingleSideLiquidityWallet(
       pact.allTokens[pair?.token0],
       pact.allTokens[pair?.token1],
       currentToken?.code,
@@ -240,7 +239,7 @@ const RemoveSingleSideLiquidity = ({ pair, previewObject, setPreviewAmount, prev
             withBorder
             size="large"
             numberOnly
-            topComponent={<Label labelStyle={{ marginBottom: 16 }}>Amount</Label>}
+            topComponent={<Label labelStyle={{ marginBottom: 16 }}>Amount %</Label>}
             inputRightComponent={
               <InputToken
                 geColor="black"

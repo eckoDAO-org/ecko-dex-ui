@@ -129,7 +129,7 @@ const RemoveDoubleSideLiquidity = ({ pair, previewObject, setPreviewAmount, prev
 
   const onRemoveLiquidity = async () => {
     setLoading(true);
-    const res = await liquidity.removeLiquidityWallet(
+    const res = await liquidity.removeDoubleSideLiquidityWallet(
       pact.allTokens[pair?.token0],
       pact.allTokens[pair?.token1],
       extractDecimal(pooled),

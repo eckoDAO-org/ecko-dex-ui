@@ -57,27 +57,16 @@ const AddLiquidityContainer = (props) => {
 
   const calculateApr = async () => {
     const allPairsData = await getAllPairsData(tokensUsdPrice, pact.allTokens, pact.allPairs, data.pools);
+    let pool = getCurrentPool(pair.token0, pair.token1);
 
-    let pool = null;
-    if (pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED) {
-      pool = data.pools.find((p) => p.token0 === pair.token0 || p.token1 === pair.token0);
-    } else {
-      pool = data.pools.find((p) => (p.token0 === pair.token0 && p.token1 === pair.token1) || (p.token0 === pair.token1 && p.token1 === pair.token0));
-    }
     if (pool) {
       let apr = allPairsData.find((p) => p.name === pool.name)?.apr || 0;
       setApr(apr);
     }
   };
 
-  const getCurrentPool = () => {
-    let pool = null;
-    if (pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED) {
-      pool = data.pools.find((p) => p.token0 === pair.token0 || p.token1 === pair.token0);
-    } else {
-      pool = data.pools.find((p) => (p.token0 === pair.token0 && p.token1 === pair.token1) || (p.token0 === pair.token1 && p.token1 === pair.token0));
-    }
-
+  const getCurrentPool = (token0, token1) => {
+    let pool = data.pools.find((p) => (p.token0 === token0 && p.token1 === token1) || (p.token0 === token1 && p.token1 === token0));
     if (pool) {
       return pool;
     }
@@ -102,20 +91,14 @@ const AddLiquidityContainer = (props) => {
   };
 
   useEffect(() => {
-    if (pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED) {
-      if (data?.pools?.length && data?.volumes?.data?.length && isValidString(pair?.token0)) {
-        calculateApr();
-      }
-    } else {
-      if (
-        data?.pools?.length &&
-        data?.volumes?.data?.length &&
-        isValidString(pair?.token0) &&
-        isValidString(pair.token1) &&
-        pair?.token0 !== pair.token1
-      ) {
-        calculateApr();
-      }
+    if (
+      data?.pools?.length &&
+      data?.volumes?.data?.length &&
+      isValidString(pair?.token0) &&
+      isValidString(pair.token1) &&
+      pair?.token0 !== pair.token1
+    ) {
+      calculateApr();
     }
   }, [pair, data]);
 
@@ -157,11 +140,11 @@ const AddLiquidityContainer = (props) => {
       </FlexContainer>
       {/* REWARDS BOOSTER COMPONENTS */}
       <RewardBooster
-        pair={getCurrentPool()}
+        pair={getCurrentPool(pair.token0, pair.token1)}
         apr={apr}
         type={LIQUIDITY_VIEW.ADD_LIQUIDITY}
         handleState={setWantsKdxRewards}
-        isBoosted={getCurrentPool() && getCurrentPool().isBoosted}
+        isBoosted={getCurrentPool(pair.token0, pair.token1) && getCurrentPool(pair.token0, pair.token1).isBoosted}
       />
 
       <FlexContainer gap={24}>
@@ -169,7 +152,9 @@ const AddLiquidityContainer = (props) => {
           fontFamily="syncopate"
           withShade={pathname !== ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED}
           onClick={() =>
-            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${query.get('token0')}`), { from: props?.location?.state?.from })
+            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${query.get('token0')}&token1=${query.get('token1')}`), {
+              from: props?.location?.state?.from,
+            })
           }
         >
           SINGLE-SIDED
@@ -178,7 +163,9 @@ const AddLiquidityContainer = (props) => {
           fontFamily="syncopate"
           withShade={pathname !== ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED}
           onClick={() =>
-            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${query.get('token0')}`), { from: props?.location?.state?.from })
+            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${query.get('token0')}&token1=${query.get('token1')}`), {
+              from: props?.location?.state?.from,
+            })
           }
         >
           DOUBLE-SIDED
@@ -190,9 +177,10 @@ const AddLiquidityContainer = (props) => {
           apr={apr}
           pools={data?.pools}
           pair={pair}
-          onPairChange={(token0) => {
-            setPair({ token0 });
-            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${token0}`));
+          onPairChange={(token0, token1) => {
+            let currentPool = getCurrentPool(token0, token1);
+            setPair({ token0: currentPool?.token1, token1: currentPool?.token0 });
+            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${token0}&token1=${token1}`));
           }}
         />
       )}
@@ -200,7 +188,8 @@ const AddLiquidityContainer = (props) => {
         <DoubleSidedLiquidity
           pair={{ token0: query.get('token0'), token1: query.get('token1') }}
           onPairChange={(token0, token1) => {
-            setPair({ token0, token1 });
+            let currentPool = getCurrentPool(token0, token1);
+            setPair({ token0: currentPool?.token1, token1: currentPool?.token0 });
             history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${token0}&token1=${token1}`));
           }}
         />
