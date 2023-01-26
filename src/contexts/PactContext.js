@@ -5,7 +5,7 @@ import Pact from 'pact-lang-api';
 // import { useInterval } from '../hooks/useInterval';
 import axios from 'axios';
 import { getTokenUsdPriceByName } from '../utils/token-utils';
-import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, KADDEX_NAMESPACE, KADDEX_API_URL } from '../constants/contextConstants';
+import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { useAccountContext, useNotificationContext, useWalletContext } from '.';
 import { fetchPrecision, getPairList } from '../api/pact';
 import tokenData, { pairsData, blacklistedTokenData } from '../constants/cryptoCurrencies';
@@ -62,11 +62,7 @@ export const PactProvider = (props) => {
 
   const getNetworkGasData = async () => {
     try {
-      let response = await axios.get(`${KADDEX_API_URL}/api/mempool/getgasdata`, {
-        params: {
-          chain: CHAIN_ID,
-        },
-      });
+      let response = await axios.get(`${process.env.REACT_APP_KADDEX_STATS_API_URL}/mempool/get-gas-data`);
       setNetworkGasData(response.data);
     } catch (err) {}
   };
