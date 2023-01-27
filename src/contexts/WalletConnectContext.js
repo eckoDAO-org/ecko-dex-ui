@@ -1,4 +1,4 @@
-import Client from '@walletconnect/sign-client';
+import SignClient from '@walletconnect/sign-client';
 import QRCodeModal from '@walletconnect/qrcode-modal';
 import { NETWORKID, WALLET_CONNECT_METADATA, WALLET_CONNECT_PROJECT_ID, WALLET_CONNECT_RELAY_URL } from '../constants/contextConstants';
 import React, { createContext, useCallback, useEffect, useState } from 'react';
@@ -98,12 +98,12 @@ export const WalletConnectProvider = (props) => {
 
   const initialize = useCallback(async () => {
     try {
-      const initClient = await Client.init({
-        relayUrl: WALLET_CONNECT_RELAY_URL,
+      const signClient = await SignClient.init({
         projectId: WALLET_CONNECT_PROJECT_ID,
+        relayUrl: WALLET_CONNECT_RELAY_URL,
         metadata: WALLET_CONNECT_METADATA,
       });
-      setClient(initClient);
+      setClient(signClient);
       return true;
     } catch (err) {
       return false;

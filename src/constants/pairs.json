@@ -135,7 +135,7 @@
         "main": false,
         "isBoosted": false,
         "color": "#7c572e",
-        "isVerified": true
+        "isVerified": false
       },
       "arkade.token:coin": {
         "name": "arkade.token:coin",
@@ -162,7 +162,7 @@
         "main": false,
         "isBoosted": false,
         "color": "#33cc33",
-        "isVerified": true
+        "isVerified": false
       },
       "coin:free.docu": {
         "name": "coin:free.docu",
@@ -171,7 +171,7 @@
         "main": false,
         "isBoosted": false,
         "color": "#e03a3f",
-        "isVerified": true
+        "isVerified": false
       }
     }
   }
