@@ -64,8 +64,9 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
   }, []);
 
   useEffect(async () => {
-    onPairChange(fromValue?.coin);
     if (selectedPool) {
+      onPairChange(selectedPool?.token1, selectedPool?.token0);
+
       setFetchingPair(true);
       if (selectedPool?.token0 === fromValue.coin) {
         await pact.getReserves(pact.allTokens?.[selectedPool?.token0]?.code, pact.allTokens?.[selectedPool?.token1]?.code);

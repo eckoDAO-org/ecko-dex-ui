@@ -16,7 +16,9 @@ import LogoLoader from '../shared/Loader';
 import { FadeIn } from '../shared/animations';
 import { FlexContainer } from '../shared/FlexContainer';
 import InputRange from '../shared/InputRange';
-import { SuccessRemoveView } from '../modals/liquidity/LiquidityTxView';
+import { SuccessSingleSideRemoveView } from '../modals/liquidity/LiquidityTxView';
+import TokenSelectorModalContent from '../modals/swap-modals/TokenSelectorModalContent';
+import InputToken from '../shared/InputToken';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -24,9 +26,6 @@ const Container = styled(FadeIn)`
   overflow: auto;
   max-width: 550px;
   .ui.input > input {
-    padding: 0px;
-    padding-bottom: 16px;
-    font-size: 13px;
     height: fit-content;
   }
 `;
@@ -59,7 +58,7 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, previewAmount }) => {
+const RemoveSingleSideLiquidity = ({ pair, previewObject, setPreviewAmount, previewAmount }) => {
   const pact = usePactContext();
   const wallet = useWalletContext();
   const liquidity = useLiquidityContext();
@@ -71,11 +70,11 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
   const [showTxModal, setShowTxModal] = useState(false);
 
   const [amount, setAmount] = useState(100);
+  const [currentToken, setCurrentToken] = useState({ coin: pair?.token0, code: pair?.name.split(':')[0] });
   const [loading, setLoading] = useState(false);
 
   const [pooled, setPooled] = useState(pair?.balance);
   const [pooledToken0, setPooledToken0] = useState(reduceBalance(pair?.pooledAmount?.[0], 12));
-
   const [pooledToken1, setPooledToken1] = useState(reduceBalance(pair?.pooledAmount?.[1], 12));
   const [previewFees, setPreviewFees] = useState(previewObject?.['estimated-kdx-rewards']);
 
@@ -97,13 +96,18 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
     if (!isNaN(amount) && reduceBalance(amount) !== 0) {
       setButtons({
         A: () => {
-          onRemoveLiquidity();
+          onRemoveSingleSideLiquidity();
         },
       });
     } else {
       setButtons({ A: null });
     }
   }, [amount, pooled, pooledToken0, pooledToken1]);
+
+  const handleTokenValue = async (token) => {
+    const crypto = pact.allTokens[token];
+    setCurrentToken({ coin: crypto.name, code: crypto.code });
+  };
 
   useEffect(() => {
     if (wallet.walletSuccess) {
@@ -127,13 +131,13 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
     setLoading(false);
   };
 
-  const onRemoveLiquidity = async () => {
+  const onRemoveSingleSideLiquidity = async () => {
     setLoading(true);
-    const res = await liquidity.removeLiquidityWallet(
+    const res = await liquidity.removeSingleSideLiquidityWallet(
       pact.allTokens[pair?.token0],
       pact.allTokens[pair?.token1],
-      extractDecimal(pooled),
-      previewAmount
+      currentToken?.code,
+      extractDecimal(pooled)
     );
     if (!res) {
       wallet.setIsWaitingForWalletAuth(true);
@@ -165,7 +169,7 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
             loading={loading}
           >
             {/* SuccessRemoveWithBoosterView to remove liquidy with booster */}
-            <SuccessRemoveView
+            <SuccessSingleSideRemoveView
               token0={pair.token0}
               token1={pair.token1}
               label="Remove Liquidity"
@@ -179,10 +183,30 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
     }
   }, [showTxModal]);
 
+  const openTokenSelectorModal = () => {
+    modalContext.openModal({
+      title: 'Select',
+      description: '',
+
+      onClose: () => {
+        modalContext.closeModal();
+      },
+      content: (
+        <TokenSelectorModalContent
+          token={currentToken.coin}
+          tokensToKeep={[pair?.token0, pair?.token1]}
+          onSelectToken={async (crypto) => await handleTokenValue(crypto.name)}
+          onClose={() => {
+            modalContext.closeModal();
+          }}
+        />
+      ),
+    });
+  };
+
   return (
     <Container $gameEditionView={gameEditionView}>
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
-
       <FormContainer
         containerStyle={gameEditionView ? { border: 'none', padding: 0 } : {}}
         footer={
@@ -198,7 +222,7 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
                 fluid
                 type="gradient"
                 disabled={isNaN(amount) || reduceBalance(amount) === 0}
-                onClick={async () => await onRemoveLiquidity()}
+                onClick={async () => await onRemoveSingleSideLiquidity()}
               >
                 Remove
               </CustomButton>
@@ -213,27 +237,18 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
             placeholder="Enter Amount"
             geColor="white"
             withBorder
+            size="large"
             numberOnly
-            fontSize={13}
-            inputStyle={{ padding: 0 }}
-            topComponent={<Label labelStyle={{ marginBottom: 16 }}>Amount</Label>}
+            topComponent={<Label labelStyle={{ marginBottom: 16 }}>Amount %</Label>}
             inputRightComponent={
-              <FlexContainer className="align-ce h-fit-content">
-                <Label labelStyle={{ marginRight: 4 }}>%</Label>
-                <CustomButton
-                  buttonStyle={{
-                    padding: 0,
-                    height: 'fit-content',
-                  }}
-                  fontFamily="basier"
-                  labelStyle={{ textTransform: 'uppercase' }}
-                  type="basic"
-                  fontSize={13}
-                  onClick={() => setAmount(100)}
-                >
-                  Max
-                </CustomButton>
-              </FlexContainer>
+              <InputToken
+                geColor="black"
+                values={currentToken}
+                onClick={() => {
+                  openTokenSelectorModal();
+                }}
+                onMaxClickButton={() => setAmount(100)}
+              />
             }
             onChange={(e) => {
               if (Number(e.target.value) <= 100 && Number(e.target.value) >= 0) {
@@ -253,32 +268,37 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
           </InfoContainer>
         ) : (
           <FlexContainer className="column" gap={12} style={{ margin: '16px 0' }}>
-            <div>
-              <FlexContainer className="justify-sb w-100">
-                <Label fontSize={13}>Pooled {pair?.token0}</Label>
-                <Label fontSize={13}>{getDecimalPlaces(extractDecimal(pooledToken0))}</Label>
-              </FlexContainer>
-              {tokensUsdPrice ? (
-                <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7, justifyContent: 'flex-end' }}>
-                  $ {humanReadableNumber(tokensUsdPrice?.[pair?.token0] * extractDecimal(pooledToken0))}
-                </Label>
-              ) : (
-                ''
-              )}
-            </div>
-            <div>
-              <FlexContainer className="justify-sb w-100">
-                <Label fontSize={13}>Pooled {pair?.token1}</Label>
-                <Label fontSize={13}>{getDecimalPlaces(extractDecimal(pooledToken1))}</Label>
-              </FlexContainer>
-              {tokensUsdPrice ? (
-                <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7, justifyContent: 'flex-end' }}>
-                  $ {humanReadableNumber(tokensUsdPrice?.[pair?.token1] * extractDecimal(pooledToken1))}
-                </Label>
-              ) : (
-                ''
-              )}
-            </div>
+            {currentToken?.coin === pair?.token0 && (
+              <div>
+                <FlexContainer className="justify-sb w-100">
+                  <Label fontSize={13}>Pooled {pair?.token0}</Label>
+                  <Label fontSize={13}>{getDecimalPlaces(extractDecimal(pooledToken0))}</Label>
+                </FlexContainer>
+                {tokensUsdPrice ? (
+                  <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7, justifyContent: 'flex-end' }}>
+                    $ {humanReadableNumber(tokensUsdPrice?.[pair?.token0] * extractDecimal(pooledToken0))}
+                  </Label>
+                ) : (
+                  ''
+                )}
+              </div>
+            )}
+            {currentToken?.coin === pair?.token1 && (
+              <div>
+                <FlexContainer className="justify-sb w-100">
+                  <Label fontSize={13}>Pooled {pair?.token1}</Label>
+                  <Label fontSize={13}>{getDecimalPlaces(extractDecimal(pooledToken1))}</Label>
+                </FlexContainer>
+                {tokensUsdPrice ? (
+                  <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7, justifyContent: 'flex-end' }}>
+                    $ {humanReadableNumber(tokensUsdPrice?.[pair?.token1] * extractDecimal(pooledToken1))}
+                  </Label>
+                ) : (
+                  ''
+                )}
+              </div>
+            )}
+
             {wantsKdxRewards && pair.isBoosted && (
               <div>
                 <FlexContainer className="justify-sb w-100">
@@ -311,4 +331,4 @@ const RemoveLiquidityContent = ({ pair, previewObject, setPreviewAmount, preview
   );
 };
 
-export default RemoveLiquidityContent;
+export default RemoveSingleSideLiquidity;

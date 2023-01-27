@@ -18,7 +18,8 @@ import {
   ROUTE_LIQUIDITY_POOLS,
   ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED,
   ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED,
-  ROUTE_LIQUIDITY_REMOVE_LIQUIDITY,
+  ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_SINGLE_SIDED,
+  ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_DOUBLE_SIDED,
   ROUTE_STAKE,
   ROUTE_UNSTAKE,
   ROUTE_DAO,
@@ -67,7 +68,11 @@ export default () => {
               component={AddLiquidityContainer}
             />
             <Route exact path={[ROUTE_LIQUIDITY_CREATE_PAIR]} component={CreatePairContainer} />
-            <Route exact path={ROUTE_LIQUIDITY_REMOVE_LIQUIDITY} component={RemoveLiquidityContainer} />
+            <Route
+              exact
+              path={[ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_SINGLE_SIDED, ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_DOUBLE_SIDED]}
+              component={RemoveLiquidityContainer}
+            />
             <Route exact path={[ROUTE_DAO, ROUTE_DAO_PROPOSAL]} component={DaoContainer} />
             <Route exact path={[ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS]} component={AnalyticsContainer} />
             <Route exact path={[ROUTE_STAKE, ROUTE_UNSTAKE]} component={StakeContainer} />

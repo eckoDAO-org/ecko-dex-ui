@@ -147,8 +147,11 @@ export const LiquidityProvider = (props) => {
       try {
         const args = await getOneSideLiquidityPairInfo(amountDesired0, pact.slippage, token0.code, token1.code);
         let pair = await getPairAccount(token0.code, token1.code);
+        const pairConfig = pact.allPairs[`${token0.code}:${token1.code}`] || pact.allPairs[`${token1.code}:${token0.code}`];
+        const useWrapper = pairConfig.isBoosted ? true : false;
+
         const signCmd = {
-          pactCode: `(${KADDEX_NAMESPACE}.wrapper.add-liquidity-one-sided
+          pactCode: `(${KADDEX_NAMESPACE}.liquidity-helper.add-liquidity-one-sided
             ${token0.code}
             ${token1.code}
             (read-decimal 'amountDesired0)
@@ -158,6 +161,7 @@ export const LiquidityProvider = (props) => {
             (read-keyset 'user-ks)
             ${JSON.stringify(account.account)}
             (read-keyset 'user-ks)
+            ${useWrapper}
           )`,
           caps: [
             ...(pact.enableGasStation
@@ -191,6 +195,7 @@ export const LiquidityProvider = (props) => {
         //alert to sign tx
         wallet.setIsWaitingForWalletAuth(true);
         let command = null;
+
         if (isXWalletConnected) {
           const res = await xWalletRequestSign(signCmd);
           command = res.signedCmd;
@@ -251,11 +256,12 @@ export const LiquidityProvider = (props) => {
     }
   };
 
-  const removeLiquidityWallet = async (token0, token1, liquidity, previewAmount) => {
+  const removeDoubleSideLiquidityWallet = async (token0, token1, liquidity, previewAmount) => {
     try {
       let pair = await getPairAccount(token0.code, token1.code);
 
       const pairConfig = pact.allPairs[`${token0.code}:${token1.code}`] || pact.allPairs[`${token1.code}:${token0.code}`];
+
       const pactCode = pairConfig.isBoosted
         ? `(${KADDEX_NAMESPACE}.wrapper.remove-liquidity
         ${token0.code}
@@ -333,7 +339,7 @@ export const LiquidityProvider = (props) => {
       if (isWalletConnectConnected) {
         await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
       }
-      let previewData = await removeLiquidityPreview(token0.code, token1.code, previewAmount);
+      let previewData = await removeLiquidityPreview(token0.code, token1.code);
       if (!previewData.errorMessage) {
         const result = { ...data, resPreview: { ...previewData } };
         setLocalRes(result);
@@ -361,7 +367,100 @@ export const LiquidityProvider = (props) => {
     }
   };
 
-  const removeLiquidityPreview = async (token0, token1, amount) => {
+  const removeSingleSideLiquidityWallet = async (token0, token1, tokenOutCode, liquidity) => {
+    try {
+      let pair = await getPairAccount(token0.code, token1.code);
+      const pairConfig = pact.allPairs[`${token0.code}:${token1.code}`] || pact.allPairs[`${token1.code}:${token0.code}`];
+
+      const useWrapper = pairConfig.isBoosted ? true : false;
+
+      const tokenOtherCode = tokenOutCode === token0.code ? token1.code : token0.code;
+      const slippage = 1 - pact.slippage;
+
+      const pactCode = `(${KADDEX_NAMESPACE}.liquidity-helper.remove-liquidity-one-sided
+        ${tokenOutCode}
+        ${tokenOtherCode}
+        (read-decimal 'liquidity)
+        0.0
+        0.0
+        (read-decimal 'slippage)
+        ${JSON.stringify(account.account)}
+        ${JSON.stringify(account.account)}
+        (read-keyset 'user-ks)
+        ${useWrapper}
+        ${wantsKdxRewards}
+      )`;
+      const signCmd = {
+        pactCode,
+        caps: [
+          ...(pact.enableGasStation
+            ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
+            : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
+          Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${KADDEX_NAMESPACE}.tokens.TRANSFER`, [
+            pairConfig.name,
+            account.account,
+            pair,
+            reduceBalance(liquidity, PRECISION),
+          ]),
+        ],
+        sender: pact.enableGasStation ? 'kaddex-free-gas' : account.account,
+        gasLimit: Number(pact.gasConfiguration.gasLimit),
+        gasPrice: parseFloat(pact.gasConfiguration.gasPrice),
+        chainId: CHAIN_ID,
+        ttl: 600,
+        envData: {
+          'user-ks': account.guard,
+          liquidity: reduceBalance(liquidity, PRECISION),
+          slippage: slippage,
+        },
+        signingPubKey: account.guard.keys[0],
+        networkId: NETWORKID,
+      };
+
+      //alert to sign tx
+      wallet.setIsWaitingForWalletAuth(true);
+      let cmd = null;
+      if (isXWalletConnected) {
+        const res = await xWalletRequestSign(signCmd);
+        cmd = res.signedCmd;
+      } else if (isWalletConnectConnected) {
+        const res = await walletConnectRequestSign(account.account, NETWORKID, signCmd);
+        cmd = res.signedCmd;
+      } else {
+        cmd = await Pact.wallet.sign(signCmd);
+      }
+      //close alert programmatically
+      wallet.setIsWaitingForWalletAuth(false);
+      wallet.setWalletSuccess(true);
+      pact.setPactCmd(cmd);
+      let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(cmd));
+      data = await parseRes(data);
+      const eventData = {
+        ...data,
+        amountFrom: reduceBalance(liquidity, PRECISION),
+        tokenAddressFrom: token0.code,
+        tokenAddressTo: token1.code,
+        coinFrom: token0.name,
+        coinTo: token1.name,
+        type: 'LIQUIDITY REMOVE',
+      };
+      if (isWalletConnectConnected) {
+        await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
+      }
+
+      let previewData = await removeLiquidityPreview(token0.code, token1.code);
+      if (!previewData.errorMessage) {
+        const result = { ...data, resPreview: { ...previewData } };
+        setLocalRes(result);
+        return result;
+      } else {
+        setLocalRes(data);
+        return data;
+      }
+    } catch (error) {}
+  };
+
+  const removeLiquidityPreview = async (token0, token1) => {
     try {
       const pactCode = `(${KADDEX_NAMESPACE}.wrapper.preview-remove-liquidity
         ${token0}
@@ -382,7 +481,8 @@ export const LiquidityProvider = (props) => {
     setPairListAccount,
     addLiquidityWallet,
     addOneSideLiquidityWallet,
-    removeLiquidityWallet,
+    removeDoubleSideLiquidityWallet,
+    removeSingleSideLiquidityWallet,
     removeLiquidityPreview,
     wantsKdxRewards,
     setWantsKdxRewards,

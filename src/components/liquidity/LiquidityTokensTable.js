@@ -6,16 +6,10 @@ import CommonTable from '../shared/CommonTable';
 import { humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import { AddIcon, BoosterIcon, GasIcon, TradeUpIcon, VerifiedLogo } from '../../assets';
-import {
-  ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED,
-  ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED,
-  ROUTE_LIQUIDITY_POOLS,
-  ROUTE_LIQUIDITY_TOKENS,
-  ROUTE_TOKEN_INFO,
-} from '../../router/routes';
+import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_LIQUIDITY_TOKENS, ROUTE_TOKEN_INFO } from '../../router/routes';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
-import { checkIfTokenIsInBoostedPool, getAllPairsData } from '../../utils/token-utils';
+import { getAllPairsData } from '../../utils/token-utils';
 import { useApplicationContext, usePactContext } from '../../contexts';
 import { commonColors, theme } from '../../styles/theme';
 import styled from 'styled-components';
@@ -90,16 +84,9 @@ const LiquidityTokensTable = ({ verifiedActive }) => {
         {
           icon: () => <AddIcon />,
           onClick: (item) => {
-            const itemIsInBoostedPair = checkIfTokenIsInBoostedPool(item, allPairs);
-            if (itemIsInBoostedPair) {
-              history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${item.name}`), {
-                from: ROUTE_LIQUIDITY_TOKENS,
-              });
-            } else {
-              history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=KDA&token1=${item.name}`), {
-                from: ROUTE_LIQUIDITY_POOLS,
-              });
-            }
+            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${item.name}&token1=KDA`), {
+              from: ROUTE_LIQUIDITY_TOKENS,
+            });
           },
         },
         {
