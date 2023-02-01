@@ -268,36 +268,33 @@ const RemoveSingleSideLiquidity = ({ pair, previewObject, setPreviewAmount, prev
           </InfoContainer>
         ) : (
           <FlexContainer className="column" gap={12} style={{ margin: '16px 0' }}>
-            {currentToken?.coin === pair?.token0 && (
-              <div>
-                <FlexContainer className="justify-sb w-100">
-                  <Label fontSize={13}>Pooled {pair?.token0}</Label>
-                  <Label fontSize={13}>{getDecimalPlaces(extractDecimal(pooledToken0))}</Label>
-                </FlexContainer>
-                {tokensUsdPrice ? (
-                  <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7, justifyContent: 'flex-end' }}>
-                    $ {humanReadableNumber(tokensUsdPrice?.[pair?.token0] * extractDecimal(pooledToken0))}
-                  </Label>
-                ) : (
-                  ''
-                )}
-              </div>
-            )}
-            {currentToken?.coin === pair?.token1 && (
-              <div>
-                <FlexContainer className="justify-sb w-100">
-                  <Label fontSize={13}>Pooled {pair?.token1}</Label>
-                  <Label fontSize={13}>{getDecimalPlaces(extractDecimal(pooledToken1))}</Label>
-                </FlexContainer>
-                {tokensUsdPrice ? (
-                  <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7, justifyContent: 'flex-end' }}>
-                    $ {humanReadableNumber(tokensUsdPrice?.[pair?.token1] * extractDecimal(pooledToken1))}
-                  </Label>
-                ) : (
-                  ''
-                )}
-              </div>
-            )}
+            <div>
+              <FlexContainer className="justify-sb w-100">
+                <Label fontSize={13}>Pooled {pair?.token0}</Label>
+                <Label fontSize={13}>{getDecimalPlaces(extractDecimal(pooledToken0))}</Label>
+              </FlexContainer>
+              {tokensUsdPrice ? (
+                <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7, justifyContent: 'flex-end' }}>
+                  $ {humanReadableNumber(tokensUsdPrice?.[pair?.token0] * extractDecimal(pooledToken0))}
+                </Label>
+              ) : (
+                ''
+              )}
+            </div>
+
+            <div>
+              <FlexContainer className="justify-sb w-100">
+                <Label fontSize={13}>Pooled {pair?.token1}</Label>
+                <Label fontSize={13}>{getDecimalPlaces(extractDecimal(pooledToken1))}</Label>
+              </FlexContainer>
+              {tokensUsdPrice ? (
+                <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7, justifyContent: 'flex-end' }}>
+                  $ {humanReadableNumber(tokensUsdPrice?.[pair?.token1] * extractDecimal(pooledToken1))}
+                </Label>
+              ) : (
+                ''
+              )}
+            </div>
 
             {wantsKdxRewards && pair.isBoosted && (
               <div>
