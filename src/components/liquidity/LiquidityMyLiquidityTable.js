@@ -5,7 +5,11 @@ import { useAccountContext, usePactContext } from '../../contexts';
 import { useErrorState } from '../../hooks/useErrorState';
 import { getPairList, getPairListAccountBalance } from '../../api/pact';
 import { AddIcon, RemoveIcon, VerifiedLogo } from '../../assets';
-import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_MY_LIQUIDITY, ROUTE_LIQUIDITY_REMOVE_LIQUIDITY } from '../../router/routes';
+import {
+  ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED,
+  ROUTE_LIQUIDITY_MY_LIQUIDITY,
+  ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_DOUBLE_SIDED,
+} from '../../router/routes';
 import { extractDecimal, getDecimalPlaces, humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
@@ -83,7 +87,9 @@ const LiquidityMyLiquidityTable = () => {
               icon: () => <RemoveIcon />,
               onClick: (item) => {
                 const { token0, token1 } = item;
-                history.push(ROUTE_LIQUIDITY_REMOVE_LIQUIDITY.concat(`?token0=${token0}&token1=${token1}`), { from: ROUTE_LIQUIDITY_MY_LIQUIDITY });
+                history.push(ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${token0}&token1=${token1}`), {
+                  from: ROUTE_LIQUIDITY_MY_LIQUIDITY,
+                });
               },
             },
           ]}

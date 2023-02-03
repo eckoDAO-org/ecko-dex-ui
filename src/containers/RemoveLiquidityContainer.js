@@ -1,22 +1,27 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { useAccountContext, useLiquidityContext, usePactContext } from '../contexts';
-import RemoveLiquidityContent from '../components/liquidity/RemoveLiquidityContent';
+import RemoveDoubleSideLiquidity from '../components/liquidity/RemoveDoubleSideLiquidity';
 import SlippagePopupContent from '../components/layout/header/SlippagePopupContent';
 import { FadeIn } from '../components/shared/animations';
 import { FlexContainer } from '../components/shared/FlexContainer';
 import { ArrowBack } from '../assets';
 import Label from '../components/shared/Label';
 import RewardBooster from '../components/liquidity/RewardBooster';
-import { ROUTE_LIQUIDITY_MY_LIQUIDITY } from '../router/routes';
+import {
+  ROUTE_LIQUIDITY_MY_LIQUIDITY,
+  ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_DOUBLE_SIDED,
+  ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_SINGLE_SIDED,
+} from '../router/routes';
 import { getPairList, getPairListAccountBalance } from '../api/pact';
 import useQueryParams from '../hooks/useQueryParams';
 import AppLoader from '../components/shared/AppLoader';
 import { LIQUIDITY_VIEW } from '../constants/liquidityView';
 import { getAllPairsData } from '../utils/token-utils';
 import theme from '../styles/theme';
+import RemoveSingleSideLiquidity from '../components/liquidity/RemoveSingleSideLiquidity';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -33,8 +38,9 @@ const Container = styled(FadeIn)`
   }
 `;
 
-const RemoveLiquidityContainer = () => {
+const RemoveLiquidityContainer = (props) => {
   const history = useHistory();
+  const { pathname } = useLocation();
   const query = useQueryParams();
   const liquidity = useLiquidityContext();
   const { account } = useAccountContext();
@@ -73,7 +79,9 @@ const RemoveLiquidityContainer = () => {
         setPair(currentPair);
         if (currentPair) {
           await calculateApr(resultPairList, currentPair, pairs);
-          await removePreview(currentPair);
+          if (currentPair?.isBoosted) {
+            await removePreview(currentPair);
+          }
         }
       }
     }
@@ -142,7 +150,36 @@ const RemoveLiquidityContainer = () => {
             previewObject={previewObject}
             pair={pair}
           />
-          <RemoveLiquidityContent pair={pair} previewObject={previewObject} previewAmount={previewAmount} setPreviewAmount={setPreviewAmount} />
+          <FlexContainer gap={24}>
+            <Label
+              fontFamily="syncopate"
+              withShade={pathname !== ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_SINGLE_SIDED}
+              onClick={() =>
+                history.push(ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${query.get('token0')}&token1=${query.get('token1')}`), {
+                  from: props?.location?.state?.from,
+                })
+              }
+            >
+              SINGLE-SIDED
+            </Label>
+            <Label
+              fontFamily="syncopate"
+              withShade={pathname !== ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_DOUBLE_SIDED}
+              onClick={() =>
+                history.push(ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${query.get('token0')}&token1=${query.get('token1')}`), {
+                  from: props?.location?.state?.from,
+                })
+              }
+            >
+              DOUBLE-SIDED
+            </Label>
+          </FlexContainer>
+          {pathname === ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_SINGLE_SIDED && (
+            <RemoveSingleSideLiquidity pair={pair} previewObject={previewObject} previewAmount={previewAmount} setPreviewAmount={setPreviewAmount} />
+          )}
+          {pathname === ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_DOUBLE_SIDED && (
+            <RemoveDoubleSideLiquidity pair={pair} previewObject={previewObject} previewAmount={previewAmount} setPreviewAmount={setPreviewAmount} />
+          )}
         </>
       )}
     </Container>

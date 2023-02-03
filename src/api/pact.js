@@ -162,9 +162,9 @@ export const getOneSideLiquidityPairInfo = async (amountA, slippage, token0, tok
         (let* (
           (p (${KADDEX_NAMESPACE}.exchange.get-pair ${token0} ${token1}))
           (pair-account (at 'account p))
-          (amountB (${KADDEX_NAMESPACE}.wrapper.get-other-side-token-amount-after-swap ${amountA} ${token0} ${token1} (+ 1.0 ${slippage})))
+          (amountB (${KADDEX_NAMESPACE}.liquidity-helper.get-add-liquidity-token-amount-after-swap ${amountA} ${token0} ${token1} (+ 1.0 ${slippage})))
           (reserveA (${KADDEX_NAMESPACE}.exchange.reserve-for p ${token0}))
-          (amountA-after-swap (- ${amountA} (${KADDEX_NAMESPACE}.wrapper.get-one-sided-liquidity-swap-amount reserveA ${amountA})))
+          (amountA-after-swap (- ${amountA} (${KADDEX_NAMESPACE}.liquidity-helper.get-one-sided-liquidity-swap-amount reserveA ${amountA})))
           (amountA-min (${KADDEX_NAMESPACE}.exchange.truncate ${token0} (* amountA-after-swap (- 1.0 ${slippage}))))
           (amountB-min (${KADDEX_NAMESPACE}.exchange.truncate ${token1} (* (/ amountB (+ 1.0 ${slippage})) (- 1.0 ${slippage}))))
         )

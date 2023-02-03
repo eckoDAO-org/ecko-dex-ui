@@ -47,7 +47,7 @@ const LiquidityPoolsTable = ({ verifiedActive }) => {
         {
           icon: () => <AddIcon />,
           onClick: (item) =>
-            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${item.token0}&token1=${item.token1}`), {
+            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${item.token1}&token1=${item.token0}`), {
               from: ROUTE_LIQUIDITY_POOLS,
             }),
         },
