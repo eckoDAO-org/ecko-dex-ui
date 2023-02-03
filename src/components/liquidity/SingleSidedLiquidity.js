@@ -163,10 +163,14 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
       5: { msg: 'Pair Already Exists', status: false },
       6: { msg: 'Select different tokens', status: false },
       7: { msg: 'Fetching Pair...', status: false },
+      8: { msg: 'The pool is empty', status: false },
     };
     if (!account.account.account) return status[0];
     if (fetchingPair) {
       return status[7];
+    }
+    if (extractDecimal(selectedPool?.reserves[0]) === 0 && extractDecimal(selectedPool?.reserves[1]) === 0) {
+      return status[8];
     }
     if (isNaN(pact.ratio)) {
       return status[4];
