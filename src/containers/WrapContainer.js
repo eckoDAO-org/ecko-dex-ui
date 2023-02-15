@@ -1,24 +1,24 @@
-import React, { useState } from "react";
-import { Modal, Header, Icon } from "semantic-ui-react";
-import ModalContainer from "../shared/ModalContainer";
-import CustomButton from "../shared/CustomButton";
+import React, { useState } from 'react';
+import { Modal, Header, Icon } from 'semantic-ui-react';
+import ModalContainer from '../shared/ModalContainer';
+import CustomButton from '../shared/CustomButton';
 
-import Input from "../shared/Input";
-import InputToken from "../shared/InputToken";
-import MenuTabs from "../shared/MenuTabs";
-import cryptoCurrencies from "../constants/tokens";
+import Input from '../shared/Input';
+import InputToken from '../shared/InputToken';
+import MenuTabs from '../shared/MenuTabs';
+import cryptoCurrencies from '../constants/tokens';
 
-import { ROUTE_INDEX } from "../router/routes";
-import { NavLink } from "react-router-dom";
-import TokenSelectorModal from "../components/swap/swap-modals/TokenSelectorModal";
+import { ROUTE_INDEX } from '../router/routes';
+import { NavLink } from 'react-router-dom';
+import TokenSelectorModal from '../components/swap/swap-modals/TokenSelectorModal';
 
 const WrapContainer = (props) => {
   const [activeItem, setActiveItem] = useState(0);
   const [showTokenSelector, setShowTokenSelector] = useState(false);
   const [selectedToken, setSelectedToken] = useState(null);
-  const [amount, setAmount] = useState("");
-  const [address, setAddress] = useState("");
-  const [amountReceived, setAmountReceived] = useState("");
+  const [amount, setAmount] = useState('');
+  const [address, setAddress] = useState('');
+  const [amountReceived, setAmountReceived] = useState('');
 
   const onTokenClick = ({ crypto }) => {
     setSelectedToken(crypto.code);
@@ -36,20 +36,20 @@ const WrapContainer = (props) => {
         }}
         onOpen={() => setOpen(true)}
         open={open}
-        size="small"
+        size='small'
       >
         <Header icon>
-          <Icon name="time" />
+          <Icon name='time' />
           Coming soon!
         </Header>
         <Modal.Content>
-          The bridge feature is coming to Kaddex soon! Be ready to wrap and
+          The bridge feature is coming to eckoDEX soon! Be ready to wrap and
           unwrap your tokens
         </Modal.Content>
         <Modal.Actions>
           <CustomButton>
-            <NavLink to={ROUTE_INDEX} style={{ color: "white" }}>
-              <Icon name="checkmark" /> Got it
+            <NavLink to={ROUTE_INDEX} style={{ color: 'white' }}>
+              <Icon name='checkmark' /> Got it
             </NavLink>
           </CustomButton>
         </Modal.Actions>
@@ -64,12 +64,12 @@ const WrapContainer = (props) => {
       <ModalContainer>
         <MenuTabs
           activeItem={activeItem}
-          items={["wrap", "unwrap"]}
+          items={['wrap', 'unwrap']}
           onItemClick={(index) => setActiveItem(index)}
         />
         <Input
-          leftLabel="input"
-          placeholder="enter amount"
+          leftLabel='input'
+          placeholder='enter amount'
           inputRightComponent={
             selectedToken ? (
               <InputToken
@@ -87,22 +87,22 @@ const WrapContainer = (props) => {
           onChange={(e, { value }) => setAmount(value)}
         />
         <Input
-          leftLabel="destination"
-          placeholder="enter address"
+          leftLabel='destination'
+          placeholder='enter address'
           containerStyle={{ marginBottom: 16 }}
           value={address}
           onChange={(e, { value }) => setAddress(value)}
         />
         <Input
-          leftLabel="you will receive"
-          placeholder="amount"
+          leftLabel='you will receive'
+          placeholder='amount'
           value={amountReceived}
           disabled
           onChange={(e, { value }) => setAmountReceived(value)}
         />
         <CustomButton
           buttonStyle={{ marginTop: 24 }}
-          onClick={() => console.log("next")}
+          onClick={() => console.log('next')}
         >
           Next
         </CustomButton>

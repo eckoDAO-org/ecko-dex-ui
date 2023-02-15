@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components/macro";
-import Wrapper from "../../shared/Wrapper";
-import CustomParticles from "./CustomParticles";
-import DesktopHeader from "./header/DesktopHeader";
-import MobileHeader from "./header/MobileHeader";
-import { ReactComponent as Stripes } from "../../assets/images/shared/stripes.svg";
+import React from 'react';
+import styled from 'styled-components/macro';
+import Wrapper from '../../shared/Wrapper';
+import CustomParticles from './CustomParticles';
+import DesktopHeader from './header/DesktopHeader';
+import MobileHeader from './header/MobileHeader';
+import { ReactComponent as Stripes } from '../../assets/images/shared/stripes.svg';
 
 const MainContainer = styled.div`
   display: flex;
@@ -44,8 +44,8 @@ const Layout = ({ children }) => {
     <MainContainer>
       <CustomParticles />
       <WrapperContainer>
-        <MobileHeader className="desktop-none" />
-        <DesktopHeader className="mobile-none" />
+        <MobileHeader className='desktop-none' />
+        <DesktopHeader className='mobile-none' />
         <MainContent>{children}</MainContent>
       </WrapperContainer>
       <StripesContainer>

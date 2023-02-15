@@ -1,11 +1,11 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
-import styled from "styled-components/macro";
-import { KaddexLogo } from "../../../assets";
-import { ROUTE_INDEX } from "../../../router/routes";
-import menuItems from "../../menuItems";
-import RightHeaderItems from "./RightHeaderItems";
-import HeaderItem from "../../../shared/HeaderItem";
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import styled from 'styled-components/macro';
+import { EckoDEXLogo } from '../../../assets';
+import { ROUTE_INDEX } from '../../../router/routes';
+import menuItems from '../../menuItems';
+import RightHeaderItems from './RightHeaderItems';
+import HeaderItem from '../../../shared/HeaderItem';
 
 const Container = styled.div`
   display: flex;
@@ -32,8 +32,8 @@ const DesktopHeader = ({ className }) => {
   return (
     <Container className={className}>
       <LeftContainer>
-        <KaddexLogo
-          style={{ cursor: "pointer" }}
+        <EckoDEXLogo
+          style={{ cursor: 'pointer' }}
           onClick={() => history.push(ROUTE_INDEX)}
         />
         {menuItems.map((item, index) => (

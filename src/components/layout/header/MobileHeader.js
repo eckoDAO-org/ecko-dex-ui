@@ -1,18 +1,18 @@
-import React, { useState, useRef } from "react";
-import { useHistory } from "react-router-dom";
-import styled from "styled-components/macro";
-import { KaddexLogo } from "../../../assets";
-import { ROUTE_INDEX } from "../../../router/routes";
-import RightHeaderItems from "./RightHeaderItems";
+import React, { useState, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
+import styled from 'styled-components/macro';
+import { EckoDEXLogo } from '../../../assets';
+import { ROUTE_INDEX } from '../../../router/routes';
+import RightHeaderItems from './RightHeaderItems';
 // import Burger from "./burger/Burger";
 // import MobileMenu from "./menu/MobileMenu";
-import PopupContentList from "./PopupContentList";
-import HeaderItem from "../../../shared/HeaderItem";
-import CustomPopup from "../../../shared/CustomPopup";
-import { HamburgerIcon } from "../../../assets";
-import { useOnClickOutside } from "../../../hooks/hooks";
-import menuItems from "../../menuItems";
-import theme from "../../../styles/theme";
+import PopupContentList from './PopupContentList';
+import HeaderItem from '../../../shared/HeaderItem';
+import CustomPopup from '../../../shared/CustomPopup';
+import { HamburgerIcon } from '../../../assets';
+import { useOnClickOutside } from '../../../hooks/hooks';
+import menuItems from '../../menuItems';
+import theme from '../../../styles/theme';
 
 const Container = styled.div`
   display: flex;
@@ -56,22 +56,22 @@ const MobileHeader = ({ className }) => {
           <CustomPopup
             basic
             trigger={<HamburgerIcon />}
-            on="click"
+            on='click'
             offset={[0, 10]}
-            position="bottom left"
+            position='bottom left'
           >
             <PopupContentList items={menuItems} />
           </CustomPopup>
         </HeaderItem>
         {/* <Burger open={open} setOpen={setOpen} />
         <MobileMenu open={open} setOpen={setOpen} /> */}
-        <KaddexLogo
+        <EckoDEXLogo
           style={{
-            cursor: "pointer",
+            cursor: 'pointer',
             width:
               window.innerWidth <= theme.mediaQueries.mobileSmallPixel
-                ? "100px"
-                : "100%",
+                ? '100px'
+                : '100%',
           }}
           onClick={() => history.push(ROUTE_INDEX)}
         />

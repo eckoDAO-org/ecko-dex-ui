@@ -1,12 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react';
 
-import CustomButton from "../../../shared/CustomButton";
+import CustomButton from '../../../shared/CustomButton';
 
-import { WALLET } from "../../../constants/wallet";
-import { ModalContext } from "../../../contexts/ModalContext";
-import ConnectWalletZelcoreModal from "./ConnectWalletZelcoreModal";
-import ConnectWalletChainweaverModal from "./ConnectWalletChainweaverModal";
-import { useKaddexWalletContext, useNotificationContext } from "../../../contexts";
+import { WALLET } from '../../../constants/wallet';
+import { ModalContext } from '../../../contexts/ModalContext';
+import ConnectWalletZelcoreModal from './ConnectWalletZelcoreModal';
+import ConnectWalletChainweaverModal from './ConnectWalletChainweaverModal';
+import {
+  useKaddexWalletContext,
+  useNotificationContext,
+} from '../../../contexts';
 
 const ConnectWalletModal = () => {
   const modalContext = useContext(ModalContext);
@@ -17,11 +20,11 @@ const ConnectWalletModal = () => {
     switch (walletName) {
       default:
         return <div />;
-      case "Zelcore":
+      case 'Zelcore':
         return modalContext.openModal({
-          id: "ZELCORE",
-          title: "connect wallet",
-          description: "Zelcore Signing",
+          id: 'ZELCORE',
+          title: 'connect wallet',
+          description: 'Zelcore Signing',
           onBack: () => modalContext.onBackModal(),
           content: (
             <ConnectWalletZelcoreModal
@@ -30,11 +33,11 @@ const ConnectWalletModal = () => {
             />
           ),
         });
-      case "Chainweaver":
+      case 'Chainweaver':
         return modalContext.openModal({
-          id: "CHIANWEAVER",
-          title: "connect wallet",
-          description: "Chainweaver",
+          id: 'CHIANWEAVER',
+          title: 'connect wallet',
+          description: 'Chainweaver',
           onBack: () => modalContext.onBackModal(),
           content: (
             <ConnectWalletChainweaverModal
@@ -43,17 +46,17 @@ const ConnectWalletModal = () => {
             />
           ),
         });
-        case "X-Wallet":
-          if (!isInstalled) {
-            showNotification({
-              title: 'Wallet not found',
-              message: `Please install ${WALLET.KADDEX_WALLET.name}`,
-              type: STATUSES.WARNING,
-            });
-          } else {
-            initializeKaddexWallet();
-            modalContext.closeModal();
-          };
+      case 'eckoWALLET':
+        if (!isInstalled) {
+          showNotification({
+            title: 'Wallet not found',
+            message: `Please install ${WALLET.KADDEX_WALLET.name}`,
+            type: STATUSES.WARNING,
+          });
+        } else {
+          initializeKaddexWallet();
+          modalContext.closeModal();
+        }
     }
   };
 
@@ -61,9 +64,9 @@ const ConnectWalletModal = () => {
     <CustomButton
       key={index}
       buttonStyle={{
-        border: "1px solid #424242",
+        border: '1px solid #424242',
       }}
-      background="transparent"
+      background='transparent'
       onClick={() => {
         openWalletModal(wallet.name);
       }}

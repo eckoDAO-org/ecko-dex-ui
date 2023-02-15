@@ -16,7 +16,10 @@ const initialKaddexWalletState = {
 
 export const KaddexWalletProvider = (props) => {
   const [kadenaExt, setKadenaExt] = useState(null);
-  const [kaddexWalletState, setKaddexWalletState] = useLocalStorage('kaddexWalletState', initialKaddexWalletState);
+  const [kaddexWalletState, setKaddexWalletState] = useLocalStorage(
+    'kaddexWalletState',
+    initialKaddexWalletState
+  );
 
   const { setVerifiedAccount, logout, account } = useAccountContext();
   const { wallet, setSelectedWallet, signingWallet } = useWalletContext();
@@ -39,12 +42,12 @@ export const KaddexWalletProvider = (props) => {
     const registerEvents = async () => {
       if (kadenaExt) {
         kadenaExt.on('res_accountChange', async (response) => {
-          console.log('X-Wallet: LISTEN res_accountChange', response);
+          console.log('eckoWALLET: LISTEN res_accountChange', response);
           await checkStatus();
         });
         kadenaExt.on('res_checkStatus', onCheckStatusResponse);
         kadenaExt.on('res_sendKadena', (response) => {
-          console.log('X-Wallet: LISTEN res_SendKadena', response);
+          console.log('eckoWALLET: LISTEN res_SendKadena', response);
         });
         kadenaExt.on('res_disconnect', () => {});
       }
@@ -65,7 +68,7 @@ export const KaddexWalletProvider = (props) => {
    * Used by ConnectModal
    */
   const initializeKaddexWallet = async () => {
-    console.log('!!!initializeKaddexWallet');
+    console.log('!!!initializeEckoDEXWallet');
     const networkInfo = await getNetworkInfo();
     console.log('🚀 !!! ~ networkInfo', networkInfo);
     if (networkInfo.networkId !== NETWORKID) {
@@ -90,7 +93,7 @@ export const KaddexWalletProvider = (props) => {
 
   const disconnectWallet = async () => {
     if (kadenaExt) {
-      console.log('X-Wallet: SEND disconnect request');
+      console.log('eckoWALLET: SEND disconnect request');
       setKaddexWalletState({
         ...kaddexWalletState,
         account: null,
@@ -109,12 +112,12 @@ export const KaddexWalletProvider = (props) => {
     const network = await kadenaExt.request({
       method: 'kda_getNetwork',
     });
-    console.log('X-Wallet: SEND kda_getNetwork request', network);
+    console.log('eckoWALLET: SEND kda_getNetwork request', network);
     return network;
   };
 
   const checkStatus = async () => {
-    console.log('X-Wallet: SEND kda_checkStatus request');
+    console.log('eckoWALLET: SEND kda_checkStatus request');
     await kadenaExt?.request({
       method: 'kda_checkStatus',
       networkId: NETWORKID,
@@ -126,7 +129,7 @@ export const KaddexWalletProvider = (props) => {
       method: 'kda_requestAccount',
       networkId: NETWORKID,
     });
-    console.log('X-Wallet: SEND kda_requestAccount request', account);
+    console.log('eckoWALLET: SEND kda_requestAccount request', account);
     return account;
   };
 
@@ -135,7 +138,7 @@ export const KaddexWalletProvider = (props) => {
     if (account.status === 'fail') {
       alertDisconnect();
     } else {
-      console.log('X-Wallet: SEND kda_requestSign request');
+      console.log('eckoWALLET: SEND kda_requestSign request');
       return await kadenaExt.request({
         method: 'kda_requestSign',
         data: {
@@ -146,12 +149,11 @@ export const KaddexWalletProvider = (props) => {
     }
   };
 
-
   const setAccountData = async () => {
-    console.log('X-Wallet: SETTING ACCOUNT DATA');
+    console.log('eckoWALLET: SETTING ACCOUNT DATA');
     const acc = await getAccountInfo();
     if (acc.wallet) {
-      console.log('X-Wallet: SETTING ACCOUNT DATA - WALLET FOUNDED', acc);
+      console.log('eckoWALLET: SETTING ACCOUNT DATA - WALLET FOUNDED', acc);
       await setVerifiedAccount(acc.wallet.account);
       await signingWallet();
       await setSelectedWallet(WALLET.KADDEX_WALLET);
@@ -161,13 +163,15 @@ export const KaddexWalletProvider = (props) => {
         isConnected: true,
       });
     } else if (kaddexWalletState.isConnected) {
-      console.log('X-Wallet: SETTING ACCOUNT DATA - WALLET NOT FOUND CONNECTING');
+      console.log(
+        'eckoWALLET: SETTING ACCOUNT DATA - WALLET NOT FOUND CONNECTING'
+      );
       const connectRes = await connectWallet();
       if (connectRes.status === 'success') {
         await setAccountData();
       }
     } else {
-      console.log('X-Wallet: SETTING ACCOUNT DATA - NOT CONNECTED');
+      console.log('eckoWALLET: SETTING ACCOUNT DATA - NOT CONNECTED');
     }
   };
 
@@ -182,10 +186,16 @@ export const KaddexWalletProvider = (props) => {
   };
 
   const onCheckStatusResponse = async (response) => {
-    console.log('X-Wallet: LISTEN res_checkStatus', response);
+    console.log('eckoWALLET: LISTEN res_checkStatus', response);
     // I have to use local storage directly because of state is null on callback listener
-    const localState = localStorage.getItem('kaddexWalletState') && JSON.parse(localStorage.getItem('kaddexWalletState'));
-    if (localState?.isConnected && response?.result?.status === 'fail' && response?.result?.message === 'Not connected') {
+    const localState =
+      localStorage.getItem('kaddexWalletState') &&
+      JSON.parse(localStorage.getItem('kaddexWalletState'));
+    if (
+      localState?.isConnected &&
+      response?.result?.status === 'fail' &&
+      response?.result?.message === 'Not connected'
+    ) {
       const connectRes = await connectWallet();
       if (connectRes.status === 'success') {
         await setAccountData();
