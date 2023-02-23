@@ -6,13 +6,14 @@ import { humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
-import { AddIcon, BoosterIcon, GasIcon, VerifiedLogo } from '../../assets';
-import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS } from '../../router/routes';
+import { AddIcon, BoosterIcon, GasIcon, TradeUpIcon, VerifiedLogo } from '../../assets';
+import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS, ROUTE_POOL_INFO } from '../../router/routes';
 import Label from '../shared/Label';
 import { getAllPairsData } from '../../utils/token-utils';
 import { theme, commonColors } from '../../styles/theme';
-import { usePactContext } from '../../contexts';
+import { useApplicationContext, usePactContext } from '../../contexts';
 import useWindowSize from '../../hooks/useWindowSize';
+import styled from 'styled-components';
 
 const LiquidityPoolsTable = ({ verifiedActive }) => {
   const history = useHistory();
@@ -21,6 +22,8 @@ const LiquidityPoolsTable = ({ verifiedActive }) => {
   const [verifiedPairList, setVerifiedPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(false);
   const [allPairList, setAllPairList] = useState([]);
+
+  const { themeMode } = useApplicationContext();
 
   const [width] = useWindowSize();
 
@@ -41,7 +44,9 @@ const LiquidityPoolsTable = ({ verifiedActive }) => {
     <CommonTable
       items={verifiedActive ? verifiedPairList : allPairList}
       columns={
-        enableGasStation ? renderColumns(allTokens, allPairs, width) : renderColumns(allTokens, allPairs, width).filter((x) => x.name !== 'Fees')
+        enableGasStation
+          ? renderColumns(history, allTokens, allPairs, width)
+          : renderColumns(allTokens, allPairs, width).filter((x) => x.name !== 'Fees')
       }
       actions={[
         {
@@ -50,6 +55,25 @@ const LiquidityPoolsTable = ({ verifiedActive }) => {
             history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${item.token1}&token1=${item.token0}`), {
               from: ROUTE_LIQUIDITY_POOLS,
             }),
+        },
+        {
+          icon: () => (
+            <FlexContainer
+              className="align-ce"
+              style={{
+                background: theme(themeMode).colors.white,
+                padding: '8px 4px',
+                borderRadius: 100,
+                width: 24,
+                height: 24,
+              }}
+            >
+              <TradeUpIcon className="svg-app-inverted-color" />
+            </FlexContainer>
+          ),
+          onClick: (item) => {
+            history.push(ROUTE_POOL_INFO.replace(':pool', `${item.token0}:${item.token1}`), { from: history.location.pathname });
+          },
         },
       ]}
     />
@@ -60,7 +84,16 @@ const LiquidityPoolsTable = ({ verifiedActive }) => {
 
 export default LiquidityPoolsTable;
 
-const renderColumns = (allTokens, allPairs, width) => {
+const ScalableCryptoContainer = styled(FlexContainer)`
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+
+  :hover {
+    transform: scale(1.18);
+  }
+`;
+
+const renderColumns = (history, allTokens, allPairs, width) => {
   return [
     {
       name: '',
@@ -77,7 +110,13 @@ const renderColumns = (allTokens, allPairs, width) => {
         }
 
         return (
-          <FlexContainer desktopClassName="align-ce" tabletClassName="align-ce" mobileClassName="column align-fs" mobilePixel={769}>
+          <ScalableCryptoContainer
+            desktopClassName="align-ce"
+            tabletClassName="align-ce"
+            mobileClassName="column align-fs"
+            mobilePixel={769}
+            onClick={() => history.push(ROUTE_POOL_INFO.replace(':pool', `${t0}:${t1}`), { from: history.location.pathname })}
+          >
             <div className="flex align-ce">
               {allPairs[item.name]?.isVerified ? (
                 <div style={{ marginRight: 16 }}>
@@ -86,8 +125,10 @@ const renderColumns = (allTokens, allPairs, width) => {
               ) : (
                 <div style={{ width: 32 }} />
               )}
-              <CryptoContainer style={{ zIndex: 2 }}> {allTokens[t0].icon}</CryptoContainer>
-              <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>{allTokens[t1].icon} </CryptoContainer>
+              <CryptoContainer style={{ zIndex: 2 }}> {allTokens[t1].icon}</CryptoContainer>
+              <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }} size={30}>
+                {allTokens[t0].icon}{' '}
+              </CryptoContainer>
             </div>
             <div
               className="align-fs flex"
@@ -96,9 +137,9 @@ const renderColumns = (allTokens, allPairs, width) => {
                 marginTop: width <= theme().mediaQueries.mobilePixel && 4,
               }}
             >
-              {t0}/{t1}
+              {t1}/{t0}
             </div>
-          </FlexContainer>
+          </ScalableCryptoContainer>
         );
       },
     },
