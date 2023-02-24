@@ -29,6 +29,8 @@ import {
   ROUTE_ANALYTICS_KDX,
   ROUTE_ANALYTICS_STATS,
   ROUTE_TOKEN_INFO,
+  ROUTE_ANALYTICS_POOLS,
+  ROUTE_POOL_INFO,
 } from './routes';
 import SwapHistoryContainer from '../containers/SwapHistoryContainer';
 import { useGameEditionContext } from '../contexts';
@@ -38,6 +40,7 @@ import AddLiquidityContainer from '../components/liquidity/AddLiquidityContainer
 import RemoveLiquidityContainer from '../containers/RemoveLiquidityContainer';
 import StakeContainer from '../containers/StakeContainer';
 import TokenInfoContainer from '../containers/TokenInfoContainer';
+import PoolInfoContainer from '../containers/PoolInfoContainer';
 import CreatePairContainer from '../components/liquidity/CreatePairContainer';
 
 export default () => {
@@ -74,9 +77,10 @@ export default () => {
               component={RemoveLiquidityContainer}
             />
             <Route exact path={[ROUTE_DAO, ROUTE_DAO_PROPOSAL]} component={DaoContainer} />
-            <Route exact path={[ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS]} component={AnalyticsContainer} />
+            <Route exact path={[ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS, ROUTE_ANALYTICS_POOLS]} component={AnalyticsContainer} />
             <Route exact path={[ROUTE_STAKE, ROUTE_UNSTAKE]} component={StakeContainer} />
             <Route exact path={ROUTE_TOKEN_INFO} component={TokenInfoContainer} />
+            <Route exact path={ROUTE_POOL_INFO} component={PoolInfoContainer} />
           </Switch>
         )}
       </Layout>
