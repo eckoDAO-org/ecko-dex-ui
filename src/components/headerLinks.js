@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  AboutIcon,
-  CodeIcon,
-  DiscordIcon,
-  KaddexCoinIcon,
-  TelegramIcon,
-} from '../assets';
+import { AboutIcon, CodeIcon, KaddexCoinIcon, TelegramIcon } from '../assets';
 
 export default [
   {
@@ -24,18 +18,18 @@ export default [
     id: 1,
     label: 'code',
     icon: <CodeIcon />,
-    link: 'https://github.com/KaddexGit/kaddex-swap-v2',
+    link: 'https://github.com/eckoDAO-org/ecko-dex-ui',
   },
   {
     id: 2,
     label: 'telegram',
     icon: <TelegramIcon />,
-    link: 'https://t.me/KaddeXofficial',
+    link: 'https://t.me/eckoDAO',
   },
-  {
+  /* {
     id: 3,
     label: 'discord',
     icon: <DiscordIcon />,
     link: 'https://discord.gg/QSJpHRFDcv',
-  },
+  }, */
 ];
