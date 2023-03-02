@@ -6,7 +6,6 @@ export { ReactComponent as GeCancelButtonIcon } from './cancel-button.svg';
 export { ReactComponent as GeConfirmButtonIcon } from './confirm-button.svg';
 export { ReactComponent as GeRetryButtonIcon } from './retry-button.svg';
 export { ReactComponent as HideWiresIcon } from './hide-wires.svg';
-export { ReactComponent as KaddexLoadingIcon } from './kaddex-loading.svg';
 export { ReactComponent as LogoChainweaverIcon } from './logo-chainweaver.svg';
 export { ReactComponent as LogoTorusIcon } from './logo-torus.svg';
 export { ReactComponent as LogoXwalletIcon } from './logo-x-wallet.svg';
@@ -23,6 +22,8 @@ export { ReactComponent as PixeledTokenSelectorWhiteIcon } from './pixeled-token
 export { ReactComponent as TreeDotsHorizontalIcon } from './tree-dots-horizontal.svg';
 export { ReactComponent as WireChainweaverIcon } from './wire-chainweaver.svg';
 export { ReactComponent as WireTorusIcon } from './wire-torus.svg';
-export { ReactComponent as WireXwalletIcon } from './wire-x-wallet.svg';
 export { ReactComponent as WireZelcoreIcon } from './wire-zelcore.svg';
 export { ReactComponent as WireWalletConnectIcon } from './wire-walletconnect-logo.svg';
+
+export { ReactComponent as EckoDexLoadingIcon } from './eckodex_game_loading.svg';
+export { ReactComponent as WireEckoWalletIcon } from './wire-eckoWALLET.svg';

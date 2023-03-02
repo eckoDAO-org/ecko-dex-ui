@@ -111,7 +111,7 @@ const RewardBooster = ({ type, apr, handleState, previewObject, pair, isBoosted 
                     impermanent loss. Their emission is programmatical, diminishing and time oriented.
                   </Label>
                   <Label labelStyle={{ marginTop: 8 }}>
-                    <a href="https://drive.google.com/file/d/1DS_Nr0raqzpHW_gBolorJ-4lTNSrLdLB/view" target="_blank" rel="noopener noreferrer">
+                    <a href="https://dex.ecko.finance/liquidity-mining-2.0.pdf" target="_blank" rel="noopener noreferrer">
                       Read the documentation
                     </a>
                   </Label>

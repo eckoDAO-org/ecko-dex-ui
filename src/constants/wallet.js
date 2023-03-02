@@ -3,22 +3,23 @@ import {
   LockLogo,
   ZelcoreLogo,
   WireChainweaverIcon,
-  WireXwalletIcon,
+  WireEckoWalletIcon,
   WireZelcoreIcon,
   LogoZelcoreIcon,
   LogoChainweaverIcon,
-  XWalletLogo,
+  EckoWalletLogo,
   WalletConnectLogo,
-  WireWalletConnectIcon, LogoWalletConnectIcon,
+  WireWalletConnectIcon,
+  LogoWalletConnectIcon,
 } from '../assets';
 
 export const WALLET = {
-  KADDEX_WALLET: {
-    id: 'KADDEX_WALLET',
-    name: 'X-Wallet',
-    logo: <XWalletLogo style={{ width: 45 }} />,
-    wireIcon: <WireXwalletIcon />,
-    notificationLogo: <XWalletLogo />,
+  ECKOWALLET: {
+    id: 'ECKOWALLET',
+    name: 'eckoWALLET',
+    logo: <EckoWalletLogo style={{ width: 45 }} />,
+    wireIcon: <WireEckoWalletIcon />,
+    notificationLogo: <EckoWalletLogo />,
   },
   ZELCORE: {
     id: 'ZELCORE',

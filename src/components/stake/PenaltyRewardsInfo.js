@@ -8,7 +8,7 @@ import List from '../shared/List';
 const PenaltyRewardsInfo = () => {
   return (
     <FlexContainer className="column" gap={16}>
-      <Label>The Kaddex Staking tool aims at rewarding long-term holders. For the same reason:</Label>
+      <Label>The eckoDEX Staking tool aims at rewarding long-term holders. For the same reason:</Label>
 
       <List
         paddingLeft={16}

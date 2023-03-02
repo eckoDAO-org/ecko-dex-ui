@@ -589,8 +589,8 @@ const SwapContainer = () => {
       mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
     >
       <Helmet>
-        <meta name="description" content="A multi-protocol decentralized exchange (DEX) by Kaddex." />
-        <title>Kaddex | Swap</title>
+        <meta name="description" content="A multi-protocol decentralized exchange (DEX) by eckoDEX." />
+        <title>eckoDEX | Swap</title>
       </Helmet>
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
 

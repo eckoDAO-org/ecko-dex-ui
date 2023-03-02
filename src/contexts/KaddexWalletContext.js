@@ -4,6 +4,7 @@ import { useAccountContext, useWalletContext, useNotificationContext } from '.';
 import { NETWORK, NETWORKID } from '../constants/contextConstants';
 import { WALLET } from '../constants/wallet';
 import useLocalStorage from '../hooks/useLocalStorage';
+import { genRandomString } from '../utils/string-utils';
 
 export const KaddexWalletContext = createContext();
 
@@ -152,16 +153,17 @@ export const KaddexWalletProvider = (props) => {
       console.log('X-Wallet: SETTING ACCOUNT DATA - WALLET FOUNDED', acc);
       await setVerifiedAccount(acc.wallet.account);
       await signingWallet();
-      await setSelectedWallet(WALLET.KADDEX_WALLET);
+      await setSelectedWallet(WALLET.ECKOWALLET);
       setKaddexWalletState({
         account: acc.wallet.account,
         isInstalled: true,
         isConnected: true,
       });
       showNotification({
-        title: `${WALLET.KADDEX_WALLET.name} was connected`,
+        toastId: genRandomString(),
+        title: `${WALLET.ECKOWALLET.name} was connected`,
         type: 'game-mode',
-        icon: WALLET.KADDEX_WALLET.notificationLogo,
+        icon: WALLET.ECKOWALLET.notificationLogo,
         closeButton: false,
         titleStyle: { fontSize: 13 },
         autoClose: 2000,

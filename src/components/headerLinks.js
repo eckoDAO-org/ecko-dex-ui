@@ -1,18 +1,18 @@
 import React from 'react';
-import { AboutIcon, BetaIcon, CodeIcon, DiscordIcon, VaultIcon, XWalletLogo } from '../assets';
+import { AboutIcon, BetaIcon, CodeIcon, VaultIcon, EckoWalletLogo, DiscordIcon } from '../assets';
 
 export default [
   {
     id: 3,
-    label: 'X-Wallet',
-    icon: <XWalletLogo />,
-    link: 'https://chrome.google.com/webstore/detail/x-wallet/bofddndhbegljegmpmnlbhcejofmjgbn',
+    label: 'eckoWALLET',
+    icon: <EckoWalletLogo />,
+    link: 'https://chrome.google.com/webstore/detail/eckowallet/bofddndhbegljegmpmnlbhcejofmjgbn',
   },
   {
     id: 4,
     label: 'BETA',
     icon: <BetaIcon className="menu-icon" />,
-    link: 'https://beta.kaddex.com',
+    link: 'https://beta.ecko.finance',
     hideOnGameEdition: true,
   },
   {
@@ -24,21 +24,21 @@ export default [
   },
   {
     id: 2,
-    label: 'discord',
+    label: 'Discord',
     icon: <DiscordIcon className="menu-icon" />,
-    link: 'https://discord.gg/QSJpHRFDcv',
+    link: 'https://discord.com/invite/eckodao',
   },
   {
     id: 1,
-    label: 'code',
+    label: 'Code',
     icon: <CodeIcon className="menu-icon" />,
-    link: 'https://github.com/KaddexGit/kaddex-swap-v2',
+    link: 'https://github.com/eckoDAO-org/ecko-dex-ui',
   },
 
   {
     id: 0,
-    label: 'about',
+    label: 'About',
     icon: <AboutIcon className="menu-icon" />,
-    link: 'https://kaddex.com',
+    link: 'https://dex.ecko.finance',
   },
 ];

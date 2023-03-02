@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { KaddexLightModeLogo, KaddexLogo } from '../../../assets';
+import { EckoDexLightModeLogo, EckoDexLogo } from '../../../assets';
 import { ROUTE_INDEX } from '../../../router/routes';
 import menuItems from '../../menuItems';
 import RightHeaderItems from './RightHeaderItems';
@@ -66,9 +66,9 @@ const DesktopHeader = ({ className }) => {
     <Container className={className} resolutionConfiguration={resolutionConfiguration}>
       <LeftContainer>
         {themeMode === 'dark' ? (
-          <KaddexLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
+          <EckoDexLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
         ) : (
-          <KaddexLightModeLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
+          <EckoDexLightModeLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
         )}
 
         <AnimatedDiv className={gameEditionView ? 'fadeOut' : 'fadeIn'}>

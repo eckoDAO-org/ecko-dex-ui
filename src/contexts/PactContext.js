@@ -6,7 +6,7 @@ import Pact from 'pact-lang-api';
 import axios from 'axios';
 import { getTokenUsdPriceByName } from '../utils/token-utils';
 import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, KADDEX_NAMESPACE } from '../constants/contextConstants';
-import { useAccountContext, useNotificationContext, useWalletContext } from '.';
+import { useNotificationContext, useWalletContext } from '.';
 import { fetchPrecision, getPairList } from '../api/pact';
 import tokenData, { pairsData, blacklistedTokenData } from '../constants/cryptoCurrencies';
 import { GAS_OPTIONS } from '../constants/gasConfiguration';
@@ -28,7 +28,6 @@ const initialNetworkGasData = {
 };
 
 export const PactProvider = (props) => {
-  const account = useAccountContext();
   const wallet = useWalletContext();
   const notificationContext = useNotificationContext();
 
@@ -40,10 +39,6 @@ export const PactProvider = (props) => {
   const [pactCmd, setPactCmd] = useState(null);
 
   const [ratio, setRatio] = useState(NaN);
-  const [swapList, setSwapList] = useState([]);
-  const [offsetSwapList, setOffsetSwapList] = useState(0);
-  const [moreSwap, setMoreSwap] = useState(true);
-  const [loadingSwap, setLoadingSwap] = useState(false);
 
   const [tokensUsdPrice, setTokensUsdPrice] = useState(null);
 
@@ -185,90 +180,6 @@ export const PactProvider = (props) => {
       storeTtl(600);
     }
   }, []);
-
-  const getEventsSwapList = async () => {
-    setSwapList([]);
-    const limit = 50;
-    try {
-      if (account.account.account) {
-        setLoadingSwap(true);
-        let response = await axios.get('https://estats.chainweb.com/txs/events', {
-          params: {
-            search: account.account.account,
-            name: `${KADDEX_NAMESPACE}.exchange.SWAP`,
-            offset: offsetSwapList,
-            limit: limit,
-          },
-        });
-
-        if (Object.values(response?.data).length < limit) setMoreSwap(false);
-        if (Object.values(response?.data).length !== 0) {
-          let swap = Object.values(response?.data).map((s) => ({
-            ...s,
-            tokenA: s.params[3],
-            amountA: s.params[2],
-            tokenB: s.params[5],
-            amountB: s.params[4],
-          }));
-          if (swap.length !== 0) {
-            setSwapList(swap);
-          } else setSwapList({ error: 'No swaps found' });
-        } else {
-          if (process.env.REACT_APP_KDA_NETWORK_TYPE === 'development') {
-            setSwapList({ error: 'This Devnet environment does not have a block explorer.' });
-          } else {
-            setSwapList({ error: 'No movement was performed' });
-          }
-        }
-        setLoadingSwap(false);
-      } else {
-        setSwapList({ error: 'Connect your wallet to view the swap history' });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getMoreEventsSwapList = async () => {
-    const limit = 50;
-    let offset = offsetSwapList + limit;
-
-    try {
-      if (account.account.account) {
-        setLoadingSwap(true);
-        let response = await axios.get('https://estats.chainweb.com/txs/events', {
-          params: {
-            search: account.account.account,
-            name: `${KADDEX_NAMESPACE}.exchange.SWAP`,
-            offset: offset,
-            limit: limit,
-          },
-        });
-        let swap = Object.values(response?.data).map((s) => ({
-          ...s,
-          tokenA: s.params[3],
-          amountA: s.params[2],
-          tokenB: s.params[5],
-          amountB: s.params[4],
-        }));
-        if (swap.length !== 0) {
-          const newResults = [...swapList, ...swap];
-          if (swap.length < limit) {
-            setMoreSwap(false);
-          }
-          setSwapList(newResults);
-        } else {
-          setMoreSwap(false);
-        }
-        setLoadingSwap(false);
-      } else {
-        setSwapList({ error: 'Connect your wallet to view the swap history' });
-      }
-      setOffsetSwapList(offset);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const getReserves = async (token0, token1) => {
     try {
@@ -413,11 +324,8 @@ export const PactProvider = (props) => {
     precision,
     setPrecision,
     fetchPrecision,
-    swapList,
     allPairs,
     allTokens,
-    getMoreEventsSwapList,
-    moreSwap,
     polling,
     setPolling,
     ratio,
@@ -433,9 +341,6 @@ export const PactProvider = (props) => {
     priceImpactWithoutFee,
     computeOut,
     computeIn,
-    setMoreSwap,
-    loadingSwap,
-    getEventsSwapList,
     kdaUsdPrice,
   };
   return <PactContext.Provider value={contextValues}>{props.children}</PactContext.Provider>;

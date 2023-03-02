@@ -45,7 +45,7 @@ const Banner = ({ text, position }) => {
     >
       <AlertIcon className="mobile-none" />
       <Label inverted fontSize={13} labelStyle={{ display: 'inline-block' }}>
-        {text || 'Welcome to our devnet environment, first, make sure to have devnet network information added to x-wallet, and funds on chain 0.'}
+        {text || 'Welcome to our devnet environment, first, make sure to have devnet network information added to eckoWALLET, and funds on chain 0.'}
       </Label>
     </STYBannerContainer>
   );

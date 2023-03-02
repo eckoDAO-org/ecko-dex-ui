@@ -5,7 +5,7 @@ import styled from 'styled-components/macro';
 import { useGameEditionContext, useWalletContext } from '../../contexts';
 import { PROGRESS_BAR_MAX_VALUE } from '../../contexts/GameEditionContext';
 import { ROUTE_GAME_EDITION_MENU } from '../../router/routes';
-import { KaddexLoadingIcon } from '../../assets';
+import { EckoDexLoadingIcon } from '../../assets';
 import GameEditionProgressBar from '../shared/GameEditionProgressBar';
 import loadingBackground from '../../assets/images/game-edition/loading-background.png';
 import GameEditionLabel from './components/GameEditionLabel';
@@ -49,7 +49,7 @@ const GameEditionStartAnimation = () => {
   // check to not render this component when exit from game edition
   return gameEditionView ? (
     <Container style={{ backgroundImage: `url(${loadingBackground})` }}>
-      <KaddexLoadingIcon />
+      <EckoDexLoadingIcon />
       <GameEditionProgressBar loadingValue={loadingValue} />
       <GameEditionLabel style={{ marginTop: 50 }}>V 1.0.0</GameEditionLabel>
     </Container>

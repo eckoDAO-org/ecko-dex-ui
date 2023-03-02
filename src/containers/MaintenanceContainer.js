@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { KaddexLogo } from '../assets';
+import { EckoDexLogo } from '../assets';
 
 const Container = styled.div`
   margin: 0;
@@ -26,7 +26,7 @@ const Container = styled.div`
 const MaintenanceContainer = () => {
   return (
     <Container>
-      <KaddexLogo style={{ marginBottom: 32 }} />
+      <EckoDexLogo style={{ marginBottom: 32 }} />
       <span style={{ fontSize: '16px', textAlign: 'center' }}>The platform is temporarily on maintenance. Please check back soon.</span>
     </Container>
   );

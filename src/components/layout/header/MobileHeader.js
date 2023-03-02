@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import RightHeaderItems from './RightHeaderItems';
 import PopupContentList from './PopupContentList';
-import { HamburgerIcon, KaddexLightModeLogo, KaddexLogo } from '../../../assets';
+import { HamburgerIcon, EckoDexLightModeLogo, EckoDexLogo } from '../../../assets';
 import menuItems from '../../menuItems';
 import { useHistory } from 'react-router';
 import { ROUTE_INDEX } from '../../../router/routes';
@@ -60,9 +60,9 @@ const MobileHeader = ({ className }) => {
         <LeftContainer>
           <PopupContentList withoutAccountInfo items={menuItems} icon={<HamburgerIcon className="hamburger-icon" />} className="hamburger" />
           {themeMode === 'dark' ? (
-            <KaddexLogo className="w-100" style={{ cursor: 'pointer', zIndex: 1, height: 20 }} onClick={() => history.push(ROUTE_INDEX)} />
+            <EckoDexLogo className="w-100" style={{ cursor: 'pointer', zIndex: 1, height: 20 }} onClick={() => history.push(ROUTE_INDEX)} />
           ) : (
-            <KaddexLightModeLogo className="w-100" style={{ cursor: 'pointer', zIndex: 1, height: 20 }} onClick={() => history.push(ROUTE_INDEX)} />
+            <EckoDexLightModeLogo className="w-100" style={{ cursor: 'pointer', zIndex: 1, height: 20 }} onClick={() => history.push(ROUTE_INDEX)} />
           )}
         </LeftContainer>
 

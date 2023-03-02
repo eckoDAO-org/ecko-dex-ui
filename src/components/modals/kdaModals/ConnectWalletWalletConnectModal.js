@@ -71,18 +71,18 @@ const ConnectWalletWalletConnectModal = ({ onConnectionSuccess }) => {
         <Label className="flex column" fontSize={13} geFontSize={20} geColor="yellow" geLabelStyle={{ textAlign: 'center' }}>
           <span>
             Please carefully read the information on our{' '}
-            <a href={`https://docs.kaddex.com/kaddex-features/getting-started/x-wallet/walletconnect`} target="_blank" rel="noopener noreferrer">
+            <a href={`https://docs.ecko.finance/eckodex/getting-started/eckowallet/walletconnect`} target="_blank" rel="noopener noreferrer">
               documentation
             </a>{' '}
-            when connecting your iOS or Android mobile device to the Kaddex DEX, either using a Connection Code, or a QR Code.
+            when connecting your iOS or Android mobile device to the eckoDEX, either using a Connection Code, or a QR Code.
           </span>
         </Label>
       </div>
       <Label fontSize={13} geFontSize={16} geColor="blue" geLabelStyle={{ textAlign: 'center', marginBottom: 30 }}>
         Important:
         <br />
-        Please make the KDA account provided is controlled by your X-Wallet mobile App which has support for WalletConnect. When submitting a
-        transaction, WalletConnect will show you a preview within your X-Wallet mobile App before signing.
+        Please make the KDA account provided is controlled by your eckoWALLET mobile App which has support for WalletConnect. When submitting a
+        transaction, WalletConnect will show you a preview within your eckoWALLET mobile App before signing.
       </Label>
       <CustomButton geType="pink" geLabel="CONNECT" onClick={onConnectWallet}>
         Connect

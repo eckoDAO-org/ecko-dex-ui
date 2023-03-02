@@ -453,8 +453,8 @@ const StakeContainer = () => {
       mobileStyle={{ paddingRight: theme().layout.mobilePadding, paddingLeft: theme().layout.mobilePadding }}
     >
       <Helmet>
-        <meta name="description" content="Accrue voting power for the Kaddex DAO while generating passive income." />
-        <title>Kaddex | Staking</title>
+        <meta name="description" content="Accrue voting power for the eckoDAO while generating passive income." />
+        <title>eckoDEX | Staking</title>
       </Helmet>
       <FlexContainer className="w-100 justify-sb" style={{ marginBottom: 24 }}>
         <FlexContainer gap={16} mobileStyle={{ marginBottom: 16 }}>

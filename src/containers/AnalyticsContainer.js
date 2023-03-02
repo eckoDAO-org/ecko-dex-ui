@@ -64,7 +64,7 @@ const AnalyticsContainer = () => {
         )}
         <Helmet>
           <meta name="description" content="Discovering, interpreting, and communicating significant data patterns based on our platform." />
-          <title>Kaddex | Analytics</title>
+          <title>eckoDEX | Analytics</title>
         </Helmet>
         <FlexContainer
           className="column w-100 h-100 main"

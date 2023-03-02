@@ -37,7 +37,19 @@ export const getInfoCoin = (item, coinPositionArray, allTokens) => {
     ? `${item?.params[coinPositionArray]?.refName?.namespace}.${item?.params[coinPositionArray]?.refName?.name}`
     : item?.params[coinPositionArray]?.refName?.name;
   const crypto = Object.values(allTokens).find(({ code }) => code === cryptoCode);
-  return crypto;
+  return crypto
+    ? crypto
+    : {
+        code: cryptoCode,
+        coingeckoId: 'kadena',
+        color: '#FFFFFF',
+        icon: null,
+        isVerified: false,
+        main: false,
+        name: cryptoCode.split('.')[1],
+        precision: 12,
+        tokenNameKaddexStats: null,
+      };
 };
 
 export const getApr = (volume, liquidity) => {
@@ -132,8 +144,11 @@ export const getAllPairsData = async (tokensUsdPrice, allTokens, allPairs, _pool
         let token0UsdPrice = tokensUsdPrice[getTokenName(volumes[pool.name]?.baseTokenCode, allTokens)];
         let token1UsdPrice = tokensUsdPrice[getTokenName(volumes[pool.name]?.targetTokenCode, allTokens)];
 
-        volume24HUsd =
-          token0UsdPrice && token1UsdPrice ? volumes[pool.name].baseVolume * token0UsdPrice + volumes[pool.name].targetVolume * token1UsdPrice : 0;
+        volume24HUsd = token0UsdPrice
+          ? volumes[pool.name].baseVolume * token0UsdPrice
+          : token1UsdPrice
+          ? volumes[pool.name].targetVolume * token1UsdPrice
+          : 0;
 
         liquidityUsd = liquidity0 + liquidity1;
         apr = volume24HUsd && liquidityUsd ? getApr(volume24HUsd, liquidityUsd) : 0;
