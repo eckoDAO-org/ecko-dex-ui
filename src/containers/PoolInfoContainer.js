@@ -26,7 +26,7 @@ import CommonTable from '../components/shared/CommonTable';
 import { convertUTCToSecond } from '../utils/time-utils';
 import { shortenAddress } from '../utils/string-utils';
 import moment from 'moment';
-import { ROUTE_ANALYTICS_POOLS, ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_SWAP } from '../router/routes';
+import { ROUTE_ANALYTICS_STATS, ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_SWAP } from '../router/routes';
 
 const formatPrice = (price, precision = 3) => {
   return `$ ${humanReadableNumber(price, 3) !== '0.000' ? humanReadableNumber(price, 3) : price.toFixed(precision)}`;
@@ -184,7 +184,7 @@ const PoolInfoContainer = () => {
             marginRight: '16px',
             justifyContent: 'center',
           }}
-          onClick={() => history.push(fromLocation || ROUTE_ANALYTICS_POOLS)}
+          onClick={() => history.push(fromLocation || ROUTE_ANALYTICS_STATS)}
         />
         <CryptoContainer style={{ marginRight: 8 }}>{poolDetails.token0Info.icon}</CryptoContainer>
         <Label fontSize={24} fontFamily="syncopate" style={{ whiteSpace: 'nowrap' }}>

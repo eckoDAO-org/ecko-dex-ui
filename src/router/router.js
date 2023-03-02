@@ -28,7 +28,7 @@ import {
   ROUTE_LIQUIDITY_CREATE_PAIR,
   ROUTE_ANALYTICS_KDX,
   ROUTE_TOKEN_INFO,
-  ROUTE_ANALYTICS_POOLS,
+  ROUTE_ANALYTICS_STATS,
   ROUTE_POOL_INFO,
 } from './routes';
 import SwapHistoryContainer from '../containers/SwapHistoryContainer';
@@ -76,7 +76,7 @@ export default () => {
               component={RemoveLiquidityContainer}
             />
             <Route exact path={[ROUTE_DAO, ROUTE_DAO_PROPOSAL]} component={DaoContainer} />
-            <Route exact path={[ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_POOLS]} component={AnalyticsContainer} />
+            <Route exact path={[ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS]} component={AnalyticsContainer} />
             <Route exact path={[ROUTE_STAKE, ROUTE_UNSTAKE]} component={StakeContainer} />
             <Route exact path={ROUTE_TOKEN_INFO} component={TokenInfoContainer} />
             <Route exact path={ROUTE_POOL_INFO} component={PoolInfoContainer} />
