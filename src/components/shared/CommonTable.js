@@ -50,7 +50,7 @@ const Wrapper = styled(FlexContainer)`
     width: 100%;
     position: absolute;
     z-index: 3;
-    top: 64px;
+    top: ${({ cellPadding }) => `${28 + cellPadding * 2}px`};
     left: 0px;
   }
   th {
@@ -128,7 +128,7 @@ const Paginator = styled(Pagination)`
 //  ...
 // ]
 
-const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onClick, wantPagination, offset = 10 }) => {
+const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onClick, wantPagination, offset = 10, cellPadding = 24 }) => {
   const [sortedItems, setSortedItems] = useState([]);
   const [sortNames, setSortNames] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
@@ -179,9 +179,9 @@ const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onCl
   };
 
   return (
-    <Wrapper withGradient className="w-100 relative hidden column background-fill" style={{ paddingTop: 0 }}>
+    <Wrapper withGradient className="w-100 relative hidden column background-fill" style={{ paddingTop: 0 }} cellPadding={cellPadding}>
       <FlexContainer className="w-100 x-auto">
-        <table cellSpacing={0} cellPadding={24}>
+        <table cellSpacing={0} cellPadding={cellPadding}>
           <thead>
             <tr className="tr-sticky" style={{ zIndex: 3, top: 0 }}>
               {columns?.map((c, i) => (
@@ -191,6 +191,7 @@ const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onCl
                       <Label
                         fontSize={13}
                         className={`capitalize ${c?.align === 'right' ? 'justify-fe' : ''}`}
+                        labelStyle={{ whiteSpace: 'nowrap', paddingTop: '6px', paddingBottom: '6px' }}
                         onClick={
                           c.sortBy
                             ? () => {
@@ -288,7 +289,7 @@ const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onCl
           </FlexContainer>
         ) : (
           <FlexContainer className="w-100 justify-fs" style={{ padding: '8px 16px' }}>
-            <Label fontFamily="syncopate">No Vaulting found</Label>
+            <Label fontFamily="syncopate">No row found</Label>
           </FlexContainer>
         )
       ) : null}

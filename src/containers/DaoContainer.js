@@ -43,7 +43,7 @@ const DaoContainer = () => {
     >
       <Helmet>
         <meta name="description" content="The community led DeFi ecosystem on Kadena." />
-        <title>Kaddex | DAO</title>
+        <title>eckoDEX | DAO</title>
       </Helmet>
       {proposal_id ? (
         <SingleProposalContainer proposal_id={proposal_id} accountData={accountData} />

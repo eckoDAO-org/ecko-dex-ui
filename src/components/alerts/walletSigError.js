@@ -3,7 +3,7 @@ import './alert.css';
 
 export default async () => {
   return await swal({
-    text: 'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kaddex',
+    text: 'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in eckoDEX',
     title: 'Wallet Signing Failure',
   });
 };

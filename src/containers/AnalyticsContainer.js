@@ -14,7 +14,6 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS } from '../router/routes';
 import Dex from '../components/analytics/Dex';
 import Kdx from '../components/analytics/Kdx';
-import StatsTable from '../components/analytics/StatsTable';
 import { KDX_TOTAL_SUPPLY } from '../constants/contextConstants';
 import { getAnalyticsData } from '../api/kaddex-analytics';
 import moment from 'moment';
@@ -22,6 +21,7 @@ import { Helmet } from 'react-helmet';
 import { VerifiedBoldLogo } from '../assets';
 import CustomButton from '../components/shared/CustomButton';
 import styled from 'styled-components';
+import Pools from '../components/analytics/Pools';
 
 export const FIXED_SUPPLY = 200577508;
 export const FIXED_BURNT = 99422492;
@@ -64,7 +64,7 @@ const AnalyticsContainer = () => {
         )}
         <Helmet>
           <meta name="description" content="Discovering, interpreting, and communicating significant data patterns based on our platform." />
-          <title>Kaddex | Analytics</title>
+          <title>eckoDEX | Analytics</title>
         </Helmet>
         <FlexContainer
           className="column w-100 h-100 main"
@@ -105,7 +105,7 @@ const AnalyticsContainer = () => {
             </FlexContainer>
 
             <FlexContainer className="align-ce">
-              {pathname === ROUTE_ANALYTICS_STATS && (
+              {(pathname === ROUTE_ANALYTICS_STATS) && (
                 <CustomButton
                   fontSize={13}
                   buttonStyle={{ height: 33 }}
@@ -146,7 +146,7 @@ const AnalyticsContainer = () => {
           {/* KDX */}
           {pathname === ROUTE_ANALYTICS_KDX && <Kdx analyticsData={analyticsData} KDX_TOTAL_SUPPLY={KDX_TOTAL_SUPPLY} kdaPrice={kdaUsdPrice} />}
           {/* DEX */}
-          {pathname === ROUTE_ANALYTICS_STATS && <StatsTable verifiedActive={verifiedActive} />}
+          {pathname === ROUTE_ANALYTICS_STATS && <Pools verifiedActive={verifiedActive} />}
         </FlexContainer>
       </>
     )

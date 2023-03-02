@@ -64,9 +64,11 @@ const VolumeChart = ({ kdaPrice, width, height }) => {
           name: timeRange._id,
           title: chartTimeRanges[volumeRange]?.title(timeRange),
           Volume: Number(
-            timeRange.volumes.reduce((partialSum, currVol) => {
-              return partialSum + (currVol.tokenFromName === 'coin' ? currVol.tokenFromVolume : currVol.tokenToVolume);
-            }, 0) * (2).toFixed(2)
+            timeRange.volumes
+              .reduce((partialSum, currVol) => {
+                return partialSum + (currVol.tokenFromName === 'coin' ? currVol.tokenFromVolume : currVol.tokenToVolume);
+              }, 0)
+              .toFixed(2)
           ),
           kdaPrice: kdaVerifiedPrice,
         });

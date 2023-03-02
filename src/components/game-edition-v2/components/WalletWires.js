@@ -158,7 +158,7 @@ const WalletWires = () => {
           if (wallet && selectedWire && wallet?.id !== selectedWire?.id) {
             oldWire = WALLET[wallet.id];
           } else {
-            if (wallet?.id === WALLET.KADDEX_WALLET) {
+            if (wallet?.id === WALLET.ECKOWALLET) {
               disconnectWallet();
             } else {
               logout();
@@ -172,7 +172,7 @@ const WalletWires = () => {
         <span>Disconnect</span>
       </DisconnectButton>
 
-      {[WALLET.KADDEX_WALLET, WALLET.ZELCORE, WALLET.CHAINWEAVER, WALLET.WALLETCONNECT].map((wire, i) => (
+      {[WALLET.ECKOWALLET, WALLET.ZELCORE, WALLET.CHAINWEAVER, WALLET.WALLETCONNECT].map((wire, i) => (
         <ConnectionWire key={i} wire={wire} onClick={selectedWire ? null : () => onWireSelect(wire)} />
       ))}
     </WiresContainer>

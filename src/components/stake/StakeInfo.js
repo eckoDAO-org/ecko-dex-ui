@@ -8,7 +8,7 @@ import List from '../shared/List';
 const StakeInfo = () => {
   return (
     <FlexContainer className="column" gap={16}>
-      <Label>The Kaddex Staking tool accomplishes three main purposes:</Label>
+      <Label>The eckoDEX Staking tool accomplishes three main purposes:</Label>
 
       <List
         paddingLeft={16}

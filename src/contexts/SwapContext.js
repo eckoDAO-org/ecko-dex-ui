@@ -188,7 +188,7 @@ export const SwapProvider = (props) => {
             error: true,
             title: 'Wallet Signing Failure',
             content:
-              'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in Kaddex.',
+              'You cancelled the transaction or did not sign it correctly. Please make sure you sign with the keys of the account linked in eckoDEX.',
           }); //walletSigError();
         console.log(e);
       }

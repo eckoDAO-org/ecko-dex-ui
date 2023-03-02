@@ -46,7 +46,7 @@ const LiquidityContainer = () => {
           content="Liquidity providers earn a 0.25% fee back and 0.05% goes to stakers on all trades proportional to their share of the pool.
 Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity."
         />
-        <title>Kaddex | Liquidity</title>
+        <title>eckoDEX | Liquidity</title>
       </Helmet>
       <FlexContainer
         className="w-100 justify-sb"

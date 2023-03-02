@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { HamburgerIcon, KaddexLightModeLogo, KaddexLogo } from '../../../assets';
+import { HamburgerIcon, EckoDexLightModeLogo, EckoDexLogo } from '../../../assets';
 import { useApplicationContext } from '../../../contexts';
 import useWindowSize from '../../../hooks/useWindowSize';
 import { ROUTE_INDEX } from '../../../router/routes';
@@ -58,9 +58,9 @@ const TabletHeader = ({ className }) => {
         <LeftContainer>
           <PopupContentList withoutAccountInfo items={menuItems} icon={<HamburgerIcon className="hamburger-icon" />} className="hamburger" />
           {themeMode === 'dark' ? (
-            <KaddexLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
+            <EckoDexLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
           ) : (
-            <KaddexLightModeLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
+            <EckoDexLightModeLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
           )}
         </LeftContainer>
 

@@ -20,10 +20,9 @@ export { ReactComponent as ExplorerIcon } from './images/shared/ic_explorer.svg'
 export { ReactComponent as GasIcon } from './images/shared/gas.svg';
 export { ReactComponent as HamburgerIcon } from './images/header/hamburger.svg';
 export { ReactComponent as HistoryIcon } from './images/shared/history.svg';
-export { ReactComponent as KaddexLightModeLogo } from './images/header/kaddex_logo_light_mode.svg';
+export { ReactComponent as EckoDexLightModeLogo } from './images/header/eckoDEX_dark.svg';
+export { ReactComponent as EckoDexLogo } from './images/header/eckoDEX.svg';
 export { ReactComponent as KaddexLetterLogo } from './images/header/Kaddex_A_logo.svg';
-export { ReactComponent as KaddexLogo } from './images/header/kaddex_logo.svg';
-export { ReactComponent as KaddexWhite } from './images/header/KADDEX-white.svg';
 export { ReactComponent as KDALogo } from './images/header/kadena-logo.svg';
 export { ReactComponent as KaddexOutlineIcon } from './images/shared/kaddex-outline.svg';
 export { ReactComponent as LockLogo } from './images/shared/awesome-lock.svg';
@@ -49,7 +48,7 @@ export { ReactComponent as TradeUpIcon } from './images/shared/trade-up.svg';
 export { ReactComponent as VotingPowerFormulaIcon } from './images/shared/voting-power-formula.svg';
 export { ReactComponent as ZelcoreLogo } from './images/shared/zelcore-logo.svg';
 export { ReactComponent as WalletConnectLogo } from './images/shared/walletconnect-logo.svg';
-export { ReactComponent as XWalletLogo } from './images/header/x-wallet-logo.svg';
+export { ReactComponent as EckoWalletLogo } from './images/game-edition/icon_eckoWALLET.svg';
 export { ReactComponent as InfoIcon } from './images/shared/info-icon.svg';
 export { ReactComponent as BoosterIcon } from './images/shared/booster.svg';
 export { ReactComponent as SimplexLogo } from './images/shared/simplex-logo.svg';
@@ -71,5 +70,8 @@ export { ReactComponent as LiquidityDollarLogo } from './images/shared/liquidity
 export { ReactComponent as AddLiquidityLogo } from './images/shared/add_liquidity.svg';
 export { ReactComponent as VaultIcon } from './images/shared/vault.svg';
 export { ReactComponent as SKDXIcon } from './images/shared/skdx-logo.svg';
+export { ReactComponent as UnmarshalLogo } from './images/shared/unmarshal-logo.svg';
+export { ReactComponent as KadenaExplorerLogo } from './images/shared/kadena-explorer-logo.svg';
 
 export * from '../assets/images/game-edition';
+export * from './socials';

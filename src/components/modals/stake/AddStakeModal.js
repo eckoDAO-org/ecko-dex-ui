@@ -38,7 +38,7 @@ export const AddStakeModal = ({ onConfirm, alreadyStakedAmount, toStakeAmount })
     if (alreadyStakedAmount && alreadyStakedAmount > 0) {
       return `Adding more KDX to your stake, will simply increase your waiting time proportionally, and it will also activate a 3% flat penalty fee on any unstaked amount for 72hours. Once the 72 hours have passed, you can unstake your tokens normally without paying this penalty.`;
     }
-    return `Stakers will earn ${STAKING_REWARDS_PERCENT} % on all swaps taking place on Kaddex. This will give holders a simple way to earn passive income while at the same time participating in our governance program. Supplying KDX to our staking program will activate a 3% flat penalty fee on any unstaked amount for 72hours. Once the 72 hours have passed, you can unstake your tokens normally without paying this penalty.`;
+    return `Stakers will earn ${STAKING_REWARDS_PERCENT} % on all swaps taking place on eckoDEX. This will give holders a simple way to earn passive income while at the same time participating in our governance program. Supplying KDX to our staking program will activate a 3% flat penalty fee on any unstaked amount for 72hours. Once the 72 hours have passed, you can unstake your tokens normally without paying this penalty.`;
   };
 
   return (
