@@ -49,10 +49,12 @@
     "build": "react-scripts build && node post-build.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "lint": "eslint --fix ./src && prettier --write ./src"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "ignorePatterns": ["src/charting_library", "public", "node_modules"]
   },
   "browserslist": [
     ">0.2%",
@@ -69,6 +71,7 @@
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
     "patch-package": "^6.4.7",
-    "prettier": "^2.1.2"
+    "prettier": "^2.1.2",
+    "eslint": "6.8.0"
   }
 }

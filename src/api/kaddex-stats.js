@@ -16,6 +16,62 @@ export const kaddexStatsRequest = async (url) => {
   }
 };
 
+export const dexscanAllPoolsStatsRequest = async (url) => {
+  try {
+    return await axios
+      .get(`${process.env.REACT_APP_DEXSCAN_API_URL}/${url}`, {
+        headers: { accept: 'application/json' },
+      })
+      .then(async (res) => {
+        return res;
+      })
+      .catch((err) => console.log('dexscan stats error', err));
+  } catch (error) {
+    console.log('error', error);
+  }
+};
+
+export const dexscanPoolDetailsRequest = async (url, poolId) => {
+  try {
+    return await axios
+      .get(`${process.env.REACT_APP_DEXSCAN_API_URL}/${url}`, {
+        headers: { accept: 'application/json' },
+        params: {
+          id: poolId,
+          exchange: 'KADDEX',
+        },
+      })
+      .then(async (res) => {
+        return res;
+      })
+      .catch((err) => console.log('dexscan stats error', err));
+  } catch (error) {
+    console.log('error', error);
+  }
+};
+
+export const dexscanPoolTransactionsRequest = async (url, poolId, fromTime = undefined, toTime = undefined) => {
+  try {
+    return await axios
+      .get(`${process.env.REACT_APP_DEXSCAN_API_URL}/${url}`, {
+        headers: { accept: 'application/json' },
+        params: {
+          id: poolId,
+          exchange: 'KADDEX',
+          limit: 25,
+          fromTime,
+          toTime,
+        },
+      })
+      .then(async (res) => {
+        return res;
+      })
+      .catch((err) => console.log('dexscan stats error', err));
+  } catch (error) {
+    console.log('error', error);
+  }
+};
+
 //TODO: NOT USED
 export const getDailyVolume = async () => {
   const url = `volume/daily?dateStart=${moment().subtract(4, 'day').format('YYYY-MM-DD')}&dateEnd=${moment()

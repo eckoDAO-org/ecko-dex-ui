@@ -18,6 +18,7 @@ import {
   ROUTE_LIQUIDITY_CREATE_PAIR,
   ROUTE_ANALYTICS_KDX,
   ROUTE_ANALYTICS_STATS,
+  ROUTE_ANALYTICS_POOLS,
 } from '../router/routes';
 
 export const SWAP = {
@@ -52,7 +53,7 @@ export const ANALYTICS = {
   id: 4,
   label: 'Analytics',
   route: ROUTE_ANALYTICS,
-  activeRoutes: [ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS],
+  activeRoutes: [ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS, ROUTE_ANALYTICS_POOLS],
 };
 export const STAKE = {
   id: 3,

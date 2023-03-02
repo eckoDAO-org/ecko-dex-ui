@@ -55,6 +55,16 @@ const AddLiquidityContainer = (props) => {
 
   const [apr, setApr] = useState(null);
 
+  const [fromLocation, setFromLocation] = useState();
+
+  useEffect(() => {
+    const locationState = props?.location?.state?.from;
+
+    if (locationState) {
+      setFromLocation(locationState);
+    }
+  }, [props.location]);
+
   const calculateApr = async () => {
     const allPairsData = await getAllPairsData(tokensUsdPrice, pact.allTokens, pact.allPairs, data.pools);
     let pool = getCurrentPool(pair.token0, pair.token1);
@@ -129,7 +139,7 @@ const AddLiquidityContainer = (props) => {
               justifyContent: 'center',
             }}
             onClick={() => {
-              history.push(props?.location?.state?.from || ROUTE_LIQUIDITY_TOKENS);
+              history.push(fromLocation || ROUTE_LIQUIDITY_TOKENS);
             }}
           />
           <Label fontSize={24} fontFamily="syncopate">
@@ -153,7 +163,7 @@ const AddLiquidityContainer = (props) => {
           withShade={pathname !== ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED}
           onClick={() =>
             history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${query.get('token0')}&token1=${query.get('token1')}`), {
-              from: props?.location?.state?.from,
+              from: fromLocation,
             })
           }
         >
@@ -164,7 +174,7 @@ const AddLiquidityContainer = (props) => {
           withShade={pathname !== ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED}
           onClick={() =>
             history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${query.get('token0')}&token1=${query.get('token1')}`), {
-              from: props?.location?.state?.from,
+              from: fromLocation,
             })
           }
         >

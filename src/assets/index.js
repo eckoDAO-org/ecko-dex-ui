@@ -70,5 +70,8 @@ export { ReactComponent as LiquidityDollarLogo } from './images/shared/liquidity
 export { ReactComponent as AddLiquidityLogo } from './images/shared/add_liquidity.svg';
 export { ReactComponent as VaultIcon } from './images/shared/vault.svg';
 export { ReactComponent as SKDXIcon } from './images/shared/skdx-logo.svg';
+export { ReactComponent as UnmarshalLogo } from './images/shared/unmarshal-logo.svg';
+export { ReactComponent as KadenaExplorerLogo } from './images/shared/kadena-explorer-logo.svg';
 
 export * from '../assets/images/game-edition';
+export * from './socials';

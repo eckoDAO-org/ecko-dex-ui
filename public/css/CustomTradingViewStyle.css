@@ -1,0 +1,5 @@
+.theme-dark:root {
+  --tv-color-platform-background: #25263d;
+  --tv-color-pane-background: #1f2034;
+  --tv-color-pane-background-secondary: #25263d;
+}
