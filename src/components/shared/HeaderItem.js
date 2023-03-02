@@ -8,7 +8,6 @@ const Item = styled(Link)`
   color: ${({ theme: { colors } }) => colors.white};
   font-size: 14px;
   text-decoration: none;
-  text-transform: capitalize;
   background: transparent;
   z-index: 1;
 

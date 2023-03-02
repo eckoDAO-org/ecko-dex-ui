@@ -5,7 +5,7 @@ import Label from '../shared/Label';
 const CreatePairInfo = () => {
   return (
     <FlexContainer className="column" gap={16}>
-      <Label fontSize={13}>Kaddex allows community members to create and add liquidity for any specific token pair.</Label>
+      <Label fontSize={13}>eckoDEX allows community members to create and add liquidity for any specific token pair.</Label>
     </FlexContainer>
   );
 };

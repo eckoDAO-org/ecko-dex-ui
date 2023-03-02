@@ -14,21 +14,7 @@ const FooterPolicy = () => {
       mobileStyle={{ margin: '0px 16px 24px' }}
     >
       {/* {width > commonTheme.mediaQueries.desktopPixel && <Label color="transparent" fontSize={12} labelStyle={{ minWidth: 259 }}></Label>} */}
-      {themeMode === 'dark' ? (
-        <NccLogo
-          className="pointer"
-          onClick={() => {
-            window.open(`https://drive.google.com/file/d/1shHQ5ssADcJE4DOAOH2YXxnn9EoMtBJu/view?usp=sharing`, '_blank', 'noopener,noreferrer');
-          }}
-        />
-      ) : (
-        <NccLogoLightMode
-          className="pointer"
-          onClick={() => {
-            window.open(`https://drive.google.com/file/d/1shHQ5ssADcJE4DOAOH2YXxnn9EoMtBJu/view?usp=sharing`, '_blank', 'noopener,noreferrer');
-          }}
-        />
-      )}
+      {themeMode === 'dark' ? <NccLogo /> : <NccLogoLightMode />}
       {/* <Label
         fontSize={12}
         labelStyle={{
@@ -42,7 +28,7 @@ const FooterPolicy = () => {
           className="pointer"
           style={{ marginBottom: width < commonTheme.mediaQueries.mobilePixel && 8 }}
           onClick={() => {
-            window.open(`https://kaddex.com/terms-of-use`, '_blank', 'noopener,noreferrer');
+            window.open(`https://dex.ecko.finance/terms-of-use`, '_blank', 'noopener,noreferrer');
           }}
         >
           Terms & Conditions
@@ -51,7 +37,7 @@ const FooterPolicy = () => {
         <span
           className="pointer"
           onClick={() => {
-            window.open(`https://kaddex.com/privacy-policy`, '_blank', 'noopener,noreferrer');
+            window.open(`https://dex.ecko.finance/privacy-policy`, '_blank', 'noopener,noreferrer');
           }}
         >
           Privacy Policy

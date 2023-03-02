@@ -31,7 +31,7 @@
       h1.title {
         font-size: 14px;
         color: #0f1222;
-        font-family: "Roboto", sans-serif !important;
+        font-family: 'Roboto', sans-serif !important;
         margin: 0;
         text-align: center;
       }
@@ -112,9 +112,7 @@
         <div class="beat beat-even"></div>
         <div class="beat beat-odd"></div>
       </div>
-      <h1 class="title content" id="closeText" style="display: none">
-        You can close this window now
-      </h1>
+      <h1 class="title content" id="closeText" style="display: none">You can close this window now</h1>
     </div>
     <script
       src="https://scripts.toruswallet.io/broadcastChannel_3_5_3.js"
@@ -126,7 +124,7 @@
         var storage;
         try {
           storage = window[type];
-          var x = "__storage_test__";
+          var x = '__storage_test__';
           storage.setItem(x, x);
           storage.removeItem(x);
           return true;
@@ -139,9 +137,9 @@
               e.code === 1014 ||
               // test name field too, because code might not be present
               // everything except Firefox
-              e.name === "QuotaExceededError" ||
+              e.name === 'QuotaExceededError' ||
               // Firefox
-              e.name === "NS_ERROR_DOM_QUOTA_REACHED") &&
+              e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
             // acknowledge QuotaExceededError only if there's something already stored
             storage &&
             storage.length !== 0
@@ -149,28 +147,28 @@
         }
       }
       function showCloseText() {
-        var closeText = document.getElementById("closeText");
-        var spinner = document.getElementById("spinner");
+        var closeText = document.getElementById('closeText');
+        var spinner = document.getElementById('spinner');
         if (closeText) {
-          closeText.style.display = "block";
+          closeText.style.display = 'block';
         }
         if (spinner) {
-          spinner.style.display = "none";
+          spinner.style.display = 'none';
         }
       }
-      var isLocalStorageAvailable = storageAvailable("localStorage");
-      var isSessionStorageAvailable = storageAvailable("sessionStorage");
+      var isLocalStorageAvailable = storageAvailable('localStorage');
+      var isSessionStorageAvailable = storageAvailable('sessionStorage');
       // set theme
-      let theme = "light";
+      let theme = 'light';
       if (isLocalStorageAvailable) {
-        var torusTheme = localStorage.getItem("torus-theme");
+        var torusTheme = localStorage.getItem('torus-theme');
         if (torusTheme) {
-          theme = torusTheme.split("-")[0];
+          theme = torusTheme.split('-')[0];
         }
       }
 
-      if (theme === "dark") {
-        document.querySelector("body").style.backgroundColor = "#24252A";
+      if (theme === 'dark') {
+        document.querySelector('body').style.backgroundColor = '#24252A';
       }
       var bc;
       var broadcastChannelOptions = {
@@ -178,19 +176,17 @@
         webWorkerSupport: false, // (optional) set this to false if you know that your channel will never be used in a WebWorker (increase performance)
       };
       var instanceParams = {};
-      var preopenInstanceId = new URL(window.location.href).searchParams.get(
-        "preopenInstanceId"
-      );
+      var preopenInstanceId = new URL(window.location.href).searchParams.get('preopenInstanceId');
       if (!preopenInstanceId) {
-        document.getElementById("message").style.visibility = "visible";
+        document.getElementById('message').style.visibility = 'visible';
         // in general oauth redirect
         try {
           var url = new URL(location.href);
           var hash = url.hash.substr(1);
           var hashParams = {};
           if (hash) {
-            hashParams = hash.split("&").reduce(function (result, item) {
-              var parts = item.split("=");
+            hashParams = hash.split('&').reduce(function (result, item) {
+              var parts = item.split('=');
               result[parts[0]] = parts[1];
               return result;
             }, {});
@@ -199,26 +195,13 @@
           for (var key of url.searchParams.keys()) {
             queryParams[key] = url.searchParams.get(key);
           }
-          var error = "";
+          var error = '';
           try {
             if (Object.keys(hashParams).length > 0 && hashParams.state) {
-              instanceParams =
-                JSON.parse(
-                  window.atob(
-                    decodeURIComponent(decodeURIComponent(hashParams.state))
-                  )
-                ) || {};
+              instanceParams = JSON.parse(window.atob(decodeURIComponent(decodeURIComponent(hashParams.state)))) || {};
               if (hashParams.error) error = hashParams.error;
-            } else if (
-              Object.keys(queryParams).length > 0 &&
-              queryParams.state
-            ) {
-              instanceParams =
-                JSON.parse(
-                  window.atob(
-                    decodeURIComponent(decodeURIComponent(queryParams.state))
-                  )
-                ) || {};
+            } else if (Object.keys(queryParams).length > 0 && queryParams.state) {
+              instanceParams = JSON.parse(window.atob(decodeURIComponent(decodeURIComponent(queryParams.state)))) || {};
               if (queryParams.error) error = queryParams.error;
             }
           } catch (e) {
@@ -228,7 +211,7 @@
             // communicate to window.opener
             window.opener.postMessage(
               {
-                channel: "redirect_channel_" + instanceParams.instanceId,
+                channel: 'redirect_channel_' + instanceParams.instanceId,
                 data: {
                   instanceParams: instanceParams,
                   hashParams: hashParams,
@@ -236,18 +219,15 @@
                 },
                 error: error,
               },
-              "https://stage.swap.kaddex.com"
+              'https://swap.ecko.finance'
             );
           } else {
             // communicate via broadcast channel
-            bc = new broadcastChannelLib.BroadcastChannel(
-              "redirect_channel_" + instanceParams.instanceId,
-              broadcastChannelOptions
-            );
-            bc.addEventListener("message", function (ev) {
+            bc = new broadcastChannelLib.BroadcastChannel('redirect_channel_' + instanceParams.instanceId, broadcastChannelOptions);
+            bc.addEventListener('message', function (ev) {
               if (ev.success) {
                 bc.close();
-                console.log("posted", {
+                console.log('posted', {
                   queryParams,
                   instanceParams,
                   hashParams,
@@ -266,13 +246,12 @@
               error: error,
             }).then(function () {
               setTimeout(function () {
-                window.location.href =
-                  url.origin + location.search + location.hash;
+                window.location.href = url.origin + location.search + location.hash;
               }, 5000);
             });
           }
         } catch (err) {
-          console.error(err, "service worker error in redirect");
+          console.error(err, 'service worker error in redirect');
           bc && bc.close();
           window.close();
           showCloseText();
@@ -280,32 +259,26 @@
       } else {
         // in preopen, awaiting redirect
         try {
-          bc = new broadcastChannelLib.BroadcastChannel(
-            "preopen_channel_" + preopenInstanceId,
-            broadcastChannelOptions
-          );
+          bc = new broadcastChannelLib.BroadcastChannel('preopen_channel_' + preopenInstanceId, broadcastChannelOptions);
           bc.onmessage = function (ev) {
             var { preopenInstanceId: oldId, payload, message } = ev.data;
             if (oldId === preopenInstanceId && payload && payload.url) {
               window.location.href = payload.url;
-            } else if (
-              oldId === preopenInstanceId &&
-              message === "setup_complete"
-            ) {
+            } else if (oldId === preopenInstanceId && message === 'setup_complete') {
               bc.postMessage({
                 data: {
                   preopenInstanceId: preopenInstanceId,
-                  message: "popup_loaded",
+                  message: 'popup_loaded',
                 },
               });
             }
-            if (ev.error && ev.error !== "") {
+            if (ev.error && ev.error !== '') {
               console.error(ev.error);
               bc.close();
             }
           };
         } catch (err) {
-          console.error(err, "service worker error in preopen");
+          console.error(err, 'service worker error in preopen');
           bc && bc.close();
           window.close();
           showCloseText();

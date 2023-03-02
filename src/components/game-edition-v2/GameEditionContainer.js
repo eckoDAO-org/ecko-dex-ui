@@ -16,7 +16,7 @@ import { STATUSES } from '../../contexts/NotificationContext';
 import WalletWires from './components/WalletWires';
 import ConnectWalletWire from './components/ConnectWalletWire';
 import GameEditionModalsContainer from './GameEditionModalsContainer';
-import { KaddexWhite } from '../../assets';
+import { EckoDexLogo } from '../../assets';
 import { WALLET } from '../../constants/wallet';
 import ConnectWalletZelcoreModal from '../modals/kdaModals/ConnectWalletZelcoreModal';
 import ConnectWalletChainweaverModal from '../modals/kdaModals/ConnectWalletChainweaverModal';
@@ -91,7 +91,7 @@ const GameEditionDesktopContainer = styled.div`
     }
   }};
 
-  .kaddex-logo {
+  .eckoDEX-logo {
     margin-top: 20px;
     svg {
       height: 14.5px;
@@ -213,11 +213,11 @@ const GameEditionContainer = ({ children }) => {
           content: <ConnectWalletWalletConnectModal onConnectionSuccess={async () => await onConnectionSuccess(WALLET.WALLETCONNECT)} />,
         });
 
-      case WALLET.KADDEX_WALLET.name:
+      case WALLET.ECKOWALLET.name:
         if (!isInstalled) {
           showNotification({
             title: 'Wallet not found',
-            message: `Please install ${WALLET.KADDEX_WALLET.name}`,
+            message: `Please install ${WALLET.ECKOWALLET.name}`,
             type: STATUSES.WARNING,
           });
           onWireSelect(null);
@@ -231,12 +231,12 @@ const GameEditionContainer = ({ children }) => {
 
   useEffect(() => {
     if (account.account && isConnected) {
-      onWireSelect(WALLET.KADDEX_WALLET);
+      onWireSelect(WALLET.ECKOWALLET);
 
       showNotification({
-        title: `${WALLET.KADDEX_WALLET.name} connected`,
+        title: `${WALLET.ECKOWALLET.name} connected`,
         type: 'game-mode',
-        icon: WALLET.KADDEX_WALLET.notificationLogo,
+        icon: WALLET.ECKOWALLET.notificationLogo,
         closeButton: false,
         titleStyle: { fontSize: 13 },
         autoClose: 3000,
@@ -251,7 +251,7 @@ const GameEditionContainer = ({ children }) => {
       showNotification({
         title: `${WALLET.WALLETCONNECT.name} connected`,
         type: 'game-mode',
-        icon: WALLET.KADDEX_WALLET.notificationLogo,
+        icon: WALLET.ECKOWALLET.notificationLogo,
         closeButton: false,
         titleStyle: { fontSize: 13 },
         autoClose: 3000,
@@ -321,8 +321,8 @@ const GameEditionContainer = ({ children }) => {
             )}
           </DisplayContent>
 
-          <div className="kaddex-logo">
-            <KaddexWhite />
+          <div className="eckoDEX-logo">
+            <EckoDexLogo />
           </div>
         </GameEditionDesktopContainer>
         {showTokens && (

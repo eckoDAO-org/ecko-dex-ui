@@ -69,11 +69,11 @@ const ConnectWalletModal = () => {
           });
         }
 
-      case WALLET.KADDEX_WALLET.name:
+      case WALLET.ECKOWALLET.name:
         if (!isInstalled) {
           showNotification({
             title: 'Wallet not found',
-            message: `Please install ${WALLET.KADDEX_WALLET.name}`,
+            message: `Please install ${WALLET.ECKOWALLET.name}`,
             type: STATUSES.WARNING,
           });
         } else {
@@ -92,10 +92,10 @@ const ConnectWalletModal = () => {
       <CustomButton
         type="gradient"
         onClick={() => {
-          openWalletModal(WALLET.KADDEX_WALLET.name);
+          openWalletModal(WALLET.ECKOWALLET.name);
         }}
       >
-        {WALLET.KADDEX_WALLET.name}
+        {WALLET.ECKOWALLET.name}
       </CustomButton>
       <CustomButton
         type="primary"

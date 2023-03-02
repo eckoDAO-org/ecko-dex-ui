@@ -13,10 +13,10 @@ export const NETWORK_VERSION = process.env.REACT_APP_KDA_NETWORK_VERSION || '0.0
 export const WALLET_CONNECT_PROJECT_ID = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID || '';
 export const WALLET_CONNECT_RELAY_URL = process.env.REACT_APP_WALLET_CONNECT_RELAY_URL || '';
 export const WALLET_CONNECT_METADATA = {
-  name: 'Kaddex SWAP',
+  name: 'eckoDEX SWAP',
   description: 'Swap for KDA and KDX',
-  url: 'https://swap.kaddex.com/',
-  icons: ['https://kaddex.com/Kaddex_icon.png'],
+  url: 'https://swap.ecko.finance/',
+  icons: ['https://dex.ecko.finance/Kaddex_icon.png'],
 };
 
 export const KDX_TOTAL_SUPPLY = 1000000000;

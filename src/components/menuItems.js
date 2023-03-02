@@ -23,7 +23,7 @@ import {
 
 export const SWAP = {
   id: 0,
-  label: 'swap',
+  label: 'Swap',
   route: ROUTE_SWAP,
   activeRoutes: [ROUTE_MY_SWAP],
 };
@@ -51,19 +51,19 @@ export const DAO = {
 };
 export const ANALYTICS = {
   id: 4,
-  label: 'analytics',
+  label: 'Analytics',
   route: ROUTE_ANALYTICS,
   activeRoutes: [ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS, ROUTE_ANALYTICS_POOLS],
 };
 export const STAKE = {
   id: 3,
-  label: 'stake',
+  label: 'Stake',
   route: ROUTE_STAKE,
   activeRoutes: [ROUTE_UNSTAKE],
 };
 export const VAULT = {
   id: 3,
-  label: 'vault',
+  label: 'Vault',
   target: '_blank',
   link: process.env.REACT_APP_VAULTING_URL,
 };
@@ -73,17 +73,17 @@ export default NETWORK_TYPE === 'development' ? [SWAP, LIQUIDITY, STAKE, DAO, AN
 export const gameEditionRoutes = [
   {
     id: 0,
-    label: 'swap',
+    label: 'Swap',
     route: ROUTE_SWAP,
   },
   {
     id: 1,
-    label: 'stats',
+    label: 'Stats',
     route: ROUTE_STATS,
   },
   {
     id: 2,
-    label: 'history',
+    label: 'History',
     route: ROUTE_MY_SWAP,
   },
 ];

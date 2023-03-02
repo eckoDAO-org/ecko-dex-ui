@@ -224,7 +224,7 @@ self.addEventListener('fetch', function (event) {
                 },
                 error: error,
               },
-               "https://stage.swap.kaddex.com"
+               "https://swap.ecko.finance"
             );
           } else {
             // communicate via broadcast channel

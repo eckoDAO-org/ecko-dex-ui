@@ -289,7 +289,7 @@ const CommonTable = ({ columns, items, actions, hasMore, loadMore, loading, onCl
           </FlexContainer>
         ) : (
           <FlexContainer className="w-100 justify-fs" style={{ padding: '8px 16px' }}>
-            <Label fontFamily="syncopate">No Vaulting found</Label>
+            <Label fontFamily="syncopate">No row found</Label>
           </FlexContainer>
         )
       ) : null}
