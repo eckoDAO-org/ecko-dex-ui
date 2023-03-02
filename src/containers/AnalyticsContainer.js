@@ -11,10 +11,9 @@ import InfoPopup from '../components/shared/InfoPopup';
 import { getPoolState } from '../api/kaddex.staking';
 import { theme, commonColors } from '../styles/theme';
 import { useHistory, useLocation } from 'react-router-dom';
-import { ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS, ROUTE_ANALYTICS_POOLS } from '../router/routes';
+import { ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_POOLS } from '../router/routes';
 import Dex from '../components/analytics/Dex';
 import Kdx from '../components/analytics/Kdx';
-import StatsTable from '../components/analytics/StatsTable';
 import { KDX_TOTAL_SUPPLY } from '../constants/contextConstants';
 import { getAnalyticsData } from '../api/kaddex-analytics';
 import moment from 'moment';
@@ -57,7 +56,7 @@ const AnalyticsContainer = () => {
   ) : (
     !gameEditionView && (
       <>
-        {pathname !== ROUTE_ANALYTICS_STATS && pathname !== ROUTE_ANALYTICS_POOLS && (
+        {pathname !== ROUTE_ANALYTICS_POOLS && (
           <Banner
             position="unset"
             text={`The information displayed on this page is currently under BETA testing, and is provided on an "as is" and "as available" basis.`}
@@ -95,15 +94,6 @@ const AnalyticsContainer = () => {
                 KDX
               </Label>
               <Label
-                withShade={pathname !== ROUTE_ANALYTICS_STATS}
-                className="pointer"
-                fontSize={24}
-                fontFamily="syncopate"
-                onClick={() => history.push(ROUTE_ANALYTICS_STATS)}
-              >
-                STATS
-              </Label>
-              <Label
                 withShade={pathname !== ROUTE_ANALYTICS_POOLS}
                 className="pointer"
                 fontSize={24}
@@ -115,7 +105,7 @@ const AnalyticsContainer = () => {
             </FlexContainer>
 
             <FlexContainer className="align-ce">
-              {(pathname === ROUTE_ANALYTICS_STATS || pathname === ROUTE_ANALYTICS_POOLS) && (
+              {(pathname === ROUTE_ANALYTICS_POOLS) && (
                 <CustomButton
                   fontSize={13}
                   buttonStyle={{ height: 33 }}
@@ -156,7 +146,6 @@ const AnalyticsContainer = () => {
           {/* KDX */}
           {pathname === ROUTE_ANALYTICS_KDX && <Kdx analyticsData={analyticsData} KDX_TOTAL_SUPPLY={KDX_TOTAL_SUPPLY} kdaPrice={kdaUsdPrice} />}
           {/* DEX */}
-          {pathname === ROUTE_ANALYTICS_STATS && <StatsTable verifiedActive={verifiedActive} />}
           {pathname === ROUTE_ANALYTICS_POOLS && <Pools verifiedActive={verifiedActive} />}
         </FlexContainer>
       </>
