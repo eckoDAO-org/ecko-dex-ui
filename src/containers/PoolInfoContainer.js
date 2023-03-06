@@ -33,7 +33,19 @@ const formatPrice = (price, precision = 3) => {
 };
 
 const formatSupplyInfo = (supply, token) => {
+  if (supply === 0) {
+    return '-';
+  }
+
   return `${humanReadableNumber(supply)} ${token}`;
+};
+
+const formatMarketCapInfo = (supply, currentPrice) => {
+  if (supply === 0) {
+    return '-';
+  }
+
+  return `$ ${humanReadableNumber(supply * currentPrice)}`;
 };
 
 // Map of social key to logo icon
@@ -269,13 +281,13 @@ const PoolInfoContainer = () => {
         <Label fontSize={14} color={commonColors.gameEditionBlueGrey}>
           Market Cap
         </Label>
-        <Label fontSize={14}>$ {humanReadableNumber(poolDetails.price * poolDetails.circulatingSupply)}</Label>
+        <Label fontSize={14}>{formatMarketCapInfo(poolDetails.circulatingSupply, poolDetails.price)}</Label>
       </FlexContainer>
       <FlexContainer gap={4} className="column">
         <Label fontSize={14} color={commonColors.gameEditionBlueGrey}>
           Fully Diluted Market Cap
         </Label>
-        <Label fontSize={14}>$ {humanReadableNumber(poolDetails.price * poolDetails.totalSupply)}</Label>
+        <Label fontSize={14}>{formatMarketCapInfo(poolDetails.totalSupply, poolDetails.price)}</Label>
       </FlexContainer>
       <FlexContainer gap={4} className="column">
         <Label fontSize={14} color={commonColors.gameEditionBlueGrey}>
