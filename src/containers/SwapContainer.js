@@ -589,7 +589,7 @@ const SwapContainer = () => {
       mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
     >
       <Helmet>
-        <meta name="description" content="A multi-protocol decentralized exchange (DEX) by eckoDEX." />
+        <meta name="description" content="Swap, provide liquidity and earn with Governance Mining on eckoDEX." />
         <title>eckoDEX | Swap</title>
       </Helmet>
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />

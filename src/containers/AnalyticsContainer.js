@@ -63,7 +63,10 @@ const AnalyticsContainer = () => {
           />
         )}
         <Helmet>
-          <meta name="description" content="Discovering, interpreting, and communicating significant data patterns based on our platform." />
+          <meta
+            name="description"
+            content="Stay informed on eckoDEX stats and $KDX token with our analytics section. Track ecko-growth and stay ahead of the game."
+          />
           <title>eckoDEX | Analytics</title>
         </Helmet>
         <FlexContainer
@@ -105,7 +108,7 @@ const AnalyticsContainer = () => {
             </FlexContainer>
 
             <FlexContainer className="align-ce">
-              {(pathname === ROUTE_ANALYTICS_STATS) && (
+              {pathname === ROUTE_ANALYTICS_STATS && (
                 <CustomButton
                   fontSize={13}
                   buttonStyle={{ height: 33 }}
