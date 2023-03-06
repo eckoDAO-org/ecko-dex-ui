@@ -12,6 +12,10 @@ import { commonColors, theme } from '../../styles/theme';
 import AppLoader from '../shared/AppLoader';
 import styled from 'styled-components';
 
+const getPairInfoPactContext = (allPairs, token0, token1) => {
+  return allPairs[`${token1}:${token0}`] || allPairs[`${token0}:${token1}`];
+};
+
 const Pools = ({ verifiedActive }) => {
   const { themeMode } = useApplicationContext();
 
@@ -32,7 +36,7 @@ const Pools = ({ verifiedActive }) => {
         const kaddexDexscanPoolsStats = dexscanPoolsStats.filter((d) => d.exchange.name === 'KADDEX');
 
         for (const dexscanPool of kaddexDexscanPoolsStats) {
-          const pairInfo = pact.allPairs[`${dexscanPool.token1.address}:${dexscanPool.token0.address}`];
+          const pairInfo = getPairInfoPactContext(pact.allPairs, dexscanPool.token0.address, dexscanPool.token1.address);
           const tokenInfo = pact.allTokens[dexscanPool.token0.name];
 
           if (!pairInfo || !tokenInfo) {

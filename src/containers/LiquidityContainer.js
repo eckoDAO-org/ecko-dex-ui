@@ -41,12 +41,8 @@ const LiquidityContainer = () => {
       mobileStyle={{ paddingRight: theme().layout.mobilePadding, paddingLeft: theme().layout.mobilePadding }}
     >
       <Helmet>
-        <meta
-          name="description"
-          content="Liquidity providers earn a 0.25% fee back and 0.05% goes to stakers on all trades proportional to their share of the pool.
-Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity."
-        />
-        <title>eckoDEX | Liquidity</title>
+        <meta name="description" content="Earn LP rewards with your digital assets on eckoDEX." />
+        <title>eckoDEX | Pools/Liquidity</title>
       </Helmet>
       <FlexContainer
         className="w-100 justify-sb"
