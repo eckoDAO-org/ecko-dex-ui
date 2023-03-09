@@ -29,7 +29,7 @@ const StatsTable = ({ verifiedActive }) => {
         const tokensStatsData = await getAnalyticsTokenStatsData();
         for (const t of Object.values(pact.allTokens)) {
           const price = pact?.tokensUsdPrice && pact?.tokensUsdPrice[t?.name];
-          const tokenStats = tokensStatsData[t.code];
+          const tokenStats = tokensStatsData ? tokensStatsData[t.code] : undefined;
           data.push({
             ...t,
             price,
