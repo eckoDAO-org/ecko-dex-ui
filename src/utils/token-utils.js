@@ -127,7 +127,7 @@ export const getAllPairsData = async (tokensUsdPrice, allTokens, allPairs, _pool
   const pools = _pools ? _pools : await getPairList(allPairs);
 
   if (pools.length) {
-    const volumes = await getAnalyticsPoolsStatsData();
+    const volumes = await getAnalyticsPoolsStatsData() || {};
     const multipliers = await getPairsMultiplier(pools);
     let allData = [];
     for (const pool of pools) {
