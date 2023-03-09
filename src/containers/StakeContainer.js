@@ -104,7 +104,9 @@ const StakeContainer = () => {
       setPoolState(res);
     });
     getAnalyticsData(moment().subtract(1, 'day').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')).then((res) => {
-      setKdxSupply(res[res.length - 1].circulatingSupply.totalSupply);
+      if(res){
+        setKdxSupply(res[res.length - 1].circulatingSupply.totalSupply);
+      }
     });
   }, []);
 

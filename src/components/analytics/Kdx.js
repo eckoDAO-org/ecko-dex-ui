@@ -30,10 +30,10 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdaPrice, analyticsData }) => {
   useEffect(() => {
     const initData = async () => {
       if (kdxToken && asset && currency) {
-        const { data } = await getDailyCandles(asset, currency, moment().subtract(1, 'days').toDate(), new Date());
-        if (data?.length) {
-          const initial = data[0]?.usdPrice?.close;
-          const final = data[1]?.usdPrice?.close;
+        const result = await getDailyCandles(asset, currency, moment().subtract(1, 'days').toDate(), new Date());
+        if (result?.data?.length) {
+          const initial = result.data[0]?.usdPrice?.close;
+          const final = result.data[1]?.usdPrice?.close;
           setKdxPriceDiff({ initial, final });
         }
       }
