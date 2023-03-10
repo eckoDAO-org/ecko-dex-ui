@@ -3,7 +3,7 @@
   "name": "eckoDEX",
   "icons": [
     {
-      "src": "./images/maskable_icon.png",
+      "src": "/images/maskable_icon.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/svg",
       "purpose": "maskable"
@@ -14,7 +14,7 @@
       "type": "image/svg"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#240B2F"

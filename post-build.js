@@ -15,7 +15,7 @@ const parts = builtHTMLContent.split(splitBy);
 const fileWithPreload = [parts[0], splitBy];
 
 for (const link of assets) {
-  fileWithPreload.push(`<link rel="preload" href="./${link}" as="font" crossorigin="anonymous">`);
+  fileWithPreload.push(`<link rel="preload" href="/${link}" as="font" crossorigin="anonymous">`);
 }
 
 fileWithPreload.push(parts[1]);
