@@ -1,3 +1,5 @@
+import noExponents from './noExponents';
+
 export const reduceBalance = (balance, prec = 6) => {
   if (balance) {
     if (balance.int) balance = balance.int;
@@ -89,5 +91,40 @@ export const getDecimalPlaces = (value) => {
     return getDecimalPositions(myValue.toFixed(5));
   } else {
     return humanReadableNumber(myValue);
+  }
+};
+
+export const smallDecimalsFormatting = (value, power) => {
+  const myValue = noExponents(Number(value));
+
+  console.log('🚀 log --> myValue:', myValue);
+
+  if (myValue < 10 ** -power) {
+    //counts the number of zeros after the '.'
+    var zerosCount = -Math.floor(Math.log(myValue) / Math.log(10) + 1);
+    console.log('zerosCount: ', zerosCount);
+
+    var str = myValue.toString();
+
+    const beforZeros = str.substring(0, str.indexOf('.') + 2);
+    console.log('🚀 log --> beforZeros:', beforZeros);
+
+    const afterZeros = str.substring(zerosCount + 2, str.length);
+    console.log('🚀 log --> afterZeros:', afterZeros);
+
+    const finalNumber = beforZeros + (zerosCount - 1) + afterZeros;
+    console.log('🚀 log --> finalNumber:', finalNumber);
+    console.log('TRUE');
+
+    var numberObject = {
+      initialNumber: myValue,
+      beforZeros: beforZeros,
+      zerosRemoved: zerosCount - 1,
+      afterZeros: afterZeros,
+    };
+    return numberObject;
+  } else {
+    console.log('FALSE');
+    return false;
   }
 };
