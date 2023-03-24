@@ -114,7 +114,7 @@ const Position = ({
           )
         }
         onChange={(e, { value }) => {
-          setKdxAmount(limitDecimalPlaces(value, 7));
+          setKdxAmount(limitDecimalPlaces(value, 12));
         }}
       />
       {pathname === ROUTE_UNSTAKE &&
