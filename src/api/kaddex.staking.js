@@ -42,7 +42,7 @@ export const getAddStakeCommand = async (verifiedAccount, amountToStake, gasStat
   if (decimalPlaces > tokenData['KDX'].precision) {
     decimalPlaces = tokenData['KDX'].precision;
   }
-  const pactCode = `(${KADDEX_NAMESPACE}.staking.stake "${account.account}" ${parsedAmount.toFixed(decimalPlaces || 2)})`;
+  const pactCode = `(${KADDEX_NAMESPACE}.staking.stake "${account.account}" ${reduceBalance(parsedAmount, decimalPlaces)})`;
   return {
     pactCode,
     caps: [
@@ -53,9 +53,12 @@ export const getAddStakeCommand = async (verifiedAccount, amountToStake, gasStat
         'kaddex.skdx',
         account.account,
         account.account,
-        parsedAmount,
+        reduceBalance(parsedAmount, decimalPlaces),
       ]),
-      Pact.lang.mkCap('stake capability', 'staking', `${KADDEX_NAMESPACE}.staking.STAKE`, [account.account, parsedAmount]),
+      Pact.lang.mkCap('stake capability', 'staking', `${KADDEX_NAMESPACE}.staking.STAKE`, [
+        account.account,
+        reduceBalance(parsedAmount, decimalPlaces),
+      ]),
     ],
     sender: gasStation ? 'kaddex-free-gas' : account.account,
     gasLimit: Number(gasLimit),

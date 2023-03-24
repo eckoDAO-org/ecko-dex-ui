@@ -505,9 +505,7 @@ const StakeContainer = () => {
           buttonLabel={pathname === ROUTE_STAKE ? 'stake' : 'unstake'}
           pendingAmount={(estimateUnstakeData && estimateUnstakeData['stake-record'] && estimateUnstakeData['stake-record']['pending-add']) || false}
           onClickMax={() =>
-            setInputAmount(
-              pathname !== ROUTE_UNSTAKE ? Number(kdxAccountBalance.toFixed(12)) : Number(estimateUnstakeData?.staked.toFixed(12)) || 0.0
-            )
+            setInputAmount(pathname !== ROUTE_UNSTAKE ? reduceBalance(kdxAccountBalance, 12) : reduceBalance(estimateUnstakeData?.staked, 12) || 0.0)
           }
           kdxAccountBalance={kdxAccountBalance}
           setKdxAmount={(value) => setInputAmount(value)}
