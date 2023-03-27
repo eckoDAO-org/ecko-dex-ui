@@ -94,37 +94,31 @@ export const getDecimalPlaces = (value) => {
   }
 };
 
-export const smallDecimalsFormatting = (value, power) => {
-  const myValue = noExponents(Number(value));
-
-  console.log('🚀 log --> myValue:', myValue);
+export const smallDecimalsFormatting = (value, power = 3) => {
+  const myValue = noExponents(extractDecimal(value));
 
   if (myValue < 10 ** -power) {
     //counts the number of zeros after the '.'
     var zerosCount = -Math.floor(Math.log(myValue) / Math.log(10) + 1);
-    console.log('zerosCount: ', zerosCount);
 
     var str = myValue.toString();
 
-    const beforZeros = str.substring(0, str.indexOf('.') + 2);
-    console.log('🚀 log --> beforZeros:', beforZeros);
+    const beforeZeros = str.substring(0, str.indexOf('.') + 2);
 
-    const afterZeros = str.substring(zerosCount + 2, str.length);
-    console.log('🚀 log --> afterZeros:', afterZeros);
+    var afterZeros = str.substring(zerosCount + 2, str.length);
+    if (afterZeros.length > 4) {
+      afterZeros = afterZeros.substring(0, 4);
+    }
 
-    const finalNumber = beforZeros + (zerosCount - 1) + afterZeros;
-    console.log('🚀 log --> finalNumber:', finalNumber);
-    console.log('TRUE');
-
-    var numberObject = {
+    return {
       initialNumber: myValue,
-      beforZeros: beforZeros,
+      beforeZeros: beforeZeros,
       zerosRemoved: zerosCount - 1,
       afterZeros: afterZeros,
     };
-    return numberObject;
   } else {
-    console.log('FALSE');
-    return false;
+    return {
+      initialNumber: humanReadableNumber(myValue, 3),
+    };
   }
 };
