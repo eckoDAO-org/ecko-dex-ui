@@ -8,7 +8,7 @@ const DecimalFotmatted = ({ value }) => {
       {numberObject.beforeZeros && numberObject.zerosRemoved && numberObject.afterZeros ? (
         <span>
           $ {numberObject.beforeZeros}
-          <sub style={{ fontSize: 8, bottom: '-6px' }}>{numberObject.zerosRemoved}</sub>
+          <sub style={{ fontSize: 10, bottom: '-6px' }}>{numberObject.zerosRemoved}</sub>
           {numberObject.afterZeros}
         </span>
       ) : (
