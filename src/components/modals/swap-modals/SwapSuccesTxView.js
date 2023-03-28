@@ -159,7 +159,6 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
         {/* TO VALUES */}
         <FlexContainer className="align-ce justify-sb">
           <RowTokenInfoPrice
-            isEstimated
             tokenIcon={getTokenIconByCode(swap?.localRes?.result?.data[1]?.token, pact.allTokens)}
             tokenName={getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)}
             amount={
