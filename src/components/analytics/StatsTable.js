@@ -115,7 +115,7 @@ const renderColumns = (history, allTokens) => {
       sortBy: 'price',
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer h-100" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
-          {humanReadableNumber(item.price, 3) !== '0.000' ? `$ ${humanReadableNumber(item.price, 3)}` : '<$ 0.001'}
+          <DecimalFotmatted value={item.price} />
         </ScalableCryptoContainer>
       ),
     },
