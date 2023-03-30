@@ -15,7 +15,7 @@ import { commonColors, theme } from '../../styles/theme';
 import styled from 'styled-components';
 import { getAnalyticsTokenStatsData } from '../../api/kaddex-analytics';
 import useWindowSize from '../../hooks/useWindowSize';
-import DecimalFotmatted from '../shared/DecimalFotmatted';
+import DecimalFormatted from '../shared/DecimalFormatted';
 
 const LiquidityTokensTable = ({ verifiedActive }) => {
   const history = useHistory();
@@ -151,7 +151,7 @@ const renderColumns = (history, allTokens, width) => {
       sortBy: 'tokenUsdPrice',
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer h-100" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
-          <DecimalFotmatted value={item.tokenUsdPrice} />
+          <DecimalFormatted value={item.tokenUsdPrice} />
         </ScalableCryptoContainer>
       ),
     },

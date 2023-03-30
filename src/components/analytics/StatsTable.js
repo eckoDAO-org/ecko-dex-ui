@@ -13,6 +13,7 @@ import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import GraphicPercentage from '../shared/GraphicPercentage';
 import { getAnalyticsTokenStatsData } from '../../api/kaddex-analytics';
+import {DecimalFormatted} from '../../components/shared/DecimalFormatted';
 
 const StatsTable = ({ verifiedActive }) => {
   const { themeMode } = useApplicationContext();
@@ -115,7 +116,7 @@ const renderColumns = (history, allTokens) => {
       sortBy: 'price',
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer h-100" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
-          <DecimalFotmatted value={item.price} />
+          <DecimalFormatted value={item.price} />
         </ScalableCryptoContainer>
       ),
     },

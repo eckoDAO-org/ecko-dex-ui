@@ -11,7 +11,7 @@ import CommonTable from '../shared/CommonTable';
 import { commonColors, theme } from '../../styles/theme';
 import AppLoader from '../shared/AppLoader';
 import styled from 'styled-components';
-import DecimalFotmatted from '../shared/DecimalFotmatted';
+import DecimalFormatted from '../shared/DecimalFormatted';
 
 const getPairInfoPactContext = (allPairs, token0, token1) => {
   return allPairs[`${token1}:${token0}`] || allPairs[`${token0}:${token1}`];
@@ -130,7 +130,7 @@ const renderColumns = (history) => {
     {
       name: 'Price',
       width: 100,
-      render: ({ item }) => <DecimalFotmatted value={item.price} />,
+      render: ({ item }) => <DecimalFormatted value={item.price} />,
       sortBy: 'price',
     },
     {

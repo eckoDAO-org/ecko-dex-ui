@@ -1,7 +1,7 @@
 import React from 'react';
 import { smallDecimalsFormatting } from '../../utils/reduceBalance';
 
-const DecimalFotmatted = ({ value }) => {
+const DecimalFormatted = ({ value }) => {
   const numberObject = smallDecimalsFormatting(value);
   return (
     <>
@@ -18,4 +18,4 @@ const DecimalFotmatted = ({ value }) => {
   );
 };
 
-export default DecimalFotmatted;
+export default DecimalFormatted;
