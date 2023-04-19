@@ -2,8 +2,9 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import { getDecimalPlaces, reduceBalance } from '../../utils/reduceBalance';
 import Label from '../shared/Label';
-import { useLiquidityContext, usePactContext } from '../../contexts';
+import { usePactContext } from '../../contexts';
 import { commonColors } from '../../styles/theme';
+import { FEE } from '../../constants/contextConstants';
 
 const ResultContainer = styled.div`
   display: flex;
@@ -27,7 +28,6 @@ const RowContainer = styled.div`
 
 const SwapResults = ({ priceImpact, fromValues, toValues }) => {
   const pact = usePactContext();
-  const liquidity = useLiquidityContext();
 
   const getPriceImpactColor = () => {
     if (pact.priceImpactWithoutFee(priceImpact)) {
@@ -80,9 +80,19 @@ const SwapResults = ({ priceImpact, fromValues, toValues }) => {
       <RowContainer>
         <Label fontSize={13}>Liquidity Provider Fee</Label>
         <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
-          {getDecimalPlaces(liquidity.liquidityProviderFee * parseFloat(fromValues.amount))} {fromValues.coin}
+          {getDecimalPlaces(FEE * parseFloat(fromValues.amount))} {fromValues.coin}
         </Label>
       </RowContainer>
+      {pact.isMultihopsSwap ? (
+        <RowContainer>
+          <Label fontSize={13} />
+          <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
+            {getDecimalPlaces(FEE * pact.multihopsCoinAmount)} KDA
+          </Label>
+        </RowContainer>
+      ) : (
+        ''
+      )}
     </ResultContainer>
   );
 };

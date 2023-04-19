@@ -18,7 +18,6 @@ export const LiquidityProvider = (props) => {
     sendTransactionUpdateEvent: walletConnectSendTransactionUpdateEvent,
   } = useWalletConnectContext();
   const wallet = useWalletContext();
-  const [liquidityProviderFee, setLiquidityProviderFee] = useState(0.003);
   const [pairListAccount, setPairListAccount] = useState(pact.allPairs);
   const [wantsKdxRewards, setWantsKdxRewards] = useState(true);
 
@@ -475,8 +474,6 @@ export const LiquidityProvider = (props) => {
   };
 
   const contextValue = {
-    liquidityProviderFee,
-    setLiquidityProviderFee,
     pairListAccount,
     setPairListAccount,
     addLiquidityWallet,
