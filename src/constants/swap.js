@@ -14,6 +14,10 @@ export const SWAP_BUTTON_PAIR_NOT_ESIST = {
   id: 'PAIR_NOT_ESIST',
   label: 'Pair does not exist',
 };
+export const SWAP_BUTTON_POOL_IS_EMPTY = {
+  id: 'POOL_IS_EMPTY',
+  label: 'One of the pools is empty',
+};
 export const SWAP_BUTTON_NOT_LIQUIDITY = {
   id: 'NOT_LIQUIDITY',
   label: 'not enough liquidity',

@@ -49,10 +49,21 @@ export const SwapSuccessViewGE = () => {
       rightItem={
         <>
           <div className="flex justify-fs align-ce">
-            {getTokenIconByCode(swap?.localRes?.result?.data[1]?.token, pact.allTokens)}
-            <GameEditionLabel fontSize={32} color="black" fontFamily="syncopate">
-              {getDecimalPlaces(extractDecimal(swap?.localRes?.result?.data[1]?.amount))}
-            </GameEditionLabel>
+            {pact.isMultihopsSwap ? (
+              <>
+                {getTokenIconByCode(swap?.localRes?.result?.data[2]?.token, pact.allTokens)}
+                <GameEditionLabel fontSize={32} color="black" fontFamily="syncopate">
+                  {getDecimalPlaces(extractDecimal(swap?.localRes?.result?.data[2]?.amount))}
+                </GameEditionLabel>
+              </>
+            ) : (
+              <>
+                {getTokenIconByCode(swap?.localRes?.result?.data[1]?.token, pact.allTokens)}
+                <GameEditionLabel fontSize={32} color="black" fontFamily="syncopate">
+                  {getDecimalPlaces(extractDecimal(swap?.localRes?.result?.data[1]?.amount))}
+                </GameEditionLabel>
+              </>
+            )}
           </div>
           <GameEditionLabel color="blue">To</GameEditionLabel>
           <div className="flex justify-fs">
@@ -69,7 +80,7 @@ export const SwapSuccessViewGE = () => {
       infoItems={[
         {
           label: `${getTokenName(swap?.localRes?.result?.data[0]?.token, pact.allTokens)}/${getTokenName(
-            swap?.localRes?.result?.data[1]?.token,
+            pact.isMultihopsSwap ? swap?.localRes?.result?.data[2]?.token : swap?.localRes?.result?.data[1]?.token,
             pact.allTokens
           )}`,
           value: `1 = ${reduceBalance(pact?.computeOut(1), 6)}`,
@@ -156,26 +167,60 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
           />
         </FlexContainer>
         <ArrowIcon style={{ marginLeft: 6 }} />
-        {/* TO VALUES */}
-        <FlexContainer className="align-ce justify-sb">
-          <RowTokenInfoPrice
-            tokenIcon={getTokenIconByCode(swap?.localRes?.result?.data[1]?.token, pact.allTokens)}
-            tokenName={getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)}
-            amount={
-              fromValues
-                ? fromValues.amount * reduceBalance(pact?.computeOut(fromValues.amount) / fromValues.amount, 12)
-                : swap?.localRes?.result?.data[1]?.amount
-            }
-            tokenPrice={pact.tokensUsdPrice?.[getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)] || null}
-          />
-        </FlexContainer>
+        {pact.isMultihopsSwap ? (
+          <>
+            {/* TO VALUES */}
+            <FlexContainer className="align-ce justify-sb">
+              <RowTokenInfoPrice
+                tokenIcon={getTokenIconByCode(swap?.localRes?.result?.data[1]?.token, pact.allTokens)}
+                tokenName={getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)}
+                /* amount={swap?.localRes?.result?.data[1]?.amount}
+                tokenPrice={pact.tokensUsdPrice?.[getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)] || null} */
+              />
+            </FlexContainer>
+            <ArrowIcon style={{ marginLeft: 6 }} />
+            {/* TO VALUES */}
+            <FlexContainer className="align-ce justify-sb">
+              <RowTokenInfoPrice
+                tokenIcon={getTokenIconByCode(swap?.localRes?.result?.data[2]?.token, pact.allTokens)}
+                tokenName={getTokenName(swap?.localRes?.result?.data[2]?.token, pact.allTokens)}
+                amount={
+                  fromValues
+                    ? fromValues.amount * reduceBalance(pact?.computeOut(fromValues.amount) / fromValues.amount, 12)
+                    : swap?.localRes?.result?.data[2]?.amount
+                }
+                tokenPrice={pact.tokensUsdPrice?.[getTokenName(swap?.localRes?.result?.data[2]?.token, pact.allTokens)] || null}
+              />
+            </FlexContainer>
+          </>
+        ) : (
+          <>
+            {/* TO VALUES */}
+            <FlexContainer className="align-ce justify-sb">
+              <RowTokenInfoPrice
+                tokenIcon={getTokenIconByCode(swap?.localRes?.result?.data[1]?.token, pact.allTokens)}
+                tokenName={getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)}
+                amount={
+                  fromValues
+                    ? fromValues.amount * reduceBalance(pact?.computeOut(fromValues.amount) / fromValues.amount, 12)
+                    : swap?.localRes?.result?.data[1]?.amount
+                }
+                tokenPrice={pact.tokensUsdPrice?.[getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)] || null}
+              />
+            </FlexContainer>
+          </>
+        )}
+
         <FlexContainer className="row justify-sb">
           <Label>Ratio</Label>
           <Label fontSize={13}>{`1 ${getTokenName(swap?.localRes?.result?.data[0]?.token, pact.allTokens)} = ${
             getDecimalPlaces(pact?.computeOut(fromValues.amount) / fromValues.amount) < 0.000001
               ? '< 0.000001'
               : getDecimalPlaces(pact?.computeOut(fromValues.amount) / fromValues.amount)
-          } ${getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)}`}</Label>
+          } ${getTokenName(
+            pact.isMultihopsSwap ? swap?.localRes?.result?.data[2]?.token : swap?.localRes?.result?.data[1]?.token,
+            pact.allTokens
+          )}`}</Label>
         </FlexContainer>
       </FlexContainer>
     </SuccesViewContainer>
