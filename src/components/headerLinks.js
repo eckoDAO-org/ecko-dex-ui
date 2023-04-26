@@ -24,7 +24,7 @@ export default [
     id: 2,
     label: 'telegram',
     icon: <TelegramIcon />,
-    link: 'https://t.me/eckoDAO',
+    link: 'https://t.me/eckofinance',
   },
   /* {
     id: 3,
