@@ -85,12 +85,14 @@ export const SwapProvider = (props) => {
   const swapWallet = async (token0, token1, isSwapIn) => {
     const accountDetails = await getTokenBalanceAccount(token0.address, account.account);
     if (accountDetails.result.status === 'success') {
-      const pair = await getPair(token0.address, token1.address);
+      const pair = !pact.isMultihopsSwap ? await getPair(token0.address, token1.address) : null;
+
+      const pactTokenArray = pact.isMultihopsSwap ? `${token0.address} coin ${token1.address}` : `${token0.address} ${token1.address}`;
       try {
         const inPactCode = `(${KADDEX_NAMESPACE}.exchange.swap-exact-in
           (read-decimal 'token0Amount)
           (read-decimal 'token1AmountWithSlippage)
-          [${token0.address} ${token1.address}]
+          [${pactTokenArray}]
           ${JSON.stringify(account.account)}
           ${JSON.stringify(account.account)}
           (read-keyset 'user-ks)
@@ -98,25 +100,16 @@ export const SwapProvider = (props) => {
         const outPactCode = `(${KADDEX_NAMESPACE}.exchange.swap-exact-out
           (read-decimal 'token1Amount)
           (read-decimal 'token0AmountWithSlippage)
-          [${token0.address} ${token1.address}]
+          [${pactTokenArray}]
           ${JSON.stringify(account.account)}
           ${JSON.stringify(account.account)}
           (read-keyset 'user-ks)
         )`;
+
+        const caps = getSwapCaps(isSwapIn, account, token0, token1, pair);
         const signCmd = {
           pactCode: isSwapIn ? inPactCode : outPactCode,
-          caps: [
-            ...(pact.enableGasStation
-              ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
-              : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
-            Pact.lang.mkCap('transfer capability', 'trasnsfer token in', `${token0.address}.TRANSFER`, [
-              account.account,
-              pair.account,
-              isSwapIn
-                ? reduceBalance(token0.amount, pact.allTokens[token0.coin].precision)
-                : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token0.coin].precision),
-            ]),
-          ],
+          caps,
           sender: pact.enableGasStation ? 'kaddex-free-gas' : account.account,
           gasLimit: Number(pact.gasConfiguration.gasLimit),
           gasPrice: parseFloat(pact.gasConfiguration.gasPrice),
@@ -198,6 +191,44 @@ export const SwapProvider = (props) => {
         title: 'Invalid Action',
         content: `You cannot perform this action with this account. Make sure you have the selected token on chain ${CHAIN_ID}`,
       }); //walletSigError();
+    }
+  };
+
+  const getSwapCaps = (isSwapIn, account, token0, token1, pair) => {
+    if (pact.isMultihopsSwap) {
+      return [
+        ...(pact.enableGasStation
+          ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
+          : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
+        Pact.lang.mkCap('transfer capability', 'trasnsfer token in', `${token0.address}.TRANSFER`, [
+          account.account,
+          pact.multihopsReserves.fromData.pairAccount,
+          isSwapIn
+            ? reduceBalance(token0.amount, pact.allTokens[token0.coin].precision)
+            : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token0.coin].precision),
+        ]),
+
+        Pact.lang.mkCap('transfer capability', 'trasnsfer token in', `${token1.address}.TRANSFER`, [
+          account.account,
+          pact.multihopsReserves.toData.pairAccount,
+          isSwapIn
+            ? reduceBalance(token1.amount, pact.allTokens[token1.coin].precision)
+            : reduceBalance(token1.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token1.coin].precision),
+        ]),
+      ];
+    } else {
+      return [
+        ...(pact.enableGasStation
+          ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
+          : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
+        Pact.lang.mkCap('transfer capability', 'trasnsfer token in', `${token0.address}.TRANSFER`, [
+          account.account,
+          pair.account,
+          isSwapIn
+            ? reduceBalance(token0.amount, pact.allTokens[token0.coin].precision)
+            : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token0.coin].precision),
+        ]),
+      ];
     }
   };
   return (

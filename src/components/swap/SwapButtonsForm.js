@@ -11,6 +11,7 @@ import {
   SWAP_BUTTON_FETCHING_PAIR,
   SWAP_BUTTON_NOT_LIQUIDITY,
   SWAP_BUTTON_PAIR_NOT_ESIST,
+  SWAP_BUTTON_POOL_IS_EMPTY,
   SWAP_BUTTON_SELECT_TOKENS,
   SWAP_BUTTON_SWAP,
 } from '../../constants/swap';
@@ -55,6 +56,7 @@ const SwapButtonsForm = ({
     //if (!pact.hasWallet()) return "Set signing method in wallet";
     if (!fromValues.coin || !toValues.coin) return SWAP_BUTTON_SELECT_TOKENS.label;
     if (fetchingPair) return SWAP_BUTTON_FETCHING_PAIR.label;
+    if (isNaN(ratio) && pact.isMultihopsSwap) return SWAP_BUTTON_POOL_IS_EMPTY.label;
     if (isNaN(ratio)) return SWAP_BUTTON_PAIR_NOT_ESIST.label;
     if (noLiquidity) return SWAP_BUTTON_NOT_LIQUIDITY.label;
     if (!fromValues.amount || !toValues.amount) return SWAP_BUTTON_ENTER_AMOUNT.label;

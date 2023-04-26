@@ -177,6 +177,7 @@ const SwapContainer = () => {
       }
     }
   }, [fromValues.amount]);
+
   useEffect(() => {
     if (!isNaN(toValues.amount)) {
       if (inputSide === 'to' && toValues.amount !== '') {
@@ -218,6 +219,7 @@ const SwapContainer = () => {
       }
     }
   }, [toValues.amount]);
+
   useEffect(() => {
     if (!isNaN(pact.ratio)) {
       if (fromValues.amount !== '' && toValues.amount === '') {
@@ -296,7 +298,13 @@ const SwapContainer = () => {
     if (fetchData) {
       setFetchingPair(true);
       if (toValues.coin !== '' && fromValues.coin !== '') {
-        await pact.getReserves(fromValues.address, toValues.address);
+        if (fromValues.address === 'coin' || toValues.address === 'coin') {
+          pact.setIsMultihopsSwap(false);
+          await pact.getReserves(fromValues.address, toValues.address);
+        } else {
+          pact.setIsMultihopsSwap(true);
+          await pact.getReservesMultihops(fromValues.address, toValues.address);
+        }
       }
       setFetchingPair(false);
       setFetchData(false);
