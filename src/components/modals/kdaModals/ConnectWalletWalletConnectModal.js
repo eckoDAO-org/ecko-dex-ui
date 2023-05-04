@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import CustomButton from '../../../components/shared/CustomButton';
 import Label from '../../shared/Label';
+import { NETWORKID } from '../../../constants/contextConstants';
 import { useAccountContext, useGameEditionContext, useModalContext, useWalletConnectContext } from '../../../contexts';
 import GetWalletConnectAccountModal from './GetWalletConnectAccountModal';
 
@@ -8,7 +9,7 @@ const ConnectWalletWalletConnectModal = ({ onConnectionSuccess }) => {
   const modalContext = useModalContext();
   const { gameEditionView, openModal, closeModal, onWireSelect } = useGameEditionContext();
   const { account, setVerifiedAccount } = useAccountContext();
-  const { connectWallet } = useWalletConnectContext();
+  const { connectWallet, requestGetAccounts } = useWalletConnectContext();
 
   const onWalletDismiss = useCallback(() => {
     if (gameEditionView) {
@@ -26,8 +27,13 @@ const ConnectWalletWalletConnectModal = ({ onConnectionSuccess }) => {
     connectWallet()
       .then(async (responseNullable) => {
         if (responseNullable && responseNullable.accounts.length > 0) {
-          if (responseNullable.accounts.length === 1) {
-            await setVerifiedAccount(responseNullable.accounts[0], onConnectionSuccess);
+          const wcAccounts = await requestGetAccounts(NETWORKID, responseNullable.accounts);
+          // call getAccounts
+          const resultAccounts = [];
+          wcAccounts.accounts.forEach((wcAcc) => wcAcc.kadenaAccounts.forEach((kAcc) => resultAccounts.push(kAcc.name)));
+
+          if (resultAccounts.length === 1) {
+            await setVerifiedAccount(resultAccounts[0], onConnectionSuccess);
             modalContext.closeModal();
           } else {
             if (gameEditionView) {
@@ -35,11 +41,7 @@ const ConnectWalletWalletConnectModal = ({ onConnectionSuccess }) => {
                 hideOnClose: true,
                 title: 'SELECT ACCOUNT',
                 content: (
-                  <GetWalletConnectAccountModal
-                    onClose={onWalletDismiss}
-                    accounts={responseNullable.accounts}
-                    onConnectionSuccess={onConnectionSuccess}
-                  />
+                  <GetWalletConnectAccountModal onClose={onWalletDismiss} accounts={resultAccounts} onConnectionSuccess={onConnectionSuccess} />
                 ),
               });
             } else {
@@ -50,7 +52,7 @@ const ConnectWalletWalletConnectModal = ({ onConnectionSuccess }) => {
                 onBack: () => modalContext.onBackModal(),
                 content: (
                   <GetWalletConnectAccountModal
-                    accounts={responseNullable.accounts}
+                    accounts={resultAccounts}
                     onClose={modalContext.closeModal}
                     onConnectionSuccess={onConnectionSuccess}
                   />

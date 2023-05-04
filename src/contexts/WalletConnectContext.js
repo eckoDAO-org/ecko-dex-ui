@@ -10,8 +10,9 @@ export const KDA_NAMESPACE = 'kadena';
 export const KDA_CHAINS = ['kadena:mainnet01', 'kadena:testnet04', 'kadena:development'];
 
 const KDA_METHODS = {
-  KDA_SIGN: 'kadena_sign',
-  KDA_QUICK_SIGN: 'kadena_quicksign',
+  KDA_SIGN: 'kadena_sign_v1',
+  KDA_QUICK_SIGN: 'kadena_quicksign_v1',
+  KDA_GET_ACCOUNTS: 'kadena_getAccounts_v1',
 };
 
 const KDX_METHODS = {
@@ -110,6 +111,33 @@ export const WalletConnectProvider = (props) => {
     }
   }, []);
 
+  const getWalletConnectAccounts = async (networkId, accounts) => {
+    if (!client) {
+      const initialized = await initialize();
+      if (!initialized) {
+        throw new Error('WalletConnect is not initialized');
+      }
+    }
+    if (!walletConnectState?.pairingTopic) {
+      const connectedWallet = await connectWallet();
+      if (!connectedWallet) {
+        throw new Error('WalletConnect is not connected');
+      }
+    }
+    const response = await client?.request({
+      topic: walletConnectState?.pairingTopic,
+      chainId: `${KDA_NAMESPACE}:${networkId || NETWORKID}`,
+      request: {
+        method: KDA_METHODS.KDA_GET_ACCOUNTS,
+        params: {
+          accounts,
+        },
+      },
+    });
+
+    return response;
+  };
+
   const connectWallet = useCallback(
     async (pairing = undefined) => {
       if (!client) {
@@ -144,15 +172,7 @@ export const WalletConnectProvider = (props) => {
           ...walletConnectState,
           pairingTopic: session.topic,
         });
-
-        const accounts = session.namespaces[KDA_NAMESPACE].accounts.map((item) => {
-          let normalAccountName = item;
-          KDA_CHAINS.forEach((chain) => {
-            normalAccountName = normalAccountName.replace('**', ':').replace(`${chain}:`, '');
-          });
-          return normalAccountName;
-        });
-
+        const accounts = session.namespaces.kadena.accounts;
         QRCodeModal.close();
 
         return {
@@ -196,6 +216,8 @@ export const WalletConnectProvider = (props) => {
     },
     [client, walletConnectState, connectWallet, initialize]
   );
+
+  const requestGetAccounts = useCallback(getWalletConnectAccounts, [client, walletConnectState, connectWallet, initialize]);
 
   const sendTransactionUpdateEvent = useCallback(
     async (networkId, payload) => {
@@ -284,6 +306,7 @@ export const WalletConnectProvider = (props) => {
   const contextValues = {
     ...walletConnectState,
     connectWallet,
+    requestGetAccounts,
     requestSignTransaction,
     sendTransactionUpdateEvent,
   };
