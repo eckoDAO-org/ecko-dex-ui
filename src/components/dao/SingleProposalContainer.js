@@ -114,8 +114,16 @@ const SingleProposalContainer = ({ proposal_id, accountData }) => {
         const res = await kaddexWalletRequestSign(commandToSign);
         return res.signedCmd;
       } else if (isWalletConnectConnected) {
-        const res = await walletConnectRequestSign(account.account, NETWORKID, commandToSign);
-        return res.signedCmd;
+        const res = await walletConnectRequestSign(account.account, NETWORKID, {
+          code: commandToSign.pactCode,
+          data: commandToSign.envData,
+          ...commandToSign,
+        });
+        if (res?.status === 'fail') {
+          notificationContext.showErrorNotification(null, 'Vote error', (res.message?.toString && res.message?.toString()) || 'Generic Vote error');
+          return;
+        }
+        return res.body;
       } else {
         const res = await Pact.wallet.sign(commandToSign);
         return res;
