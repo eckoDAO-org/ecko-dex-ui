@@ -21,15 +21,6 @@ const Container = styled.div`
   align-items: center;
   cursor: pointer;
 
-  svg {
-    path {
-      fill: ${({ $gameEditionView, theme: { colors }, geColor }) => {
-        if ($gameEditionView && geColor) return geColor;
-        if (!$gameEditionView) return colors.white;
-      }};
-    }
-  }
-
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
     top: ${({ $gameEditionView }) => $gameEditionView && '0px'};
   }
@@ -46,8 +37,25 @@ const ElementsContainer = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  svg {
+  .dropdown {
     margin-left: 8px;
+    margin-right: 0px;
+    width: 13px !important;
+    path {
+      fill: ${({ $gameEditionView, theme: { colors }, geColor }) => {
+        if ($gameEditionView && geColor) return `${geColor} !important`;
+        if (!$gameEditionView) return `${colors.white} !important`;
+      }};
+    }
+  }
+
+  svg {
+    width: ${({ size = 20 }) => `${size}px`};
+    height: ${({ size = 20 }) => `${size}px`};
+    margin: 0px 8px 0px 0px;
+    path {
+      fill: ${({ commonColors }) => commonColors.appColor}!important;
+    }
   }
 
   @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobileSmallPixel}px`}) {
@@ -56,21 +64,6 @@ const ElementsContainer = styled.div`
     }
     span {
       margin-right: 4px;
-    }
-  }
-`;
-
-const CryptoContainer = styled.div`
-  img {
-    width: ${({ size = 20 }) => `${size}px`}!important;
-    height: ${({ size = 20 }) => `${size}px`}!important;
-  }
-  svg {
-    width: ${({ size = 20 }) => `${size}px`}!important;
-    height: ${({ size = 20 }) => `${size}px`}!important;
-    margin: 0px 8px 0px 0px;
-    path {
-      fill: ${({ commonColors }) => commonColors.appColor}!important;
     }
   }
 `;
@@ -100,6 +93,7 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
             </CustomButton>
           )}
           <ElementsContainer
+            commonColors={commonColors}
             $gameEditionView={gameEditionView}
             geColor={geColor}
             onClick={onClick}
@@ -109,17 +103,15 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
               padding: !gameEditionView && '4px 8px',
             }}
           >
-            {allTokens[values.coin]?.isVerified || allTokens[values.coin]?.icon ? (
-              allTokens[values.coin]?.icon
-            ) : (
-              <CryptoContainer className="flex align-ce" style={{ zIndex: 2 }} commonColors={commonColors}>
-                <UnknownLogo />
-              </CryptoContainer>
-            )}
+            {allTokens[values.coin]?.isVerified || allTokens[values.coin]?.icon ? allTokens[values.coin]?.icon : <UnknownLogo className="cmm" />}
             <Label geFontSize={24} geColor={geColor} style={{ opacity: 1 }}>
               {allTokens[values.coin]?.name}
             </Label>
-            {gameEditionView ? <PixeledArrowDownIcon /> : <ArrowDown style={{ opacity: 1 }} />}
+            {gameEditionView ? (
+              <PixeledArrowDownIcon className="dropdown" geColor={geColor} />
+            ) : (
+              <ArrowDown className="dropdown" style={{ opacity: 1 }} />
+            )}
           </ElementsContainer>
         </>
       ) : (
