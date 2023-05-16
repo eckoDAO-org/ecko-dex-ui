@@ -15,7 +15,7 @@ export const SwapProvider = (props) => {
   const { isConnected: isKaddexWalletConnected, requestSign: kaddexWalletRequestSign } = useKaddexWalletContext();
   const {
     pairingTopic: isWalletConnectConnected,
-    requestSignTransaction: walletConnectRequestSignTransaction,
+    requestSignTransaction,
     sendTransactionUpdateEvent: walletConnectSendTransactionUpdateEvent,
   } = useWalletConnectContext();
   const wallet = useWalletContext();
@@ -134,8 +134,20 @@ export const SwapProvider = (props) => {
           const res = await kaddexWalletRequestSign(signCmd);
           command = res.signedCmd;
         } else if (isWalletConnectConnected) {
-          const res = await walletConnectRequestSignTransaction(account.account, NETWORKID, signCmd);
-          command = res.signedCmd;
+          const res = await requestSignTransaction(account.account, NETWORKID, {
+            code: signCmd.pactCode,
+            data: signCmd.envData,
+            ...signCmd,
+          });
+          if (res?.status === 'fail') {
+            wallet.setWalletError({
+              error: true,
+              title: 'Wallet Signing Failure',
+              content: res.message || 'You cancelled the transaction or did not sign it correctly.',
+            });
+            return;
+          }
+          command = res.body;
         } else {
           command = await Pact.wallet.sign(signCmd);
         }

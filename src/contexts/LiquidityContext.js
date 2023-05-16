@@ -88,8 +88,12 @@ export const LiquidityProvider = (props) => {
         const res = await xWalletRequestSign(signCmd);
         command = res.signedCmd;
       } else if (isWalletConnectConnected) {
-        const res = await walletConnectRequestSign(account.account, NETWORKID, signCmd);
-        command = res.signedCmd;
+        const res = await walletConnectRequestSign(account.account, NETWORKID, {
+          code: signCmd.pactCode,
+          data: signCmd.envData,
+          ...signCmd,
+        });
+        command = res.body;
       } else {
         command = await Pact.wallet.sign(signCmd);
       }
@@ -199,8 +203,20 @@ export const LiquidityProvider = (props) => {
           const res = await xWalletRequestSign(signCmd);
           command = res.signedCmd;
         } else if (isWalletConnectConnected) {
-          const res = await walletConnectRequestSign(account.account, NETWORKID, signCmd);
-          command = res.signedCmd;
+          const res = await walletConnectRequestSign(account.account, NETWORKID, {
+            code: signCmd.pactCode,
+            data: signCmd.envData,
+            ...signCmd,
+          });
+          if (res?.status === 'fail') {
+            wallet.setWalletError({
+              error: true,
+              title: 'Wallet Signing Failure',
+              content: res.message || 'You cancelled the transaction or did not sign it correctly.',
+            });
+            return;
+          }
+          command = res.body;
         } else {
           command = await Pact.wallet.sign(signCmd);
         }
