@@ -4,7 +4,7 @@ import Label from '../../shared/Label';
 import { NETWORKID } from '../../../constants/contextConstants';
 import { useAccountContext, useGameEditionContext, useModalContext, useWalletConnectContext } from '../../../contexts';
 import GetWalletConnectAccountModal from './GetWalletConnectAccountModal';
-import { convertWalletConnectAccountName } from "../../../utils/string-utils";
+import { convertWalletConnectAccountName } from '../../../utils/string-utils';
 
 const ConnectWalletWalletConnectModal = ({ onConnectionSuccess }) => {
   const modalContext = useModalContext();
