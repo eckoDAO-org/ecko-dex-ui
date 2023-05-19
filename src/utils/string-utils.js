@@ -58,5 +58,5 @@ export const convertWalletConnectAccountName = (accountName) => {
     return '';
   }
   const nameSplits = accountName.split(':');
-  return `k:${nameSplits[nameSplits.length - 1]}`
+  return `k:${nameSplits[nameSplits.length - 1]}`;
 }
