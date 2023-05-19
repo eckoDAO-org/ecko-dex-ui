@@ -52,3 +52,11 @@ export const shortenAddress = (walletAddress, frontCount = 4, backCount = 4) => 
 
   return `${walletAddress.slice(0, 2 + frontCount)}...${walletAddress.slice(-backCount)}`;
 };
+
+export const convertWalletConnectAccountName = (accountName) => {
+  if (!accountName) {
+    return '';
+  }
+  const nameSplits = accountName.split(':');
+  return `k:${nameSplits[nameSplits.length - 1]}`
+}

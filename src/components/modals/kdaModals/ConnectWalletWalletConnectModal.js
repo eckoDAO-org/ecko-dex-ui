@@ -4,6 +4,7 @@ import Label from '../../shared/Label';
 import { NETWORKID } from '../../../constants/contextConstants';
 import { useAccountContext, useGameEditionContext, useModalContext, useWalletConnectContext } from '../../../contexts';
 import GetWalletConnectAccountModal from './GetWalletConnectAccountModal';
+import { convertWalletConnectAccountName } from "../../../utils/string-utils";
 
 const ConnectWalletWalletConnectModal = ({ onConnectionSuccess }) => {
   const modalContext = useModalContext();
@@ -33,7 +34,7 @@ const ConnectWalletWalletConnectModal = ({ onConnectionSuccess }) => {
           wcAccounts.accounts.forEach((wcAcc) => wcAcc.kadenaAccounts.forEach((kAcc) => resultAccounts.push(kAcc.name)));
 
           if (resultAccounts.length === 1) {
-            await setVerifiedAccount(resultAccounts[0], onConnectionSuccess);
+            await setVerifiedAccount(convertWalletConnectAccountName(resultAccounts[0]), onConnectionSuccess);
             modalContext.closeModal();
           } else {
             if (gameEditionView) {
