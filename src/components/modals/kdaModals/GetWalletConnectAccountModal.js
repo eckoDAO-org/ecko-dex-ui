@@ -8,7 +8,7 @@ import Label from '../../shared/Label';
 import { GeArrowIcon } from '../../../assets';
 import { useAccountContext, useGameEditionContext, useModalContext, useWalletContext } from '../../../contexts';
 import { WALLET } from '../../../constants/wallet';
-import { convertWalletConnectAccountName } from "../../../utils/string-utils";
+import { convertWalletConnectAccountName } from '../../../utils/string-utils';
 
 const ActionContainer = styled.div`
   display: flex;
