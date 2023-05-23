@@ -76,7 +76,7 @@ const CustomDropdown = styled.div`
   .ui.selection.dropdown {
     padding-right: 1em !important;
   }
-  
+
   .ui.selection.visible.dropdown .menu {
     position: unset;
     top: unset;
@@ -87,7 +87,7 @@ const CustomDropdown = styled.div`
     border: none;
     padding-left: 0 !important;
     padding-right: 0 !important;
-    
+
     &:first-child {
       padding-top: 1.5rem !important;
     }

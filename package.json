@@ -7,9 +7,9 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "@walletconnect/sign-client": "^2.3.1",
-    "@web3modal/standalone": "^2.0.0",
     "@walletconnect/qrcode-modal": "^1.8.0",
+    "@walletconnect/sign-client": "^2.7.6",
+    "@web3modal/standalone": "^2.0.0",
     "apexcharts": "^3.35.3",
     "axios": "^0.24.0",
     "base64-url": "^2.3.3",
@@ -54,7 +54,11 @@
   },
   "eslintConfig": {
     "extends": "react-app",
-    "ignorePatterns": ["src/charting_library", "public", "node_modules"]
+    "ignorePatterns": [
+      "src/charting_library",
+      "public",
+      "node_modules"
+    ]
   },
   "browserslist": [
     ">0.2%",

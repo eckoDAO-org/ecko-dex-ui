@@ -104,7 +104,7 @@ const StakeContainer = () => {
       setPoolState(res);
     });
     getAnalyticsData(moment().subtract(1, 'day').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')).then((res) => {
-      if(res){
+      if (res) {
         setKdxSupply(res[res.length - 1].circulatingSupply.totalSupply);
       }
     });
@@ -138,8 +138,12 @@ const StakeContainer = () => {
       const res = await kaddexWalletRequestSign(cmd);
       return res.signedCmd;
     } else if (isWalletConnectConnected) {
-      const res = await walletConnectRequestSign(account.account, NETWORKID, cmd);
-      return res.signedCmd;
+      const res = await walletConnectRequestSign(account.account, NETWORKID, {
+        code: cmd.pactCode,
+        data: cmd.envData,
+        ...cmd,
+      });
+      return res.body;
     } else {
       return await Pact.wallet.sign(cmd);
     }

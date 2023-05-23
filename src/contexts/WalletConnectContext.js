@@ -1,4 +1,4 @@
-import SignClient from '@walletconnect/sign-client';
+import { SignClient } from '@walletconnect/sign-client';
 import QRCodeModal from '@walletconnect/qrcode-modal';
 import { NETWORKID, WALLET_CONNECT_METADATA, WALLET_CONNECT_PROJECT_ID, WALLET_CONNECT_RELAY_URL } from '../constants/contextConstants';
 import React, { createContext, useCallback, useEffect, useState } from 'react';
@@ -10,8 +10,9 @@ export const KDA_NAMESPACE = 'kadena';
 export const KDA_CHAINS = ['kadena:mainnet01', 'kadena:testnet04', 'kadena:development'];
 
 const KDA_METHODS = {
-  KDA_SIGN: 'kadena_sign',
-  KDA_QUICK_SIGN: 'kadena_quicksign',
+  KDA_SIGN: 'kadena_sign_v1',
+  KDA_QUICK_SIGN: 'kadena_quicksign_v1',
+  KDA_GET_ACCOUNTS: 'kadena_getAccounts_v1',
 };
 
 const KDX_METHODS = {
@@ -110,63 +111,56 @@ export const WalletConnectProvider = (props) => {
     }
   }, []);
 
-  const connectWallet = useCallback(
-    async (pairing = undefined) => {
-      if (!client) {
-        const initialized = await initialize();
-        if (!initialized) {
-          throw new Error('WalletConnect is not initialized');
-        }
+  const connectWallet = useCallback(async () => {
+    if (!client) {
+      const initialized = await initialize();
+      if (!initialized) {
+        throw new Error('WalletConnect is not initialized');
       }
-      try {
-        const requiredNamespaces = getRequiredNamespaces(KDA_CHAINS);
+    }
+    try {
+      setWalletConnectState({
+        ...walletConnectState,
+        pairingTopic: null,
+      });
+      const requiredNamespaces = getRequiredNamespaces(KDA_CHAINS);
 
-        const { uri, approval } = await client.connect({
-          pairingTopic: pairing?.topic,
-          requiredNamespaces,
-        });
+      const { uri, approval } = await client.connect({
+        requiredNamespaces,
+      });
 
-        if (uri) {
-          QRCodeModal.open(
-            uri,
-            () => {
-              console.log('EVENT', 'QR Code Modal closed');
-            },
-            {
-              desktopLinks: [],
-              mobileLinks: [],
-            }
-          );
-        }
-
-        const session = await approval();
-        setWalletConnectState({
-          ...walletConnectState,
-          pairingTopic: session.topic,
-        });
-
-        const accounts = session.namespaces[KDA_NAMESPACE].accounts.map((item) => {
-          let normalAccountName = item;
-          KDA_CHAINS.forEach((chain) => {
-            normalAccountName = normalAccountName.replace('**', ':').replace(`${chain}:`, '');
-          });
-          return normalAccountName;
-        });
-
-        QRCodeModal.close();
-
-        return {
-          chainIds: KDA_CHAINS,
-          accounts,
-          session,
-        };
-      } catch (e) {
-        QRCodeModal.close();
-        return null;
+      if (uri) {
+        QRCodeModal.open(
+          uri,
+          () => {
+            console.log('EVENT', 'QR Code Modal closed');
+          },
+          {
+            desktopLinks: [],
+            mobileLinks: [],
+          }
+        );
       }
-    },
-    [client, initialize, setWalletConnectState, walletConnectState]
-  );
+
+      const session = await approval();
+      setWalletConnectState({
+        ...walletConnectState,
+        pairingTopic: session.topic,
+      });
+      const accounts = session.namespaces.kadena.accounts;
+      QRCodeModal.close();
+
+      return {
+        topic: session.topic,
+        chainIds: KDA_CHAINS,
+        accounts,
+        session,
+      };
+    } catch (e) {
+      QRCodeModal.close();
+      return null;
+    }
+  }, [client, initialize, setWalletConnectState, walletConnectState]);
 
   const requestSignTransaction = useCallback(
     async (account, networkId, payload) => {
@@ -196,6 +190,34 @@ export const WalletConnectProvider = (props) => {
     },
     [client, walletConnectState, connectWallet, initialize]
   );
+
+  const requestGetAccounts = async (networkId, accounts, topic = null) => {
+    if (!client) {
+      const initialized = await initialize();
+      if (!initialized) {
+        throw new Error('WalletConnect is not initialized');
+      }
+    }
+    if (!walletConnectState?.pairingTopic) {
+      const connectedWallet = await connectWallet();
+      if (!connectedWallet) {
+        throw new Error('WalletConnect is not connected');
+      }
+    }
+
+    const response = await client?.request({
+      topic: topic || walletConnectState?.pairingTopic,
+      chainId: `${KDA_NAMESPACE}:${networkId || NETWORKID}`,
+      request: {
+        method: KDA_METHODS.KDA_GET_ACCOUNTS,
+        params: {
+          accounts,
+        },
+      },
+    });
+
+    return response;
+  };
 
   const sendTransactionUpdateEvent = useCallback(
     async (networkId, payload) => {
@@ -284,6 +306,7 @@ export const WalletConnectProvider = (props) => {
   const contextValues = {
     ...walletConnectState,
     connectWallet,
+    requestGetAccounts,
     requestSignTransaction,
     sendTransactionUpdateEvent,
   };

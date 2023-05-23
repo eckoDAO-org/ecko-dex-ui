@@ -78,7 +78,7 @@ export const getTokenNameFromAddress = (token, communityTokenList) => {
   if (tokenVerified) return tokenVerified;
   const nameSpace = token.split('.')[0];
   const moduleName = token.split('.')[1];
-  const prefix = nameSpace === 'free' ? 'f.' : nameSpace === 'user' ? 'u.' : '';
+  const prefix = `${nameSpace[0]}.`;
   const computedTokenName = moduleName.substr(0, moduleName.length >= 3 ? 3 : moduleName.length).toUpperCase();
 
   const alreadyExists = tokenData[computedTokenName];
