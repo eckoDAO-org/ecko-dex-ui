@@ -13,25 +13,31 @@ const ConnectWalletWalletConnectModal = ({ onConnectionSuccess }) => {
   const { account, setVerifiedAccount } = useAccountContext();
   const { connectWallet, requestGetAccounts } = useWalletConnectContext();
 
-  const onWalletDismiss = useCallback(() => {
-    setIsGettingAccounts(false);
-    if (gameEditionView) {
-      if (!account.account) {
-        onWireSelect(null);
+  const onWalletDismiss = useCallback(
+    (err) => {
+      console.log(`🚀 !!! ~ err:`, err);
+      setIsGettingAccounts(false);
+      if (gameEditionView) {
+        if (!account.account) {
+          onWireSelect(null);
+        } else {
+          closeModal();
+        }
       } else {
-        closeModal();
+        modalContext.onBackModal();
       }
-    } else {
-      modalContext.onBackModal();
-    }
-  }, [gameEditionView, account, onWireSelect, closeModal, modalContext]);
+    },
+    [gameEditionView, account, onWireSelect, closeModal, modalContext]
+  );
 
   const onConnectWallet = useCallback(() => {
     connectWallet()
       .then(async (responseNullable) => {
+        console.log(`🚀 !!! ~ responseNullable:`, responseNullable);
         if (responseNullable && responseNullable.accounts.length > 0) {
           setIsGettingAccounts(true);
           const wcAccounts = await requestGetAccounts(NETWORKID, responseNullable.accounts, responseNullable.topic);
+          console.log(`🚀 !!! ~ wcAccounts:`, wcAccounts);
           setIsGettingAccounts(false);
           // call getAccounts
           const resultAccounts = [];
