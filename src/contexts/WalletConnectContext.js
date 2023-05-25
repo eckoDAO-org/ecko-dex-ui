@@ -93,7 +93,7 @@ const initialWalletConnectState = {
 
 export const WalletConnectProvider = (props) => {
   const [client, setClient] = useState();
-  const [walletConnectState, setWalletConnectState] = useLocalStorage('walletConnectState', initialWalletConnectState);
+  const [walletConnectState, setWalletConnectState] = useState(initialWalletConnectState);
 
   const { account, logout } = useAccountContext();
 
@@ -105,6 +105,11 @@ export const WalletConnectProvider = (props) => {
         metadata: WALLET_CONNECT_METADATA,
       });
       setClient(signClient);
+      if (signClient.session.length) {
+        const lastKeyIndex = signClient.session.keys.length - 1;
+        const session = signClient.session.get(signClient.session.keys[lastKeyIndex]);
+        setWalletConnectState({ pairingTopic: session.topic });
+      }
       return true;
     } catch (err) {
       return false;
@@ -139,7 +144,6 @@ export const WalletConnectProvider = (props) => {
       }
 
       const session = await approval();
-      console.log(`🚀 !!! ~ session:`, session);
       setWalletConnectState({
         ...walletConnectState,
         pairingTopic: session.topic,
@@ -189,16 +193,12 @@ export const WalletConnectProvider = (props) => {
   );
 
   const requestGetAccounts = async (networkId, accounts, topic = null) => {
-    console.log(`🚀 !!! ~ accounts:`, accounts);
-    console.log(`🚀 !!! ~ topic:`, topic);
-    console.log(`🚀 !!! ~ client:`, client);
     if (!client) {
       const initialized = await initialize();
       if (!initialized) {
         throw new Error('WalletConnect is not initialized');
       }
     }
-    console.log(`🚀 !!! ~ walletConnectState:`, walletConnectState);
     if (!topic && !walletConnectState?.pairingTopic) {
       const connectedWallet = await connectWallet();
       if (!connectedWallet) {
@@ -270,19 +270,7 @@ export const WalletConnectProvider = (props) => {
   };
 
   useEffect(() => {
-    console.log(`🚀 !!! ~ client:`, client);
-    console.log(`🚀 !!! ~ walletConnectState:`, walletConnectState);
     if (client) {
-      if (!walletConnectState?.pairingTopic) {
-        const pairings = client.pairing.getAll({ active: true });
-        console.log(`🚀 !!! ~ pairings:`, pairings);
-        if (pairings && pairings.length > 0) {
-          setWalletConnectState((state) => ({
-            ...state,
-            pairingTopic: pairings[pairings.length - 1].topic,
-          }));
-        }
-      }
       client.on('session_delete', deleteWalletConnectSession);
       client.on('pairing_delete', deleteWalletConnectSession);
       client.on('session_expire', deleteWalletConnectSession);
