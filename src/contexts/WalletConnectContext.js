@@ -93,7 +93,7 @@ const initialWalletConnectState = {
 
 export const WalletConnectProvider = (props) => {
   const [client, setClient] = useState();
-  const [walletConnectState, setWalletConnectState] = useLocalStorage('walletConnectState', initialWalletConnectState);
+  const [walletConnectState, setWalletConnectState] = useState(initialWalletConnectState);
 
   const { account, logout } = useAccountContext();
 
@@ -105,6 +105,11 @@ export const WalletConnectProvider = (props) => {
         metadata: WALLET_CONNECT_METADATA,
       });
       setClient(signClient);
+      if (signClient.session.length) {
+        const lastKeyIndex = signClient.session.keys.length - 1;
+        const session = signClient.session.get(signClient.session.keys[lastKeyIndex]);
+        setWalletConnectState({ pairingTopic: session.topic });
+      }
       return true;
     } catch (err) {
       return false;
@@ -119,10 +124,6 @@ export const WalletConnectProvider = (props) => {
       }
     }
     try {
-      setWalletConnectState({
-        ...walletConnectState,
-        pairingTopic: null,
-      });
       const requiredNamespaces = getRequiredNamespaces(KDA_CHAINS);
 
       const { uri, approval } = await client.connect({
@@ -198,7 +199,7 @@ export const WalletConnectProvider = (props) => {
         throw new Error('WalletConnect is not initialized');
       }
     }
-    if (!walletConnectState?.pairingTopic) {
+    if (!topic && !walletConnectState?.pairingTopic) {
       const connectedWallet = await connectWallet();
       if (!connectedWallet) {
         throw new Error('WalletConnect is not connected');
@@ -258,34 +259,30 @@ export const WalletConnectProvider = (props) => {
     }
   }, [client, initialize]);
 
+  const deleteWalletConnectSession = async () => {
+    await client.disconnect({
+      topic: walletConnectState?.pairingTopic,
+      reason: 'USER_DISCONNECTED',
+    });
+    setWalletConnectState(initialWalletConnectState);
+    localStorage.removeItem('walletConnectState');
+    logout();
+  };
+
   useEffect(() => {
     if (client) {
-      if (!walletConnectState?.pairingTopic) {
-        const pairings = client.pairing.getAll({ active: true });
-        if (pairings && pairings.length > 0) {
-          setWalletConnectState((state) => ({
-            ...state,
-            pairingTopic: pairings[pairings.length - 1].topic,
-          }));
-        }
-      }
-      const onSessionDelete = () => {
-        setWalletConnectState(initialWalletConnectState);
-        localStorage.removeItem('walletConnectState');
-        logout();
-      };
-      client.on('session_delete', onSessionDelete);
-      client.on('pairing_delete', onSessionDelete);
-      client.on('session_expire', onSessionDelete);
-      client.on('pairing_expire', onSessionDelete);
+      client.on('session_delete', deleteWalletConnectSession);
+      client.on('pairing_delete', deleteWalletConnectSession);
+      client.on('session_expire', deleteWalletConnectSession);
+      client.on('pairing_expire', deleteWalletConnectSession);
       return () => {
-        client.removeListener('session_delete', onSessionDelete);
-        client.removeListener('pairing_delete', onSessionDelete);
-        client.removeListener('session_expire', onSessionDelete);
-        client.removeListener('pairing_expire', onSessionDelete);
+        client.removeListener('session_delete', deleteWalletConnectSession);
+        client.removeListener('pairing_delete', deleteWalletConnectSession);
+        client.removeListener('session_expire', deleteWalletConnectSession);
+        client.removeListener('pairing_expire', deleteWalletConnectSession);
       };
     }
-  }, [client, walletConnectState, setWalletConnectState, logout]);
+  }, [client, walletConnectState, setWalletConnectState, logout, deleteWalletConnectSession]);
 
   useEffect(() => {
     if (walletConnectState?.pairingTopic && client && !account) {
@@ -309,6 +306,7 @@ export const WalletConnectProvider = (props) => {
     requestGetAccounts,
     requestSignTransaction,
     sendTransactionUpdateEvent,
+    deleteWalletConnectSession,
   };
   return <WalletConnectContext.Provider value={contextValues}>{props.children}</WalletConnectContext.Provider>;
 };
