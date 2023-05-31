@@ -15,7 +15,7 @@ const ConnectWalletWalletConnectModal = ({ onConnectionSuccess }) => {
 
   const onWalletDismiss = useCallback(
     (err) => {
-      console.log(`🚀 !!! ~ err:`, err);
+      console.log(`onWalletDismiss err:`, err);
       setIsGettingAccounts(false);
       if (gameEditionView) {
         if (!account.account) {
@@ -33,11 +33,9 @@ const ConnectWalletWalletConnectModal = ({ onConnectionSuccess }) => {
   const onConnectWallet = useCallback(() => {
     connectWallet()
       .then(async (responseNullable) => {
-        console.log(`🚀 !!! ~ responseNullable:`, responseNullable);
         if (responseNullable && responseNullable.accounts.length > 0) {
           setIsGettingAccounts(true);
           const wcAccounts = await requestGetAccounts(NETWORKID, responseNullable.accounts, responseNullable.topic);
-          console.log(`🚀 !!! ~ wcAccounts:`, wcAccounts);
           setIsGettingAccounts(false);
           // call getAccounts
           const resultAccounts = [];
