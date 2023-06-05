@@ -3,7 +3,6 @@ import QRCodeModal from '@walletconnect/qrcode-modal';
 import { NETWORKID, WALLET_CONNECT_METADATA, WALLET_CONNECT_PROJECT_ID, WALLET_CONNECT_RELAY_URL } from '../constants/contextConstants';
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { useAccountContext } from './index';
-import useLocalStorage from '../hooks/useLocalStorage';
 
 export const KDA_NAMESPACE = 'kadena';
 
@@ -206,15 +205,17 @@ export const WalletConnectProvider = (props) => {
       }
     }
 
+    const request = {
+      method: KDA_METHODS.KDA_GET_ACCOUNTS,
+      params: {
+        accounts,
+      },
+    };
+
     const response = await client?.request({
       topic: topic || walletConnectState?.pairingTopic,
       chainId: `${KDA_NAMESPACE}:${networkId || NETWORKID}`,
-      request: {
-        method: KDA_METHODS.KDA_GET_ACCOUNTS,
-        params: {
-          accounts,
-        },
-      },
+      request,
     });
 
     return response;

@@ -35,7 +35,11 @@ const ConnectWalletWalletConnectModal = ({ onConnectionSuccess }) => {
       .then(async (responseNullable) => {
         if (responseNullable && responseNullable.accounts.length > 0) {
           setIsGettingAccounts(true);
-          const wcAccounts = await requestGetAccounts(NETWORKID, responseNullable.accounts, responseNullable.topic);
+          const wcAccounts = await requestGetAccounts(
+            NETWORKID,
+            responseNullable.accounts.map((a) => ({ account: a })),
+            responseNullable.topic
+          );
           setIsGettingAccounts(false);
           // call getAccounts
           const resultAccounts = [];
