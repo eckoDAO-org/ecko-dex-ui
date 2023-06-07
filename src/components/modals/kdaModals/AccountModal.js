@@ -11,7 +11,14 @@ import ConnectWalletModal from './ConnectWalletModal';
 import Label from '../../shared/Label';
 import PressButtonToActionLabel from '../../game-edition-v2/components/PressButtonToActionLabel';
 import { FlexContainer } from '../../shared/FlexContainer';
-import { useAccountContext, useGameEditionContext, useKaddexWalletContext, useModalContext, useWalletContext } from '../../../contexts';
+import {
+  useAccountContext,
+  useGameEditionContext,
+  useKaddexWalletContext,
+  useModalContext,
+  useWalletConnectContext,
+  useWalletContext,
+} from '../../../contexts';
 
 const AccountModalContainer = styled(Container)`
   justify-content: space-between;
@@ -78,6 +85,7 @@ const AccountModal = ({ pathname }) => {
   const { gameEditionView, setSelectedWire, setShowWires, setButtons, buttons } = useGameEditionContext();
   const { wallet } = useWalletContext();
   const { disconnectWallet } = useKaddexWalletContext();
+  const { pairingTopic: isWalletConnectConnected, deleteWalletConnectSession } = useWalletConnectContext();
 
   useEffect(() => {
     const oldButtons = buttons;
@@ -153,8 +161,12 @@ const AccountModal = ({ pathname }) => {
           <CustomButton
             type="gradient"
             onClick={() => {
-              disconnectWallet();
-              logout();
+              if (isWalletConnectConnected) {
+                deleteWalletConnectSession();
+              } else {
+                disconnectWallet();
+                logout();
+              }
             }}
           >
             Disconnect Wallet
