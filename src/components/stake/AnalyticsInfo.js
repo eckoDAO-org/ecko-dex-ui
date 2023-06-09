@@ -8,7 +8,7 @@ const AnalyticsInfo = () => {
     <FlexContainer className="column" gap={16}>
       <Label fontSize={16}>Daily Income</Label>
       <Label>
-        It is an estimate of the amount of KDX you will get at the end of the day as a reward for your KDX staking position. It comes from the 0.05%
+        It is an estimate of the amount of KDX you will get at the end of the day as a reward for your KDX locked position. It comes from the 0.05%
         of the overall DEX trading fees.
       </Label>
       <Divider />
