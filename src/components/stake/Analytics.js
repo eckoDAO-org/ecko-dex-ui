@@ -98,13 +98,13 @@ const Analytics = ({ staked, stakedShare, totalStaked, totalBurnt, kdxSupply }) 
       <div className="flex  justify-sb">
         <div>
           <div className="flex align-ce">
-            <Label>Staked Share</Label>
+            <Label>Locked Share</Label>
           </div>
           <Label fontSize={24}>{(stakedShare && getDecimalPlaces(extractDecimal(stakedShare))) || '-'} % </Label>
           <SubLabel labelStyle={{ fontSize: 12 }}>{staked !== 0 && stakedShare ? getDecimalPlaces(extractDecimal(staked)) : '-'} KDX</SubLabel>
         </div>
         <div className="flex column align-fe">
-          <Label>Total Staked</Label>
+          <Label>Total Locked</Label>
           <Label fontSize={24}>{(kdxSupply && totalStaked && ((100 * (extractDecimal(totalStaked) || 0)) / kdxSupply).toFixed(2)) || '-'} %</Label>
           <SubLabel labelStyle={{ fontSize: 12, textAlign: 'end' }}>{humanReadableNumber(extractDecimal(totalStaked))} KDX</SubLabel>
         </div>
