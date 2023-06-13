@@ -42,8 +42,8 @@ const Position = ({
       title="position (p)"
       popup={
         <Label>
-          Position accrues your KDX holdings from both the Vaulting and the Staking Programs. Please note that all Second Sale participants are
-          automatically staking their KDX while it is being vesting.
+          Position accrues your KDX holdings from both the Vaulting and Governance Mining programs. Please note that all Second Sale participants are
+          automatically locking their KDX while it is being vesting.
         </Label>
       }
       popupTitle="Position"
