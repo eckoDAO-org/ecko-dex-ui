@@ -22,10 +22,10 @@ const MyStakeDetails = ({ stakeData }) => {
   nextUnlock();
   return (
     <FlexContainer className="column" gap={8}>
-      {/* MY STAKE */}
+      {/* MY POSITION */}
       <FlexContainer className="column" gap={16}>
         <FlexContainer className="column" gap={4}>
-          <Label>MyStake</Label>
+          <Label>MyPosition</Label>
           <Label fontSize={24}>{humanReadableNumber(stakeData?.['stake-record']?.['amount'])} KDX</Label>
           {tokensUsdPrice && (
             <Label fontSize={12} mobileFontSize={12} labelStyle={{ opacity: 0.7 }}>
@@ -87,14 +87,14 @@ const MyStakeDetails = ({ stakeData }) => {
       </FlexContainer>
       <Divider style={{ margin: '8px 0px' }} />
       <FlexContainer className="column" gap={16}>
-        <Label fontSize={16}>My Stake</Label>
-        <Label>Shows the total amount of your staked KDX. It takes into account both your unlocked and locked KDX.</Label>
+        <Label fontSize={16}>My Position</Label>
+        <Label>Shows the total amount of your KDX in Governance Mining. It takes into account both your available and unavailable KDX.</Label>
       </FlexContainer>
       <Divider style={{ margin: '8px 0px' }} />
 
       <FlexContainer className="column" gap={16}>
         <Label fontSize={16}>Available</Label>
-        <Label>Refers to the portion of your total “My Stake” position that is available to use.</Label>
+        <Label>Refers to the portion of your total “My Position” that is available to use.</Label>
       </FlexContainer>
       <Divider style={{ margin: '8px 0px' }} />
 
