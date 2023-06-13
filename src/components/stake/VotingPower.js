@@ -36,7 +36,7 @@ const VotingPower = ({ daoAccountData }) => {
 
         <InfoPopup size={16} type="modal" title="Multiplier">
           <Label>
-            The Voting Power Multiplier is a time-dependent function of your KDX staking amount. In 60 days the multiplier value goes up to 1 and can
+            The Voting Power Multiplier is a time-dependent function of your KDX in Governance Mining. In 60 days the multiplier value goes up to 1 and can
             reach 2.5 over the course of 4 years.
           </Label>
         </InfoPopup>
