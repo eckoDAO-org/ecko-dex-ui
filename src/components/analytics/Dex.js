@@ -164,7 +164,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
       </FlexContainer>
       <FlexContainer mobileClassName="column" gap={24}>
         <AnalyticsSimpleWidget
-          title={'KDX Staked'}
+          title={'KDX Locked'}
           mainText={
             (
               <div>
