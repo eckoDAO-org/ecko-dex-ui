@@ -18,7 +18,7 @@ const KdxCirculatingSupplyDetails = ({ supply, tokensUsdPrice }) => {
           )}
         </FlexContainer>
         <FlexContainer className="w-100 column" gap={8}>
-          <Label>Amount Staked</Label>
+          <Label>Amount Locked in Governance Mining</Label>
           <Label fontSize={24}>{`${humanReadableNumber(supply.stakedAmount)} KDX`}</Label>
           {tokensUsdPrice && (
             <Label fontSize={12} mobileFontSize={12} labelStyle={{ opacity: 0.7 }}>
