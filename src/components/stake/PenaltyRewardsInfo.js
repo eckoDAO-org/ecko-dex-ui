@@ -8,7 +8,7 @@ import List from '../shared/List';
 const PenaltyRewardsInfo = () => {
   return (
     <FlexContainer className="column" gap={16}>
-      <Label>The eckoDEX Staking tool aims at rewarding long-term holders. For the same reason:</Label>
+      <Label>The eckoDEX Governance Mining initiative aims at rewarding long-term holders. For the same reason:</Label>
 
       <List
         paddingLeft={16}
@@ -26,7 +26,7 @@ const PenaltyRewardsInfo = () => {
         paddingLeft={16}
         items={[
           'p denotes the penalty proportion on rewards accumulated in the first 60 days;',
-          'd is the number of days the user has kept their KDX staked;',
+          'd is the number of days the user has kept their KDX locked;',
           '“60”  is the minimum number of days required not to incur into any penalty;',
           '“0.66” is an arbitrary coefficient used to model the penalty-curve efficiently.',
         ]}
