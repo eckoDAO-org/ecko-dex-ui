@@ -56,7 +56,7 @@ export const ANALYTICS = {
 };
 export const STAKE = {
   id: 3,
-  label: 'Stake',
+  label: 'Governance Mining',
   route: ROUTE_STAKE,
   activeRoutes: [ROUTE_UNSTAKE],
 };
