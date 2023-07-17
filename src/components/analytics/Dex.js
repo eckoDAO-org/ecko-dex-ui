@@ -33,10 +33,12 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
   const stakedKdx = extractDecimal((poolState && poolState['staked-kdx']) || 0);
 
   useEffect(() => {
-    getPairList(allPairs).then((pL) => {
-      setLocalPairList(pL);
-    });
-  }, []);
+    if(allPairs){
+      getPairList(allPairs).then((pL) => {
+        setLocalPairList(pL);
+      });
+    }
+  }, [allPairs]);
 
   const getTVLDetails = async () => {
     if (localPairList?.length) {
