@@ -10,7 +10,6 @@ import { FlexContainer } from '../../shared/FlexContainer';
 import Toggle from '../../liquidity/Toggle';
 import { GAS_OPTIONS, PATH_CONFIGURATION } from '../../../constants/gasConfiguration';
 import { useLocation } from 'react-router-dom';
-import { ROUTE_DAO } from '../../../router/routes';
 import { commonColors } from '../../../styles/theme';
 import { getDecimalPlaces } from '../../../utils/reduceBalance';
 import CustomDivider from '../../shared/CustomDivider';
@@ -158,9 +157,7 @@ const GasStationSettings = ({ className, hasNotification }) => {
   useOnClickOutside(ref, () => setShowGasStationSettings(false));
 
   useEffect(() => {
-    const section = Object.values(PATH_CONFIGURATION).find((path) =>
-      path.name === PATH_CONFIGURATION.DAO_VOTE.name ? pathname.includes(ROUTE_DAO) : path.route === pathname
-    )?.name;
+    const section = Object.values(PATH_CONFIGURATION).find((path) => path.route === pathname)?.name;
     if (section) {
       setCurrentSection(section);
       setClickedButton('NORMAL');

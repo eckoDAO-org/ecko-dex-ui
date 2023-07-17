@@ -1,5 +1,4 @@
 import {
-  ROUTE_DAO_PROPOSAL,
   ROUTE_INDEX,
   ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED,
   ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED,
@@ -40,10 +39,7 @@ export const PATH_CONFIGURATION = {
     name: 'CLAIM_LIQUIDITY_REWARDS',
     route: ROUTE_LIQUIDITY_REWARDS,
   },
-  DAO_VOTE: {
-    name: 'DAO_VOTE',
-    route: ROUTE_DAO_PROPOSAL,
-  },
+
   STAKE: {
     name: 'STAKE',
     route: ROUTE_STAKE,
@@ -64,7 +60,6 @@ const ADD_LIQUIDITY_DOUBLE_SIDE_GAS = 20000;
 const ADD_LIQUIDITY_SINGLE_SIDE_GAS = 20000;
 const REMOVE_LIQUIDITY_GAS = 40000;
 const CLAIM_LIQUIDITY_REWARDS_GAS = 40000;
-const DAO_VOTE_GAS = 2000;
 const STAKE_GAS = 10000;
 const UNSTAKE_GAS = 17000;
 
@@ -96,10 +91,6 @@ export const GAS_OPTIONS = {
     },
     CLAIM_LIQUIDITY_REWARDS: {
       gasLimit: CLAIM_LIQUIDITY_REWARDS_GAS,
-      gasPrice: ECONOMY_GAS_PRICE,
-    },
-    DAO_VOTE: {
-      gasLimit: DAO_VOTE_GAS,
       gasPrice: ECONOMY_GAS_PRICE,
     },
     STAKE: {
@@ -140,10 +131,6 @@ export const GAS_OPTIONS = {
       gasLimit: CLAIM_LIQUIDITY_REWARDS_GAS,
       gasPrice: NORMAL_GAS_PRICE,
     },
-    DAO_VOTE: {
-      gasLimit: DAO_VOTE_GAS,
-      gasPrice: NORMAL_GAS_PRICE,
-    },
     STAKE: {
       gasLimit: STAKE_GAS,
       gasPrice: NORMAL_GAS_PRICE,
@@ -182,10 +169,6 @@ export const GAS_OPTIONS = {
       gasLimit: CLAIM_LIQUIDITY_REWARDS_GAS,
       gasPrice: FAST_GAS_PRICE,
     },
-    DAO_VOTE: {
-      gasLimit: DAO_VOTE_GAS,
-      gasPrice: FAST_GAS_PRICE,
-    },
     STAKE: {
       gasLimit: STAKE_GAS,
       gasPrice: FAST_GAS_PRICE,
@@ -222,10 +205,6 @@ export const GAS_OPTIONS = {
     },
     CLAIM_LIQUIDITY_REWARDS: {
       gasLimit: CLAIM_LIQUIDITY_REWARDS_GAS,
-      gasPrice: GAS_STATION_PRICE,
-    },
-    DAO_VOTE: {
-      gasLimit: DAO_VOTE_GAS,
       gasPrice: GAS_STATION_PRICE,
     },
     STAKE: {
