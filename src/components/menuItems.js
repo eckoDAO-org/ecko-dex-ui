@@ -13,7 +13,6 @@ import {
   ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_DOUBLE_SIDED,
   ROUTE_STAKE,
   ROUTE_UNSTAKE,
-  ROUTE_DAO,
   ROUTE_LIQUIDITY_REWARDS,
   ROUTE_LIQUIDITY_CREATE_PAIR,
   ROUTE_ANALYTICS_KDX,
@@ -41,13 +40,7 @@ export const LIQUIDITY = {
     ROUTE_LIQUIDITY_CREATE_PAIR,
   ],
 };
-export const DAO = {
-  id: 2,
-  label: 'DAO',
-  route: ROUTE_DAO,
-  activeRoutes: [ROUTE_DAO],
-  className: '',
-};
+
 export const ANALYTICS = {
   id: 4,
   label: 'Analytics',
@@ -67,7 +60,7 @@ export const VAULT = {
   link: process.env.REACT_APP_VAULTING_URL,
 };
 
-export default NETWORK_TYPE === 'development' ? [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS] : [SWAP, LIQUIDITY, STAKE, DAO, ANALYTICS];
+export default NETWORK_TYPE === 'development' ? [SWAP, LIQUIDITY, STAKE, ANALYTICS] : [SWAP, LIQUIDITY, STAKE, ANALYTICS];
 
 export const gameEditionRoutes = [
   {

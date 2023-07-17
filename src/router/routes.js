@@ -3,8 +3,6 @@ export const ROUTE_SWAP = '/';
 export const ROUTE_MY_SWAP = '/my-swap';
 export const ROUTE_GAME_START_ANIMATION = '/start';
 export const ROUTE_GAME_EDITION_MENU = '/menu';
-export const ROUTE_DAO = '/DAO';
-export const ROUTE_DAO_PROPOSAL = '/DAO/:proposal_id';
 export const ROUTE_STATS = '/stats';
 export const ROUTE_WRAP = '/wrap';
 
