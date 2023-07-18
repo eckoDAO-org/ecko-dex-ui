@@ -138,7 +138,7 @@ const VolumeChart = ({ kdaPrice, width, height }) => {
   };
 
   return (
-    <FlexContainer withGradient className="column align-ce w-100 h-100 background-fill" style={{ padding: 32 }}>
+    <FlexContainer withGradient className="column align-ce h-100 analytics-volumes-container background-fill" style={{ padding: 32 }}>
       <div className="w-100 flex justify-sb">
         <div>
           <Label fontSize={16}>Volume {chartTimeRanges[volumeRange].timeLabel}</Label>
@@ -154,7 +154,7 @@ const VolumeChart = ({ kdaPrice, width, height }) => {
           value={volumeRange}
         />
       </div>
-      <div style={{ width: '100%', height }}>
+      <div style={{width:"100%", height }}>
         <ResponsiveContainer>
           <BarChart
             width={width}

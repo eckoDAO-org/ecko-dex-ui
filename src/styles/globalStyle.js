@@ -279,4 +279,18 @@ export default createGlobalStyle`
         padding-bottom: 24px;
       }
     }
+
+    .analytics-tvl-container {
+      width: 50%;
+      @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel - 1}px`}) {
+        width: 100%;
+      }
+    }
+
+    .analytics-volumes-container {
+      width: 50%;
+      @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.mobilePixel - 1}px`}) {
+        width: 100%;
+      }
+    }
 `;

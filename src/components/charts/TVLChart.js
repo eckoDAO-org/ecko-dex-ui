@@ -85,7 +85,7 @@ const TVLChart = ({ kdaPrice, height }) => {
   };
 
   return (
-    <FlexContainer className="column align-ce w-100 h-100 background-fill" withGradient style={{ padding: 32 }}>
+    <FlexContainer className="column align-ce h-100 analytics-tvl-container background-fill" withGradient style={{ padding: 32 }}>
       <div className="flex justify-sb w-100">
         <div className="column w-100">
           <Label fontSize={16}>TVL</Label>
