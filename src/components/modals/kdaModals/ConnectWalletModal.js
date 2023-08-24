@@ -1,23 +1,103 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import CustomButton from '../../../components/shared/CustomButton';
 import { WALLET } from '../../../constants/wallet';
-import { useKaddexWalletContext, useNotificationContext, useModalContext, useGameEditionContext, useAccountContext } from '../../../contexts';
+import { useKaddexWalletContext, useNotificationContext, useModalContext, useGameEditionContext, useAccountContext, useWalletConnectContext } from '../../../contexts';
 import ConnectWalletZelcoreModal from './ConnectWalletZelcoreModal';
 import ConnectWalletChainweaverModal from './ConnectWalletChainweaverModal';
 import styled from 'styled-components';
 import { FlexContainer } from '../../shared/FlexContainer';
 import Label from '../../shared/Label';
 import ConnectWalletWalletConnectModal from './ConnectWalletWalletConnectModal';
+import { NETWORKID } from '../../../constants/contextConstants';
+import GetWalletConnectAccountModal from './GetWalletConnectAccountModal';
 
 const ConnectWalletModal = () => {
   const modalContext = useModalContext();
-  const { account } = useAccountContext();
+  const { account, setVerifiedAccount } = useAccountContext();
   const { STATUSES, showNotification } = useNotificationContext();
   const { initializeKaddexWallet, isInstalled } = useKaddexWalletContext();
-  const { gameEditionView, openModal, closeModal } = useGameEditionContext();
+  const { gameEditionView, openModal, closeModal, onWireSelect } = useGameEditionContext();
+
+  const { connectWallet, requestGetAccounts } = useWalletConnectContext();
+  const [_, setIsGettingAccounts] = useState(false);
+
+  const onWalletDismiss = useCallback(
+    // KW
+    (err) => {
+      console.log(`onWalletDismiss err:`, err);
+      setIsGettingAccounts(false);
+      if (gameEditionView) {
+        if (!account.account) {
+          onWireSelect(null);
+        } else {
+          closeModal();
+        }
+      } else {
+        modalContext.onBackModal();
+      }
+    },
+    [gameEditionView, account, onWireSelect, closeModal, modalContext]
+  );
+
+  const onConnectWallet = useCallback(() => {
+    // KW
+    let onConnectionSuccess;
+    connectWallet()
+      .then(async (responseNullable) => {
+        if (responseNullable && responseNullable.accounts.length > 0) {
+          setIsGettingAccounts(true);
+          const wcAccounts = await requestGetAccounts(
+            NETWORKID,
+            responseNullable.accounts.map((a) => ({ account: a })),
+            responseNullable.topic
+          );
+          setIsGettingAccounts(false);
+          // call getAccounts
+          const resultAccounts = [];
+          wcAccounts.accounts.forEach((wcAcc) => wcAcc.kadenaAccounts.forEach((kAcc) => resultAccounts.push(kAcc.name)));
+
+          if (resultAccounts.length === 1) {
+            await setVerifiedAccount(resultAccounts[0], onConnectionSuccess);
+            modalContext.closeModal();
+          } else {
+            if (gameEditionView) {
+              openModal({
+                hideOnClose: true,
+                title: 'SELECT ACCOUNT',
+                content: (
+                  <GetWalletConnectAccountModal onClose={onWalletDismiss} accounts={resultAccounts} onConnectionSuccess={onConnectionSuccess} />
+                ),
+              });
+            } else {
+              modalContext.openModal({
+                id: 'WALLETCONNECT_ACCOUNT',
+                title: 'WalletConnect accounts',
+                description: 'Select Account',
+                onBack: () => modalContext.onBackModal(),
+                content: (
+                  <GetWalletConnectAccountModal
+                    accounts={resultAccounts}
+                    onClose={modalContext.closeModal}
+                    onConnectionSuccess={onConnectionSuccess}
+                  />
+                ),
+              });
+            }
+          }
+        } else {
+          onWalletDismiss();
+          setIsGettingAccounts(false);
+        }
+      })
+      .catch(onWalletDismiss);
+  }, [gameEditionView, onWalletDismiss, openModal, setVerifiedAccount, modalContext, connectWallet]);
 
   const openWalletModal = (walletName) => {
     switch (walletName) {
+      case WALLET.KOALAWALLET.name:
+        onConnectWallet();
+        break;
+
       case WALLET.ZELCORE.name:
         if (gameEditionView) {
           return openModal({
@@ -89,6 +169,16 @@ const ConnectWalletModal = () => {
 
   return (
     <Container className="column" gap={16} style={{ marginTop: !account.account && 24 }}>
+      <CustomButton
+        type="primary"
+        onClick={() => {
+          openWalletModal(WALLET.KOALAWALLET.name);
+        }}
+      >
+        {!gameEditionView && WALLET.KOALAWALLET.logo}
+        <Label outGameEditionView>{WALLET.KOALAWALLET.name}</Label>
+      </CustomButton>
+
       <CustomButton
         type="gradient"
         onClick={() => {
