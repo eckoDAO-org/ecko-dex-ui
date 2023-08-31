@@ -4,7 +4,6 @@ import { pairs } from './pairs';
 
 const environment = process.env.REACT_APP_KDA_NETWORK_TYPE || 'testnet';
 const tokenData = tokens[environment];
-// const tokenData = tokens['development'];
 export const pairsData = pairs[environment];
 export const blacklistedTokenData = blacklistedTokens[environment];
 // TODO add img or similar to PactContext -> allTokens

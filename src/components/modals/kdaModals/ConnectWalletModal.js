@@ -22,7 +22,6 @@ const ConnectWalletModal = () => {
   const [_, setIsGettingAccounts] = useState(false);
 
   const onWalletDismiss = useCallback(
-    // KW
     (err) => {
       console.log(`onWalletDismiss err:`, err);
       setIsGettingAccounts(false);
@@ -40,7 +39,6 @@ const ConnectWalletModal = () => {
   );
 
   const onConnectWallet = useCallback(() => {
-    // KW
     let onConnectionSuccess;
     connectWallet()
       .then(async (responseNullable) => {
