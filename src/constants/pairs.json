@@ -44,6 +44,13 @@
         "token1": "XYZ",
         "isBoosted": false,
         "isVerified": true
+      },
+      "coin:zelcore.kwUSDC": {
+        "name": "coin:zelcore.kwUSDC",
+        "token0": "KDA",
+        "token1": "kwUSDC",
+        "isBoosted": true,
+        "isVerified": true
       }
     },
     "mainnet": {
@@ -172,6 +179,15 @@
         "isBoosted": false,
         "color": "#e03a3f",
         "isVerified": false
+      },
+      "coin:n_b742b4e9c600892af545afb408326e82a6c0c6ed.zUSD": {
+        "name": "coin:n_b742b4e9c600892af545afb408326e82a6c0c6ed.zUSD",
+        "token0": "KDA",
+        "token1": "zUSD",
+        "main": false,
+        "isBoosted": true,
+        "color": "#2E3191",
+        "isVerified": true
       }
     }
   }
