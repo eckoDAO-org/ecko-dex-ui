@@ -61,12 +61,10 @@ const TokenInfoContainer = () => {
           moment().subtract(1, 'months').toDate(),
           pact.allTokens[token].statsID || pact.allTokens[token].code
         );
-        if (pastLastMonthVolume) {
-          setMonthlyVolumeRange({
-            initial: pastLastMonthVolume,
-            final: lastMonthVolume,
-          });
-        }
+        setMonthlyVolumeRange({
+          initial: pastLastMonthVolume,
+          final: lastMonthVolume,
+        });
       }
       let price24Diff = null;
       if (asset === 'KDA') {
