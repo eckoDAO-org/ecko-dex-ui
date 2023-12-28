@@ -12,7 +12,7 @@ export const getTokenByModuleV2 = (token, allTokens) => {
   const tokenCode = token.refName.namespace ? `${token.refName.namespace}.${token.refName.name}` : `${token.refName.name}`;
   const token0 = Object.values(allTokens).find((t) => t.code === tokenCode);
   if (token0?.name) {
-    return token0?.name?.toUpperCase();
+    return token0.name === 'zUSD' ? token0.name : token0?.name?.toUpperCase();
   }
   return token0?.toUpperCase();
 };

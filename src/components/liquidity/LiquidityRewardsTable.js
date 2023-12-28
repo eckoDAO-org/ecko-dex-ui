@@ -270,8 +270,8 @@ const renderColumns = (allTokens) => {
       width: 160,
       render: ({ item }) => (
         <FlexContainer className="align-ce">
-          <CryptoContainer style={{ zIndex: 2 }}>{allTokens[getTokenByModuleV2(item.tokenA, allTokens)].icon} </CryptoContainer>
-          <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}> {allTokens[getTokenByModuleV2(item.tokenB, allTokens)].icon}</CryptoContainer>
+          <CryptoContainer style={{ zIndex: 2 }}>{allTokens[getTokenByModuleV2(item.tokenA, allTokens)]?.icon ?? ""} </CryptoContainer>
+          <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}> {allTokens[getTokenByModuleV2(item.tokenB, allTokens)]?.icon ?? ""}</CryptoContainer>
           {getTokenByModuleV2(item.tokenA, allTokens)}/{getTokenByModuleV2(item.tokenB, allTokens)}
         </FlexContainer>
       ),
