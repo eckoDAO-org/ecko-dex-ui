@@ -21,7 +21,7 @@ import { Helmet } from 'react-helmet';
 import { VerifiedBoldLogo } from '../assets';
 import CustomButton from '../components/shared/CustomButton';
 import styled from 'styled-components';
-import Pools from '../components/analytics/Pools';
+import StatsTable from '../components/analytics/StatsTable';
 
 export const FIXED_SUPPLY = 200577508;
 export const FIXED_BURNT = 99422492;
@@ -43,7 +43,7 @@ const AnalyticsContainer = () => {
           setPoolState(res);
         });
         getAnalyticsData(moment().subtract(1, 'day').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')).then((res) => {
-          if(res){
+          if (res) {
             setAnalyticsData(res[res.length - 1]);
           }
         });
@@ -151,7 +151,7 @@ const AnalyticsContainer = () => {
           {/* KDX */}
           {pathname === ROUTE_ANALYTICS_KDX && <Kdx analyticsData={analyticsData} KDX_TOTAL_SUPPLY={KDX_TOTAL_SUPPLY} kdaPrice={kdaUsdPrice} />}
           {/* DEX */}
-          {pathname === ROUTE_ANALYTICS_STATS && <Pools verifiedActive={verifiedActive} />}
+          {pathname === ROUTE_ANALYTICS_STATS && <StatsTable verifiedActive={verifiedActive} />}
         </FlexContainer>
       </>
     )

@@ -13,7 +13,7 @@ import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import GraphicPercentage from '../shared/GraphicPercentage';
 import { getAnalyticsTokenStatsData } from '../../api/kaddex-analytics';
-import {DecimalFormatted} from '../../components/shared/DecimalFormatted';
+import DecimalFormatted from '../shared/DecimalFormatted';
 
 const StatsTable = ({ verifiedActive }) => {
   const { themeMode } = useApplicationContext();
