@@ -188,6 +188,15 @@
         "isBoosted": true,
         "color": "#2E3191",
         "isVerified": true
+      },
+      "coin:free.cyberfly_token": {
+        "name": "coin:free.cyberfly_token",
+        "token0": "KDA",
+        "token1": "CFLY",
+        "main": false,
+        "isBoosted": false,
+        "color": "#3333ff",
+        "isVerified": true
       }
     }
   }
