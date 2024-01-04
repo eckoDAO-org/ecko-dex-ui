@@ -87,18 +87,19 @@ const VolumeChart = ({ kdaPrice, width, height }) => {
   };
   const getWeeklyKdaPrice = (timeRange, candles) => {
     const timeRangeSplitted = timeRange?._id.split('-');
-    const days = getWeekDaysByWeekNumber(timeRangeSplitted[1]?.replace('W', ''));
+    const days = getWeekDaysByWeekNumber(timeRangeSplitted[0], timeRangeSplitted[1]?.replace('W', ''));
     return getKdaAveragePrice(days, candles);
   };
 
   const getMonthlyKdaPrice = (timeRange, candles) => {
     const timeRangeSplitted = timeRange?._id.split('-');
-    const days = getWeekDaysByMonthNumber(timeRangeSplitted[1]);
+    const days = getWeekDaysByMonthNumber(timeRangeSplitted[0], timeRangeSplitted[1]);
     return getKdaAveragePrice(days, candles);
   };
 
-  const getWeekDaysByWeekNumber = (weeknumber) => {
+  const getWeekDaysByWeekNumber = (year, weeknumber) => {
     let date = moment()
+        .year(year)
         .isoWeek(weeknumber || 1)
         .startOf('week'),
       weeklength = 7,
@@ -110,12 +111,16 @@ const VolumeChart = ({ kdaPrice, width, height }) => {
     return result;
   };
 
-  const getWeekDaysByMonthNumber = (month) => {
-    let count = moment().month(month).daysInMonth();
+  const getWeekDaysByMonthNumber = (year, month) => {
+    let count = moment()
+      .year(year)
+      .month(month - 1)
+      .daysInMonth();
     let days = [];
     for (var i = 1; i < count + 1; i++) {
       days.push(
         moment()
+          .year(year)
           .month(month - 1)
           .date(i)
           .format('YYYY-MM-DD')
@@ -154,7 +159,7 @@ const VolumeChart = ({ kdaPrice, width, height }) => {
           value={volumeRange}
         />
       </div>
-      <div style={{width:"100%", height }}>
+      <div style={{ width: '100%', height }}>
         <ResponsiveContainer>
           <BarChart
             width={width}
