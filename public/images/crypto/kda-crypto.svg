@@ -1,33 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="220" height="220" viewBox="0 0 220 220">
   <defs>
-    <linearGradient id="linear-gradient" x1="-0.041" y1="0.5" x2="0.619" y2="0.5" gradientUnits="objectBoundingBox">
-      <stop offset="0" stop-color="#ed098f"/>
-      <stop offset="0.152" stop-color="#f143a9"/>
-      <stop offset="0.318" stop-color="#f57bc3"/>
-      <stop offset="0.479" stop-color="#f8aad8"/>
-      <stop offset="0.632" stop-color="#fbcfe9"/>
-      <stop offset="0.774" stop-color="#fde9f5"/>
-      <stop offset="0.901" stop-color="#fef9fc"/>
-      <stop offset="1" stop-color="#fff"/>
-    </linearGradient>
-    <linearGradient id="linear-gradient-2" x1="-0.073" y1="0.263" x2="0.527" y2="0.568" gradientUnits="objectBoundingBox">
-      <stop offset="0.217" stop-color="#ed098f"/>
-      <stop offset="0.31" stop-color="#f141a8"/>
-      <stop offset="0.404" stop-color="#f473bf"/>
-      <stop offset="0.5" stop-color="#f79ed2"/>
-      <stop offset="0.597" stop-color="#fac1e2"/>
-      <stop offset="0.695" stop-color="#fcdcef"/>
-      <stop offset="0.794" stop-color="#fdeff8"/>
-      <stop offset="0.895" stop-color="#fefbfd"/>
-      <stop offset="1" stop-color="#fff"/>
-    </linearGradient>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_24148" data-name="Rectangle 24148" width="220" height="220" fill="#fff"/>
+    </clipPath>
   </defs>
-  <g id="KDA" transform="translate(-107 -487)">
-    <rect id="Rectangle_7090" data-name="Rectangle 7090" width="32" height="32" rx="16" transform="translate(107 487)" fill="#ef279c"/>
-    <g id="Group_69782" data-name="Group 69782" transform="translate(-236 251)">
-      <path id="Path_42681" data-name="Path 42681" d="M377.5,243h-5.163l-6.076,6.377v5.313Z" transform="translate(-10.898 0)" fill="url(#linear-gradient)"/>
-      <rect id="Rectangle_10269" data-name="Rectangle 10269" width="4.365" height="17.598" transform="translate(351 243)" fill="#fff"/>
-      <path id="Path_42682" data-name="Path 42682" d="M381.748,278.184l-7.173-10.555-2.92,3.037,5.025,7.518Z" transform="translate(-14.748 -17.586)" fill="url(#linear-gradient-2)"/>
-    </g>
+  <g id="KDA" clip-path="url(#clip-path)">
+    <path id="Path_143798" data-name="Path 143798" d="M110,220A110,110,0,1,0,0,110,110,110,0,0,0,110,220Z" fill="#0e1821"/>
+    <path id="Path_143799" data-name="Path 143799" d="M175.092,172.539H129.974l-.03-.022-.355-.272L73.676,128.863l22.885-18.244,78.154,61.626Z" fill="#4a9079"/>
+    <path id="Path_143800" data-name="Path 143800" d="M175.092,48.7H129.974l-.03.022-.355.273L73.676,92.374l22.885,18.245,78.154-61.626Z" fill="#4a9079"/>
+    <path id="Path_143801" data-name="Path 143801" d="M73.684,113.369v15.5l.007,43.374v.295l-.03-.022-.348-.273L46.1,150.868l-.067-.052-.392-.3V70.724l.392-.3.067-.052L73.313,48.993l.348-.273.03-.022v.295l-.007,43.374v21Z" fill="#4a9079"/>
   </g>
 </svg>
