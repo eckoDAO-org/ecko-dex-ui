@@ -124,7 +124,8 @@
         "main": false,
         "isBoosted": false,
         "color": "#EEAA7B",
-        "isVerified": true
+        "isVerified": true,
+        "notAllowedRemoveSingleSide": true
       },
       "coin:free.kapybara-token": {
         "name": "coin:free.kapybara-token",

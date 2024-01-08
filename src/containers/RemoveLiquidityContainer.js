@@ -110,6 +110,16 @@ const RemoveLiquidityContainer = (props) => {
     }
   }, [account, allPairs]);
 
+  useEffect(() => {
+    if (pathname && pair) {
+      if (pathname === ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_SINGLE_SIDED && pair.notAllowedRemoveSingleSide) {
+        history.push(ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${query.get('token0')}&token1=${query.get('token1')}`), {
+          from: props?.location?.state?.from,
+        });
+      }
+    }
+  }, [pair, pathname]);
+
   return loading ? (
     <AppLoader className="h-100 w-100 justify-ce align-ce" />
   ) : (
@@ -151,17 +161,19 @@ const RemoveLiquidityContainer = (props) => {
             pair={pair}
           />
           <FlexContainer gap={24}>
-            <Label
-              fontFamily="syncopate"
-              withShade={pathname !== ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_SINGLE_SIDED}
-              onClick={() =>
-                history.push(ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${query.get('token0')}&token1=${query.get('token1')}`), {
-                  from: props?.location?.state?.from,
-                })
-              }
-            >
-              SINGLE-SIDED
-            </Label>
+            {!pair.notAllowedRemoveSingleSide && (
+              <Label
+                fontFamily="syncopate"
+                withShade={pathname !== ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_SINGLE_SIDED}
+                onClick={() =>
+                  history.push(ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${query.get('token0')}&token1=${query.get('token1')}`), {
+                    from: props?.location?.state?.from,
+                  })
+                }
+              >
+                SINGLE-SIDED
+              </Label>
+            )}
             <Label
               fontFamily="syncopate"
               withShade={pathname !== ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_DOUBLE_SIDED}
