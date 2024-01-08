@@ -17,6 +17,7 @@ import { FadeIn } from '../shared/animations';
 import { FlexContainer } from '../shared/FlexContainer';
 import InputRange from '../shared/InputRange';
 import { SuccessDoubleSideRemoveView } from '../modals/liquidity/LiquidityTxView';
+import BigNumber from 'bignumber.js';
 
 const Container = styled(FadeIn)`
   margin-top: 0px;
@@ -81,7 +82,12 @@ const RemoveDoubleSideLiquidity = ({ pair, previewObject, setPreviewAmount, prev
 
   useEffect(() => {
     if (!isNaN(amount) && pair) {
-      setPooled((extractDecimal(pair?.balance) * amount) / 100);
+      const bigNumPairBalance = new BigNumber(extractDecimal(pair?.balance));
+      const bigNumPairBalanceMultiplied = bigNumPairBalance.times(amount);
+
+      const calculatedPooled = bigNumPairBalanceMultiplied.dividedBy(100);
+      setPooled(extractDecimal(calculatedPooled));
+
       setPooledToken0(
         (extractDecimal(wantsKdxRewards && pair.isBoosted ? previewObject?.['tokenA-amount-received'] : pair?.pooledAmount[0]) * amount) / 100
       );
