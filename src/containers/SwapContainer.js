@@ -41,6 +41,7 @@ import {
 import theme, { commonColors } from '../styles/theme';
 import { Helmet } from 'react-helmet';
 import useQueryParams from '../hooks/useQueryParams';
+import { KADDEX_NAMESPACE } from '../constants/contextConstants';
 
 const Container = styled(FadeIn)`
   width: 100%;
@@ -122,7 +123,7 @@ const SwapContainer = () => {
     amount: '',
     balance: account.account.balance || '',
     coin: pact.allTokens?.[query.get('token1')] ? query.get('token1') : 'KDX',
-    address: pact.allTokens?.[query.get('token1')] ? pact.allTokens?.[query.get('token1')]?.code : 'kaddex.kdx',
+    address: pact.allTokens?.[query.get('token1')] ? pact.allTokens?.[query.get('token1')]?.code : `${KADDEX_NAMESPACE}.kdx`,
     precision: pact.allTokens?.[query.get('token1')] ? pact.allTokens?.[query.get('token1')]?.precision : 12,
   });
 

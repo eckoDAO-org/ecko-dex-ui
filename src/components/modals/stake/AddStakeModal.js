@@ -2,7 +2,7 @@ import React from 'react';
 import CustomButton from '../../shared/CustomButton';
 import CustomDivider from '../../shared/CustomDivider';
 import styled from 'styled-components';
-import { STAKING_REWARDS_PERCENT } from '../../../constants/contextConstants';
+import { KADDEX_NAMESPACE, STAKING_REWARDS_PERCENT } from '../../../constants/contextConstants';
 import Label from '../../shared/Label';
 import { usePactContext } from '../../../contexts';
 import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
@@ -50,7 +50,7 @@ export const AddStakeModal = ({ onConfirm, alreadyStakedAmount, toStakeAmount })
       <Label fontSize={16}>Stake </Label>
       <StakeModalRow>
         <RowTokenInfoPrice
-          tokenIcon={getTokenIconByCode('kaddex.kdx', pact.allTokens)}
+          tokenIcon={getTokenIconByCode(`${KADDEX_NAMESPACE}.kdx`, pact.allTokens)}
           tokenName="KDX"
           amount={toStakeAmount}
           tokenPrice={pact.tokensUsdPrice?.KDX}
