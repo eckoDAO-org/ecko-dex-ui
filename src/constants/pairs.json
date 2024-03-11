@@ -1,24 +1,10 @@
 {
   "pairs": {
-    "stage": {
-      "coin:kaddex.kdx": {
-        "name": "coin:kaddex.kdx",
+    "testnet": {
+      "coin:n_dd05101ff4df21179bfc038a912fc88c38d777a1.kdx": {
+        "name": "coin:n_dd05101ff4df21179bfc038a912fc88c38d777a1.kdx",
         "token0": "KDA",
         "token1": "KDX",
-        "isBoosted": true,
-        "isVerified": true
-      },
-      "coin:kaddex.abc": {
-        "name": "coin:kaddex.abc",
-        "token0": "KDA",
-        "token1": "ABC",
-        "isBoosted": true,
-        "isVerified": true
-      },
-      "coin:kaddex.xyz": {
-        "name": "coin:kaddex.xyz",
-        "token0": "KDA",
-        "token1": "XYZ",
         "isBoosted": false,
         "isVerified": true
       }

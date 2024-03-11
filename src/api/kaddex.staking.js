@@ -50,7 +50,7 @@ export const getAddStakeCommand = async (verifiedAccount, amountToStake, gasStat
         ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
         : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
       Pact.lang.mkCap('wrap capability', 'wrapping skdx', `${KADDEX_NAMESPACE}.kdx.WRAP`, [
-        'kaddex.skdx',
+        `${KADDEX_NAMESPACE}.skdx`,
         account.account,
         account.account,
         reduceBalance(parsedAmount, decimalPlaces),
@@ -85,13 +85,13 @@ export const geUnstakeCommand = (verifiedAccount, amountToUnstake) => {
         ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
         : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
       Pact.lang.mkCap('unwrap capability for rewards', 'unwrapping skdx for user', `${KADDEX_NAMESPACE}.kdx.UNWRAP`, [
-        'kaddex.skdx',
+        `${KADDEX_NAMESPACE}.skdx`,
         verifiedAccount.account,
         verifiedAccount.account,
         amountToUnstake,
       ]),
       Pact.lang.mkCap('unwrap capability for penalty', 'unwrapping skdx for penalty', `${KADDEX_NAMESPACE}.kdx.UNWRAP`, [
-        'kaddex.skdx',
+        `${KADDEX_NAMESPACE}.skdx`,
         verifiedAccount.account,
         'kdx-staking',
         amountToUnstake,
@@ -160,13 +160,13 @@ export const getRollupAndUnstakeCommand = async (verifiedAccount, amountToUnstak
     caps: [
       Pact.lang.mkCap('rollup capability', 'rollup', `${KADDEX_NAMESPACE}.staking.ROLLUP`, [account.account]),
       Pact.lang.mkCap('unwrap capability for rewards', 'unwrapping skdx for user', `${KADDEX_NAMESPACE}.kdx.UNWRAP`, [
-        'kaddex.skdx',
+        `${KADDEX_NAMESPACE}.skdx`,
         account.account,
         account.account,
         reduceBalance(parsedAmount, decimalPlaces),
       ]),
       Pact.lang.mkCap('unwrap capability for penalty', 'unwrapping skdx for penalty', `${KADDEX_NAMESPACE}.kdx.UNWRAP`, [
-        'kaddex.skdx',
+        `${KADDEX_NAMESPACE}.skdx`,
         account.account,
         'kdx-staking',
         reduceBalance(parsedAmount, decimalPlaces),
@@ -258,13 +258,13 @@ export const getRollupClaimAndUnstakeCommand = async (verifiedAccount, amountToU
       Pact.lang.mkCap('rollup capability', 'rollup', `${KADDEX_NAMESPACE}.staking.ROLLUP`, [account.account]),
       Pact.lang.mkCap('claim capability', 'claim', `${KADDEX_NAMESPACE}.staking.CLAIM`, [account.account]),
       Pact.lang.mkCap('unwrap capability for rewards', 'unwrapping skdx for user', `${KADDEX_NAMESPACE}.kdx.UNWRAP`, [
-        'kaddex.skdx',
+        `${KADDEX_NAMESPACE}.skdx`,
         account.account,
         account.account,
         reduceBalance(parsedAmount, decimalPlaces),
       ]),
       Pact.lang.mkCap('unwrap capability for penalty', 'unwrapping skdx for penalty', `${KADDEX_NAMESPACE}.kdx.UNWRAP`, [
-        'kaddex.skdx',
+        `${KADDEX_NAMESPACE}.skdx`,
         account.account,
         'kdx-staking',
         reduceBalance(parsedAmount, decimalPlaces),

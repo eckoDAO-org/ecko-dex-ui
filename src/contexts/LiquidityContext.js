@@ -481,7 +481,7 @@ export const LiquidityProvider = (props) => {
         ${token0}
         ${token1}
         ${JSON.stringify(account.account)}
-        (at 'liquidity-tokens (kaddex.wrapper.get-liquidity-position ${token0} ${token1} ${JSON.stringify(account.account)}))
+        (at 'liquidity-tokens (${KADDEX_NAMESPACE}.wrapper.get-liquidity-position ${token0} ${token1} ${JSON.stringify(account.account)}))
       )`;
       return await pactFetchLocal(pactCode);
     } catch (e) {

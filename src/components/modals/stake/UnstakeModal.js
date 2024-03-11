@@ -11,6 +11,7 @@ import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
 import { getTokenIconByCode } from '../../../utils/token-utils';
 import { STAKING_CONSTANTS } from '../../../constants/stakingConstants';
 import { commonColors } from '../../../styles/theme';
+import { KADDEX_NAMESPACE } from '../../../constants/contextConstants';
 
 export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeData, toUnstakeAmount, stakedTimeStart }) => {
   const [checked, setChecked] = useState(false);
@@ -93,7 +94,7 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
       <Label fontSize={16}>Unstaked Amount</Label>
       <StakeModalRow>
         <RowTokenInfoPrice
-          tokenIcon={getTokenIconByCode('kaddex.kdx', pact.allTokens)}
+          tokenIcon={getTokenIconByCode(`${KADDEX_NAMESPACE}.kdx`, pact.allTokens)}
           tokenName="KDX"
           amount={toUnstakeAmount}
           tokenPrice={pact.okensUsdPrice?.KDX}
@@ -120,7 +121,7 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
           <Label fontSize={16}>Rewards Amount</Label>
           <StakeModalRow>
             <RowTokenInfoPrice
-              tokenIcon={getTokenIconByCode('kaddex.kdx', pact.allTokens)}
+              tokenIcon={getTokenIconByCode(`${KADDEX_NAMESPACE}.kdx`, pact.allTokens)}
               tokenName="KDX"
               amount={(estimateUnstakeData && estimateUnstakeData?.['reward-accrued']) || 0}
               tokenPrice={pact.tokensUsdPrice?.KDX}
