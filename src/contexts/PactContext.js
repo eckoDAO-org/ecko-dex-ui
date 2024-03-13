@@ -346,7 +346,7 @@ export const PactProvider = (props) => {
       let reserveIn = Number(pairReserve['token0']);
       let numerator = Number(amountIn * (1 - FEE) * reserveOut);
       let denominator = Number(reserveIn + amountIn * (1 - FEE));
-      return numerator / denominator;
+      return denominator !== 0 ? numerator / denominator : 0;
     }
   };
 
@@ -360,7 +360,7 @@ export const PactProvider = (props) => {
       let numerator = Number(reserveIn * amountOut);
       let denominator = Number((reserveOut - amountOut) * (1 - FEE));
       // round up the last digit
-      return numerator / denominator;
+      return denominator !== 0 ? numerator / denominator : 0;
     }
   };
 
@@ -402,7 +402,7 @@ export const PactProvider = (props) => {
 
     let numerator = Number(amountIn * (1 - FEE) * reserveOutNumber);
     let denominator = Number(reserveInNumber + amountIn * (1 - FEE));
-    return numerator / denominator;
+    return denominator !== 0 ? numerator / denominator : 0;
   };
 
   //COMPUTE_IN_MULTIHOPS
@@ -412,7 +412,7 @@ export const PactProvider = (props) => {
     let numerator = Number(reserveInNumber * amountOut);
     let denominator = Number((reserveOutNumber - amountOut) * (1 - FEE));
     // round up the last digit
-    return numerator / denominator;
+    return denominator !== 0 ? numerator / denominator : 0;
   };
 
   //COMPUTE_PRICE_IMPACT
@@ -422,9 +422,9 @@ export const PactProvider = (props) => {
     } else {
       const reserveOut = Number(pairReserve['token1']);
       const reserveIn = Number(pairReserve['token0']);
-      const midPrice = reserveOut / reserveIn;
+      const midPrice = reserveIn !== 0 ? reserveOut / reserveIn : 0;
       const exactQuote = amountIn * midPrice;
-      const slippage = (exactQuote - amountOut) / exactQuote;
+      const slippage = exactQuote !== 0 ? (exactQuote - amountOut) / exactQuote : 0;
       return slippage;
     }
   }
@@ -455,9 +455,9 @@ export const PactProvider = (props) => {
 
   //COMPUTE_PRICE_IMPACT_MULTIHOPS
   function computePriceImpactMultihops(amountIn, amountOut, reserveIn, reserveOut) {
-    const midPrice = reserveOut / reserveIn;
+    const midPrice = reserveIn !== 0 ? reserveOut / reserveIn : 0;
     const exactQuote = amountIn * midPrice;
-    const slippage = (exactQuote - amountOut) / exactQuote;
+    const slippage = exactQuote !== 0 ? (exactQuote - amountOut) / exactQuote : 0;
     return slippage;
   }
 

@@ -139,6 +139,16 @@ const SwapContainer = () => {
   const [noLiquidity, setNoLiquidity] = useState(false);
   const [priceImpact, setPriceImpact] = useState('');
 
+  useEffect(()=>{
+    if(pact.pairReserve){
+      if(pact.pairReserve.token0 <= 0 && pact.pairReserve.token1 <= 0){
+        setNoLiquidity(true)
+      }else{
+        setNoLiquidity(false)
+      }
+    }
+   },[pact.pairReserve]);
+
   useEffect(() => {
     if (!isNaN(fromValues.amount)) {
       if (inputSide === 'from' && fromValues.amount !== '') {
@@ -158,6 +168,7 @@ const SwapContainer = () => {
                 ),
               })
             );
+            throttle(500, safeSetTo(), toValues.precision);
           } else {
             debounce(
               500,
@@ -170,6 +181,7 @@ const SwapContainer = () => {
                 ).toFixed(toValues.precision),
               })
             );
+            debounce(500, safeSetTo(), toValues.precision);
           }
         }
       }
@@ -347,6 +359,24 @@ const SwapContainer = () => {
       }, 250);
     }
   };
+
+    // Check if their is enough liquidity before setting the from amount
+    const safeSetTo = () => {
+      setNoLiquidity(false);
+      if (0 >= pact.computeOut(fromValues.amount)) {
+        setNoLiquidity(true);
+        setToValues({
+          ...toValues,
+          amount: 0,
+        });
+      } else {
+        setToValues({
+          ...toValues,
+          amount: reduceBalance(pact.computeOut(fromValues.amount), toValues.precision),
+        });
+      }
+    };
+    
   // Check if their is enough liquidity before setting the from amount
   const safeSetFrom = () => {
     setNoLiquidity(false);
