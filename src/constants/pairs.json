@@ -184,6 +184,15 @@
         "isBoosted": false,
         "color": "#3333ff",
         "isVerified": true
+      },
+      "coin:n_e309f0fa7cf3a13f93a8da5325cdad32790d2070.heron": {
+        "name": "coin:n_e309f0fa7cf3a13f93a8da5325cdad32790d2070.heron",
+        "token0": "KDA",
+        "token1": "HERON",
+        "main": false,
+        "isBoosted": false,
+        "color": "#3333ff",
+        "isVerified": true
       }
     }
   }
