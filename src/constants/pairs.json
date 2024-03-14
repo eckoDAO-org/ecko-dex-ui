@@ -193,6 +193,15 @@
         "isBoosted": false,
         "color": "#3333ff",
         "isVerified": true
+      },
+      "coin:free.maga": {
+        "name": "coin:free.maga",
+        "token0": "KDA",
+        "token1": "MAGA",
+        "main": false,
+        "isBoosted": false,
+        "color": "#3333ff",
+        "isVerified": true
       }
     }
   }
