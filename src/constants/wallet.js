@@ -11,9 +11,18 @@ import {
   WalletConnectLogo,
   WireWalletConnectIcon,
   LogoWalletConnectIcon,
+  KoalaWalletLogo
 } from '../assets';
 
 export const WALLET = {
+  KOALAWALLET: {
+    id: 'KOALAWALLET',
+    name: 'KoalaWallet',
+    logo: <KoalaWalletLogo width={18} height={18} />,
+    signMethod: 'wallet',
+    // wireIcon: <WireWalletConnectIcon />,
+    // notificationLogo: <LogoWalletConnectIcon />,
+  },
   ECKOWALLET: {
     id: 'ECKOWALLET',
     name: 'eckoWALLET',
