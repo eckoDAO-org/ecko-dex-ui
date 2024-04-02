@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { getAnalyticsPoolsStatsData } from '../api/kaddex-analytics';
+import { getAnalyticsDexscanPoolsData } from '../api/kaddex-analytics';
 import { getCoingeckoUsdPrice } from '../api/coingecko';
 import { getTotalKDAVolume } from '../api/kaddex-stats';
 import { getPairsMultiplier } from '../api/liquidity-rewards';
@@ -127,7 +127,7 @@ export const getAllPairsData = async (tokensUsdPrice, allTokens, allPairs, _pool
   const pools = _pools ? _pools : await getPairList(allPairs);
 
   if (pools.length) {
-    const volumes = await getAnalyticsPoolsStatsData() || {};
+    const dexscanPoolsStats = await getAnalyticsDexscanPoolsData();
     const multipliers = await getPairsMultiplier(pools);
     let allData = [];
     for (const pool of pools) {
@@ -137,18 +137,20 @@ export const getAllPairsData = async (tokensUsdPrice, allTokens, allPairs, _pool
       const token0 = Object.values(allTokens).find((t) => t.name === pool.token0);
       const token1 = Object.values(allTokens).find((t) => t.name === pool.token1);
 
+      const specificPairData = dexscanPoolsStats.filter(
+        (d) =>
+          (d.token0.address === token0.code && d.token1.address === token1.code) ||
+          (d.token0.address === token1.code && d.token1.address === token0.code)
+      );
+
+      let liquidity0 = 0;
+      let liquidity1 = 0;
+
       if (tokensUsdPrice) {
-        const liquidity0 = tokensUsdPrice[token0?.name] ? reduceBalance(pool.reserves[0]) * tokensUsdPrice[token0.name] : 0;
-        const liquidity1 = tokensUsdPrice[token1?.name] ? reduceBalance(pool.reserves[1]) * tokensUsdPrice[token1.name] : 0;
+        liquidity0 = tokensUsdPrice[token0?.name] ? reduceBalance(pool.reserves[0]) * tokensUsdPrice[token0.name] : 0;
+        liquidity1 = tokensUsdPrice[token1?.name] ? reduceBalance(pool.reserves[1]) * tokensUsdPrice[token1.name] : 0;
 
-        let token0UsdPrice = tokensUsdPrice[getTokenName(volumes[pool.name]?.baseTokenCode, allTokens)];
-        let token1UsdPrice = tokensUsdPrice[getTokenName(volumes[pool.name]?.targetTokenCode, allTokens)];
-
-        volume24HUsd = token0UsdPrice
-          ? volumes[pool.name].baseVolume * token0UsdPrice
-          : token1UsdPrice
-          ? volumes[pool.name].targetVolume * token1UsdPrice
-          : 0;
+        volume24HUsd = specificPairData[0] ? specificPairData[0].volume24h : 0;
 
         liquidityUsd = liquidity0 + liquidity1;
         apr = volume24HUsd && liquidityUsd ? getApr(volume24HUsd, liquidityUsd) : 0;
@@ -165,6 +167,8 @@ export const getAllPairsData = async (tokensUsdPrice, allTokens, allPairs, _pool
         apr,
         multiplier,
         liquidityUsd,
+        liquidity0,
+        liquidity1,
         volume24HUsd,
       };
       allData.push(data);
@@ -227,9 +231,16 @@ export const getTokenUsdPriceByLiquidity = (liquidity0, liquidity1, usdPrice, pr
 /**
  * @param {string} tokenName [example: "KDX"]
  */
-export const getTokenUsdPriceByName = async (tokenName, pools, allTokens, kdaPrice) => {
-  const token = Object.values(allTokens).find((t) => t.name === tokenName);
-  return await getTokenUsdPrice(token, pools, allTokens, kdaPrice);
+export const getTokenUsdPriceByName = async (tokenName, pools, allTokens, kdaPrice, dexscanPoolsStats) => {
+  const specificPairData = dexscanPoolsStats.filter(
+    (d) => (d.token0.name === tokenName && d.token1.name === 'KDA') || (d.token0.name === 'KDA' && d.token1.name === tokenName)
+  );
+  if (specificPairData[0] && tokenName !== 'KDA') {
+    return specificPairData[0].price;
+  } else {
+    const token = Object.values(allTokens).find((t) => t.name === tokenName);
+    return await getTokenUsdPrice(token, pools, allTokens, kdaPrice);
+  }
 };
 
 // retrieve token usd price based on the first pair that contains the token with a known price

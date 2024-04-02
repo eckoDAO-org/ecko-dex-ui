@@ -13,7 +13,6 @@ import { getAllPairsData } from '../../utils/token-utils';
 import { useApplicationContext, usePactContext } from '../../contexts';
 import { commonColors, theme } from '../../styles/theme';
 import styled from 'styled-components';
-import { getAnalyticsTokenStatsData } from '../../api/kaddex-analytics';
 import useWindowSize from '../../hooks/useWindowSize';
 import DecimalFormatted from '../shared/DecimalFormatted';
 
@@ -32,19 +31,27 @@ const LiquidityTokensTable = ({ verifiedActive }) => {
     const pairsList = await getPairList(allPairs);
     if (pairsList?.length) {
       const pairsData = await getAllPairsData(tokensUsdPrice, allTokens, allPairs, pairsList);
-      const tokensStatsData = await getAnalyticsTokenStatsData();
       const tokens = Object.values(allTokens);
       const result = [];
       // calculate sum of liquidity in usd and volumes in usd for each token in each pair
       for (const token of tokens) {
+        const volume24UsdSum = pairsData
+          .filter((t) => t.token0 === token.name || t.token1 === token.name)
+          .reduce((total, v) => total + v.volume24HUsd, 0);
+
         const tokenPairs = pairsList.filter((p) => p.token0 === token.name || p.token1 === token.name);
         const tokenUsdPrice = tokensUsdPrice?.[token.name] ? tokensUsdPrice?.[token.name] : 0;
+
+        const liquidityUSD = pairsData
+          .filter((t) => t.token0 === token.name || t.token1 === token.name)
+          .reduce((total, v) => total + (v.token0 === token.name ? v.liquidity0 : v.liquidity1), 0);
+
         let liquidity = 0;
         for (const tokenPair of tokenPairs) {
           liquidity += token.name === tokenPair.token0 ? reduceBalance(tokenPair.reserves[0]) : reduceBalance(tokenPair.reserves[1]);
         }
-        const liquidityUSD = tokenUsdPrice ? liquidity * tokenUsdPrice : null;
-        const volume24H = tokensStatsData?.[token.code]?.volume24h;
+
+        const volume24H = volume24UsdSum / 2;
         let tokenInfo = pairsData
           .filter((d) => d.token0 === token.name || d.token1 === token.name)
           .sort((x, y) => y.apr * y.multiplier - x.apr * x.multiplier);
@@ -53,7 +60,7 @@ const LiquidityTokensTable = ({ verifiedActive }) => {
 
         result.push({
           ...token,
-          volume24HUsd: volume24H * tokensUsdPrice?.[token.name],
+          volume24HUsd: volume24H,
           volume24H,
           apr,
           liquidityUSD,
