@@ -21,7 +21,7 @@ import { Helmet } from 'react-helmet';
 import { VerifiedBoldLogo } from '../assets';
 import CustomButton from '../components/shared/CustomButton';
 import styled from 'styled-components';
-import StatsTable from '../components/analytics/StatsTable';
+import Pools from '../components/analytics/Pools';
 
 export const FIXED_SUPPLY = 200577508;
 export const FIXED_BURNT = 99422492;
@@ -151,7 +151,7 @@ const AnalyticsContainer = () => {
           {/* KDX */}
           {pathname === ROUTE_ANALYTICS_KDX && <Kdx analyticsData={analyticsData} KDX_TOTAL_SUPPLY={KDX_TOTAL_SUPPLY} kdaPrice={kdaUsdPrice} />}
           {/* DEX */}
-          {pathname === ROUTE_ANALYTICS_STATS && <StatsTable verifiedActive={verifiedActive} />}
+          {pathname === ROUTE_ANALYTICS_STATS && <Pools verifiedActive={verifiedActive} />}
         </FlexContainer>
       </>
     )
