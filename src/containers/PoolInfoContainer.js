@@ -28,6 +28,7 @@ import { shortenAddress } from '../utils/string-utils';
 import moment from 'moment';
 import { ROUTE_ANALYTICS_STATS, ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_SWAP } from '../router/routes';
 import Banner from '../components/layout/header/Banner';
+import DecimalFormatted from '../components/shared/DecimalFormatted';
 
 const formatPrice = (price, precision = 3) => {
   return `$ ${humanReadableNumber(price, 3) !== '0.000' ? humanReadableNumber(price, 3) : price.toFixed(precision)}`;
@@ -134,23 +135,23 @@ const PoolInfoContainer = () => {
             getAnalyticsDexscanPoolDetails(pool),
             getAnalyticsDexscanPoolTransactions(pool),
           ]);
-          
+
           const pairInfo = pact.allPairs[`${dexscanPoolDetails.token1.address}:${dexscanPoolDetails.token0.address}`];
           const token0Info = pact.allTokens[dexscanPoolDetails.token0.name];
           const token1Info = pact.allTokens[dexscanPoolDetails.token1.name];
-  
+
           const data = {
             token0Info,
             token1Info,
             ...pairInfo,
             ...dexscanPoolDetails,
           };
-  
+
           const formattedTransactions = formatTransactions(dexscanPoolTransactions);
-  
+
           setFirstTxnTime(formattedTransactions[0].timestampInSeconds);
           setLastTxnTime(formattedTransactions[formattedTransactions.length - 1].timestampInSeconds);
-  
+
           setPoolDetails(data);
           setTransactions(formattedTransactions);
           setLoading(false);
@@ -195,10 +196,13 @@ const PoolInfoContainer = () => {
 
   if (hasErrors) {
     return (
-      <div className='flex h-100 align-ce justify-ce'>
+      <div className="flex h-100 align-ce justify-ce">
         <Banner
           position="center"
-          text={`Temporarily Unavailable: The ${pool.replace(':', '/')} pool analytics page is currently down for maintenance. We're working to restore it promptly.`}
+          text={`Temporarily Unavailable: The ${pool.replace(
+            ':',
+            '/'
+          )} pool analytics page is currently down for maintenance. We're working to restore it promptly.`}
         />
       </div>
     );
@@ -454,7 +458,7 @@ const renderColumns = (history, poolDetails) => {
       render: ({ item }) => (
         <FlexContainer className="align-ce">
           <Label color={getColor(item)} labelStyle={{ whiteSpace: 'nowrap' }}>
-            {formatPrice(item.price, poolDetails.precision)}
+            <DecimalFormatted value={item.price} />
           </Label>
         </FlexContainer>
       ),
