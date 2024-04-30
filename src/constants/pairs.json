@@ -211,6 +211,15 @@
         "isBoosted": false,
         "color": "#d966ff",
         "isVerified": true
+      },
+      "coin:free.crankk01": {
+        "name": "coin:free.crankk01",
+        "token0": "KDA",
+        "token1": "CRKK",
+        "main": false,
+        "isBoosted": true,
+        "color": "#6eba1c",
+        "isVerified": true
       }
     }
   }
