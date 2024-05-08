@@ -5,7 +5,7 @@ import { getFloatPrecision } from '../utils/string-utils';
 import { CHAIN_ID, GAS_PRICE, GAS_LIMIT, NETWORKID, ENABLE_GAS_STATION, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { handleError } from './utils';
 import { reduceBalance } from '../utils/reduceBalance';
-import tokenData from '../constants/cryptoCurrencies';
+import {tokenData} from '../constants/cryptoCurrencies';
 
 export const getPoolState = async () => {
   try {
