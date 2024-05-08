@@ -14,6 +14,7 @@ import { getPairs, getTokenNameFromAddress } from '../api/pairs';
 import { UnknownLogo } from '../assets';
 import { reduceBalance } from '../utils/reduceBalance';
 import { getAnalyticsKdaUsdPrice, getCoingeckoUsdPrice } from '../api/coingecko';
+import { getAnalyticsDexscanPoolsData } from '../api/kaddex-analytics';
 
 export const PactContext = createContext();
 
@@ -150,9 +151,10 @@ export const PactProvider = (props) => {
   const updateTokenUsdPrice = async (kdaPrice) => {
     const pairList = await getPairList(allPairs);
     const result = {};
+    const dexscanPoolsStats = await getAnalyticsDexscanPoolsData();
     if (allTokens) {
       for (const token of Object.values(allTokens)) {
-        await getTokenUsdPriceByName(token.name, pairList, allTokens, kdaPrice).then((price) => {
+        await getTokenUsdPriceByName(token.name, pairList, allTokens, kdaPrice, dexscanPoolsStats).then((price) => {
           result[token.name] = price;
         });
       }

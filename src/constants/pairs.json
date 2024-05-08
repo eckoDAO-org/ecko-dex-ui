@@ -202,6 +202,24 @@
         "isBoosted": false,
         "color": "#3333ff",
         "isVerified": true
+      },
+      "coin:free.finux": {
+        "name": "coin:free.finux",
+        "token0": "KDA",
+        "token1": "FINUX",
+        "main": false,
+        "isBoosted": false,
+        "color": "#d966ff",
+        "isVerified": true
+      },
+      "coin:free.crankk01": {
+        "name": "coin:free.crankk01",
+        "token0": "KDA",
+        "token1": "CRKK",
+        "main": false,
+        "isBoosted": true,
+        "color": "#6eba1c",
+        "isVerified": true
       }
     }
   }
