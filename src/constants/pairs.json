@@ -220,6 +220,15 @@
         "isBoosted": true,
         "color": "#6eba1c",
         "isVerified": true
+      },
+      "coin:n_582fed11af00dc626812cd7890bb88e72067f28c.bro": {
+        "name": "coin:n_582fed11af00dc626812cd7890bb88e72067f28c.bro",
+        "token0": "KDA",
+        "token1": "BRO",
+        "main": false,
+        "isBoosted": false,
+        "color": "#c9661a",
+        "isVerified": true
       }
     }
   }
