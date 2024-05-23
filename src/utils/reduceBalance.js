@@ -1,4 +1,5 @@
 import noExponents from './noExponents';
+import reduceToken from './reduceToken';
 
 export const reduceBalance = (balance, prec = 6) => {
   if (balance) {
@@ -44,6 +45,21 @@ export const limitDecimalPlaces = (numStr, count) => {
     return numStr;
   } else {
     return numStr;
+  }
+};
+
+export const getShorterNameSpace = (str) => {
+  if (str.indexOf('.') === -1) {
+    return str;
+  } else {
+    const beforeDotStr = str.slice(0, str.indexOf('.'));
+    const afterDotStr = str.slice(str.indexOf('.'), str.length);
+    if (beforeDotStr.length > 10) {
+      const reducedString = reduceToken(beforeDotStr);
+      return reducedString.concat(afterDotStr);
+    } else {
+      return str;
+    }
   }
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { extractDecimal, reduceBalance } from '../../utils/reduceBalance';
+import { extractDecimal, getShorterNameSpace, reduceBalance } from '../../utils/reduceBalance';
 import { CryptoContainer, FlexContainer } from './FlexContainer';
 import { usePactContext } from '../../contexts';
 import Label from './Label';
@@ -29,7 +29,7 @@ const RowTokenInfoPrice = ({ tokenIcon, tokenName, amount, tokenPrice }) => {
           ) : (
             <Label labelStyle={{ fontSize: 12 }}></Label>
           )}
-          <Label labelStyle={{ opacity: 0.6, fontSize: 12 }}>{allTokens[tokenName].code}</Label>
+          <Label labelStyle={{ opacity: 0.6, fontSize: 12 }}>{getShorterNameSpace(allTokens[tokenName].code)}</Label>
         </FlexContainer>
       </FlexContainer>
     </FlexContainer>
