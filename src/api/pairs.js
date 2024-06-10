@@ -2,7 +2,7 @@ import Pact from 'pact-lang-api';
 import { CHAIN_ID, NETWORKID, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { pactFetchLocal } from './pact';
 import { handleError } from './utils';
-import tokenData from '../constants/cryptoCurrencies';
+import {tokenData} from '../constants/cryptoCurrencies';
 
 export const createPairCommand = async (token0, token1, hint, gasStation, gasLimit, gasPrice, account) => {
   const pactCode = `(${KADDEX_NAMESPACE}.exchange.create-pair ${token0} ${token1} "")`;
