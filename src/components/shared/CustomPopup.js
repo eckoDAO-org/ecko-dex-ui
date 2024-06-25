@@ -3,13 +3,13 @@ import { Popup as SUIPopup } from 'semantic-ui-react';
 import styled, { css } from 'styled-components/macro';
 import { useApplicationContext } from '../../contexts';
 import browserDetection from '../../utils/browserDetection';
-import GradientContainer from './GradientContainer';
+import PopupLayout from './PopupLayout';
 
 const Popup = styled(SUIPopup)`
   max-width: ${browserDetection() === 'SAFARI' && 'unset !important'};
 `;
 
-const PopupContainer = styled(({ hideGradient, ...rest }) => <GradientContainer hideGradient={hideGradient} {...rest} />)`
+const PopupContainer = styled(({ ...rest }) => <PopupLayout {...rest} />)`
   display: flex;
   align-items: center;
   flex-direction: column;

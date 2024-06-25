@@ -90,7 +90,7 @@ const ConnectWalletModal = () => {
   return (
     <Container className="column" gap={16} style={{ marginTop: !account.account && 24 }}>
       <CustomButton
-        type="gradient"
+        type="secondary"
         onClick={() => {
           openWalletModal(WALLET.ECKOWALLET.name);
         }}

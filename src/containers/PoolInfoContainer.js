@@ -331,7 +331,7 @@ const PoolInfoContainer = () => {
       <CustomButton
         fontSize={13}
         buttonStyle={{ height: 33, width: 200 }}
-        type="gradient"
+        type="secondary"
         fontFamily="syncopate"
         onClick={() => history.push(ROUTE_SWAP.concat(`?token0=${poolDetails.token1.name}&token1=${poolDetails.token0.name}`), { from: pathname })}
       >
@@ -340,7 +340,7 @@ const PoolInfoContainer = () => {
       <CustomButton
         fontSize={13}
         buttonStyle={{ height: 33, width: 200 }}
-        type="gradient"
+        type="secondary"
         fontFamily="syncopate"
         onClick={() =>
           history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${poolDetails.token0.name}&token1=${poolDetails.token1.name}`), {

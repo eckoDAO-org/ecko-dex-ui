@@ -7,17 +7,9 @@
       <feComposite operator="in" in2="blur"/>
       <feComposite in="SourceGraphic"/>
     </filter>
-    <linearGradient id="linear-gradient" x1="-0.044" y1="0.5" x2="1.021" y2="0.5" gradientUnits="objectBoundingBox">
-      <stop offset="0" stop-color="#ffd21e"/>
-      <stop offset="1" stop-color="orange"/>
-    </linearGradient>
-    <linearGradient id="linear-gradient-2" x1="0.247" y1="-0.049" x2="0.724" y2="0.986" gradientUnits="objectBoundingBox">
-      <stop offset="0" stop-color="#0faffa"/>
-      <stop offset="1" stop-color="aqua"/>
-    </linearGradient>
-    <linearGradient id="linear-gradient-3" x1="0.886" y1="-0.049" x2="-1.038" y2="2.689" gradientUnits="objectBoundingBox">
-      <stop offset="0" stop-color="#ff00a7"/>
-      <stop offset="0.966" stop-color="#686bf0"/>
+    <linearGradient id="linear-gradient" x1="-0.028" y1="-0.028" x2="0.859" y2="0.859" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ffd300"/>
+      <stop offset="1" stop-color="#ff00b8"/>
     </linearGradient>
   </defs>
   <g id="Group_70369" data-name="Group 70369" transform="translate(7045 -3534)">
@@ -25,15 +17,6 @@
     <g transform="matrix(1, 0, 0, 1, -7045, 3534)" filter="url(#Ellipse_5894)">
       <circle id="Ellipse_5894-2" data-name="Ellipse 5894" cx="16.5" cy="16.5" r="16.5" transform="translate(13.5 95.55) rotate(-90)" fill="#fff" stroke="rgba(0,0,0,0)" stroke-width="1"/>
     </g>
-    <g id="Coin" transform="translate(-12640.811 3646.23)">
-      <rect id="Rectangle_12998" data-name="Rectangle 12998" width="31.62" height="31.64" rx="15.81" transform="translate(5609.811 -49.23)" fill="#fff"/>
-      <g id="Group_82611" data-name="Group 82611" transform="translate(5449.781 -137.015)">
-        <g id="Group_77302" data-name="Group 77302" transform="translate(164.029 92.785)">
-          <path id="Path_73367" data-name="Path 73367" d="M1684.74-1370.437v-3.725h8.4l1.856,3.725Z" transform="translate(-1675.226 1390.217)" fill="url(#linear-gradient)"/>
-          <path id="Path_73368" data-name="Path 73368" d="M1691.016-1466.627h-4.152l9.781,19.78h4.164Z" transform="translate(-1676.981 1466.627)" fill="url(#linear-gradient-2)"/>
-          <path id="Path_73369" data-name="Path 73369" d="M1643.98-1466.627l-2.084,4.174-7.79,15.606h-4.161l9.874-19.78Z" transform="translate(-1629.946 1466.627)" fill="url(#linear-gradient-3)"/>
-        </g>
-      </g>
-    </g>
+    <path id="Path_143847" data-name="Path 143847" d="M-1515.583,6460.3l-.933-.934-2.059-2.06,2.059-2.06.933-.934.933.934,2.059,2.06-2.059,2.06Zm0,2.886v6.156l-8.959-8.959,3.079-3.078Zm-8.959-8.957v6.154l3.079-3.078,5.881-5.88v-6.156Z" transform="translate(-5496.426 -2844.5)" fill="url(#linear-gradient)"/>
   </g>
 </svg>

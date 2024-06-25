@@ -489,7 +489,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
             <FlexContainer className="justify-ce w-100" style={{ marginTop: 16 }}>
               <CustomButton
                 fluid
-                type="gradient"
+                type="secondary"
                 disabled={!buttonStatus().status}
                 onClick={() => {
                   if (!account.account.account) {

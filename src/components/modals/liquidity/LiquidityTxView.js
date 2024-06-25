@@ -4,7 +4,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Checkbox } from 'semantic-ui-react';
 import styled from 'styled-components/macro';
-import { ArrowIcon, KaddexOutlineIcon } from '../../../assets';
+import { ArrowIcon, EckoOutlineIcon } from '../../../assets';
 import { CHAIN_ID } from '../../../constants/contextConstants';
 import { useAccountContext, useGameEditionContext, useLiquidityContext, usePactContext, useSwapContext } from '../../../contexts';
 import { extractDecimal, getDecimalPlaces, reduceBalance } from '../../../utils/reduceBalance';
@@ -414,7 +414,7 @@ export const SuccessRemoveWithBoosterView = ({ token0, token1, loading, onClick 
       loading={loading}
       onClick={onClick}
       hideSubtitle
-      icon={<KaddexOutlineIcon />}
+      icon={<EckoOutlineIcon />}
       footer={
         <CheckboxContainer checked={checked}>
           <Label fontFamily="syncopate" fontSize={16}>

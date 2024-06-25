@@ -159,7 +159,7 @@ const AccountModal = ({ pathname }) => {
           </CustomButton>
 
           <CustomButton
-            type="gradient"
+            type="secondary"
             onClick={() => {
               if (isWalletConnectConnected) {
                 deleteWalletConnectSession();

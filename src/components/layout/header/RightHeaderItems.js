@@ -11,7 +11,7 @@ import PopupContentList from './PopupContentList';
 import reduceToken from '../../../utils/reduceToken';
 import AccountModal from '../../modals/kdaModals/AccountModal';
 import theme, { commonTheme } from '../../../styles/theme';
-import { ChainIcon, CoinKaddexIcon, ThreeDotsIcon } from '../../../assets';
+import { ChainIcon, CoinEckoIcon, ThreeDotsIcon } from '../../../assets';
 import { humanReadableNumber, reduceBalance } from '../../../utils/reduceBalance';
 import Label from '../../shared/Label';
 import {
@@ -74,7 +74,7 @@ const RightHeaderItems = () => {
       {width < theme.mediaQueries.desktopPixel + 100 && (
         <div className="flex column align-fe">
           <div className="flex align-ce justify-fe">
-            <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 8, width: 14, height: 14 }} />
+            <CoinEckoIcon className="kaddex-price" style={{ marginRight: 8, width: 14, height: 14 }} />
             <Label outGameEditionView fontSize={12} labelStyle={{ whiteSpace: 'nowrap' }}>
               $ {tokensUsdPrice?.KDX ? humanReadableNumber(tokensUsdPrice?.KDX, 3) : '-'}
             </Label>
@@ -90,7 +90,7 @@ const RightHeaderItems = () => {
       {width >= theme.mediaQueries.desktopPixel + 100 && (
         <>
           <div className="flex align-ce">
-            <CoinKaddexIcon className="kaddex-price" style={{ marginRight: 8 }} />
+            <CoinEckoIcon className="kaddex-price" style={{ marginRight: 8 }} />
             <Label outGameEditionView fontSize={14} className="mainnet-chain-2" labelStyle={{ whiteSpace: 'nowrap' }}>
               $ {tokensUsdPrice?.KDX ? humanReadableNumber(tokensUsdPrice?.KDX, 3) : '-'}
             </Label>

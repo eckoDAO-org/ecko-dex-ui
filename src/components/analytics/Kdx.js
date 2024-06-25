@@ -130,10 +130,10 @@ const Kdx = ({ KDX_TOTAL_SUPPLY, kdaPrice, analyticsData }) => {
       <VestingPieChart
         kdxSupplyPercentage={(analyticsData?.circulatingSupply?.totalSupply / KDX_TOTAL_SUPPLY) * 100}
         kdxBurntPercentage={((analyticsData?.burn?.stakingBurn + analyticsData?.burn?.tokenBurn) / KDX_TOTAL_SUPPLY) * 100}
-        kdxLiquidityMiningPercentage={((KDX_MINING_REWARDS_CAP - analyticsData?.liquidityMining) / KDX_TOTAL_SUPPLY) * 100}
+        kdxLiquidityMiningPercentage={(analyticsData?.liquidityMining / KDX_TOTAL_SUPPLY) * 100}
         kdxCommunitySalePercentage={20.2}
         kdxTeamPercentage={0}
-        kdxDaoTreasuryPercentage={((KDX_DAO_TREASURY_CAP - analyticsData?.daoTreasury?.amount) / KDX_TOTAL_SUPPLY) * 100}
+        kdxDaoTreasuryPercentage={(analyticsData?.daoTreasury?.amount / KDX_TOTAL_SUPPLY) * 100}
       />
     </FlexContainer>
   );

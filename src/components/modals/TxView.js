@@ -224,7 +224,7 @@ export const SuccesViewContainer = ({ swap, onClick, children, icon, hideSubtitl
       </FlexContainer>
       {footer}
       <CustomButton
-        type={disableButton ? 'primary' : 'gradient'}
+        type={disableButton ? 'primary' : 'secondary'}
         disabled={disableButton}
         buttonStyle={{
           width: '100%',

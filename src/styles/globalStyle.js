@@ -210,6 +210,13 @@ export default createGlobalStyle`
       height: 100%;
     }
 
+    .w-50 {
+      width: 50%;
+    }
+    .h-50 {
+      height: 50%;
+    }
+
     .flex-1 {
       flex: 1;
     }

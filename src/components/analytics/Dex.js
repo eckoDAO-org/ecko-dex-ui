@@ -33,7 +33,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
   const stakedKdx = extractDecimal((poolState && poolState['staked-kdx']) || 0);
 
   useEffect(() => {
-    if(allPairs){
+    if (allPairs) {
       getPairList(allPairs).then((pL) => {
         setLocalPairList(pL);
       });
@@ -193,7 +193,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
                     width: 32,
                     height: 16,
                     borderRadius: 4,
-                    background: 'linear-gradient(to right, #5dcbe5, #e37480, #f6cc7d)',
+                    background: 'linear-gradient(to right, #FFD300, #FF00B8)',
                     marginRight: 8,
                   }}
                 ></div>

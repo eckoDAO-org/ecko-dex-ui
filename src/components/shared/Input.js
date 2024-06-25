@@ -44,7 +44,7 @@ const Container = styled.div`
       `;
     } else {
       return css`
-        border: 1px solid ${colors.white}99;
+        border: 1px solid ${colors.white}66;
         padding: 10px 10px 0px 10px;
         border-radius: 4px;
         .ui.input > input {

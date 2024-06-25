@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import { getKdxRewardsAvailable, getPairMultiplier } from '../../api/liquidity-rewards';
-import { BoosterIcon, CoinKaddexIcon, CoinsIcon, KaddexOutlineIcon } from '../../assets';
+import { BoosterIcon, CoinEckoIcon, CoinsIcon, EckoOutlineIcon } from '../../assets';
 import { KDX_TOTAL_SUPPLY } from '../../constants/contextConstants';
 import { LIQUIDITY_VIEW } from '../../constants/liquidityView';
 import { useLiquidityContext, usePactContext } from '../../contexts';
@@ -76,9 +76,9 @@ const RewardBooster = ({ type, apr, handleState, previewObject, pair, isBoosted 
               disabled={!isBoosted}
             />
             {wantsKdxRewards ? (
-              <CoinKaddexIcon width={24} height={24} />
+              <CoinEckoIcon width={24} height={24} />
             ) : (
-              <KaddexOutlineIcon
+              <EckoOutlineIcon
                 className="svg-app-color"
                 style={{ border: `1px solid ${theme.colors.white}`, borderRadius: '100%' }}
                 width={24}

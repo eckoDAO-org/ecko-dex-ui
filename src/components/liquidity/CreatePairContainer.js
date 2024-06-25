@@ -265,7 +265,7 @@ const CreatePairContainer = () => {
             disabled={getButtonStatus().disabled}
             buttonStyle={{ maxWidth: '444px' }}
             fluid
-            type="gradient"
+            type={getButtonStatus().disabled ? 'primary' : 'secondary'}
             onClick={async () => {
               await onCreatePair();
             }}

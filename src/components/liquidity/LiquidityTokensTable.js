@@ -15,6 +15,7 @@ import { commonColors, theme } from '../../styles/theme';
 import styled from 'styled-components';
 import useWindowSize from '../../hooks/useWindowSize';
 import DecimalFormatted from '../shared/DecimalFormatted';
+import Search from '../shared/Search';
 
 const LiquidityTokensTable = ({ verifiedActive }) => {
   const history = useHistory();
@@ -22,6 +23,7 @@ const LiquidityTokensTable = ({ verifiedActive }) => {
   const [loading, setLoading] = useState(true);
   const [allTokensList, setAllTokensList] = useState([]);
   const [verifiedTokensList, setVerifiedTokensList] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
 
   const { tokensUsdPrice, enableGasStation, allTokens, allPairs } = usePactContext();
 
@@ -82,42 +84,47 @@ const LiquidityTokensTable = ({ verifiedActive }) => {
     }
   }, [tokensUsdPrice]);
 
+  const tokenList = Object.values(verifiedActive ? verifiedTokensList : allTokensList).filter((c) => {
+    const code = c.code !== 'coin' ? c.code.split('.')[1] : c.code;
+    return code.toLocaleLowerCase().includes(searchValue?.toLocaleLowerCase()) || c.name.toLowerCase().includes(searchValue?.toLowerCase());
+  });
+
   return !loading ? (
-    <CommonTable
-      items={verifiedActive ? verifiedTokensList : allTokensList}
-      columns={
-        enableGasStation ? renderColumns(history, allTokens, width) : renderColumns(history, allTokens, width).filter((x) => x.name !== 'Fees')
-      }
-      actions={[
-        {
-          icon: () => <AddIcon />,
-          onClick: (item) => {
-            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${item.name}&token1=KDA`), {
-              from: ROUTE_LIQUIDITY_TOKENS,
-            });
+    <>
+      <CommonTable
+        items={tokenList}
+        columns={renderColumns(history, allTokens, width, searchValue, setSearchValue)}
+        actions={[
+          {
+            icon: () => <AddIcon />,
+            onClick: (item) => {
+              history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${item.name}&token1=KDA`), {
+                from: ROUTE_LIQUIDITY_TOKENS,
+              });
+            },
           },
-        },
-        {
-          icon: () => (
-            <FlexContainer
-              className="align-ce"
-              style={{
-                background: theme(themeMode).colors.white,
-                padding: '8px 4px',
-                borderRadius: 100,
-                width: 24,
-                height: 24,
-              }}
-            >
-              <TradeUpIcon className="svg-app-inverted-color" />
-            </FlexContainer>
-          ),
-          onClick: (item) => {
-            history.push(ROUTE_TOKEN_INFO.replace(':token', item.name));
+          {
+            icon: () => (
+              <FlexContainer
+                className="align-ce"
+                style={{
+                  background: theme(themeMode).colors.white,
+                  padding: '8px 4px',
+                  borderRadius: 100,
+                  width: 24,
+                  height: 24,
+                }}
+              >
+                <TradeUpIcon className="svg-app-inverted-color" />
+              </FlexContainer>
+            ),
+            onClick: (item) => {
+              history.push(ROUTE_TOKEN_INFO.replace(':token', item.name));
+            },
           },
-        },
-      ]}
-    />
+        ]}
+      />
+    </>
   ) : (
     <AppLoader className="h-100 w-100 align-ce justify-ce" />
   );
@@ -133,10 +140,24 @@ const ScalableCryptoContainer = styled(FlexContainer)`
   }
 `;
 
-const renderColumns = (history, allTokens, width) => {
+const renderColumns = (history, allTokens, width, searchValue, setSearchValue) => {
   return [
     {
-      name: '',
+      name: (
+        <Search
+          containerStyle={{
+            marginBottom: '-10px',
+            marginTop: '-8px',
+            border: 'none',
+            width: '100px',
+          }}
+          iconFirst
+          fluid
+          placeholder="Search"
+          value={searchValue}
+          onChange={(e, { value }) => setSearchValue(value)}
+        />
+      ),
       width: width <= theme().mediaQueries.mobilePixel ? 90 : 100,
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
@@ -180,22 +201,13 @@ const renderColumns = (history, allTokens, width) => {
       render: ({ item }) => {
         if (item.volume24HUsd) {
           return `$ ${humanReadableNumber(item.volume24HUsd)}`;
+        } else {
+          if (item.volume24H > 0) {
+            return humanReadableNumber(item.volume24H);
+          }
         }
-        return humanReadableNumber(item.volume24H);
+        return '$ 0.00';
       },
-    },
-
-    {
-      name: 'Fees',
-      width: width <= theme().mediaQueries.mobilePixel ? 90 : 100,
-      render: () => (
-        <FlexContainer className="align-ce">
-          <GasIcon />
-          <Label fontSize={13} color="#41CC41" labelStyle={{ marginLeft: 12 }}>
-            Gasless
-          </Label>
-        </FlexContainer>
-      ),
     },
 
     {

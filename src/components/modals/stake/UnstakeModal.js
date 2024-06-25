@@ -137,7 +137,7 @@ export const UnstakeModal = ({ onConfirm, isRewardsAvailable, estimateUnstakeDat
           )}
         </div>
       )}
-      <CustomButton type="gradient" buttonStyle={{ marginTop: 32 }} onClick={() => onConfirm(checked)}>
+      <CustomButton type="secondary" buttonStyle={{ marginTop: 32 }} onClick={() => onConfirm(checked)}>
         CONFIRM
       </CustomButton>
     </div>
