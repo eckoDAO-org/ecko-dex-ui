@@ -91,7 +91,7 @@ const ConnectWalletWalletConnectModal = ({ onConnectionSuccess }) => {
             <Label className="flex column" fontSize={13} geFontSize={20} geColor="yellow" geLabelStyle={{ textAlign: 'center' }}>
               <span>
                 Please carefully read the information on our{' '}
-                <a href={`https://docs.ecko.finance/eckodex/getting-started/eckowallet/walletconnect`} target="_blank" rel="noopener noreferrer">
+                <a href={`https://docs.ecko.finance/eckodao/getting-started/eckowallet/walletconnect`} target="_blank" rel="noopener noreferrer">
                   documentation
                 </a>{' '}
                 when connecting your iOS or Android mobile device to the eckoDEX, either using a Connection Code, or a QR Code.
