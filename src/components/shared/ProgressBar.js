@@ -15,7 +15,7 @@ const STYMaxSupplyContainer = styled.div`
 const STYMaxSupply = styled.div`
   height: 8px;
   background: ${({ darkBar, activeBackground }) =>
-    darkBar ? 'linear-gradient(to right, #E0E0E0, #5C5C5C99, #E0E0E0)' : activeBackground || 'linear-gradient(to right, #5dcbe5, #e37480, #f6cc7d)'};
+    darkBar ? 'linear-gradient(to right, #E0E0E0, #5C5C5C99, #E0E0E0)' : activeBackground || 'linear-gradient(to right,#FFD300, #FF00B8)'};
   border-radius: 10px;
   width: ${({ width }) => width}%;
 `;

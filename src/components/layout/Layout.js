@@ -6,10 +6,8 @@ import useWindowSize from '../../hooks/useWindowSize';
 import { useAccountContext, useApplicationContext, useGameEditionContext, usePactContext } from '../../contexts';
 import DesktopHeader from './header/DesktopHeader';
 import MobileHeader from './header/MobileHeader';
-import { ReactComponent as Stripes } from '../../assets/images/shared/stripes.svg';
 import GameEditionContainer from '../game-edition-v2/GameEditionContainer';
 import { ROUTE_GAME_EDITION_MENU, ROUTE_GAME_START_ANIMATION, ROUTE_INDEX, ROUTE_STATS } from '../../router/routes';
-import browserDetection from '../../utils/browserDetection';
 import gameEditionBackground from '../../assets/images/game-edition/game-edition-background.png';
 import TabletHeader from './header/TabletHeader';
 import { FlexContainer } from '../shared/FlexContainer';
@@ -47,17 +45,6 @@ const CenterBackground = styled.img`
     to {
       opacity: 1;
     }
-  }
-`;
-
-const StripesContainer = styled.div`
-  position: absolute;
-  bottom: ${browserDetection() === 'SAFARI' ? '4px' : '0px'};
-  left: 0;
-  line-height: 0;
-  z-index: -1;
-  @media (max-width: ${({ theme: { mediaQueries } }) => `${mediaQueries.desktopPixel - 1}px`}) {
-    display: none;
   }
 `;
 
@@ -102,9 +89,6 @@ const Layout = ({ children }) => {
           <AppLoader containerStyle={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} />
         )}
       </WrapperContainer>
-      <StripesContainer>
-        <Stripes style={{ width: '45%', height: '45%' }} />
-      </StripesContainer>
       {!gameEditionView && pathname === ROUTE_INDEX && <FooterPolicy />}
     </FlexContainer>
   );

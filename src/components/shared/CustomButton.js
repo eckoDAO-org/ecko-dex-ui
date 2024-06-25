@@ -41,11 +41,16 @@ const StyledButton = styled(FlexContainer)`
             border: 1px solid ${color || `${colors.white}${disabled || borderOpacity ? '99' : ''}`};
             background: transparent;
           `;
+        case 'primary-light':
+          return css`
+            height: 42px;
+            border: 1px solid ${color || `${colors.white}${disabled || borderOpacity ? '66' : ''}`};
+            background: transparent;
+          `;
         case 'secondary':
           return css`
             height: 42px;
-            border: 1px solid ${color || `${colors.white}${disabled || borderOpacity ? '99' : ''}`};
-            background: ${color || colors.white};
+            background: ${color || `${colors.white}${disabled ? '66' : ''}`};
           `;
         case 'basic':
           return css`

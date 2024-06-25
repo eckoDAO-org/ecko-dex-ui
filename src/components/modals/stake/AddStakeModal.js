@@ -56,7 +56,7 @@ export const AddStakeModal = ({ onConfirm, alreadyStakedAmount, toStakeAmount })
           tokenPrice={pact.tokensUsdPrice?.KDX}
         />
       </StakeModalRow>
-      <CustomButton type="gradient" buttonStyle={{ marginTop: 32 }} onClick={onConfirm}>
+      <CustomButton type="secondary" buttonStyle={{ marginTop: 32 }} onClick={onConfirm}>
         CONFIRM
       </CustomButton>
     </div>

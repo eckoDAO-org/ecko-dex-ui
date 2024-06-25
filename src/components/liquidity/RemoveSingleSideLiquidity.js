@@ -220,7 +220,7 @@ const RemoveSingleSideLiquidity = ({ pair, previewObject, setPreviewAmount, prev
             ) : (
               <CustomButton
                 fluid
-                type="gradient"
+                type="secondary"
                 disabled={isNaN(amount) || reduceBalance(amount) === 0}
                 onClick={async () => await onRemoveSingleSideLiquidity()}
               >

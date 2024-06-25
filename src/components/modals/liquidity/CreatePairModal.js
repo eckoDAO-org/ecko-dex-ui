@@ -67,7 +67,7 @@ const CreatePairModal = ({ data, token0Name, token1Name, token0, token1, onConfi
           <Label>{token1}</Label>
         </FlexContainer>
       </FlexContainer>
-      <CustomButton type="gradient" buttonStyle={{ marginTop: 32 }} onClick={onConfirm}>
+      <CustomButton type="secondary" buttonStyle={{ marginTop: 32 }} onClick={onConfirm}>
         CONFIRM
       </CustomButton>
     </div>

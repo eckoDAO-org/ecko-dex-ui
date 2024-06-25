@@ -78,17 +78,13 @@ const STYFlexContainer = styled.div`
     if ((!gameEditionView || outOfGameEdition) && withGradient) {
       return css`
         border-radius: 20px;
-        background: ${({ theme: { backgroundContainer }, className }) => {
-          return `linear-gradient(to right, ${backgroundContainer}, ${backgroundContainer}), ${
-            className?.includes('gradient-button')
-              ? 'linear-gradient(90deg, #10c4df, #f04ca9, #edba31)'
-              : 'linear-gradient(90deg, #ed1cb5, #ffaa00, #39fffc)'
-          }`;
+        background: ${({ theme: { backgroundContainer } }) => {
+          return backgroundContainer;
         }};
 
         background-clip: padding-box, border-box;
         background-origin: padding-box, border-box;
-        border: 1px solid transparent;
+        border: ${({ theme: { colors } }) => `1px solid ${colors.white}66`};
         position: relative;
         border-radius: 10px;
         backdrop-filter: blur(50px);

@@ -246,7 +246,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
       <FlexContainer className="column background-fill" gap={16} withGradient style={{ padding: 24 }}>
         <Label fontSize={13}>Pool</Label>
         <CustomButton
-          type="primary"
+          type="primary-light"
           borderOpacity
           buttonStyle={{ borderRadius: 4, height: 40, marginBottom: 8 }}
           onClick={() => {
@@ -341,7 +341,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
 
         <CustomButton
           fluid
-          type="gradient"
+          type="secondary"
           disabled={!buttonStatus().status}
           onClick={() => {
             if (!account.account.account) {

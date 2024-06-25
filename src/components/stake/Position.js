@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { CoinKaddexIcon } from '../../assets';
+import { CoinEckoIcon } from '../../assets';
 import { STAKING_CONSTANTS } from '../../constants/stakingConstants';
 import { useAccountContext, useApplicationContext, useModalContext, usePactContext, useRightModalContext } from '../../contexts';
 import { ROUTE_UNSTAKE } from '../../router/routes';
@@ -36,6 +36,30 @@ const Position = ({
   const { account } = useAccountContext();
   const { themeMode } = useApplicationContext();
   const { pathname } = useLocation();
+
+  const getButtonLabel = () => {
+    if (!account.account) {
+      return 'Connect Wallet';
+    } else {
+      if (inputAmount === '' || !(inputAmount > 0)) {
+        return 'enter amount';
+      } else {
+        if (pathname === ROUTE_UNSTAKE) {
+          if (inputAmount > amount) {
+            return 'insufficient kdx amount';
+          } else {
+            return buttonLabel;
+          }
+        } else {
+          if (inputAmount > kdxAccountBalance) {
+            return 'insufficient kdx amount';
+          } else {
+            return buttonLabel;
+          }
+        }
+      }
+    }
+  };
 
   return (
     <CommonWrapper
@@ -101,7 +125,7 @@ const Position = ({
               className="flex"
               style={{ background: `${theme(themeMode).colors.white}33`, borderRadius: '20px', padding: '4px 8px' }}
             >
-              <CoinKaddexIcon />
+              <CoinEckoIcon />
               <Label>KDX</Label>
             </FlexContainer>
           </FlexContainer>
@@ -138,7 +162,8 @@ const Position = ({
           </div>
         )}
       <CustomButton
-        type="gradient"
+        type="secondary"
+        disabled={getButtonLabel() !== buttonLabel}
         buttonStyle={{
           marginTop:
             pathname === ROUTE_UNSTAKE &&
@@ -160,17 +185,7 @@ const Position = ({
           }
         }}
       >
-        {!account.account
-          ? 'Connect Wallet'
-          : inputAmount === '' || !(inputAmount > 0)
-          ? 'enter amount'
-          : pathname === ROUTE_UNSTAKE
-          ? inputAmount > amount
-            ? 'insufficient kdx amount'
-            : buttonLabel
-          : inputAmount > kdxAccountBalance
-          ? 'insufficient kdx amount'
-          : buttonLabel}
+        {getButtonLabel()}
       </CustomButton>
     </CommonWrapper>
   );

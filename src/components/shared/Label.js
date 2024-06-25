@@ -66,6 +66,7 @@ const STYText = styled.span`
     display: block;
     background-image: linear-gradient(90deg, #10c4df 0%, #f04ca9 51%, #edba31 100%);
     color: transparent;
+    /* color: ${({ theme: { colors } }) => colors.primary}; */
     -webkit-background-clip: text;
     background-clip: text;
   }

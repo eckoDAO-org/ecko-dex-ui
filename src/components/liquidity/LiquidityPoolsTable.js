@@ -14,6 +14,7 @@ import { theme, commonColors } from '../../styles/theme';
 import { useApplicationContext, usePactContext } from '../../contexts';
 import useWindowSize from '../../hooks/useWindowSize';
 import styled from 'styled-components';
+import Search from '../shared/Search';
 
 const LiquidityPoolsTable = ({ verifiedActive }) => {
   const history = useHistory();
@@ -22,6 +23,7 @@ const LiquidityPoolsTable = ({ verifiedActive }) => {
   const [verifiedPairList, setVerifiedPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(false);
   const [allPairList, setAllPairList] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
 
   const { themeMode } = useApplicationContext();
 
@@ -40,43 +42,56 @@ const LiquidityPoolsTable = ({ verifiedActive }) => {
     if (tokensUsdPrice) fetchData();
   }, [tokensUsdPrice]);
 
+  const pairList = Object.values(verifiedActive ? verifiedPairList : allPairList).filter((c) => {
+    const firstToken = c.name.split(':')[0];
+    const secondToken = c.name.split(':')[1];
+
+    const codeFirstToken = firstToken !== 'coin' ? firstToken.split('.')[1] : firstToken;
+    const codeSecondToken = secondToken !== 'coin' ? secondToken.split('.')[1] : secondToken;
+
+    return (
+      codeFirstToken.toLocaleLowerCase().includes(searchValue?.toLocaleLowerCase()) ||
+      codeSecondToken.toLocaleLowerCase().includes(searchValue?.toLocaleLowerCase()) ||
+      c.token0.toLowerCase().includes(searchValue?.toLowerCase()) ||
+      c.token1.toLowerCase().includes(searchValue?.toLowerCase())
+    );
+  });
+
   return !loading ? (
-    <CommonTable
-      items={verifiedActive ? verifiedPairList : allPairList}
-      columns={
-        enableGasStation
-          ? renderColumns(history, allTokens, allPairs, width)
-          : renderColumns(allTokens, allPairs, width).filter((x) => x.name !== 'Fees')
-      }
-      actions={[
-        {
-          icon: () => <AddIcon />,
-          onClick: (item) =>
-            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${item.token1}&token1=${item.token0}`), {
-              from: ROUTE_LIQUIDITY_POOLS,
-            }),
-        },
-        {
-          icon: () => (
-            <FlexContainer
-              className="align-ce"
-              style={{
-                background: theme(themeMode).colors.white,
-                padding: '8px 4px',
-                borderRadius: 100,
-                width: 24,
-                height: 24,
-              }}
-            >
-              <TradeUpIcon className="svg-app-inverted-color" />
-            </FlexContainer>
-          ),
-          onClick: (item) => {
-            history.push(ROUTE_POOL_INFO.replace(':pool', `${item.token0}:${item.token1}`), { from: history.location.pathname });
+    <>
+      <CommonTable
+        items={pairList}
+        columns={renderColumns(history, allTokens, allPairs, width, searchValue, setSearchValue)}
+        actions={[
+          {
+            icon: () => <AddIcon />,
+            onClick: (item) =>
+              history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${item.token1}&token1=${item.token0}`), {
+                from: ROUTE_LIQUIDITY_POOLS,
+              }),
           },
-        },
-      ]}
-    />
+          {
+            icon: () => (
+              <FlexContainer
+                className="align-ce"
+                style={{
+                  background: theme(themeMode).colors.white,
+                  padding: '8px 4px',
+                  borderRadius: 100,
+                  width: 24,
+                  height: 24,
+                }}
+              >
+                <TradeUpIcon className="svg-app-inverted-color" />
+              </FlexContainer>
+            ),
+            onClick: (item) => {
+              history.push(ROUTE_POOL_INFO.replace(':pool', `${item.token0}:${item.token1}`), { from: history.location.pathname });
+            },
+          },
+        ]}
+      />
+    </>
   ) : (
     <AppLoader containerStyle={{ height: '100%', alignItems: 'center', justifyContent: 'center' }} />
   );
@@ -93,11 +108,26 @@ const ScalableCryptoContainer = styled(FlexContainer)`
   }
 `;
 
-const renderColumns = (history, allTokens, allPairs, width) => {
+const renderColumns = (history, allTokens, allPairs, width, searchValue, setSearchValue) => {
   return [
     {
-      name: '',
+      name: (
+        <Search
+          containerStyle={{
+            marginBottom: '-10px',
+            marginTop: '-8px',
+            border: 'none',
+            width: '100px',
+          }}
+          iconFirst
+          fluid
+          placeholder="Search"
+          value={searchValue}
+          onChange={(e, { value }) => setSearchValue(value)}
+        />
+      ),
       width: width <= theme().mediaQueries.mobilePixel ? 80 : 160,
+
       render: ({ item }) => {
         let t0 = null;
         let t1 = null;
@@ -164,18 +194,6 @@ const renderColumns = (history, allTokens, allPairs, width) => {
         }
         return `$ 0.00`;
       },
-    },
-    {
-      name: 'Fees',
-      width: 100,
-      render: () => (
-        <FlexContainer className="align-ce">
-          <GasIcon />
-          <Label fontSize={13} color="#41CC41" labelStyle={{ marginLeft: 12 }}>
-            Gasless
-          </Label>
-        </FlexContainer>
-      ),
     },
     {
       name: 'KDX Multiplier',

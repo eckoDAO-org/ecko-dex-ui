@@ -70,7 +70,7 @@ const ClaimYourKDXRewards = ({ multiplier, amount, onClick, hasObservedPrice, to
           </div>
         </div>
       </div>
-      <CustomButton type="gradient" onClick={onClick}>
+      <CustomButton type="secondary" onClick={onClick}>
         confirm
       </CustomButton>
     </FlexContainer>

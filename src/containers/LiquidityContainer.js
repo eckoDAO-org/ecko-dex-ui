@@ -131,7 +131,7 @@ const LiquidityContainer = () => {
               <CustomButton
                 fontSize={13}
                 buttonStyle={{ height: 33, width: 'min-content', padding: '0px 16px' }}
-                type="gradient"
+                type="primary"
                 fontFamily="syncopate"
                 onClick={() => history.push(ROUTE_LIQUIDITY_CREATE_PAIR)}
               >
@@ -173,13 +173,13 @@ const LiquidityContainer = () => {
             <CustomButton
               fontSize={13}
               buttonStyle={{ height: 33 }}
-              type={pathname === ROUTE_LIQUIDITY_REWARDS ? 'secondary' : 'primary'}
-              color={commonColors.pink}
+              type="basic"
+              /*  color={commonColors.pink} */
               onClick={() => history.push(ROUTE_LIQUIDITY_REWARDS)}
             >
-              <ButtonContent color={pathname === ROUTE_LIQUIDITY_REWARDS ? '#fff' : commonColors.pink}>
+              <ButtonContent active={pathname === ROUTE_LIQUIDITY_REWARDS} color={commonColors.pink}>
                 <BoosterIcon />
-                <Label fontFamily="syncopate" color={pathname === ROUTE_LIQUIDITY_REWARDS ? '#fff' : commonColors.pink} labelStyle={{ marginTop: 1 }}>
+                <Label fontFamily="syncopate" color={commonColors.pink} labelStyle={{ marginTop: 1 }}>
                   REWARDS
                 </Label>
               </ButtonContent>
@@ -187,17 +187,13 @@ const LiquidityContainer = () => {
             <CustomButton
               fontSize={13}
               buttonStyle={{ height: 33 }}
-              type={pathname === ROUTE_LIQUIDITY_MY_LIQUIDITY ? 'secondary' : 'primary'}
+              type="basic"
               fontFamily="syncopate"
               onClick={() => history.push(ROUTE_LIQUIDITY_MY_LIQUIDITY)}
             >
-              <ButtonContent color={commonColors.white}>
-                <LiquidityDollarLogo className={pathname === ROUTE_LIQUIDITY_MY_LIQUIDITY ? 'svg-app-inverted-color' : 'svg-app-color'} />
-                <Label
-                  fontFamily="syncopate"
-                  color={pathname === ROUTE_LIQUIDITY_MY_LIQUIDITY ? theme(themeMode).colors.primary : theme(themeMode).colors.white}
-                  labelStyle={{ marginTop: 1 }}
-                >
+              <ButtonContent active={pathname === ROUTE_LIQUIDITY_MY_LIQUIDITY} color={theme(themeMode).colors.white}>
+                <LiquidityDollarLogo className={'svg-app-color'} />
+                <Label fontFamily="syncopate" color={theme(themeMode).colors.white} labelStyle={{ marginTop: 1 }}>
                   MY LIQUIDITY
                 </Label>
               </ButtonContent>
@@ -206,7 +202,7 @@ const LiquidityContainer = () => {
             <CustomButton
               fontSize={13}
               buttonStyle={{ height: 33 }}
-              type="gradient"
+              type="primary"
               fontFamily="syncopate"
               onClick={() =>
                 history.push(
@@ -222,7 +218,7 @@ const LiquidityContainer = () => {
               <CustomButton
                 fontSize={13}
                 buttonStyle={{ height: 33 }}
-                type="gradient"
+                type="secondary"
                 fontFamily="syncopate"
                 onClick={() => history.push(ROUTE_LIQUIDITY_CREATE_PAIR)}
               >
@@ -248,12 +244,24 @@ export default LiquidityContainer;
 
 const ButtonContent = styled.div`
   display: flex;
-  align-items: center;
+  align-self: baseline;
+  border-top: 8px solid transparent;
+  transition: border-bottom 0.5s ease-in-out;
+  padding-bottom: 8px;
+  border-bottom: ${({ color, active }) => (active ? `1px solid ${color}` : '1px solid transparent')};
   svg {
     margin-right: 8px;
     path {
       fill: ${({ color }) => color};
     }
+  }
+
+  &:hover {
+    color: ${({ theme: { colors } }) => colors.white};
+    transition: border-bottom 0.8s ease-in-out;
+    border-bottom: ${({ color }) => `1px solid ${color}`};
+
+    cursor: pointer;
   }
 `;
 

@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-import { KaddexLetterLogo } from '../../assets';
+import { EckoLogoLoader } from '../../assets';
 import { useGameEditionContext } from '../../contexts';
 
 const LogoLoader = ({ withTopMargin, containerStyle, logoStyle }) => {
   return (
     <LogoLoaderContainer withTopMargin={withTopMargin} style={containerStyle}>
-      <KaddexLetterLogo className="rotate" style={logoStyle} />
+      <EckoLogoLoader className="rotate" style={logoStyle} />
     </LogoLoaderContainer>
   );
 };

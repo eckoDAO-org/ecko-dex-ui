@@ -40,7 +40,7 @@ export const ClaimModal = ({ onConfirm, estimateUnstakeData }) => {
           </StakeModalRow>
         </>
       ) : null}
-      <CustomButton type="gradient" buttonStyle={{ marginTop: 32 }} onClick={onConfirm}>
+      <CustomButton type="secondary" buttonStyle={{ marginTop: 32 }} onClick={onConfirm}>
         WITHDRAW
       </CustomButton>
     </div>

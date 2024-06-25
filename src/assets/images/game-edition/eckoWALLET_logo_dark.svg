@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="linear-gradient-wallet-new" x1="0.375" y1="-0.085" x2="0.516" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#090d2b"/>
+      <stop offset="0.783" stop-color="#172443"/>
+      <stop offset="1" stop-color="#101d3d"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-wallet-new-2" x1="-0.028" y1="-0.028" x2="0.859" y2="0.859" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ffd300"/>
+      <stop offset="1" stop-color="#ff00b8"/>
+    </linearGradient>
+  </defs>
+  <g id="Group_113150" data-name="Group 113150" transform="translate(2271 20637)">
+    <rect id="Rectangle_24172" data-name="Rectangle 24172" width="32" height="32" rx="16" transform="translate(-2271 -20637)" fill="url(#linear-gradient-wallet-new)"/>
+    <path id="Path_143847" data-name="Path 143847" d="M-1517.224,6457.551l-.762-.763-1.682-1.682,1.682-1.683.762-.762.763.762,1.682,1.683-1.682,1.682Zm0,2.358v5.028l-7.318-7.318,2.515-2.514Zm-7.318-7.316v5.026l2.515-2.514,4.8-4.8v-5.028Z" transform="translate(-735.332 -27076.117)" fill="url(#linear-gradient-wallet-new-2)"/>
+  </g>
+</svg>

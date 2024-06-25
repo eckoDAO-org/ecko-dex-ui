@@ -44,7 +44,7 @@ const Wrapper = styled(FlexContainer)`
   }
   .tr-sticky:after {
     content: '';
-    background: -webkit-linear-gradient(left, #ed1cb5 0%, #ffa900 12%, #39fffc 47%);
+    background: ${({ theme: { colors } }) => colors.white}66;
     display: block;
     height: 1px;
     width: 100%;
