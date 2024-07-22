@@ -20,68 +20,6 @@ export const SwapProvider = (props) => {
   } = useWalletConnectContext();
   const wallet = useWalletContext();
 
-  const swap = async (token0, token1, isSwapIn) => {
-    try {
-      let pair = await getPairAccount(token0.address, token1.address);
-      const inPactCode = `(${KADDEX_NAMESPACE}.exchange.swap-exact-in
-          (read-decimal 'token0Amount)
-          (read-decimal 'token1AmountWithSlippage)
-          [${token0.address} ${token1.address}]
-          ${JSON.stringify(account.account)}
-          ${JSON.stringify(account.account)}
-          (read-keyset 'user-ks)
-        )`;
-      const outPactCode = `(${KADDEX_NAMESPACE}.exchange.swap-exact-out
-          (read-decimal 'token1Amount)
-          (read-decimal 'token0AmountWithSlippage)
-          [${token0.address} ${token1.address}]
-          ${JSON.stringify(account.account)}
-          ${JSON.stringify(account.account)}
-          (read-keyset 'user-ks)
-        )`;
-      const cmd = {
-        pactCode: isSwapIn ? inPactCode : outPactCode,
-        keyPairs: {
-          publicKey: account.guard.keys[0],
-          secretKey: wallet.privKey,
-          clist: [
-            {
-              name: `${token0.address}.TRANSFER`,
-              args: [
-                account.account,
-                pair,
-                isSwapIn
-                  ? reduceBalance(token0.amount, pact.allTokens[token0.coin].precision)
-                  : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token0.coin].precision),
-              ],
-            },
-          ],
-        },
-        envData: {
-          'user-ks': account.guard,
-          token0Amount: reduceBalance(token0.amount, pact.allTokens[token0.coin].precision),
-          token1Amount: reduceBalance(token1.amount, pact.allTokens[token1.coin].precision),
-          token1AmountWithSlippage: reduceBalance(token1.amount * (1 - parseFloat(pact.slippage)), pact.allTokens[token1.coin].precision),
-          token0AmountWithSlippage: reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token0.coin].precision),
-        },
-        // meta: Pact.lang.mkMeta('', '', 0, 0, 0, 0),
-        networkId: NETWORKID,
-        meta: Pact.lang.mkMeta(
-          account.account,
-          CHAIN_ID,
-          Number(pact.gasConfiguration.gasLimit),
-          parseFloat(pact.gasConfiguration.gasPrice),
-          creationTime(),
-          600
-        ),
-      };
-      pact.setPactCmd(cmd);
-      await Pact.fetch.send(cmd, NETWORK);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   const swapWallet = async (token0, token1, isSwapIn) => {
     const accountDetails = await getTokenBalanceAccount(token0.address, account.account);
     if (accountDetails.result.status === 'success') {
@@ -246,7 +184,6 @@ export const SwapProvider = (props) => {
   return (
     <SwapContext.Provider
       value={{
-        swap,
         getPairAccount,
         swapWallet,
         localRes,
