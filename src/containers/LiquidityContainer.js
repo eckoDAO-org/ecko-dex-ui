@@ -165,8 +165,10 @@ const LiquidityContainer = () => {
                   </div>
                 }
               >
-                <Label labelStyle={{ maxWidth: verifiedActive ? '140px' : '180px' }}>
-                  {verifiedActive ? 'Click to display unverified pools.' : 'Click to display only verified pools.'}
+                <Label labelStyle={{ maxWidth: verifiedActive ? '150px' : '180px' }}>
+                  {verifiedActive
+                    ? `Click to display unverified ${pathname === ROUTE_LIQUIDITY_TOKENS ? 'tokens' : 'pools'}.`
+                    : `Click to display only verified ${pathname === ROUTE_LIQUIDITY_TOKENS ? 'tokens' : 'pools'}.`}
                 </Label>
               </CustomPopup>
             )}
