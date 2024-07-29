@@ -229,6 +229,15 @@
         "isBoosted": false,
         "color": "#c9661a",
         "isVerified": true
+      },
+      "coin:n_625e9938ae84bdb7d190f14fc283c7a6dfc15d58.ktoshi": {
+        "name": "coin:n_625e9938ae84bdb7d190f14fc283c7a6dfc15d58.ktoshi",
+        "token0": "KDA",
+        "token1": "KTO",
+        "main": false,
+        "isBoosted": false,
+        "color": "#c9661a",
+        "isVerified": true
       }
     }
   }
