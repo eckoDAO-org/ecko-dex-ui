@@ -59,7 +59,7 @@ export const commonColors = {
 export const lightTheme = {
   ...commonTheme,
   backgroundBody:
-    'radial-gradient(at 90% 10%, hsla(298,34%,85%,1) 0, transparent 37%),radial-gradient(at 18% 73%, hsla(179,100%,94%,1) 0, transparent 71%),radial-gradient(at 81% 69%, hsla(40,100%,93%,1) 0, transparent 79%);',
+    '#F4F4F4;',
 
   colors: {
     primary: '#FFFFFF',
@@ -85,7 +85,7 @@ export const darkTheme = {
   },
   buttonBackgroundGradient: 'rgb(17,8,23)',
   backgroundInput: 'transparent',
-  backgroundContainer: '#292A45',
+  backgroundContainer: '#1C1C24',
   backgroundTableHighlight: '#38395E',
   backgroundProgressBar: '#5C5C5C99',
 };

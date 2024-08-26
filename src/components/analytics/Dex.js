@@ -165,46 +165,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
         <VolumeChart kdaPrice={kdaPrice} height={300} />
       </FlexContainer>
       <FlexContainer mobileClassName="column" gap={24}>
-        <AnalyticsSimpleWidget
-          title={'KDX Staked'}
-          mainText={
-            (
-              <div>
-                {humanReadableNumber(stakedKdx, 2)} KDX
-                <Label fontSize={16} mobileFontSize={16} labelStyle={{ opacity: 0.7, marginBottom: 3 }}>
-                  $ {humanReadableNumber(tokensUsdPrice?.KDX * extractDecimal(stakedKdx))}
-                </Label>
-              </div>
-            ) || '-'
-          }
-          subtitle={
-            <div className="w-100 flex column" style={{ paddingTop: 10 }}>
-              <ProgressBar maxValue={kdxSupply} currentValue={stakedKdx} containerStyle={{ paddingTop: 2, width: '100%' }} />
-              <div className="w-100 flex justify-sb" style={{ paddingTop: 4 }}>
-                <span>0%</span>
-                <span>25%</span>
-                <span>50%</span>
-                <span>75%</span>
-                <span>100%</span>
-              </div>
-              <div className="flex" style={{ paddingTop: 16 }}>
-                <div
-                  style={{
-                    width: 32,
-                    height: 16,
-                    borderRadius: 4,
-                    background: 'linear-gradient(to right, #FFD300, #FF00B8)',
-                    marginRight: 8,
-                  }}
-                ></div>
-
-                <SKDXIcon style={{ width: 16, height: 16, marginRight: 8 }} />
-
-                <Label>sKDX {((100 * stakedKdx) / kdxSupply).toFixed(3)} %</Label>
-              </div>
-            </div>
-          }
-        />
+        
       </FlexContainer>
       <FlexContainer>
         <StackedBarChart title="TVL Details" withDoubleToken data={isMainnet() ? tvlDetails : sampleTokensVolume} />

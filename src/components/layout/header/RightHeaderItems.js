@@ -73,12 +73,7 @@ const RightHeaderItems = () => {
     <RightContainerHeader>
       {width < theme.mediaQueries.desktopPixel + 100 && (
         <div className="flex column align-fe">
-          <div className="flex align-ce justify-fe">
-            <CoinEckoIcon className="kaddex-price" style={{ marginRight: 8, width: 14, height: 14 }} />
-            <Label outGameEditionView fontSize={12} labelStyle={{ whiteSpace: 'nowrap' }}>
-              $ {tokensUsdPrice?.KDX ? humanReadableNumber(tokensUsdPrice?.KDX, 3) : '-'}
-            </Label>
-          </div>
+          
           <div style={{ display: 'flex' }}>
             <Label outGameEditionView fontSize={13} class1Name="mainnet-chain-2 desktop-only" labelStyle={{ marginLeft: 6, whiteSpace: 'nowrap' }}>
               {`Chain ${CHAIN_ID}`}
@@ -89,12 +84,7 @@ const RightHeaderItems = () => {
 
       {width >= theme.mediaQueries.desktopPixel + 100 && (
         <>
-          <div className="flex align-ce">
-            <CoinEckoIcon className="kaddex-price" style={{ marginRight: 8 }} />
-            <Label outGameEditionView fontSize={14} className="mainnet-chain-2" labelStyle={{ whiteSpace: 'nowrap' }}>
-              $ {tokensUsdPrice?.KDX ? humanReadableNumber(tokensUsdPrice?.KDX, 3) : '-'}
-            </Label>
-          </div>
+          
           <CustomPopup
             offset={[-50, 2]}
             popupStyle={{ padding: 2 }}
@@ -159,7 +149,7 @@ const RightHeaderItems = () => {
         </FadeContainer>
       )}
 
-      <GasStationSettings className="header-item w-fit-content" hasNotification={networkGasData.networkCongested} />
+      {/* <GasStationSettings className="header-item w-fit-content" hasNotification={networkGasData.networkCongested} /> */}
 
       {account?.account && (
         <BellNotification

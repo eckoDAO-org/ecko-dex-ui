@@ -13,7 +13,7 @@ const StyledButton = styled(FlexContainer)`
   width: 100%;
   justify-content: center;
   align-items: center;
-  border-radius: 20px;
+  border-radius: 8px;
   margin: 0px;
   padding: 0 16px;
   span {
@@ -67,7 +67,6 @@ const StyledButton = styled(FlexContainer)`
       }
     }
   }}
-
   svg {
     margin-right: 4px;
   }
@@ -159,18 +158,3 @@ const CustomButton = ({
 };
 
 export default CustomButton;
-
-CustomButton.propTypes = {
-  loading: PropTypes.bool,
-  children: PropTypes.any.isRequired,
-  onClick: PropTypes.func.isRequired,
-  type: PropTypes.oneOf(['primary', 'secondary', 'basic', 'gradient']),
-  geType: PropTypes.oneOf(['confirm', 'cancel', 'retry', 'pink']),
-  disabled: PropTypes.bool,
-};
-
-CustomButton.defaultProps = {
-  loading: false,
-  type: 'primary',
-  disabled: false,
-};

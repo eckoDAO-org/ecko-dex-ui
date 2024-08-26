@@ -1,9 +1,9 @@
 {
-  "short_name": "eckoDEX",
-  "name": "eckoDEX",
+  "short_name": "Mercatus",
+  "name": "Mercatus",
   "icons": [
     {
-      "src": "/images/maskable_icon.png",
+      "src": "/images/favicon.svg",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/svg",
       "purpose": "maskable"

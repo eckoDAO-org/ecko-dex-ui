@@ -20,6 +20,7 @@
     "formik": "^2.2.0",
     "glob": "^8.0.3",
     "https-browserify": "^1.0.0",
+    "js-yaml": "^4.1.0",
     "lodash": "^4.17.20",
     "moment": "^2.29.4",
     "pact-lang-api": "^4.2.0",
@@ -72,8 +73,8 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@babel/preset-env": "^7.24.5",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/preset-env": "^7.24.5",
     "babel-plugin-macros": "^2.8.0",
     "eslint": "6.8.0",
     "eslint-config-airbnb": "^18.2.0",
@@ -89,7 +90,7 @@
     "react-app-rewired": "^2.2.1"
   },
   "engines": {
-    "node": "18.x",
+    "node": "20.x",
     "npm": "please-use-yarn"
   }
 }

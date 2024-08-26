@@ -19,11 +19,8 @@ import {
   ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED,
   ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_SINGLE_SIDED,
   ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_DOUBLE_SIDED,
-  ROUTE_STAKE,
-  ROUTE_UNSTAKE,
   ROUTE_LIQUIDITY_REWARDS,
   ROUTE_LIQUIDITY_CREATE_PAIR,
-  ROUTE_ANALYTICS_KDX,
   ROUTE_TOKEN_INFO,
   ROUTE_ANALYTICS_STATS,
   ROUTE_POOL_INFO,
@@ -34,7 +31,6 @@ import StatsHistoryGameEditionContainer from '../containers/StatsHistoryGameEdit
 import LiquidityContainer from '../containers/LiquidityContainer';
 import AddLiquidityContainer from '../components/liquidity/AddLiquidityContainer';
 import RemoveLiquidityContainer from '../containers/RemoveLiquidityContainer';
-import StakeContainer from '../containers/StakeContainer';
 import TokenInfoContainer from '../containers/TokenInfoContainer';
 import PoolInfoContainer from '../containers/PoolInfoContainer';
 import CreatePairContainer from '../components/liquidity/CreatePairContainer';
@@ -72,8 +68,7 @@ export default () => {
               path={[ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_SINGLE_SIDED, ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_DOUBLE_SIDED]}
               component={RemoveLiquidityContainer}
             />
-            <Route exact path={[ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS]} component={AnalyticsContainer} />
-            <Route exact path={[ROUTE_STAKE, ROUTE_UNSTAKE]} component={StakeContainer} />
+            <Route exact path={[ROUTE_ANALYTICS, ROUTE_ANALYTICS_STATS]} component={AnalyticsContainer} />
             <Route exact path={ROUTE_TOKEN_INFO} component={TokenInfoContainer} />
             <Route exact path={ROUTE_POOL_INFO} component={PoolInfoContainer} />
           </Switch>

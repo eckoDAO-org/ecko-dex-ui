@@ -72,7 +72,7 @@ const GameEditionStartAnimation = () => {
             setFade('out');
           }}
         >
-          <span>eckoDEX</span>
+          <span>Mercatus</span>
         </div>
       </AnimatedDiv>
     </Container>

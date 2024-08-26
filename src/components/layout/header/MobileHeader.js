@@ -60,9 +60,9 @@ const MobileHeader = ({ className }) => {
         <LeftContainer>
           <PopupContentList withoutAccountInfo items={menuItems} icon={<HamburgerIcon className="hamburger-icon" />} className="hamburger" />
           {themeMode === 'dark' ? (
-            <EckoDexLogo className="w-100" style={{ cursor: 'pointer', zIndex: 1, height: 20 }} onClick={() => history.push(ROUTE_INDEX)} />
-          ) : (
             <EckoDexLightModeLogo className="w-100" style={{ cursor: 'pointer', zIndex: 1, height: 20 }} onClick={() => history.push(ROUTE_INDEX)} />
+          ) : (
+            <EckoDexLogo className="w-100" style={{ cursor: 'pointer', zIndex: 1, height: 20 }} onClick={() => history.push(ROUTE_INDEX)} />
           )}
         </LeftContainer>
 

@@ -4,7 +4,6 @@ import { commonColors } from '../../styles/theme';
 import CustomButton from '../shared/CustomButton';
 import Label from '../shared/Label';
 import CommonWrapper from './CommonWrapper';
-import PenaltyRewardsInfo from './PenaltyRewardsInfo';
 import { extractDecimal, getDecimalPlaces, humanReadableNumber } from '../../utils/reduceBalance';
 import { usePactContext } from '../../contexts';
 import { getTimeByBlockchain } from '../../utils/string-utils';

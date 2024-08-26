@@ -14,7 +14,7 @@ const FooterPolicy = () => {
       mobileStyle={{ margin: '0px 16px 24px' }}
     >
       {/* {width > commonTheme.mediaQueries.desktopPixel && <Label color="transparent" fontSize={12} labelStyle={{ minWidth: 259 }}></Label>} */}
-      {themeMode === 'dark' ? <NccLogo /> : <NccLogoLightMode />}
+      {/* {themeMode === 'dark' ? <NccLogo /> : <NccLogoLightMode />} */}
       {/* <Label
         fontSize={12}
         labelStyle={{

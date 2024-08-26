@@ -67,42 +67,69 @@ export const getModuleList = async () => {
   }
 };
 
-export const getTokenNameFromAddress = (token, communityTokenList) => {
-  let tokenVerified = null;
-  Object.keys(tokenData).forEach((item) => {
-    if (tokenData[item].code === token) {
-      tokenVerified = tokenData[item].name;
-    }
-  });
+export const getTokenNameFromAddress = (token, allTokensList) => {
+  // Check if the token is already in tokenData
+  let existingToken = Object.values(tokenData).find(t => t.code === token);
+  if (existingToken) return existingToken.name;
 
-  if (tokenVerified) return tokenVerified;
+  // If not, generate a name based on the token address
   const nameSpace = token.split('.')[0];
   const moduleName = token.split('.')[1];
   const prefix = `${nameSpace[0]}.`;
   const computedTokenName = moduleName.substr(0, moduleName.length >= 3 ? 3 : moduleName.length).toUpperCase();
 
-  const alreadyExists = tokenData[computedTokenName];
+  let finalTokenName = `${prefix}${computedTokenName}`;
 
-  let finalTokenName = '';
-
-  if (alreadyExists) {
-    finalTokenName = `${prefix}nv${computedTokenName}`;
-  } else {
-    finalTokenName = `${prefix}${computedTokenName}`;
-  }
-
-  if (communityTokenList[finalTokenName]) {
+  // Ensure the generated name is unique
+  if (allTokensList[finalTokenName]) {
     let i = 1;
-    let newNameToCheckExistance = finalTokenName + i;
-    while (communityTokenList[newNameToCheckExistance]) {
+    let newNameToCheckExistence = finalTokenName + i;
+    while (allTokensList[newNameToCheckExistence]) {
       i++;
-      newNameToCheckExistance = finalTokenName + i;
+      newNameToCheckExistence = finalTokenName + i;
     }
-    return newNameToCheckExistance;
+    return newNameToCheckExistence;
   } else {
     return finalTokenName;
   }
 };
+
+// export const getTokenNameFromAddress = (token, communityTokenList) => {
+//   let tokenVerified = null;
+//   Object.keys(tokenData).forEach((item) => {
+//     if (tokenData[item].code === token) {
+//       tokenVerified = tokenData[item].name;
+//     }
+//   });
+
+//   if (tokenVerified) return tokenVerified;
+//   const nameSpace = token.split('.')[0];
+//   const moduleName = token.split('.')[1];
+//   const prefix = `${nameSpace[0]}.`;
+//   const computedTokenName = moduleName.substr(0, moduleName.length >= 3 ? 3 : moduleName.length).toUpperCase();
+
+//   const alreadyExists = tokenData[computedTokenName];
+
+//   let finalTokenName = '';
+
+//   if (alreadyExists) {
+//     finalTokenName = `${prefix}nv${computedTokenName}`;
+//   } else {
+//     finalTokenName = `${prefix}${computedTokenName}`;
+//   }
+
+//   if (communityTokenList[finalTokenName]) {
+//     let i = 1;
+//     let newNameToCheckExistance = finalTokenName + i;
+//     while (communityTokenList[newNameToCheckExistance]) {
+//       i++;
+//       newNameToCheckExistance = finalTokenName + i;
+//     }
+//     return newNameToCheckExistance;
+//   } else {
+//     return finalTokenName;
+//   }
+// };
 
 export const getVerifiedPairs = (pairs) => {
   return Object.values(pairs).filter((pair) => pair.isVerified);

@@ -1,32 +1,30 @@
 import React from 'react';
-import { AboutIcon, BetaIcon, CodeIcon, VaultIcon, EckoWalletLogo, DiscordIcon } from '../assets';
+import { AboutIcon, CodeIcon, EckoWalletLogo, DiscordIcon, LinxLogoLight } from '../assets';
 
 export default [
   {
-    id: 3,
+    id: 2,
     label: 'eckoWALLET',
     icon: <EckoWalletLogo />,
     link: 'https://chrome.google.com/webstore/detail/eckowallet/bofddndhbegljegmpmnlbhcejofmjgbn',
   },
   {
-    id: 4,
-    label: 'BETA',
-    icon: <BetaIcon className="menu-icon" />,
-    link: 'https://beta.ecko.finance',
-    hideOnGameEdition: true,
+    id: 3,
+    label: 'LinxWallet',
+    icon: <LinxLogoLight />,
+    link: 'https://play.google.com/store/apps/details?id=com.thinedgelabs.linx_wallet',
   },
+  // {
+  //   id: 2,
+  //   label: 'Discord',
+  //   icon: <DiscordIcon className="menu-icon" />,
+  //   link: 'https://discord.com/invite/eckodao',
+  // },
   {
-    id: 5,
-    label: 'Vault',
-    icon: <VaultIcon className="menu-icon" />,
-    link: process.env.REACT_APP_VAULTING_URL,
-    hideOnGameEdition: true,
-  },
-  {
-    id: 2,
-    label: 'Discord',
-    icon: <DiscordIcon className="menu-icon" />,
-    link: 'https://discord.com/invite/eckodao',
+    id: 0,
+    label: 'Token Assets',
+    icon: <CodeIcon className="menu-icon" />,
+    link: 'https://github.com/CryptoPascal31/kadena_tokens',
   },
   {
     id: 1,
@@ -35,10 +33,5 @@ export default [
     link: 'https://github.com/eckoDAO-org/ecko-dex-ui',
   },
 
-  {
-    id: 0,
-    label: 'About',
-    icon: <AboutIcon className="menu-icon" />,
-    link: 'https://dex.ecko.finance',
-  },
+  
 ];

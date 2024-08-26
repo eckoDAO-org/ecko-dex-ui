@@ -1,6 +1,5 @@
 import React from 'react';
 import tokensJson from './tokens';
-//import blacklistedTokens from './tokens';
 import pairsJson from './pairs';
 
 const environment = process.env.REACT_APP_KDA_NETWORK_TYPE || 'testnet';

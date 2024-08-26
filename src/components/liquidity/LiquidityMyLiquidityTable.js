@@ -63,7 +63,7 @@ const LiquidityMyLiquidityTable = () => {
     !account.account ? (
       <Label className="justify-ce">Please connect your wallet to see your liquidity. </Label>
     ) : pairList.length === 0 ? (
-      <Label className="justify-ce">Your active eckoDEX liquidity positions will appear here.</Label>
+      <Label className="justify-ce">Your active Mercatus liquidity positions will appear here.</Label>
     ) : (
       <div className="column">
         <div className="flex justify-fs" style={{ marginBottom: 16 }}>

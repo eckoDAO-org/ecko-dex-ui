@@ -1,6 +1,4 @@
 import { createGlobalStyle, css } from 'styled-components/macro';
-import appDarkBackground from '../assets/images/shared/app-dark-background.png';
-import appLightBackground from '../assets/images/shared/app-light-background.png';
 
 export default createGlobalStyle`
     *, *:before, *:after {
@@ -33,17 +31,13 @@ export default createGlobalStyle`
       background: ${({ theme: { backgroundBody } }) => backgroundBody};
 
       opacity: 1;
-      background-size: cover;
-      background-repeat: no-repeat;
       overflow: hidden;
       ${({ themeMode }) => {
         return css`
-          background-repeat: no-repeat;
-          background-size: cover;
-          background-position: center;
-          background-image: url(${themeMode === 'light' ? appLightBackground : appDarkBackground});
+          background-color: ${themeMode === 'light' ? '#F5F5F5' : '#13131A'};
         `;
-      }}};
+      }}
+    }
       
 
     #root {

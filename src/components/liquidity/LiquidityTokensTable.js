@@ -5,7 +5,7 @@ import { getPairList } from '../../api/pact';
 import CommonTable from '../shared/CommonTable';
 import { humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
-import { AddIcon, BoosterIcon, GasIcon, TradeUpIcon, VerifiedLogo } from '../../assets';
+import { AddIcon, BoosterIcon, TradeUpIcon } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_LIQUIDITY_TOKENS, ROUTE_TOKEN_INFO } from '../../router/routes';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
@@ -17,15 +17,14 @@ import useWindowSize from '../../hooks/useWindowSize';
 import DecimalFormatted from '../shared/DecimalFormatted';
 import Search from '../shared/Search';
 
-const LiquidityTokensTable = ({ verifiedActive }) => {
+const LiquidityTokensTable = () => {
   const history = useHistory();
   const { themeMode } = useApplicationContext();
   const [loading, setLoading] = useState(true);
   const [allTokensList, setAllTokensList] = useState([]);
-  const [verifiedTokensList, setVerifiedTokensList] = useState([]);
   const [searchValue, setSearchValue] = useState('');
 
-  const { tokensUsdPrice, enableGasStation, allTokens, allPairs } = usePactContext();
+  const { tokensUsdPrice, allTokens, allPairs } = usePactContext();
 
   const [width] = useWindowSize();
 
@@ -55,25 +54,23 @@ const LiquidityTokensTable = ({ verifiedActive }) => {
 
         const volume24H = volume24UsdSum / 2;
         let tokenInfo = pairsData
-          .filter((d) => d.token0 === token.name || d.token1 === token.name)
-          .sort((x, y) => y.apr * y.multiplier - x.apr * x.multiplier);
-        let apr = tokenInfo?.[0]?.apr;
-        let multiplier = tokenInfo?.[0]?.multiplier;
+      .filter((d) => d.token0 === token.name || d.token1 === token.name)
+      .sort((x, y) => (y.apr || 0) * (y.multiplier || 1) - (x.apr || 0) * (x.multiplier || 1));
+    let apr = tokenInfo?.[0]?.apr || 0;
+    let multiplier = tokenInfo?.[0]?.multiplier || 1;
 
-        result.push({
-          ...token,
-          volume24HUsd: volume24H,
-          volume24H,
-          apr,
-          liquidityUSD,
-          liquidity,
-          tokenUsdPrice,
-          multiplier,
-        });
-      }
-      const verifiedTokensData = result.filter((r) => r.isVerified);
+    result.push({
+      ...token,
+      volume24HUsd: volume24H,
+      volume24H,
+      apr,
+      liquidityUSD,
+      liquidity,
+      tokenUsdPrice,
+      multiplier,
+    });
+  }
       setAllTokensList(result.sort((x, y) => y.liquidityUSD - x.liquidityUSD));
-      setVerifiedTokensList(verifiedTokensData.sort((x, y) => y.liquidityUSD - x.liquidityUSD));
     }
     setLoading(false);
   };
@@ -84,47 +81,45 @@ const LiquidityTokensTable = ({ verifiedActive }) => {
     }
   }, [tokensUsdPrice]);
 
-  const tokenList = Object.values(verifiedActive ? verifiedTokensList : allTokensList).filter((c) => {
+  const tokenList = allTokensList.filter((c) => {
     const code = c.code !== 'coin' ? c.code.split('.')[1] : c.code;
     return code.toLocaleLowerCase().includes(searchValue?.toLocaleLowerCase()) || c.name.toLowerCase().includes(searchValue?.toLowerCase());
   });
 
   return !loading ? (
-    <>
-      <CommonTable
-        items={tokenList}
-        columns={renderColumns(history, allTokens, width, searchValue, setSearchValue)}
-        actions={[
-          {
-            icon: () => <AddIcon />,
-            onClick: (item) => {
-              history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${item.name}&token1=KDA`), {
-                from: ROUTE_LIQUIDITY_TOKENS,
-              });
-            },
+    <CommonTable
+      items={tokenList}
+      columns={renderColumns(history, allTokens, width, searchValue, setSearchValue)}
+      actions={[
+        {
+          icon: () => <AddIcon />,
+          onClick: (item) => {
+            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${item.name}&token1=KDA`), {
+              from: ROUTE_LIQUIDITY_TOKENS,
+            });
           },
-          {
-            icon: () => (
-              <FlexContainer
-                className="align-ce"
-                style={{
-                  background: theme(themeMode).colors.white,
-                  padding: '8px 4px',
-                  borderRadius: 100,
-                  width: 24,
-                  height: 24,
-                }}
-              >
-                <TradeUpIcon className="svg-app-inverted-color" />
-              </FlexContainer>
-            ),
-            onClick: (item) => {
-              history.push(ROUTE_TOKEN_INFO.replace(':token', item.name));
-            },
+        },
+        {
+          icon: () => (
+            <FlexContainer
+              className="align-ce"
+              style={{
+                background: theme(themeMode).colors.white,
+                padding: '8px 4px',
+                borderRadius: 100,
+                width: 24,
+                height: 24,
+              }}
+            >
+              <TradeUpIcon className="svg-app-inverted-color" />
+            </FlexContainer>
+          ),
+          onClick: (item) => {
+            history.push(ROUTE_TOKEN_INFO.replace(':token', item.name));
           },
-        ]}
-      />
-    </>
+        },
+      ]}
+    />
   ) : (
     <AppLoader className="h-100 w-100 align-ce justify-ce" />
   );
@@ -161,13 +156,6 @@ const renderColumns = (history, allTokens, width, searchValue, setSearchValue) =
       width: width <= theme().mediaQueries.mobilePixel ? 90 : 100,
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
-          {allTokens[item.name]?.isVerified ? (
-            <div style={{ marginRight: 16 }}>
-              <VerifiedLogo className="svg-app-color" />
-            </div>
-          ) : (
-            <div style={{ width: 32 }} />
-          )}
           <CryptoContainer style={{ zIndex: 2 }}> {allTokens[item.name].icon}</CryptoContainer>
           {item.name}
         </ScalableCryptoContainer>
@@ -215,17 +203,31 @@ const renderColumns = (history, allTokens, width, searchValue, setSearchValue) =
       width: 100,
       sortBy: 'apr',
       multiplier: 'multiplier',
-      render: ({ item }) =>
-        item.multiplier > 1 ? (
+      render: ({ item }) => {
+        if (item.apr === undefined || item.apr === null) {
+          return 'N/A';
+        }
+        
+        const aprValue = Number(item.apr);
+        const multiplierValue = Number(item.multiplier) || 1;
+        
+        if (isNaN(aprValue) || isNaN(multiplierValue)) {
+          return 'N/A';
+        }
+        
+        const totalApr = (aprValue * multiplierValue).toFixed(2);
+        
+        return multiplierValue > 1 ? (
           <FlexContainer className="align-ce svg-pink">
             <BoosterIcon style={{ width: 16, height: 16 }} />
             <Label labelStyle={{ fontWeight: 600, marginLeft: 6 }} fontSize={14} color={commonColors.pink}>
-              {(item?.apr * item?.multiplier)?.toFixed(2)} %
+              {totalApr} %
             </Label>
           </FlexContainer>
         ) : (
-          `${item.apr.toFixed(2)} %`
-        ),
+          `${totalApr} %`
+        );
+      },
     },
   ];
 };

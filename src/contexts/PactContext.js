@@ -76,69 +76,116 @@ export const PactProvider = (props) => {
 
   const getPairsData = async () => {
     const result = await getPairs();
-    let communityList = {};
-    let communityTokenList = {};
+    let allTokensList = { ...tokenData };
+    let allPairsList = { ...pairsData };
+  
     if (result.errorMessage) {
-      console.log('ERROR');
+      console.log('ERROR', result.errorMessage);
       return;
     } else {
-      const communityPairs = result.filter((r) => !pairsData.hasOwnProperty(r));
-      const communityPairsWithKda = communityPairs.filter((res) => res.split(':')[0] === 'coin' || res.split(':')[1] === 'coin');
-
-      communityPairsWithKda.map((item) => {
-        // TOKENS
+      const newPairs = result.filter((r) => !pairsData.hasOwnProperty(r));
+      
+      newPairs.forEach((item) => {
         const tokens = item.split(':');
-        const token0 = tokens[0]; // Gets the first contract
-        const token1 = tokens[1]; // Gets the second contract
-
+        const token0 = tokens[0];
+        const token1 = tokens[1];
+  
         if (blacklistedTokenData.includes(token0) || blacklistedTokenData.includes(token1)) {
           return;
         }
-
-        const tokenToCheck = token0 === 'coin' ? token1 : token0;
-        const communityToken = {
-          name: getTokenNameFromAddress(tokenToCheck, communityTokenList),
-          coingeckoId: '',
-          statsID: tokenToCheck,
-          tokenNameKaddexStats: tokenToCheck,
-          code: tokenToCheck,
-          main: false,
-          icon: <UnknownLogo style={{ marginRight: 8 }} />,
-          color: '',
-          precision: 12,
-          isVerified: false,
-        };
-        communityTokenList[communityToken.name] = communityToken;
-
-        let cpToken0Name = '';
-        let cpToken1Name = '';
-
-        Object.keys(communityTokenList).forEach((item) => {
-          if (communityTokenList[item].code === token0) {
-            cpToken0Name = communityTokenList[item].name;
-          }
-          if (communityTokenList[item].code === token1) {
-            cpToken1Name = communityTokenList[item].name;
+  
+        // Process tokens
+        [token0, token1].forEach(tokenAddress => {
+          if (tokenAddress !== 'coin' && !allTokensList[tokenAddress]) {
+            const tokenName = getTokenNameFromAddress(tokenAddress, allTokensList);
+            allTokensList[tokenName] = {
+              name: tokenName,
+              code: tokenAddress,
+              icon: <UnknownLogo style={{ marginRight: 8 }} />,
+              precision: 12,
+            };
           }
         });
-
-        // PAIRS
-        const communityPair = {
-          name: item,
-          token0: tokens[0] === 'coin' ? 'KDA' : cpToken0Name,
-          token1: tokens[1] === 'coin' ? 'KDA' : cpToken1Name,
-          main: false,
-          isBoosted: false,
-          color: '#92187B',
-          isVerified: false,
+  
+        // Process pair
+        const pairName = item;
+        allPairsList[pairName] = {
+          name: pairName,
+          token0: token0 === 'coin' ? 'KDA' : (allTokensList[token0]?.name || getTokenNameFromAddress(token0, allTokensList)),
+          token1: token1 === 'coin' ? 'KDA' : (allTokensList[token1]?.name || getTokenNameFromAddress(token1, allTokensList)),
         };
-        communityList[communityPair.name] = communityPair;
       });
-      setAllTokens((prev) => ({ ...prev, ...tokenData, ...communityTokenList }));
-      setAllPairs((prev) => ({ ...prev, ...pairsData, ...communityList }));
+  
+      setAllTokens(allTokensList);
+      setAllPairs(allPairsList);
     }
-    return;
   };
+
+  // const getPairsData = async () => {
+  //   const result = await getPairs();
+  //   let communityList = {};
+  //   let communityTokenList = {};
+  //   if (result.errorMessage) {
+  //     console.log('ERROR');
+  //     return;
+  //   } else {
+  //     const communityPairs = result.filter((r) => !pairsData.hasOwnProperty(r));
+  //     const communityPairsWithKda = communityPairs.filter((res) => res.split(':')[0] === 'coin' || res.split(':')[1] === 'coin');
+
+  //     communityPairsWithKda.map((item) => {
+  //       // TOKENS
+  //       const tokens = item.split(':');
+  //       const token0 = tokens[0]; // Gets the first contract
+  //       const token1 = tokens[1]; // Gets the second contract
+
+  //       if (blacklistedTokenData.includes(token0) || blacklistedTokenData.includes(token1)) {
+  //         return;
+  //       }
+
+  //       const tokenToCheck = token0 === 'coin' ? token1 : token0;
+  //       const communityToken = {
+  //         name: getTokenNameFromAddress(tokenToCheck, communityTokenList),
+  //         coingeckoId: '',
+  //         statsID: tokenToCheck,
+  //         tokenNameKaddexStats: tokenToCheck,
+  //         code: tokenToCheck,
+  //         main: false,
+  //         icon: <UnknownLogo style={{ marginRight: 8 }} />,
+  //         color: '',
+  //         precision: 12,
+  //         isVerified: false,
+  //       };
+  //       communityTokenList[communityToken.name] = communityToken;
+
+  //       let cpToken0Name = '';
+  //       let cpToken1Name = '';
+
+  //       Object.keys(communityTokenList).forEach((item) => {
+  //         if (communityTokenList[item].code === token0) {
+  //           cpToken0Name = communityTokenList[item].name;
+  //         }
+  //         if (communityTokenList[item].code === token1) {
+  //           cpToken1Name = communityTokenList[item].name;
+  //         }
+  //       });
+
+  //       // PAIRS
+  //       const communityPair = {
+  //         name: item,
+  //         token0: tokens[0] === 'coin' ? 'KDA' : cpToken0Name,
+  //         token1: tokens[1] === 'coin' ? 'KDA' : cpToken1Name,
+  //         main: false,
+  //         isBoosted: false,
+  //         color: '#92187B',
+  //         isVerified: false,
+  //       };
+  //       communityList[communityPair.name] = communityPair;
+  //     });
+  //     setAllTokens((prev) => ({ ...prev, ...tokenData, ...communityTokenList }));
+  //     setAllPairs((prev) => ({ ...prev, ...pairsData, ...communityList }));
+  //   }
+  //   return;
+  // };
 
   useEffect(() => {
     async function fetchData() {

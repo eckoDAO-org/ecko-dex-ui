@@ -137,6 +137,12 @@ export const getAllPairsData = async (tokensUsdPrice, allTokens, allPairs, _pool
       const token0 = Object.values(allTokens).find((t) => t.name === pool.token0);
       const token1 = Object.values(allTokens).find((t) => t.name === pool.token1);
 
+      // Check if both tokens exist
+      if (!token0 || !token1) {
+        console.warn(`Skipping pool ${pool.name} due to missing token data`);
+        continue;
+      }
+
       const specificPairData = dexscanPoolsStats.filter(
         (d) =>
           (d.token0.address === token0.code && d.token1.address === token1.code) ||
@@ -147,8 +153,8 @@ export const getAllPairsData = async (tokensUsdPrice, allTokens, allPairs, _pool
       let liquidity1 = 0;
 
       if (tokensUsdPrice) {
-        liquidity0 = tokensUsdPrice[token0?.name] ? reduceBalance(pool.reserves[0]) * tokensUsdPrice[token0.name] : 0;
-        liquidity1 = tokensUsdPrice[token1?.name] ? reduceBalance(pool.reserves[1]) * tokensUsdPrice[token1.name] : 0;
+        liquidity0 = tokensUsdPrice[token0.name] ? reduceBalance(pool.reserves[0]) * tokensUsdPrice[token0.name] : 0;
+        liquidity1 = tokensUsdPrice[token1.name] ? reduceBalance(pool.reserves[1]) * tokensUsdPrice[token1.name] : 0;
 
         volume24HUsd = specificPairData[0] ? specificPairData[0].volume24h : 0;
 
@@ -160,7 +166,8 @@ export const getAllPairsData = async (tokensUsdPrice, allTokens, allPairs, _pool
         volume24HUsd = null;
       }
 
-      const multiplier = multipliers.find((m) => m.pair === pool.name).multiplier;
+      const multiplierObj = multipliers.find((m) => m.pair === pool.name);
+      const multiplier = multiplierObj ? multiplierObj.multiplier : 1; // Default to 1 if not found
 
       let data = {
         ...pool,
@@ -176,7 +183,63 @@ export const getAllPairsData = async (tokensUsdPrice, allTokens, allPairs, _pool
 
     return allData;
   }
+  return []; // Return an empty array if there are no pools
 };
+
+// export const getAllPairsData = async (tokensUsdPrice, allTokens, allPairs, _pools) => {
+//   const pools = _pools ? _pools : await getPairList(allPairs);
+
+//   if (pools.length) {
+//     const dexscanPoolsStats = await getAnalyticsDexscanPoolsData();
+//     const multipliers = await getPairsMultiplier(pools);
+//     let allData = [];
+//     for (const pool of pools) {
+//       let volume24HUsd = 0;
+//       let liquidityUsd = 0;
+//       let apr = 0;
+//       const token0 = Object.values(allTokens).find((t) => t.name === pool.token0);
+//       const token1 = Object.values(allTokens).find((t) => t.name === pool.token1);
+
+//       const specificPairData = dexscanPoolsStats.filter(
+//         (d) =>
+//           (d.token0.address === token0.code && d.token1.address === token1.code) ||
+//           (d.token0.address === token1.code && d.token1.address === token0.code)
+//       );
+
+//       let liquidity0 = 0;
+//       let liquidity1 = 0;
+
+//       if (tokensUsdPrice) {
+//         liquidity0 = tokensUsdPrice[token0?.name] ? reduceBalance(pool.reserves[0]) * tokensUsdPrice[token0.name] : 0;
+//         liquidity1 = tokensUsdPrice[token1?.name] ? reduceBalance(pool.reserves[1]) * tokensUsdPrice[token1.name] : 0;
+
+//         volume24HUsd = specificPairData[0] ? specificPairData[0].volume24h : 0;
+
+//         liquidityUsd = liquidity0 + liquidity1;
+//         apr = volume24HUsd && liquidityUsd ? getApr(volume24HUsd, liquidityUsd) : 0;
+//       } else {
+//         apr = null;
+//         liquidityUsd = null;
+//         volume24HUsd = null;
+//       }
+
+//       const multiplier = multipliers.find((m) => m.pair === pool.name).multiplier;
+
+//       let data = {
+//         ...pool,
+//         apr,
+//         multiplier,
+//         liquidityUsd,
+//         liquidity0,
+//         liquidity1,
+//         volume24HUsd,
+//       };
+//       allData.push(data);
+//     }
+
+//     return allData;
+//   }
+// };
 
 // convert liquidity in usd
 export const getUsdTokenLiquidity = (liquidty, usdPrice) => {

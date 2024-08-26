@@ -44,16 +44,7 @@ const SwapResults = ({ priceImpact, fromValues, toValues }) => {
 
   return (
     <ResultContainer>
-      {pact.enableGasStation && (
-        <RowContainer>
-          <Label fontSize={13} color={commonColors.green}>
-            Gas Cost
-          </Label>
-          <Label fontSize={13} color={commonColors.green} geColor="green" labelStyle={{ marginLeft: 5 }}>
-            FREE
-          </Label>
-        </RowContainer>
-      )}
+      
       <RowContainer>
         <Label fontSize={13} color={getPriceImpactColor()}>
           Price Impact

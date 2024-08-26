@@ -11,10 +11,8 @@ import InfoPopup from '../components/shared/InfoPopup';
 import { getPoolState } from '../api/kaddex.staking';
 import { theme, commonColors } from '../styles/theme';
 import { useHistory, useLocation } from 'react-router-dom';
-import { ROUTE_ANALYTICS, ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS } from '../router/routes';
+import { ROUTE_ANALYTICS, ROUTE_ANALYTICS_STATS } from '../router/routes';
 import Dex from '../components/analytics/Dex';
-import Kdx from '../components/analytics/Kdx';
-import { KDX_TOTAL_SUPPLY } from '../constants/contextConstants';
 import { getAnalyticsData } from '../api/kaddex-analytics';
 import moment from 'moment';
 import { Helmet } from 'react-helmet';
@@ -67,9 +65,9 @@ const AnalyticsContainer = () => {
         <Helmet>
           <meta
             name="description"
-            content="Stay informed on eckoDEX stats and $KDX token with our analytics section. Track ecko-growth and stay ahead of the game."
+            content="Stay informed on Mercatus stats with our analytics section. Track growth and stay ahead of the game."
           />
-          <title>eckoDEX | Analytics</title>
+          <title>Mercatus | Analytics</title>
         </Helmet>
         <FlexContainer
           className="column w-100 h-100 main"
@@ -89,16 +87,7 @@ const AnalyticsContainer = () => {
               >
                 DEX
               </Label>
-              <Label
-                withShade={pathname !== ROUTE_ANALYTICS_KDX}
-                className="pointer"
-                fontSize={24}
-                fontFamily="syncopate"
-                onClick={() => history.push(ROUTE_ANALYTICS_KDX)}
-              >
-                KDX
-              </Label>
-              <Label
+                 <Label
                 withShade={pathname !== ROUTE_ANALYTICS_STATS}
                 className="pointer"
                 fontSize={24}
@@ -148,8 +137,7 @@ const AnalyticsContainer = () => {
           {pathname === ROUTE_ANALYTICS && (
             <Dex kdxSupply={analyticsData?.circulatingSupply?.totalSupply} kdaPrice={kdaUsdPrice} poolState={poolState} />
           )}
-          {/* KDX */}
-          {pathname === ROUTE_ANALYTICS_KDX && <Kdx analyticsData={analyticsData} KDX_TOTAL_SUPPLY={KDX_TOTAL_SUPPLY} kdaPrice={kdaUsdPrice} />}
+          
           {/* DEX */}
           {pathname === ROUTE_ANALYTICS_STATS && <Pools verifiedActive={verifiedActive} />}
         </FlexContainer>

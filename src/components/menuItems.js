@@ -11,11 +11,8 @@ import {
   ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED,
   ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_SINGLE_SIDED,
   ROUTE_LIQUIDITY_REMOVE_LIQUIDITY_DOUBLE_SIDED,
-  ROUTE_STAKE,
-  ROUTE_UNSTAKE,
   ROUTE_LIQUIDITY_REWARDS,
   ROUTE_LIQUIDITY_CREATE_PAIR,
-  ROUTE_ANALYTICS_KDX,
   ROUTE_ANALYTICS_STATS,
 } from '../router/routes';
 
@@ -45,22 +42,11 @@ export const ANALYTICS = {
   id: 4,
   label: 'Analytics',
   route: ROUTE_ANALYTICS,
-  activeRoutes: [ROUTE_ANALYTICS_KDX, ROUTE_ANALYTICS_STATS],
-};
-export const STAKE = {
-  id: 3,
-  label: 'Stake',
-  route: ROUTE_STAKE,
-  activeRoutes: [ROUTE_UNSTAKE],
-};
-export const VAULT = {
-  id: 3,
-  label: 'Vault',
-  target: '_blank',
-  link: process.env.REACT_APP_VAULTING_URL,
+  activeRoutes: [ROUTE_ANALYTICS_STATS],
 };
 
-export default NETWORK_TYPE === 'development' ? [SWAP, LIQUIDITY, STAKE, ANALYTICS] : [SWAP, LIQUIDITY, STAKE, ANALYTICS];
+
+export default NETWORK_TYPE === 'development' ? [SWAP, LIQUIDITY, ANALYTICS] : [SWAP, LIQUIDITY, ANALYTICS];
 
 export const gameEditionRoutes = [
   {

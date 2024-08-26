@@ -196,39 +196,10 @@ const renderColumns = (history, allTokens, allPairs, width, searchValue, setSear
       },
     },
     {
-      name: 'KDX Multiplier',
-      width: 100,
-      sortBy: 'multiplier',
-      render: ({ item }) =>
-        item.multiplier > 1 ? (
-          <FlexContainer className="align-ce svg-pink">
-            <BoosterIcon style={{ width: 16, height: 16 }} />
-            <Label labelStyle={{ fontWeight: 600, marginLeft: 6 }} fontSize={13} color={commonColors.pink}>
-              {item.multiplier.toFixed(2)} x
-            </Label>
-          </FlexContainer>
-        ) : (
-          '-'
-        ),
-    },
-    {
       name: 'APR',
       width: 100,
       sortBy: 'apr',
-      multiplier: 'multiplier',
-      render: ({ item }) =>
-        item.multiplier > 1 ? (
-          <div className="column flex">
-            <Label labelStyle={{ fontWeight: 600 }} fontSize={14} color={commonColors.pink}>
-              {(item.apr * item.multiplier).toFixed(2)} %
-            </Label>
-            <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
-              {item.apr.toFixed(2)} %
-            </Label>
-          </div>
-        ) : (
-          `${item.apr.toFixed(2)} %`
-        ),
+      render: ({ item }) => `${item.apr.toFixed(2)} %`,
     },
   ];
 };

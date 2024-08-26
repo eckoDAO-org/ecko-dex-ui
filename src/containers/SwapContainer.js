@@ -24,7 +24,6 @@ import PixeledBlueContainer from '../components/game-edition-v2/components/Pixel
 import useLazyImage from '../hooks/useLazyImage';
 import LogoLoader from '../components/shared/Loader';
 import { FlexContainer } from '../components/shared/FlexContainer';
-import GameEditionModeButton from '../components/layout/header/GameEditionModeButton';
 import { HistoryIcon } from '../assets';
 import { ROUTE_MY_SWAP, ROUTE_SWAP } from '../router/routes';
 import { SwapSuccessView, SwapSuccessViewGE } from '../components/modals/swap-modals/SwapSuccesTxView';
@@ -62,6 +61,7 @@ const Container = styled(FadeIn)`
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
+        background-color: #f5f5f5;
         background-image: ${`url(${ArcadeBackground})`};
       `;
     } else {
@@ -628,15 +628,15 @@ const SwapContainer = () => {
       mobileStyle={{ paddingRight: theme.layout.mobilePadding, paddingLeft: theme.layout.mobilePadding }}
     >
       <Helmet>
-        <meta name="description" content="Swap, provide liquidity and earn with Governance Mining on eckoDEX." />
-        <title>eckoDEX | Swap</title>
+        <meta name="description" content="Swap, provide liquidity and earn with Governance Mining on Mercatus." />
+        <title>Mercatus | Swap</title>
       </Helmet>
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
 
       <FlexContainer
         className="justify-sb w-100"
         gameEditionClassName="justify-ce"
-        style={{ marginBottom: 24 }}
+        style={{ marginBottom: 24, marginTop: gameEditionView ? 0 : 24 }}
         gameEditionStyle={{ marginBottom: 14 }}
       >
         <Label fontSize={32} geCenter fontFamily="syncopate" geFontSize={52} geLabelStyle={{ lineHeight: '32px' }}>
@@ -650,7 +650,6 @@ const SwapContainer = () => {
             <SvgContainer>
               <SlippagePopupContent />
             </SvgContainer>
-            {width >= resolutionConfiguration?.width && height >= resolutionConfiguration?.height && <GameEditionModeButton />}
           </FlexContainer>
         )}
       </FlexContainer>
@@ -707,7 +706,7 @@ const SwapContainer = () => {
             ) : (
               <>
                 <FlexContainer className="w-100 justify-sb" style={{ margin: '16px 0' }}>
-                  {pact.enableGasStation && (
+                  {/* {pact.enableGasStation && (
                     <>
                       <Label fontSize={13} color={commonColors.green}>
                         Gas Cost
@@ -720,7 +719,7 @@ const SwapContainer = () => {
                         </>
                       </div>
                     </>
-                  )}
+                  )} */}
                 </FlexContainer>
               </>
             )}

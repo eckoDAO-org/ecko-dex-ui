@@ -314,7 +314,7 @@ const GasStationSettings = ({ className, hasNotification }) => {
                   Speed up your transaction!
                 </Label>
                 <Label fontSize={13} outGameEditionView labelStyle={{ marginTop: 4 }}>
-                  By disabling eckoDEX's free gas station, gas limit and gas price amounts will update automatically to meet gas requirements for a
+                  By disabling Mercatus's free gas station, gas limit and gas price amounts will update automatically to meet gas requirements for a
                   successful transaction.
                 </Label>
               </>

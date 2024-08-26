@@ -41,8 +41,8 @@ const LiquidityContainer = () => {
       mobileStyle={{ paddingRight: theme().layout.mobilePadding, paddingLeft: theme().layout.mobilePadding }}
     >
       <Helmet>
-        <meta name="description" content="Earn LP rewards with your digital assets on eckoDEX." />
-        <title>eckoDEX | Pools/Liquidity</title>
+        <meta name="description" content="Earn LP rewards with your digital assets on Mercatus." />
+        <title>Mercatus | Pools/Liquidity</title>
       </Helmet>
       <FlexContainer
         className="w-100 justify-sb"
@@ -143,35 +143,7 @@ const LiquidityContainer = () => {
           /* DESKTOP & TABLET */
 
           <FlexContainer gap={16} mobilePixel={530}>
-            {(pathname === ROUTE_LIQUIDITY_TOKENS || pathname === ROUTE_LIQUIDITY_POOLS) && (
-              <CustomPopup
-                offset={[-50, -130]}
-                popupStyle={{ padding: 2 }}
-                trigger={
-                  <div style={{ display: 'flex' }}>
-                    <MobileButton
-                      background={verifiedActive ? theme(themeMode).colors.white : 'transparent'}
-                      color={theme(themeMode).colors.white}
-                      onClick={() => {
-                        if (verifiedActive) {
-                          setVerifiedActive(false);
-                        } else {
-                          setVerifiedActive(true);
-                        }
-                      }}
-                    >
-                      <VerifiedBoldLogo className={verifiedActive ? 'svg-app-inverted-color' : 'svg-app-color'} />
-                    </MobileButton>
-                  </div>
-                }
-              >
-                <Label labelStyle={{ maxWidth: verifiedActive ? '150px' : '180px' }}>
-                  {verifiedActive
-                    ? `Click to display unverified ${pathname === ROUTE_LIQUIDITY_TOKENS ? 'tokens' : 'pools'}.`
-                    : `Click to display only verified ${pathname === ROUTE_LIQUIDITY_TOKENS ? 'tokens' : 'pools'}.`}
-                </Label>
-              </CustomPopup>
-            )}
+            
             <CustomButton
               fontSize={13}
               buttonStyle={{ height: 33 }}

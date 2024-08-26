@@ -13,9 +13,9 @@ export const NETWORK_VERSION = process.env.REACT_APP_KDA_NETWORK_VERSION || '0.0
 export const WALLET_CONNECT_PROJECT_ID = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID || '';
 export const WALLET_CONNECT_RELAY_URL = process.env.REACT_APP_WALLET_CONNECT_RELAY_URL || '';
 export const WALLET_CONNECT_METADATA = {
-  name: 'eckoDEX SWAP',
+  name: 'Mercatus SWAP',
   description: 'Swap for KDA and KDX',
-  url: 'https://swap.ecko.finance/',
+  url: 'https://mercatusdex.fun/',
   icons: ['https://dex.ecko.finance/Kaddex_icon.png'],
 };
 

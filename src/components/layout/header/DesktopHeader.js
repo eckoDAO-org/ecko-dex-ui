@@ -65,11 +65,29 @@ const DesktopHeader = ({ className }) => {
   return (
     <Container className={className} resolutionConfiguration={resolutionConfiguration}>
       <LeftContainer>
-        {themeMode === 'dark' ? (
-          <EckoDexLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
-        ) : (
-          <EckoDexLightModeLogo style={{ cursor: 'pointer', zIndex: 1 }} onClick={() => history.push(ROUTE_INDEX)} />
-        )}
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+  {themeMode === 'dark' ? (
+    <>
+      <EckoDexLogo
+        style={{ cursor: 'pointer', zIndex: 1, width: '40px', height: 'auto' }}
+        onClick={() => history.push(ROUTE_INDEX)}
+      />
+      <span style={{ color: '#FFFFFF', marginLeft: '4px', fontWeight: 'bold' }}>
+      MERCATUS
+      </span>
+    </>
+  ) : (
+    <>
+      <EckoDexLightModeLogo
+        style={{ cursor: 'pointer', zIndex: 1, width: '40px', height: 'auto' }}
+        onClick={() => history.push(ROUTE_INDEX)}
+      />
+      <span style={{ color: '#000000', marginLeft: '4px', fontWeight: 'bold' }}>
+        MERCATUS
+      </span>
+    </>
+  )}
+</div>
 
         <AnimatedDiv className={gameEditionView ? 'fadeOut' : 'fadeIn'}>
           {menuItems.map((item, index) => (
@@ -80,10 +98,7 @@ const DesktopHeader = ({ className }) => {
         </AnimatedDiv>
       </LeftContainer>
 
-      {width >= resolutionConfiguration?.width && height >= resolutionConfiguration?.height && gameEditionView && (
-        <GameEditionModeButton className="header" />
-      )}
-
+   
       <RightHeaderItems />
     </Container>
   );
