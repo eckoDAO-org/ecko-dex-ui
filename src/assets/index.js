@@ -74,6 +74,6 @@ export { ReactComponent as SKDXIcon } from './images/shared/skdx-logo.svg';
 export { ReactComponent as UnmarshalLogo } from './images/shared/unmarshal-logo.svg';
 export { ReactComponent as KadenaExplorerLogo } from './images/shared/kadena-explorer-logo.svg';
 export { ReactComponent as LinxLogoLight } from './images/shared/linx-logo-light.svg';
-
+export { ReactComponent as CircleInfo } from './images/shared/circle-info.svg';
 export * from '../assets/images/game-edition';
 export * from './socials';

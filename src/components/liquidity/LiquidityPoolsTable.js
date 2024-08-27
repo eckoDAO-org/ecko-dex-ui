@@ -6,7 +6,7 @@ import { humanReadableNumber } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
-import { AddIcon, BoosterIcon, GasIcon, TradeUpIcon, VerifiedLogo } from '../../assets';
+import { AddIcon, BoosterIcon, GasIcon, TradeUpIcon, VerifiedLogo, CircleInfo } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS, ROUTE_POOL_INFO } from '../../router/routes';
 import Label from '../shared/Label';
 import { getAllPairsData } from '../../utils/token-utils';
@@ -15,6 +15,9 @@ import { useApplicationContext, usePactContext } from '../../contexts';
 import useWindowSize from '../../hooks/useWindowSize';
 import styled from 'styled-components';
 import Search from '../shared/Search';
+
+
+
 
 const LiquidityPoolsTable = ({ verifiedActive }) => {
   const history = useHistory();
@@ -108,6 +111,8 @@ const ScalableCryptoContainer = styled(FlexContainer)`
   }
 `;
 
+const defaultIcon = <CircleInfo />;
+
 const renderColumns = (history, allTokens, allPairs, width, searchValue, setSearchValue) => {
   return [
     {
@@ -155,9 +160,11 @@ const renderColumns = (history, allTokens, allPairs, width, searchValue, setSear
               ) : (
                 <div style={{ width: 32 }} />
               )}
-              <CryptoContainer style={{ zIndex: 2 }}> {allTokens[t1].icon}</CryptoContainer>
+              <CryptoContainer style={{ zIndex: 2 }}> 
+                {allTokens[t1]?.icon || defaultIcon}
+              </CryptoContainer>
               <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }} size={30}>
-                {allTokens[t0].icon}{' '}
+                {allTokens[t0]?.icon || defaultIcon}
               </CryptoContainer>
             </div>
             <div

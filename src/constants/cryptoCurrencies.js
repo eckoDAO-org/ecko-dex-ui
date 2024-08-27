@@ -1,40 +1,59 @@
 import React from 'react';
 import pairsJson from './pairs';
 import { loadTokens } from './tokenLoader';
-import { VerifiedBoldLogo } from '../assets';
+import {  CircleInfo } from '../assets';
 
 const environment = process.env.REACT_APP_KDA_NETWORK_TYPE || 'testnet';
+const BASE_ICON_URL = 'https://github.com/CryptoPascal31/kadena_tokens/tree/main/';
+export const DEFAULT_ICON_URL = 'https://github.com/CryptoPascal31/kadena_tokens/tree/main/img/kdx.svg';
 
 export let tokenData = {};
-export const pairsData = pairsJson.pairs[environment];
+export let pairsData = pairsJson.pairs[environment];
 export let blacklistedTokenData = [];
 
 export const initializeTokenData = async () => {
   const yamlTokens = await loadTokens();
   if (yamlTokens) {
-    tokenData = Object.entries(yamlTokens).reduce((acc, [key, token]) => {
+    // Extract blacklisted tokens
+    blacklistedTokenData = yamlTokens.blacklist || [];
+
+    // Process tokens for the current environment
+    const environmentTokens = yamlTokens[environment] || {};
+
+    tokenData = Object.entries(environmentTokens).reduce((acc, [key, token]) => {
+      // Skip blacklisted tokens
+      if (blacklistedTokenData.includes(key)) {
+        return acc;
+      }
+
       acc[key] = {
         name: token.name || key,
         coingeckoId: token.coingeckoId || '',
-        tokenNameKaddexStats: token.code,
-        code: token.code,
-        icon: token.icon ? (
-          <img alt="" src={token.icon} style={{ width: 20, height: 20, marginRight: '8px' }} />
-        ) : (
-          <VerifiedBoldLogo style={{ marginRight: 8 }} />
-        ),
+        tokenNameKaddexStats: token.code || key,
+        code: token.code || key,
+        icon: token.img ? `${BASE_ICON_URL}${token.img}` : DEFAULT_ICON_URL,
         color: token.color || '#FFFFFF',
         main: token.main || false,
         precision: token.precision || 12,
-        isVerified: true, 
+        isVerified: true,
       };
+      console.log("acc", acc)
       return acc;
     }, {});
 
-    blacklistedTokenData = Object.keys(yamlTokens).filter(key => yamlTokens[key].blacklisted || false);
+    // Filter out blacklisted tokens from pairsData
+    pairsData = Object.entries(pairsData).reduce((acc, [pairKey, pairValue]) => {
+      const [token0, token1] = pairKey.split(':');
+      if (!blacklistedTokenData.includes(token0) && !blacklistedTokenData.includes(token1)) {
+        acc[pairKey] = pairValue;
+      }
+      return acc;
+    }, {});
+
+    console.log('Initialized tokenData:', tokenData);
+    console.log('Initialized pairsData:', pairsData);
+    console.log('Blacklisted tokens:', blacklistedTokenData);
   }
-  
-  console.log('Initialized tokenData:', tokenData); // For debugging only
 };
 
 

@@ -8,7 +8,7 @@ import { getTokenUsdPriceByName } from '../utils/token-utils';
 import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { useNotificationContext, useWalletContext } from '.';
 import { fetchPrecision, getPairList } from '../api/pact';
-import {tokenData, pairsData, blacklistedTokenData } from '../constants/cryptoCurrencies';
+import {tokenData, pairsData, blacklistedTokenData, DEFAULT_ICON_URL } from '../constants/cryptoCurrencies';
 import { GAS_OPTIONS } from '../constants/gasConfiguration';
 import { getPairs, getTokenNameFromAddress } from '../api/pairs';
 import { UnknownLogo } from '../assets';
@@ -101,7 +101,8 @@ export const PactProvider = (props) => {
             allTokensList[tokenName] = {
               name: tokenName,
               code: tokenAddress,
-              icon: <UnknownLogo style={{ marginRight: 8 }} />,
+              icon: DEFAULT_ICON_URL,
+              // icon: <UnknownLogo style={{ marginRight: 8 }} />,
               precision: 12,
               isVerified: true,
             };
