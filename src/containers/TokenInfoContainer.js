@@ -25,6 +25,7 @@ const TokenInfoContainer = () => {
   const { token } = useParams();
 
   const pact = usePactContext();
+  console.log('pact', pact);
   const { themeMode } = useApplicationContext();
   const asset =
     (pact.allTokens?.[token].statsID || pact.allTokens?.[token].code) === 'coin'

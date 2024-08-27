@@ -6,6 +6,7 @@ import CommonTable from '../shared/CommonTable';
 import { humanReadableNumber, reduceBalance } from '../../utils/reduceBalance';
 import AppLoader from '../shared/AppLoader';
 import { AddIcon, BoosterIcon, TradeUpIcon } from '../../assets';
+import {DEFAULT_ICON_URL} from '../../constants/cryptoCurrencies';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_LIQUIDITY_TOKENS, ROUTE_TOKEN_INFO } from '../../router/routes';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Label from '../shared/Label';
@@ -157,19 +158,44 @@ const renderColumns = (history, allTokens, width, searchValue, setSearchValue) =
         />
       ),
       width: width <= theme().mediaQueries.mobilePixel ? 90 : 100,
-      render: ({ item }) => (
-        <ScalableCryptoContainer className="align-ce pointer" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
-          <CryptoContainer style={{ zIndex: 2 }}> {allTokens[item.name].icon}</CryptoContainer>
-          {item.name}
-        </ScalableCryptoContainer>
-      ),
+      render: ({ item }) => {
+        console.log("Rendering item:", item);
+        
+        // Find the token by name or code
+        const token = allTokens[item.name] || Object.values(allTokens).find(t => t.name === item.name || t.code === item.name);
+        
+        console.log("Found token:", token);
+
+        if (!token) {
+          console.warn(`Token not found for ${item.name}`);
+          return null;
+        }
+
+        return (
+          <ScalableCryptoContainer className="align-ce pointer" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.statsId))}>
+            <CryptoContainer style={{ zIndex: 2 }}>
+              <img
+                alt={`${item.name} icon`}
+                src={token.icon}
+                style={{ width: 20, height: 20, marginRight: '8px' }}
+                onError={(e) => {
+                  console.error(`Failed to load icon for ${item.name}:`, e);
+                  e.target.onerror = null;
+                  e.target.src = DEFAULT_ICON_URL;
+                }}
+              />
+            </CryptoContainer>
+            {item.name}
+          </ScalableCryptoContainer>
+        );
+      },
     },
     {
       name: 'price',
       width: width <= theme().mediaQueries.mobilePixel ? 90 : 100,
       sortBy: 'tokenUsdPrice',
       render: ({ item }) => (
-        <ScalableCryptoContainer className="align-ce pointer h-100" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
+        <ScalableCryptoContainer className="align-ce pointer h-100" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.statsId))}>
           <DecimalFormatted value={item.tokenUsdPrice} />
         </ScalableCryptoContainer>
       ),

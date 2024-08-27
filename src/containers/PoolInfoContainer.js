@@ -29,8 +29,10 @@ import moment from 'moment';
 import { ROUTE_ANALYTICS_STATS, ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_SWAP } from '../router/routes';
 import Banner from '../components/layout/header/Banner';
 import DecimalFormatted from '../components/shared/DecimalFormatted';
+import {DEFAULT_ICON_URL} from '../constants/cryptoCurrencies';
 
 const formatPrice = (price, precision = 3) => {
+  console.log('price', price);
   return `$ ${humanReadableNumber(price, 3) !== '0.000' ? humanReadableNumber(price, 3) : price.toFixed(precision)}`;
 };
 
@@ -114,6 +116,7 @@ const PoolInfoContainer = () => {
     }
 
     const poolDetails = getAnalyticsDexscanPoolDetails(pool);
+    console.log('poolDetails1', poolDetails);
     setPoolDetails((prev) => ({ ...prev, ...poolDetails }));
   }, [pool, firstTxnTime]);
 
@@ -137,9 +140,10 @@ const PoolInfoContainer = () => {
           ]);
 
           const pairInfo = pact.allPairs[`${dexscanPoolDetails.token1.address}:${dexscanPoolDetails.token0.address}`];
-          const token0Info = pact.allTokens[dexscanPoolDetails.token0.name];
-          const token1Info = pact.allTokens[dexscanPoolDetails.token1.name];
-
+         
+          const token0Info = pact.allTokens[dexscanPoolDetails.token0.address];
+          const token1Info = pact.allTokens[dexscanPoolDetails.token1.address];
+         
           const data = {
             token0Info,
             token1Info,
@@ -151,6 +155,7 @@ const PoolInfoContainer = () => {
 
           setFirstTxnTime(formattedTransactions[0].timestampInSeconds);
           setLastTxnTime(formattedTransactions[formattedTransactions.length - 1].timestampInSeconds);
+          console.log('poolDetails2', data);
 
           setPoolDetails(data);
           setTransactions(formattedTransactions);
@@ -220,7 +225,17 @@ const PoolInfoContainer = () => {
           }}
           onClick={() => history.push(fromLocation || ROUTE_ANALYTICS_STATS)}
         />
-        <CryptoContainer style={{ marginRight: 8 }}>{poolDetails.token0Info.icon}</CryptoContainer>
+      <CryptoContainer style={{ marginRight: 8 }}>
+        <img 
+          src={poolDetails.token0Info.icon} 
+          alt={poolDetails.token0.name}
+          style={{ width: 20, height: 20 }}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = DEFAULT_ICON_URL;
+          }}
+        />
+      </CryptoContainer>
         <Label fontSize={24} fontFamily="syncopate" style={{ whiteSpace: 'nowrap' }}>
           <span>{`${poolDetails.token0.name}`}</span>
           <span style={{ padding: '0 8px', color: commonColors.gameEditionBlueGrey }}>/</span>
@@ -469,7 +484,17 @@ const renderColumns = (history, poolDetails) => {
       width: 100,
       render: ({ item }) => (
         <FlexContainer className="align-ce">
-          <CryptoContainer size={32}>{poolDetails.token0Info.icon}</CryptoContainer>
+          <CryptoContainer size={32}>
+            <img 
+              src={poolDetails.token0Info.icon} 
+              alt={poolDetails.token0.name}
+              style={{ width: 20, height: 20 }}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = DEFAULT_ICON_URL;
+              }}
+            />
+          </CryptoContainer>
           <Label color={getColor(item)}>{humanReadableNumber(item.token0Amount)}</Label>
         </FlexContainer>
       ),
@@ -480,7 +505,17 @@ const renderColumns = (history, poolDetails) => {
       width: 100,
       render: ({ item }) => (
         <FlexContainer className="align-ce">
-          <CryptoContainer size={28}>{poolDetails.token1Info.icon}</CryptoContainer>
+          <CryptoContainer size={28}>
+            <img 
+              src={poolDetails.token1Info.icon} 
+              alt={poolDetails.token1.name}
+              style={{ width: 20, height: 20 }}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = DEFAULT_ICON_URL;
+              }}
+            />
+          </CryptoContainer>
           <Label color={getColor(item)}>{humanReadableNumber(item.token1Amount)}</Label>
         </FlexContainer>
       ),

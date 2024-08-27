@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useErrorState } from '../../hooks/useErrorState';
 import { humanReadableNumber } from '../../utils/reduceBalance';
+import {DEFAULT_ICON_URL} from '../../constants/cryptoCurrencies';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
-import { AddIcon, BoosterIcon, GasIcon, TradeUpIcon, VerifiedLogo, CircleInfo } from '../../assets';
+import { AddIcon, TradeUpIcon } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS, ROUTE_POOL_INFO } from '../../router/routes';
 import Label from '../shared/Label';
 import { getAllPairsData } from '../../utils/token-utils';
@@ -19,11 +20,11 @@ import Search from '../shared/Search';
 
 
 
-const LiquidityPoolsTable = ({ verifiedActive }) => {
+const LiquidityPoolsTable = () => {
+  
   const history = useHistory();
   const { enableGasStation, tokensUsdPrice, allTokens, allPairs } = usePactContext();
 
-  const [verifiedPairList, setVerifiedPairList] = useErrorState([], true);
   const [loading, setLoading] = useState(false);
   const [allPairList, setAllPairList] = useState([]);
   const [searchValue, setSearchValue] = useState('');
@@ -34,9 +35,7 @@ const LiquidityPoolsTable = ({ verifiedActive }) => {
 
   const fetchData = async () => {
     const pairsDataInfo = await getAllPairsData(tokensUsdPrice, allTokens, allPairs);
-    const verifiedPairsData = pairsDataInfo.filter((res) => res.isVerified);
     setAllPairList(pairsDataInfo.sort((x, y) => y.liquidityUsd - x.liquidityUsd));
-    setVerifiedPairList(verifiedPairsData.sort((x, y) => y.liquidityUsd - x.liquidityUsd));
     setLoading(false);
   };
 
@@ -45,7 +44,7 @@ const LiquidityPoolsTable = ({ verifiedActive }) => {
     if (tokensUsdPrice) fetchData();
   }, [tokensUsdPrice]);
 
-  const pairList = Object.values(verifiedActive ? verifiedPairList : allPairList).filter((c) => {
+  const pairList = Object.values(allPairList).filter((c) => {
     const firstToken = c.name.split(':')[0];
     const secondToken = c.name.split(':')[1];
 
@@ -89,6 +88,7 @@ const LiquidityPoolsTable = ({ verifiedActive }) => {
               </FlexContainer>
             ),
             onClick: (item) => {
+              console.log("Item:", item);
               history.push(ROUTE_POOL_INFO.replace(':pool', `${item.token0}:${item.token1}`), { from: history.location.pathname });
             },
           },
@@ -111,9 +111,8 @@ const ScalableCryptoContainer = styled(FlexContainer)`
   }
 `;
 
-const defaultIcon = <CircleInfo />;
-
 const renderColumns = (history, allTokens, allPairs, width, searchValue, setSearchValue) => {
+  console.log("Rendering columns with tokens:", allTokens);
   return [
     {
       name: (
@@ -132,17 +131,23 @@ const renderColumns = (history, allTokens, allPairs, width, searchValue, setSear
         />
       ),
       width: width <= theme().mediaQueries.mobilePixel ? 80 : 160,
-
       render: ({ item }) => {
-        let t0 = null;
-        let t1 = null;
-        if (item.token0 !== 'KDA' && item.token1 !== 'KDA') {
-          t0 = item.token0;
-          t1 = item.token1;
-        } else {
-          t0 = item.token0 === 'KDA' ? item.token0 : item.token1;
-          t1 = item.token1 === 'KDA' ? item.token0 : item.token1;
+        console.log("Rendering pool item:", item);
+
+        // Extract token names from the item.name 
+        const [t0, t1] = item.name.split(':');
+
+        // Find the tokens in allTokens
+        const token0 = Object.values(allTokens).find(token => token.name === t0 || token.code === t0);
+        const token1 = Object.values(allTokens).find(token => token.code === t1 || token.name === t1);
+
+        if (!token0 || !token1) {
+          console.warn(`Token not found for ${t0} or ${t1}`);
+          return null;
         }
+
+        // Determine which token is KDA
+        const [nonKdaToken, kdaToken] = token0.name === 'KDA' ? [token0, token1] : [token0, token1];
 
         return (
           <ScalableCryptoContainer
@@ -150,21 +155,33 @@ const renderColumns = (history, allTokens, allPairs, width, searchValue, setSear
             tabletClassName="align-ce"
             mobileClassName="column align-fs"
             mobilePixel={769}
-            onClick={() => history.push(ROUTE_POOL_INFO.replace(':pool', `${t0}:${t1}`), { from: history.location.pathname })}
-          >
+            onClick={() => history.push(ROUTE_POOL_INFO.replace(':pool', `${nonKdaToken.name}:${kdaToken.name}`), 
+            { from: history.location.pathname })}          >
             <div className="flex align-ce">
-              {allPairs[item.name]?.isVerified ? (
-                <div style={{ marginRight: 16 }}>
-                  <VerifiedLogo className="svg-app-color" />
-                </div>
-              ) : (
-                <div style={{ width: 32 }} />
-              )}
-              <CryptoContainer style={{ zIndex: 2 }}> 
-                {allTokens[t1]?.icon || defaultIcon}
+              
+              <CryptoContainer style={{ zIndex: 2 }}>
+                <img
+                  alt={`${kdaToken.name} icon`}
+                  src={kdaToken.icon}
+                  style={{ width: 20, height: 20, marginRight: '8px' }}
+                  onError={(e) => {
+                    console.error(`Failed to load icon for ${kdaToken.name}:`, e);
+                    e.target.onerror = null;
+                    e.target.src = DEFAULT_ICON_URL;
+                  }}
+                />
               </CryptoContainer>
               <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }} size={30}>
-                {allTokens[t0]?.icon || defaultIcon}
+                <img
+                  alt={`${nonKdaToken.name} icon`}
+                  src={nonKdaToken.icon}
+                  style={{ width: 20, height: 20, marginRight: '8px' }}
+                  onError={(e) => {
+                    console.error(`Failed to load icon for ${nonKdaToken.name}:`, e);
+                    e.target.onerror = null;
+                    e.target.src = DEFAULT_ICON_URL;
+                  }}
+                />
               </CryptoContainer>
             </div>
             <div
@@ -174,7 +191,7 @@ const renderColumns = (history, allTokens, allPairs, width, searchValue, setSear
                 marginTop: width <= theme().mediaQueries.mobilePixel && 4,
               }}
             >
-              {t1}/{t0}
+              {kdaToken.name}/{nonKdaToken.name}
             </div>
           </ScalableCryptoContainer>
         );

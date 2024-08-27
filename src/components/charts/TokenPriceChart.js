@@ -94,7 +94,6 @@ const TokenPriceChart = ({ dataToken, height }) => {
       candle?.usdPrice?.close ?? candle?.price?.close,
     ],
   }));
-
   return isLoading ? (
     <AppLoader containerStyle={{ height: '100%', alignItems: 'center', justifyContent: 'center' }} />
   ) : (
