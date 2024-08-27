@@ -68,57 +68,144 @@ export const getPairList = async (allPairs) => {
       return accum;
     }, '');
 
+    console.log('Pact query tokenPairList:', tokenPairList);
+
     let data = await pactFetchLocal(
       `
-              (namespace 'free)
-  
-              (module ${KADDEX_NAMESPACE}-read G
-  
-                (defcap G ()
-                  true)
-  
-                (defun pair-info (pairList:list)
-                  (let* (
-                    (token0 (at 0 pairList))
-                    (token1 (at 1 pairList))
-                    (p (${KADDEX_NAMESPACE}.exchange.get-pair token0 token1))
-                    (reserveA (${KADDEX_NAMESPACE}.exchange.reserve-for p token0))
-                    (reserveB (${KADDEX_NAMESPACE}.exchange.reserve-for p token1))
-                    (totalBal (${KADDEX_NAMESPACE}.tokens.total-supply (${KADDEX_NAMESPACE}.exchange.get-pair-key token0 token1)))
-                  )
-                  [(${KADDEX_NAMESPACE}.exchange.get-pair-key token0 token1)
-                   reserveA
-                   reserveB
-                   totalBal
-                 ]
-                ))
-              )
-              (map (${KADDEX_NAMESPACE}-read.pair-info) [${tokenPairList}])
-               `
+      (namespace 'free)
+      
+      (module ${KADDEX_NAMESPACE}-read G
+        (defcap G ()
+          true)
+        
+        (defun pair-info (pairList:list)
+          (let* (
+            (token0 (at 0 pairList))
+            (token1 (at 1 pairList))
+            (p (${KADDEX_NAMESPACE}.exchange.get-pair token0 token1))
+            (reserveA (${KADDEX_NAMESPACE}.exchange.reserve-for p token0))
+            (reserveB (${KADDEX_NAMESPACE}.exchange.reserve-for p token1))
+            (totalBal (${KADDEX_NAMESPACE}.tokens.total-supply (${KADDEX_NAMESPACE}.exchange.get-pair-key token0 token1)))
+          )
+          [(${KADDEX_NAMESPACE}.exchange.get-pair-key token0 token1)
+           reserveA
+           reserveB
+           totalBal
+          ]
+        ))
+      )
+      (map (${KADDEX_NAMESPACE}-read.pair-info) [${tokenPairList}])
+      `
     );
-    if (data.errorMessage) {
-      return data;
+
+    console.log('Raw Pact query result:', JSON.stringify(data, null, 2));
+
+    if (data?.result?.status === 'failure') {
+      console.error('Pact query failed:', data.result.error);
+      return []; // Or handle this case as needed
     }
-    if (data) {
-      let dataList = data.reduce((accum, data) => {
-        accum[data[0]] = {
-          supply: data[3],
-          reserves: [data[1], data[2]],
-        };
+
+    if (data?.result?.status === 'success') {
+      let dataList = data.result.data.reduce((accum, pairData) => {
+        if (pairData[0] !== "ERROR") {
+          accum[pairData[0]] = {
+            supply: pairData[3],
+            reserves: [pairData[1], pairData[2]],
+          };
+        } else {
+          console.warn(`Error for pair: ${pairData[1]}`);
+        }
         return accum;
       }, {});
+
       const pairList = Object.values(allPairs).map((pair) => {
-        return {
-          ...pair,
-          ...dataList[pair.name],
-        };
+        if (dataList[pair.name]) {
+          return {
+            ...pair,
+            ...dataList[pair.name],
+          };
+        } else {
+          console.warn(`No data found for pair: ${pair.name}`);
+          return {
+            ...pair,
+            supply: "0",
+            reserves: ["0", "0"],
+          };
+        }
       });
+
       return pairList;
     }
+
+    // If we get here, something unexpected happened
+    console.error('Unexpected data structure:', data);
+    return [];
+
   } catch (e) {
+    console.error('Error in getPairList:', e);
     return handleError(e);
   }
 };
+
+// export const getPairList = async (allPairs) => {
+//   try {
+//     const tokenPairList = Object.keys(allPairs).reduce((accum, pair) => {
+//       accum += `[${pair.split(':').join(' ')}] `;
+//       return accum;
+//     }, '');
+
+//     let data = await pactFetchLocal(
+//       `
+//               (namespace 'free)
+  
+//               (module ${KADDEX_NAMESPACE}-read G
+  
+//                 (defcap G ()
+//                   true)
+  
+//                 (defun pair-info (pairList:list)
+//                   (let* (
+//                     (token0 (at 0 pairList))
+//                     (token1 (at 1 pairList))
+//                     (p (${KADDEX_NAMESPACE}.exchange.get-pair token0 token1))
+//                     (reserveA (${KADDEX_NAMESPACE}.exchange.reserve-for p token0))
+//                     (reserveB (${KADDEX_NAMESPACE}.exchange.reserve-for p token1))
+//                     (totalBal (${KADDEX_NAMESPACE}.tokens.total-supply (${KADDEX_NAMESPACE}.exchange.get-pair-key token0 token1)))
+//                   )
+//                   [(${KADDEX_NAMESPACE}.exchange.get-pair-key token0 token1)
+//                    reserveA
+//                    reserveB
+//                    totalBal
+//                  ]
+//                 ))
+//               )
+//               (map (${KADDEX_NAMESPACE}-read.pair-info) [${tokenPairList}])
+//                `
+//     );
+//     if (data.errorMessage) {
+//       return data;
+//     }
+//     if (data) {
+//       let dataList = data.reduce((accum, data) => {
+//         accum[data[0]] = {
+//           supply: data[3],
+//           reserves: [data[1], data[2]],
+//         };
+//         return accum;
+//       }, {});
+//       const pairList = Object.values(allPairs).map((pair) => {
+//         console.log("pairList", pair)
+//         return {
+//           ...pair,
+//           ...dataList[pair.name],
+//         };
+//       });
+//       return pairList;
+//     }
+//   } catch (e) {
+//     return handleError(e);
+//   }
+// };
 
 export const getPairListAccountBalance = async (account, allPairs) => {
   try {

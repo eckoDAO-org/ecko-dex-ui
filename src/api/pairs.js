@@ -69,7 +69,7 @@ export const getModuleList = async () => {
 
 export const getTokenNameFromAddress = (token, allTokensList) => {
   // Check if the token is already in tokenData
-  let existingToken = Object.values(tokenData).find(t => t.code === token);
+  let existingToken = Object.values(allTokensList).find(t => t.code === token);
   if (existingToken) return existingToken.name;
 
   // If not, generate a name based on the token address

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { ThemeProvider } from 'styled-components/macro';
 import GlobalStyle from './styles/globalStyle';
 import Router from './router/router';
@@ -19,8 +19,21 @@ import useLazyImage from './hooks/useLazyImage';
 import AppLoader from './components/shared/AppLoader';
 import { useApplicationContext } from './contexts';
 import MaintenanceContainer from './containers/MaintenanceContainer';
+import { initializeTokenData } from './constants/cryptoCurrencies';
 
 function App() {
+  const [tokenDataLoaded, setTokenDataLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadTokenData = async () => {
+      await initializeTokenData();
+      setTokenDataLoaded(true);
+    };
+
+    loadTokenData();
+  }, []);
+
+ 
   const { themeMode } = useApplicationContext();
   const [loaded] = useLazyImage([gameEditionBackground]);
   return (

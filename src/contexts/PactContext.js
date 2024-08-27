@@ -103,6 +103,7 @@ export const PactProvider = (props) => {
               code: tokenAddress,
               icon: <UnknownLogo style={{ marginRight: 8 }} />,
               precision: 12,
+              isVerified: true,
             };
           }
         });
