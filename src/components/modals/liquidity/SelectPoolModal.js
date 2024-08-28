@@ -6,10 +6,16 @@ import CustomDivider from '../../shared/CustomDivider';
 import { CryptoContainer, FlexContainer } from '../../shared/FlexContainer';
 import Label from '../../shared/Label';
 import Search from '../../shared/Search';
+import {DEFAULT_ICON_URL} from '../../../constants/cryptoCurrencies';
 
 const SelectPoolModal = ({ pools, onSelect }) => {
   const [searchValue, setSearchValue] = useState('');
   const { allTokens } = usePactContext();
+
+  const getTokenIcon = (tokenCode) => {
+    const token = Object.values(allTokens).find(t => t.code === tokenCode || t.name === tokenCode);
+    return token ? token.icon : null;
+  };
 
   return (
     <Content>
@@ -27,14 +33,30 @@ const SelectPoolModal = ({ pools, onSelect }) => {
       >
         <FlexContainer className="column" gap={16}>
           {pools
-            .filter((pool) => `${pool.token0}/${pool.token1}`?.toLowerCase()?.includes(searchValue?.replaceAll(' ', '')?.toLowerCase()))
+            .filter((pool) => `${pool.token0}/${pool.token1}`.toLowerCase().includes(searchValue.replaceAll(' ', '').toLowerCase()))
             .map((pool, i) => (
               <div key={i} className="pointer flex align-ce" onClick={() => onSelect(pool)}>
                 <CryptoContainer size={22} style={{ zIndex: 2 }}>
-                  {allTokens[pool.token0].icon}
+                  <img
+                    src={getTokenIcon(pool.token0)}
+                    alt={pool.token0}
+                    style={{ width: 20, height: 20 }}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = DEFAULT_ICON_URL;
+                    }}
+                  />
                 </CryptoContainer>
                 <CryptoContainer size={22} style={{ marginLeft: -12, zIndex: 1 }}>
-                  {allTokens[pool.token1].icon}{' '}
+                  <img
+                    src={getTokenIcon(pool.token1)}
+                    alt={pool.token1}
+                    style={{ width: 20, height: 20 }}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = DEFAULT_ICON_URL;
+                    }}
+                  />
                 </CryptoContainer>
                 <Label fontSize={13}>
                   {pool.token0}/{pool.token1}

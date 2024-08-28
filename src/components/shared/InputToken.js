@@ -6,6 +6,7 @@ import CustomButton from './CustomButton';
 import Label from './Label';
 import { useApplicationContext, useGameEditionContext, usePactContext } from '../../contexts';
 import { theme, commonColors } from '../../styles/theme';
+import {DEFAULT_ICON_URL} from '../../constants/cryptoCurrencies';
 
 const Container = styled.div`
   ${({ $gameEditionView, coin }) => {
@@ -72,7 +73,15 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
   const { gameEditionView } = useGameEditionContext();
   const { themeMode } = useApplicationContext();
   const { allTokens } = usePactContext();
-  
+
+  const getTokenData = (tokenIdentifier) => {
+    return Object.values(allTokens).find(
+      token => token.code === tokenIdentifier || token.name === tokenIdentifier
+    );
+  };
+
+  const tokenData = getTokenData(values.coin || values.address);
+
   return (
     <Container $gameEditionView={gameEditionView} geColor={geColor} coin={values?.coin}>
       {values?.coin ? (
@@ -103,17 +112,21 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
               padding: !gameEditionView && '4px 8px',
             }}
           >
-{allTokens[values.address]?.isVerified || allTokens[values.address]?.icon ? (
-  <img
-    alt={`${allTokens[values.address]?.name} icon`}
-    src={allTokens[values.address]?.icon}
-    style={{ width: 20, height: 20, marginRight: '8px' }}
-  />
-) : (
-  <UnknownLogo className="cmm" />
-)}
+            {tokenData?.icon ? (
+              <img
+                alt={`${tokenData.name} icon`}
+                src={tokenData.icon}
+                style={{ width: 20, height: 20, marginRight: '8px' }}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = DEFAULT_ICON_URL; 
+                }}
+              />
+            ) : (
+              <UnknownLogo className="cmm" />
+            )}
             <Label geFontSize={24} geColor={geColor} style={{ opacity: 1 }}>
-              {allTokens[values.coin]?.name}
+              {tokenData?.name || 'Unknown'}
             </Label>
             {gameEditionView ? (
               <PixeledArrowDownIcon className="dropdown" geColor={geColor} />

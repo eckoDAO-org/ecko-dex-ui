@@ -222,7 +222,7 @@ const CreatePairContainer = () => {
                 }}
               >
                 <div className="align-ce flex">
-                  {pact.allTokens[token0.name]?.icon}
+                  {pact.allTokens[token0.address]?.icon}
                   <Label fontSize={13}>{token0.name}</Label>
                 </div>
               </CustomButton>
