@@ -72,7 +72,7 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
   const { gameEditionView } = useGameEditionContext();
   const { themeMode } = useApplicationContext();
   const { allTokens } = usePactContext();
-
+  
   return (
     <Container $gameEditionView={gameEditionView} geColor={geColor} coin={values?.coin}>
       {values?.coin ? (
@@ -103,7 +103,15 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
               padding: !gameEditionView && '4px 8px',
             }}
           >
-            {allTokens[values.coin]?.isVerified || allTokens[values.coin]?.icon ? allTokens[values.coin]?.icon : <UnknownLogo className="cmm" />}
+{allTokens[values.address]?.isVerified || allTokens[values.address]?.icon ? (
+  <img
+    alt={`${allTokens[values.address]?.name} icon`}
+    src={allTokens[values.address]?.icon}
+    style={{ width: 20, height: 20, marginRight: '8px' }}
+  />
+) : (
+  <UnknownLogo className="cmm" />
+)}
             <Label geFontSize={24} geColor={geColor} style={{ opacity: 1 }}>
               {allTokens[values.coin]?.name}
             </Label>

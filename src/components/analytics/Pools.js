@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ROUTE_POOL_INFO } from '../../router/routes';
-import { TradeUpIcon, VerifiedLogo } from '../../assets';
+import { TradeUpIcon } from '../../assets';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import { extractDecimal, humanReadableNumber } from '../../utils/reduceBalance';
 import GraphicPercentage from '../shared/GraphicPercentage';
@@ -18,7 +18,8 @@ const getPairInfoPactContext = (allPairs, token0, token1) => {
   return allPairs[`${token1}:${token0}`] || allPairs[`${token0}:${token1}`];
 };
 
-const Pools = ({ verifiedActive }) => {
+const Pools = () => {
+
   const { themeMode } = useApplicationContext();
 
   const pact = usePactContext();
@@ -28,7 +29,6 @@ const Pools = ({ verifiedActive }) => {
   const [hasErrors, setHasErrors] = useState(false);
 
   const [statsData, setStatsData] = useState([]);
-  const [verifiedStatsData, setVerifiedStatsData] = useState([]);
 
   useEffect(() => {
     const setInitData = async () => {
@@ -38,11 +38,10 @@ const Pools = ({ verifiedActive }) => {
           const dexscanPoolsStats = await getAnalyticsDexscanPoolsData();
 
           const kaddexDexscanPoolsStats = dexscanPoolsStats.filter((d) => d.exchange.name === 'KADDEX');
-
           for (const dexscanPool of kaddexDexscanPoolsStats) {
             const pairInfo = getPairInfoPactContext(pact.allPairs, dexscanPool.token0.address, dexscanPool.token1.address);
-            const tokenInfo = pact.allTokens[dexscanPool.token0.name];
-
+            const tokenInfo = pact.allTokens[dexscanPool.token0.address];
+           
             if (!pairInfo || !tokenInfo) {
               continue;
             }
@@ -53,11 +52,7 @@ const Pools = ({ verifiedActive }) => {
               ...dexscanPool,
             });
           }
-
           setStatsData(data.sort((x, y) => y.volume24h - x.volume24h));
-
-          const dataVerified = data.filter((r) => r.isVerified);
-          setVerifiedStatsData(dataVerified.sort((x, y) => y.volume24h - x.volume24h));
 
           setLoading(false);
         }
@@ -83,9 +78,9 @@ const Pools = ({ verifiedActive }) => {
 
   return !loading ? (
     <CommonTable
-      items={verifiedActive ? verifiedStatsData : statsData}
-      columns={renderColumns(history)}
-      actions={[
+    items={statsData}
+    columns={renderColumns(history)}
+    actions={[
         {
           icon: () => (
             <FlexContainer
@@ -129,14 +124,14 @@ const renderColumns = (history) => {
       width: 100,
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer" onClick={() => history.push(ROUTE_POOL_INFO.replace(':pool', item.id))}>
-          {item.isVerified ? (
-            <div style={{ marginRight: 16 }}>
-              <VerifiedLogo className="svg-app-color" />
-            </div>
-          ) : (
-            <div style={{ width: 32 }} />
-          )}
-          <CryptoContainer style={{ zIndex: 2 }}>{item.icon} </CryptoContainer>
+          
+          <CryptoContainer style={{ zIndex: 2 }}>
+            <img
+              alt={`${item.token0.name} icon`}
+              src={item.icon}
+              style={{ width: 20, height: 20, marginRight: '8px' }}
+            />
+          </CryptoContainer>
           <div className="flex ce" style={{ whiteSpace: 'nowrap' }}>
             <b>{item.token0.name}</b>
             <span style={{ color: commonColors.gameEditionBlueGrey }}>/{item.token1.name}</span>

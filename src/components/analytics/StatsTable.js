@@ -97,13 +97,7 @@ const renderColumns = (history, allTokens) => {
       width: 100,
       render: ({ item }) => (
         <ScalableCryptoContainer className="align-ce pointer" onClick={() => history.push(ROUTE_TOKEN_INFO.replace(':token', item.name))}>
-          {allTokens[item.name]?.isVerified ? (
-            <div style={{ marginRight: 16 }}>
-              <VerifiedLogo className="svg-app-color" />
-            </div>
-          ) : (
-            <div style={{ width: 32 }} />
-          )}
+          
           <CryptoContainer style={{ zIndex: 2 }}>{item.icon} </CryptoContainer>
           {item.name}
         </ScalableCryptoContainer>

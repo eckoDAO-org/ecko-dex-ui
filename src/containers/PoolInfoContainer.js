@@ -32,7 +32,6 @@ import DecimalFormatted from '../components/shared/DecimalFormatted';
 import {DEFAULT_ICON_URL} from '../constants/cryptoCurrencies';
 
 const formatPrice = (price, precision = 3) => {
-  console.log('price', price);
   return `$ ${humanReadableNumber(price, 3) !== '0.000' ? humanReadableNumber(price, 3) : price.toFixed(precision)}`;
 };
 
@@ -116,7 +115,6 @@ const PoolInfoContainer = () => {
     }
 
     const poolDetails = getAnalyticsDexscanPoolDetails(pool);
-    console.log('poolDetails1', poolDetails);
     setPoolDetails((prev) => ({ ...prev, ...poolDetails }));
   }, [pool, firstTxnTime]);
 
@@ -155,7 +153,6 @@ const PoolInfoContainer = () => {
 
           setFirstTxnTime(formattedTransactions[0].timestampInSeconds);
           setLastTxnTime(formattedTransactions[formattedTransactions.length - 1].timestampInSeconds);
-          console.log('poolDetails2', data);
 
           setPoolDetails(data);
           setTransactions(formattedTransactions);

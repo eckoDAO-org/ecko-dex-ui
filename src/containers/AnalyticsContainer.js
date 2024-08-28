@@ -16,8 +16,6 @@ import Dex from '../components/analytics/Dex';
 import { getAnalyticsData } from '../api/kaddex-analytics';
 import moment from 'moment';
 import { Helmet } from 'react-helmet';
-import { VerifiedBoldLogo } from '../assets';
-import CustomButton from '../components/shared/CustomButton';
 import styled from 'styled-components';
 import Pools from '../components/analytics/Pools';
 
@@ -32,7 +30,6 @@ const AnalyticsContainer = () => {
   const { gameEditionView } = useGameEditionContext();
   const { themeMode } = useApplicationContext();
   const { kdaUsdPrice } = usePactContext();
-  const [verifiedActive, setVerifiedActive] = useState(true);
 
   useEffect(() => {
     const getInitialData = async () => {
@@ -99,32 +96,7 @@ const AnalyticsContainer = () => {
             </FlexContainer>
 
             <FlexContainer className="align-ce">
-              {pathname === ROUTE_ANALYTICS_STATS && (
-                <CustomButton
-                  fontSize={13}
-                  buttonStyle={{ height: 33 }}
-                  type={verifiedActive ? 'secondary' : 'primary'}
-                  fontFamily="syncopate"
-                  onClick={() => {
-                    if (verifiedActive) {
-                      setVerifiedActive(false);
-                    } else {
-                      setVerifiedActive(true);
-                    }
-                  }}
-                >
-                  <ButtonContent color={commonColors.white}>
-                    <VerifiedBoldLogo className={verifiedActive ? 'svg-app-inverted-color' : 'svg-app-color'} />
-                    <Label
-                      fontFamily="syncopate"
-                      color={verifiedActive ? theme(themeMode).colors.primary : theme(themeMode).colors.white}
-                      labelStyle={{ marginTop: 1 }}
-                    >
-                      VERIFIED
-                    </Label>
-                  </ButtonContent>
-                </CustomButton>
-              )}
+           
 
               <InfoPopup type="modal" title="Analytics data info">
                 <Label>
@@ -139,7 +111,7 @@ const AnalyticsContainer = () => {
           )}
           
           {/* DEX */}
-          {pathname === ROUTE_ANALYTICS_STATS && <Pools verifiedActive={verifiedActive} />}
+          {pathname === ROUTE_ANALYTICS_STATS && <Pools  />}
         </FlexContainer>
       </>
     )

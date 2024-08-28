@@ -38,11 +38,9 @@ export const getAnalyticsDexscanPoolsData = async () => {
 };
 
 export const getAnalyticsDexscanPoolDetails = async (poolId) => {
-  console.log("Getting pool details for poolId:", poolId);
   const url = `api/pairs`;
   return await dexscanPoolDetailsRequest(url, poolId)
     .then((res) => {
-      console.log("res", res);
       return res.data;
     })
     .catch((err) => console.log('err', err));

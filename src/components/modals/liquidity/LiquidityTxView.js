@@ -375,7 +375,7 @@ export const SuccessSingleSideRemoveView = ({ token0, token1, loading, onClick, 
           </FlexContainer>
           {/* RIGHT */}
           <Label className="mobile-only" fontSize={16}>
-            Receive
+            Receive 
           </Label>
 
           <FlexContainer className="w-100 justify-ce align-ce">

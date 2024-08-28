@@ -88,7 +88,6 @@ const LiquidityPoolsTable = () => {
               </FlexContainer>
             ),
             onClick: (item) => {
-              console.log("Item:", item);
               history.push(ROUTE_POOL_INFO.replace(':pool', `${item.token0}:${item.token1}`), { from: history.location.pathname });
             },
           },
@@ -112,7 +111,6 @@ const ScalableCryptoContainer = styled(FlexContainer)`
 `;
 
 const renderColumns = (history, allTokens, allPairs, width, searchValue, setSearchValue) => {
-  console.log("Rendering columns with tokens:", allTokens);
   return [
     {
       name: (
@@ -132,7 +130,6 @@ const renderColumns = (history, allTokens, allPairs, width, searchValue, setSear
       ),
       width: width <= theme().mediaQueries.mobilePixel ? 80 : 160,
       render: ({ item }) => {
-        console.log("Rendering pool item:", item);
 
         // Extract token names from the item.name 
         const [t0, t1] = item.name.split(':');

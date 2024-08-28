@@ -110,13 +110,7 @@ const renderColumns = (tokensUsdPrice, allTokens, allPairs, width) => {
       render: ({ item }) => (
         <FlexContainer desktopClassName="align-ce" tabletClassName="align-ce" mobileClassName="column align-fs" mobilePixel={769}>
           <div className="flex align-ce">
-            {allPairs[item.name]?.isVerified ? (
-              <div style={{ marginRight: 16 }}>
-                <VerifiedLogo className="svg-app-color" />
-              </div>
-            ) : (
-              <div style={{ width: 32 }} />
-            )}
+           
             <CryptoContainer style={{ zIndex: 2 }}>{allTokens[item.token0].icon} </CryptoContainer>
             <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}> {allTokens[item.token1].icon}</CryptoContainer>
           </div>

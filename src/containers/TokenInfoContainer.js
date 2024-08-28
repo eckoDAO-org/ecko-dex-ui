@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { useHistory, useParams } from 'react-router-dom';
@@ -23,15 +22,21 @@ const initialMonthlyRange = {
 const TokenInfoContainer = () => {
   const history = useHistory();
   const { token } = useParams();
-
   const pact = usePactContext();
-  console.log('pact', pact);
   const { themeMode } = useApplicationContext();
-  const asset =
-    (pact.allTokens?.[token].statsID || pact.allTokens?.[token].code) === 'coin'
-      ? 'KDA'
-      : pact.allTokens?.[token].statsID || pact.allTokens?.[token].code;
-  const currency = (pact.allTokens?.[token].statsID || pact.allTokens?.[token].code) === 'coin' ? 'USDT' : 'coin';
+
+  // Find the correct token key in pact.allTokens
+  const tokenKey = Object.keys(pact.allTokens).find(
+    key => pact.allTokens[key].name === token || pact.allTokens[key].code === token
+  );
+
+  const asset = tokenKey && (pact.allTokens[tokenKey].statsID || pact.allTokens[tokenKey].code) === 'coin'
+    ? 'KDA'
+    : pact.allTokens[tokenKey]?.statsID || pact.allTokens[tokenKey]?.code;
+
+  const currency = tokenKey && (pact.allTokens[tokenKey].statsID || pact.allTokens[tokenKey].code) === 'coin'
+    ? 'USDT'
+    : 'coin';
 
   const [monthlyRange, setMonthlyRange] = useState(initialMonthlyRange);
   const [monthlyVolumeRange, setMonthlyVolumeRange] = useState(initialMonthlyRange);
@@ -42,6 +47,11 @@ const TokenInfoContainer = () => {
 
   useEffect(() => {
     const initData = async () => {
+      if (!tokenKey) {
+        console.warn(`Token key not found for ${token}`);
+        return;
+      }
+
       const { data } = await getDailyCandles(asset, currency, moment().subtract(30, 'days').toDate());
       if (data) {
         const initial = data[0]?.usdPrice?.close || data[0]?.price?.close || 0;
@@ -54,13 +64,13 @@ const TokenInfoContainer = () => {
       const lastMonthVolume = await getTotalVolume(
         moment().subtract(1, 'months').toDate(),
         new Date(),
-        pact.allTokens[token].statsID || pact.allTokens[token].code
+        pact.allTokens[tokenKey].statsID || pact.allTokens[tokenKey].code
       );
       if (lastMonthVolume) {
         const pastLastMonthVolume = await getTotalVolume(
           moment().subtract(2, 'months').toDate(),
           moment().subtract(1, 'months').toDate(),
-          pact.allTokens[token].statsID || pact.allTokens[token].code
+          pact.allTokens[tokenKey].statsID || pact.allTokens[tokenKey].code
         );
         setMonthlyVolumeRange({
           initial: pastLastMonthVolume,
@@ -76,7 +86,7 @@ const TokenInfoContainer = () => {
       setPrice24h(price24Diff);
     };
     initData();
-  }, [asset, currency, token]);
+  }, [asset, currency, token, tokenKey]);
 
   return (
     <FlexContainer
@@ -97,17 +107,23 @@ const TokenInfoContainer = () => {
             }}
             onClick={() => history.goBack()}
           />
-          <CryptoContainer style={{ marginRight: 8 }}>{pact.allTokens?.[token].icon}</CryptoContainer>
+        <CryptoContainer style={{ marginRight: 8 }}>
+          <img
+            alt={`${token} icon`}
+            src={pact.allTokens[tokenKey]?.icon}
+            style={{ width: 20, height: 20, marginRight: '8px' }}
+          />
+        </CryptoContainer>
           <div>
             <Label fontSize={24} fontFamily="syncopate">
-              {token}
+              {pact.allTokens[tokenKey]?.name}
             </Label>
             <Label fontSize={12} className="mobile-none" color={commonColors.gameEditionBlueGrey}>
-              {pact.allTokens?.[token].code}
+              {pact.allTokens[tokenKey]?.code}
             </Label>
           </div>
         </div>
-        {!pact.allTokens?.[token].isVerified && (
+        {!pact.allTokens[tokenKey]?.isVerified && (
           <CustomButton
             fontSize={13}
             buttonStyle={{ height: 33, width: 'min-content' }}
@@ -160,11 +176,8 @@ const TokenInfoContainer = () => {
           subtitle={<GraphicPercentage prevValue={monthlyRange?.initial} currentValue={monthlyRange?.final} />}
         />
       </FlexContainer>
-      <TokenPriceChart dataToken={pact.allTokens?.[token]} height={300} />
+      <TokenPriceChart dataToken={pact.allTokens?.[tokenKey]} height={300} />
     </FlexContainer>
-    // <div>
-    //   <CustomButton onClick={() => history.goBack()}>Token Info</CustomButton>
-    // </div>
   );
 };
 

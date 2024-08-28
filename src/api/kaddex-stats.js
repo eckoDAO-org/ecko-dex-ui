@@ -42,7 +42,6 @@ export const dexscanPoolDetailsRequest = async (url, poolId) => {
         },
       })
       .then(async (res) => {
-        console.log('res', res);
         return res;
       })
       .catch((err) => console.log('dexscan stats error', err));

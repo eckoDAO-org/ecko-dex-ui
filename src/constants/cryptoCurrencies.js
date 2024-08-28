@@ -51,9 +51,7 @@ export const initializeTokenData = async () => {
       return acc;
     }, {});
 
-    console.log('Initialized tokenData:', tokenData);
-    console.log('Initialized pairsData:', pairsData);
-    console.log('Blacklisted tokens:', blacklistedTokenData);
+  
   }
 };
 

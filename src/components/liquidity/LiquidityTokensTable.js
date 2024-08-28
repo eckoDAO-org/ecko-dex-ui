@@ -83,7 +83,6 @@ const LiquidityTokensTable = () => {
   }, [tokensUsdPrice]);
 
   const tokenList = allTokensList.filter((c) => {
-    console.log("c", c)
     const code = c.code !== 'coin' ? c.code.split('.')[1] : c.code;
     return code.toLocaleLowerCase().includes(searchValue?.toLocaleLowerCase()) || c.name.toLowerCase().includes(searchValue?.toLowerCase());
   });
@@ -138,8 +137,7 @@ const ScalableCryptoContainer = styled(FlexContainer)`
 `;
 
 const renderColumns = (history, allTokens, width, searchValue, setSearchValue) => {
-  console.log("Rendering columns with tokens:", allTokens);
-  console.log("Rendering columns with search value:", searchValue);
+
   return [
     {
       name: (
@@ -159,12 +157,10 @@ const renderColumns = (history, allTokens, width, searchValue, setSearchValue) =
       ),
       width: width <= theme().mediaQueries.mobilePixel ? 90 : 100,
       render: ({ item }) => {
-        console.log("Rendering item:", item);
         
         // Find the token by name or code
         const token = allTokens[item.name] || Object.values(allTokens).find(t => t.name === item.name || t.code === item.name);
         
-        console.log("Found token:", token);
 
         if (!token) {
           console.warn(`Token not found for ${item.name}`);

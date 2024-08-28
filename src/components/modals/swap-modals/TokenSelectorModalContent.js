@@ -127,8 +127,11 @@ const TokenSelectorModalContent = ({ onSelectToken, onClose, token, tokensToKeep
                         }
                       }}
                     >
-                      {crypto.isVerified ? <VerifiedLogo className="svg-small svg-app-color" /> : <div style={{ width: '24px' }} />}
-                      {crypto.icon}
+                      <img
+                        alt={`${crypto.name} icon`}
+                        src={crypto.icon}
+                        style={{ width: 24, height: 24, marginRight: '8px' }}
+                      />
                       {crypto.name}
 
                       {token === crypto.name && (
