@@ -37,21 +37,20 @@ const TVChartContainer = (props) => {
 
     const enabledFeatures = [];
     let defaultInterval = '60';
+    const datefeed_url = new URL("/udf", process.env.REACT_APP_DEXSCAN_API_URL);
+
 
     const widgetOptions = {
       theme: 'Dark',
       symbol: symbol,
-      datafeed: new window.Datafeeds.UDFCompatibleDatafeed(process.env.REACT_APP_DEXSCAN_API_URL),
+      datafeed: new window.Datafeeds.UDFCompatibleDatafeed(datefeed_url),
       interval: defaultInterval,
       container: ref.current,
       library_path: '/static/charting_library/',
       locale: getLanguageFromURL() || 'en',
       disabled_features: [
         'use_localstorage_for_settings',
-        'header_symbol_search',
         'symbol_search_hot_key',
-        'header_compare',
-        'timeframes_toolbar',
         'header_undo_redo',
         'header_saveload',
         'control_bar',
