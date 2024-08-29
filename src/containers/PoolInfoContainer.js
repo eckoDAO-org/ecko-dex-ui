@@ -21,6 +21,7 @@ import CustomButton from '../components/shared/CustomButton';
 import { ButtonContent } from 'semantic-ui-react';
 import { humanReadableNumber } from '../utils/reduceBalance';
 import GraphicPercentage from '../components/shared/GraphicPercentage';
+import UsdKdaToggle from '../components/shared/UsdKdaToggle';
 import TradingViewChart from '../components/charts/TradingViewChart';
 import CommonTable from '../components/shared/CommonTable';
 import { convertUTCToSecond } from '../utils/time-utils';
@@ -31,8 +32,8 @@ import Banner from '../components/layout/header/Banner';
 import DecimalFormatted from '../components/shared/DecimalFormatted';
 import {DEFAULT_ICON_URL} from '../constants/cryptoCurrencies';
 
-const formatPrice = (price, precision = 3) => {
-  return `$ ${humanReadableNumber(price, 3) !== '0.000' ? humanReadableNumber(price, 3) : price.toFixed(precision)}`;
+const formatPrice = (price, precision = 3, unit="$") => {
+  return `${unit} ${humanReadableNumber(price, 3) !== '0.000' ? humanReadableNumber(price, 3) : price.toFixed(precision)}`;
 };
 
 const formatSupplyInfo = (supply, token) => {
@@ -85,6 +86,60 @@ const formatTransactions = (transactions) => {
     token0Amount: txn.token0.amount,
     token1Amount: txn.token1.amount,
   }));
+};
+
+
+
+  const TokenPriceWidget = ({poolDetails}) => {
+    const [usdKda, setUsdKda] = useState(false); // False measn USD, while true means KDA => Default is USD
+    const unit = usdKda?"KDA":"$";
+
+    return <FlexContainer withGradient gap={8} className="relative row background-fill w-100" style={{ padding: 5, zIndex: 1 }}>
+
+    <div className="column w-100" style={{ padding: 22}}>
+      <Label fontSize={14} color={commonColors.gameEditionBlueGrey}>
+        Price
+      </Label>
+      <Label fontSize={32}>{formatPrice(usdKda?poolDetails.priceKda:poolDetails.price, poolDetails.token0Info.precision, unit)}</Label>
+      <FlexContainer gap={16}>
+        <FlexContainer gap={8}>
+          <Label fontSize={14} color={commonColors.gameEditionBlueGrey}>
+            24H
+          </Label>
+          <GraphicPercentage componentStyle={{ margin: 0 }} percentageValue={(usdKda?poolDetails.pricePercChange24hKda:poolDetails.pricePercChange24h) * 100} />
+        </FlexContainer>
+        <FlexContainer gap={8}>
+          <Label fontSize={14} color={commonColors.gameEditionBlueGrey}>
+            7D
+          </Label>
+          <GraphicPercentage componentStyle={{ margin: 0 }} percentageValue={(usdKda?poolDetails.pricePercChange7dKda:poolDetails.pricePercChange7d) * 100} />
+        </FlexContainer>
+      </FlexContainer>
+      <FlexContainer gap={12} className="column" style={{ marginTop: '16px' }}>
+        <FlexContainer gap={4} className="column">
+          <Label fontSize={14} color={commonColors.gameEditionBlueGrey}>
+            24H Volume
+          </Label>
+          <Label fontSize={14}>{unit} {humanReadableNumber(usdKda?poolDetails.volume24hKda:poolDetails.volume24h)}</Label>
+        </FlexContainer>
+        <FlexContainer gap={4} className="column">
+          <Label fontSize={14} color={commonColors.gameEditionBlueGrey}>
+            All Time Low
+          </Label>
+          <Label fontSize={14}>{formatPrice(usdKda?poolDetails.allTimeLowKda:poolDetails.allTimeLow, poolDetails.token0Info.precision , unit)}</Label>
+        </FlexContainer>
+        <FlexContainer gap={4} className="column">
+          <Label fontSize={14} color={commonColors.gameEditionBlueGrey}>
+            All Time High
+          </Label>
+          <Label fontSize={14}>{formatPrice(usdKda?poolDetails.allTimeHighKda:poolDetails.allTimeHigh, poolDetails.token0Info.precision, unit)}</Label>
+        </FlexContainer>
+      </FlexContainer>
+      </div>
+      <div className="column">
+            <UsdKdaToggle initialState={false} onClick={setUsdKda} />
+      </div>
+    </FlexContainer>
 };
 
 const PoolInfoContainer = () => {
@@ -264,49 +319,6 @@ const PoolInfoContainer = () => {
     </FlexContainer>
   );
 
-  const tokenPriceWidget = (
-    <FlexContainer withGradient gap={8} className="relative column background-fill w-100" style={{ padding: 32, zIndex: 1 }}>
-      <Label fontSize={14} color={commonColors.gameEditionBlueGrey}>
-        Price
-      </Label>
-      <Label fontSize={32}>{formatPrice(poolDetails.price, poolDetails.token0Info.precision)}</Label>
-      <FlexContainer gap={16}>
-        <FlexContainer gap={8}>
-          <Label fontSize={14} color={commonColors.gameEditionBlueGrey}>
-            24H
-          </Label>
-          <GraphicPercentage componentStyle={{ margin: 0 }} percentageValue={poolDetails.pricePercChange24h * 100} />
-        </FlexContainer>
-        <FlexContainer gap={8}>
-          <Label fontSize={14} color={commonColors.gameEditionBlueGrey}>
-            7D
-          </Label>
-          <GraphicPercentage componentStyle={{ margin: 0 }} percentageValue={poolDetails.pricePercChange7d * 100} />
-        </FlexContainer>
-      </FlexContainer>
-      <FlexContainer gap={12} className="column" style={{ marginTop: '16px' }}>
-        <FlexContainer gap={4} className="column">
-          <Label fontSize={14} color={commonColors.gameEditionBlueGrey}>
-            24H Volume
-          </Label>
-          <Label fontSize={14}>$ {humanReadableNumber(poolDetails.volume24h)}</Label>
-        </FlexContainer>
-        <FlexContainer gap={4} className="column">
-          <Label fontSize={14} color={commonColors.gameEditionBlueGrey}>
-            All Time Low
-          </Label>
-          <Label fontSize={14}>{formatPrice(poolDetails.allTimeLow, poolDetails.token0Info.precision)}</Label>
-        </FlexContainer>
-        <FlexContainer gap={4} className="column">
-          <Label fontSize={14} color={commonColors.gameEditionBlueGrey}>
-            All Time High
-          </Label>
-          <Label fontSize={14}>{formatPrice(poolDetails.allTimeHigh, poolDetails.token0Info.precision)}</Label>
-        </FlexContainer>
-      </FlexContainer>
-    </FlexContainer>
-  );
-
   const tokenDetailsWidget = (
     <FlexContainer withGradient gap={12} className="relative column background-fill w-100" style={{ padding: 32, zIndex: 1 }}>
       <Label fontSize={16}>Token Details</Label>
@@ -392,7 +404,7 @@ const PoolInfoContainer = () => {
     >
       {header}
       <FlexContainer gap={16} className="w-100 justify-sb" tabletClassName="column" mobileClassName="column">
-        {tokenPriceWidget}
+        <TokenPriceWidget poolDetails={poolDetails} />
         {tokenDetailsWidget}
       </FlexContainer>
       <FlexContainer className="w-100" mobileClassName="justify-ce" tabletClassName="justify-fe" desktopClassName="justify-fe" gap={8}>
