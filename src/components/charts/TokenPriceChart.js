@@ -12,6 +12,7 @@ import Label from '../shared/Label';
 import CustomDropdown from '../shared/CustomDropdown';
 import styled from 'styled-components';
 import { Area, AreaChart, ResponsiveContainer, Tooltip } from 'recharts';
+import UsdKdaPrice from '../shared/UsdKdaPrice';
 
 export const GraphCardHeader = styled.div`
   width: 100%;
@@ -52,11 +53,12 @@ const ThemeIconContainer = styled.div`
 const initialCurrentData = {
   date: new Date(),
   price: 0,
+  kdaPrice:0.0,
 };
 
 const CHART_MODES = ['line', 'candle'];
 
-const TokenPriceChart = ({ dataToken, height }) => {
+const TokenPriceChart = ({ dataToken, height, unit="$" }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [chartMode, setChartMode] = useState(CHART_MODES[0]);
   const [candles, setCandles] = useState([]);
@@ -67,7 +69,7 @@ const TokenPriceChart = ({ dataToken, height }) => {
 
   useEffect(() => {
     fetchCandles();
-  }, [dateStart]);
+  }, [dateStart, unit]);
 
   const fetchCandles = async () => {
     const asset = (dataToken?.statsID || dataToken?.code) === 'coin' ? 'KDA' : dataToken?.statsID || dataToken?.code;
@@ -78,34 +80,27 @@ const TokenPriceChart = ({ dataToken, height }) => {
       const last = candles?.data[candles.data.length - 1];
       setCurrentData({
         ...currentData,
-        price: last?.usdPrice?.close || last?.price?.close || '-',
+        usdPrice: last?.usdPrice?.close || '-',
+        kdaPrice: last?.price?.close || '-',
       });
     }
     setIsLoading(false);
     return candles;
   };
 
-  const candlesticks = candles?.map((candle) => ({
-    x: new Date(candle?.day),
-    y: [
-      candle?.usdPrice?.open ?? candle?.price?.open,
-      candle?.usdPrice?.high ?? candle?.price?.high,
-      candle?.usdPrice?.low ?? candle?.price?.low,
-      candle?.usdPrice?.close ?? candle?.price?.close,
-    ],
-  }));
+  const candlesticks = candles?.map((candle) => {
+    const _price = unit==="KDA"? candle?.price : candle.usdPrice;
+    return {x: new Date(candle?.day),
+            y: [ _price?.open, _price?.high, _price?.low, _price?.close]};
+    });
+
   return isLoading ? (
     <AppLoader containerStyle={{ height: '100%', alignItems: 'center', justifyContent: 'center' }} />
   ) : (
     <FlexContainer className="column align-ce w-100 h-100 background-fill" withGradient style={{ padding: 32 }}>
       <FlexContainer className="flex justify-sb w-100" mobileClassName="column">
         <FlexContainer className="column w-100" mobileStyle={{ marginBottom: 10 }}>
-          <Label fontSize={24}>
-            ${' '}
-            {humanReadableNumber(currentData?.price, 3) !== '0.000'
-              ? humanReadableNumber(currentData?.price, 3)
-              : humanReadableNumber(currentData?.price, dataToken?.precision)}
-          </Label>
+          <UsdKdaPrice value={unit==="KDA"?currentData?.kdaPrice:currentData.usdPrice} unit={unit} precision={dataToken.precision} fontSize={24} />
           <Label fontSize={16}>{moment(currentData?.date).format('DD/MM/YYYY')}</Label>
         </FlexContainer>
         <ThemeIconContainer className="flex">
@@ -143,20 +138,23 @@ const TokenPriceChart = ({ dataToken, height }) => {
             <AreaChart
               data={candles?.map((candle) => ({
                 name: candle?.day,
-                price: candle?.usdPrice?.close || candle?.price?.close,
+                usdPrice: candle?.usdPrice?.close || 0.0,
+                kdaPrice: candle?.price?.close || 0.0
               }))}
               onMouseMove={({ activePayload }) => {
                 if (activePayload) {
                   setCurrentData({
                     date: activePayload[0]?.payload?.name,
-                    price: activePayload && activePayload[0]?.payload?.price,
+                    usdPrice: (activePayload && activePayload[0]?.payload?.usdPrice) ||  '-',
+                    kdaPrice: (activePayload && activePayload[0]?.payload?.kdaPrice) ||  '-',
                   });
                 }
               }}
               onMouseLeave={() => {
                 setCurrentData({
                   date: candles[candles.length - 1]?.date ?? new Date(),
-                  price: candles[candles.length - 1]?.usdPrice?.close || candles[candles.length - 1]?.price?.close || '-',
+                  usdPrice: (candles[candles.length - 1]?.usdPrice?.close) ||  '-',
+                  kdaPrice: (candles[candles.length - 1]?.price?.close) ||  '-',
                 });
               }}
               margin={{
@@ -173,7 +171,7 @@ const TokenPriceChart = ({ dataToken, height }) => {
                 </linearGradient>
               </defs>
               <Tooltip label="Price" content={() => ''} />
-              <Area type="monotone" dataKey="price" stroke="#ED1CB5" strokeWidth={2} fill="url(#color)" activeDot={{ r: 5 }} dot={{ r: 0 }} />
+              <Area type="monotone" dataKey={unit==="KDA"?"kdaPrice":"usdPrice"} stroke="#ED1CB5" strokeWidth={2} fill="url(#color)" activeDot={{ r: 5 }} dot={{ r: 0 }} />
             </AreaChart>
           </STYChartContainer>
         </div>

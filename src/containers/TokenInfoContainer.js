@@ -13,6 +13,8 @@ import { getDecimalPlaces, humanReadableNumber } from '../utils/reduceBalance';
 import { theme, commonColors, commonTheme } from '../styles/theme';
 import styled from 'styled-components';
 import CustomButton from '../components/shared/CustomButton';
+import UsdKdaPrice from '../components/shared/UsdKdaPrice';
+import UsdKdaToggle from '../components/shared/UsdKdaToggle';
 
 const initialMonthlyRange = {
   initial: 0,
@@ -24,6 +26,10 @@ const TokenInfoContainer = () => {
   const { token } = useParams();
   const pact = usePactContext();
   const { themeMode } = useApplicationContext();
+  const [usdKda, setUsdKda] = useState(false); // False measn USD, while true means KDA => Default is USD
+
+  const unit = usdKda?"KDA":"$";
+  const precision = pact.allTokens?.[token].precision
 
   // Find the correct token key in pact.allTokens
   const tokenKey = Object.keys(pact.allTokens).find(
@@ -54,8 +60,8 @@ const TokenInfoContainer = () => {
 
       const { data } = await getDailyCandles(asset, currency, moment().subtract(30, 'days').toDate());
       if (data) {
-        const initial = data[0]?.usdPrice?.close || data[0]?.price?.close || 0;
-        const final = data[data?.length - 1]?.usdPrice?.close || data[data?.length - 1]?.price?.close || 0;
+        const initial = (unit==="KDA"?data[0]?.price?.close : data[0]?.usdPrice?.close) || 0;
+        const final = (unit==="KDA"?data[data?.length - 1]?.price?.close : data[data?.length - 1]?.usdPrice?.close) || 0;
         setMonthlyRange({
           initial,
           final,
@@ -78,7 +84,7 @@ const TokenInfoContainer = () => {
         });
       }
       let price24Diff = null;
-      if (asset === 'KDA') {
+      if (asset === 'KDA' || unit==="KDA") {
         price24Diff = await getKDAPriceDiff(moment().subtract(1, 'days').toDate(), new Date(), asset, currency);
       } else {
         price24Diff = await getUSDPriceDiff(moment().subtract(1, 'days').toDate(), new Date(), asset, currency);
@@ -86,7 +92,7 @@ const TokenInfoContainer = () => {
       setPrice24h(price24Diff);
     };
     initData();
-  }, [asset, currency, token, tokenKey]);
+  }, [asset, currency, token, tokenKey, unit]);
 
   return (
     <FlexContainer
@@ -122,6 +128,7 @@ const TokenInfoContainer = () => {
               {pact.allTokens[tokenKey]?.code}
             </Label>
           </div>
+          <div style={{marginLeft:"auto"}}> <UsdKdaToggle initialState={false} onClick={setUsdKda} /> </div>
         </div>
         {!pact.allTokens[tokenKey]?.isVerified && (
           <CustomButton
@@ -151,13 +158,7 @@ const TokenInfoContainer = () => {
           title={'Price'}
           mainText={
             <FlexContainer className="flex align-fs column" style={{ marginBottom: 7 }}>
-              {`$ ${
-                pact?.tokensUsdPrice?.[token]
-                  ? humanReadableNumber(pact?.tokensUsdPrice?.[token], 3) !== '0.000'
-                    ? humanReadableNumber(pact?.tokensUsdPrice?.[token], 3)
-                    : (pact?.tokensUsdPrice?.[token]).toFixed(pact.allTokens?.[token].precision)
-                  : '-'
-              }`}
+              <UsdKdaPrice value={pact?.tokensUsdPrice?.[token]} precision={precision} unit={unit} fontSize={32}/>
               <GraphicPercentage prevValue={price24h?.initial} currentValue={price24h?.final} />
             </FlexContainer>
           }
@@ -165,18 +166,18 @@ const TokenInfoContainer = () => {
         />
         <AnalyticsSimpleWidget
           title="1M Trading Volume"
-          mainText={`$ ${humanReadableNumber(monthlyVolumeRange?.final * monthlyRange?.final)}`}
+          mainText={<UsdKdaPrice value={monthlyVolumeRange?.final * monthlyRange?.final} unit={unit} precision={precision} fontSize={24}/>}
           subtitle={
             monthlyVolumeRange?.initial && <GraphicPercentage prevValue={monthlyVolumeRange?.initial} currentValue={monthlyVolumeRange?.final} />
           }
         />
         <AnalyticsSimpleWidget
           title="1M Price Delta"
-          mainText={`$ ${humanReadableNumber(monthlyRange?.final - monthlyRange?.initial)}`}
+          mainText={<UsdKdaPrice value={monthlyRange?.final - monthlyRange?.initial} precision={precision} unit={unit} fontSize={24}/>}
           subtitle={<GraphicPercentage prevValue={monthlyRange?.initial} currentValue={monthlyRange?.final} />}
         />
       </FlexContainer>
-      <TokenPriceChart dataToken={pact.allTokens?.[tokenKey]} height={300} />
+      <TokenPriceChart dataToken={pact.allTokens?.[tokenKey]} height={300} unit={unit}/>
     </FlexContainer>
   );
 };
