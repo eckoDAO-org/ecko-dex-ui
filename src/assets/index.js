@@ -75,5 +75,6 @@ export { ReactComponent as UnmarshalLogo } from './images/shared/unmarshal-logo.
 export { ReactComponent as KadenaExplorerLogo } from './images/shared/kadena-explorer-logo.svg';
 export { ReactComponent as LinxLogoLight } from './images/shared/linx-logo-light.svg';
 export { ReactComponent as CircleInfo } from './images/shared/circle-info.svg';
+export { ReactComponent as KadenaSimpleLogo } from './images/shared/kadena_simple.svg';
 export * from '../assets/images/game-edition';
 export * from './socials';
