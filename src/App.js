@@ -19,23 +19,15 @@ import useLazyImage from './hooks/useLazyImage';
 import AppLoader from './components/shared/AppLoader';
 import { useApplicationContext } from './contexts';
 import MaintenanceContainer from './containers/MaintenanceContainer';
-import { initializeTokenData } from './constants/cryptoCurrencies';
+// import { initializeTokenData } from './constants/cryptoCurrencies';
+import { TokenDataProvider } from './contexts/TokenDataContext';
+
+
 
 function App() {
-  const [tokenDataLoaded, setTokenDataLoaded] = useState(false);
-
-  useEffect(() => {
-    const loadTokenData = async () => {
-      await initializeTokenData();
-      setTokenDataLoaded(true);
-    };
-
-    loadTokenData();
-  }, []);
-
- 
   const { themeMode } = useApplicationContext();
   const [loaded] = useLazyImage([gameEditionBackground]);
+
   return (
     <ThemeProvider theme={theme(themeMode)}>
       {process.env.REACT_APP_MAINTENANCE_PAGE === 'true' ? (
@@ -45,29 +37,31 @@ function App() {
       ) : (
         <>
           <GlobalStyle themeMode={themeMode} />
-          <GameEditionProvider>
-            <AccountProvider>
-              <NotificationRender>
-                <WalletProvider>
-                  <PactProvider>
-                    <KaddexWalletProvider>
-                      <WalletConnectProvider>
-                        <SwapProvider>
-                          <LiquidityProvider>
-                            <RightModalRender>
-                              <ModalRender>
-                                <Router />
-                              </ModalRender>
-                            </RightModalRender>
-                          </LiquidityProvider>
-                        </SwapProvider>
-                      </WalletConnectProvider>
-                    </KaddexWalletProvider>
-                  </PactProvider>
-                </WalletProvider>
-              </NotificationRender>
-            </AccountProvider>
-          </GameEditionProvider>
+          <TokenDataProvider>
+            <GameEditionProvider>
+              <AccountProvider>
+                <NotificationRender>
+                  <WalletProvider>
+                    <PactProvider>
+                      <KaddexWalletProvider>
+                        <WalletConnectProvider>
+                          <SwapProvider>
+                            <LiquidityProvider>
+                              <RightModalRender>
+                                <ModalRender>
+                                  <Router />
+                                </ModalRender>
+                              </RightModalRender>
+                            </LiquidityProvider>
+                          </SwapProvider>
+                        </WalletConnectProvider>
+                      </KaddexWalletProvider>
+                    </PactProvider>
+                  </WalletProvider>
+                </NotificationRender>
+              </AccountProvider>
+            </GameEditionProvider>
+          </TokenDataProvider>
         </>
       )}
     </ThemeProvider>

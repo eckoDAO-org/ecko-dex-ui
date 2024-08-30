@@ -136,7 +136,6 @@ const PoolInfoContainer = () => {
             getAnalyticsDexscanPoolDetails(pool),
             getAnalyticsDexscanPoolTransactions(pool),
           ]);
-
           const pairInfo = pact.allPairs[`${dexscanPoolDetails.token1.address}:${dexscanPoolDetails.token0.address}`];
          
           const token0Info = pact.allTokens[dexscanPoolDetails.token0.address];

@@ -149,7 +149,7 @@ const RightHeaderItems = () => {
         </FadeContainer>
       )}
 
-      {/* <GasStationSettings className="header-item w-fit-content" hasNotification={networkGasData.networkCongested} /> */}
+      <GasStationSettings className="header-item w-fit-content" hasNotification={networkGasData.networkCongested} />
 
       {account?.account && (
         <BellNotification

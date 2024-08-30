@@ -50,7 +50,7 @@ const SwapButtonsForm = ({
   const { swapWallet } = useSwapContext();
   const pact = usePactContext();
   const { gameEditionView, setButtons, closeModal } = useGameEditionContext();
-
+// console.log("fromValues", fromValues)
   const getButtonLabel = () => {
     if (!account.account) return SWAP_BUTTON_CONNECT_WALLET.label;
     //if (!pact.hasWallet()) return "Set signing method in wallet";
