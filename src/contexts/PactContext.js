@@ -44,6 +44,7 @@ export const PactProvider = (props) => {
   const [ratio, setRatio] = useState(NaN);
 
   const [tokensUsdPrice, setTokensUsdPrice] = useState(null);
+  const [tokensKdaPrice, setTokensKdaPrice] = useState(null);
 
   const [enableGasStation, setEnableGasStation] = useState(true);
   const [gasConfiguration, setGasConfiguration] = useState(GAS_OPTIONS.DEFAULT.SWAP);
@@ -207,16 +208,19 @@ export const PactProvider = (props) => {
 
   const updateTokenUsdPrice = async (kdaPrice) => {
     const pairList = await getPairList(allPairs);
-    const result = {};
+    const resultUsd = {};
+    const resultKda = {};
     const dexscanPoolsStats = await getAnalyticsDexscanPoolsData();
     if (allTokens) {
-      for (const token of Object.values(allTokens)) {
+      for (const [token_key, token] of Object.entries(allTokens)) {
         await getTokenUsdPriceByName(token.name, pairList, allTokens, kdaPrice, dexscanPoolsStats).then((price) => {
-          result[token.name] = price;
+          resultUsd[token_key] = price.usd;
+          resultKda[token_key] = price.kda;
         });
       }
     }
-    setTokensUsdPrice(result);
+    setTokensUsdPrice(resultUsd);
+    setTokensKdaPrice(resultKda);
   };
 
   useEffect(() => {
@@ -535,6 +539,7 @@ export const PactProvider = (props) => {
   const contextValues = {
     setPactCmd,
     tokensUsdPrice,
+    tokensKdaPrice,
     slippage,
     setSlippage,
     storeSlippage,

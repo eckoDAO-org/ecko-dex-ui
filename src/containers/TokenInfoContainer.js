@@ -158,7 +158,7 @@ const TokenInfoContainer = () => {
           title={'Price'}
           mainText={
             <FlexContainer className="flex align-fs column" style={{ marginBottom: 7 }}>
-              <UsdKdaPrice value={pact?.tokensUsdPrice?.[token]} precision={precision} unit={unit} fontSize={32}/>
+              <UsdKdaPrice value={unit==="KDA"?pact?.tokensKdaPrice?.[token]:pact?.tokensUsdPrice?.[token]} precision={precision} unit={unit} fontSize={32}/>
               <GraphicPercentage prevValue={price24h?.initial} currentValue={price24h?.final} />
             </FlexContainer>
           }
