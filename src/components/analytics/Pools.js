@@ -37,7 +37,7 @@ const Pools = () => {
           const data = [];
           const dexscanPoolsStats = await getAnalyticsDexscanPoolsData();
 
-          const kaddexDexscanPoolsStats = dexscanPoolsStats.filter((d) => d.exchange.name === 'KADDEX');
+          const kaddexDexscanPoolsStats = dexscanPoolsStats.filter((d) => d.exchange.name === 'MERCATUS');
           for (const dexscanPool of kaddexDexscanPoolsStats) {
             const pairInfo = getPairInfoPactContext(pact.allPairs, dexscanPool.token0.address, dexscanPool.token1.address);
             const tokenInfo = pact.allTokens[dexscanPool.token0.address];

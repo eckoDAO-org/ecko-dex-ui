@@ -42,7 +42,7 @@ const LiquidityTokensTable = () => {
           .reduce((total, v) => total + v.volume24HUsd, 0);
 
         const tokenPairs = pairsList.filter((p) => p.token0 === token.name || p.token1 === token.name);
-        const tokenUsdPrice = tokensUsdPrice?.[token.name] ? tokensUsdPrice?.[token.name] : 0;
+        const tokenUsdPrice = tokensUsdPrice?.[token.code] ? tokensUsdPrice?.[token.code] : 0;
 
         const liquidityUSD = pairsData
           .filter((t) => t.token0 === token.name || t.token1 === token.name)
