@@ -9,7 +9,7 @@ import AnalyticsSimpleWidget from '../components/shared/AnalyticsSimpleWidget';
 import { CryptoContainer, FlexContainer } from '../components/shared/FlexContainer';
 import GraphicPercentage from '../components/shared/GraphicPercentage';
 import Label from '../components/shared/Label';
-import { getDecimalPlaces, humanReadableNumber } from '../utils/reduceBalance';
+import { getDecimalPlaces } from '../utils/reduceBalance';
 import { theme, commonColors, commonTheme } from '../styles/theme';
 import styled from 'styled-components';
 import CustomButton from '../components/shared/CustomButton';
