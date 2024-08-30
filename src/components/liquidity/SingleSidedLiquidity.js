@@ -39,7 +39,10 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
   });
 
   const [loading, setLoading] = useState(false);
-
+  // console.log("pair", pair);
+  // console.log("pools", pools);
+  // console.log("crypto ME", fromValue);
+  // console.log("CRYPTO YOU selected pool", selectedPool);
   // update the balance after a transaction send or change account
   useEffect(() => {
     if (account.fetchAccountBalance) {
@@ -85,8 +88,10 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
   // }, 10000);
 
   const handleTokenValue = async (token) => {
+    // console.log('token', token);
+    // console.log('pact.allTokens', pact.allTokens);
     const crypto = pact.allTokens[token];
-
+    // console.log('crypto in handle', crypto);
     let balance;
     if (crypto?.code === 'coin') {
       if (account.account) {
@@ -111,12 +116,41 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
     account.setFetchAccountBalance(false);
     // onPairChange(token);
   };
+  
+  // const openTokenSelectorModal = () => {
+  //   console.log("cry", crypto)
+  //   console.log("cry1", fromValue)
+  //   console.log("cry2", selectedPool?.token0)
+  //   console.log("cry3", selectedPool?.token1)
+  //   modalContext.openModal({
+  //     title: 'Select',
+  //     description: '',
+
+  //     onClose: () => {
+  //       modalContext.closeModal();
+  //     },
+  //     content: (
+  //       <TokenSelectorModalContent
+  //         token={fromValue.coin}
+  //         tokensToKeep={[selectedPool?.token0, selectedPool?.token1]}
+  //         onSelectToken={async (crypto) => await handleTokenValue(crypto.name)}
+  //         onClose={() => {
+  //           modalContext.closeModal();
+  //         }}
+  //       />
+  //     ),
+  //   });
+  // };
 
   const openTokenSelectorModal = () => {
+    // console.log("crypto object:", crypto);
+    // console.log("fromValue object:", fromValue);
+    // console.log("selectedPool?.token0:", selectedPool?.token0);
+    // console.log("selectedPool?.token1:", selectedPool?.token1);
+  
     modalContext.openModal({
       title: 'Select',
       description: '',
-
       onClose: () => {
         modalContext.closeModal();
       },
@@ -124,7 +158,12 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
         <TokenSelectorModalContent
           token={fromValue.coin}
           tokensToKeep={[selectedPool?.token0, selectedPool?.token1]}
-          onSelectToken={async (crypto) => await handleTokenValue(crypto.name)}
+          onSelectToken={async (selectedCrypto) => {
+            // console.log("Selected crypto in modal:", selectedCrypto);
+            // console.log("Selected crypto name:", selectedCrypto.name);
+            // console.log("Selected crypto full object:", JSON.stringify(selectedCrypto, null, 2));
+            await handleTokenValue(selectedCrypto.code);
+          }}
           onClose={() => {
             modalContext.closeModal();
           }}

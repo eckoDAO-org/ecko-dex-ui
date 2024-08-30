@@ -51,8 +51,13 @@ const AddLiquidityContainer = (props) => {
 
   const [loading, setLoading] = useState(true);
   const [data, setData] = useErrorState({ pools: [], volumes: [] });
-  const [pair, setPair] = useState({ token0: query?.get('token0'), token1: query.get('token1') });
-
+  // const [pair, setPair] = useState({ token0: query?.get('token0'), token1: query.get('token1') });
+  console.log("allTokens", pact.allTokens)
+  const [pair, setPair] = useState({ 
+    token0: pact.allTokens[query.get('token0')]?.code || query.get('token0'), 
+    token1: pact.allTokens[query.get('token1')]?.code || query.get('token1')
+  });
+  console.log("pairdfdfdf", pair)
   const [apr, setApr] = useState(null);
 
   const [fromLocation, setFromLocation] = useState();
@@ -67,6 +72,7 @@ const AddLiquidityContainer = (props) => {
 
   const calculateApr = async () => {
     const allPairsData = await getAllPairsData(tokensUsdPrice, pact.allTokens, pact.allPairs, data.pools);
+    console.log("pairs", pair)
     let pool = getCurrentPool(pair.token0, pair.token1);
 
     if (pool) {
@@ -76,7 +82,9 @@ const AddLiquidityContainer = (props) => {
   };
 
   const getCurrentPool = (token0, token1) => {
+    console.log("getCurrentPool", token0, token1)
     let pool = data.pools.find((p) => (p.token0 === token0 && p.token1 === token1) || (p.token0 === token1 && p.token1 === token0));
+    console.log("pool current", pool)
     if (pool) {
       return pool;
     }
@@ -84,6 +92,7 @@ const AddLiquidityContainer = (props) => {
 
   const fetchData = async () => {
     const pools = await getPairList(pact.allPairs);
+    console.log("pools fetch", pools)
     if (pools.length) {
       const multipliers = await getPairsMultiplier(pools);
       const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
@@ -111,7 +120,7 @@ const AddLiquidityContainer = (props) => {
       calculateApr();
     }
   }, [pair, data]);
-
+console.log("pact.allPairs", pact.allPairs)
   useEffect(() => {
     if (pact.allPairs) {
       setLoading(true);
