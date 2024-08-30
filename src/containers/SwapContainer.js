@@ -100,7 +100,7 @@ const SwapContainer = () => {
   const [width, height] = useWindowSize();
   const pact = usePactContext();
   const swap = useSwapContext();
-  const account = useAccountContext();
+  const account = useAccountContext(); 
   const wallet = useWalletContext();
   const modalContext = useModalContext();
   const { resolutionConfiguration } = useApplicationContext();
@@ -109,7 +109,6 @@ const SwapContainer = () => {
 
   const { gameEditionView, openModal, closeModal, outsideToken } = useGameEditionContext();
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
-
   const [selectedToken, setSelectedToken] = useState(null);
   const [fromValues, setFromValues] = useState({
     amount: '',
@@ -126,7 +125,6 @@ const SwapContainer = () => {
     address: pact.allTokens?.[query.get('token1')] ? pact.allTokens?.[query.get('token1')]?.code : `${KADDEX_NAMESPACE}.kdx`,
     precision: pact.allTokens?.[query.get('token1')] ? pact.allTokens?.[query.get('token1')]?.precision : 12,
   });
-
   const [inputSide, setInputSide] = useState('');
   const [fromNote, setFromNote] = useState('');
   const [toNote, setToNote] = useState('');
@@ -268,16 +266,19 @@ const SwapContainer = () => {
     history.push(ROUTE_SWAP.concat(`?token0=${fromValues.coin}&token1=${toValues.coin}`));
   }, [fromValues.coin, toValues.coin]);
 
+
   useEffect(() => {
     setBalanceLoading(true);
     const getBalance = async () => {
       if (account.account && account.fetchAccountBalance) {
         let acctOfFromValues = await account.getTokenAccount(
-          pact.allTokens[fromValues.coin]?.code,
+          pact.allTokens[fromValues.address]?.code,
           account.account.account,
           tokenSelectorType === 'from'
         );
-        let acctOfToValues = await account.getTokenAccount(pact.allTokens[toValues.coin]?.code, account.account.account, tokenSelectorType === 'to');
+       
+        let acctOfToValues = await account.getTokenAccount(pact.allTokens[toValues.address]?.code, account.account.account, tokenSelectorType === 'to');
+
         if (acctOfFromValues) {
           let balanceFrom = getCorrectBalance(acctOfFromValues.balance);
           setFromValues((prev) => ({
@@ -293,7 +294,7 @@ const SwapContainer = () => {
           }));
         }
       }
-      setTimeout(() => setBalanceLoading(false), 1000);
+      setTimeout(() => setBalanceLoading(false), 2000);
     };
     getBalance();
   }, [account.fetchAccountBalance, account.account.account]);

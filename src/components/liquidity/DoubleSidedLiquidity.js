@@ -99,12 +99,15 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
     if (fetchData) {
       setFetchingPair(true);
       if (toValues.coin !== '' && fromValues.coin !== '') {
-        await pact.getReserves(pact.allTokens?.[fromValues?.coin]?.code, pact.allTokens?.[toValues?.coin]?.code);
+        console.log("Fetching reserves for:", fromValues, toValues);
+        const result = await pact.getReserves(pact.allTokens?.[fromValues?.coin]?.code, pact.allTokens?.[toValues?.coin]?.code);
+        console.log("getReserves result:", result);
+        console.log("pact.ratio after getReserves:", pact.ratio);
       }
       setFetchingPair(false);
       setFetchData(false);
     }
-  }, [fetchData]); //the getPair call is invoked when is selected a token
+  }, [fetchData]);
 
   /// POLLING ON UPDATE PACT RATIO
   // useInterval(async () => {

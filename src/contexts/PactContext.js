@@ -76,52 +76,126 @@ export const PactProvider = (props) => {
 
   const getPairsData = async () => {
     const result = await getPairs();
-    let allTokensList = { ...tokenData };
-    let allPairsList = { ...pairsData };
-  
+    let communityList = {};
+    let communityTokenList = {};
     if (result.errorMessage) {
-      console.log('ERROR', result.errorMessage);
+      console.log('ERROR');
       return;
     } else {
-      const newPairs = result.filter((r) => !pairsData.hasOwnProperty(r));
-      
-      newPairs.forEach((item) => {
+      const communityPairs = result.filter((r) => !pairsData.hasOwnProperty(r));
+      const communityPairsWithKda = communityPairs.filter((res) => res.split(':')[0] === 'coin' || res.split(':')[1] === 'coin');
+  
+      communityPairsWithKda.forEach((item) => {
+        // TOKENS
         const tokens = item.split(':');
-        const token0 = tokens[0];
-        const token1 = tokens[1];
+        const token0 = tokens[0]; // Gets the first contract
+        const token1 = tokens[1]; // Gets the second contract
   
         if (blacklistedTokenData.includes(token0) || blacklistedTokenData.includes(token1)) {
           return;
         }
   
-        // Process tokens
-        [token0, token1].forEach(tokenAddress => {
-          if (tokenAddress !== 'coin' && !allTokensList[tokenAddress]) {
-            const tokenName = getTokenNameFromAddress(tokenAddress, allTokensList);
-            allTokensList[tokenName] = {
-              name: tokenName,
+        [token0, token1].forEach((tokenAddress, index) => {
+          if (tokenAddress !== 'coin' && !communityTokenList[tokenAddress]) {
+            const communityToken = {
+              name: getTokenNameFromAddress(tokenAddress, communityTokenList),
+              coingeckoId: '',
+              statsID: tokenAddress,
+              tokenNameKaddexStats: tokenAddress,
               code: tokenAddress,
-              icon: DEFAULT_ICON_URL,
-              // icon: <UnknownLogo style={{ marginRight: 8 }} />,
+              main: false,
+              icon: DEFAULT_ICON_URL,              
+              color: '',
               precision: 12,
               isVerified: true,
+              token0: index === 0 ? tokenAddress : token0,
+              token1: index === 1 ? tokenAddress : token1
             };
+            communityTokenList[communityToken.name] = communityToken;
           }
         });
   
-        // Process pair
-        const pairName = item;
-        allPairsList[pairName] = {
-          name: pairName,
-          token0: token0 === 'coin' ? 'KDA' : (allTokensList[token0]?.name || getTokenNameFromAddress(token0, allTokensList)),
-          token1: token1 === 'coin' ? 'KDA' : (allTokensList[token1]?.name || getTokenNameFromAddress(token1, allTokensList)),
+        // PAIRS
+        const communityPair = {
+          name: item,
+          token0: token0 === 'coin' ? 'KDA' : communityTokenList[getTokenNameFromAddress(token0, communityTokenList)].name,
+          token1: token1 === 'coin' ? 'KDA' : communityTokenList[getTokenNameFromAddress(token1, communityTokenList)].name,
+          main: false,
+          isBoosted: false,
+          color: '#92187B',
+          isVerified: true,
         };
+        communityList[communityPair.name] = communityPair;
       });
   
-      setAllTokens(allTokensList);
-      setAllPairs(allPairsList);
+      // Add token0 and token1 fields to main tokens
+      const updatedTokenData = Object.entries(tokenData).reduce((acc, [key, token]) => {
+        const pairWithToken = Object.values(pairsData).find(pair => pair.token0 === token.name || pair.token1 === token.name);
+        if (pairWithToken) {
+          acc[key] = {
+            ...token,
+            token0: pairWithToken.token0 === token.name ? token.code : pairWithToken.token0,
+            token1: pairWithToken.token1 === token.name ? token.code : pairWithToken.token1
+          };
+        } else {
+          acc[key] = token;
+        }
+        return acc;
+      }, {});
+
+      setAllTokens((prev) => ({ ...prev, ...updatedTokenData, ...communityTokenList }));
+      setAllPairs((prev) => ({ ...prev, ...pairsData, ...communityList }));
     }
   };
+  // const getPairsData = async () => {
+  //   const result = await getPairs();
+  //   let allTokensList = { ...tokenData };
+  //   let allPairsList = { ...pairsData };
+  
+  //   if (result.errorMessage) {
+  //     console.log('ERROR', result.errorMessage);
+  //     return;
+  //   } else {
+  //     const newPairs = result.filter((r) => !pairsData.hasOwnProperty(r));
+  //     console.log("newPairs", newPairs);
+  //     newPairs.forEach((item) => {
+  //       const tokens = item.split(':');
+  //       const token0 = tokens[0];
+  //       const token1 = tokens[1];
+        
+  //       if (blacklistedTokenData.includes(token0) || blacklistedTokenData.includes(token1)) {
+  //         return;
+  //       }
+  
+  //       // Process tokens
+  //       [token0, token1].forEach(tokenAddress => {
+  //         if (tokenAddress !== 'coin' && !allTokensList[tokenAddress]) {
+  //           const tokenName = getTokenNameFromAddress(tokenAddress, allTokensList);
+  //           allTokensList[tokenName] = {
+  //             name: tokenName,
+  //             code: tokenAddress,
+  //             icon: DEFAULT_ICON_URL,
+  //             // icon: <UnknownLogo style={{ marginRight: 8 }} />,
+  //             precision: 12,
+  //             isVerified: true,
+  //           };
+  //         }
+  //       });
+  
+  //       // Process pair
+  //       const pairName = item;
+  //       allPairsList[pairName] = {
+  //         name: pairName,
+  //         token0: token0 === 'coin' ? 'KDA' : (allTokensList[token0]?.code || getTokenNameFromAddress(token0, allTokensList)),
+  //         token1: token1 === 'coin' ? 'KDA' : (allTokensList[token1]?.code || getTokenNameFromAddress(token1, allTokensList)),
+  //       };
+  //     });
+  //     // console.log("allTokensList", allTokensList);
+  //     console.log("allPairsList", allPairsList);
+  //     setAllTokens(allTokensList);
+  //     setAllPairs(allPairsList);
+  //   }
+  // };
 
   useEffect(() => {
     async function fetchData() {

@@ -7,7 +7,7 @@ import {DEFAULT_ICON_URL} from '../../constants/cryptoCurrencies';
 import AppLoader from '../shared/AppLoader';
 import CommonTable from '../shared/CommonTable';
 import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
-import { AddIcon, TradeUpIcon } from '../../assets';
+import { AddIcon, TradeUpIcon, GasIcon } from '../../assets';
 import { ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED, ROUTE_LIQUIDITY_POOLS, ROUTE_POOL_INFO } from '../../router/routes';
 import Label from '../shared/Label';
 import { getAllPairsData } from '../../utils/token-utils';
@@ -16,8 +16,6 @@ import { useApplicationContext, usePactContext } from '../../contexts';
 import useWindowSize from '../../hooks/useWindowSize';
 import styled from 'styled-components';
 import Search from '../shared/Search';
-
-
 
 
 const LiquidityPoolsTable = () => {

@@ -19,8 +19,8 @@ export const SwapProvider = (props) => {
     sendTransactionUpdateEvent: walletConnectSendTransactionUpdateEvent,
   } = useWalletConnectContext();
   const wallet = useWalletContext();
-
   const swapWallet = async (token0, token1, isSwapIn) => {
+
     const accountDetails = await getTokenBalanceAccount(token0.address, account.account);
     if (accountDetails.result.status === 'success') {
       const pair = !pact.isMultihopsSwap ? await getPair(token0.address, token1.address) : null;
@@ -55,10 +55,10 @@ export const SwapProvider = (props) => {
           ttl: 600,
           envData: {
             'user-ks': accountDetails.result.data.guard,
-            token0Amount: reduceBalance(token0.amount, pact.allTokens[token0.coin].precision),
-            token1Amount: reduceBalance(token1.amount, pact.allTokens[token1.coin].precision),
-            token0AmountWithSlippage: reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token0.coin].precision),
-            token1AmountWithSlippage: reduceBalance(token1.amount * (1 - parseFloat(pact.slippage)), pact.allTokens[token1.coin].precision),
+            token0Amount: reduceBalance(token0.amount, pact.allTokens[token0.address].precision),
+            token1Amount: reduceBalance(token1.amount, pact.allTokens[token1.address].precision),
+            token0AmountWithSlippage: reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token0.address].precision),
+            token1AmountWithSlippage: reduceBalance(token1.amount * (1 - parseFloat(pact.slippage)), pact.allTokens[token1.address].precision),
           },
           signingPubKey: accountDetails.result.data.guard.keys[0],
           networkId: NETWORKID,
@@ -100,15 +100,15 @@ export const SwapProvider = (props) => {
         const eventData = {
           ...data,
           amountFrom: isSwapIn
-            ? reduceBalance(token0.amount, pact.allTokens[token0.coin].precision)
-            : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token0.coin].precision),
+            ? reduceBalance(token0.amount, pact.allTokens[token0.address].precision)
+            : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token0.address].precision),
           amountTo: isSwapIn
-            ? reduceBalance(token1.amount * (1 - parseFloat(pact.slippage)), pact.allTokens[token1.coin].precision)
-            : reduceBalance(token1.amount, pact.allTokens[token1.coin].precision),
+            ? reduceBalance(token1.amount * (1 - parseFloat(pact.slippage)), pact.allTokens[token1.address].precision)
+            : reduceBalance(token1.amount, pact.allTokens[token1.address].precision),
           tokenAddressFrom: token0.address,
           tokenAddressTo: token1.address,
-          coinFrom: token0.coin,
-          coinTo: token1.coin,
+          coinFrom: token0.address,
+          coinTo: token1.address,
           type: 'SWAP',
         };
         if (isWalletConnectConnected) {
@@ -154,16 +154,16 @@ export const SwapProvider = (props) => {
           account.account,
           pact.multihopsReserves.fromData.pairAccount,
           isSwapIn
-            ? reduceBalance(token0.amount, pact.allTokens[token0.coin].precision)
-            : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token0.coin].precision),
+            ? reduceBalance(token0.amount, pact.allTokens[token0.address].precision)
+            : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token0.address].precision),
         ]),
 
         Pact.lang.mkCap('transfer capability', 'trasnsfer token in', `${token1.address}.TRANSFER`, [
           account.account,
           pact.multihopsReserves.toData.pairAccount,
           isSwapIn
-            ? reduceBalance(token1.amount, pact.allTokens[token1.coin].precision)
-            : reduceBalance(token1.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token1.coin].precision),
+            ? reduceBalance(token1.amount, pact.allTokens[token1.address].precision)
+            : reduceBalance(token1.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token1.address].precision),
         ]),
       ];
     } else {
@@ -175,8 +175,8 @@ export const SwapProvider = (props) => {
           account.account,
           pair.account,
           isSwapIn
-            ? reduceBalance(token0.amount, pact.allTokens[token0.coin].precision)
-            : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token0.coin].precision),
+            ? reduceBalance(token0.amount, pact.allTokens[token0.address].precision)
+            : reduceBalance(token0.amount * (1 + parseFloat(pact.slippage)), pact.allTokens[token0.address].precision),
         ]),
       ];
     }

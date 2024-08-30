@@ -324,6 +324,7 @@ export const getPairAccount = async (token0, token1) => {
 };
 
 export const getTokenBalanceAccount = async (coinCode, account) => {
+  console.log("coinCode", coinCode, account)
   if (account) {
     return await Pact.fetch.local(
       {
