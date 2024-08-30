@@ -27,7 +27,7 @@ export const initializeTokenData = async () => {
       // Construct the raw GitHub URL for the icon
       const iconUrl = token.img ? `${BASE_ICON_URL}${token.img}` : DEFAULT_ICON_URL;
 
-      acc[token.name] = {
+      acc[key] = {
         name: token.name || key,
         coingeckoId: token.coingeckoId || '',
         tokenNameKaddexStats: token.code || key,

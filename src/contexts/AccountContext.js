@@ -32,7 +32,6 @@ export const AccountProvider = (props) => {
 
   useEffect(() => {
     if (account.account) setVerifiedAccount(account.account);
-    console.log("account.account", account.account)
   }, [fetchAccountBalance]);
 
   useEffect(() => {
@@ -57,7 +56,6 @@ export const AccountProvider = (props) => {
         },
         NETWORK
       );
-      console.log("data", data)
       if (data.result.status === 'success') {
         await setAccount({
           ...data.result.data,
@@ -80,7 +78,6 @@ export const AccountProvider = (props) => {
 
   const getTokenAccount = async (token, account, first) => {
     try {
-      console.log("token", token, account)
       let data = await getTokenBalanceAccount(token, account);
 
       if (data.result.status === 'success') {

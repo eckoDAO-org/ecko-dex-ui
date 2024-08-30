@@ -19,7 +19,7 @@ import useLazyImage from './hooks/useLazyImage';
 import AppLoader from './components/shared/AppLoader';
 import { useApplicationContext } from './contexts';
 import MaintenanceContainer from './containers/MaintenanceContainer';
-// import { initializeTokenData } from './constants/cryptoCurrencies';
+import { initializeTokenData } from './constants/cryptoCurrencies';
 import { TokenDataProvider } from './contexts/TokenDataContext';
 
 
@@ -27,6 +27,17 @@ import { TokenDataProvider } from './contexts/TokenDataContext';
 function App() {
   const { themeMode } = useApplicationContext();
   const [loaded] = useLazyImage([gameEditionBackground]);
+
+
+  const [tokenDataLoaded, setTokenDataLoaded] = useState(false);   
+  
+  useEffect(() => {     
+    const loadTokenData = async () => {       
+      await initializeTokenData();       
+      setTokenDataLoaded(true);     
+    };      
+    loadTokenData();   
+  }, []);
 
   return (
     <ThemeProvider theme={theme(themeMode)}>
@@ -37,7 +48,7 @@ function App() {
       ) : (
         <>
           <GlobalStyle themeMode={themeMode} />
-          <TokenDataProvider>
+          {/* <TokenDataProvider> */}
             <GameEditionProvider>
               <AccountProvider>
                 <NotificationRender>
@@ -61,7 +72,7 @@ function App() {
                 </NotificationRender>
               </AccountProvider>
             </GameEditionProvider>
-          </TokenDataProvider>
+          {/* </TokenDataProvider> */}
         </>
       )}
     </ThemeProvider>

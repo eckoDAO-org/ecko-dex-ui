@@ -109,7 +109,6 @@ const SwapContainer = () => {
 
   const { gameEditionView, openModal, closeModal, outsideToken } = useGameEditionContext();
   const [tokenSelectorType, setTokenSelectorType] = useState(null);
-// console.log("pact.allTokens", pact.allTokens)
   const [selectedToken, setSelectedToken] = useState(null);
   const [fromValues, setFromValues] = useState({
     amount: '',
@@ -118,8 +117,7 @@ const SwapContainer = () => {
     address: pact.allTokens?.[query.get('token0')] ? pact.allTokens?.[query.get('token0')]?.code : 'coin',
     precision: pact.allTokens?.[query.get('token0')] ? pact.allTokens?.[query.get('token0')]?.precision : 12,
   });
-  // console.log("pact.allTokens", pact.allTokens)
-  // console.log("fromValues", fromValues)
+
   const [toValues, setToValues] = useState({
     amount: '',
     balance: account.account.balance || '',
@@ -127,7 +125,6 @@ const SwapContainer = () => {
     address: pact.allTokens?.[query.get('token1')] ? pact.allTokens?.[query.get('token1')]?.code : `${KADDEX_NAMESPACE}.kdx`,
     precision: pact.allTokens?.[query.get('token1')] ? pact.allTokens?.[query.get('token1')]?.precision : 12,
   });
-  // console.log("toValues", toValues)
   const [inputSide, setInputSide] = useState('');
   const [fromNote, setFromNote] = useState('');
   const [toNote, setToNote] = useState('');
@@ -139,7 +136,7 @@ const SwapContainer = () => {
   const [fetchingPair, setFetchingPair] = useState(false);
   const [noLiquidity, setNoLiquidity] = useState(false);
   const [priceImpact, setPriceImpact] = useState('');
-console.log("balanceLoading", balanceLoading)
+
   useEffect(()=>{
     if(pact.pairReserve){
       if(pact.pairReserve.token0 <= 0 && pact.pairReserve.token1 <= 0){
@@ -198,7 +195,6 @@ console.log("balanceLoading", balanceLoading)
         setFromNote('(estimate)');
         setToNote('');
         setInputSide(null);
-        console.log("fromValues line 201", fromValues.coin)
         if (fromValues.coin !== '' && toValues.coin !== '' && !isNaN(pact.ratio)) {
           if (toValues.amount.length < 5) {
             throttle(
@@ -275,16 +271,14 @@ console.log("balanceLoading", balanceLoading)
     setBalanceLoading(true);
     const getBalance = async () => {
       if (account.account && account.fetchAccountBalance) {
-        console.log("account.account", account.account, account.fetchAccountBalance)
         let acctOfFromValues = await account.getTokenAccount(
-          pact.allTokens[fromValues.coin],
+          pact.allTokens[fromValues.address]?.code,
           account.account.account,
           tokenSelectorType === 'from'
         );
-        console.log("allTokens", pact.allTokens)
-        console.log("pact.allTokens[toValues.coin]?.code", pact.allTokens[toValues.coin]?.code)
-        let acctOfToValues = await account.getTokenAccount(pact.allTokens[toValues.coin]?.code, account.account.account, tokenSelectorType === 'to');
-        console.log("acctOfFromValues", acctOfFromValues)
+       
+        let acctOfToValues = await account.getTokenAccount(pact.allTokens[toValues.address]?.code, account.account.account, tokenSelectorType === 'to');
+
         if (acctOfFromValues) {
           let balanceFrom = getCorrectBalance(acctOfFromValues.balance);
           setFromValues((prev) => ({
@@ -300,7 +294,7 @@ console.log("balanceLoading", balanceLoading)
           }));
         }
       }
-      setTimeout(() => setBalanceLoading(false), 1000);
+      setTimeout(() => setBalanceLoading(false), 2000);
     };
     getBalance();
   }, [account.fetchAccountBalance, account.account.account]);

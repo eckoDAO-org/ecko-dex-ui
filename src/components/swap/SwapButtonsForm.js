@@ -86,7 +86,6 @@ const SwapButtonsForm = ({
 
   const handleClick = async () => {
     setLoading(true);
-
     const res = await swapWallet(
       {
         amount: fromValues.amount,
