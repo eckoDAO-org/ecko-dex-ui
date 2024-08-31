@@ -33,7 +33,7 @@ const formatPrice = (price, precision = 3, unit="$") => {
 export const getExplorerLink = (item) => {
   const unmarshalUrl = `https://xscan.io/transactions/${item.requestkey}?chain=kadena`;
   const kadenaExplorerUrl = `https://explorer.chainweb.com/mainnet/tx/${item.requestkey}`;
-  const kadenaDetailsExplorerUrl = `https://explorer.chainweb.com/mainnet/txdetails/${item.requestkey}`;
+  const kadenaDetailsExplorerUrl = `https://explorer.chainweb.com/mainnet/txdetail/${item.requestkey}`;
 
   const unmarshalLink = (
     <a href={unmarshalUrl} target="_blank" rel="noopener noreferrer">
