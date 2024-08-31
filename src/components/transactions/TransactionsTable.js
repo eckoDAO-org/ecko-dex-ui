@@ -88,8 +88,6 @@ const TransactionsTable = ({tokenA, tokenB, load_fct}) => {
     }
   }, [firstTxnTime, load_fct]);
 
-  console.log(load_fct)
-
   useEffect(() => {
     const setInitData = async () => {
       const dexscanPoolTransactions =  await load_fct();
@@ -107,9 +105,12 @@ const TransactionsTable = ({tokenA, tokenB, load_fct}) => {
 
     const olderTxns = formatTransactions(await load_fct(undefined, lastTxnTime));
 
-    setLastTxnTime(olderTxns[olderTxns.length - 1].timestampInSeconds);
+    if(olderTxns && olderTxns.length > 0)
+    {
+      setLastTxnTime(olderTxns[olderTxns.length - 1].timestampInSeconds);
+      setTransactions((prev) => [...prev, ...olderTxns]);
+    }
 
-    setTransactions((prev) => [...prev, ...olderTxns]);
     setIsLoadingMoreTxns(false);
   };
 
@@ -237,6 +238,7 @@ const TransactionsTable = ({tokenA, tokenB, load_fct}) => {
 
 
   return <div style={{ fontFamily: commonTheme.fontFamily.regular }}>
+          {transactions &&
           <CommonTable items={transactions}
                        columns={renderColumns()}
                        wantPagination
@@ -244,7 +246,7 @@ const TransactionsTable = ({tokenA, tokenB, load_fct}) => {
                        loading={isLoadingMoreTxns}
                        offset={8}
                        loadMore={async () => {await loadMoreTransactions()}}
-                       cellPadding={12} />
+                       cellPadding={12} />}
           </div>
 
 
