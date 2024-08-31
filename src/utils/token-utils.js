@@ -152,8 +152,8 @@ export const getAllPairsData = async (tokensUsdPrice, allTokens, allPairs, _pool
       let liquidity1 = 0;
 
       if (tokensUsdPrice) {
-        liquidity0 = tokensUsdPrice[token0.name] ? reduceBalance(pool.reserves[0]) * tokensUsdPrice[token0.name] : 0;
-        liquidity1 = tokensUsdPrice[token1.name] ? reduceBalance(pool.reserves[1]) * tokensUsdPrice[token1.name] : 0;
+        liquidity0 = tokensUsdPrice[token0.code] ? reduceBalance(pool.reserves[0]) * tokensUsdPrice[token0.code] : 0;
+        liquidity1 = tokensUsdPrice[token1.code] ? reduceBalance(pool.reserves[1]) * tokensUsdPrice[token1.code] : 0;
 
         volume24HUsd = specificPairData[0] ? specificPairData[0].volume24h : 0;
 
@@ -287,7 +287,8 @@ export const get24HVolumeSingleSided = (volumes, tokenNameKaddexStats) => {
 
 export const getTokenUsdPriceByLiquidity = (liquidity0, liquidity1, usdPrice, precision = 8) => {
   const liquidityRatio = liquidity0 / liquidity1;
-  return bigNumberConverter(liquidityRatio * usdPrice, precision);
+  return {usd: bigNumberConverter(liquidityRatio * usdPrice, precision),
+          kda: bigNumberConverter(liquidityRatio, precision)}
 };
 
 /**
@@ -298,7 +299,7 @@ export const getTokenUsdPriceByName = async (tokenName, pools, allTokens, kdaPri
     (d) => (d.token0.name === tokenName && d.token1.name === 'KDA') || (d.token0.name === 'KDA' && d.token1.name === tokenName)
   );
   if (specificPairData[0] && tokenName !== 'KDA') {
-    return specificPairData[0].price;
+    return {"usd":specificPairData[0].price, "kda": specificPairData[0].priceKda}
   } else {
     const token = Object.values(allTokens).find((t) => t.name === tokenName);
     return await getTokenUsdPrice(token, pools, allTokens, kdaPrice);
@@ -312,7 +313,7 @@ export const getTokenUsdPrice = async (token, pairsList, allTokens, kdaPrice) =>
   }
   const filteredPairs = pairsList.filter((p) => p.token0 === token.name || p.token1 === token.name);
 
-  let tokenUsd = token.name === 'KDA' && !kdaPrice ? await getCoingeckoUsdPrice(token.coingeckoId) : token.name === 'KDA' ? kdaPrice : null;
+  let tokenUsd = token.name === 'KDA' && !kdaPrice ? await getCoingeckoUsdPrice(token.coingeckoId) : token.name === 'KDA' ? {usd:kdaPrice, kda:1.0} : null;
   if (tokenUsd) {
     return tokenUsd;
   } else {
