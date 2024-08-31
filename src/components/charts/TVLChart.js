@@ -81,7 +81,7 @@ const TVLChart = ({ kdaPrice, height }) => {
   const getDailyKdaPrice = (day, candles) => {
     const id = day?._id;
     const candle = candles.find((x) => x?.dayString === id);
-    return candle?.price?.close;
+    return candle?.usdPrice?.close;
   };
 
   return (

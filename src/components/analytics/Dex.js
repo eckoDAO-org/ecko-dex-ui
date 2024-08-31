@@ -46,7 +46,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
         return partialSum + reduceBalance(curr.token0 === 'KDA' ? curr.reserves[0] : curr.reserves[1]);
       }, 0);
 
-      const kdaPrice = tokensUsdPrice?.KDA;
+      const kdaPrice = tokensUsdPrice?.coin;
       const pairData = localPairList
         .map((t) => {
           const kdaTVL = reduceBalance(t.token0 === 'KDA' ? t.reserves[0] : t.reserves[1]);
@@ -83,7 +83,7 @@ const Dex = ({ kdaPrice, kdxSupply, poolState }) => {
           .format('YYYY-MM-DD')}`
       )
       .then(async (volumeRes) => {
-        const kdaPrice = tokensUsdPrice?.KDA;
+        const kdaPrice = tokensUsdPrice?.coin;
         let allVolumes = [];
         const allTokenPairs = localPairList;
         const findTokenPair = (vol) =>
