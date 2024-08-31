@@ -143,8 +143,7 @@ export const PactProvider = (props) => {
         }
         return acc;
       }, {});
-      console.log("updatedTokenData", updatedTokenData);
-      console.log("communityTokenList", communityTokenList);
+     
       setAllTokens((prev) => ({ ...prev, ...updatedTokenData, ...communityTokenList }));
       setAllPairs((prev) => ({ ...prev, ...pairsData, ...communityList }));
     }
@@ -536,7 +535,6 @@ export const PactProvider = (props) => {
     const res = 1 - (1 - FEE * numHops);
     return res;
   }
-  console.log("allTokens", allTokens);
   const contextValues = {
     setPactCmd,
     tokensUsdPrice,

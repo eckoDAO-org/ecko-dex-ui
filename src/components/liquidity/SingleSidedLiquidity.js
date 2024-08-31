@@ -98,8 +98,6 @@
       if (selectedPool) {
         onPairChange(selectedPool?.token1, selectedPool?.token0);
     
-        console.log("selectedPool?.token0", selectedPool?.token0); // Name like 'KDA'
-        console.log("selectedPool?.token1", selectedPool?.token1); // Name like 'KDX'
         
         setFetchingPair(true);
     
@@ -116,9 +114,6 @@
         const token0Address = token0Entry.code;
         const token1Address = token1Entry.code;
     
-        console.log("token0Address", token0Address); // Contract address for 'KDA'
-        console.log("token1Address", token1Address); // Contract address for 'KDX'
-    
         if (fromValue.coin === selectedPool?.token0) {
           await pact.getReserves(token0Address, token1Address);
         } else {
@@ -131,9 +126,6 @@
       }
     }, [fromValue?.coin, selectedPool]);
     
-    useEffect(() => {
-      console.log("fromValue updated:", fromValue);
-    }, [fromValue]);
 
     /// POLLING ON UPDATE PACT RATIO
     // useInterval(async () => {
@@ -142,33 +134,7 @@
     //   }
     // }, 10000);
 
-    // const handleTokenValue = async (token) => {
-    //   // console.log('pact.allTokens', pact.allTokens);
-    //   const crypto = pact.allTokens[token];
-    //   let balance;
-    //   if (crypto?.code === 'coin') {
-    //     if (account.account) {
-    //       balance = account.account.balance;
-    //     }
-    //   } else {
-    //     try {
-    //       let data = await getTokenBalanceAccount(crypto?.code, account.account.account);
-    //       if (data.result.status === 'success') {
-    //         balance = getCorrectBalance(data.result.data.balance);
-    //       }
-    //     } catch (e) {
-    //       console.log('error', e);
-    //     }
-    //   }
-    //   setFromValue((prev) => ({
-    //     ...prev,
-    //     balance: balance,
-    //     coin: crypto?.name,
-    //     precision: crypto?.precision,
-    //   }));
-    //   account.setFetchAccountBalance(false);
-    //   // onPairChange(token);
-    // };
+ 
     const handleTokenValue = async (tokenCode) => {
       const crypto = pact.allTokens[tokenCode];
       let balance;
@@ -196,30 +162,7 @@
       account.setFetchAccountBalance(false);
     };
     
-    // const openTokenSelectorModal = () => {
-    //   console.log("cry", crypto)
-    //   console.log("cry1", fromValue)
-    //   console.log("cry2", selectedPool?.token0)
-    //   console.log("cry3", selectedPool?.token1)
-    //   modalContext.openModal({
-    //     title: 'Select',
-    //     description: '',
 
-    //     onClose: () => {
-    //       modalContext.closeModal();
-    //     },
-    //     content: (
-    //       <TokenSelectorModalContent
-    //         token={fromValue.coin}
-    //         tokensToKeep={[selectedPool?.token0, selectedPool?.token1]}
-    //         onSelectToken={async (crypto) => await handleTokenValue(crypto.name)}
-    //         onClose={() => {
-    //           modalContext.closeModal();
-    //         }}
-    //       />
-    //     ),
-    //   });
-    // };
 
     const openTokenSelectorModal = () => {
       // console.log("crypto object:", crypto);
@@ -256,14 +199,13 @@
       const token0Entry = Object.values(pact.allTokens).find(token => token.name === selectedPool?.token0);
       const token1Entry = Object.values(pact.allTokens).find(token => token.name === selectedPool?.token1);
       
-      // Determine which token is `token1` based on `fromValue.coin`
+      // Determine which token is token1 based on fromValue.coin
       const token1Code = selectedPool?.token0 === fromValue.coin ? token1Entry?.code : token0Entry?.code;
       const fromValueCode = token0Entry?.name === fromValue.coin ? token0Entry?.code : token1Entry?.code;
     
-      console.log("token1Code", token1Code); // Should log the contract address for `token1`
-      console.log("fromValueCode", fromValueCode); // Should log the contract address for `fromValue.coin`
     
-      // Ensure both token codes are valid
+    
+      // We have to ensure both token codes are valid
       if (!fromValueCode || !token1Code) {
         console.error("Invalid token codes:", fromValueCode, token1Code);
         return;

@@ -22,7 +22,6 @@ export const LiquidityProvider = (props) => {
   const [wantsKdxRewards, setWantsKdxRewards] = useState(true);
 
   const addLiquidityWallet = async (token0, token1, amountDesired0, amountDesired1) => {
-    console.log("token0", token0, token1)
     try {
       let pair = await getPairAccount(token0.code, token1.code);
 
@@ -38,7 +37,6 @@ export const LiquidityProvider = (props) => {
       } else {
         pairConfig = pairExists;
       }
-      console.log("pairConfig", pairConfig)
       const contractName = pairConfig.isBoosted ? 'wrapper' : 'exchange';
       const signCmd = {
         pactCode: `(${KADDEX_NAMESPACE}.${contractName}.add-liquidity
@@ -146,7 +144,6 @@ export const LiquidityProvider = (props) => {
   };
 
   const addOneSideLiquidityWallet = async (token0, token1, amountDesired0) => {
-    console.log("tokeNADDONE", token0, token1)
     const accountDetails = await getTokenBalanceAccount(token0.code, account.account);
     if (accountDetails.result.status === 'success') {
       try {
@@ -200,7 +197,6 @@ export const LiquidityProvider = (props) => {
         //alert to sign tx
         wallet.setIsWaitingForWalletAuth(true);
         let command = null;
-
         if (isXWalletConnected) {
           const res = await xWalletRequestSign(signCmd);
           command = res.signedCmd;

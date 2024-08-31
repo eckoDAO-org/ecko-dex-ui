@@ -41,7 +41,6 @@ const Container = styled(FadeIn)`
 `;
 
 const AddLiquidityContainer = (props) => {
-  console.log("props", props)
   const history = useHistory();
   const { setWantsKdxRewards } = useLiquidityContext();
   const pact = usePactContext();
@@ -52,15 +51,7 @@ const AddLiquidityContainer = (props) => {
 
   const [loading, setLoading] = useState(true);
   const [data, setData] = useErrorState({ pools: [], volumes: [] });
-  // const [pair, setPair] = useState({ token0: query?.get('token0'), token1: query.get('token1') });
-  // const [pair, setPair] = useState({ 
-  //   token0: pact.allTokens[query.get('token0')]?.code || query.get('token0'), 
-  //   token1: pact.allTokens[query.get('token1')]?.code || query.get('token1')
-  // });
-console.log("pact.allTokens", pact.allTokens)
 
-console.log("query.get('token0')", query.get('token0'))
-console.log("query.get('token1')", query.get('token1'))
 
 const [pair, setPair] = useState({
   token0: pact.allTokens[query.get('token0')]?.code || query.get('token0'),
@@ -98,7 +89,6 @@ const [pair, setPair] = useState({
   // };
 
   useEffect(() => {
-    console.log('Pools data:', data.pools);
   }, [data.pools]);
   
   useEffect(() => {
@@ -110,12 +100,10 @@ const [pair, setPair] = useState({
     }
   }, [pair, data.pools]);
   const getCurrentPool = (token0, token1) => {
-    console.log('Checking pool for:', token0, token1);
     const pool = data.pools.find((p) => 
       (p.token0 === token0 && p.token1 === token1) || 
       (p.token0 === token1 && p.token1 === token0)
     );
-    console.log('Found pool:', pool);
     return pool;
   };
   
