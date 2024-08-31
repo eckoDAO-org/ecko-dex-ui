@@ -4,16 +4,14 @@ import { CryptoContainer, FlexContainer } from '../components/shared/FlexContain
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { useApplicationContext, usePactContext } from '../contexts';
 import Label from '../components/shared/Label';
-import { getAnalyticsDexscanPoolDetails, getAnalyticsDexscanPoolTransactions } from '../api/kaddex-analytics';
+import { getAnalyticsDexscanPoolDetails} from '../api/kaddex-analytics';
 import AppLoader from '../components/shared/AppLoader';
 import {
   ArrowBack,
   DiscordLogoIcon,
   GithubLogoIcon,
-  KadenaExplorerLogo,
   TelegramLogoIcon,
   TwitterLogoIcon,
-  UnmarshalLogo,
   VerifiedBoldLogo,
   WebsiteLogoIcon,
 } from '../assets';
@@ -23,19 +21,12 @@ import { humanReadableNumber } from '../utils/reduceBalance';
 import GraphicPercentage from '../components/shared/GraphicPercentage';
 import UsdKdaToggle from '../components/shared/UsdKdaToggle';
 import TradingViewChart from '../components/charts/TradingViewChart';
-import CommonTable from '../components/shared/CommonTable';
+import TransactionsTablePool from '../components/transactions/TransactionsTablePool';
+
 import UsdKdaPrice from '../components/shared/UsdKdaPrice';
-import { convertUTCToSecond } from '../utils/time-utils';
-import { shortenAddress } from '../utils/string-utils';
-import moment from 'moment';
 import { ROUTE_ANALYTICS_STATS, ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED, ROUTE_SWAP } from '../router/routes';
 import Banner from '../components/layout/header/Banner';
-import DecimalFormatted from '../components/shared/DecimalFormatted';
 import {DEFAULT_ICON_URL} from '../constants/cryptoCurrencies';
-
-const formatPrice = (price, precision = 3, unit="$") => {
-  return `${unit} ${humanReadableNumber(price, 3) !== '0.000' ? humanReadableNumber(price, 3) : price.toFixed(precision)}`;
-};
 
 const formatSupplyInfo = (supply, token) => {
   if (supply === 0) {
@@ -78,17 +69,6 @@ const getSocialElement = (social) => {
     </a>
   );
 };
-
-const formatTransactions = (transactions) => {
-  return transactions.map((txn) => ({
-    ...txn,
-    timestampInSeconds: convertUTCToSecond(txn.timestamp),
-    token0Amount: txn.token0.amount,
-    token1Amount: txn.token1.amount,
-  }));
-};
-
-
 
   const TokenPriceWidget = ({poolDetails, unit}) => {
 
@@ -179,10 +159,7 @@ const PoolInfoContainer = () => {
   const { themeMode } = useApplicationContext();
   const [poolDetails, setPoolDetails] = useState();
   const [loading, setLoading] = useState(true);
-  const [transactions, setTransactions] = useState([]);
-  const [isLoadingMoreTxns, setIsLoadingMoreTxns] = useState(false);
-  const [firstTxnTime, setFirstTxnTime] = useState();
-  const [lastTxnTime, setLastTxnTime] = useState();
+
   const [fromLocation, setFromLocation] = useState();
   const [hasErrors, setHasErrors] = useState(false);
   const timerRef = useRef(null);
@@ -192,18 +169,9 @@ const PoolInfoContainer = () => {
 
   // Function to refresh pool details and transactions data
   const refreshData = useCallback(async () => {
-    if (firstTxnTime) {
-      const latestTxn = formatTransactions(await getAnalyticsDexscanPoolTransactions(pool, firstTxnTime));
-
-      if (latestTxn.length > 0) {
-        setFirstTxnTime(latestTxn[0].timestampInSeconds);
-        setTransactions((prev) => [...latestTxn, ...prev]);
-      }
-    }
-
     const poolDetails = getAnalyticsDexscanPoolDetails(pool);
     setPoolDetails((prev) => ({ ...prev, ...poolDetails }));
-  }, [pool, firstTxnTime]);
+  }, [pool]);
 
   // Update the previous page for back navigation
   useEffect(() => {
@@ -219,29 +187,19 @@ const PoolInfoContainer = () => {
     const setInitData = async () => {
       try {
         if (pact?.tokensUsdPrice) {
-          const [dexscanPoolDetails, dexscanPoolTransactions] = await Promise.all([
-            getAnalyticsDexscanPoolDetails(pool),
-            getAnalyticsDexscanPoolTransactions(pool),
-          ]);
+          const dexscanPoolDetails =  await getAnalyticsDexscanPoolDetails(pool);
           const pairInfo = pact.allPairs[`${dexscanPoolDetails.token1.address}:${dexscanPoolDetails.token0.address}`];
-         
+
           const token0Info = pact.allTokens[dexscanPoolDetails.token0.address];
           const token1Info = pact.allTokens[dexscanPoolDetails.token1.address];
-         
+
           const data = {
             token0Info,
             token1Info,
             ...pairInfo,
             ...dexscanPoolDetails,
           };
-
-          const formattedTransactions = formatTransactions(dexscanPoolTransactions);
-
-          setFirstTxnTime(formattedTransactions[0].timestampInSeconds);
-          setLastTxnTime(formattedTransactions[formattedTransactions.length - 1].timestampInSeconds);
-
           setPoolDetails(data);
-          setTransactions(formattedTransactions);
           setLoading(false);
         }
       } catch (error) {
@@ -265,18 +223,6 @@ const PoolInfoContainer = () => {
       clearInterval(timerRef.current);
     };
   }, [refreshData]);
-
-  // Function to load older transactions
-  const loadMoreTransactions = async () => {
-    setIsLoadingMoreTxns(true);
-
-    const olderTxns = formatTransactions(await getAnalyticsDexscanPoolTransactions(pool, undefined, lastTxnTime));
-
-    setLastTxnTime(olderTxns[olderTxns.length - 1].timestampInSeconds);
-
-    setTransactions((prev) => [...prev, ...olderTxns]);
-    setIsLoadingMoreTxns(false);
-  };
 
   if (loading) {
     return <AppLoader className="h-100 w-100 align-ce justify-ce" />;
@@ -309,8 +255,8 @@ const PoolInfoContainer = () => {
           onClick={() => history.push(fromLocation || ROUTE_ANALYTICS_STATS)}
         />
       <CryptoContainer style={{ marginRight: 8 }}>
-        <img 
-          src={poolDetails.token0Info.icon} 
+        <img
+          src={poolDetails.token0Info.icon}
           alt={poolDetails.token0.name}
           style={{ width: 20, height: 20 }}
           onError={(e) => {
@@ -379,23 +325,6 @@ const PoolInfoContainer = () => {
     </>
   );
 
-  const transactionsTable = (
-    <div style={{ fontFamily: commonTheme.fontFamily.regular }}>
-      <CommonTable
-        items={transactions}
-        columns={renderColumns(history, poolDetails)}
-        wantPagination
-        hasMore={true}
-        loading={isLoadingMoreTxns}
-        offset={8}
-        loadMore={async () => {
-          await loadMoreTransactions();
-        }}
-        cellPadding={12}
-      />
-    </div>
-  );
-
   return (
     <FlexContainer
       className="column w-100 main"
@@ -415,149 +344,9 @@ const PoolInfoContainer = () => {
       <FlexContainer withGradient className="w-100 justify-sb relative column background-fill" style={{ height: 600, zIndex: 1, padding: 0 }}>
         <TradingViewChart symbol={unit==="KDA"?poolDetails.symbolKda:poolDetails.symbol} />
       </FlexContainer>
-      {transactionsTable}
+      <TransactionsTablePool pool={pool} />
     </FlexContainer>
   );
 };
 
 export default PoolInfoContainer;
-
-const getColor = (item) => {
-  if (item.type === 'BUY') {
-    return '#9ce29c';
-  } else {
-    return '#f79898';
-  }
-};
-
-export const getExplorerLink = (item) => {
-  const unmarshalUrl = `https://xscan.io/transactions/${item.requestkey}?chain=kadena`;
-  const kadenaExplorerUrl = `https://explorer.chainweb.com/mainnet/tx/${item.requestkey}`;
-
-  const unmarshalLink = (
-    <a href={unmarshalUrl} target="_blank" rel="noopener noreferrer">
-      <UnmarshalLogo style={{ cursor: 'pointer', width: 24, height: 24 }} />
-    </a>
-  );
-
-  const kadenaExplorerLink = (
-    <a href={kadenaExplorerUrl} target="_blank" rel="noopener noreferrer">
-      <KadenaExplorerLogo style={{ cursor: 'pointer', width: 18, height: 18 }} />
-    </a>
-  );
-
-  return (
-    <FlexContainer className="align-ce" gap={8}>
-      {kadenaExplorerLink}
-      {item.address.startsWith('k:') && unmarshalLink}
-    </FlexContainer>
-  );
-};
-
-const renderColumns = (history, poolDetails) => {
-  return [
-    {
-      name: 'Transaction Date',
-      width: 100,
-      render: ({ item }) => (
-        <FlexContainer className="align-ce">
-          <Label color={getColor(item)} labelStyle={{ whiteSpace: 'nowrap' }}>
-            {moment(new Date(item.timestamp)).format('yyyy-MM-DD HH:mm:ss')}
-          </Label>
-        </FlexContainer>
-      ),
-      sortBy: 'timestampInSeconds',
-    },
-    {
-      name: 'Type',
-      width: 100,
-      render: ({ item }) => (
-        <FlexContainer className="align-ce">
-          <Label color={item.type === 'BUY' ? commonColors.green : commonColors.red}>{item.type}</Label>
-        </FlexContainer>
-      ),
-      sortBy: 'type',
-    },
-    {
-      name: 'Price',
-      width: 100,
-      render: ({ item }) => (
-        <FlexContainer className="align-ce">
-          <Label color={getColor(item)} labelStyle={{ whiteSpace: 'nowrap' }}>
-            <DecimalFormatted value={item.price} />
-          </Label>
-        </FlexContainer>
-      ),
-      sortBy: 'price',
-    },
-    {
-      name: poolDetails.token0.name,
-      width: 100,
-      render: ({ item }) => (
-        <FlexContainer className="align-ce">
-          <CryptoContainer size={32}>
-            <img 
-              src={poolDetails.token0Info.icon} 
-              alt={poolDetails.token0.name}
-              style={{ width: 20, height: 20 }}
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = DEFAULT_ICON_URL;
-              }}
-            />
-          </CryptoContainer>
-          <Label color={getColor(item)}>{humanReadableNumber(item.token0Amount)}</Label>
-        </FlexContainer>
-      ),
-      sortBy: 'token0Amount',
-    },
-    {
-      name: poolDetails.token1.name,
-      width: 100,
-      render: ({ item }) => (
-        <FlexContainer className="align-ce">
-          <CryptoContainer size={28}>
-            <img 
-              src={poolDetails.token1Info.icon} 
-              alt={poolDetails.token1.name}
-              style={{ width: 20, height: 20 }}
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = DEFAULT_ICON_URL;
-              }}
-            />
-          </CryptoContainer>
-          <Label color={getColor(item)}>{humanReadableNumber(item.token1Amount)}</Label>
-        </FlexContainer>
-      ),
-      sortBy: 'token1Amount',
-    },
-    {
-      name: 'Value',
-      width: 100,
-      render: ({ item }) => (
-        <FlexContainer className="align-ce">
-          <Label color={getColor(item)} labelStyle={{ whiteSpace: 'nowrap' }}>
-            {formatPrice(item.amount)}
-          </Label>
-        </FlexContainer>
-      ),
-      sortBy: 'amount',
-    },
-    {
-      name: 'Address',
-      width: 100,
-      render: ({ item }) => (
-        <FlexContainer className="align-ce">
-          <Label color={getColor(item)}>{shortenAddress(item.address)}</Label>
-        </FlexContainer>
-      ),
-      sortBy: 'address',
-    },
-    {
-      name: 'Explorer',
-      width: 100,
-      render: ({ item }) => getExplorerLink(item),
-    },
-  ];
-};
