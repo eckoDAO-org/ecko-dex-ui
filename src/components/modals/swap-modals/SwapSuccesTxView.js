@@ -21,7 +21,6 @@ export const SwapSuccessViewGE = () => {
 
   const pact = usePactContext();
   const swap = useSwapContext();
-
   return (
     <SuccessViewContainerGE
       containerStyle={{ marginTop: 16 }}
@@ -137,8 +136,10 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
     >
       <FlexContainer className="w-100 column" gap={12}>
         {/* DISCLAIMER */}
-        {(!pact.allTokens[getTokenName(swap?.localRes?.result?.data[0]?.token, pact.allTokens)].isVerified ||
-          !pact.allTokens[getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)].isVerified) && <DisclaimerUnverifiedTokens />}
+        <DisclaimerUnverifiedTokens />
+
+        {/* {(!pact.allTokens[getTokenName(swap?.localRes?.result?.data[0]?.token, pact.allTokens)].isVerified ||
+          !pact.allTokens[getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)].isVerified) && <DisclaimerUnverifiedTokens />} */}
         {/* ACCOUNT */}
         <FlexContainer className="align-ce justify-sb">
           <Label fontSize={13}>Account</Label>

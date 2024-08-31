@@ -19,6 +19,14 @@ export const getTokenByModuleV2 = (token, allTokens) => {
 
 export const getTokenName = (code, allTokens) => {
   const token0 = Object.values(allTokens).find((t) => t.code === code);
+  if (token0?.code) {
+    return token0?.code;
+  }
+  return code?.toUpperCase();
+};
+
+export const getTokenShortName = (code, allTokens) => {
+  const token0 = Object.values(allTokens).find((t) => t.code === code);
   if (token0?.name) {
     return token0?.name;
   }

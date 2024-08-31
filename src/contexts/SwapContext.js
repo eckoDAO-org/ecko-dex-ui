@@ -20,7 +20,7 @@ export const SwapProvider = (props) => {
   } = useWalletConnectContext();
   const wallet = useWalletContext();
   const swapWallet = async (token0, token1, isSwapIn) => {
-
+   
     const accountDetails = await getTokenBalanceAccount(token0.address, account.account);
     if (accountDetails.result.status === 'success') {
       const pair = !pact.isMultihopsSwap ? await getPair(token0.address, token1.address) : null;
@@ -111,6 +111,7 @@ export const SwapProvider = (props) => {
           coinTo: token1.address,
           type: 'SWAP',
         };
+     
         if (isWalletConnectConnected) {
           await walletConnectSendTransactionUpdateEvent(NETWORKID, eventData);
         }
