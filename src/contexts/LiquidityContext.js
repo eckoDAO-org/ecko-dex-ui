@@ -146,6 +146,7 @@ export const LiquidityProvider = (props) => {
   };
 
   const addOneSideLiquidityWallet = async (token0, token1, amountDesired0) => {
+    console.log("tokeNADDONE", token0, token1)
     const accountDetails = await getTokenBalanceAccount(token0.code, account.account);
     if (accountDetails.result.status === 'success') {
       try {
@@ -189,9 +190,9 @@ export const LiquidityProvider = (props) => {
           ttl: 600,
           envData: {
             'user-ks': accountDetails.result.data.guard,
-            amountDesired0: reduceBalance(amountDesired0, pact.allTokens[token0.name].precision),
-            amountMinimum0: reduceBalance(args['amountA-min'], pact.allTokens[token0.name].precision),
-            amountMinimum1: reduceBalance(args['amountB-min'], pact.allTokens[token1.name].precision),
+            amountDesired0: reduceBalance(amountDesired0, pact.allTokens[token0.code].precision),
+            amountMinimum0: reduceBalance(args['amountA-min'], pact.allTokens[token0.code].precision),
+            amountMinimum1: reduceBalance(args['amountB-min'], pact.allTokens[token1.code].precision),
           },
           signingPubKey: accountDetails.result.data.guard.keys[0],
           networkId: NETWORKID,

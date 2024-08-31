@@ -62,13 +62,11 @@ console.log("pact.allTokens", pact.allTokens)
 console.log("query.get('token0')", query.get('token0'))
 console.log("query.get('token1')", query.get('token1'))
 
-  const [pair, setPair] = useState(() => {
-    const token0Code = pact.allTokens[query.get('token0')]?.code || query.get('token0');
-    const token1Code = pact.allTokens[query.get('token1')]?.code || query.get('token1');
-    console.log("token0Code", token0Code)
-    console.log("token1Code", token1Code)
-    return { token0: token0Code, token1: token1Code };
-  });
+const [pair, setPair] = useState({
+  token0: pact.allTokens[query.get('token0')]?.code || query.get('token0'),
+  token1: pact.allTokens[query.get('token1')]?.code || query.get('token1')
+});
+
 
   const [apr, setApr] = useState(null);
 
@@ -99,12 +97,29 @@ console.log("query.get('token1')", query.get('token1'))
   //   }
   // };
 
+  useEffect(() => {
+    console.log('Pools data:', data.pools);
+  }, [data.pools]);
+  
+  useEffect(() => {
+    if (data.pools.length > 0) {
+      const pool = getCurrentPool(pair.token0, pair.token1);
+      if (!pool) {
+        console.log(`No pool found for token0: ${pair.token0}, token1: ${pair.token1}`);
+      }
+    }
+  }, [pair, data.pools]);
   const getCurrentPool = (token0, token1) => {
-    return data.pools.find(p => 
+    console.log('Checking pool for:', token0, token1);
+    const pool = data.pools.find((p) => 
       (p.token0 === token0 && p.token1 === token1) || 
       (p.token0 === token1 && p.token1 === token0)
     );
+    console.log('Found pool:', pool);
+    return pool;
   };
+  
+  
 
   const updatePairAndNavigate = (token0, token1, route) => {
     const currentPool = getCurrentPool(token0, token1);
