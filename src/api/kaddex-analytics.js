@@ -48,7 +48,17 @@ export const getAnalyticsDexscanPoolDetails = async (poolId) => {
 
 export const getAnalyticsDexscanPoolTransactions = async (poolId, fromTime = undefined, toTime = undefined) => {
   const url = `api/transactions`;
-  return await dexscanPoolTransactionsRequest(url, poolId, fromTime, toTime)
+
+  return await dexscanPoolTransactionsRequest(url, poolId, undefined, fromTime, toTime)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => console.log('err', err));
+};
+
+export const getAnalyticsDexscanAccountTransactions = async (account, fromTime = undefined, toTime = undefined) => {
+  const url = `api/transactions`;
+  return await dexscanPoolTransactionsRequest(url, undefined, account, fromTime, toTime)
     .then((res) => {
       return res.data;
     })
