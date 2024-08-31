@@ -81,7 +81,6 @@ const InputToken = ({ values, disabledButton, onClick, onMaxClickButton, geColor
   };
 
   const tokenData = getTokenData(values.coin || values.address);
-
   return (
     <Container $gameEditionView={gameEditionView} geColor={geColor} coin={values?.coin}>
       {values?.coin ? (

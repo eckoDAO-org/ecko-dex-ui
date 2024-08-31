@@ -92,7 +92,13 @@ const SwapForm = ({
   const { tokensUsdPrice } = usePactContext();
   const { gameEditionView } = useGameEditionContext();
   const [rotation, setRotation] = useState(0);
-  
+  console.log("swapform", label)
+  console.log("fromValues", fromValues)
+  console.log("toValues", toValues)
+  console.log("fromNote", fromNote)
+  console.log("toNote", toNote)
+  console.log("swapValues", swapValues)
+
   return (
     <Container gameEditionView={gameEditionView}>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>

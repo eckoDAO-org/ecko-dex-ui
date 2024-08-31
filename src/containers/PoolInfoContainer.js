@@ -373,7 +373,7 @@ const PoolInfoContainer = () => {
             from: pathname,
           })
         }
-      >
+      > 
         ADD LIQUIDITY
       </CustomButton>
     </>

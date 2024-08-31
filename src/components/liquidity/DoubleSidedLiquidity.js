@@ -36,6 +36,8 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   const [inputSide, setInputSide] = useState('');
   const [loading, setLoading] = useState(false);
   const [balanceLoading, setBalanceLoading] = useState(false);
+  console.log("pair", pair);
+  console.log("pact.allTokens", pact.allTokens);
   const [fromValues, setFromValues] = useState({
     amount: '',
     balance: '',
@@ -523,7 +525,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
           setShowTxModal={setShowTxModal}
           label="Amount"
         />
-
+  
         {fromValues.coin && toValues.coin && (
           <>
             {gameEditionView ? (

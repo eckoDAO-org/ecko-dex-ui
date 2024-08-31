@@ -18,6 +18,7 @@ import { CryptoContainer, FlexContainer } from '../shared/FlexContainer';
 import Input from '../shared/Input';
 import InputToken from '../shared/InputToken';
 import Label from '../shared/Label';
+import { DEFAULT_ICON_URL } from '../../constants/cryptoCurrencies';
 
 const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
   const modalContext = useModalContext();
@@ -28,6 +29,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
   const [fetchingPair, setFetchingPair] = useState(false);
   const [selectedPool, setSelectedPool] = useState(null);
   const [showTxModal, setShowTxModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [fromValue, setFromValue] = useState({
     coin: pair?.token0 || 'KDX',
@@ -38,17 +40,27 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
     precision: 12,
   });
 
-  const [loading, setLoading] = useState(false);
-  // console.log("pair", pair);
-  // console.log("pools", pools);
-  // console.log("crypto ME", fromValue);
-  // console.log("CRYPTO YOU selected pool", selectedPool);
+const splitPoolIndex = (poolIndex) => {
+  if (!poolIndex) return { token0: null, token1: null };
+  const [token0, token1] = poolIndex.split(':');
+  return { token0, token1 };
+};
+
+const getTokenIcon = (tokenCode, allTokens) => {
+ 
+  if (!tokenCode || !allTokens) return DEFAULT_ICON_URL;
+  const token = Object.values(allTokens).find(t => t.code === tokenCode || t.name === tokenCode);
+  return token ? token.icon : DEFAULT_ICON_URL;
+};
+const { token0, token1 } = splitPoolIndex(selectedPool?.name);
+
+
   // update the balance after a transaction send or change account
   useEffect(() => {
     if (account.fetchAccountBalance) {
       handleTokenValue(pair?.token0 || 'KDX');
     }
-  }, [account.fetchAccountBalance, account.account.account]);
+  }, [account.fetchAccountBalance, account.account.account, pair?.token0]);
 
   //reset fetchAccountBalance change page
   useEffect(() => {
@@ -64,7 +76,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
     } else {
       setSelectedPool(pools[0]);
     }
-  }, []);
+  }, [pair?.token0, pools]);
 
   useEffect(async () => {
     if (selectedPool) {
@@ -80,6 +92,10 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
     }
   }, [fromValue?.coin, selectedPool]);
 
+  useEffect(() => {
+    console.log("fromValue updated:", fromValue);
+  }, [fromValue]);
+
   /// POLLING ON UPDATE PACT RATIO
   // useInterval(async () => {
   //   if (!isNaN(pact.ratio)) {
@@ -88,10 +104,8 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
   // }, 10000);
 
   const handleTokenValue = async (token) => {
-    // console.log('token', token);
     // console.log('pact.allTokens', pact.allTokens);
     const crypto = pact.allTokens[token];
-    // console.log('crypto in handle', crypto);
     let balance;
     if (crypto?.code === 'coin') {
       if (account.account) {
@@ -99,7 +113,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
       }
     } else {
       try {
-        let data = await getTokenBalanceAccount(crypto.code, account.account.account);
+        let data = await getTokenBalanceAccount(crypto?.code, account.account.account);
         if (data.result.status === 'success') {
           balance = getCorrectBalance(data.result.data.balance);
         }
@@ -277,7 +291,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
       });
     }
   }, [showTxModal]);
-
+console.log("YOOOOOOO", fromValue)
   return (
     <>
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
@@ -301,7 +315,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
                   onSelect={(pool) => {
                     setSelectedPool(pool);
                     modalContext.closeModal();
-                    //setFromValue((prev) => ({ ...prev, coin: pool.token0 }));
+                    // setFromValue((prev) => ({ ...prev, coin: pool.token0 }));
                     handleTokenValue(pool.token0);
                   }}
                   onClose={() => {
@@ -316,10 +330,28 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
             <div className="flex align-ce w-100">
               <div className="flex align-ce">
                 <CryptoContainer size={22} style={{ zIndex: 2 }}>
-                  {pact.allTokens?.[selectedPool?.token0]?.icon}
+                  {/* {pact.allTokens?.[selectedPool?.token0]?.icon} */}
+                  <img
+                    src={getTokenIcon(token0, pact.allTokens)}
+                    alt={token0}
+                    style={{ width: 20, height: 20 }}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = DEFAULT_ICON_URL;
+                    }}
+                  />
                 </CryptoContainer>
                 <CryptoContainer size={22} style={{ marginLeft: -12, zIndex: 1 }}>
-                  {pact.allTokens?.[selectedPool?.token1]?.icon}{' '}
+                <img
+                    src={getTokenIcon(token1, pact.allTokens)}
+                    alt={token1}
+                    style={{ width: 20, height: 20 }}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = DEFAULT_ICON_URL;
+                    }}
+                  />
+                  {/* {pact.allTokens?.[selectedPool?.token1]?.icon}{' '} */}
                 </CryptoContainer>
               </div>
               <Label fontSize={13}>
@@ -329,7 +361,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
             <ArrowDown className="arrow-down" />
           </div>
         </CustomButton>
-
+          
         <Input
           error={isNaN(fromValue.amount)}
           topLeftLabel="amount"
@@ -369,6 +401,7 @@ const SingleSidedLiquidity = ({ pair, pools, onPairChange, apr }) => {
               amount: limitDecimalPlaces(value, fromValue.precision),
             }));
           }}
+          hj
         />
 
         <FlexContainer className="justify-sb w-100">
