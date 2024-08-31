@@ -92,7 +92,7 @@ const SwapForm = ({
   const { tokensUsdPrice } = usePactContext();
   const { gameEditionView } = useGameEditionContext();
   const [rotation, setRotation] = useState(0);
-
+  
   return (
     <Container gameEditionView={gameEditionView}>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
@@ -129,7 +129,7 @@ const SwapForm = ({
               !gameEditionView &&
               Number(fromValues.amount) !== 0 && (
                 <Label labelStyle={{ margin: '-10px 0px 10px 2px', opacity: 0.7 }}>
-                  $ {humanReadableNumber(extractDecimal(tokensUsdPrice?.[fromValues.coin]) * extractDecimal(fromValues.amount))}
+                  $ {humanReadableNumber(extractDecimal(tokensUsdPrice?.[fromValues.address]) * extractDecimal(fromValues.amount))}
                 </Label>
               )
             }
@@ -205,7 +205,7 @@ const SwapForm = ({
               !gameEditionView &&
               Number(toValues.amount) !== 0 && (
                 <Label labelStyle={{ margin: '-10px 0px 10px 2px', opacity: 0.7 }}>
-                  $ {humanReadableNumber(extractDecimal(tokensUsdPrice?.[toValues.coin]) * extractDecimal(toValues.amount))}
+                  $ {humanReadableNumber(extractDecimal(tokensUsdPrice?.[toValues.address]) * extractDecimal(toValues.amount))}
                 </Label>
               )
             }

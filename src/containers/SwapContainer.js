@@ -125,6 +125,9 @@ const SwapContainer = () => {
     address: pact.allTokens?.[query.get('token1')] ? pact.allTokens?.[query.get('token1')]?.code : `${KADDEX_NAMESPACE}.kdx`,
     precision: pact.allTokens?.[query.get('token1')] ? pact.allTokens?.[query.get('token1')]?.precision : 12,
   });
+
+
+
   const [inputSide, setInputSide] = useState('');
   const [fromNote, setFromNote] = useState('');
   const [toNote, setToNote] = useState('');
@@ -654,7 +657,7 @@ const SwapContainer = () => {
           </FlexContainer>
         )}
       </FlexContainer>
-
+        
       <FormContainer
         gameEditionView={gameEditionView}
         footer={
@@ -680,7 +683,7 @@ const SwapContainer = () => {
             }}
           />
         }
-      >
+      > 
         <SwapForm
           balanceLoading={balanceLoading}
           fromValues={fromValues}
