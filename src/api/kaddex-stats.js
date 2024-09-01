@@ -50,13 +50,14 @@ export const dexscanPoolDetailsRequest = async (url, poolId) => {
   }
 };
 
-export const dexscanPoolTransactionsRequest = async (url, poolId, fromTime = undefined, toTime = undefined) => {
+export const dexscanPoolTransactionsRequest = async (url, poolId=undefined, account=undefined, fromTime = undefined, toTime = undefined) => {
   try {
     return await axios
       .get(`${process.env.REACT_APP_DEXSCAN_API_URL}/${url}`, {
         headers: { accept: 'application/json' },
         params: {
           id: poolId,
+          account,
           exchange: 'KADDEX',
           limit: 25,
           fromTime,
