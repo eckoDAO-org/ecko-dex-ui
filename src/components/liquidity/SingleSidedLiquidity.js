@@ -120,9 +120,7 @@
 
  
     const handleTokenValue = async (tokenCode) => {
-      console.log('tokenCode', tokenCode);
       const crypto = pact.allTokens[tokenCode];
-      console.log('crypto', crypto);
       let balance;
       let contract = crypto?.code;
   
@@ -154,7 +152,6 @@
   
 
     const openTokenSelectorModal = () => {
-      console.log('fromValuemodal', fromValue);
       modalContext.openModal({
         title: 'Select',
         description: '',
@@ -166,7 +163,6 @@
             token={fromValue.coin}
             tokensToKeep={[selectedPool?.token0, selectedPool?.token1]}
             onSelectToken={async (selectedCrypto) => {
-             console.log("selectedCrypto", selectedCrypto);
               await handleTokenValue(selectedCrypto.code);
             }}
             onClose={() => {
@@ -183,8 +179,7 @@
       const token1Code = selectedPool?.token0 === fromValue.coin ? 
         pact.allTokens[token1]?.code : 
         pact.allTokens[token0]?.code;
-      console.log('fromValueCode', fromValueCode);
-      console.log('token1Code', token1Code);
+     
       if (!fromValueCode || !token1Code) {
         console.error("Invalid token codes:", fromValueCode, token1Code);
         return;

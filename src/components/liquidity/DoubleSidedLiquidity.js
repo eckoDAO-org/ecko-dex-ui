@@ -135,7 +135,6 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   // }, 10000);
 
   const onTokenClick = async ({ crypto }) => {
-    console.log("onTokenClick", crypto);
     let balance;
     if (crypto?.code === 'coin') {
       if (account.account) {
@@ -304,9 +303,10 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   };
 
   const supply = async () => {
+   
     const res = await liquidity.addLiquidityWallet(
-      pact.allTokens[fromValues.address],
-      pact.allTokens[toValues.address],
+      pact.allTokens?.[fromValues.address].code,
+      pact.allTokens?.[toValues.address].code,
       reduceBalance(fromValues.amount, fromValues.precision),
       reduceBalance(toValues.amount, toValues.precision)
     );
