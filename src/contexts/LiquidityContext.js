@@ -22,6 +22,7 @@ export const LiquidityProvider = (props) => {
   const [wantsKdxRewards, setWantsKdxRewards] = useState(true);
 
   const addLiquidityWallet = async (token0, token1, amountDesired0, amountDesired1) => {
+    
     try {
       let pair = await getPairAccount(token0.code, token1.code);
 
