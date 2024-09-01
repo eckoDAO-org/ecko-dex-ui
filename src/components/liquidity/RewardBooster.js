@@ -13,12 +13,7 @@ const RewardBooster = ({ apr, pair }) => {
         <div className="flex justify-sb align-fs">
           <FlexContainer gap={16} className="align-ce">
             <CoinsIcon className="coins-icon" />
-            <EckoOutlineIcon
-              className="svg-app-color"
-              style={{ border: `1px solid ${theme.colors.white}`, borderRadius: '100%' }}
-              width={24}
-              height={24}
-            />
+            
           </FlexContainer>
           <div className="flex column">
             <Label fontSize={24}> APR {apr?.toFixed(2)} %</Label>

@@ -51,13 +51,14 @@ const AddLiquidityContainer = (props) => {
 
   const [loading, setLoading] = useState(true);
   const [data, setData] = useErrorState({ pools: [], volumes: [] });
-  // const [pair, setPair] = useState({ token0: query?.get('token0'), token1: query.get('token1') });
-  console.log("allTokens", pact.allTokens)
-  const [pair, setPair] = useState({ 
-    token0: pact.allTokens[query.get('token0')]?.code || query.get('token0'), 
-    token1: pact.allTokens[query.get('token1')]?.code || query.get('token1')
-  });
-  console.log("pairdfdfdf", pair)
+
+
+const [pair, setPair] = useState({
+  token0: pact.allTokens[query.get('token0')]?.code || query.get('token0'),
+  token1: pact.allTokens[query.get('token1')]?.code || query.get('token1')
+});
+
+
   const [apr, setApr] = useState(null);
 
   const [fromLocation, setFromLocation] = useState();
@@ -72,7 +73,6 @@ const AddLiquidityContainer = (props) => {
 
   const calculateApr = async () => {
     const allPairsData = await getAllPairsData(tokensUsdPrice, pact.allTokens, pact.allPairs, data.pools);
-    console.log("pairs", pair)
     let pool = getCurrentPool(pair.token0, pair.token1);
 
     if (pool) {
@@ -81,18 +81,46 @@ const AddLiquidityContainer = (props) => {
     }
   };
 
+  // const getCurrentPool = (token0, token1) => {
+  //   let pool = data.pools.find((p) => (p.token0 === token0 && p.token1 === token1) || (p.token0 === token1 && p.token1 === token0));
+  //   if (pool) {
+  //     return pool;
+  //   }
+  // };
+
+  useEffect(() => {
+  }, [data.pools]);
+  
+  useEffect(() => {
+    if (data.pools.length > 0) {
+      const pool = getCurrentPool(pair.token0, pair.token1);
+      if (!pool) {
+        console.log(`No pool found for token0: ${pair.token0}, token1: ${pair.token1}`);
+      }
+    }
+  }, [pair, data.pools]);
   const getCurrentPool = (token0, token1) => {
-    console.log("getCurrentPool", token0, token1)
-    let pool = data.pools.find((p) => (p.token0 === token0 && p.token1 === token1) || (p.token0 === token1 && p.token1 === token0));
-    console.log("pool current", pool)
-    if (pool) {
-      return pool;
+    const pool = data.pools.find((p) => 
+      (p.token0 === token0 && p.token1 === token1) || 
+      (p.token0 === token1 && p.token1 === token0)
+    );
+    return pool;
+  };
+  
+  
+
+  const updatePairAndNavigate = (token0, token1, route) => {
+    const currentPool = getCurrentPool(token0, token1);
+    if (currentPool) {
+      setPair({ token0: currentPool.token0, token1: currentPool.token1 });
+      history.push(route.concat(`?token0=${currentPool.token0}&token1=${currentPool.token1}`), {
+        from: fromLocation,
+      });
     }
   };
 
   const fetchData = async () => {
     const pools = await getPairList(pact.allPairs);
-    console.log("pools fetch", pools)
     if (pools.length) {
       const multipliers = await getPairsMultiplier(pools);
       const volumes = await getGroupedVolume(moment().subtract(1, 'days').toDate(), moment().subtract(1, 'days').toDate(), 'daily');
@@ -120,7 +148,6 @@ const AddLiquidityContainer = (props) => {
       calculateApr();
     }
   }, [pair, data]);
-console.log("pact.allPairs", pact.allPairs)
   useEffect(() => {
     if (pact.allPairs) {
       setLoading(true);
@@ -197,20 +224,16 @@ console.log("pact.allPairs", pact.allPairs)
           pools={data?.pools}
           pair={pair}
           onPairChange={(token0, token1) => {
-            let currentPool = getCurrentPool(token0, token1);
-            setPair({ token0: currentPool?.token1, token1: currentPool?.token0 });
-            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${token0}&token1=${token1}`));
-          }}
+          updatePairAndNavigate(token0, token1, ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED);
+        }}
         />
       )}
       {pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED && (
         <DoubleSidedLiquidity
           pair={{ token0: query.get('token0'), token1: query.get('token1') }}
           onPairChange={(token0, token1) => {
-            let currentPool = getCurrentPool(token0, token1);
-            setPair({ token0: currentPool?.token1, token1: currentPool?.token0 });
-            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${token0}&token1=${token1}`));
-          }}
+          updatePairAndNavigate(token0, token1, ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED);
+        }}
         />
       )}
     </Container>

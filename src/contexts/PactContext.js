@@ -143,7 +143,7 @@ export const PactProvider = (props) => {
         }
         return acc;
       }, {});
-
+     
       setAllTokens((prev) => ({ ...prev, ...updatedTokenData, ...communityTokenList }));
       setAllPairs((prev) => ({ ...prev, ...pairsData, ...communityList }));
     }
@@ -259,6 +259,7 @@ export const PactProvider = (props) => {
   }, []);
 
   const getReserves = async (token0, token1) => {
+    console.log('getReserves', token0, token1);
     setIsMultihopsSwap(false);
     setMultihopsReserves(null);
     try {
@@ -535,7 +536,6 @@ export const PactProvider = (props) => {
     const res = 1 - (1 - FEE * numHops);
     return res;
   }
-
   const contextValues = {
     setPactCmd,
     tokensUsdPrice,

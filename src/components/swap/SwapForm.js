@@ -92,7 +92,7 @@ const SwapForm = ({
   const { tokensUsdPrice } = usePactContext();
   const { gameEditionView } = useGameEditionContext();
   const [rotation, setRotation] = useState(0);
-  
+
   return (
     <Container gameEditionView={gameEditionView}>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
