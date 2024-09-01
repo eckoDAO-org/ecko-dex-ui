@@ -259,6 +259,7 @@ export const PactProvider = (props) => {
   }, []);
 
   const getReserves = async (token0, token1) => {
+    console.log('getReserves', token0, token1);
     setIsMultihopsSwap(false);
     setMultihopsReserves(null);
     try {

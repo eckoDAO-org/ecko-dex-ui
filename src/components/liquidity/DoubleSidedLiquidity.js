@@ -36,32 +36,48 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   const [inputSide, setInputSide] = useState('');
   const [loading, setLoading] = useState(false);
   const [balanceLoading, setBalanceLoading] = useState(false);
-  console.log("pair", pair);
-  console.log("pact.allTokens", pact.allTokens);
-  const [fromValues, setFromValues] = useState({
-    amount: '',
-    balance: '',
-    coin: pact.allTokens?.[pair?.token0] ? pair?.token0 : 'KDX',
-    precision: pact.allTokens?.[pair?.token0] ? pact.allTokens?.[pair?.token0]?.precision : 12,
-  });
-  const [toValues, setToValues] = useState({
-    amount: '',
-    balance: account.account.balance || '',
-    coin: pact.allTokens?.[pair?.token1] ? pair?.token1 : pair?.token0 === 'KDA' ? 'KDX' : 'KDA',
-    precision: pact.allTokens?.[pair?.token1] ? pact.allTokens?.[pair?.token1]?.precision : 12,
-  });
+  
+  const getInitialFromValue = () => {
+    const initialToken = pair?.token0 || 'KDA';
+    const tokenInfo = pact.allTokens[initialToken];
+    return {
+      amount: '',
+      balance: '',
+      coin: initialToken,
+      code: tokenInfo?.code || 'coin',
+      address: tokenInfo?.code || 'coin',
+      precision: tokenInfo?.precision || 12,
+    };
+  };
 
+  const getInitialToValue = () => {
+    const initialToken = pair?.token1 || (pair?.token0 === 'KDA' ? 'KDX' : 'KDA');
+    const tokenInfo = pact.allTokens[initialToken];
+    return {
+      amount: '',
+      balance: '',
+      coin: initialToken,
+      code: tokenInfo?.code || 'kaddex.kdx',
+      address: tokenInfo?.code || 'kaddex.kdx',
+      precision: tokenInfo?.precision || 12,
+    };
+  };
+
+  const [fromValues, setFromValues] = useState(getInitialFromValue);
+  const [toValues, setToValues] = useState(getInitialToValue);
+// console.log("fromValues", fromValues);
+// console.log("toValues", toValues);
   // update the balance after a transaction send or change account
   useEffect(() => {
     setBalanceLoading(true);
     const getBalance = async () => {
       if (account.account) {
         let acctOfFromValues = await account.getTokenAccount(
-          pact.allTokens[fromValues.coin]?.code,
+          pact.allTokens[fromValues.address]?.code,
           account.account.account,
           tokenSelectorType === 'from'
         );
-        let acctOfToValues = await account.getTokenAccount(pact.allTokens[toValues.coin]?.code, account.account.account, tokenSelectorType === 'to');
+        let acctOfToValues = await account.getTokenAccount(pact.allTokens[toValues.address]?.code, account.account.account, tokenSelectorType === 'to');
         if (acctOfFromValues) {
           let balanceFrom = getCorrectBalance(acctOfFromValues.balance);
           setFromValues((prev) => ({
@@ -100,11 +116,11 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   useEffect(async () => {
     if (fetchData) {
       setFetchingPair(true);
-      if (toValues.coin !== '' && fromValues.coin !== '') {
-        console.log("Fetching reserves for:", fromValues, toValues);
-        const result = await pact.getReserves(pact.allTokens?.[fromValues?.coin]?.code, pact.allTokens?.[toValues?.coin]?.code);
-        console.log("getReserves result:", result);
-        console.log("pact.ratio after getReserves:", pact.ratio);
+      if (toValues.address !== '' && fromValues.address !== '') {
+        // console.log("Fetching reserves for:", fromValues, toValues);
+        const result = await pact.getReserves(pact.allTokens?.[fromValues?.address]?.code, pact.allTokens?.[toValues?.address]?.code);
+        // console.log("getReserves result:", result);
+        // console.log("pact.ratio after getReserves:", pact.ratio);
       }
       setFetchingPair(false);
       setFetchData(false);
@@ -119,6 +135,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   // }, 10000);
 
   const onTokenClick = async ({ crypto }) => {
+    console.log("onTokenClick", crypto);
     let balance;
     if (crypto?.code === 'coin') {
       if (account.account) {
@@ -135,6 +152,8 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
         ...prev,
         balance: balance,
         coin: crypto?.name,
+        address: crypto?.code,
+        code: crypto?.code,
         precision: crypto?.precision,
       }));
     if (tokenSelectorType === 'to')
@@ -142,6 +161,8 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
         ...prev,
         balance: balance,
         coin: crypto?.name,
+        address: crypto?.code,
+        code: crypto?.code,
         precision: crypto?.precision,
       }));
     setFetchData(true);
@@ -284,10 +305,10 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
 
   const supply = async () => {
     const res = await liquidity.addLiquidityWallet(
-      pact.allTokens[fromValues.coin],
-      pact.allTokens[toValues.coin],
-      reduceBalance(fromValues.amount, pact.allTokens[fromValues.coin].precision),
-      reduceBalance(toValues.amount, pact.allTokens[toValues.coin].precision)
+      pact.allTokens[fromValues.address],
+      pact.allTokens[toValues.address],
+      reduceBalance(fromValues.amount, fromValues.precision),
+      reduceBalance(toValues.amount, toValues.precision)
     );
     if (!res) {
       wallet.setIsWaitingForWalletAuth(true);
@@ -297,6 +318,21 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
     }
   };
 
+  // const supply = async () => {
+  //   const res = await liquidity.addLiquidityWallet(
+  //     pact.allTokens[fromValues.coin],
+  //     pact.allTokens[toValues.coin],
+  //     reduceBalance(fromValues.amount, pact.allTokens[fromValues.coin].precision),
+  //     reduceBalance(toValues.amount, pact.allTokens[toValues.coin].precision)
+  //   );
+  //   if (!res) {
+  //     wallet.setIsWaitingForWalletAuth(true);
+  //   } else {
+  //     wallet.setWalletError(null);
+  //     setShowTxModal(true);
+  //   }
+  // };
+
   // to reset the input data when selected the same coin
   useEffect(() => {
     if (tokenSelectorType === 'from') {
@@ -305,6 +341,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
           amount: '',
           balance: '',
           coin: '',
+          code: '',
           address: '',
           precision: 0,
         });
@@ -316,6 +353,7 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
           amount: '',
           balance: '',
           coin: '',
+          code: '',
           address: '',
           precision: 0,
         });
@@ -552,20 +590,20 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
                     <Label fontSize={13}>{`${toValues.coin}/${fromValues.coin}`}</Label>
                     <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
                       {pact.pairReserve.token0 === 0 && pact.pairReserve.token1 === 0
-                        ? pact.getRatioFirstAddLiquidity(toValues.coin, toValues.amount, fromValues.coin, fromValues.amount)
-                        : reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) < 0.000001
+                        ? pact.getRatioFirstAddLiquidity(toValues.address, toValues.amount, fromValues.address, fromValues.amount)
+                        : reduceBalance(pact.getRatio(toValues.address, fromValues.address)) < 0.000001
                         ? '< 0.000001'
-                        : reduceBalance(pact.getRatio(toValues.coin, fromValues.coin)) ?? '-'}
+                        : reduceBalance(pact.getRatio(toValues.address, fromValues.address)) ?? '-'}
                     </Label>
                   </FlexContainer>
                   <FlexContainer className="column align-ce w-100">
                     <Label fontSize={13}>{`${fromValues.coin}/${toValues.coin}`}</Label>
                     <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
                       {pact.pairReserve.token0 === 0 && pact.pairReserve.token1 === 0
-                        ? pact.getRatioFirstAddLiquidityInverse(toValues.coin, toValues.amount, fromValues.coin, fromValues.amount)
-                        : reduceBalance(pact.getRatio1(fromValues.coin, toValues.coin)) < 0.000001
+                        ? pact.getRatioFirstAddLiquidityInverse(toValues.address, toValues.amount, fromValues.address, fromValues.amount)
+                        : reduceBalance(pact.getRatio1(fromValues.address, toValues.address)) < 0.000001
                         ? '< 0.000001'
-                        : reduceBalance(pact.getRatio1(fromValues.coin, toValues.coin)) ?? '-'}
+                        : reduceBalance(pact.getRatio1(fromValues.address, toValues.address)) ?? '-'}
                     </Label>
                   </FlexContainer>
                   <FlexContainer className="column align-fe w-100">

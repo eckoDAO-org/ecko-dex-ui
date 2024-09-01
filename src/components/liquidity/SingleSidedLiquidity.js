@@ -32,7 +32,8 @@
     const [loading, setLoading] = useState(false);
 
     const [fromValue, setFromValue] = useState({
-      coin: pair?.token0 || 'KDX',
+      coin: pair?.token0 || 'KDA',
+      contract: 'coin',
       account: '',
       guard: null,
       balance: '',
@@ -78,22 +79,7 @@
       }
     }, [pair?.token0, pools]);
 
-    // useEffect(async () => {
-    //   if (selectedPool) {
-    //     onPairChange(selectedPool?.token1, selectedPool?.token0);
-    //     console.log("selectedPool?.token0", selectedPool?.token0);
-    //     console.log("selectedPool?.token1", selectedPool?.token1);
-    //     setFetchingPair(true);
-    //     if (selectedPool?.token0 === fromValue.coin) {
-    //       await pact.getReserves(pact.allTokens?.[selectedPool?.token0]?.code, pact.allTokens?.[selectedPool?.token1]?.code);
-    //     } else {
-    //       await pact.getReserves(pact.allTokens?.[selectedPool?.token1]?.code, pact.allTokens?.[selectedPool?.token0]?.code);
-    //     }
-    //     console.log("pact.ratio after getReserves:", pact.ratio);
 
-    //     setFetchingPair(false);
-    //   }
-    // }, [fromValue?.coin, selectedPool]);
     useEffect(async () => {
       if (selectedPool) {
         onPairChange(selectedPool?.token1, selectedPool?.token0);
@@ -119,9 +105,7 @@
         } else {
           await pact.getReserves(token1Address, token0Address);
         }
-    
-        console.log("pact.ratio after getReserves:", pact.ratio);
-        
+            
         setFetchingPair(false);
       }
     }, [fromValue?.coin, selectedPool]);
@@ -138,11 +122,13 @@
     const handleTokenValue = async (tokenCode) => {
       const crypto = pact.allTokens[tokenCode];
       let balance;
-    
+      let contract = crypto?.code;
+  
       if (crypto?.code === 'coin') {
         if (account.account) {
           balance = account.account.balance;
         }
+        contract = 'coin';
       } else {
         try {
           let data = await getTokenBalanceAccount(crypto.code, account.account.account);
@@ -156,19 +142,16 @@
       setFromValue((prev) => ({
         ...prev,
         balance: balance,
-        coin: crypto?.name,
+        coin: crypto?.name || 'KDA',
+        contract: contract || 'coin',
         precision: crypto?.precision,
       }));
       account.setFetchAccountBalance(false);
     };
-    
 
+  
 
     const openTokenSelectorModal = () => {
-      // console.log("crypto object:", crypto);
-      // console.log("fromValue object:", fromValue);
-      // console.log("selectedPool?.token0:", selectedPool?.token0);
-      // console.log("selectedPool?.token1:", selectedPool?.token1);
     
       modalContext.openModal({
         title: 'Select',
@@ -181,9 +164,7 @@
             token={fromValue.coin}
             tokensToKeep={[selectedPool?.token0, selectedPool?.token1]}
             onSelectToken={async (selectedCrypto) => {
-              // console.log("Selected crypto in modal:", selectedCrypto);
-              // console.log("Selected crypto name:", selectedCrypto.name);
-              // console.log("Selected crypto full object:", JSON.stringify(selectedCrypto, null, 2));
+             
               await handleTokenValue(selectedCrypto.code);
             }}
             onClose={() => {
@@ -195,22 +176,16 @@
     };
 
     const supply = async () => {
-      // Find the correct token entries based on the token names
-      const token0Entry = Object.values(pact.allTokens).find(token => token.name === selectedPool?.token0);
-      const token1Entry = Object.values(pact.allTokens).find(token => token.name === selectedPool?.token1);
-      
-      // Determine which token is token1 based on fromValue.coin
-      const token1Code = selectedPool?.token0 === fromValue.coin ? token1Entry?.code : token0Entry?.code;
-      const fromValueCode = token0Entry?.name === fromValue.coin ? token0Entry?.code : token1Entry?.code;
-    
-    
-    
-      // We have to ensure both token codes are valid
+      const fromValueCode = fromValue.contract;
+      const token1Code = selectedPool?.token0 === fromValue.coin ? 
+        pact.allTokens[selectedPool?.token1]?.code : 
+        pact.allTokens[selectedPool?.token0]?.code;
+  
       if (!fromValueCode || !token1Code) {
         console.error("Invalid token codes:", fromValueCode, token1Code);
         return;
       }
-    
+  
       const res = await addOneSideLiquidityWallet(
         pact.allTokens[fromValueCode],
         pact.allTokens[token1Code],
@@ -219,8 +194,8 @@
     
       if (!res) {
         wallet.setIsWaitingForWalletAuth(true);
-        /* pact.setWalletError(true); */
-        /* walletError(); */
+        // pact.setWalletError(true); 
+        // walletError(); 
       } else {
         wallet.setWalletError(null);
         setShowTxModal(true);
@@ -316,6 +291,7 @@
         });
       }
     }, [showTxModal]);
+
     return (
       <>
         <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
@@ -414,7 +390,7 @@
             bottomContent={
               fromValue.amount && (
                 <Label labelStyle={{ margin: '-10px 0px 10px 2px', opacity: 0.7 }}>
-                  $ {humanReadableNumber(extractDecimal(pact.tokensUsdPrice?.[fromValue.coin]) * extractDecimal(fromValue.amount))}
+                  $ {humanReadableNumber(extractDecimal(pact.tokensUsdPrice?.[fromValue.contract]) * extractDecimal(fromValue.amount))}
                 </Label>
               )
             }
