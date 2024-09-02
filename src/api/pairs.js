@@ -77,9 +77,7 @@ export const getTokenNameFromAddress = (token, allTokensList) => {
   const moduleName = token.split('.')[1];
   const prefix = `${nameSpace[0]}.`;
   const computedTokenName = moduleName.substr(0, moduleName.length >= 3 ? 3 : moduleName.length).toUpperCase();
-
   let finalTokenName = `${prefix}${computedTokenName}`;
-
   // Ensure the generated name is unique
   if (allTokensList[finalTokenName]) {
     let i = 1;

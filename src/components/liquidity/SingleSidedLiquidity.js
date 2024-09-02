@@ -30,7 +30,6 @@
     const [selectedPool, setSelectedPool] = useState(null);
     const [showTxModal, setShowTxModal] = useState(false);
     const [loading, setLoading] = useState(false);
-
     const [fromValue, setFromValue] = useState({
       coin: pair?.token0 || 'KDA',
       contract: 'coin',

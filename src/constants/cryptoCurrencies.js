@@ -5,7 +5,8 @@ import {  CircleInfo } from '../assets';
 
 const environment = process.env.REACT_APP_KDA_NETWORK_TYPE || 'mainnet';
 const BASE_ICON_URL = 'https://raw.githubusercontent.com/CryptoPascal31/kadena_tokens/main/';
-export const DEFAULT_ICON_URL = `${BASE_ICON_URL}img/kdx.svg`;
+// export const DEFAULT_ICON_URL = `${BASE_ICON_URL}img/kdx.svg`;
+export const DEFAULT_ICON_URL = `/images/crypto/q.svg`;
 
 export let tokenData = {};
 export let pairsData = pairsJson.pairs[environment];
