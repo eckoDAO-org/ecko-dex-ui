@@ -107,12 +107,13 @@ const renderColumns = (tokensUsdPrice, allTokens, allPairs, width) => {
     {
       name: '',
       width: width <= theme().mediaQueries.mobilePixel ? 80 : 160,
-      render: ({ item }) => (
-        <FlexContainer desktopClassName="align-ce" tabletClassName="align-ce" mobileClassName="column align-fs" mobilePixel={769}>
+      render: ({ item }) => {
+        console.log(item)
+        return <FlexContainer desktopClassName="align-ce" tabletClassName="align-ce" mobileClassName="column align-fs" mobilePixel={769}>
           <div className="flex align-ce">
-           
-            <CryptoContainer style={{ zIndex: 2 }}>{allTokens[item.token0].icon} </CryptoContainer>
-            <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}> {allTokens[item.token1].icon}</CryptoContainer>
+
+            <CryptoContainer style={{ zIndex: 2 }}> <img alt="" src={allTokens[item.token0_code].icon} style={{ width: 20, height: 20, marginRight: '8px' }} /></CryptoContainer>
+            <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>  <img alt="" src={allTokens[item.token1_code].icon} style={{ width: 20, height: 20, marginRight: '8px' }} /> </CryptoContainer>
           </div>
           <div
             className="align-fs flex"
@@ -124,7 +125,7 @@ const renderColumns = (tokensUsdPrice, allTokens, allPairs, width) => {
             {item.token0}/{item.token1}
           </div>
         </FlexContainer>
-      ),
+      },
     },
     {
       name: 'Token A',
@@ -137,7 +138,7 @@ const renderColumns = (tokensUsdPrice, allTokens, allPairs, width) => {
           </Label>
           {tokensUsdPrice ? (
             <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
-              $ {humanReadableNumber(tokensUsdPrice?.[item.token0] * item?.pooledAmountToken0)}
+              $ {humanReadableNumber(tokensUsdPrice?.[item.token0_code] * item?.pooledAmountToken0)}
             </Label>
           ) : (
             ''
@@ -157,7 +158,7 @@ const renderColumns = (tokensUsdPrice, allTokens, allPairs, width) => {
           </Label>
           {tokensUsdPrice ? (
             <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7 }}>
-              $ {humanReadableNumber(tokensUsdPrice?.[item.token1] * item?.pooledAmountToken1)}
+              $ {humanReadableNumber(tokensUsdPrice?.[item.token1_code] * item?.pooledAmountToken1)}
             </Label>
           ) : (
             ''
