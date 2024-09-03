@@ -5,7 +5,6 @@ import { getFloatPrecision } from '../utils/string-utils';
 import { CHAIN_ID, GAS_PRICE, GAS_LIMIT, NETWORKID, ENABLE_GAS_STATION, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { handleError } from './utils';
 import { reduceBalance } from '../utils/reduceBalance';
-import {tokenData} from '../constants/cryptoCurrencies';
 
 export const getPoolState = async () => {
   try {
@@ -25,7 +24,7 @@ export const estimateUnstake = async (account) => {
   }
 };
 
-export const getAddStakeCommand = async (verifiedAccount, amountToStake, gasStation, gasLimit, gasPrice) => {
+export const getAddStakeCommand = async (verifiedAccount, amountToStake, gasStation, gasLimit, gasPrice, allTokens) => {
   let account = null;
   if (verifiedAccount.guard) {
     account = verifiedAccount;
@@ -39,8 +38,8 @@ export const getAddStakeCommand = async (verifiedAccount, amountToStake, gasStat
   }
   const parsedAmount = parseFloat(amountToStake?.toString());
   let decimalPlaces = getFloatPrecision(parsedAmount);
-  if (decimalPlaces > tokenData['KDX'].precision) {
-    decimalPlaces = tokenData['KDX'].precision;
+  if (decimalPlaces > allTokens['kaddex.kdx'].precision) {
+    decimalPlaces = allTokens['kaddex.kdx'].precision;
   }
   const pactCode = `(${KADDEX_NAMESPACE}.staking.stake "${account.account}" (read-decimal 'amount))`;
   return {
@@ -134,7 +133,7 @@ export const getRollupRewardsCommand = (verifiedAccount) => {
   };
 };
 
-export const getRollupAndUnstakeCommand = async (verifiedAccount, amountToUnstake, gasStation, gasLimit, gasPrice) => {
+export const getRollupAndUnstakeCommand = async (verifiedAccount, amountToUnstake, gasStation, gasLimit, gasPrice, allTokens) => {
   let account = null;
   if (verifiedAccount.guard) {
     account = verifiedAccount;
@@ -148,8 +147,8 @@ export const getRollupAndUnstakeCommand = async (verifiedAccount, amountToUnstak
   }
   const parsedAmount = parseFloat(amountToUnstake?.toString());
   let decimalPlaces = getFloatPrecision(parsedAmount);
-  if (decimalPlaces > tokenData['KDX'].precision) {
-    decimalPlaces = tokenData['KDX'].precision;
+  if (decimalPlaces > allTokens['KDX'].precision) {
+    decimalPlaces = allTokens['KDX'].precision;
   }
   const pactCode = `
   (${KADDEX_NAMESPACE}.staking.rollup "${account.account}")
@@ -227,7 +226,7 @@ export const getRollupAndClaimCommand = async (verifiedAccount, gasStation, gasL
     networkId: NETWORKID,
   };
 };
-export const getRollupClaimAndUnstakeCommand = async (verifiedAccount, amountToUnstake, gasStation, gasLimit, gasPrice) => {
+export const getRollupClaimAndUnstakeCommand = async (verifiedAccount, amountToUnstake, gasStation, gasLimit, gasPrice, allTokens) => {
   let account = null;
   if (verifiedAccount.guard) {
     account = verifiedAccount;
@@ -241,8 +240,8 @@ export const getRollupClaimAndUnstakeCommand = async (verifiedAccount, amountToU
   }
   const parsedAmount = parseFloat(amountToUnstake?.toString());
   let decimalPlaces = getFloatPrecision(parsedAmount);
-  if (decimalPlaces > tokenData['KDX'].precision) {
-    decimalPlaces = tokenData['KDX'].precision;
+  if (decimalPlaces > allTokens['kaddex.kdx'].precision) {
+    decimalPlaces = allTokens['kaddex.kdx'].precision;
   }
   const pactCode = `
   (${KADDEX_NAMESPACE}.staking.rollup "${account.account}")
