@@ -69,9 +69,11 @@ const TokenPriceChart = ({ dataToken, height, unit="$" }) => {
 
   useEffect(() => {
     fetchCandles();
-  }, [dateStart, unit]);
+  }, [dateStart, unit, dataToken]);
 
   const fetchCandles = async () => {
+    if(!dataToken)
+      return
     const asset = (dataToken?.statsID || dataToken?.code) === 'coin' ? 'KDA' : dataToken?.statsID || dataToken?.code;
     const currency = (dataToken?.statsID || dataToken?.code) === 'coin' ? 'USDT' : 'coin';
     const candles = await getDailyCandles(asset, currency, moment(dateStart).toDate());
@@ -94,7 +96,7 @@ const TokenPriceChart = ({ dataToken, height, unit="$" }) => {
             y: [ _price?.open, _price?.high, _price?.low, _price?.close]};
     });
 
-  return isLoading ? (
+  return (isLoading || !dataToken) ? (
     <AppLoader containerStyle={{ height: '100%', alignItems: 'center', justifyContent: 'center' }} />
   ) : (
     <FlexContainer className="column align-ce w-100 h-100 background-fill" withGradient style={{ padding: 32 }}>
