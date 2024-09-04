@@ -9,10 +9,10 @@ import AnalyticsSimpleWidget from '../components/shared/AnalyticsSimpleWidget';
 import { CryptoContainer, FlexContainer } from '../components/shared/FlexContainer';
 import GraphicPercentage from '../components/shared/GraphicPercentage';
 import Label from '../components/shared/Label';
-import { getDecimalPlaces } from '../utils/reduceBalance';
 import { theme, commonColors, commonTheme } from '../styles/theme';
 import styled from 'styled-components';
 import CustomButton from '../components/shared/CustomButton';
+import AppLoader from '../components/shared/AppLoader';
 import UsdKdaPrice from '../components/shared/UsdKdaPrice';
 import UsdKdaToggle from '../components/shared/UsdKdaToggle';
 
@@ -24,23 +24,23 @@ const initialMonthlyRange = {
 const TokenInfoContainer = () => {
   const history = useHistory();
   const { token } = useParams();
-  const pact = usePactContext();
+  const {allTokens, tokensKdaPrice, tokensUsdPrice} = usePactContext();
   const { themeMode } = useApplicationContext();
   const [usdKda, setUsdKda] = useState(false); // False measn USD, while true means KDA => Default is USD
 
   const unit = usdKda?"KDA":"$";
-  const precision = pact.allTokens?.[token].precision
+  const precision = allTokens?.[token]?.precision
 
-  // Find the correct token key in pact.allTokens
-  const tokenKey = Object.keys(pact.allTokens).find(
-    key => pact.allTokens[key].name === token || pact.allTokens[key].code === token
+  // Find the correct token key in allTokens
+  const tokenKey = Object.keys(allTokens).find(
+    key => allTokens[key].name === token || allTokens[key].code === token
   );
 
-  const asset = tokenKey && (pact.allTokens[tokenKey].statsID || pact.allTokens[tokenKey].code) === 'coin'
+  const asset = tokenKey && (allTokens[tokenKey].statsID || allTokens[tokenKey].code) === 'coin'
     ? 'KDA'
-    : pact.allTokens[tokenKey]?.statsID || pact.allTokens[tokenKey]?.code;
+    : allTokens[tokenKey]?.statsID || allTokens[tokenKey]?.code;
 
-  const currency = tokenKey && (pact.allTokens[tokenKey].statsID || pact.allTokens[tokenKey].code) === 'coin'
+  const currency = tokenKey && (allTokens[tokenKey].statsID || allTokens[tokenKey].code) === 'coin'
     ? 'USDT'
     : 'coin';
 
@@ -70,13 +70,13 @@ const TokenInfoContainer = () => {
       const lastMonthVolume = await getTotalVolume(
         moment().subtract(1, 'months').toDate(),
         new Date(),
-        pact.allTokens[tokenKey].statsID || pact.allTokens[tokenKey].code
+        allTokens[tokenKey].statsID || allTokens[tokenKey].code
       );
       if (lastMonthVolume) {
         const pastLastMonthVolume = await getTotalVolume(
           moment().subtract(2, 'months').toDate(),
           moment().subtract(1, 'months').toDate(),
-          pact.allTokens[tokenKey].statsID || pact.allTokens[tokenKey].code
+          allTokens[tokenKey].statsID || allTokens[tokenKey].code
         );
         setMonthlyVolumeRange({
           initial: pastLastMonthVolume,
@@ -92,7 +92,10 @@ const TokenInfoContainer = () => {
       setPrice24h(price24Diff);
     };
     initData();
-  }, [asset, currency, token, tokenKey, unit]);
+  }, [asset, currency, token, tokenKey, unit, allTokens]);
+
+  if(Object.keys(allTokens).length === 0)
+    return <AppLoader className="h-100 w-100 align-ce justify-ce" />;
 
   return (
     <FlexContainer
@@ -116,21 +119,21 @@ const TokenInfoContainer = () => {
         <CryptoContainer style={{ marginRight: 8 }}>
           <img
             alt={`${token} icon`}
-            src={pact.allTokens[tokenKey]?.icon}
+            src={allTokens[tokenKey]?.icon}
             style={{ width: 20, height: 20, marginRight: '8px' }}
           />
         </CryptoContainer>
           <div>
             <Label fontSize={24} fontFamily="syncopate">
-              {pact.allTokens[tokenKey]?.name}
+              {allTokens[tokenKey]?.name}
             </Label>
             <Label fontSize={12} className="mobile-none" color={commonColors.gameEditionBlueGrey}>
-              {pact.allTokens[tokenKey]?.code}
+              {allTokens[tokenKey]?.code}
             </Label>
           </div>
           <div style={{marginLeft:"auto"}}> <UsdKdaToggle initialState={false} onClick={setUsdKda} /> </div>
         </div>
-        {!pact.allTokens[tokenKey]?.isVerified && (
+        {!allTokens[tokenKey]?.isVerified && (
           <CustomButton
             fontSize={13}
             buttonStyle={{ height: 33, width: 'min-content' }}
@@ -158,11 +161,10 @@ const TokenInfoContainer = () => {
           title={'Price'}
           mainText={
             <FlexContainer className="flex align-fs column" style={{ marginBottom: 7 }}>
-              <UsdKdaPrice value={unit==="KDA"?pact?.tokensKdaPrice?.[token]:pact?.tokensUsdPrice?.[token]} precision={precision} unit={unit} fontSize={32}/>
+              <UsdKdaPrice value={unit==="KDA"?tokensKdaPrice?.[tokenKey]:tokensUsdPrice?.[tokenKey]} precision={precision} unit={unit} fontSize={32}/>
               <GraphicPercentage prevValue={price24h?.initial} currentValue={price24h?.final} />
             </FlexContainer>
           }
-          subtitle={token !== 'KDX' ? `1 KDX = ${getDecimalPlaces(pact?.tokensUsdPrice?.KDX / pact?.tokensUsdPrice?.[token])} ${token}` : null}
         />
         <AnalyticsSimpleWidget
           title="1M Trading Volume"
@@ -177,7 +179,7 @@ const TokenInfoContainer = () => {
           subtitle={<GraphicPercentage prevValue={monthlyRange?.initial} currentValue={monthlyRange?.final} />}
         />
       </FlexContainer>
-      <TokenPriceChart dataToken={pact.allTokens?.[tokenKey]} height={300} unit={unit}/>
+      <TokenPriceChart dataToken={allTokens?.[tokenKey]} height={300} unit={unit}/>
     </FlexContainer>
   );
 };
