@@ -80,7 +80,7 @@ const LiquidityTokensTable = () => {
     if (tokensUsdPrice) {
       fetchData();
     }
-  }, [tokensUsdPrice]);
+  }, [tokensUsdPrice, allTokens, allPairs]);
 
   const tokenList = allTokensList.filter((c) => {
     const code = c.code !== 'coin' ? c.code.split('.')[1] : c.code;
