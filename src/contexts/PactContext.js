@@ -163,7 +163,7 @@ export const PactProvider = (props) => {
                              tokenNameKaddexStats: token.address,
                              code: token.address,
                              statsId: token.address,
-                             icon: token.img,
+                             icon: token.img || DEFAULT_ICON_URL,
                              color: '#FFFFFF',
                              main: false,
                              precision: 12,
