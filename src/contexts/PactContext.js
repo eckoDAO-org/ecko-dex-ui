@@ -8,13 +8,13 @@ import { getTokenUsdPriceByName } from '../utils/token-utils';
 import { CHAIN_ID, creationTime, FEE, GAS_PRICE, NETWORK, KADDEX_NAMESPACE } from '../constants/contextConstants';
 import { useNotificationContext, useWalletContext } from '.';
 import { fetchPrecision, getPairList } from '../api/pact';
-import {tokenData, pairsData, blacklistedTokenData, DEFAULT_ICON_URL } from '../constants/cryptoCurrencies';
+import {loadTokens } from '../constants/tokenLoader';
 import { GAS_OPTIONS } from '../constants/gasConfiguration';
-import { getPairs, getTokenNameFromAddress } from '../api/pairs';
-import { UnknownLogo } from '../assets';
-import { reduceBalance } from '../utils/reduceBalance';
+import { getPairs} from '../api/pairs';
+import { reduceBalance, getShorterNameSpace} from '../utils/reduceBalance';
 import { getAnalyticsKdaUsdPrice, getCoingeckoUsdPrice } from '../api/coingecko';
 import { getAnalyticsDexscanPoolsData } from '../api/kaddex-analytics';
+import {DEFAULT_ICON_URL} from '../constants/cryptoCurrencies';
 
 export const PactContext = createContext();
 
@@ -50,8 +50,10 @@ export const PactProvider = (props) => {
   const [gasConfiguration, setGasConfiguration] = useState(GAS_OPTIONS.DEFAULT.SWAP);
   const [networkGasData, setNetworkGasData] = useState(initialNetworkGasData);
 
-  const [allPairs, setAllPairs] = useState(null);
-  const [allTokens, setAllTokens] = useState(null);
+  const [tokensBlacklist, setTokensBlacklist] = useState(null);
+
+  const [allPairs, setAllPairs] = useState({});
+  const [allTokens, setAllTokens] = useState({});
 
   const [isMultihopsSwap, setIsMultihopsSwap] = useState(false);
 
@@ -75,90 +77,113 @@ export const PactProvider = (props) => {
   }, []);
   // useInterval(getNetworkGasData, 20000);
 
-  const getPairsData = async () => {
-    const result = await getPairs();
-    let communityList = {};
-    let communityTokenList = {};
-    if (result.errorMessage) {
-      console.log('ERROR');
-      return;
-    } else {
-      const communityPairs = result.filter((r) => !pairsData.hasOwnProperty(r));
-      const communityPairsWithKda = communityPairs.filter((res) => res.split(':')[0] === 'coin' || res.split(':')[1] === 'coin');
-      
-      communityPairsWithKda.forEach((item) => {
-        // TOKENS
-        const tokens = item.split(':');
-        const token0 = tokens[0]; // Gets the first contract
-        const token1 = tokens[1]; // Gets the second contract
-        
-        if (blacklistedTokenData.includes(token0) || blacklistedTokenData.includes(token1)) {
-          return;
-        }
-        
-        [token0, token1].forEach((tokenAddress, index) => {
-          if (tokenAddress !== 'coin' && !communityTokenList[tokenAddress]) {
-            const tokenName = getTokenNameFromAddress(tokenAddress, communityTokenList);
-            const moduleContractName = tokenAddress; // This is already in the format "module.contractname"
-            const communityToken = {
-              symbol: tokenName,
-              name: tokenName,
-              statsId: tokenAddress,
-              description: '',
-              icon: DEFAULT_ICON_URL,
-              precision: 12,
-              socials: [],
-              code: tokenAddress,
-              main: false,
-              isVerified: true,
-              token0: index === 0 ? tokenAddress : token0,
-              token1: index === 1 ? tokenAddress : token1
-            };
-            communityTokenList[moduleContractName] = communityToken;
-          }
-        });
-        
-        // PAIRS
-        const communityPair = {
-          name: item,
-          token0: token0 === 'coin' ? 'KDA' : communityTokenList[token0].name,
-          token1: token1 === 'coin' ? 'KDA' : communityTokenList[token1].name,
-          main: false,
-          isBoosted: false,
-          color: '#92187B',
-          isVerified: true,
-        };
-        communityList[communityPair.name] = communityPair;
-      });
-      
-      // Add token0 and token1 fields to main tokens
-      const updatedTokenData = Object.entries(tokenData).reduce((acc, [key, token]) => {
-        const pairWithToken = Object.values(pairsData).find(pair => pair.token0 === token.name || pair.token1 === token.name);
-        if (pairWithToken) {
-          acc[key] = {
-            ...token,
-            token0: pairWithToken.token0 === token.name ? token.code : pairWithToken.token0,
-            token1: pairWithToken.token1 === token.name ? token.code : pairWithToken.token1
-          };
-        } else {
-          acc[key] = token;
-        }
-        return acc;
-      }, {});
-      
-      setAllTokens((prev) => ({ ...prev, ...updatedTokenData, ...communityTokenList }));
-      setAllPairs((prev) => ({ ...prev, ...pairsData, ...communityList }));
-    }
-  };
+  const update_unverified = (old_toks, new_toks) => { const tmp_toks ={}
+                                                      new_toks.forEach( ([k, v]) => {if (!old_toks?.[k]?.isVerified)
+                                                                                      tmp_toks[k] = v})
+                                                      return {...old_toks, ...tmp_toks}}
 
 
-  useEffect(() => {
-    async function fetchData() {
-      await getPairsData();
-    }
+  /* Step1 => Load the Tokens + Blaclist from the YAML */
+  useEffect(() => loadTokens().then( ({data, blacklist}) => {console.log("Tokens loaded from GH repository");
+                                                             const good_tokens = data.filter( ([mod,]) => !blacklist.includes(mod) )
+                                                             setAllTokens(Object.fromEntries(good_tokens))
+                                                             setTokensBlacklist(blacklist);})
+                              .catch( () => console.error("Cannot retrieve tokens list => This is very bad"))
+            ,[])
 
-    fetchData();
-  }, []);
+
+
+
+    /* Step 2 => Once the blacklist is loaded, loat pairs from the node */
+  const filter_pair_by_blacklist = (x) => {const [tokA, tokB] = x.split(":")
+                                           return !tokensBlacklist.includes(tokA) && !tokensBlacklist.includes(tokB)}
+
+  const create_unknwon_token = (t) => ({ name: getShorterNameSpace(t),
+                                         coingeckoId: "",
+                                         tokenNameKaddexStats: t,
+                                         code: t,
+                                         statsId: t,
+                                         icon: DEFAULT_ICON_URL,
+                                         color: '#FFFFFF',
+                                         main: false,
+                                         precision: 12,
+                                         isVerified: false})
+
+  const pair_to_token = (p) => {
+    const [tokA, tokB] = p.split(":")
+    return tokA === "coin"? [tokB, create_unknwon_token(tokB)]: [tokA, create_unknwon_token(tokA)]
+  }
+
+  const pair_to_pair_object = (p) => {
+    const [tokA, tokB] = p.split(":")
+    return [p, {name:p,
+                token0: allTokens[tokA]?.name || getShorterNameSpace(tokA),
+                token1: allTokens[tokB]?.name || getShorterNameSpace(tokB),
+                token0_code: tokA,
+                token1_code: tokB,
+                main:true,
+                isBoosted:false,
+                color: allTokens[tokA==="coin"?tokB:tokA]?.color ||'#FFFFFF',
+                isVerified:false}]
+   }
+
+  useEffect(() => {if(tokensBlacklist && tokensBlacklist.length > 0)
+                      getPairs().then( (data) => { const flt_data = data.filter(filter_pair_by_blacklist);
+                                                   console.log("Pairs list recieved from Pact node")
+                                                   setAllPairs( (prev) => update_unverified(prev, flt_data.map(pair_to_pair_object)));
+                                                   setAllTokens( (prev) => update_unverified(prev, flt_data.map(pair_to_token)))
+                                                 })
+                                .catch(()=> console.warn("Error during pair laoding from chain => Don't worry; not fatal"))
+                  }, [tokensBlacklist]);
+
+
+  const filter_apipair_by_blacklist = (x) => {const tokA = x.token0.address
+                                              const tokB = x.token1.address
+                                              return !tokensBlacklist.includes(tokA) && !tokensBlacklist.includes(tokB)}
+
+  const apipair_to_pair_object = (p) => {
+    const base_token =  p.token0.name === "KDA"?p.token1:p.token0;
+    const tokens = [p.token0, p.token1].sort((a,b) => a.address > b.address)
+    const pair = tokens.map(x=>x.address).join(":")
+    return [pair, {name:pair,
+                   token0: tokens[0].name,
+                   token1: tokens[1].name,
+                   token0_code: tokens[0].address,
+                   token1_code: tokens[1].address,
+                   main:true,
+                   isBoosted:false,
+                   color: allTokens[base_token.address]?.color ||'#FFFFFF',
+                   isVerified:true}]
+  }
+
+  const apipair_to_token = (p) => {
+    const token =  p.token0.name === "KDA"?p.token1:p.token0;
+    return [token.address, { name: token.name,
+                             coingeckoId: "",
+                             tokenNameKaddexStats: token.address,
+                             code: token.address,
+                             statsId: token.address,
+                             icon: token.img || DEFAULT_ICON_URL,
+                             color: '#FFFFFF',
+                             main: false,
+                             precision: 12,
+                             isVerified: true}]
+  }
+
+
+
+
+  useEffect(() => {if(!tokensBlacklist || tokensBlacklist.length === 0)
+                      return
+                   getAnalyticsDexscanPoolsData().then( (data) => { const flt_data = data.filter(filter_apipair_by_blacklist);
+                                                                    console.log("Pairs list recieved from backend")
+                                                                    setAllPairs( (prev) => update_unverified(prev, flt_data.map(apipair_to_pair_object)));
+                                                                    setAllTokens( (prev) => update_unverified(prev, flt_data.map(apipair_to_token)))
+                                                                  })
+                                                  .catch(()=> console.warn("Error during pair laoding from API => Not fatal but UX may be degraded"))
+                  }, [tokensBlacklist]);
+
+
 
   const updateTokenUsdPrice = async (kdaPrice) => {
     const pairList = await getPairList(allPairs);
