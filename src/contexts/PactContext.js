@@ -142,16 +142,17 @@ export const PactProvider = (props) => {
                                               return !tokensBlacklist.includes(tokA) && !tokensBlacklist.includes(tokB)}
 
   const apipair_to_pair_object = (p) => {
-    const token =  p.token0.name === "KDA"?p.token1:p.token0;
-    const pair = [p.token0.address, p.token1.address].sort().join(":")
+    const base_token =  p.token0.name === "KDA"?p.token1:p.token0;
+    const tokens = [p.token0, p.token1].sort((a,b) => a.address > b.address)
+    const pair = tokens.map(x=>x.address).join(":")
     return [pair, {name:pair,
-                   token0: p.token0.name,
-                   token1: p.token1.name,
-                   token0_code: p.token0.address,
-                   token1_code: p.token1.address,
+                   token0: tokens[0].name,
+                   token1: tokens[1].name,
+                   token0_code: tokens[0].address,
+                   token1_code: tokens[1].address,
                    main:true,
                    isBoosted:false,
-                   color: allTokens[token.address]?.color ||'#FFFFFF',
+                   color: allTokens[base_token.address]?.color ||'#FFFFFF',
                    isVerified:true}]
   }
 
