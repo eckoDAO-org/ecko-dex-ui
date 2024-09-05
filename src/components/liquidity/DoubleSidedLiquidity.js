@@ -36,10 +36,12 @@ const DoubleSidedLiquidity = ({ pair, pairCode, onPairChange }) => {
   const [inputSide, setInputSide] = useState('');
   const [loading, setLoading] = useState(false);
   const [balanceLoading, setBalanceLoading] = useState(false);
-  
+
   const getInitialFromValue = () => {
-    const initialToken = pair?.token0 || 'KDA';
+    const initialToken = pairCode?.token0 || 'coin';
+    console.log("initialToken TO", initialToken);
     const tokenInfo = pact.allTokens[initialToken];
+    console.log("tokenInfo TO", tokenInfo);
     return {
       amount: '',
       balance: '',
@@ -51,10 +53,10 @@ const DoubleSidedLiquidity = ({ pair, pairCode, onPairChange }) => {
   };
 
   const getInitialToValue = () => {
-    const initialToken = pair?.token1 || (pair?.token0 === 'KDA' ? 'KDX' : 'KDA');
-    console.log("initialToken", initialToken);
+    const initialToken = pairCode?.token1 || (pairCode?.token0 === 'KDA' ? 'KDX' : 'KDA');
+    console.log("initialToken FROM", initialToken);
     const tokenInfo = pact.allTokens[initialToken];
-    console.log("tokenInfo", tokenInfo);
+    console.log("tokenInfo FROM", tokenInfo);
     return {
       amount: '',
       balance: '',
