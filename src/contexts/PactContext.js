@@ -143,7 +143,7 @@ export const PactProvider = (props) => {
 
   const apipair_to_pair_object = (p) => {
     const base_token =  p.token0.name === "KDA"?p.token1:p.token0;
-    const tokens = [p.token0, p.token1].sort((a,b) => a.address > b.address)
+    const tokens = [p.token0, p.token1].sort((a,b) => a.address > b.address?1:-1)
     const pair = tokens.map(x=>x.address).join(":")
     return [pair, {name:pair,
                    token0: tokens[0].name,
