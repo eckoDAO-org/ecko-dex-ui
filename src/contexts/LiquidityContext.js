@@ -22,9 +22,11 @@ export const LiquidityProvider = (props) => {
   const [wantsKdxRewards, setWantsKdxRewards] = useState(true);
 
   const addLiquidityWallet = async (token0, token1, amountDesired0, amountDesired1) => {
+    console.log("token0", token0)
+    console.log("token1", token1)
     try {
       let pair = await getPairAccount(token0, token1);
-
+      console.log("pair", pair)
       let newAmountDesired0 = amountDesired0;
       let newAmountDesired1 = amountDesired1;
       const pairExists = pact.allPairs[`${token0}:${token1}`];
@@ -106,20 +108,22 @@ export const LiquidityProvider = (props) => {
       pact.setPactCmd(command);
       let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(command));
       data = await parseRes(data);
+      console.log("pairConfig.token0", pairConfig)
+      console.log("pairConfig.token1", pairConfig.token1)
       const eventData = {
         ...data,
         amountFrom: Math.max(
-          reduceBalance(newAmountDesired0 * (1 - parseFloat(pact.slippage)), pact.allTokens[pairConfig.token0].precision),
-          reduceBalance(newAmountDesired0, pact.allTokens[pairConfig.token0].precision)
+          reduceBalance(newAmountDesired0 * (1 - parseFloat(pact.slippage)), pact.allTokens[pairConfig.token0_code].precision),
+          reduceBalance(newAmountDesired0, pact.allTokens[pairConfig.token0_code].precision)
         ),
         amountTo: Math.max(
-          reduceBalance(newAmountDesired1 * (1 - parseFloat(pact.slippage)), pact.allTokens[pairConfig.token1].precision),
-          reduceBalance(newAmountDesired1, pact.allTokens[pairConfig.token1].precision)
+          reduceBalance(newAmountDesired1 * (1 - parseFloat(pact.slippage)), pact.allTokens[pairConfig.token1_code].precision),
+          reduceBalance(newAmountDesired1, pact.allTokens[pairConfig.token1_code].precision)
         ),
-        tokenAddressFrom: pact.allTokens[pairConfig.token0].code,
-        tokenAddressTo: pact.allTokens[pairConfig.token1].code,
-        coinFrom: pact.allTokens[pairConfig.token0].name,
-        coinTo: pact.allTokens[pairConfig.token1].name,
+        tokenAddressFrom: pact.allTokens[pairConfig.token0_code].code,
+        tokenAddressTo: pact.allTokens[pairConfig.token1_code].code,
+        coinFrom: pact.allTokens[pairConfig.token0_code].name,
+        coinTo: pact.allTokens[pairConfig.token1_code].name,
         type: 'LIQUIDITY DOUBLE SIDE',
       };
       if (isWalletConnectConnected) {

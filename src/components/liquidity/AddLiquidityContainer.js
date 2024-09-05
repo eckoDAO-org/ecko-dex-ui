@@ -59,6 +59,8 @@ const [pair, setPair] = useState({
 });
 
 
+
+
   const [apr, setApr] = useState(null);
 
   const [fromLocation, setFromLocation] = useState();
@@ -99,6 +101,7 @@ const [pair, setPair] = useState({
       }
     }
   }, [pair, data.pools]);
+
   const getCurrentPool = (token0, token1) => {
     const pool = data.pools.find((p) => 
       (p.token0 === token0 && p.token1 === token1) || 
@@ -107,7 +110,8 @@ const [pair, setPair] = useState({
     return pool;
   };
   
-  
+  const pool = getCurrentPool(pair.token0, pair.token1);
+
 
   const updatePairAndNavigate = (token0, token1, route) => {
     const currentPool = getCurrentPool(token0, token1);
@@ -156,7 +160,6 @@ const [pair, setPair] = useState({
       setLoading(false);
     }
   }, [pact.allPairs]);
-
   return loading ? (
     <AppLoader className="h-100 w-100 align-ce justify-ce" />
   ) : (
@@ -223,6 +226,7 @@ const [pair, setPair] = useState({
           apr={apr}
           pools={data?.pools}
           pair={pair}
+          pairCode={{ token0: pool?.token0_code, token1: pool?.token1_code }}
           onPairChange={(token0, token1) => {
           updatePairAndNavigate(token0, token1, ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED);
         }}
@@ -231,6 +235,7 @@ const [pair, setPair] = useState({
       {pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED && (
         <DoubleSidedLiquidity
           pair={{ token0: query.get('token0'), token1: query.get('token1') }}
+          pairCode={{ token0: pool?.token0_code, token1: pool?.token1_code }}
           onPairChange={(token0, token1) => {
           updatePairAndNavigate(token0, token1, ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED);
         }}

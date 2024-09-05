@@ -34,6 +34,7 @@ export const getTokenShortName = (code, allTokens) => {
 };
 
 export const getTokenIconById = (token, allTokens) => {
+  console.log('token', token);
   return allTokens[token]?.icon;
 };
 export const getTokenIconByCode = (tokenCode, allTokens) => {

@@ -18,6 +18,7 @@ import { CryptoContainer, FlexContainer } from '../../shared/FlexContainer';
 import Label from '../../shared/Label';
 import RowTokenInfoPrice from '../../shared/RowTokenInfoPrice';
 import { SuccessViewContainerGE, SuccesViewContainer } from '../TxView';
+import {DEFAULT_ICON_URL} from '../../../constants/cryptoCurrencies';
 
 export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }) => {
   const { setButtons } = useGameEditionContext();
@@ -76,12 +77,13 @@ export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }
   );
 };
 
-export const SuccessAddView = ({ token0, token1, loading, onClick, apr }) => {
+export const SuccessAddView = ({ token0, token1, token0Name, token1Name, loading, onClick, apr }) => {
   const { account } = useAccountContext();
   const pact = usePactContext();
   const swap = useSwapContext();
-  const pair = getPairByTokensName(token0, token1, pact.allPairs);
-
+  const pair = getPairByTokensName(token0Name, token1Name, pact.allPairs);
+console.log("pair", pair)
+console.log("swap", swap.localRes?.result?.data)
   const fromValues = extractDecimal(swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1']);
 console.log("token0", token0)
 console.log("token1", token1)
@@ -107,15 +109,33 @@ console.log("token1", token1)
         <FlexContainer className="align-ce justify-sb">
           <Label fontSize={13}>Pool</Label>
           <FlexContainer>
-            <CryptoContainer size={24} style={{ zIndex: 2 }}>
-              {getTokenIconById(token0, pact.allTokens)}
+            <CryptoContainer style={{ zIndex: 2 }}>
+            <img
+                  alt={`${token0} icon`}
+                  src={getTokenIconById(token0, pact.allTokens)}
+                  style={{ width: 20, height: 20, marginRight: '8px' }}
+                  onError={(e) => {
+                    console.error(`Failed to load icon for ${token0}:`, e);
+                    e.target.onerror = null;
+                    e.target.src = DEFAULT_ICON_URL;
+                  }}
+                />
             </CryptoContainer>
-            <CryptoContainer size={24} style={{ marginLeft: -12, zIndex: 1 }}>
-              {getTokenIconById(token1, pact.allTokens)}
-            </CryptoContainer>
+            <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>
+            <img
+                  alt={`${token1} icon`}
+                  src={getTokenIconById(token1, pact.allTokens)}
+                  style={{ width: 20, height: 20, marginRight: '8px' }}
+                  onError={(e) => {
+                    console.error(`Failed to load icon for ${token1}:`, e);
+                    e.target.onerror = null;
+                    e.target.src = DEFAULT_ICON_URL;
+                  }}
+                />            
+                </CryptoContainer>
 
             <Label fontSize={13}>
-              {token0}/{token1}
+              {pair?.token0}/{pair?.token1}
             </Label>
           </FlexContainer>
         </FlexContainer>
@@ -149,7 +169,7 @@ console.log("token1", token1)
           tokenIcon={getTokenIconById(token1, pact.allTokens)}
           tokenName={token1}
           amount={
-            fromValues && pair?.isVerified
+            fromValues 
               ? fromValues * reduceBalance(pact?.computeOut(fromValues) / fromValues, 12)
               : swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0']
           }
@@ -159,11 +179,11 @@ console.log("token1", token1)
         <FlexContainer className="row justify-sb">
           <Label>Ratio</Label>
           {pact.pairReserve?.token0 !== 0 && pact.pairReserve?.token1 !== 0 ? (
-            <Label fontSize={13}>{`1 ${token0} = ${
+            <Label fontSize={13}>{`1 ${pair?.token0} = ${
               getDecimalPlaces(pact?.computeOut(fromValues) / fromValues) < 0.000001
                 ? '< 0.000001'
                 : getDecimalPlaces(pact?.computeOut(fromValues) / fromValues)
-            } ${token1}`}</Label>
+            } ${pair?.token1}`}</Label>
           ) : (
             <Label fontSize={13}>{`1 ${token0} = ${
               getDecimalPlaces(

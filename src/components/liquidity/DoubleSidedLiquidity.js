@@ -21,7 +21,7 @@ import reduceToken from '../../utils/reduceToken';
 import ConnectWalletModal from '../modals/kdaModals/ConnectWalletModal';
 import { isNaN } from 'lodash';
 
-const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
+const DoubleSidedLiquidity = ({ pair, pairCode, onPairChange }) => {
   const pact = usePactContext();
   const account = useAccountContext();
   const wallet = useWalletContext();
@@ -52,7 +52,9 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
 
   const getInitialToValue = () => {
     const initialToken = pair?.token1 || (pair?.token0 === 'KDA' ? 'KDX' : 'KDA');
+    console.log("initialToken", initialToken);
     const tokenInfo = pact.allTokens[initialToken];
+    console.log("tokenInfo", tokenInfo);
     return {
       amount: '',
       balance: '',
@@ -303,7 +305,9 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
   };
 
   const supply = async () => {
-   
+    console.log("pact.allTokens", pact.allTokens)
+    console.log("fromValues", fromValues)
+    console.log("toValues", toValues)
     const res = await liquidity.addLiquidityWallet(
       pact.allTokens?.[fromValues.address].code,
       pact.allTokens?.[toValues.address].code,
@@ -502,14 +506,13 @@ const DoubleSidedLiquidity = ({ pair, onPairChange }) => {
                 modalContext.closeModal();
               }}
             >
-              <SuccessAddView token0={pair.token0} token1={pair.token1} label="Add Liquidity" loading={loading} onClick={onAddLiquidity} />
+              <SuccessAddView token0={pairCode?.token0} token1={pairCode?.token1} token0Name={pair.token0} token1Name={pair.token1} label="Add Liquidity" loading={loading} onClick={onAddLiquidity} />
             </TxView>
           ),
         });
       }
     }
   }, [showTxModal]);
-
   return (
     <>
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
