@@ -45,7 +45,6 @@ const AddLiquidityContainer = (props) => {
   const pact = usePactContext();
   const { pathname } = useLocation();
   const { tokensUsdPrice } = usePactContext();
-
   const query = useQueryParams();
 
   const [loading, setLoading] = useState(true);
@@ -92,6 +91,7 @@ const AddLiquidityContainer = (props) => {
       (p.token0 === token0 && p.token1 === token1) || 
       (p.token0 === token1 && p.token1 === token0)
     );
+    console.log('Current pool:', pool);
     return pool;
   };
 
@@ -99,6 +99,8 @@ const AddLiquidityContainer = (props) => {
 
   const updatePairAndNavigate = (token0, token1, route) => {
     const currentPool = getCurrentPool(token0, token1);
+    console.log('Updating pair and navigating to:', route, 'with tokens:', token0, token1);
+    console.log('Current pool:', currentPool);
     if (currentPool) {
       setPair({ token0: currentPool.token0, token1: currentPool.token1 });
       history.push(route.concat(`?token0=${currentPool.token0}&token1=${currentPool.token1}`), {
@@ -118,7 +120,7 @@ const AddLiquidityContainer = (props) => {
           pool.multiplier = multiplier.multiplier;
         }
       }
-
+      console.log("pools", pools);
       setData({ pools, volumes });
     }
 

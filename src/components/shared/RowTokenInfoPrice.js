@@ -7,8 +7,8 @@ import {DEFAULT_ICON_URL} from '../../constants/cryptoCurrencies';
 
 const RowTokenInfoPrice = ({ tokenIcon, tokenName, amount, tokenPrice, contract }) => {
   console.log('tokenIcon', tokenIcon, tokenName, amount, tokenPrice);
+console.log('contract', contract);
   const { allTokens } = usePactContext();
-  console.log('allTokens', allTokens);
   /*
       The component returns Token icon with amount and usd token price:
        --------

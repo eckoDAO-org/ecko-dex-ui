@@ -78,21 +78,18 @@ export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }
 };
 
 export const SuccessAddView = ({ token0, token1, token0Name, token1Name, loading, onClick, apr }) => {
-  console.log('token0 success', token0, token1, token0Name, token1Name);
   const { account } = useAccountContext();
   const pact = usePactContext();
   const swap = useSwapContext();
-  const pair = getPairByTokensName(token0Name, token1Name, pact.allPairs);
-console.log("pair", pair)
-console.log("swap", swap.localRes?.result?.data)
+  const pair = getPairByTokensName(token0, token1, pact.allPairs);
+
   const fromValues = extractDecimal(swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1']);
-console.log("token0", token0)
-console.log("token1", token1)
+
   return (
     <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle>
       <FlexContainer className="w-100 column" gap={12}>
         {/* DISCLAIMER */}
-        {(!pact.allTokens[token0].isVerified || !pact.allTokens[token1].isVerified) && <DisclaimerUnverifiedTokens />}
+         <DisclaimerUnverifiedTokens />
         {/* ACCOUNT */}
         <FlexContainer className="align-ce justify-sb">
           <Label fontSize={13}>Account</Label>
@@ -162,6 +159,7 @@ console.log("token1", token1)
           tokenName={token0}
           amount={fromValues}
           tokenPrice={pact.tokensUsdPrice?.[token0] || null}
+          contract={token0Name}
         />
 
         {/* TO VALUES */}
@@ -175,6 +173,8 @@ console.log("token1", token1)
               : swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0']
           }
           tokenPrice={pact.tokensUsdPrice?.[token1] || null}
+          contract={token1Name}
+
         />
 
         <FlexContainer className="row justify-sb">
