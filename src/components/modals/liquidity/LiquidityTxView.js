@@ -78,6 +78,7 @@ export const SuccessAddRemoveViewGE = ({ token0, token1, swap, label, onBPress }
 };
 
 export const SuccessAddView = ({ token0, token1, token0Name, token1Name, loading, onClick, apr }) => {
+  console.log('token0 success', token0, token1, token0Name, token1Name);
   const { account } = useAccountContext();
   const pact = usePactContext();
   const swap = useSwapContext();
@@ -112,7 +113,7 @@ console.log("token1", token1)
             <CryptoContainer style={{ zIndex: 2 }}>
             <img
                   alt={`${token0} icon`}
-                  src={getTokenIconById(token0, pact.allTokens)}
+                  src={getTokenIconById(token0Name, pact.allTokens)}
                   style={{ width: 20, height: 20, marginRight: '8px' }}
                   onError={(e) => {
                     console.error(`Failed to load icon for ${token0}:`, e);
@@ -124,7 +125,7 @@ console.log("token1", token1)
             <CryptoContainer style={{ marginLeft: -12, zIndex: 1 }}>
             <img
                   alt={`${token1} icon`}
-                  src={getTokenIconById(token1, pact.allTokens)}
+                  src={getTokenIconById(token1Name, pact.allTokens)}
                   style={{ width: 20, height: 20, marginRight: '8px' }}
                   onError={(e) => {
                     console.error(`Failed to load icon for ${token1}:`, e);
@@ -157,7 +158,7 @@ console.log("token1", token1)
         <Label>Amount</Label>
         {/* FROM VALUES */}
         <RowTokenInfoPrice
-          tokenIcon={getTokenIconById(token0, pact.allTokens)}
+          tokenIcon={getTokenIconById(token0Name, pact.allTokens)}
           tokenName={token0}
           amount={fromValues}
           tokenPrice={pact.tokensUsdPrice?.[token0] || null}
@@ -166,7 +167,7 @@ console.log("token1", token1)
         {/* TO VALUES */}
 
         <RowTokenInfoPrice
-          tokenIcon={getTokenIconById(token1, pact.allTokens)}
+          tokenIcon={getTokenIconById(token1Name, pact.allTokens)}
           tokenName={token1}
           amount={
             fromValues 
@@ -210,12 +211,15 @@ console.log("token1", token1)
     </SuccesViewContainer>
   );
 };
-export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading, onClick, apr, multiplier }) => {
+export const SuccessAddSigleSideView = ({ apr, multiplier, initialAmount, token0, token0Name, token1, token1Name, loading, onClick  }) => {
+  console.log('token0 success', initialAmount, token0, token1);
+  console.log('token1 success',  token0Name, token1Name);
+
   const { account } = useAccountContext();
   const pact = usePactContext();
   const swap = useSwapContext();
   const pair = getPairByTokensName(token0, token1, pact.allPairs);
-
+  console.log('pair', pair);
   const fromValues = extractDecimal(swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1']);
 
   return (
@@ -239,10 +243,27 @@ export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading
           <Label fontSize={13}>Pool</Label>
           <FlexContainer>
             <CryptoContainer size={24} style={{ zIndex: 2 }}>
-              {getTokenIconById(token0, pact.allTokens)}
+            <img 
+          src={getTokenIconById(token0Name, pact.allTokens)}
+          alt={token0}
+          style={{ width: 20, height: 20 }}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = DEFAULT_ICON_URL;
+          }}
+        />
+              
             </CryptoContainer>
             <CryptoContainer size={24} style={{ marginLeft: -12, zIndex: 1 }}>
-              {getTokenIconById(token1, pact.allTokens)}
+            <img 
+          src={getTokenIconById(token0Name, pact.allTokens)}
+          alt={token0}
+          style={{ width: 20, height: 20 }}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = DEFAULT_ICON_URL;
+          }}
+        />
             </CryptoContainer>
 
             <Label fontSize={13}>
@@ -270,10 +291,12 @@ export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading
           {/* LEFT */}
           <FlexContainer className="w-100 justify-ce align-ce">
             <RowTokenInfoPrice
-              tokenIcon={getTokenIconById(token0, pact.allTokens)}
+              tokenIcon={getTokenIconById(token0Name, pact.allTokens)}
               tokenName={token0}
               amount={initialAmount}
               tokenPrice={pact.tokensUsdPrice?.[token0] || null}
+              contract={token0Name}
+
             />
           </FlexContainer>
           <FlexContainer className="align-ce justify-ce" mobileClassName="w-100">
@@ -283,16 +306,19 @@ export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading
           {/* RIGHT */}
           <FlexContainer className="justify-ce column w-100" gap={14}>
             <RowTokenInfoPrice
-              tokenIcon={getTokenIconById(token0, pact.allTokens)}
+              tokenIcon={getTokenIconById(token0Name, pact.allTokens)}
               tokenName={token0}
               amount={fromValues}
               tokenPrice={pact.tokensUsdPrice?.[token0] || null}
+              contract={token0Name}
+
             />
             <RowTokenInfoPrice
-              tokenIcon={getTokenIconById(token1, pact.allTokens)}
+              tokenIcon={getTokenIconById(token1Name, pact.allTokens)}
               tokenName={token1}
               amount={extractDecimal(swap?.localRes?.result?.data?.[token1 === pair.token1 ? 'amount1' : 'amount0'])}
               tokenPrice={pact.tokensUsdPrice?.[token1] || null}
+              contract={token1Name}
             />
           </FlexContainer>
         </FlexContainer>
@@ -302,6 +328,7 @@ export const SuccessAddSigleSideView = ({ initialAmount, token0, token1, loading
 };
 
 export const SuccessDoubleSideRemoveView = ({ token0, token1, loading, onClick, pair }) => {
+  console.log('token0 success', token0, token1);
   const swap = useSwapContext();
   const { wantsKdxRewards } = useLiquidityContext();
   const pact = usePactContext();

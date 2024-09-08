@@ -102,6 +102,7 @@ export const SwapSuccessViewGE = () => {
 };
 
 export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
+  console.log('SwapSuccessView', fromValues);
   const { account } = useAccountContext();
   const pact = usePactContext();
   const swap = useSwapContext();

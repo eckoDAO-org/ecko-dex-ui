@@ -64,7 +64,8 @@ const TokenItem = styled.div`
     font-size: ${({ gameEditionView }) => gameEditionView && '13px'};
   }
 `;
-const TokenSelectorModalContent = ({ onSelectToken, onClose, token, tokensToKeep }) => {
+const TokenSelectorModalContent = ({ token, tokensToKeep, onSelectToken, onClose  }) => {
+  console.log('TokenSelectorModalContent', token, tokensToKeep );
   const [searchValue, setSearchValue] = useState('');
   const pact = usePactContext();
   const { gameEditionView, onCloseTokensList } = useGameEditionContext();

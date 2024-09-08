@@ -34,7 +34,7 @@ export const getTokenShortName = (code, allTokens) => {
 };
 
 export const getTokenIconById = (token, allTokens) => {
-  console.log('token', token);
+  console.log('token50', token);
   return allTokens[token]?.icon;
 };
 export const getTokenIconByCode = (tokenCode, allTokens) => {
@@ -49,16 +49,16 @@ export const getInfoCoin = (item, coinPositionArray, allTokens) => {
   return crypto
     ? crypto
     : {
-        code: cryptoCode,
-        coingeckoId: 'kadena',
-        color: '#FFFFFF',
-        icon: null,
-        isVerified: false,
-        main: false,
-        name: cryptoCode.split('.')[1],
-        precision: 12,
-        tokenNameKaddexStats: null,
-      };
+      code: cryptoCode,
+      coingeckoId: 'kadena',
+      color: '#FFFFFF',
+      icon: null,
+      isVerified: false,
+      main: false,
+      name: cryptoCode.split('.')[1],
+      precision: 12,
+      tokenNameKaddexStats: null,
+    };
 };
 
 export const getApr = (volume, liquidity) => {
@@ -89,6 +89,7 @@ export const getPairByTokensName = (token0Name, token1Name, allPairs) => {
 // calculate liquidity, volumes and apr for each pool
 // TODO: NOT USED
 export const getAllPairValues = async (pools, volumes, allTokens) => {
+  console.log("getAllPairValues")
   const result = [];
 
   for (const pool of pools) {
@@ -133,6 +134,7 @@ export const getAllPairValues = async (pools, volumes, allTokens) => {
 };
 
 export const getAllPairsData = async (tokensUsdPrice, allTokens, allPairs, _pools) => {
+  console.log("getAllPairsData")
   const pools = _pools ? _pools : await getPairList(allPairs);
   if (pools.length) {
     const dexscanPoolsStats = await getAnalyticsDexscanPoolsData();
@@ -296,8 +298,10 @@ export const get24HVolumeSingleSided = (volumes, tokenNameKaddexStats) => {
 
 export const getTokenUsdPriceByLiquidity = (liquidity0, liquidity1, usdPrice, precision = 8) => {
   const liquidityRatio = liquidity0 / liquidity1;
-  return {usd: bigNumberConverter(liquidityRatio * usdPrice, precision),
-          kda: bigNumberConverter(liquidityRatio, precision)}
+  return {
+    usd: bigNumberConverter(liquidityRatio * usdPrice, precision),
+    kda: bigNumberConverter(liquidityRatio, precision)
+  }
 };
 
 /**
@@ -308,7 +312,7 @@ export const getTokenUsdPriceByName = async (tokenName, pools, allTokens, kdaPri
     (d) => (d.token0.name === tokenName && d.token1.name === 'KDA') || (d.token0.name === 'KDA' && d.token1.name === tokenName)
   );
   if (specificPairData[0] && tokenName !== 'KDA') {
-    return {"usd":specificPairData[0].price, "kda": specificPairData[0].priceKda}
+    return { "usd": specificPairData[0].price, "kda": specificPairData[0].priceKda }
   } else {
     const token = Object.values(allTokens).find((t) => t.name === tokenName);
     return await getTokenUsdPrice(token, pools, allTokens, kdaPrice);
@@ -322,7 +326,7 @@ export const getTokenUsdPrice = async (token, pairsList, allTokens, kdaPrice) =>
   }
   const filteredPairs = pairsList.filter((p) => p.token0 === token.name || p.token1 === token.name);
 
-  let tokenUsd = token.name === 'KDA' && !kdaPrice ? await getCoingeckoUsdPrice(token.coingeckoId) : token.name === 'KDA' ? {usd:kdaPrice, kda:1.0} : null;
+  let tokenUsd = token.name === 'KDA' && !kdaPrice ? await getCoingeckoUsdPrice(token.coingeckoId) : token.name === 'KDA' ? { usd: kdaPrice, kda: 1.0 } : null;
   if (tokenUsd) {
     return tokenUsd;
   } else {

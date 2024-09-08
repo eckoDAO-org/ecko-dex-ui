@@ -150,6 +150,7 @@ const TokenSelectorModalContent = ({ tokenSelectorType, onTokenClick, onClose, f
     }
   };
   const onTokenSelect = (crypto) => {
+    console.log('onTokenSelect', crypto);
     if (!showTokens) {
       if (tokenSelectorType === 'from' && fromToken === crypto.name) return;
       if (tokenSelectorType === 'to' && toToken === crypto.name) return;

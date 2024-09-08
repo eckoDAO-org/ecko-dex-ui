@@ -5,8 +5,10 @@ import { usePactContext } from '../../contexts';
 import Label from './Label';
 import {DEFAULT_ICON_URL} from '../../constants/cryptoCurrencies';
 
-const RowTokenInfoPrice = ({ tokenIcon, tokenName, amount, tokenPrice }) => {
+const RowTokenInfoPrice = ({ tokenIcon, tokenName, amount, tokenPrice, contract }) => {
+  console.log('tokenIcon', tokenIcon, tokenName, amount, tokenPrice);
   const { allTokens } = usePactContext();
+  console.log('allTokens', allTokens);
   /*
       The component returns Token icon with amount and usd token price:
        --------
@@ -30,8 +32,8 @@ const RowTokenInfoPrice = ({ tokenIcon, tokenName, amount, tokenPrice }) => {
         </CryptoContainer>
       <FlexContainer className="column w-100" style={{ alignSelf: !tokenPrice && 'center' }}>
         <FlexContainer className="justify-sb w-100">
-          <Label>{reduceBalance(extractDecimal(amount), allTokens[tokenName].precision)}</Label>
-          <Label>{getShorterNameSpace(tokenName)}</Label>
+          <Label>{reduceBalance(extractDecimal(amount), allTokens[contract].precision)}</Label>
+          <Label>{getShorterNameSpace(contract)}</Label>
         </FlexContainer>
 
         <FlexContainer className="justify-sb w-100">
@@ -40,7 +42,7 @@ const RowTokenInfoPrice = ({ tokenIcon, tokenName, amount, tokenPrice }) => {
           ) : (
             <Label labelStyle={{ fontSize: 12 }}></Label>
           )}
-          <Label labelStyle={{ opacity: 0.6, fontSize: 12 }}>{getShorterNameSpace(allTokens[tokenName].name)}</Label>
+          <Label labelStyle={{ opacity: 0.6, fontSize: 12 }}>{getShorterNameSpace(allTokens[contract].name)}</Label>
         </FlexContainer>
       </FlexContainer>
     </FlexContainer>

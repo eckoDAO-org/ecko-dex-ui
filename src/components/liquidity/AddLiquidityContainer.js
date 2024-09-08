@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components/macro';
@@ -52,22 +51,16 @@ const AddLiquidityContainer = (props) => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useErrorState({ pools: [], volumes: [] });
 
-
-const [pair, setPair] = useState({
-  token0: pact.allTokens[query.get('token0')]?.code || query.get('token0'),
-  token1: pact.allTokens[query.get('token1')]?.code || query.get('token1')
-});
-
-
-
+  const [pair, setPair] = useState({
+    token0: pact.allTokens[query.get('token0')]?.code || query.get('token0'),
+    token1: pact.allTokens[query.get('token1')]?.code || query.get('token1')
+  });
 
   const [apr, setApr] = useState(null);
-
   const [fromLocation, setFromLocation] = useState();
 
   useEffect(() => {
     const locationState = props?.location?.state?.from;
-
     if (locationState) {
       setFromLocation(locationState);
     }
@@ -83,16 +76,8 @@ const [pair, setPair] = useState({
     }
   };
 
-  // const getCurrentPool = (token0, token1) => {
-  //   let pool = data.pools.find((p) => (p.token0 === token0 && p.token1 === token1) || (p.token0 === token1 && p.token1 === token0));
-  //   if (pool) {
-  //     return pool;
-  //   }
-  // };
+  useEffect(() => {}, [data.pools]);
 
-  useEffect(() => {
-  }, [data.pools]);
-  
   useEffect(() => {
     if (data.pools.length > 0) {
       const pool = getCurrentPool(pair.token0, pair.token1);
@@ -109,9 +94,8 @@ const [pair, setPair] = useState({
     );
     return pool;
   };
-  
-  const pool = getCurrentPool(pair.token0, pair.token1);
 
+  const pool = getCurrentPool(pair.token0, pair.token1);
 
   const updatePairAndNavigate = (token0, token1, route) => {
     const currentPool = getCurrentPool(token0, token1);
@@ -152,6 +136,7 @@ const [pair, setPair] = useState({
       calculateApr();
     }
   }, [pair, data]);
+
   useEffect(() => {
     if (pact.allPairs) {
       setLoading(true);
@@ -160,6 +145,7 @@ const [pair, setPair] = useState({
       setLoading(false);
     }
   }, [pact.allPairs]);
+
   return loading ? (
     <AppLoader className="h-100 w-100 align-ce justify-ce" />
   ) : (
@@ -196,40 +182,46 @@ const [pair, setPair] = useState({
         isBoosted={getCurrentPool(pair.token0, pair.token1) && getCurrentPool(pair.token0, pair.token1).isBoosted}
       />
 
-      <FlexContainer gap={24}>
-        <Label
-          fontFamily="syncopate"
-          withShade={pathname !== ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED}
-          onClick={() =>
-            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${query.get('token0')}&token1=${query.get('token1')}`), {
-              from: fromLocation,
-            })
-          }
-        >
-          SINGLE-SIDED
-        </Label>
-        <Label
-          fontFamily="syncopate"
-          withShade={pathname !== ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED}
-          onClick={() =>
-            history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${query.get('token0')}&token1=${query.get('token1')}`), {
-              from: fromLocation,
-            })
-          }
-        >
-          DOUBLE-SIDED
-        </Label>
-      </FlexContainer>
+<FlexContainer gap={24}>
+  <Label
+    fontFamily="syncopate"
+    withShade={pathname !== ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED}
+    onClick={() => {
+      const token0 = query.get('token0');
+      const token1 = query.get('token1');
+      console.log('Navigating to SINGLE-SIDED with tokens:', token0, token1);
+      history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${token0}&token1=${token1}`), {
+        from: fromLocation,
+      });
+    }}
+  >
+    SINGLE-SIDED
+  </Label>
+  <Label
+    fontFamily="syncopate"
+    withShade={pathname !== ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED}
+    onClick={() => {
+      const token0 = query.get('token0');
+      const token1 = query.get('token1');
+      console.log('Navigating to DOUBLE-SIDED with tokens:', token0, token1);
+      history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${token0}&token1=${token1}`), {
+        from: fromLocation,
+      });
+    }}
+  >
+    DOUBLE-SIDED
+  </Label>
+</FlexContainer>
 
       {pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED && (
         <SingleSidedLiquidity
           apr={apr}
           pools={data?.pools}
-          pair={pair}
+          pair={{ token0: query.get('token0'), token1: query.get('token1') }}
           pairCode={{ token0: pool?.token0_code, token1: pool?.token1_code }}
           onPairChange={(token0, token1) => {
-          updatePairAndNavigate(token0, token1, ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED);
-        }}
+            updatePairAndNavigate(token0, token1, ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED);
+          }}
         />
       )}
       {pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED && (
@@ -237,8 +229,8 @@ const [pair, setPair] = useState({
           pair={{ token0: query.get('token0'), token1: query.get('token1') }}
           pairCode={{ token0: pool?.token0_code, token1: pool?.token1_code }}
           onPairChange={(token0, token1) => {
-          updatePairAndNavigate(token0, token1, ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED);
-        }}
+            updatePairAndNavigate(token0, token1, ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED);
+          }}
         />
       )}
     </Container>

@@ -154,7 +154,9 @@ export const LiquidityProvider = (props) => {
     const accountDetails = await getTokenBalanceAccount(token0.code, account.account);
     if (accountDetails.result.status === 'success') {
       try {
+        console.log("amountDesired0", amountDesired0, pact.slippage, token0.code, token1.code)
         const args = await getOneSideLiquidityPairInfo(amountDesired0, pact.slippage, token0.code, token1.code);
+        console.log("args", args)
         let pair = await getPairAccount(token0.code, token1.code);
         const pairConfig = pact.allPairs[`${token0.code}:${token1.code}`] || pact.allPairs[`${token1.code}:${token0.code}`];
         // const useWrapper = pairConfig.isBoosted ? true : false;
@@ -232,17 +234,19 @@ const useWrapper = false;
         pact.setPactCmd(command);
         let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(command));
         data = await parseRes(data);
+        console.log("pairConfig.token0", token0)
+        console.log("pairConfig.token1", token1)
         const eventData = {
           ...data,
           amountFrom: Math.max(
-            reduceBalance(amountDesired0, pact.allTokens[token0.name].precision),
-            reduceBalance(args['amountA-min'], pact.allTokens[token0.name].precision)
+            reduceBalance(amountDesired0, pact.allTokens[token0.code].precision),
+            reduceBalance(args['amountA-min'], pact.allTokens[token0.code].precision)
           ),
-          amountTo: reduceBalance(args['amountB-min'], pact.allTokens[token1.name].precision),
-          tokenAddressFrom: pact.allTokens[token0.name].code,
-          tokenAddressTo: pact.allTokens[token1.name].code,
-          coinFrom: pact.allTokens[token0.name].name,
-          coinTo: pact.allTokens[token1.name].name,
+          amountTo: reduceBalance(args['amountB-min'], pact.allTokens[token1.code].precision),
+          tokenAddressFrom: pact.allTokens[token0.code].code,
+          tokenAddressTo: pact.allTokens[token1.code].code,
+          coinFrom: pact.allTokens[token0.code].name,
+          coinTo: pact.allTokens[token1.code].name,
           type: 'LIQUIDITY SINGLE SIDE',
         };
         if (isWalletConnectConnected) {
