@@ -59,6 +59,7 @@ const ButtonContainer = styled.div`
 `;
 
 const RemoveSingleSideLiquidity = ({ pair, previewObject, setPreviewAmount, previewAmount }) => {
+  console.log("RemoveSingleSideLiquidity -> pair", pair)
   const pact = usePactContext();
   const wallet = useWalletContext();
   const liquidity = useLiquidityContext();
@@ -134,8 +135,8 @@ const RemoveSingleSideLiquidity = ({ pair, previewObject, setPreviewAmount, prev
   const onRemoveSingleSideLiquidity = async () => {
     setLoading(true);
     const res = await liquidity.removeSingleSideLiquidityWallet(
-      pact.allTokens[pair?.token0],
-      pact.allTokens[pair?.token1],
+      pact.allTokens[pair?.token0_code],
+      pact.allTokens[pair?.token1_code],
       currentToken?.code,
       extractDecimal(pooled)
     );
@@ -171,11 +172,13 @@ const RemoveSingleSideLiquidity = ({ pair, previewObject, setPreviewAmount, prev
             {/* SuccessRemoveWithBoosterView to remove liquidy with booster */}
             <SuccessSingleSideRemoveView
               token0={pair.token0}
+              token0Name={pair.token0_code}
               token1={pair.token1}
-              label="Remove Liquidity"
+              token1Name={pair.token1_code}
               loading={loading}
               onClick={sendTransaction}
               pair={pair}
+              label="Remove Liquidity"
             />
           </TxView>
         ),
@@ -275,7 +278,7 @@ const RemoveSingleSideLiquidity = ({ pair, previewObject, setPreviewAmount, prev
               </FlexContainer>
               {tokensUsdPrice ? (
                 <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7, justifyContent: 'flex-end' }}>
-                  $ {humanReadableNumber(tokensUsdPrice?.[pair?.token0] * extractDecimal(pooledToken0))}
+                  $ {humanReadableNumber(tokensUsdPrice?.[pair?.token0_code] * extractDecimal(pooledToken0))}
                 </Label>
               ) : (
                 ''
@@ -289,7 +292,7 @@ const RemoveSingleSideLiquidity = ({ pair, previewObject, setPreviewAmount, prev
               </FlexContainer>
               {tokensUsdPrice ? (
                 <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7, justifyContent: 'flex-end' }}>
-                  $ {humanReadableNumber(tokensUsdPrice?.[pair?.token1] * extractDecimal(pooledToken1))}
+                  $ {humanReadableNumber(tokensUsdPrice?.[pair?.token1_code] * extractDecimal(pooledToken1))}
                 </Label>
               ) : (
                 ''

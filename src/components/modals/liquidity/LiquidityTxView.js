@@ -327,7 +327,7 @@ export const SuccessAddSigleSideView = ({ apr, multiplier, initialAmount, token0
   );
 };
 
-export const SuccessDoubleSideRemoveView = ({ token0, token1, loading, onClick, pair }) => {
+export const SuccessDoubleSideRemoveView = ({ token0, token0Name, token1, token1Name, loading, onClick, pair }) => {
   console.log('token0 success', token0, token1);
   const swap = useSwapContext();
   const { wantsKdxRewards } = useLiquidityContext();
@@ -336,7 +336,7 @@ export const SuccessDoubleSideRemoveView = ({ token0, token1, loading, onClick, 
     <SuccesViewContainer swap={swap} loading={loading} onClick={onClick} hideSubtitle>
       <FlexContainer className="w-100 column" gap={12}>
         {/* DISCLAIMER */}
-        {(!pact.allTokens[token0].isVerified || !pact.allTokens[token1].isVerified) && <DisclaimerUnverifiedTokens />}
+         <DisclaimerUnverifiedTokens />
         <Label>Are you sure you want to remove your liquidity?</Label>
 
         <CustomDivider style={{ margin: '16px 0' }} />
@@ -346,16 +346,19 @@ export const SuccessDoubleSideRemoveView = ({ token0, token1, loading, onClick, 
         </div>
 
         <RowTokenInfoPrice
-          tokenIcon={getTokenIconById(token0, pact.allTokens)}
+          tokenIcon={getTokenIconById(token0Name, pact.allTokens)}
           tokenName={token0}
           amount={pair.isBoosted ? swap?.localRes?.result?.data?.amountA : swap?.localRes?.result?.data?.amount0}
           tokenPrice={pact.tokensUsdPrice?.[token0] || null}
+          contract={token0Name}
+        
         />
         <RowTokenInfoPrice
-          tokenIcon={getTokenIconById(token1, pact.allTokens)}
+          tokenIcon={getTokenIconById(token1Name, pact.allTokens)}
           tokenName={token1}
           amount={pair.isBoosted ? swap?.localRes?.result?.data?.amountB : swap?.localRes?.result?.data?.amount1}
           tokenPrice={pact.tokensUsdPrice?.[token1] || null}
+          contract={token1Name}
         />
         {wantsKdxRewards && pair.isBoosted && (
           <>
@@ -363,7 +366,7 @@ export const SuccessDoubleSideRemoveView = ({ token0, token1, loading, onClick, 
               <Label fontSize={16}>Estimated Rewards</Label>
             </div>
             <RowTokenInfoPrice
-              tokenIcon={getTokenIconById('KDX', pact.allTokens)}
+              tokenIcon={getTokenIconById('kaddex.kdx', pact.allTokens)}
               tokenName={'KDX'}
               amount={swap?.localRes?.resPreview?.['estimated-kdx-rewards']}
               tokenPrice={pact.tokensUsdPrice?.KDX || null}
@@ -374,7 +377,8 @@ export const SuccessDoubleSideRemoveView = ({ token0, token1, loading, onClick, 
     </SuccesViewContainer>
   );
 };
-export const SuccessSingleSideRemoveView = ({ token0, token1, loading, onClick, pair }) => {
+export const SuccessSingleSideRemoveView = ({ token0, token0Name, token1, token1Name, loading, onClick, pair }) => {
+  console.log('token0 success', token0, token0Name, token1, token1Name);
   const swap = useSwapContext();
   const { wantsKdxRewards } = useLiquidityContext();
   const pact = usePactContext();
@@ -400,20 +404,22 @@ export const SuccessSingleSideRemoveView = ({ token0, token1, loading, onClick, 
 
           <FlexContainer className="justify-ce column w-100" gap={14}>
             <RowTokenInfoPrice
-              tokenIcon={getTokenIconById(token0, pact.allTokens)}
+              tokenIcon={getTokenIconById(token0Name, pact.allTokens)}
               tokenName={token0}
               amount={
                 pair.isBoosted ? swap?.localRes?.result?.data?.['remove-result']?.amountA : swap?.localRes?.result?.data?.['remove-result']?.amount0
               }
               tokenPrice={pact.tokensUsdPrice?.[token0] || null}
+              contract={token0Name}
             />
             <RowTokenInfoPrice
-              tokenIcon={getTokenIconById(token1, pact.allTokens)}
+              tokenIcon={getTokenIconById(token1Name, pact.allTokens)}
               tokenName={token1}
               amount={
                 pair.isBoosted ? swap?.localRes?.result?.data?.['remove-result']?.amountB : swap?.localRes?.result?.data?.['remove-result']?.amount1
               }
               tokenPrice={pact.tokensUsdPrice?.[token1] || null}
+              contract={token1Name}
             />
           </FlexContainer>
 
@@ -441,7 +447,7 @@ export const SuccessSingleSideRemoveView = ({ token0, token1, loading, onClick, 
               <Label fontSize={16}>Estimated Rewards</Label>
             </div>
             <RowTokenInfoPrice
-              tokenIcon={getTokenIconById('KDX', pact.allTokens)}
+              tokenIcon={getTokenIconById('kaddex.kdx', pact.allTokens)}
               tokenName={'KDX'}
               amount={swap?.localRes?.resPreview?.['estimated-kdx-rewards']}
               tokenPrice={pact.tokensUsdPrice?.KDX || null}
@@ -453,6 +459,7 @@ export const SuccessSingleSideRemoveView = ({ token0, token1, loading, onClick, 
   );
 };
 export const SuccessRemoveWithBoosterView = ({ token0, token1, loading, onClick }) => {
+  console.log('SuccessRemoveWithBoosterView', token0, token1);
   const swap = useSwapContext();
   const pact = usePactContext();
   const [checked, setChecked] = useState(false);

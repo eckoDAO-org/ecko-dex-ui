@@ -281,6 +281,7 @@ const useWrapper = false;
   };
 
   const removeDoubleSideLiquidityWallet = async (token0, token1, liquidity, previewAmount) => {
+    console.log("remove", token0, token1, liquidity, previewAmount)
     try {
       let pair = await getPairAccount(token0.code, token1.code);
 

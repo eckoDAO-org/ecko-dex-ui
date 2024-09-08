@@ -136,8 +136,8 @@ const RemoveDoubleSideLiquidity = ({ pair, previewObject, setPreviewAmount, prev
   const onRemoveLiquidity = async () => {
     setLoading(true);
     const res = await liquidity.removeDoubleSideLiquidityWallet(
-      pact.allTokens[pair?.token0],
-      pact.allTokens[pair?.token1],
+      pact.allTokens[pair?.token0_code],
+      pact.allTokens[pair?.token1_code],
       extractDecimal(pooled),
       previewAmount
     );
@@ -173,7 +173,9 @@ const RemoveDoubleSideLiquidity = ({ pair, previewObject, setPreviewAmount, prev
             {/* SuccessRemoveWithBoosterView to remove liquidy with booster */}
             <SuccessDoubleSideRemoveView
               token0={pair.token0}
+              token0Name={pair.token0_code}
               token1={pair.token1}
+              token1Name={pair.token1_code}
               label="Remove Liquidity"
               loading={loading}
               onClick={sendTransaction}
@@ -266,7 +268,7 @@ const RemoveDoubleSideLiquidity = ({ pair, previewObject, setPreviewAmount, prev
               </FlexContainer>
               {tokensUsdPrice ? (
                 <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7, justifyContent: 'flex-end' }}>
-                  $ {humanReadableNumber(tokensUsdPrice?.[pair?.token0] * extractDecimal(pooledToken0))}
+                  $ {humanReadableNumber(tokensUsdPrice?.[pair?.token0_code] * extractDecimal(pooledToken0))}
                 </Label>
               ) : (
                 ''
@@ -279,7 +281,7 @@ const RemoveDoubleSideLiquidity = ({ pair, previewObject, setPreviewAmount, prev
               </FlexContainer>
               {tokensUsdPrice ? (
                 <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7, justifyContent: 'flex-end' }}>
-                  $ {humanReadableNumber(tokensUsdPrice?.[pair?.token1] * extractDecimal(pooledToken1))}
+                  $ {humanReadableNumber(tokensUsdPrice?.[pair?.token1_code] * extractDecimal(pooledToken1))}
                 </Label>
               ) : (
                 ''
