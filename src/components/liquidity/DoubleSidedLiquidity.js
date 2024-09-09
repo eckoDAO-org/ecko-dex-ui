@@ -126,12 +126,7 @@ const DoubleSidedLiquidity = ({ pair, pairCode, onPairChange }) => {
     }
   }, [fetchData]);
 
-  /// POLLING ON UPDATE PACT RATIO
-  // useInterval(async () => {
-  //   if (!isNaN(pact.ratio)) {
-  //     await pact.getReserves(pact.allTokens?.[fromValues?.coin]?.code, pact.allTokens?.[toValues?.coin]?.code);
-  //   }
-  // }, 10000);
+
 
   const onTokenClick = async ({ crypto }) => {
     let balance;

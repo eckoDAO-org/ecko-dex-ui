@@ -5,6 +5,7 @@ import { useKaddexWalletContext, usePactContext, useWalletContext, useAccountCon
 import { extractDecimal, reduceBalance } from '../utils/reduceBalance';
 import { handleError, mkReq, parseRes } from '../api/utils';
 import { getOneSideLiquidityPairInfo, getPairAccount, getTokenBalanceAccount, pactFetchLocal } from '../api/pact';
+import { isWrapperBoosted } from '../constants/WrapperConfig';
 
 export const LiquidityContext = createContext(null);
 
@@ -156,6 +157,7 @@ export const LiquidityProvider = (props) => {
   };
 
   const addOneSideLiquidityWallet = async (token0, token1, amountDesired0) => {
+    console.log('addOneSideLiquidityWallet', token0, token1);
     const accountDetails = await getTokenBalanceAccount(token0.code, account.account);
     if (accountDetails.result.status === 'success') {
       try {
@@ -163,7 +165,7 @@ export const LiquidityProvider = (props) => {
         let pair = await getPairAccount(token0.code, token1.code);
         const pairConfig = pact.allPairs[`${token0.code}:${token1.code}`] || pact.allPairs[`${token1.code}:${token0.code}`];
         // const useWrapper = pairConfig.isBoosted ? true : false;
-const useWrapper = false;
+        const useWrapper = isWrapperBoosted(token0.code, token1.code);
         const signCmd = {
           pactCode: `(${KADDEX_NAMESPACE}.liquidity-helper.add-liquidity-one-sided
             ${token0.code}
@@ -399,7 +401,7 @@ const useWrapper = false;
       const pairConfig = pact.allPairs[`${token0.code}:${token1.code}`] || pact.allPairs[`${token1.code}:${token0.code}`];
 
       // const useWrapper = pairConfig.isBoosted ? true : false;
-      const useWrapper = false;
+      const useWrapper = isWrapperBoosted(token0.code, token1.code);
       const tokenOtherCode = tokenOutCode === token0.code ? token1.code : token0.code;
       const slippage = 1 - pact.slippage;
 

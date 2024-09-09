@@ -9,12 +9,10 @@ import Search from '../../shared/Search';
 import { DEFAULT_ICON_URL } from '../../../constants/cryptoCurrencies';
 
 const SelectPoolModal = ({ pools, onSelect, onClose }) => {
-  console.log('pools', pools);
   const [searchValue, setSearchValue] = useState('');
   const { allTokens } = usePactContext();
 
   useEffect(() => {
-    console.log('searchValue', searchValue);
   }, [searchValue]);
 
   const getTokenIcon = (tokenCode) => {
@@ -27,11 +25,9 @@ const SelectPoolModal = ({ pools, onSelect, onClose }) => {
   );
 
   useEffect(() => {
-    console.log('filteredPools', filteredPools);
   }, [filteredPools]);
 
   const handlePoolSelect = (pool) => {
-    console.log('selected pool', pool);
     onSelect(pool);
     onClose(); // Close the modal after selection
   };
