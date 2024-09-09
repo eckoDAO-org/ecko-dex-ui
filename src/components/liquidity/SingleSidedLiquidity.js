@@ -57,7 +57,7 @@ const SingleSidedLiquidity = ({ apr, pools, pair, pairCode, onPairChange  }) => 
   // Update the balance after a transaction send or change account
   useEffect(() => {
     if (account.fetchAccountBalance) {
-      handleTokenValue(pair?.token0 || 'KDX');
+      handleTokenValue(token0 || 'KDX');
     }
   }, [account.fetchAccountBalance, account.account.account, pair?.token0]);
 
@@ -112,10 +112,11 @@ const SingleSidedLiquidity = ({ apr, pools, pair, pairCode, onPairChange  }) => 
   }, [fromValue?.coin, selectedPool]);
 
   const handleTokenValue = async (tokenCode) => {
+    console.log("tokenCode", tokenCode);
     const crypto = pact.allTokens[tokenCode];
     let balance;
     let contract = crypto?.code;
-
+    console.log("crypto", crypto);
     if (crypto?.code === 'coin') {
       if (account.account) {
         balance = account.account.balance;
@@ -153,6 +154,8 @@ const SingleSidedLiquidity = ({ apr, pools, pair, pairCode, onPairChange  }) => 
           token={fromValue.coin}
           tokensToKeep={[selectedPool?.token0, selectedPool?.token1]}
           onSelectToken={async (selectedCrypto) => {
+            console.log("(selectedCrypto)", selectedCrypto);
+
             await handleTokenValue(selectedCrypto.code);
           }}
           onClose={() => {
