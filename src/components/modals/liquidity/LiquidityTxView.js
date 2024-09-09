@@ -212,14 +212,11 @@ export const SuccessAddView = ({ token0, token1, token0Name, token1Name, loading
   );
 };
 export const SuccessAddSigleSideView = ({ apr, multiplier, initialAmount, token0, token0Name, token1, token1Name, loading, onClick  }) => {
-  console.log('token0 success', initialAmount, token0, token1);
-  console.log('token1 success',  token0Name, token1Name);
 
   const { account } = useAccountContext();
   const pact = usePactContext();
   const swap = useSwapContext();
   const pair = getPairByTokensName(token0, token1, pact.allPairs);
-  console.log('pair', pair);
   const fromValues = extractDecimal(swap?.localRes?.result?.data?.[token0 === pair.token0 ? 'amount0' : 'amount1']);
 
   return (
@@ -256,7 +253,7 @@ export const SuccessAddSigleSideView = ({ apr, multiplier, initialAmount, token0
             </CryptoContainer>
             <CryptoContainer size={24} style={{ marginLeft: -12, zIndex: 1 }}>
             <img 
-          src={getTokenIconById(token0Name, pact.allTokens)}
+          src={getTokenIconById(token1Name, pact.allTokens)}
           alt={token0}
           style={{ width: 20, height: 20 }}
           onError={(e) => {
@@ -328,7 +325,6 @@ export const SuccessAddSigleSideView = ({ apr, multiplier, initialAmount, token0
 };
 
 export const SuccessDoubleSideRemoveView = ({ token0, token0Name, token1, token1Name, loading, onClick, pair }) => {
-  console.log('token0 success', token0, token1);
   const swap = useSwapContext();
   const { wantsKdxRewards } = useLiquidityContext();
   const pact = usePactContext();
@@ -378,7 +374,6 @@ export const SuccessDoubleSideRemoveView = ({ token0, token0Name, token1, token1
   );
 };
 export const SuccessSingleSideRemoveView = ({ token0, token0Name, token1, token1Name, loading, onClick, pair }) => {
-  console.log('token0 success', token0, token0Name, token1, token1Name);
   const swap = useSwapContext();
   const { wantsKdxRewards } = useLiquidityContext();
   const pact = usePactContext();
@@ -459,7 +454,6 @@ export const SuccessSingleSideRemoveView = ({ token0, token0Name, token1, token1
   );
 };
 export const SuccessRemoveWithBoosterView = ({ token0, token1, loading, onClick }) => {
-  console.log('SuccessRemoveWithBoosterView', token0, token1);
   const swap = useSwapContext();
   const pact = usePactContext();
   const [checked, setChecked] = useState(false);

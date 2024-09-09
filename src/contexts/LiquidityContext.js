@@ -22,21 +22,27 @@ export const LiquidityProvider = (props) => {
   const [wantsKdxRewards, setWantsKdxRewards] = useState(true);
 
   const addLiquidityWallet = async (token0, token1, amountDesired0, amountDesired1) => {
-    console.log("token0", token0)
-    console.log("token1", token1)
+   
     try {
       let pair = await getPairAccount(token0, token1);
-      console.log("pair", pair)
       let newAmountDesired0 = amountDesired0;
       let newAmountDesired1 = amountDesired1;
       const pairExists = pact.allPairs[`${token0}:${token1}`];
       let pairConfig = null;
 
+      let orderedToken0, orderedToken1, orderedAmount0, orderedAmount1;
+
       if (!pairExists) {
-        newAmountDesired0 = amountDesired1;
-        newAmountDesired1 = amountDesired0;
+        orderedToken0 = token1;
+        orderedToken1 = token0;
+        orderedAmount0 = amountDesired1;
+        orderedAmount1 = amountDesired0;
         pairConfig = pact.allPairs[`${token1}:${token0}`];
       } else {
+        orderedToken0 = token0;
+        orderedToken1 = token1;
+        orderedAmount0 = amountDesired0;
+        orderedAmount1 = amountDesired1;
         pairConfig = pairExists;
       }
    
@@ -45,8 +51,8 @@ export const LiquidityProvider = (props) => {
       const contractName = 'exchange';
       const signCmd = {
         pactCode: `(${KADDEX_NAMESPACE}.${contractName}.add-liquidity
-            ${pact.allTokens[token0].code}
-            ${pact.allTokens[token1].code}
+            ${pact.allTokens[orderedToken0].code}
+            ${pact.allTokens[orderedToken1].code}
             (read-decimal 'amountDesired0)
             (read-decimal 'amountDesired1)
             (read-decimal 'amountMinimum0)
@@ -59,15 +65,15 @@ export const LiquidityProvider = (props) => {
           ...(pact.enableGasStation
             ? [Pact.lang.mkCap('Gas Station', 'free gas', `${KADDEX_NAMESPACE}.gas-station.GAS_PAYER`, ['kaddex-free-gas', { int: 1 }, 1.0])]
             : [Pact.lang.mkCap('gas', 'pay gas', 'coin.GAS')]),
-          Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${pact.allTokens[token0].code}.TRANSFER`, [
+          Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${pact.allTokens[orderedToken0].code}.TRANSFER`, [
             account.account,
             pair,
-            Number(newAmountDesired0),
+            Number(orderedAmount0),
           ]),
-          Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${pact.allTokens[token1].code}.TRANSFER`, [
+          Pact.lang.mkCap('transfer capability', 'Transfer Token to Pool', `${pact.allTokens[orderedToken1].code}.TRANSFER`, [
             account.account,
             pair,
-            Number(newAmountDesired1),
+            Number(orderedAmount1),
           ]),
         ],
         sender: pact.enableGasStation ? 'kaddex-free-gas' : account.account,
@@ -77,10 +83,10 @@ export const LiquidityProvider = (props) => {
         ttl: 600,
         envData: {
           'user-ks': account.guard,
-          amountDesired0: reduceBalance(newAmountDesired0, pact.allTokens[token0].precision),
-          amountDesired1: reduceBalance(newAmountDesired1, pact.allTokens[token1].precision),
-          amountMinimum0: reduceBalance(newAmountDesired0 * (1 - parseFloat(pact.slippage)), pact.allTokens[token0].precision),
-          amountMinimum1: reduceBalance(newAmountDesired1 * (1 - parseFloat(pact.slippage)), pact.allTokens[token1].precision),
+          amountDesired0: reduceBalance(orderedAmount0, pact.allTokens[orderedToken0].precision),
+          amountDesired1: reduceBalance(orderedAmount1, pact.allTokens[orderedToken1].precision),
+          amountMinimum0: reduceBalance(orderedAmount0 * (1 - parseFloat(pact.slippage)), pact.allTokens[orderedToken0].precision),
+          amountMinimum1: reduceBalance(orderedAmount1 * (1 - parseFloat(pact.slippage)), pact.allTokens[orderedToken1].precision),
         },
         signingPubKey: account.guard.keys[0],
         networkId: NETWORKID,
@@ -108,8 +114,7 @@ export const LiquidityProvider = (props) => {
       pact.setPactCmd(command);
       let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(command));
       data = await parseRes(data);
-      console.log("pairConfig.token0", pairConfig)
-      console.log("pairConfig.token1", pairConfig.token1)
+     
       const eventData = {
         ...data,
         amountFrom: Math.max(
@@ -154,9 +159,7 @@ export const LiquidityProvider = (props) => {
     const accountDetails = await getTokenBalanceAccount(token0.code, account.account);
     if (accountDetails.result.status === 'success') {
       try {
-        console.log("amountDesired0", amountDesired0, pact.slippage, token0.code, token1.code)
         const args = await getOneSideLiquidityPairInfo(amountDesired0, pact.slippage, token0.code, token1.code);
-        console.log("args", args)
         let pair = await getPairAccount(token0.code, token1.code);
         const pairConfig = pact.allPairs[`${token0.code}:${token1.code}`] || pact.allPairs[`${token1.code}:${token0.code}`];
         // const useWrapper = pairConfig.isBoosted ? true : false;
@@ -234,8 +237,7 @@ const useWrapper = false;
         pact.setPactCmd(command);
         let data = await fetch(`${NETWORK}/api/v1/local`, mkReq(command));
         data = await parseRes(data);
-        console.log("pairConfig.token0", token0)
-        console.log("pairConfig.token1", token1)
+      
         const eventData = {
           ...data,
           amountFrom: Math.max(
@@ -281,7 +283,6 @@ const useWrapper = false;
   };
 
   const removeDoubleSideLiquidityWallet = async (token0, token1, liquidity, previewAmount) => {
-    console.log("remove", token0, token1, liquidity, previewAmount)
     try {
       let pair = await getPairAccount(token0.code, token1.code);
 

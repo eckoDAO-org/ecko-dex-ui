@@ -44,6 +44,7 @@ const DoubleSidedLiquidity = ({ pair, pairCode, onPairChange }) => {
       amount: '',
       balance: '',
       coin: initialToken,
+      name: pair.token0 || 'KDA',
       code: tokenInfo?.code || 'coin',
       address: tokenInfo?.code || 'coin',
       precision: tokenInfo?.precision || 12,
@@ -57,6 +58,7 @@ const DoubleSidedLiquidity = ({ pair, pairCode, onPairChange }) => {
       amount: '',
       balance: '',
       coin: initialToken,
+      name: pair.token1 || 'BRO',
       code: tokenInfo?.code || 'n_582fed11af00dc626812cd7890bb88e72067f28c.bro',
       address: tokenInfo?.code || 'n_582fed11af00dc626812cd7890bb88e72067f28c.bro',
       precision: tokenInfo?.precision || 12,
@@ -65,8 +67,7 @@ const DoubleSidedLiquidity = ({ pair, pairCode, onPairChange }) => {
 
   const [fromValues, setFromValues] = useState(getInitialFromValue);
   const [toValues, setToValues] = useState(getInitialToValue);
-// console.log("fromValues", fromValues);
-// console.log("toValues", toValues);
+
   // update the balance after a transaction send or change account
   useEffect(() => {
     setBalanceLoading(true);
@@ -117,10 +118,8 @@ const DoubleSidedLiquidity = ({ pair, pairCode, onPairChange }) => {
     if (fetchData) {
       setFetchingPair(true);
       if (toValues.address !== '' && fromValues.address !== '') {
-        // console.log("Fetching reserves for:", fromValues, toValues);
         const result = await pact.getReserves(pact.allTokens?.[fromValues?.address]?.code, pact.allTokens?.[toValues?.address]?.code);
-        // console.log("getReserves result:", result);
-        // console.log("pact.ratio after getReserves:", pact.ratio);
+       
       }
       setFetchingPair(false);
       setFetchData(false);
@@ -151,6 +150,7 @@ const DoubleSidedLiquidity = ({ pair, pairCode, onPairChange }) => {
         ...prev,
         balance: balance,
         coin: crypto?.name,
+        name: crypto?.name,
         address: crypto?.code,
         code: crypto?.code,
         precision: crypto?.precision,
@@ -160,6 +160,7 @@ const DoubleSidedLiquidity = ({ pair, pairCode, onPairChange }) => {
         ...prev,
         balance: balance,
         coin: crypto?.name,
+        name: crypto?.name,
         address: crypto?.code,
         code: crypto?.code,
         precision: crypto?.precision,
@@ -586,7 +587,7 @@ const DoubleSidedLiquidity = ({ pair, pairCode, onPairChange }) => {
               <>
                 <div className="flex justify-sb" style={{ marginTop: 16 }}>
                   <FlexContainer className="column w-100">
-                    <Label fontSize={13}>{`${toValues.coin}/${fromValues.coin}`}</Label>
+                    <Label fontSize={13}>{`${toValues.name}/${fromValues.name}`}</Label>
                     <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
                       {pact.pairReserve.token0 === 0 && pact.pairReserve.token1 === 0
                         ? pact.getRatioFirstAddLiquidity(toValues.address, toValues.amount, fromValues.address, fromValues.amount)
@@ -596,7 +597,7 @@ const DoubleSidedLiquidity = ({ pair, pairCode, onPairChange }) => {
                     </Label>
                   </FlexContainer>
                   <FlexContainer className="column align-ce w-100">
-                    <Label fontSize={13}>{`${fromValues.coin}/${toValues.coin}`}</Label>
+                    <Label fontSize={13}>{`${fromValues.name}/${toValues.name}`}</Label>
                     <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
                       {pact.pairReserve.token0 === 0 && pact.pairReserve.token1 === 0
                         ? pact.getRatioFirstAddLiquidityInverse(toValues.address, toValues.amount, fromValues.address, fromValues.amount)

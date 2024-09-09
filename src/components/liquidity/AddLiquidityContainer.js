@@ -125,41 +125,66 @@ const AddLiquidityContainer = (props) => {
     return pool;
   };
 
+
+
   useEffect(() => {
     if (pair.token0 && pair.token1) {
       const currentPool = getCurrentPool(pair.token0, pair.token1);
       if (currentPool) {
-        // Ensure we keep the order as in the URL if it's not a known pair
-        const newPair = {
-          token0: currentPool.token0 === pair.token0 ? pair.token0 : pair.token1,
-          token1: currentPool.token0 === pair.token0 ? pair.token1 : pair.token0
-        };
-        setPair(newPair);
+        // Update pairCode with the full token codes
         setPairCode({
-          token0: pact.allTokens[newPair.token0]?.code,
-          token1: pact.allTokens[newPair.token1]?.code
+          token0: pact.allTokens[currentPool.token0_code]?.code,
+          token1: pact.allTokens[currentPool.token1_code]?.code
         });
+  
+        // Only update pair if the order needs to be swapped, using shortened names
+        if (currentPool.token0 !== pair.token0) {
+          setPair({
+            token0: pair.token1,
+            token1: pair.token0
+          });
+        }
       }
     }
-  }, [pair.token0, pair.token1, data.pools]);
+  }, [pair.token0, pair.token1, data.pools, pact.allTokens]);
 
 
   const updatePairAndNavigate = (token0, token1, route) => {
     const currentPool = getCurrentPool(token0, token1);
     
+  
+    // Create a mapping of full codes to shortened names
+    const getShortName = (fullCode) => {
+      const token = Object.values(pact.allTokens).find(t => t.code === fullCode);
+      return token ? token.name : fullCode;
+    };
+  
     if (currentPool) {
       const newPair = {
-        token0: currentPool.token0 === token0 ? token0 : token1,
-        token1: currentPool.token0 === token0 ? token1 : token0
+        token0: getShortName(currentPool.token0 === token0 ? token0 : token1),
+        token1: getShortName(currentPool.token0 === token0 ? token1 : token0)
       };
       setPair(newPair);
+      setPairCode({
+        token0: pact.allTokens[currentPool.token0_code]?.code,
+        token1: pact.allTokens[currentPool.token1_code]?.code
+      });
       history.push(route.concat(`?token0=${newPair.token0}&token1=${newPair.token1}`), {
         from: fromLocation,
       });
     } else {
       // If no pool is found, still update the pair and navigate
-      setPair({ token0, token1 });
-      history.push(route.concat(`?token0=${token0}&token1=${token1}`), {
+      const newPair = {
+        token0: getShortName(token0),
+        token1: getShortName(token1)
+      };
+      setPair(newPair);
+      // Set pairCode to full codes when no pool is found
+      setPairCode({
+        token0: pact.allTokens[token0]?.code || token0,
+        token1: pact.allTokens[token1]?.code || token1
+      });
+      history.push(route.concat(`?token0=${newPair.token0}&token1=${newPair.token1}`), {
         from: fromLocation,
       });
     }

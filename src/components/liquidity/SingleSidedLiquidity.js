@@ -19,7 +19,7 @@ import Label from '../shared/Label';
 import { DEFAULT_ICON_URL } from '../../constants/cryptoCurrencies';
 
 const SingleSidedLiquidity = ({ apr, pools, pair, pairCode, onPairChange  }) => {
-
+  
   const modalContext = useModalContext();
   const { addOneSideLiquidityWallet } = useLiquidityContext();
   const wallet = useWalletContext();
@@ -71,11 +71,14 @@ const SingleSidedLiquidity = ({ apr, pools, pair, pairCode, onPairChange  }) => 
 
   useEffect(() => {
     if (pair?.token0 && !selectedPool) {
-     
       const pool = pools.find((p) => p.token0 === pair.token0 || p.token1 === pair.token0);
       setSelectedPool(pool);
+      if (pool) {
+        handleTokenValue(pair.token0);
+      }
     } else if (!pair?.token0 && !selectedPool && pools.length > 0) {
       setSelectedPool(pools[0]);
+      handleTokenValue(pools[0].token0);
     }
   }, [pair?.token0, pools, selectedPool]);
 
@@ -112,11 +115,12 @@ const SingleSidedLiquidity = ({ apr, pools, pair, pairCode, onPairChange  }) => 
   }, [fromValue?.coin, selectedPool]);
 
   const handleTokenValue = async (tokenCode) => {
-    console.log("tokenCode", tokenCode);
-    const crypto = pact.allTokens[tokenCode];
-    let balance;
+    const crypto = Object.values(pact.allTokens).find(token => token.name === tokenCode || token.code === tokenCode);
+    if (!crypto) {
+      console.error("Token not found:", tokenCode);
+      return;
+    }    let balance;
     let contract = crypto?.code;
-    console.log("crypto", crypto);
     if (crypto?.code === 'coin') {
       if (account.account) {
         balance = account.account.balance;
@@ -138,6 +142,7 @@ const SingleSidedLiquidity = ({ apr, pools, pair, pairCode, onPairChange  }) => 
       coin: crypto?.name || 'KDA',
       contract: contract || 'coin',
       precision: crypto?.precision,
+      amount: '',
     }));
     account.setFetchAccountBalance(false);
   };
@@ -154,9 +159,7 @@ const SingleSidedLiquidity = ({ apr, pools, pair, pairCode, onPairChange  }) => 
           token={fromValue.coin}
           tokensToKeep={[selectedPool?.token0, selectedPool?.token1]}
           onSelectToken={async (selectedCrypto) => {
-            console.log("(selectedCrypto)", selectedCrypto);
-
-            await handleTokenValue(selectedCrypto.code);
+            await handleTokenValue(selectedCrypto.name);
           }}
           onClose={() => {
             modalContext.closeModal();
@@ -169,6 +172,7 @@ const SingleSidedLiquidity = ({ apr, pools, pair, pairCode, onPairChange  }) => 
   const onSelectPool = (pool) => {
     setSelectedPool(pool);
     onPairChange(pool.token0, pool.token1);
+    handleTokenValue(pool.token0); // Now it updates fromValue with the first token of the new pair
   };
 
   const supply = async () => {
@@ -244,6 +248,13 @@ const SingleSidedLiquidity = ({ apr, pools, pair, pairCode, onPairChange  }) => 
   };
 
   useEffect(() => {
+    if (selectedPool) {
+      const defaultToken = selectedPool.token0;
+      handleTokenValue(defaultToken);
+    }
+  }, [selectedPool]);
+
+  useEffect(() => {
     if (showTxModal === false) {
       setFromValue((prev) => ({
         ...prev,
@@ -251,6 +262,8 @@ const SingleSidedLiquidity = ({ apr, pools, pair, pairCode, onPairChange  }) => 
       }));
     }
   }, [showTxModal]);
+
+
 
   useEffect(() => {
     if (showTxModal) {
