@@ -50,9 +50,19 @@ const AddLiquidityContainer = (props) => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useErrorState({ pools: [], volumes: [] });
 
+  // const [pair, setPair] = useState({
+  //   token0: pact.allTokens[query.get('token0')]?.code || query.get('token0'),
+  //   token1: pact.allTokens[query.get('token1')]?.code || query.get('token1')
+  // });
+
   const [pair, setPair] = useState({
-    token0: pact.allTokens[query.get('token0')]?.code || query.get('token0'),
-    token1: pact.allTokens[query.get('token1')]?.code || query.get('token1')
+    token0: query.get('token0'),
+    token1: query.get('token1')
+  });
+
+  const [pairCode, setPairCode] = useState({
+    token0: null,
+    token1: null
   });
 
   const [apr, setApr] = useState(null);
@@ -86,24 +96,70 @@ const AddLiquidityContainer = (props) => {
     }
   }, [pair, data.pools]);
 
+
   const getCurrentPool = (token0, token1) => {
-    const pool = data.pools.find((p) => 
-      (p.token0 === token0 && p.token1 === token1) || 
-      (p.token0 === token1 && p.token1 === token0)
-    );
-    console.log('Current pool:', pool);
+    // Check if the pair exists in pact.allPairs
+    const pairKey = Object.keys(pact.allPairs).find(key => {
+      const [t0, t1] = key.split(':');
+      return (t0 === token0 && t1 === token1) || (t0 === token1 && t1 === token0);
+    });
+
+    let pool;
+    if (pairKey) {
+      const [correctToken0, correctToken1] = pairKey.split(':');
+      pool = data.pools.find(p => 
+        (p.token0 === correctToken0 && p.token1 === correctToken1) || 
+        (p.token0 === correctToken1 && p.token1 === correctToken0)
+      );
+    }
+
+    // If not found in pact.allPairs or data.pools, fall back to the original search
+    if (!pool) {
+      pool = data.pools.find(p => 
+        (p.token0 === token0 && p.token1 === token1) || 
+        (p.token0 === token1 && p.token1 === token0)
+      );
+    }
+
+    // console.log('Current pool:', pool);
     return pool;
   };
 
-  const pool = getCurrentPool(pair.token0, pair.token1);
+  useEffect(() => {
+    if (pair.token0 && pair.token1) {
+      const currentPool = getCurrentPool(pair.token0, pair.token1);
+      if (currentPool) {
+        // Ensure we keep the order as in the URL if it's not a known pair
+        const newPair = {
+          token0: currentPool.token0 === pair.token0 ? pair.token0 : pair.token1,
+          token1: currentPool.token0 === pair.token0 ? pair.token1 : pair.token0
+        };
+        setPair(newPair);
+        setPairCode({
+          token0: pact.allTokens[newPair.token0]?.code,
+          token1: pact.allTokens[newPair.token1]?.code
+        });
+      }
+    }
+  }, [pair.token0, pair.token1, data.pools]);
+
 
   const updatePairAndNavigate = (token0, token1, route) => {
     const currentPool = getCurrentPool(token0, token1);
-    console.log('Updating pair and navigating to:', route, 'with tokens:', token0, token1);
-    console.log('Current pool:', currentPool);
+    
     if (currentPool) {
-      setPair({ token0: currentPool.token0, token1: currentPool.token1 });
-      history.push(route.concat(`?token0=${currentPool.token0}&token1=${currentPool.token1}`), {
+      const newPair = {
+        token0: currentPool.token0 === token0 ? token0 : token1,
+        token1: currentPool.token0 === token0 ? token1 : token0
+      };
+      setPair(newPair);
+      history.push(route.concat(`?token0=${newPair.token0}&token1=${newPair.token1}`), {
+        from: fromLocation,
+      });
+    } else {
+      // If no pool is found, still update the pair and navigate
+      setPair({ token0, token1 });
+      history.push(route.concat(`?token0=${token0}&token1=${token1}`), {
         from: fromLocation,
       });
     }
@@ -120,7 +176,6 @@ const AddLiquidityContainer = (props) => {
           pool.multiplier = multiplier.multiplier;
         }
       }
-      console.log("pools", pools);
       setData({ pools, volumes });
     }
 
@@ -191,7 +246,6 @@ const AddLiquidityContainer = (props) => {
     onClick={() => {
       const token0 = query.get('token0');
       const token1 = query.get('token1');
-      console.log('Navigating to SINGLE-SIDED with tokens:', token0, token1);
       history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED.concat(`?token0=${token0}&token1=${token1}`), {
         from: fromLocation,
       });
@@ -205,7 +259,6 @@ const AddLiquidityContainer = (props) => {
     onClick={() => {
       const token0 = query.get('token0');
       const token1 = query.get('token1');
-      console.log('Navigating to DOUBLE-SIDED with tokens:', token0, token1);
       history.push(ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED.concat(`?token0=${token0}&token1=${token1}`), {
         from: fromLocation,
       });
@@ -214,13 +267,13 @@ const AddLiquidityContainer = (props) => {
     DOUBLE-SIDED
   </Label>
 </FlexContainer>
-
+          <>
       {pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED && (
         <SingleSidedLiquidity
           apr={apr}
           pools={data?.pools}
-          pair={{ token0: query.get('token0'), token1: query.get('token1') }}
-          pairCode={{ token0: pool?.token0_code, token1: pool?.token1_code }}
+          pair={pair}
+          pairCode={pairCode}
           onPairChange={(token0, token1) => {
             updatePairAndNavigate(token0, token1, ROUTE_LIQUIDITY_ADD_LIQUIDITY_SINGLE_SIDED);
           }}
@@ -228,13 +281,14 @@ const AddLiquidityContainer = (props) => {
       )}
       {pathname === ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED && (
         <DoubleSidedLiquidity
-          pair={{ token0: query.get('token0'), token1: query.get('token1') }}
-          pairCode={{ token0: pool?.token0_code, token1: pool?.token1_code }}
+          pair={pair}
+          pairCode={pairCode}
           onPairChange={(token0, token1) => {
             updatePairAndNavigate(token0, token1, ROUTE_LIQUIDITY_ADD_LIQUIDITY_DOUBLE_SIDED);
           }}
         />
       )}
+    </>
     </Container>
   );
 };

@@ -34,7 +34,6 @@ export const getTokenShortName = (code, allTokens) => {
 };
 
 export const getTokenIconById = (token, allTokens) => {
-  console.log('token50', token);
   return allTokens[token]?.icon;
 };
 export const getTokenIconByCode = (tokenCode, allTokens) => {
@@ -89,7 +88,6 @@ export const getPairByTokensName = (token0Name, token1Name, allPairs) => {
 // calculate liquidity, volumes and apr for each pool
 // TODO: NOT USED
 export const getAllPairValues = async (pools, volumes, allTokens) => {
-  console.log("getAllPairValues")
   const result = [];
 
   for (const pool of pools) {
@@ -134,7 +132,6 @@ export const getAllPairValues = async (pools, volumes, allTokens) => {
 };
 
 export const getAllPairsData = async (tokensUsdPrice, allTokens, allPairs, _pools) => {
-  console.log("getAllPairsData")
   const pools = _pools ? _pools : await getPairList(allPairs);
   if (pools.length) {
     const dexscanPoolsStats = await getAnalyticsDexscanPoolsData();
