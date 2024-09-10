@@ -42,6 +42,9 @@ const SwapResults = ({ priceImpact, fromValues, toValues }) => {
     }
   };
 
+  const isHeronInvolved = fromValues.coin === 'HERON' || toValues.coin === 'HERON';
+
+
   return (
     <ResultContainer>
       
@@ -55,6 +58,16 @@ const SwapResults = ({ priceImpact, fromValues, toValues }) => {
             : `${reduceBalance(pact.priceImpactWithoutFee(priceImpact) * 100, 4)} %`}
         </Label>
       </RowContainer>
+      {isHeronInvolved && (
+        <RowContainer>
+          <Label fontSize={13} color={commonColors.red}>
+            Burn Fee
+          </Label>
+          <Label fontSize={13} labelStyle={{ textAlign: 'end' }} color={commonColors.red}>
+            1%
+          </Label>
+        </RowContainer>
+      )}
       <RowContainer>
         <Label fontSize={13}>Price</Label>
         <Label fontSize={13} labelStyle={{ textAlign: 'end' }}>
