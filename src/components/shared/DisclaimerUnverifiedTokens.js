@@ -29,7 +29,7 @@ const DisclaimerUnverifiedTokens = () => {
       </SvgContainer>
 
       <Label fontSize={12} fontFamily="basier" color={commonColors.gold}>
-        This transaction contains unverified tokens. Review the preview information throughly before confirming the transaction.
+        None of the tokens on this platform are pre-verified. Review the preview throughly before confirming the transaction.
       </Label>
     </FlexContainer>
   );

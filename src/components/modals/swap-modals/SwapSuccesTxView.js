@@ -102,7 +102,6 @@ export const SwapSuccessViewGE = () => {
 };
 
 export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
-  console.log('SwapSuccessView', fromValues);
   const { account } = useAccountContext();
   const pact = usePactContext();
   const swap = useSwapContext();
@@ -111,7 +110,7 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
   const amountBWithSlippage =
     extractDecimal(swap?.localRes?.result?.data[1]?.amount) - extractDecimal(swap?.localRes?.result?.data[1]?.amount) * pact.slippage;
 
-  return (
+    return (
     <SuccesViewContainer
       swap={swap}
       loading={loading}
@@ -166,6 +165,7 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
             tokenName={getTokenName(swap?.localRes?.result?.data[0]?.token, pact.allTokens)}
             amount={fromValues ? fromValues.amount : swap?.localRes?.result?.data[0]?.amount}
             tokenPrice={pact.tokensUsdPrice?.[getTokenName(swap?.localRes?.result?.data[0]?.token, pact.allTokens)] || null}
+            contract={fromValues?.address}
           />
         </FlexContainer>
         <ArrowIcon style={{ marginLeft: 6 }} />
@@ -192,6 +192,7 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
                     : swap?.localRes?.result?.data[2]?.amount
                 }
                 tokenPrice={pact.tokensUsdPrice?.[getTokenName(swap?.localRes?.result?.data[2]?.token, pact.allTokens)] || null}
+                contract={fromValues?.address}
               />
             </FlexContainer>
           </>
@@ -208,6 +209,7 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
                     : swap?.localRes?.result?.data[1]?.amount
                 }
                 tokenPrice={pact.tokensUsdPrice?.[getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)] || null}
+                contract={getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens) || null}
               />
             </FlexContainer>
           </>

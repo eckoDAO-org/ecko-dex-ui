@@ -163,7 +163,6 @@ export const LiquidityProvider = (props) => {
       try {
         const args = await getOneSideLiquidityPairInfo(amountDesired0, pact.slippage, token0.code, token1.code);
         let pair = await getPairAccount(token0.code, token1.code);
-        const pairConfig = pact.allPairs[`${token0.code}:${token1.code}`] || pact.allPairs[`${token1.code}:${token0.code}`];
         // const useWrapper = pairConfig.isBoosted ? true : false;
         const useWrapper = isWrapperBoosted(token0.code, token1.code);
         const signCmd = {

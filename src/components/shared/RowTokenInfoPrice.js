@@ -6,7 +6,6 @@ import Label from './Label';
 import {DEFAULT_ICON_URL} from '../../constants/cryptoCurrencies';
 
 const RowTokenInfoPrice = ({ tokenIcon, tokenName, amount, tokenPrice, contract }) => {
-
   const { allTokens } = usePactContext();
   /*
       The component returns Token icon with amount and usd token price:

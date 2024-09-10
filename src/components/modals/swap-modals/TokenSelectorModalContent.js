@@ -65,7 +65,6 @@ const TokenItem = styled.div`
   }
 `;
 const TokenSelectorModalContent = ({ token, tokensToKeep, onSelectToken, onClose  }) => {
-  console.log('TokenSelectorModalContent', token, tokensToKeep );
   const [searchValue, setSearchValue] = useState('');
   const pact = usePactContext();
   const { gameEditionView, onCloseTokensList } = useGameEditionContext();
