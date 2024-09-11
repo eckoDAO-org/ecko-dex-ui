@@ -58,9 +58,9 @@ const TabletHeader = ({ className }) => {
         <LeftContainer>
           <PopupContentList withoutAccountInfo items={menuItems} icon={<HamburgerIcon className="hamburger-icon" />} className="hamburger" />
           {themeMode === 'dark' ? (
-            <EckoDexLightModeLogo style={{ cursor: 'pointer', zIndex: 1, width: '40px' }} onClick={() => history.push(ROUTE_INDEX)} />
+            <EckoDexLightModeLogo style={{ cursor: 'pointer', zIndex: 1, width: '40px', height: 20 }} onClick={() => history.push(ROUTE_INDEX)} />
           ) : (
-            <EckoDexLogo style={{ cursor: 'pointer', zIndex: 1, width: '40px' }} onClick={() => history.push(ROUTE_INDEX)} />
+            <EckoDexLogo style={{ cursor: 'pointer', zIndex: 1, width: '40px', height: 20 }} onClick={() => history.push(ROUTE_INDEX)} />
           )}
         </LeftContainer>
 
@@ -68,9 +68,7 @@ const TabletHeader = ({ className }) => {
           <RightHeaderItems />
         </RightContainer>
       </RowContainer>
-      {/* <Label outGameEditionView className="mainnet-chain-2 desktop-none mobile-none">
-        Chain 2
-      </Label> */}
+     
     </Container>
   );
 };
