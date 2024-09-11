@@ -88,21 +88,13 @@ const ConnectWalletWalletConnectModal = ({ onConnectionSuccess }) => {
       ) : (
         <>
           <div>
-            <Label className="flex column" fontSize={13} geFontSize={20} geColor="yellow" geLabelStyle={{ textAlign: 'center' }}>
-              <span>
-                Please carefully read the information on our{' '}
-                <a href={`https://docs.ecko.finance/eckodao/getting-started/eckowallet/walletconnect`} target="_blank" rel="noopener noreferrer">
-                  documentation
-                </a>{' '}
-                when connecting your iOS or Android mobile device to the Mercatus, either using a Connection Code, or a QR Code.
-              </span>
-            </Label>
+           
           </div>
           <Label fontSize={13} geFontSize={16} geColor="blue" geLabelStyle={{ textAlign: 'center', marginBottom: 30 }}>
             Important:
             <br />
-            Please make the KDA account provided is controlled by your wallet mobile App which has support for WalletConnect. When submitting a
-            transaction, WalletConnect will show you a preview within your eckoWALLET mobile App before signing.
+            Please make sure the KDA account provided is controlled by your wallet mobile App which has support for WalletConnect. When submitting a
+            transaction, WalletConnect will show you a preview within your mobile App before signing.
           </Label>
           <CustomButton geType="pink" geLabel="CONNECT" onClick={onConnectWallet}>
             Connect
