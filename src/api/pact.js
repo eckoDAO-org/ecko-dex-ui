@@ -1,7 +1,7 @@
 import Pact from 'pact-lang-api';
 import { handleError } from './utils';
 import { CHAIN_ID, creationTime, GAS_PRICE, KADDEX_NAMESPACE, NETWORKID } from '../constants/contextConstants';
-import { NETWORK } from '../constants/contextConstants';
+import { NETWORK, PRICE_NETWORK } from '../constants/contextConstants';
 import { extractDecimal } from '../utils/reduceBalance';
 
 export const pactFetchLocal = async (pactCode, options) => {
@@ -23,21 +23,22 @@ export const pactFetchLocal = async (pactCode, options) => {
   }
 };
 
-export const getCurrentKdaUSDPrice = async () => {
-  try {
-    let data = await Pact.fetch.local(
-      {
-        pactCode: `
-        (${KADDEX_NAMESPACE}.public-sale.kda-current-usd-price)
-        `,
-        meta: Pact.lang.mkMeta('', '0', GAS_PRICE, 150000, creationTime(), 600),
-        chainId: 0,
-      },
-      `https://api.chainweb.com/chainweb/0.0/${NETWORKID}/chain/0/pact`
-    );
-    return data.result?.status === 'success' ? data.result?.data : null;
-  } catch (e) {
-    console.log(e);
+export const customPactFetchLocal = async (pactCode, options) => {
+  let data = await Pact.fetch.local(
+    {
+      pactCode,
+      meta: Pact.lang.mkMeta('', String(4), GAS_PRICE, 150000, creationTime(), 600),
+      ...options,
+    },
+    PRICE_NETWORK
+  );
+  if (data.result.status === 'success') {
+    return data.result.data;
+  } else if (data.result.error.message) {
+    const errorMessage = handleError(data);
+    return { errorMessage: data.result.error.message || errorMessage };
+  } else {
+    return handleError(data);
   }
 };
 

@@ -3,7 +3,7 @@ import React from 'react';
 import { useAccountContext, useApplicationContext, usePactContext, useSwapContext } from '../../../contexts';
 import { extractDecimal, getDecimalPlaces, reduceBalance } from '../../../utils/reduceBalance';
 import reduceToken from '../../../utils/reduceToken';
-import { getTokenIconByCode, getTokenName } from '../../../utils/token-utils';
+import { getTokenIconByCode, getTokenName, getTokenShortName } from '../../../utils/token-utils';
 import GameEditionLabel from '../../game-edition-v2/components/GameEditionLabel';
 import { AlertIcon, ArrowIcon, ChainIcon } from '../../../assets';
 import { CHAIN_ID } from '../../../constants/contextConstants';
@@ -106,10 +106,8 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
   const pact = usePactContext();
   const swap = useSwapContext();
   const { themeMode } = useApplicationContext();
-
   const amountBWithSlippage =
     extractDecimal(swap?.localRes?.result?.data[1]?.amount) - extractDecimal(swap?.localRes?.result?.data[1]?.amount) * pact.slippage;
-
     return (
     <SuccesViewContainer
       swap={swap}
@@ -176,8 +174,9 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
               <RowTokenInfoPrice
                 tokenIcon={getTokenIconByCode(swap?.localRes?.result?.data[1]?.token, pact.allTokens)}
                 tokenName={getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)}
-                /* amount={swap?.localRes?.result?.data[1]?.amount}
-                tokenPrice={pact.tokensUsdPrice?.[getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)] || null} */
+                 amount={swap?.localRes?.result?.data[1]?.amount}
+                tokenPrice={pact.tokensUsdPrice?.[getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens)] || null} 
+                contract={getTokenName(swap?.localRes?.result?.data[1]?.token, pact.allTokens) || null}
               />
             </FlexContainer>
             <ArrowIcon style={{ marginLeft: 6 }} />
@@ -192,7 +191,7 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
                     : swap?.localRes?.result?.data[2]?.amount
                 }
                 tokenPrice={pact.tokensUsdPrice?.[getTokenName(swap?.localRes?.result?.data[2]?.token, pact.allTokens)] || null}
-                contract={fromValues?.address}
+                contract={getTokenName(swap?.localRes?.result?.data[2]?.token, pact.allTokens) || null}
               />
             </FlexContainer>
           </>
@@ -217,11 +216,11 @@ export const SwapSuccessView = ({ loading, sendTransaction, fromValues }) => {
 
         <FlexContainer className="row justify-sb">
           <Label>Ratio</Label>
-          <Label fontSize={13}>{`1 ${getTokenName(swap?.localRes?.result?.data[0]?.token, pact.allTokens)} = ${
+          <Label fontSize={13}>{`1 ${getTokenShortName(swap?.localRes?.result?.data[0]?.token, pact.allTokens)} = ${
             getDecimalPlaces(pact?.computeOut(fromValues.amount) / fromValues.amount) < 0.000001
               ? '< 0.000001'
               : getDecimalPlaces(pact?.computeOut(fromValues.amount) / fromValues.amount)
-          } ${getTokenName(
+          } ${getTokenShortName(
             pact.isMultihopsSwap ? swap?.localRes?.result?.data[2]?.token : swap?.localRes?.result?.data[1]?.token,
             pact.allTokens
           )}`}</Label>

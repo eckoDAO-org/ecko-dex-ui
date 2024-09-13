@@ -22,6 +22,7 @@ export const WALLET_CONNECT_METADATA = {
 export const KDX_TOTAL_SUPPLY = 1000000000;
 
 export const NETWORK = `${process.env.REACT_APP_KDA_NETWORK}/chainweb/${NETWORK_VERSION}/${NETWORKID}/chain/${CHAIN_ID}/pact`;
+export const PRICE_NETWORK = `${process.env.REACT_APP_KDA_NETWORK}/chainweb/${NETWORK_VERSION}/${NETWORKID}/chain/4/pact`;
 
 export const creationTime = () => Math.round(new Date().getTime() / 1000) - 10;
 

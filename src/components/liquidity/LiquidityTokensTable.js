@@ -43,7 +43,7 @@ const LiquidityTokensTable = () => {
 
         const tokenPairs = pairsList.filter((p) => p.token0 === token.name || p.token1 === token.name);
         const tokenUsdPrice = tokensUsdPrice?.[token.code] ? tokensUsdPrice?.[token.code] : 0;
-
+        
         const liquidityUSD = pairsData
           .filter((t) => t.token0 === token.name || t.token1 === token.name)
           .reduce((total, v) => total + (v.token0 === token.name ? v.liquidity0 : v.liquidity1), 0);
@@ -137,7 +137,6 @@ const ScalableCryptoContainer = styled(FlexContainer)`
 `;
 
 const renderColumns = (history, allTokens, width, searchValue, setSearchValue) => {
-
   return [
     {
       name: (
@@ -160,7 +159,6 @@ const renderColumns = (history, allTokens, width, searchValue, setSearchValue) =
         
         // Find the token by name or code
         const token = allTokens[item.name] || Object.values(allTokens).find(t => t.name === item.name || t.code === item.name);
-        
 
         if (!token) {
           console.warn(`Token not found for ${item.name}`);

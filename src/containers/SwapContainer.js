@@ -121,8 +121,8 @@ const SwapContainer = () => {
   const [toValues, setToValues] = useState({
     amount: '',
     balance: account.account.balance || '',
-    coin: pact.allTokens?.[query.get('token1')] ? query.get('token1') : 'KDX',
-    address: pact.allTokens?.[query.get('token1')] ? pact.allTokens?.[query.get('token1')]?.code : `${KADDEX_NAMESPACE}.kdx`,
+    coin: pact.allTokens?.[query.get('token1')] ? query.get('token1') : 'BRO',
+    address: pact.allTokens?.[query.get('token1')] ? pact.allTokens?.[query.get('token1')]?.code : `n_582fed11af00dc626812cd7890bb88e72067f28c.bro`,
     precision: pact.allTokens?.[query.get('token1')] ? pact.allTokens?.[query.get('token1')]?.precision : 12,
   });
 

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import moment from 'moment';
+import {customPactFetchLocal} from './pact';
 
 export const getAnalyticsKdaUsdPrice = async () => {
   const kdaPrice = await axios.get(
@@ -14,18 +15,37 @@ export const getAnalyticsKdaUsdPrice = async () => {
   }
 };
 
-export const getCoingeckoUsdPrice = async (tokenName) => {
+const failoverGC = async (tokenName) => {
   if (tokenName) {
     const API = `https://api.coingecko.com/api/v3/simple/price?ids=${tokenName}&vs_currencies=usd`;
 
-    return await axios
-      .get(API)
-      .then(async (res) => {
-        return res.data?.[tokenName]?.usd;
-      })
-      .catch((err) => {
-        console.log('error', err);
-        return null;
-      });
-  } else return null;
+    try {
+      const res = await axios.get(API);
+      return res.data?.[tokenName]?.usd || null;
+    } catch (err) {
+      console.error('Failover error:', err);
+      return null;
+    }
+  }
+  return null;
+};
+
+export const getCoingeckoUsdPrice = async (tokenName) => {
+  try {
+    const result = await customPactFetchLocal(`(n_bfb76eab37bf8c84359d6552a1d96a309e030b71.dia-oracle.get-value "KDA/USD")`);
+
+    if (result.errorMessage) {
+      throw new Error(result.errorMessage);
+    }
+
+    if (result?.value != null) {
+      return result.value;
+    } else {
+      throw new Error("Invalid or missing value in the result");
+    }
+  } catch (error) {
+    console.error("Error in getCoingeckoUsdPrice:", error.message);
+    // Fallback to failoverGC in case of any node issues
+    return await failoverGC(tokenName);
+  }
 };
