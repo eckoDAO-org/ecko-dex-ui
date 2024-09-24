@@ -32,7 +32,6 @@ const LiquidityMyLiquidityTable = () => {
       account.account,
       pairs.filter((x) => x.reserves[0] !== 0)
     );
-
     if (!result.errorMessage) {
       const resultWithLiquidity = result?.filter((r) => extractDecimal(r.pooledAmount[0]) !== 0 && extractDecimal(r.pooledAmount[1]) !== 0);
       let allData = [];
@@ -108,7 +107,6 @@ const renderColumns = (tokensUsdPrice, allTokens, allPairs, width) => {
       name: '',
       width: width <= theme().mediaQueries.mobilePixel ? 80 : 160,
       render: ({ item }) => {
-        console.log(item)
         return <FlexContainer desktopClassName="align-ce" tabletClassName="align-ce" mobileClassName="column align-fs" mobilePixel={769}>
           <div className="flex align-ce">
 

@@ -3,6 +3,7 @@ import { handleError } from './utils';
 import { CHAIN_ID, creationTime, GAS_PRICE, KADDEX_NAMESPACE, NETWORKID } from '../constants/contextConstants';
 import { NETWORK, PRICE_NETWORK } from '../constants/contextConstants';
 import { extractDecimal } from '../utils/reduceBalance';
+import {isWrapperBoosted} from '../constants/WrapperConfig';
 
 export const pactFetchLocal = async (pactCode, options) => {
   let data = await Pact.fetch.local(
@@ -120,28 +121,54 @@ export const getPairList = async (allPairs) => {
     return handleError(e);
   }
 };
+// Needed to update for wrapper logic to work
+// export const getPairListAccountBalance = async (account, allPairs) => {
+//   try {
+//     const tokenPairListWithBooster = Object.values(allPairs)
+//       .filter((token) => token.isBoosted)
+//       .reduce((accum, pair) => {
+//         accum += `[${pair.name.split(':').join(' ')}] `;
+//         return accum;
+//       }, '');
+//       console.log("tokenPairListWithBooster", tokenPairListWithBooster)
+//     const tokenPairListWithoutBooster = Object.values(allPairs)
+//       .filter((token) => !token.isBoosted)
+//       .reduce((accum, pair) => {
+//         accum += `[${pair.name.split(':').join(' ')}] `;
+//         return accum;
+//       }, '');
+//       console.log("tokenPairListWithoutBooster", tokenPairListWithoutBooster)
+//     const boosterResult = await dataWithBooster(account, tokenPairListWithBooster, allPairs);
+
+//     const noBoosterResult = await dataWithoutBooster(account, tokenPairListWithoutBooster, allPairs);
+
+//     const totalResult = boosterResult.concat(noBoosterResult);
+
+//     return totalResult;
+//   } catch (e) {
+//     return handleError(e);
+//   }
+// };
 
 export const getPairListAccountBalance = async (account, allPairs) => {
   try {
     const tokenPairListWithBooster = Object.values(allPairs)
-      .filter((token) => token.isBoosted)
+      .filter((pair) => isWrapperBoosted(pair.token0_code, pair.token1_code))
       .reduce((accum, pair) => {
         accum += `[${pair.name.split(':').join(' ')}] `;
         return accum;
       }, '');
+
     const tokenPairListWithoutBooster = Object.values(allPairs)
-      .filter((token) => !token.isBoosted)
+      .filter((pair) => !isWrapperBoosted(pair.token0_code, pair.token1_code))
       .reduce((accum, pair) => {
         accum += `[${pair.name.split(':').join(' ')}] `;
         return accum;
       }, '');
 
     const boosterResult = await dataWithBooster(account, tokenPairListWithBooster, allPairs);
-
     const noBoosterResult = await dataWithoutBooster(account, tokenPairListWithoutBooster, allPairs);
-
     const totalResult = boosterResult.concat(noBoosterResult);
-
     return totalResult;
   } catch (e) {
     return handleError(e);
@@ -235,16 +262,22 @@ const dataWithoutBooster = async (account, tokenPairList, allPairs) => {
       return accum;
     }, {});
 
+
     const pairList = Object.values(allPairs)
-      .filter((token) => !token.isBoosted)
+      .filter((pair) => !isWrapperBoosted(pair.token0_code, pair.token1_code))
       .map((pair) => {
-        return {
+        const pairData = dataList[pair.name];
+        const result = {
           ...pair,
-          ...dataList[pair.name],
+          ...(pairData || {}),  
+          isBoosted: false,
         };
+        return result;
       });
+
     return pairList;
   }
+  return [];  
 };
 
 const dataWithBooster = async (account, tokenPairList, allPairs) => {
@@ -290,7 +323,6 @@ const dataWithBooster = async (account, tokenPairList, allPairs) => {
     )
     (map (${KADDEX_NAMESPACE}-read.pair-info) [${tokenPairList}])`
   );
-
   if (data) {
     const dataList = data.map((data) => {
       let dataObj = {
@@ -302,15 +334,21 @@ const dataWithBooster = async (account, tokenPairList, allPairs) => {
 
       return dataObj;
     });
-
+  
     const pairList = Object.values(allPairs)
-      .filter((token) => token.isBoosted)
+      .filter((pair) => {
+        const isBoosted = isWrapperBoosted(pair.token0_code, pair.token1_code);
+        return isBoosted;
+      })
       .map((pair, index) => {
-        return {
+        const result = {
           ...pair,
           ...dataList[index],
+          isBoosted: true,
         };
+        return result;
       });
+    
     return pairList;
   }
 };
@@ -325,7 +363,6 @@ export const getPairAccount = async (token0, token1) => {
 };
 
 export const getTokenBalanceAccount = async (coinCode, account) => {
-  // console.log("coinCode", coinCode, account)
   if (account) {
     return await Pact.fetch.local(
       {
