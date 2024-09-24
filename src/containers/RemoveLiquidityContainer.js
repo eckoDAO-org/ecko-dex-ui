@@ -76,6 +76,7 @@ const RemoveLiquidityContainer = (props) => {
       );
       if (resultPairList.length) {
         const currentPair = resultPairList.find((p) => p.token0 === token0 && p.token1 === token1);
+        console.log('currentPair', currentPair);
         setPair(currentPair);
         if (currentPair) {
           await calculateApr(resultPairList, currentPair, pairs);
@@ -93,9 +94,9 @@ const RemoveLiquidityContainer = (props) => {
       await removePreview(pair);
     }
   }, 60000); */
-
+  console.log("allTokens", allTokens);
   const removePreview = async (currentPair) => {
-    const res = await liquidity.removeLiquidityPreview(allTokens[currentPair?.token0].code, allTokens[currentPair?.token1].code, previewAmount);
+    const res = await liquidity.removeLiquidityPreview(allTokens[currentPair?.token0_code].code, allTokens[currentPair?.token1_code].code, previewAmount);
     if (!res.errorMessage) {
       setPreviewObject(res);
     }
