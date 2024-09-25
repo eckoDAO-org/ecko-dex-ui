@@ -59,7 +59,6 @@ const ButtonContainer = styled.div`
 `;
 
 const RemoveSingleSideLiquidity = ({ pair, previewObject, setPreviewAmount, previewAmount }) => {
-  console.log("RemoveSingleSideLiquidity -> pair", pair)
   const pact = usePactContext();
   const wallet = useWalletContext();
   const liquidity = useLiquidityContext();

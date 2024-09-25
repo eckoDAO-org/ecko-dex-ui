@@ -28,7 +28,6 @@ const TransactionsDetails = styled.div`
 const TxView = ({ loading, onClose, children }) => {
   const swap = useSwapContext();
   const { gameEditionView } = useGameEditionContext();
-
   const Message = ({ color, children }) => {
     const { gameEditionView } = useGameEditionContext();
 

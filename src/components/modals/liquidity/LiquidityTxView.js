@@ -366,6 +366,7 @@ export const SuccessDoubleSideRemoveView = ({ token0, token0Name, token1, token1
               tokenName={'KDX'}
               amount={swap?.localRes?.resPreview?.['estimated-kdx-rewards']}
               tokenPrice={pact.tokensUsdPrice?.KDX || null}
+              contract={"kaddex.kdx"}
             />
           </>
         )}
@@ -453,7 +454,7 @@ export const SuccessSingleSideRemoveView = ({ token0, token0Name, token1, token1
     </SuccesViewContainer>
   );
 };
-export const SuccessRemoveWithBoosterView = ({ token0, token1, loading, onClick }) => {
+export const SuccessRemoveWithBoosterView = ({ token0, token0Name, token1, token1Name, loading, onClick }) => {
   const swap = useSwapContext();
   const pact = usePactContext();
   const [checked, setChecked] = useState(false);

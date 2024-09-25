@@ -157,7 +157,6 @@ export const LiquidityProvider = (props) => {
   };
 
   const addOneSideLiquidityWallet = async (token0, token1, amountDesired0) => {
-    console.log('addOneSideLiquidityWallet', token0, token1);
     const accountDetails = await getTokenBalanceAccount(token0.code, account.account);
     if (accountDetails.result.status === 'success') {
       try {
@@ -286,11 +285,11 @@ export const LiquidityProvider = (props) => {
   const removeDoubleSideLiquidityWallet = async (token0, token1, liquidity, previewAmount) => {
     try {
       let pair = await getPairAccount(token0.code, token1.code);
-
       const pairConfig = pact.allPairs[`${token0.code}:${token1.code}`] || pact.allPairs[`${token1.code}:${token0.code}`];
-
-      const pactCode = pairConfig.isBoosted
-        ? `(${KADDEX_NAMESPACE}.wrapper.remove-liquidity
+      const isBoosted = isWrapperBoosted(token0.code, token1.code);
+      let pactCode;
+      if (isBoosted) {
+       pactCode = `(${KADDEX_NAMESPACE}.wrapper.remove-liquidity
         ${token0.code}
         ${token1.code}
         (read-decimal 'liquidity)
@@ -301,7 +300,8 @@ export const LiquidityProvider = (props) => {
         (read-keyset 'user-ks)
         ${wantsKdxRewards}
       )`
-        : `(${KADDEX_NAMESPACE}.exchange.remove-liquidity
+  } else { 
+      pactCode =  `(${KADDEX_NAMESPACE}.exchange.remove-liquidity
         ${token0.code}
         ${token1.code}
         (read-decimal 'liquidity)
@@ -311,6 +311,7 @@ export const LiquidityProvider = (props) => {
         ${JSON.stringify(account.account)}
         (read-keyset 'user-ks)
       )`;
+    }
       const signCmd = {
         pactCode,
         caps: [

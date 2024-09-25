@@ -186,7 +186,6 @@ const RemoveDoubleSideLiquidity = ({ pair, previewObject, setPreviewAmount, prev
       });
     }
   }, [showTxModal]);
-
   return (
     <Container $gameEditionView={gameEditionView}>
       <WalletRequestView show={wallet.isWaitingForWalletAuth} error={wallet.walletError} onClose={() => onWalletRequestViewModalClose()} />
@@ -295,7 +294,7 @@ const RemoveDoubleSideLiquidity = ({ pair, previewObject, setPreviewAmount, prev
                 </FlexContainer>
                 {tokensUsdPrice ? (
                   <Label fontSize={11} labelStyle={{ marginTop: 4, opacity: 0.7, justifyContent: 'flex-end' }}>
-                    $ {humanReadableNumber(tokensUsdPrice?.KDX * extractDecimal(previewFees))}
+                    $ {humanReadableNumber(tokensUsdPrice?.["kaddex.kdx"] * extractDecimal(previewFees))}
                   </Label>
                 ) : (
                   ''

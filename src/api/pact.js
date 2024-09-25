@@ -14,6 +14,7 @@ export const pactFetchLocal = async (pactCode, options) => {
     },
     NETWORK
   );
+  // console.log("data", data)
   if (data.result.status === 'success') {
     return data.result.data;
   } else if (data.result.error.message) {
@@ -121,34 +122,6 @@ export const getPairList = async (allPairs) => {
     return handleError(e);
   }
 };
-// Needed to update for wrapper logic to work
-// export const getPairListAccountBalance = async (account, allPairs) => {
-//   try {
-//     const tokenPairListWithBooster = Object.values(allPairs)
-//       .filter((token) => token.isBoosted)
-//       .reduce((accum, pair) => {
-//         accum += `[${pair.name.split(':').join(' ')}] `;
-//         return accum;
-//       }, '');
-//       console.log("tokenPairListWithBooster", tokenPairListWithBooster)
-//     const tokenPairListWithoutBooster = Object.values(allPairs)
-//       .filter((token) => !token.isBoosted)
-//       .reduce((accum, pair) => {
-//         accum += `[${pair.name.split(':').join(' ')}] `;
-//         return accum;
-//       }, '');
-//       console.log("tokenPairListWithoutBooster", tokenPairListWithoutBooster)
-//     const boosterResult = await dataWithBooster(account, tokenPairListWithBooster, allPairs);
-
-//     const noBoosterResult = await dataWithoutBooster(account, tokenPairListWithoutBooster, allPairs);
-
-//     const totalResult = boosterResult.concat(noBoosterResult);
-
-//     return totalResult;
-//   } catch (e) {
-//     return handleError(e);
-//   }
-// };
 
 export const getPairListAccountBalance = async (account, allPairs) => {
   try {
