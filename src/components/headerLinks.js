@@ -26,7 +26,7 @@ export default [
     id: 2,
     label: 'Discord',
     icon: <DiscordIcon className="menu-icon" />,
-    link: 'https://discord.com/invite/eckodao',
+    link: '',
   },
   {
     id: 1,
